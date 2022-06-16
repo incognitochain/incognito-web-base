@@ -7,6 +7,7 @@ const exampleModuleRoute: IRouteProps = {
   path: route,
   exact: true,
   element: <ExampleModule />,
+  key: route,
 };
 
 export default exampleModuleRoute;
