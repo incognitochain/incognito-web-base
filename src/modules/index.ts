@@ -1,8 +1,9 @@
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { RouteProps } from 'react-router-dom';
 
 export interface IRouteProps extends RouteProps {
   path: string;
-  component: FunctionComponent | any;
+  element: React.ReactNode;
   exact: boolean;
+  key: string;
 }

@@ -1,6 +1,7 @@
+import ExampleModule from '@modules/ExampleModule';
 import withStarted from '@modules/MainRoute/MainRoute.getStarted';
 import { IRouteProps } from '@src/modules';
-import React, { Suspense } from 'react';
+import React, { Fragment } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { compose } from 'recompose';
 import styled, { ITheme } from 'styled-components';
@@ -15,14 +16,16 @@ const Styled = styled.div`
 
 const MainRoute = (props: IProps & any) => {
   const { routes } = props;
+  console.log(<ExampleModule />);
   return (
     <Styled>
       <Routes>
-        <Suspense fallback={null}>
+        <Fragment>
           {routes.map((route: IRouteProps) => (
             <Route {...route} key={route.path} />
           ))}
-        </Suspense>
+          {/*<Route path="/" element={<ExampleModule />} />*/}
+        </Fragment>
       </Routes>
     </Styled>
   );

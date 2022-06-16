@@ -1,4 +1,5 @@
 import themeReducer from '@theme/Theme.reducer';
+import { camelCase } from 'lodash';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import logger from 'redux-logger';
 import { persistReducer, persistStore } from 'redux-persist';
@@ -13,8 +14,17 @@ export interface IConfigStore {
 export const configStore = (preloadedState: any = {}) => {
   const isMainnet = false;
 
+  // @ts-ignore
+  const files = import.meta.globEager('../../src/**/*reducer.ts');
+  const reducers: any = {};
+  for (const key in files) {
+    const name: any = key.match(/(\w{1,})(.reducer.ts)/);
+    const reducerName: any = camelCase(name[1]);
+    reducers[reducerName] = files[key].default;
+  }
+
   const rootReducers = combineReducers({
-    theme: themeReducer,
+    ...reducers,
   });
 
   const persistConfig = {
