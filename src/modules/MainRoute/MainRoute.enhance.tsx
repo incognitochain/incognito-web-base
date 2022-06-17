@@ -22,6 +22,8 @@ const enhance = (WrappedComponent: FunctionComponent) => (props: any) => {
 
   if (!routes || routes.length === 0) return null;
 
+  console.log(routes);
+
   return <WrappedComponent {...props} routes={routes} />;
 };
 

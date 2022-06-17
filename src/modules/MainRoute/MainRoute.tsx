@@ -1,4 +1,4 @@
-import ExampleModule from '@modules/ExampleModule';
+import Example from '@modules/Example';
 import withStarted from '@modules/MainRoute/MainRoute.getStarted';
 import { IRouteProps } from '@src/modules';
 import React, { Fragment } from 'react';
@@ -16,7 +16,7 @@ const Styled = styled.div`
 
 const MainRoute = (props: IProps & any) => {
   const { routes } = props;
-  console.log(<ExampleModule />);
+  console.log(<Example />);
   return (
     <Styled>
       <Routes>

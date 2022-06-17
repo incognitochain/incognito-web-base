@@ -1,4 +1,5 @@
-import { IThemeState } from '@src/theme';
+import { IExampleReducer } from '@modules/Example';
+import { IThemeReducer } from '@src/theme';
 
 export interface IAction {
   type: string;
@@ -6,5 +7,6 @@ export interface IAction {
 }
 
 export interface IRootState {
-  theme: IThemeState;
+  theme: IThemeReducer;
+  example: IExampleReducer;
 }

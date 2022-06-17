@@ -1,8 +1,8 @@
-export interface IThemeState {
+export interface IThemeReducer {
   darkMode: boolean;
 }
 
-const initialState: IThemeState = {
+const initialState: IThemeReducer = {
   darkMode: true,
 };
 
