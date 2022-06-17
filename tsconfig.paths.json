@@ -10,7 +10,8 @@
       "@services/*": ["./services/*"],
       "@images/*": ["./assets/images/*"],
       "@theme/*": ["./theme/*"],
-      "@common/*": ["./common/*"]
+      "@common/*": ["./common/*"],
+      "@constants/*": ["./constants/*"]
     }
   }
 }
