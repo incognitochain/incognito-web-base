@@ -4,9 +4,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import styled from 'styled-components';
 
-import { configStore, IConfigStore } from '../app-redux';
-
-const { store, persistor }: IConfigStore = configStore();
+import { persistor, store } from '../app-redux';
 
 const Wrapper = styled.div``;
 

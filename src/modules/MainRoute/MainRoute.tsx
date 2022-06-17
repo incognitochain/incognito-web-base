@@ -1,4 +1,3 @@
-import Example from '@modules/Example';
 import withStarted from '@modules/MainRoute/MainRoute.getStarted';
 import { IRouteProps } from '@src/modules';
 import React, { Fragment } from 'react';
@@ -16,7 +15,6 @@ const Styled = styled.div`
 
 const MainRoute = (props: IProps & any) => {
   const { routes } = props;
-  console.log(<Example />);
   return (
     <Styled>
       <Routes>
@@ -24,7 +22,6 @@ const MainRoute = (props: IProps & any) => {
           {routes.map((route: IRouteProps) => (
             <Route {...route} key={route.path} />
           ))}
-          {/*<Route path="/" element={<ExampleModule />} />*/}
         </Fragment>
       </Routes>
     </Styled>
