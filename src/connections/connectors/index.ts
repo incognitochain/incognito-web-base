@@ -1,30 +1,19 @@
-import { SupportedChainId } from '@src/constants/chains';
-import { INFURA_NETWORK_URLS } from '@src/constants/infura';
-import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
+import { INFURA_NETWORK_URLS } from '@constants/infura';
 import { initializeConnector, Web3ReactHooks } from '@web3-react/core';
-import { EIP1193 } from '@web3-react/eip1193';
-import { GnosisSafe } from '@web3-react/gnosis-safe';
 import { MetaMask } from '@web3-react/metamask';
 import { Network } from '@web3-react/network';
 import { Connector } from '@web3-react/types';
 import { WalletConnect } from '@web3-react/walletconnect';
-import Fortmatic from 'fortmatic';
 import { useMemo } from 'react';
-// import UNISWAP_LOGO_URL from '@src/favicon.svg';
 
 export enum Wallet {
   INJECTED = 'INJECTED',
-  COINBASE_WALLET = 'COINBASE_WALLET',
   WALLET_CONNECT = 'WALLET_CONNECT',
   FORTMATIC = 'FORTMATIC',
   NETWORK = 'NETWORK',
 }
 
-export const BACKFILLABLE_WALLETS = [
-  Wallet.COINBASE_WALLET,
-  Wallet.WALLET_CONNECT,
-  Wallet.INJECTED,
-];
+export const BACKFILLABLE_WALLETS = [Wallet.WALLET_CONNECT, Wallet.INJECTED];
 export const SELECTABLE_WALLETS = [...BACKFILLABLE_WALLETS, Wallet.FORTMATIC];
 
 function onError(error: Error) {
@@ -37,8 +26,6 @@ export function getWalletForConnector(connector: Connector) {
       return Wallet.INJECTED;
     case walletConnect:
       return Wallet.WALLET_CONNECT;
-    case fortmatic:
-      return Wallet.FORTMATIC;
     case network:
       return Wallet.NETWORK;
     default:
@@ -52,10 +39,11 @@ export function getConnectorForWallet(wallet: Wallet) {
       return injected;
     case Wallet.WALLET_CONNECT:
       return walletConnect;
-    case Wallet.FORTMATIC:
-      return fortmatic;
     case Wallet.NETWORK:
       return network;
+    default:
+      // default metamask
+      return injected;
   }
 }
 
@@ -65,8 +53,6 @@ function getHooksForWallet(wallet: Wallet) {
       return injectedHooks;
     case Wallet.WALLET_CONNECT:
       return walletConnectHooks;
-    case Wallet.FORTMATIC:
-      return fortmaticHooks;
     case Wallet.NETWORK:
       return networkHooks;
   }
@@ -80,10 +66,6 @@ export const [injected, injectedHooks] = initializeConnector<MetaMask>(
   (actions) => new MetaMask({ actions, onError }),
 );
 
-export const [gnosisSafe, gnosisSafeHooks] = initializeConnector<GnosisSafe>(
-  (actions) => new GnosisSafe({ actions }),
-);
-
 export const [walletConnect, walletConnectHooks] = initializeConnector<WalletConnect>(
   (actions) =>
     new WalletConnect({
@@ -95,31 +77,9 @@ export const [walletConnect, walletConnectHooks] = initializeConnector<WalletCon
       onError,
     }),
 );
-
-export const [fortmatic, fortmaticHooks] = initializeConnector<EIP1193>(
-  (actions) =>
-    new EIP1193({
-      actions,
-      provider: new Fortmatic(process.env.REACT_APP_FORTMATIC_KEY).getProvider(),
-    }),
-);
-
-export const [coinbaseWallet, coinbaseWalletHooks] = initializeConnector<CoinbaseWallet>(
-  (actions) =>
-    new CoinbaseWallet({
-      actions,
-      options: {
-        url: INFURA_NETWORK_URLS[SupportedChainId.MAINNET],
-        appName: 'Uniswap',
-        // appLogoUrl: UNISWAP_LOGO_URL,
-      },
-      onError,
-    }),
-);
-
 interface ConnectorListItem {
-  connector: Connector;
-  hooks: Web3ReactHooks;
+  connector: Connector & any;
+  hooks: Web3ReactHooks & any;
 }
 
 function getConnectorListItemForWallet(wallet: Wallet) {
@@ -131,9 +91,7 @@ function getConnectorListItemForWallet(wallet: Wallet) {
 
 export function useConnectors(selectedWallet: Wallet | undefined) {
   return useMemo(() => {
-    const connectors: ConnectorListItem[] = [
-      { connector: gnosisSafe, hooks: gnosisSafeHooks },
-    ];
+    const connectors: ConnectorListItem[] = [];
     if (selectedWallet) {
       connectors.push(getConnectorListItemForWallet(selectedWallet));
     }

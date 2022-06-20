@@ -4,11 +4,11 @@ import {
   gnosisSafe,
   network,
   useConnectors,
-} from '@components/connectors';
+} from '@connections/connectors';
+import { useAppSelector } from '@connections/state/hooks';
 import { Web3ReactProvider } from '@web3-react/core';
 import { Connector } from '@web3-react/types';
 import { ReactNode, useEffect } from 'react';
-import { useAppSelector } from 'state/hooks';
 
 const connect = async (connector: Connector) => {
   try {
