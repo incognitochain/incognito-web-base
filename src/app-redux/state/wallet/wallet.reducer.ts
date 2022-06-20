@@ -3,33 +3,16 @@ import {
   IWalletReducer,
   WalletActions,
   WalletActionType,
-} from '@connections/state/wallet';
-import { createSlice } from '@reduxjs/toolkit';
+} from '@src/app-redux/state/wallet/index';
 import { Reducer } from 'redux';
 
 export const initialState: IWalletReducer = {
   errorByWallet: {
     [Wallet.INJECTED]: undefined,
     [Wallet.WALLET_CONNECT]: undefined,
-    [Wallet.COINBASE_WALLET]: undefined,
     [Wallet.NETWORK]: undefined,
   },
 };
-
-const walletSlice = createSlice({
-  name: 'wallet',
-  initialState,
-  reducers: {
-    updateWalletError(
-      state,
-      {
-        payload: { wallet, error },
-      }: { payload: { wallet: Wallet; error: string | undefined } },
-    ) {
-      state.errorByWallet[wallet] = error;
-    },
-  },
-});
 
 export const reducer: Reducer<IWalletReducer, WalletActions> = (
   state = initialState,

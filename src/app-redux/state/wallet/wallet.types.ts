@@ -1,5 +1,5 @@
 import { Wallet } from '@connections/connectors';
-import { WalletActionType } from '@connections/state/wallet';
+import { WalletActionType } from '@src/app-redux/state/wallet/index';
 import { Action } from 'redux';
 
 //----------------------------------------------

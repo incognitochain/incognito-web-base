@@ -5,10 +5,10 @@ import {
   network,
   useConnectors,
 } from '@connections/connectors';
-import { useAppSelector } from '@connections/state/hooks';
+import { useAppSelector } from '@src/app-redux';
 import { Web3ReactProvider } from '@web3-react/core';
 import { Connector } from '@web3-react/types';
-import { ReactNode, useEffect } from 'react';
+import React from 'react';
 
 const connect = async (connector: Connector) => {
   try {
@@ -22,7 +22,7 @@ const connect = async (connector: Connector) => {
   }
 };
 
-export default function Web3Provider({ children }: { children: ReactNode }) {
+const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   const selectedWalletBackfilled = useAppSelector(
     (state) => state.user.selectedWalletBackfilled,
   );
@@ -30,10 +30,9 @@ export default function Web3Provider({ children }: { children: ReactNode }) {
 
   const connectors = useConnectors(selectedWallet);
 
-  useEffect(() => {
+  React.useEffect(() => {
     connect(gnosisSafe);
     connect(network);
-
     if (selectedWallet) {
       connect(getConnectorForWallet(selectedWallet));
     } else if (!selectedWalletBackfilled) {
@@ -41,5 +40,9 @@ export default function Web3Provider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  console.log(connectors);
+
   return <Web3ReactProvider connectors={connectors}>{children}</Web3ReactProvider>;
-}
+};
+
+export default Web3Provider;

@@ -1,5 +1,6 @@
 import { INFURA_NETWORK_URLS } from '@constants/infura';
 import { initializeConnector, Web3ReactHooks } from '@web3-react/core';
+import { GnosisSafe } from '@web3-react/gnosis-safe';
 import { MetaMask } from '@web3-react/metamask';
 import { Network } from '@web3-react/network';
 import { Connector } from '@web3-react/types';
@@ -9,12 +10,12 @@ import { useMemo } from 'react';
 export enum Wallet {
   INJECTED = 'INJECTED',
   WALLET_CONNECT = 'WALLET_CONNECT',
-  FORTMATIC = 'FORTMATIC',
   NETWORK = 'NETWORK',
+  GNOSIS_SAFE = 'GNOSIS_SAFE',
 }
 
 export const BACKFILLABLE_WALLETS = [Wallet.WALLET_CONNECT, Wallet.INJECTED];
-export const SELECTABLE_WALLETS = [...BACKFILLABLE_WALLETS, Wallet.FORTMATIC];
+export const SELECTABLE_WALLETS = [...BACKFILLABLE_WALLETS];
 
 function onError(error: Error) {
   console.debug(`web3-react error: ${error}`);
@@ -28,6 +29,8 @@ export function getWalletForConnector(connector: Connector) {
       return Wallet.WALLET_CONNECT;
     case network:
       return Wallet.NETWORK;
+    case gnosisSafe:
+      return Wallet.GNOSIS_SAFE;
     default:
       throw Error('unsupported connector');
   }
@@ -41,9 +44,10 @@ export function getConnectorForWallet(wallet: Wallet) {
       return walletConnect;
     case Wallet.NETWORK:
       return network;
+    case Wallet.GNOSIS_SAFE:
+      return gnosisSafe;
     default:
-      // default metamask
-      return injected;
+      return injected; // default metamask
   }
 }
 
@@ -55,6 +59,8 @@ function getHooksForWallet(wallet: Wallet) {
       return walletConnectHooks;
     case Wallet.NETWORK:
       return networkHooks;
+    case Wallet.GNOSIS_SAFE:
+      return gnosisSafeHooks;
   }
 }
 
@@ -77,6 +83,11 @@ export const [walletConnect, walletConnectHooks] = initializeConnector<WalletCon
       onError,
     }),
 );
+
+export const [gnosisSafe, gnosisSafeHooks] = initializeConnector<GnosisSafe>(
+  (actions) => new GnosisSafe({ actions }),
+);
+
 interface ConnectorListItem {
   connector: Connector & any;
   hooks: Web3ReactHooks & any;
@@ -91,7 +102,9 @@ function getConnectorListItemForWallet(wallet: Wallet) {
 
 export function useConnectors(selectedWallet: Wallet | undefined) {
   return useMemo(() => {
-    const connectors: ConnectorListItem[] = [];
+    const connectors: ConnectorListItem[] = [
+      { connector: gnosisSafe, hooks: gnosisSafeHooks },
+    ];
     if (selectedWallet) {
       connectors.push(getConnectorListItemForWallet(selectedWallet));
     }
