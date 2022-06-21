@@ -7,7 +7,7 @@ export const route = '/';
 const homeRoute: IRouteProps = {
   path: route,
   exact: true,
-  element: <Home />,
+  component: Home,
 };
 
 export default homeRoute;

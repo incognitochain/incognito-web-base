@@ -1,13 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const Home = React.memo(() => {
-  const navigate = useNavigate();
+  const history = useHistory();
 
   return (
     <div
       style={{ width: 100, height: 200, backgroundColor: 'blue' }}
-      onClick={() => navigate('/example')}
+      onClick={() => history.push('/example')}
     />
   );
 });

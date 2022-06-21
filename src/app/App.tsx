@@ -1,13 +1,14 @@
 import Web3Provider from '@connections/Web3Provider';
 import MainRoute from '@modules/MainRoute/MainRoute';
 import withApp from '@src/app/App.enhance';
-import { ThemedGlobalStyle, ThemeProvider } from '@src/theme';
+import { GradiantBG, ThemedGlobalStyle, ThemeProvider } from '@src/theme';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 const App: React.FunctionComponent = () => {
   return (
     <Web3Provider>
+      <GradiantBG />
       <ThemeProvider>
         <ThemedGlobalStyle />
         <Router>

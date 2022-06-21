@@ -2,8 +2,8 @@ import { injected, Wallet, walletConnect } from '@connections/connectors';
 import INJECTED_ICON_URL from '@images/arrow-right.svg';
 import COINBASE_ICON_URL from '@images/coinbaseWalletIcon.svg';
 import METAMASK_ICON_URL from '@images/metamask.png';
+import WALLET_CONNECT_ICON_URL from '@images/walletConnectIcon.svg';
 import { Connector } from '@web3-react/types';
-import WALLET_CONNECT_ICON_URL from 'images/walletConnectIcon.svg';
 
 interface WalletInfo {
   connector?: Connector;
