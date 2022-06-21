@@ -5,7 +5,7 @@ import { CheckCircle, Copy } from 'react-feather';
 import styled from 'styled-components/macro';
 
 const CopyIcon = styled(LinkStyledButton)`
-  color: ${({ color, theme }) => color || theme.text3};
+  color: ${({ color, theme }) => color || theme.content4};
   flex-shrink: 0;
   display: flex;
   text-decoration: none;

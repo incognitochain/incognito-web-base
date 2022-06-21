@@ -27,12 +27,12 @@
 //   padding: 0.25rem 0rem;
 //   font-weight: 500;
 //   font-size: 0.825rem;
-//   color: ${({ theme }) => theme.primary1};
+//   color: ${({ theme }) => theme.content4};
 // `;
 //
 // const IconWrapper = styled.div<{ pending: boolean; success?: boolean }>`
 //   color: ${({ pending, success, theme }) =>
-//     pending ? theme.primary1 : success ? theme.green1 : theme.red1};
+//     pending ? theme.content4 : success ? theme.content4 : theme.content4};
 // `;
 //
 // export default function Transaction({ hash }: { hash: string }) {

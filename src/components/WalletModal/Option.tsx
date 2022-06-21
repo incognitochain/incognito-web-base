@@ -9,10 +9,10 @@ const InfoCard = styled.button<{ active?: boolean }>`
   width: 100% !important;
 
   &:focus {
-    box-shadow: 0 0 0 1px ${({ theme }) => theme.primary1};
+    box-shadow: 0 0 0 1px ${({ theme }) => theme.content4};
   }
 
-  border: 1px solid ${({ theme, active }) => (active ? 'transparent' : theme.primary1)};
+  border: 1px solid ${({ theme, active }) => (active ? 'transparent' : theme.content4)};
 `;
 
 const OptionCard = styled(InfoCard as any)`
@@ -34,7 +34,7 @@ const OptionCardClickable = styled(OptionCard as any)<{ clickable?: boolean }>`
   margin-top: 0;
   &:hover {
     cursor: ${({ clickable }) => (clickable ? 'pointer' : '')};
-    border: ${({ clickable, theme }) => (clickable ? `1px solid ${theme.primary1}` : ``)};
+    border: ${({ clickable, theme }) => (clickable ? `1px solid ${theme.content4}` : ``)};
   }
   opacity: ${({ disabled }) => (disabled ? '0.5' : '1')};
 `;
@@ -48,13 +48,13 @@ const GreenCircle = styled.div`
     height: 8px;
     width: 8px;
     margin-right: 8px;
-    background-color: ${({ theme }) => theme.green1};
+    background-color: ${({ theme }) => theme.content4};
     border-radius: 50%;
   }
 `;
 
 const CircleWrapper = styled.div`
-  color: ${({ theme }) => theme.green1};
+  color: ${({ theme }) => theme.content4};
   display: flex;
   justify-content: center;
   align-items: center;

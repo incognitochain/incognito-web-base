@@ -23,7 +23,7 @@ export const IconWrapper = styled.div<{
   margin-right: ${({ marginRight }) => marginRight ?? 0};
   margin-left: ${({ marginLeft }) => marginLeft ?? 0};
   & > * {
-    stroke: ${({ theme, stroke }) => stroke ?? theme.blue1};
+    stroke: ${({ theme, stroke }) => stroke ?? theme.content4};
   }
 `;
 
@@ -34,7 +34,7 @@ export const LinkStyledButton = styled.button<{ disabled?: boolean }>`
   background: none;
 
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  color: ${({ theme, disabled }) => (disabled ? theme.text2 : theme.primary1)};
+  color: ${({ theme, disabled }) => (disabled ? theme.content4 : theme.content4)};
   font-weight: 500;
 
   :hover {
@@ -55,7 +55,7 @@ export const LinkStyledButton = styled.button<{ disabled?: boolean }>`
 export const StyledInternalLink = styled(Link)`
   text-decoration: none;
   cursor: pointer;
-  color: ${({ theme }: { theme: ITheme }) => theme.primary1};
+  color: ${({ theme }: { theme: ITheme }) => theme.content4};
   font-weight: 500;
 
   :hover {
@@ -75,7 +75,7 @@ export const StyledInternalLink = styled(Link)`
 const StyledLink = styled.a`
   text-decoration: none;
   cursor: pointer;
-  color: ${({ theme }: { theme: ITheme }) => theme.primary1};
+  color: ${({ theme }: { theme: ITheme }) => theme.content4};
   font-weight: 500;
 
   :hover {

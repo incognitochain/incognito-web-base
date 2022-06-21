@@ -8,7 +8,7 @@ import styled, { ITheme } from 'styled-components';
 import enhance from './MainRoute.enhance';
 import { IProps } from './MainRoute.inteface';
 const Styled = styled.div`
-  background-color: ${({ theme }: { theme: ITheme }) => theme.black};
+  background-color: ${({ theme }: { theme: ITheme }) => theme.content4};
   width: 100vw;
   height: 100vh;
 `;

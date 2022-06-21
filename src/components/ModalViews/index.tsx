@@ -67,7 +67,7 @@ export function SubmittedView({
         <CloseIcon onClick={onDismiss} />
       </RowBetween>
       <ConfirmedIcon>
-        <ArrowUpCircle strokeWidth={0.5} size={90} color={theme.primary1} />
+        <ArrowUpCircle strokeWidth={0.5} size={90} color={theme.content4} />
       </ConfirmedIcon>
       <AutoColumn gap="100px" justify={'center'}>
         {children}

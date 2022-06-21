@@ -16,7 +16,7 @@ const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
     align-items: center;
     justify-content: center;
 
-    background-color: ${({ theme }) => theme.modalBG};
+    background-color: ${({ theme }) => theme.content4};
   }
 `;
 
@@ -33,9 +33,9 @@ const StyledDialogContent = styled(
 
   &[data-reach-dialog-content] {
     margin: 0 0 2rem 0;
-    background-color: ${({ theme }) => theme.bg0};
-    border: 1px solid ${({ theme }) => theme.bg1};
-    box-shadow: 0 4px 8px 0 ${({ theme }) => transparentize(0.95, theme.shadow1)};
+    background-color: ${({ theme }) => theme.content4};
+    border: 1px solid ${({ theme }) => theme.content4};
+    box-shadow: 0 4px 8px 0 ${({ theme }) => transparentize(0.95, theme.content4)};
     padding: 0;
     width: 50vw;
     overflow-y: auto;
