@@ -13,7 +13,8 @@
       "@common/*": ["./common/*"],
       "@constants/*": ["./constants/*"],
       "@connections/*": ["./connections/*"],
-      "@hooks/*": ["./hooks/*"]
+      "@hooks/*": ["./hooks/*"],
+      "@assets/*": ["./assets/*"]
     }
   }
 }

@@ -18,7 +18,7 @@ export interface IUserReducer {
 // Payload Definition here!
 //----------------------------------------------
 export interface UpdateSelectedWalletPayload {
-  wallet: Wallet;
+  wallet: Wallet | undefined;
 }
 
 //----------------------------------------------

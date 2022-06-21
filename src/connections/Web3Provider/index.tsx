@@ -40,8 +40,6 @@ const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  console.log(connectors);
-
   return <Web3ReactProvider connectors={connectors}>{children}</Web3ReactProvider>;
 };
 

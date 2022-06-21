@@ -1,6 +1,7 @@
-import { IUserReducer } from '@connections/state/user';
-import { IWalletReducer } from '@connections/state/wallet/wallet.reducer';
 import { IExampleReducer } from '@modules/Example';
+import { IApplicationReducer } from '@src/app-redux/state/application';
+import { IUserReducer } from '@src/app-redux/state/user';
+import { IWalletReducer } from '@src/app-redux/state/wallet';
 import { IThemeReducer } from '@src/theme';
 
 export interface IAction {
@@ -13,4 +14,5 @@ export interface IRootState {
   example: IExampleReducer;
   user: IUserReducer;
   wallet: IWalletReducer;
+  application: IApplicationReducer;
 }
