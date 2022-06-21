@@ -1,4 +1,5 @@
 import { StatusIcon } from '@components/Icons';
+import { CopyIcon as CopyHelper } from '@components/Icons';
 import { injected } from '@connections/connectors';
 import { SUPPORTED_WALLETS } from '@constants/wallet';
 import Close from '@images/x.svg';
@@ -13,7 +14,6 @@ import {
 } from '@src/components';
 import { ExplorerDataType, getExplorerLink, shortenAddress } from '@src/utils';
 import { Connector } from '@web3-react/types';
-import CopyHelper from 'components/AccountDetails/Copy';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useCallback, useContext } from 'react';
 import { ExternalLink as LinkIcon } from 'react-feather';

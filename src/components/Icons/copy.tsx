@@ -43,13 +43,13 @@ interface BaseProps {
 export type CopyHelperProps = BaseProps &
   Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof BaseProps>;
 
-export default function CopyHelper({
+const CopyHelper = ({
   color,
   toCopy,
   children,
   iconSize,
   iconPosition,
-}: CopyHelperProps) {
+}: CopyHelperProps) => {
   const [isCopied, setCopied] = useCopyClipboard();
   const copy = useCallback(() => {
     setCopied(toCopy);
@@ -76,4 +76,6 @@ export default function CopyHelper({
       ) : null}
     </CopyIcon>
   );
-}
+};
+
+export default CopyHelper;
