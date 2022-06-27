@@ -1,12 +1,11 @@
 import { Trans } from '@lingui/macro';
 import CopyHelper from 'components/AccountDetails/Copy';
 import Column from 'components/Column';
+import Modal from 'components/Modal';
 import useTheme from 'hooks/useTheme';
 import { AlertOctagon } from 'react-feather';
 import styled from 'styled-components/macro';
 import { ExternalLink, ThemedText } from 'theme';
-
-import Modal from '../Modal';
 
 const ContentWrapper = styled(Column)`
   align-items: center;

@@ -1,6 +1,7 @@
 import { TransactionResponse } from '@ethersproject/providers';
 import { Trans } from '@lingui/macro';
 import StakingRewardsJson from '@uniswap/liquidity-staker/build/StakingRewards.json';
+import Modal from 'components/Modal';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { ReactNode, useState } from 'react';
 import styled from 'styled-components/macro';
@@ -13,7 +14,6 @@ import { CloseIcon, ThemedText } from '../../theme';
 import { ButtonError } from '../Button';
 import { AutoColumn } from '../Column';
 import FormattedCurrencyAmount from '../FormattedCurrencyAmount';
-import Modal from '../Modal';
 import { LoadingView, SubmittedView } from '../ModalViews';
 import { RowBetween } from '../Row';
 

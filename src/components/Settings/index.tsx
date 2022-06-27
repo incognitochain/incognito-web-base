@@ -2,6 +2,7 @@
 import { t, Trans } from '@lingui/macro';
 import { Percent } from '@uniswap/sdk-core';
 import { sendEvent } from 'components/analytics';
+import Modal from 'components/Modal';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { AUTO_ROUTER_SUPPORTED_CHAINS } from 'lib/hooks/routing/clientSideSmartOrderRouter';
 import { useContext, useRef, useState } from 'react';
@@ -16,7 +17,6 @@ import { useClientSideRouter, useExpertModeManager } from '../../state/user/hook
 import { ThemedText } from '../../theme';
 import { ButtonError } from '../Button';
 import { AutoColumn } from '../Column';
-import Modal from '../Modal';
 import QuestionHelper from '../QuestionHelper';
 import { RowBetween, RowFixed } from '../Row';
 import Toggle from '../Toggle';

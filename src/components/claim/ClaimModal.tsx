@@ -1,6 +1,7 @@
 import { isAddress } from '@ethersproject/address';
 import { Trans } from '@lingui/macro';
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
+import Modal from 'components/Modal';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import JSBI from 'jsbi';
 import { useEffect, useState } from 'react';
@@ -19,7 +20,6 @@ import { ButtonPrimary } from '../Button';
 import { AutoColumn, ColumnCenter } from '../Column';
 import Confetti from '../Confetti';
 import { Break, CardBGImage, CardBGImageSmaller, CardNoise, CardSection, DataCard } from '../earn/styled';
-import Modal from '../Modal';
 import { RowBetween } from '../Row';
 
 const ContentWrapper = styled(AutoColumn)`

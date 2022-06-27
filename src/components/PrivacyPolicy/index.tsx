@@ -1,6 +1,7 @@
 import { Trans } from '@lingui/macro';
 import { sendEvent } from 'components/analytics';
 import Card, { DarkGreyCard } from 'components/Card';
+import Modal from 'components/Modal';
 import Row, { AutoRow, RowBetween } from 'components/Row';
 import { useEffect, useRef } from 'react';
 import { ArrowDown, Info, X } from 'react-feather';
@@ -11,7 +12,6 @@ import { isMobile } from 'utils/userAgent';
 import { useModalOpen, useTogglePrivacyPolicy } from '../../state/application/hooks';
 import { ApplicationModal } from '../../state/application/reducer';
 import { AutoColumn } from '../Column';
-import Modal from '../Modal';
 
 const Wrapper = styled.div`
   max-height: 70vh;

@@ -1,20 +1,20 @@
 import { isAddress } from '@ethersproject/address';
 import { Trans } from '@lingui/macro';
+import Modal from 'components/Modal';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import useENS from 'hooks/useENS';
 import { ReactNode, useState } from 'react';
 import { X } from 'react-feather';
 import styled from 'styled-components/macro';
 import { formatCurrencyAmount } from 'utils/formatCurrencyAmount';
 
 import { UNI } from '../../constants/tokens';
-import useENS from '../../hooks/useENS';
 import { useDelegateCallback } from '../../state/governance/hooks';
 import { useTokenBalance } from '../../state/wallet/hooks';
 import { ThemedText } from '../../theme';
 import AddressInputPanel from '../AddressInputPanel';
 import { ButtonPrimary } from '../Button';
 import { AutoColumn } from '../Column';
-import Modal from '../Modal';
 import { LoadingView, SubmittedView } from '../ModalViews';
 import { RowBetween } from '../Row';
 

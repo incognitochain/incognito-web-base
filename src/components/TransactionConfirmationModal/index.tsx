@@ -1,6 +1,7 @@
 import { Trans } from '@lingui/macro';
 import { Currency } from '@uniswap/sdk-core';
 import Badge from 'components/Badge';
+import Modal from 'components/Modal';
 import { CHAIN_INFO } from 'constants/chainInfo';
 import { L2_CHAIN_IDS, SupportedL2ChainId } from 'constants/chains';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
@@ -18,7 +19,6 @@ import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
 import { TransactionSummary } from '../AccountDetails/TransactionSummary';
 import { ButtonLight, ButtonPrimary } from '../Button';
 import { AutoColumn, ColumnCenter } from '../Column';
-import Modal from '../Modal';
 import { RowBetween, RowFixed } from '../Row';
 import AnimatedConfirmation from './AnimatedConfirmation';
 

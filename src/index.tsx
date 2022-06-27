@@ -9,14 +9,13 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
+import ApplicationUpdater from 'state/application/updater';
 
-import Blocklist from './components/Blocklist';
 import Web3Provider from './components/Web3Provider';
 import { LanguageProvider } from './i18n';
 import App from './pages/App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import store from './state';
-import ApplicationUpdater from './state/application/updater';
 import ListsUpdater from './state/lists/updater';
 import LogsUpdater from './state/logs/updater';
 import TransactionUpdater from './state/transactions/updater';
@@ -48,15 +47,13 @@ ReactDOM.render(
       <HashRouter>
         <LanguageProvider>
           <Web3Provider>
-            <Blocklist>
-              <BlockNumberProvider>
-                <Updaters />
-                <ThemeProvider>
-                  <ThemedGlobalStyle />
-                  <App />
-                </ThemeProvider>
-              </BlockNumberProvider>
-            </Blocklist>
+            <BlockNumberProvider>
+              <Updaters />
+              <ThemeProvider>
+                <ThemedGlobalStyle />
+                <App />
+              </ThemeProvider>
+            </BlockNumberProvider>
           </Web3Provider>
         </LanguageProvider>
       </HashRouter>
