@@ -4,10 +4,6 @@ export type Color = string;
 export interface Colors {
   darkMode: boolean;
 
-  // base
-  white: Color;
-  black: Color;
-
   // text
   text1: Color;
   text2: Color;
@@ -17,22 +13,10 @@ export interface Colors {
 
   // backgrounds / greys
   bg0: Color;
-  bg1: Color;
-  bg2: Color;
-  bg3: Color;
-  bg4: Color;
-  bg5: Color;
   bg6: Color;
 
   modalBG: Color;
   advancedBG: Color;
-
-  //blues
-  primary1: Color;
-  primary2: Color;
-  primary3: Color;
-  primary4: Color;
-  primary5: Color;
 
   primaryText1: Color;
 
@@ -57,6 +41,49 @@ export interface Colors {
   error: Color;
   success: Color;
   warning: Color;
+
+  // base
+  white: Color;
+  black: Color;
+
+  // border
+  border1: Color;
+  border2: Color;
+  border3: Color;
+  border4: Color;
+
+  // Background
+  bg1: Color;
+  bg2: Color;
+  bg3: Color;
+  bg4: Color;
+  bg5: Color;
+
+  // content
+  content1: Color;
+  content2: Color;
+  content3: Color;
+  content4: Color;
+
+  // Primary
+  primary1: Color;
+  primary2: Color;
+  primary3: Color;
+  primary4: Color;
+  primary5: Color;
+  primary6: Color;
+  primary7: Color;
+  primary8: Color;
+  primary9: Color;
+  primary10: Color;
+  primary11: Color;
+  primary12: Color;
+  primary13: Color;
+
+  // Buttons
+  btn1: Color;
+  btn2: Color;
+  btn3: Color;
 }
 
 declare module 'styled-components/macro' {

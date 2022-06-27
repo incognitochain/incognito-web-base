@@ -54,9 +54,6 @@ const black = '#000000';
 function colors(darkMode: boolean): Colors {
   return {
     darkMode,
-    // base
-    white,
-    black,
 
     // text
     text1: darkMode ? '#FFFFFF' : '#000000',
@@ -65,25 +62,9 @@ function colors(darkMode: boolean): Colors {
     text4: darkMode ? '#B2B9D2' : '#C3C5CB',
     text5: darkMode ? '#2C2F36' : '#EDEEF2',
 
-    // backgrounds / greys
-    bg0: darkMode ? '#191B1F' : '#FFF',
-    bg1: darkMode ? '#212429' : '#F7F8FA',
-    bg2: darkMode ? '#2C2F36' : '#EDEEF2',
-    bg3: darkMode ? '#40444F' : '#CED0D9',
-    bg4: darkMode ? '#565A69' : '#888D9B',
-    bg5: darkMode ? '#6C7284' : '#888D9B',
-    bg6: darkMode ? '#1A2028' : '#6C7284',
-
     //specialty colors
     modalBG: darkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.3)',
     advancedBG: darkMode ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.6)',
-
-    //primary colors
-    primary1: darkMode ? '#2172E5' : '#E8006F',
-    primary2: darkMode ? '#3680E7' : '#FF8CC3',
-    primary3: darkMode ? '#4D8FEA' : '#FF99C9',
-    primary4: darkMode ? '#376bad70' : '#F6DDE8',
-    primary5: darkMode ? '#153d6f70' : '#FDEAF1',
 
     // color text
     primaryText1: darkMode ? '#5090ea' : '#D50066',
@@ -110,6 +91,52 @@ function colors(darkMode: boolean): Colors {
     // dont wanna forget these blue yet
     blue4: darkMode ? '#153d6f70' : '#C4D9F8',
     // blue5: darkMode ? '#153d6f70' : '#EBF4FF',
+
+    // base
+    white,
+    black,
+
+    // border
+    border1: '#363636',
+    border2: '#DDDDDD',
+    border3: '#F2F2F2',
+    border4: '#F2F4F5',
+
+    // Background
+    // backgrounds / greys
+    bg0: darkMode ? '#191B1F' : '#FFF',
+    bg1: '#F2F2F2',
+    bg2: '#1A1A1A',
+    bg3: '#303030',
+    bg4: '#404040',
+    bg5: '#F2F4F5',
+    bg6: darkMode ? '#1A2028' : '#6C7284',
+
+    // content
+    content1: '#000000',
+    content2: '#9C9C9C',
+    content3: '#0ECB81',
+    content4: '#F6465D',
+
+    // Primary
+    primary1: '#1C55B8',
+    primary2: '#1A73E8',
+    primary3: '#6BA0FB',
+    primary4: '#ECF3FF',
+    primary5: '#FFFFFF',
+    primary6: '#000000',
+    primary7: '#757575',
+    primary8: '#9C9C9C',
+    primary9: '#C0C0C0',
+    primary10: '#DDDDDD',
+    primary11: '#F5F5F5',
+    primary12: '#F9F9F9',
+    primary13: '#FCFCFC',
+
+    // Buttons
+    btn1: '#1A73E8',
+    btn2: '#03A66D',
+    btn3: '#CF304A',
   };
 }
 
