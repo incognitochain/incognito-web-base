@@ -1,4 +1,3 @@
-import { sendEvent } from 'components/analytics';
 import { SupportedLocale } from 'constants/locales';
 import { LocationDescriptor } from 'history';
 import useParsedQueryString from 'hooks/useParsedQueryString';
@@ -24,13 +23,6 @@ export function useLocationLinkProps(locale: SupportedLocale | null): {
             to: {
               ...location,
               search: stringify({ ...qs, lng: locale }),
-            },
-            onClick: () => {
-              sendEvent({
-                category: 'Localization',
-                action: 'Switch Locale',
-                label: `${activeLocale} -> ${locale}`,
-              });
             },
           },
     [location, qs, activeLocale, locale]

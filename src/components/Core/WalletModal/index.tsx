@@ -4,7 +4,6 @@ import { Connector } from '@web3-react/types';
 import MetamaskIcon from 'assets/images/metamask.png';
 import TallyIcon from 'assets/images/tally.png';
 import { ReactComponent as Close } from 'assets/images/x.svg';
-import { sendEvent } from 'components/analytics';
 import { AutoColumn } from 'components/Column';
 import AccountDetails from 'components/Core/AccountDetails';
 import { LightCard } from 'components/Core/Card';
@@ -152,14 +151,6 @@ export default function WalletModal({
   const tryActivation = useCallback(
     async (connector: Connector) => {
       const wallet = getWalletForConnector(connector);
-
-      // log selected wallet
-      sendEvent({
-        category: 'Wallet',
-        action: 'Change Wallet',
-        label: wallet,
-      });
-
       try {
         // Fortmatic opens it's own modal on activation to log in. This modal has a tabIndex
         // collision into the WalletModal, so we special case by closing the modal.

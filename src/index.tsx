@@ -1,7 +1,6 @@
 import '@reach/dialog/styles.css';
 import 'inter-ui';
 import 'polyfills';
-import 'components/analytics';
 
 import Web3Provider from 'components/Web3Provider';
 import { BlockNumberProvider } from 'lib/hooks/useBlockNumber';

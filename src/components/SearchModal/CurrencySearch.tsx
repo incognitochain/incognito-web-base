@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import { t, Trans } from '@lingui/macro';
 import { Currency, Token } from '@uniswap/sdk-core';
-import { sendEvent } from 'components/analytics';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useDebounce from 'hooks/useDebounce';
 import { useOnClickOutside } from 'hooks/useOnClickOutside';
@@ -90,16 +89,6 @@ export function CurrencySearch({
   const searchToken = useToken(debouncedQuery);
 
   const searchTokenIsAdded = useIsUserAddedToken(searchToken);
-
-  useEffect(() => {
-    if (isAddressSearch) {
-      sendEvent({
-        category: 'Currency Select',
-        action: 'Search by address',
-        label: isAddressSearch,
-      });
-    }
-  }, [isAddressSearch]);
 
   const filteredTokens: Token[] = useMemo(() => {
     return Object.values(allTokens).filter(getTokenFilter(debouncedQuery));

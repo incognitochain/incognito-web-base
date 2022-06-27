@@ -1,19 +1,18 @@
+import Header from 'components/Core/Header';
+import Polling from 'components/Core/Header/Polling';
 import Loader from 'components/Loader';
 import TopLevelModals from 'components/TopLevelModals';
 import ApeModeQueryParamReader from 'hooks/useApeModeQueryParamReader';
 import { Suspense } from 'react';
 import { useEffect } from 'react';
-import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 
-import { useAnalyticsReporter } from '../components/analytics';
 import ErrorBoundary from '../components/ErrorBoundary';
-import Header from '../components/Header';
-import Polling from '../components/Header/Polling';
 import Popups from '../components/Popups';
 import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader';
 import Swap from './Swap';
-import { RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects';
+import { RedirectToSwap } from './Swap/redirects';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -50,8 +49,6 @@ const Marginer = styled.div`
 
 export default function App() {
   const history = useHistory();
-  useAnalyticsReporter(useLocation());
-
   useEffect(() => {
     const unlisten = history.listen(() => {
       window.scrollTo(0, 0);
@@ -75,7 +72,6 @@ export default function App() {
           <TopLevelModals />
           <Suspense fallback={<Loader />}>
             <Switch>
-              <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
               <Route exact strict path="/swap" component={Swap} />
             </Switch>

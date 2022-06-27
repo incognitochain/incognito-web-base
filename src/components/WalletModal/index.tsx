@@ -1,7 +1,6 @@
 import { Trans } from '@lingui/macro';
 import { useWeb3React } from '@web3-react/core';
 import { Connector } from '@web3-react/types';
-import { sendEvent } from 'components/analytics';
 import { AutoColumn } from 'components/Column';
 import Modal from 'components/Modal';
 import { AutoRow } from 'components/Row';
@@ -152,14 +151,6 @@ export default function WalletModal({
   const tryActivation = useCallback(
     async (connector: Connector) => {
       const wallet = getWalletForConnector(connector);
-
-      // log selected wallet
-      sendEvent({
-        category: 'Wallet',
-        action: 'Change Wallet',
-        label: wallet,
-      });
-
       try {
         // Fortmatic opens it's own modal on activation to log in. This modal has a tabIndex
         // collision into the WalletModal, so we special case by closing the modal.

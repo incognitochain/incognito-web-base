@@ -3,7 +3,6 @@ import { Trade } from '@uniswap/router-sdk';
 import { Currency, CurrencyAmount, Token, TradeType } from '@uniswap/sdk-core';
 import { Trade as V2Trade } from '@uniswap/v2-sdk';
 import { Trade as V3Trade } from '@uniswap/v3-sdk';
-import { sendEvent } from 'components/analytics';
 import { NetworkAlert } from 'components/NetworkAlert/NetworkAlert';
 import SwapDetailsDropdown from 'components/swap/SwapDetailsDropdown';
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter';
@@ -237,12 +236,6 @@ export default function Swap({ history }: RouteComponentProps) {
       }
     } else {
       await approveCallback();
-
-      sendEvent({
-        category: 'Swap',
-        action: 'Approve',
-        label: [approvalOptimizedTradeString, approvalOptimizedTrade?.inputAmount?.currency.symbol].join('/'),
-      });
     }
   }, [
     signatureState,
@@ -287,26 +280,6 @@ export default function Swap({ history }: RouteComponentProps) {
     swapCallback()
       .then((hash) => {
         setSwapState({ attemptingTxn: false, tradeToConfirm, showConfirm, swapErrorMessage: undefined, txHash: hash });
-        sendEvent({
-          category: 'Swap',
-          action: 'transaction hash',
-          label: hash,
-        });
-        sendEvent({
-          category: 'Swap',
-          action:
-            recipient === null
-              ? 'Swap w/o Send'
-              : (recipientAddress ?? recipient) === account
-              ? 'Swap w/o Send + recipient'
-              : 'Swap w/ Send',
-          label: [
-            approvalOptimizedTradeString,
-            approvalOptimizedTrade?.inputAmount?.currency?.symbol,
-            approvalOptimizedTrade?.outputAmount?.currency?.symbol,
-            'MH',
-          ].join('/'),
-        });
       })
       .catch((error) => {
         setSwapState({
@@ -379,10 +352,6 @@ export default function Swap({ history }: RouteComponentProps) {
 
   const handleMaxInput = useCallback(() => {
     maxInputAmount && onUserInput(Field.INPUT, maxInputAmount.toExact());
-    sendEvent({
-      category: 'Swap',
-      action: 'Max',
-    });
   }, [maxInputAmount, onUserInput]);
 
   const handleOutputSelect = useCallback(
