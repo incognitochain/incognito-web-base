@@ -1,31 +1,31 @@
-import { Trans } from '@lingui/macro'
-import { Protocol } from '@uniswap/router-sdk'
-import { Currency, Percent, TradeType } from '@uniswap/sdk-core'
-import { Pair } from '@uniswap/v2-sdk'
-import { FeeAmount } from '@uniswap/v3-sdk'
-import AnimatedDropdown from 'components/AnimatedDropdown'
-import { AutoColumn } from 'components/Column'
-import { LoadingRows } from 'components/Loader/styled'
-import RoutingDiagram from 'components/RoutingDiagram/RoutingDiagram'
-import { AutoRow, RowBetween } from 'components/Row'
-import { SUPPORTED_GAS_ESTIMATE_CHAIN_IDS } from 'constants/chains'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import useAutoRouterSupported from 'hooks/useAutoRouterSupported'
-import { memo, useState } from 'react'
-import { Plus } from 'react-feather'
-import { InterfaceTrade } from 'state/routing/types'
-import { useDarkModeManager } from 'state/user/hooks'
-import styled from 'styled-components/macro'
-import { Separator, ThemedText } from 'theme'
+import { Trans } from '@lingui/macro';
+import { Protocol } from '@uniswap/router-sdk';
+import { Currency, Percent, TradeType } from '@uniswap/sdk-core';
+import { Pair } from '@uniswap/v2-sdk';
+import { FeeAmount } from '@uniswap/v3-sdk';
+import AnimatedDropdown from 'components/AnimatedDropdown';
+import { AutoColumn } from 'components/Column';
+import { LoadingRows } from 'components/Loader/styled';
+import RoutingDiagram from 'components/RoutingDiagram/RoutingDiagram';
+import { AutoRow, RowBetween } from 'components/Row';
+import { SUPPORTED_GAS_ESTIMATE_CHAIN_IDS } from 'constants/chains';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import useAutoRouterSupported from 'hooks/useAutoRouterSupported';
+import { memo, useState } from 'react';
+import { Plus } from 'react-feather';
+import { InterfaceTrade } from 'state/routing/types';
+import { useDarkModeManager } from 'state/user/hooks';
+import styled from 'styled-components/macro';
+import { Separator, ThemedText } from 'theme';
 
-import { AutoRouterLabel, AutoRouterLogo } from './RouterLabel'
+import { AutoRouterLabel, AutoRouterLogo } from './RouterLabel';
 
 const Wrapper = styled(AutoColumn)<{ darkMode?: boolean; fixedOpen?: boolean }>`
   padding: ${({ fixedOpen }) => (fixedOpen ? '12px' : '12px 8px 12px 12px')};
   border-radius: 16px;
   border: 1px solid ${({ theme, fixedOpen }) => (fixedOpen ? 'transparent' : theme.bg2)};
   cursor: pointer;
-`
+`;
 
 const OpenCloseIcon = styled(Plus)<{ open?: boolean }>`
   margin-left: 8px;
@@ -38,27 +38,27 @@ const OpenCloseIcon = styled(Plus)<{ open?: boolean }>`
   :hover {
     opacity: 0.8;
   }
-`
+`;
 
 interface SwapRouteProps extends React.HTMLAttributes<HTMLDivElement> {
-  trade: InterfaceTrade<Currency, Currency, TradeType>
-  syncing: boolean
-  fixedOpen?: boolean // fixed in open state, hide open/close icon
+  trade: InterfaceTrade<Currency, Currency, TradeType>;
+  syncing: boolean;
+  fixedOpen?: boolean; // fixed in open state, hide open/close icon
 }
 
 export default memo(function SwapRoute({ trade, syncing, fixedOpen = false, ...rest }: SwapRouteProps) {
-  const autoRouterSupported = useAutoRouterSupported()
-  const routes = getTokenPath(trade)
-  const [open, setOpen] = useState(false)
-  const { chainId } = useActiveWeb3React()
+  const autoRouterSupported = useAutoRouterSupported();
+  const routes = getTokenPath(trade);
+  const [open, setOpen] = useState(false);
+  const { chainId } = useActiveWeb3React();
 
-  const [darkMode] = useDarkModeManager()
+  const [darkMode] = useDarkModeManager();
 
   const formattedGasPriceString = trade?.gasUseEstimateUSD
     ? trade.gasUseEstimateUSD.toFixed(2) === '0.00'
       ? '<$0.01'
       : '$' + trade.gasUseEstimateUSD.toFixed(2)
-    : undefined
+    : undefined;
 
   return (
     <Wrapper {...rest} darkMode={darkMode} fixedOpen={fixedOpen}>
@@ -106,16 +106,16 @@ export default memo(function SwapRoute({ trade, syncing, fixedOpen = false, ...r
         </AutoRow>
       </AnimatedDropdown>
     </Wrapper>
-  )
-})
+  );
+});
 
 export interface RoutingDiagramEntry {
-  percent: Percent
-  path: [Currency, Currency, FeeAmount][]
-  protocol: Protocol
+  percent: Percent;
+  path: [Currency, Currency, FeeAmount][];
+  protocol: Protocol;
 }
 
-const V2_DEFAULT_FEE_TIER = 3000
+const V2_DEFAULT_FEE_TIER = 3000;
 
 /**
  * Loops through all routes on a trade and returns an array of diagram entries.
@@ -125,24 +125,24 @@ export function getTokenPath(trade: InterfaceTrade<Currency, Currency, TradeType
     const portion =
       trade.tradeType === TradeType.EXACT_INPUT
         ? inputAmount.divide(trade.inputAmount)
-        : outputAmount.divide(trade.outputAmount)
-    const percent = new Percent(portion.numerator, portion.denominator)
-    const path: RoutingDiagramEntry['path'] = []
+        : outputAmount.divide(trade.outputAmount);
+    const percent = new Percent(portion.numerator, portion.denominator);
+    const path: RoutingDiagramEntry['path'] = [];
     for (let i = 0; i < pools.length; i++) {
-      const nextPool = pools[i]
-      const tokenIn = tokenPath[i]
-      const tokenOut = tokenPath[i + 1]
+      const nextPool = pools[i];
+      const tokenIn = tokenPath[i];
+      const tokenOut = tokenPath[i + 1];
       const entry: RoutingDiagramEntry['path'][0] = [
         tokenIn,
         tokenOut,
         nextPool instanceof Pair ? V2_DEFAULT_FEE_TIER : nextPool.fee,
-      ]
-      path.push(entry)
+      ];
+      path.push(entry);
     }
     return {
       percent,
       path,
       protocol,
-    }
-  })
+    };
+  });
 }

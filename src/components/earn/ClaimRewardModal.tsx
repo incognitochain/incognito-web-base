@@ -1,79 +1,79 @@
-import { TransactionResponse } from '@ethersproject/providers'
-import { Trans } from '@lingui/macro'
-import StakingRewardsJson from '@uniswap/liquidity-staker/build/StakingRewards.json'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { ReactNode, useState } from 'react'
-import styled from 'styled-components/macro'
+import { TransactionResponse } from '@ethersproject/providers';
+import { Trans } from '@lingui/macro';
+import StakingRewardsJson from '@uniswap/liquidity-staker/build/StakingRewards.json';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { ReactNode, useState } from 'react';
+import styled from 'styled-components/macro';
 
-import { useContract } from '../../hooks/useContract'
-import { StakingInfo } from '../../state/stake/hooks'
-import { useTransactionAdder } from '../../state/transactions/hooks'
-import { TransactionType } from '../../state/transactions/types'
-import { CloseIcon, ThemedText } from '../../theme'
-import { ButtonError } from '../Button'
-import { AutoColumn } from '../Column'
-import Modal from '../Modal'
-import { LoadingView, SubmittedView } from '../ModalViews'
-import { RowBetween } from '../Row'
+import { useContract } from '../../hooks/useContract';
+import { StakingInfo } from '../../state/stake/hooks';
+import { useTransactionAdder } from '../../state/transactions/hooks';
+import { TransactionType } from '../../state/transactions/types';
+import { CloseIcon, ThemedText } from '../../theme';
+import { ButtonError } from '../Button';
+import { AutoColumn } from '../Column';
+import Modal from '../Modal';
+import { LoadingView, SubmittedView } from '../ModalViews';
+import { RowBetween } from '../Row';
 
-const { abi: STAKING_REWARDS_ABI } = StakingRewardsJson
+const { abi: STAKING_REWARDS_ABI } = StakingRewardsJson;
 
 function useStakingContract(stakingAddress?: string, withSignerIfPossible?: boolean) {
-  return useContract(stakingAddress, STAKING_REWARDS_ABI, withSignerIfPossible)
+  return useContract(stakingAddress, STAKING_REWARDS_ABI, withSignerIfPossible);
 }
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
   padding: 1rem;
-`
+`;
 
 interface StakingModalProps {
-  isOpen: boolean
-  onDismiss: () => void
-  stakingInfo: StakingInfo
+  isOpen: boolean;
+  onDismiss: () => void;
+  stakingInfo: StakingInfo;
 }
 
 export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: StakingModalProps) {
-  const { account } = useActiveWeb3React()
+  const { account } = useActiveWeb3React();
 
   // monitor call to help UI loading state
-  const addTransaction = useTransactionAdder()
-  const [hash, setHash] = useState<string | undefined>()
-  const [attempting, setAttempting] = useState(false)
+  const addTransaction = useTransactionAdder();
+  const [hash, setHash] = useState<string | undefined>();
+  const [attempting, setAttempting] = useState(false);
 
   function wrappedOnDismiss() {
-    setHash(undefined)
-    setAttempting(false)
-    onDismiss()
+    setHash(undefined);
+    setAttempting(false);
+    onDismiss();
   }
 
-  const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
+  const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress);
 
   async function onClaimReward() {
     if (stakingContract && stakingInfo?.stakedAmount && account) {
-      setAttempting(true)
+      setAttempting(true);
       await stakingContract
         .getReward({ gasLimit: 350000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             type: TransactionType.CLAIM,
             recipient: account,
-          })
-          setHash(response.hash)
+          });
+          setHash(response.hash);
         })
         .catch((error: any) => {
-          setAttempting(false)
-          console.log(error)
-        })
+          setAttempting(false);
+          console.log(error);
+        });
     }
   }
 
-  let error: ReactNode | undefined
+  let error: ReactNode | undefined;
   if (!account) {
-    error = <Trans>Connect Wallet</Trans>
+    error = <Trans>Connect Wallet</Trans>;
   }
   if (!stakingInfo?.stakedAmount) {
-    error = error ?? <Trans>Enter an amount</Trans>
+    error = error ?? <Trans>Enter an amount</Trans>;
   }
 
   return (
@@ -126,5 +126,5 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         </SubmittedView>
       )}
     </Modal>
-  )
+  );
 }

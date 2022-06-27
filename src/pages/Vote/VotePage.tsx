@@ -1,43 +1,43 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { Trans } from '@lingui/macro'
-import { CurrencyAmount, Fraction, Token } from '@uniswap/sdk-core'
-import ExecuteModal from 'components/vote/ExecuteModal'
-import QueueModal from 'components/vote/QueueModal'
-import { useActiveLocale } from 'hooks/useActiveLocale'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
-import JSBI from 'jsbi'
-import useBlockNumber from 'lib/hooks/useBlockNumber'
-import ms from 'ms.macro'
-import { useState } from 'react'
-import { ArrowLeft } from 'react-feather'
-import ReactMarkdown from 'react-markdown'
-import { RouteComponentProps } from 'react-router-dom'
-import styled from 'styled-components/macro'
+import { BigNumber } from '@ethersproject/bignumber';
+import { Trans } from '@lingui/macro';
+import { CurrencyAmount, Fraction, Token } from '@uniswap/sdk-core';
+import ExecuteModal from 'components/vote/ExecuteModal';
+import QueueModal from 'components/vote/QueueModal';
+import { useActiveLocale } from 'hooks/useActiveLocale';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp';
+import JSBI from 'jsbi';
+import useBlockNumber from 'lib/hooks/useBlockNumber';
+import ms from 'ms.macro';
+import { useState } from 'react';
+import { ArrowLeft } from 'react-feather';
+import ReactMarkdown from 'react-markdown';
+import { RouteComponentProps } from 'react-router-dom';
+import styled from 'styled-components/macro';
 
-import { ButtonPrimary } from '../../components/Button'
-import { GreyCard } from '../../components/Card'
-import { AutoColumn } from '../../components/Column'
-import { CardSection, DataCard } from '../../components/earn/styled'
-import { RowBetween, RowFixed } from '../../components/Row'
-import { SwitchLocaleLink } from '../../components/SwitchLocaleLink'
-import DelegateModal from '../../components/vote/DelegateModal'
-import VoteModal from '../../components/vote/VoteModal'
+import { ButtonPrimary } from '../../components/Button';
+import { GreyCard } from '../../components/Card';
+import { AutoColumn } from '../../components/Column';
+import { CardSection, DataCard } from '../../components/earn/styled';
+import { RowBetween, RowFixed } from '../../components/Row';
+import { SwitchLocaleLink } from '../../components/SwitchLocaleLink';
+import DelegateModal from '../../components/vote/DelegateModal';
+import VoteModal from '../../components/vote/VoteModal';
 import {
   AVERAGE_BLOCK_TIME_IN_SECS,
   COMMON_CONTRACT_NAMES,
   DEFAULT_AVERAGE_BLOCK_TIME_IN_SECS,
-} from '../../constants/governance'
-import { ZERO_ADDRESS } from '../../constants/misc'
-import { UNI } from '../../constants/tokens'
+} from '../../constants/governance';
+import { ZERO_ADDRESS } from '../../constants/misc';
+import { UNI } from '../../constants/tokens';
 import {
   useModalOpen,
   useToggleDelegateModal,
   useToggleExecuteModal,
   useToggleQueueModal,
   useToggleVoteModal,
-} from '../../state/application/hooks'
-import { ApplicationModal } from '../../state/application/reducer'
+} from '../../state/application/hooks';
+import { ApplicationModal } from '../../state/application/reducer';
 import {
   ProposalData,
   ProposalState,
@@ -45,17 +45,17 @@ import {
   useQuorum,
   useUserDelegatee,
   useUserVotesAsOfBlock,
-} from '../../state/governance/hooks'
-import { VoteOption } from '../../state/governance/types'
-import { useTokenBalance } from '../../state/wallet/hooks'
-import { ExternalLink, StyledInternalLink, ThemedText } from '../../theme'
-import { isAddress } from '../../utils'
-import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
-import { ProposalStatus } from './styled'
+} from '../../state/governance/hooks';
+import { VoteOption } from '../../state/governance/types';
+import { useTokenBalance } from '../../state/wallet/hooks';
+import { ExternalLink, StyledInternalLink, ThemedText } from '../../theme';
+import { isAddress } from '../../utils';
+import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
+import { ProposalStatus } from './styled';
 
 const PageWrapper = styled(AutoColumn)`
   width: 100%;
-`
+`;
 
 const ProposalInfo = styled(AutoColumn)`
   background: ${({ theme }) => theme.bg0};
@@ -64,7 +64,7 @@ const ProposalInfo = styled(AutoColumn)`
   position: relative;
   max-width: 640px;
   width: 100%;
-`
+`;
 
 const ArrowWrapper = styled(StyledInternalLink)`
   display: flex;
@@ -80,13 +80,13 @@ const ArrowWrapper = styled(StyledInternalLink)`
   :hover {
     text-decoration: none;
   }
-`
+`;
 const CardWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   width: 100%;
-`
+`;
 
 const StyledDataCard = styled(DataCard)`
   width: 100%;
@@ -94,7 +94,7 @@ const StyledDataCard = styled(DataCard)`
   background-color: ${({ theme }) => theme.bg1};
   height: fit-content;
   z-index: 2;
-`
+`;
 
 const ProgressWrapper = styled.div`
   width: 100%;
@@ -103,34 +103,34 @@ const ProgressWrapper = styled.div`
   border-radius: 4px;
   background-color: ${({ theme }) => theme.bg3};
   position: relative;
-`
+`;
 
 const Progress = styled.div<{ status: 'for' | 'against'; percentageString?: string }>`
   height: 4px;
   border-radius: 4px;
   background-color: ${({ theme, status }) => (status === 'for' ? theme.green1 : theme.red1)};
   width: ${({ percentageString }) => percentageString ?? '0%'};
-`
+`;
 
 const MarkDownWrapper = styled.div`
   max-width: 640px;
   overflow: hidden;
-`
+`;
 
 const WrapSmall = styled(RowBetween)`
   ${({ theme }) => theme.mediaWidth.upToSmall`
     align-items: flex-start;
     flex-direction: column;
   `};
-`
+`;
 
 const DetailText = styled.div`
   word-break: break-all;
-`
+`;
 
 const ProposerAddressLink = styled(ExternalLink)`
   word-break: break-all;
-`
+`;
 
 function getDateFromBlock(
   targetBlock: number | undefined,
@@ -139,15 +139,15 @@ function getDateFromBlock(
   currentTimestamp: BigNumber | undefined
 ): Date | undefined {
   if (targetBlock && currentBlock && averageBlockTimeInSeconds && currentTimestamp) {
-    const date = new Date()
+    const date = new Date();
     date.setTime(
       currentTimestamp
         .add(BigNumber.from(averageBlockTimeInSeconds).mul(BigNumber.from(targetBlock - currentBlock)))
         .toNumber() * ms`1 second`
-    )
-    return date
+    );
+    return date;
   }
-  return undefined
+  return undefined;
 }
 
 export default function VotePage({
@@ -155,51 +155,51 @@ export default function VotePage({
     params: { governorIndex, id },
   },
 }: RouteComponentProps<{ governorIndex: string; id: string }>) {
-  const parsedGovernorIndex = Number.parseInt(governorIndex)
+  const parsedGovernorIndex = Number.parseInt(governorIndex);
 
-  const { chainId, account } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React();
 
-  const quorumAmount = useQuorum(parsedGovernorIndex)
+  const quorumAmount = useQuorum(parsedGovernorIndex);
 
   // get data for this specific proposal
-  const proposalData: ProposalData | undefined = useProposalData(parsedGovernorIndex, id)
+  const proposalData: ProposalData | undefined = useProposalData(parsedGovernorIndex, id);
 
   // update vote option based on button interactions
-  const [voteOption, setVoteOption] = useState<VoteOption | undefined>(undefined)
+  const [voteOption, setVoteOption] = useState<VoteOption | undefined>(undefined);
 
   // modal for casting votes
-  const showVoteModal = useModalOpen(ApplicationModal.VOTE)
-  const toggleVoteModal = useToggleVoteModal()
+  const showVoteModal = useModalOpen(ApplicationModal.VOTE);
+  const toggleVoteModal = useToggleVoteModal();
 
   // toggle for showing delegation modal
-  const showDelegateModal = useModalOpen(ApplicationModal.DELEGATE)
-  const toggleDelegateModal = useToggleDelegateModal()
+  const showDelegateModal = useModalOpen(ApplicationModal.DELEGATE);
+  const toggleDelegateModal = useToggleDelegateModal();
 
   // toggle for showing queue modal
-  const showQueueModal = useModalOpen(ApplicationModal.QUEUE)
-  const toggleQueueModal = useToggleQueueModal()
+  const showQueueModal = useModalOpen(ApplicationModal.QUEUE);
+  const toggleQueueModal = useToggleQueueModal();
 
   // toggle for showing execute modal
-  const showExecuteModal = useModalOpen(ApplicationModal.EXECUTE)
-  const toggleExecuteModal = useToggleExecuteModal()
+  const showExecuteModal = useModalOpen(ApplicationModal.EXECUTE);
+  const toggleExecuteModal = useToggleExecuteModal();
 
   // get and format date from data
-  const currentTimestamp = useCurrentBlockTimestamp()
-  const currentBlock = useBlockNumber()
+  const currentTimestamp = useCurrentBlockTimestamp();
+  const currentBlock = useBlockNumber();
   const startDate = getDateFromBlock(
     proposalData?.startBlock,
     currentBlock,
     (chainId && AVERAGE_BLOCK_TIME_IN_SECS[chainId]) ?? DEFAULT_AVERAGE_BLOCK_TIME_IN_SECS,
     currentTimestamp
-  )
+  );
   const endDate = getDateFromBlock(
     proposalData?.endBlock,
     currentBlock,
     (chainId && AVERAGE_BLOCK_TIME_IN_SECS[chainId]) ?? DEFAULT_AVERAGE_BLOCK_TIME_IN_SECS,
     currentTimestamp
-  )
-  const now = new Date()
-  const locale = useActiveLocale()
+  );
+  const now = new Date();
+  const locale = useActiveLocale();
   const dateFormat: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
@@ -207,55 +207,57 @@ export default function VotePage({
     hour: 'numeric',
     minute: 'numeric',
     timeZoneName: 'short',
-  }
+  };
   // convert the eta to milliseconds before it's a date
-  const eta = proposalData?.eta ? new Date(proposalData.eta.mul(ms`1 second`).toNumber()) : undefined
+  const eta = proposalData?.eta ? new Date(proposalData.eta.mul(ms`1 second`).toNumber()) : undefined;
 
   // get total votes and format percentages for UI
-  const totalVotes = proposalData?.forCount?.add(proposalData.againstCount)
+  const totalVotes = proposalData?.forCount?.add(proposalData.againstCount);
   const forPercentage = totalVotes
     ? proposalData?.forCount?.asFraction?.divide(totalVotes.asFraction)?.multiply(100)
-    : undefined
-  const againstPercentage = forPercentage ? new Fraction(100).subtract(forPercentage) : undefined
+    : undefined;
+  const againstPercentage = forPercentage ? new Fraction(100).subtract(forPercentage) : undefined;
 
   // only count available votes as of the proposal start block
-  const availableVotes: CurrencyAmount<Token> | undefined = useUserVotesAsOfBlock(proposalData?.startBlock ?? undefined)
+  const availableVotes: CurrencyAmount<Token> | undefined = useUserVotesAsOfBlock(
+    proposalData?.startBlock ?? undefined
+  );
 
   // only show voting if user has > 0 votes at proposal start block and proposal is active,
   const showVotingButtons =
     availableVotes &&
     JSBI.greaterThan(availableVotes.quotient, JSBI.BigInt(0)) &&
     proposalData &&
-    proposalData.status === ProposalState.ACTIVE
+    proposalData.status === ProposalState.ACTIVE;
 
   // we only show the button if there's an account connected and the proposal state is correct
-  const showQueueButton = account && proposalData?.status === ProposalState.SUCCEEDED
+  const showQueueButton = account && proposalData?.status === ProposalState.SUCCEEDED;
 
   // we only show the button if there's an account connected and the proposal state is correct
-  const showExecuteButton = account && proposalData?.status === ProposalState.QUEUED
+  const showExecuteButton = account && proposalData?.status === ProposalState.QUEUED;
 
   const uniBalance: CurrencyAmount<Token> | undefined = useTokenBalance(
     account ?? undefined,
     chainId ? UNI[chainId] : undefined
-  )
-  const userDelegatee: string | undefined = useUserDelegatee()
+  );
+  const userDelegatee: string | undefined = useUserDelegatee();
 
   // in blurb link to home page if they are able to unlock
   const showLinkForUnlock = Boolean(
     uniBalance && JSBI.notEqual(uniBalance.quotient, JSBI.BigInt(0)) && userDelegatee === ZERO_ADDRESS
-  )
+  );
 
   // show links in propsoal details if content is an address
   // if content is contract with common name, replace address with common name
   const linkIfAddress = (content: string) => {
     if (isAddress(content) && chainId) {
-      const commonName = COMMON_CONTRACT_NAMES[chainId]?.[content] ?? content
+      const commonName = COMMON_CONTRACT_NAMES[chainId]?.[content] ?? content;
       return (
         <ExternalLink href={getExplorerLink(chainId, content, ExplorerDataType.ADDRESS)}>{commonName}</ExternalLink>
-      )
+      );
     }
-    return <span>{content}</span>
-  }
+    return <span>{content}</span>;
+  };
 
   return (
     <>
@@ -322,8 +324,8 @@ export default function VotePage({
                 padding="8px"
                 $borderRadius="8px"
                 onClick={() => {
-                  setVoteOption(VoteOption.For)
-                  toggleVoteModal()
+                  setVoteOption(VoteOption.For);
+                  toggleVoteModal();
                 }}
               >
                 <Trans>Vote For</Trans>
@@ -332,8 +334,8 @@ export default function VotePage({
                 padding="8px"
                 $borderRadius="8px"
                 onClick={() => {
-                  setVoteOption(VoteOption.Against)
-                  toggleVoteModal()
+                  setVoteOption(VoteOption.Against);
+                  toggleVoteModal();
                 }}
               >
                 <Trans>Vote Against</Trans>
@@ -346,7 +348,7 @@ export default function VotePage({
                 padding="8px"
                 $borderRadius="8px"
                 onClick={() => {
-                  toggleQueueModal()
+                  toggleQueueModal();
                 }}
               >
                 <Trans>Queue</Trans>
@@ -367,7 +369,7 @@ export default function VotePage({
                   padding="8px"
                   $borderRadius="8px"
                   onClick={() => {
-                    toggleExecuteModal()
+                    toggleExecuteModal();
                   }}
                   // can't execute until the eta has arrived
                   disabled={!currentTimestamp || !proposalData?.eta || currentTimestamp.lt(proposalData.eta)}
@@ -446,11 +448,11 @@ export default function VotePage({
                         {linkIfAddress(content)}
                         {d.callData.split(',').length - 1 === i ? '' : ','}
                       </span>
-                    )
+                    );
                   })}
                   )
                 </DetailText>
-              )
+              );
             })}
           </AutoColumn>
           <AutoColumn gap="md">
@@ -479,5 +481,5 @@ export default function VotePage({
       </PageWrapper>
       <SwitchLocaleLink />
     </>
-  )
+  );
 }

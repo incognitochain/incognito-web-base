@@ -1,46 +1,46 @@
-import { Plural, Trans } from '@lingui/macro'
-import { Currency, Token } from '@uniswap/sdk-core'
-import { TokenList } from '@uniswap/token-lists'
-import { ButtonPrimary } from 'components/Button'
-import { AutoColumn } from 'components/Column'
-import { RowBetween } from 'components/Row'
-import { SectionBreak } from 'components/swap/styleds'
-import { useUnsupportedTokens } from 'hooks/Tokens'
-import useTheme from 'hooks/useTheme'
-import { AlertCircle, ArrowLeft } from 'react-feather'
-import { useAddUserToken } from 'state/user/hooks'
-import styled from 'styled-components/macro'
-import { CloseIcon, ThemedText } from 'theme'
+import { Plural, Trans } from '@lingui/macro';
+import { Currency, Token } from '@uniswap/sdk-core';
+import { TokenList } from '@uniswap/token-lists';
+import { ButtonPrimary } from 'components/Button';
+import { AutoColumn } from 'components/Column';
+import { RowBetween } from 'components/Row';
+import { SectionBreak } from 'components/swap/styleds';
+import { useUnsupportedTokens } from 'hooks/Tokens';
+import useTheme from 'hooks/useTheme';
+import { AlertCircle, ArrowLeft } from 'react-feather';
+import { useAddUserToken } from 'state/user/hooks';
+import styled from 'styled-components/macro';
+import { CloseIcon, ThemedText } from 'theme';
 
-import BlockedToken from './BlockedToken'
-import { PaddedColumn } from './styleds'
-import TokenImportCard from './TokenImportCard'
+import BlockedToken from './BlockedToken';
+import { PaddedColumn } from './styleds';
+import TokenImportCard from './TokenImportCard';
 
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
   overflow: auto;
-`
+`;
 
 interface ImportProps {
-  tokens: Token[]
-  list?: TokenList
-  onBack?: () => void
-  onDismiss?: () => void
-  handleCurrencySelect?: (currency: Currency) => void
+  tokens: Token[];
+  list?: TokenList;
+  onBack?: () => void;
+  onDismiss?: () => void;
+  handleCurrencySelect?: (currency: Currency) => void;
 }
 
 export function ImportToken(props: ImportProps) {
-  const { tokens, list, onBack, onDismiss, handleCurrencySelect } = props
-  const theme = useTheme()
+  const { tokens, list, onBack, onDismiss, handleCurrencySelect } = props;
+  const theme = useTheme();
 
-  const addToken = useAddUserToken()
+  const addToken = useAddUserToken();
 
-  const unsupportedTokens = useUnsupportedTokens()
-  const unsupportedSet = new Set(Object.keys(unsupportedTokens))
-  const intersection = new Set(tokens.filter((token) => unsupportedSet.has(token.address)))
+  const unsupportedTokens = useUnsupportedTokens();
+  const unsupportedSet = new Set(Object.keys(unsupportedTokens));
+  const intersection = new Set(tokens.filter((token) => unsupportedSet.has(token.address)));
   if (intersection.size > 0) {
-    return <BlockedToken onBack={onBack} onDismiss={onDismiss} blockedTokens={Array.from(intersection)} />
+    return <BlockedToken onBack={onBack} onDismiss={onDismiss} blockedTokens={Array.from(intersection)} />;
   }
   return (
     <Wrapper>
@@ -72,8 +72,8 @@ export function ImportToken(props: ImportProps) {
           $borderRadius="20px"
           padding="10px 1rem"
           onClick={() => {
-            tokens.map((token) => addToken(token))
-            handleCurrencySelect && handleCurrencySelect(tokens[0])
+            tokens.map((token) => addToken(token));
+            handleCurrencySelect && handleCurrencySelect(tokens[0]);
           }}
           className=".token-dismiss-button"
         >
@@ -81,5 +81,5 @@ export function ImportToken(props: ImportProps) {
         </ButtonPrimary>
       </AutoColumn>
     </Wrapper>
-  )
+  );
 }

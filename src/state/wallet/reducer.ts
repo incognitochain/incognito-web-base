@@ -1,8 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { Wallet } from 'connectors'
+import { createSlice } from '@reduxjs/toolkit';
+import { Wallet } from 'connectors';
 
 export interface WalletState {
-  errorByWallet: Record<Wallet, string | undefined>
+  errorByWallet: Record<Wallet, string | undefined>;
 }
 
 export const initialState: WalletState = {
@@ -14,7 +14,7 @@ export const initialState: WalletState = {
     [Wallet.NETWORK]: undefined,
     [Wallet.GNOSIS_SAFE]: undefined,
   },
-}
+};
 
 const walletSlice = createSlice({
   name: 'wallet',
@@ -24,10 +24,10 @@ const walletSlice = createSlice({
       state,
       { payload: { wallet, error } }: { payload: { wallet: Wallet; error: string | undefined } }
     ) {
-      state.errorByWallet[wallet] = error
+      state.errorByWallet[wallet] = error;
     },
   },
-})
+});
 
-export const { updateWalletError } = walletSlice.actions
-export default walletSlice.reducer
+export const { updateWalletError } = walletSlice.actions;
+export default walletSlice.reducer;

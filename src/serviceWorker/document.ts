@@ -1,11 +1,11 @@
-import { RouteHandlerCallbackOptions, RouteMatchCallbackOptions } from 'workbox-core'
-import { getCacheKeyForURL, matchPrecache } from 'workbox-precaching'
-import { Route } from 'workbox-routing'
+import { RouteHandlerCallbackOptions, RouteMatchCallbackOptions } from 'workbox-core';
+import { getCacheKeyForURL, matchPrecache } from 'workbox-precaching';
+import { Route } from 'workbox-routing';
 
-import { isLocalhost } from './utils'
+import { isLocalhost } from './utils';
 
-const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$')
-export const DOCUMENT = process.env.PUBLIC_URL + '/index.html'
+const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$');
+export const DOCUMENT = process.env.PUBLIC_URL + '/index.html';
 
 /**
  * Matches with App Shell-style routing, so that navigation requests are fulfilled with an index.html shell.
@@ -14,26 +14,26 @@ export const DOCUMENT = process.env.PUBLIC_URL + '/index.html'
 export function matchDocument({ request, url }: RouteMatchCallbackOptions) {
   // If this isn't a navigation, skip.
   if (request.mode !== 'navigate') {
-    return false
+    return false;
   }
 
   // If this looks like a resource (ie has a file extension), skip.
   if (url.pathname.match(fileExtensionRegexp)) {
-    return false
+    return false;
   }
 
   // If this isn't app.uniswap.org (or a local build), skip.
   // IPFS gateways may not have domain separation, so they cannot use document caching.
   if (url.hostname !== 'app.uniswap.org' && !isLocalhost()) {
-    return false
+    return false;
   }
 
-  return true
+  return true;
 }
 
 type HandlerContext = {
-  offlineDocument?: Response
-} | void
+  offlineDocument?: Response;
+} | void;
 
 /**
  * The returned document should always be fresh, so this handler uses a custom strategy:
@@ -51,42 +51,42 @@ type HandlerContext = {
  */
 export async function handleDocument(this: HandlerContext, { event, request }: RouteHandlerCallbackOptions) {
   // If we are offline, serve the offline document.
-  if ('onLine' in navigator && !navigator.onLine) return this?.offlineDocument?.clone() || fetch(request)
+  if ('onLine' in navigator && !navigator.onLine) return this?.offlineDocument?.clone() || fetch(request);
 
   // The exact cache key should be used for requests, as etags will be different for different paths.
   // This also prevents usage of preloadResponse.
-  const requestUrl = getCacheKeyForURL(DOCUMENT)
-  const cachedResponse = await matchPrecache(DOCUMENT)
+  const requestUrl = getCacheKeyForURL(DOCUMENT);
+  const cachedResponse = await matchPrecache(DOCUMENT);
 
   // Responses will throw if offline, but if cached the cached response should still be returned.
-  const controller = new AbortController()
-  let response
+  const controller = new AbortController();
+  let response;
   try {
-    response = await fetch(requestUrl || DOCUMENT, { cache: 'reload', signal: controller.signal })
+    response = await fetch(requestUrl || DOCUMENT, { cache: 'reload', signal: controller.signal });
     if (!cachedResponse) {
-      return new Response(response.body, response)
+      return new Response(response.body, response);
     }
   } catch (e) {
-    if (!cachedResponse) throw e
-    return CachedDocument.from(cachedResponse)
+    if (!cachedResponse) throw e;
+    return CachedDocument.from(cachedResponse);
   }
 
   // The etag header can be queried before the entire response body has streamed, so it is still a
   // performant cache key.
-  const etag = response?.headers.get('etag')
-  const cachedEtag = cachedResponse?.headers.get('etag')
+  const etag = response?.headers.get('etag');
+  const cachedEtag = cachedResponse?.headers.get('etag');
   if (etag && etag === cachedEtag) {
     // If the cache is still fresh, cancel the pending response.
-    controller.abort()
-    return CachedDocument.from(cachedResponse)
+    controller.abort();
+    return CachedDocument.from(cachedResponse);
   }
 
-  return new Response(response.body, response)
+  return new Response(response.body, response);
 }
 
 export class DocumentRoute extends Route {
   constructor(offlineDocument?: Response) {
-    super(matchDocument, handleDocument.bind({ offlineDocument }), 'GET')
+    super(matchDocument, handleDocument.bind({ offlineDocument }), 'GET');
   }
 }
 
@@ -96,14 +96,17 @@ export class DocumentRoute extends Route {
  */
 export class CachedDocument extends Response {
   static async from(response: Response) {
-    const text = await response.text()
+    const text = await response.text();
 
     // Injects a marker into the document so that client code knows it was served from cache.
     // The marker should be injected immediately in the <head> so it is available to client code.
-    return new CachedDocument(text.replace('<head>', '<head><script>window.__isDocumentCached=true</script>'), response)
+    return new CachedDocument(
+      text.replace('<head>', '<head><script>window.__isDocumentCached=true</script>'),
+      response
+    );
   }
 
   private constructor(text: string, public response: Response) {
-    super(text, response)
+    super(text, response);
   }
 }

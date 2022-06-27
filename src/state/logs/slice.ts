@@ -1,26 +1,26 @@
-import { Filter } from '@ethersproject/providers'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Filter } from '@ethersproject/providers';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { filterToKey, Log } from './utils'
+import { filterToKey, Log } from './utils';
 
 export interface LogsState {
   [chainId: number]: {
     [filterKey: string]: {
-      listeners: number
-      fetchingBlockNumber?: number
+      listeners: number;
+      fetchingBlockNumber?: number;
       results?:
         | {
-            blockNumber: number
-            logs: Log[]
-            error?: undefined
+            blockNumber: number;
+            logs: Log[];
+            error?: undefined;
           }
         | {
-            blockNumber: number
-            logs?: undefined
-            error: true
-          }
-    }
-  }
+            blockNumber: number;
+            logs?: undefined;
+            error: true;
+          };
+    };
+  };
 }
 
 const slice = createSlice({
@@ -28,13 +28,13 @@ const slice = createSlice({
   initialState: {} as LogsState,
   reducers: {
     addListener(state, { payload: { chainId, filter } }: PayloadAction<{ chainId: number; filter: Filter }>) {
-      if (!state[chainId]) state[chainId] = {}
-      const key = filterToKey(filter)
+      if (!state[chainId]) state[chainId] = {};
+      const key = filterToKey(filter);
       if (!state[chainId][key])
         state[chainId][key] = {
           listeners: 1,
-        }
-      else state[chainId][key].listeners++
+        };
+      else state[chainId][key].listeners++;
     },
     fetchingLogs(
       state,
@@ -42,11 +42,11 @@ const slice = createSlice({
         payload: { chainId, filters, blockNumber },
       }: PayloadAction<{ chainId: number; filters: Filter[]; blockNumber: number }>
     ) {
-      if (!state[chainId]) return
+      if (!state[chainId]) return;
       for (const filter of filters) {
-        const key = filterToKey(filter)
-        if (!state[chainId][key]) continue
-        state[chainId][key].fetchingBlockNumber = blockNumber
+        const key = filterToKey(filter);
+        if (!state[chainId][key]) continue;
+        state[chainId][key].fetchingBlockNumber = blockNumber;
       }
     },
     fetchedLogs(
@@ -55,11 +55,11 @@ const slice = createSlice({
         payload: { chainId, filter, results },
       }: PayloadAction<{ chainId: number; filter: Filter; results: { blockNumber: number; logs: Log[] } }>
     ) {
-      if (!state[chainId]) return
-      const key = filterToKey(filter)
-      const fetchState = state[chainId][key]
-      if (!fetchState || (fetchState.results && fetchState.results.blockNumber > results.blockNumber)) return
-      fetchState.results = results
+      if (!state[chainId]) return;
+      const key = filterToKey(filter);
+      const fetchState = state[chainId][key];
+      if (!fetchState || (fetchState.results && fetchState.results.blockNumber > results.blockNumber)) return;
+      fetchState.results = results;
     },
     fetchedLogsError(
       state,
@@ -67,23 +67,23 @@ const slice = createSlice({
         payload: { chainId, filter, blockNumber },
       }: PayloadAction<{ chainId: number; blockNumber: number; filter: Filter }>
     ) {
-      if (!state[chainId]) return
-      const key = filterToKey(filter)
-      const fetchState = state[chainId][key]
-      if (!fetchState || (fetchState.results && fetchState.results.blockNumber > blockNumber)) return
+      if (!state[chainId]) return;
+      const key = filterToKey(filter);
+      const fetchState = state[chainId][key];
+      if (!fetchState || (fetchState.results && fetchState.results.blockNumber > blockNumber)) return;
       fetchState.results = {
         blockNumber,
         error: true,
-      }
+      };
     },
     removeListener(state, { payload: { chainId, filter } }: PayloadAction<{ chainId: number; filter: Filter }>) {
-      if (!state[chainId]) return
-      const key = filterToKey(filter)
-      if (!state[chainId][key]) return
-      state[chainId][key].listeners--
+      if (!state[chainId]) return;
+      const key = filterToKey(filter);
+      if (!state[chainId][key]) return;
+      state[chainId][key].listeners--;
     },
   },
-})
+});
 
-export default slice.reducer
-export const { addListener, removeListener, fetchedLogs, fetchedLogsError, fetchingLogs } = slice.actions
+export default slice.reducer;
+export const { addListener, removeListener, fetchedLogs, fetchedLogsError, fetchingLogs } = slice.actions;

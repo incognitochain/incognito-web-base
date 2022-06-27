@@ -1,14 +1,13 @@
-import { DialogContent, DialogOverlay } from '@reach/dialog'
-import { transparentize } from 'polished'
-import React from 'react'
-import { animated, useSpring, useTransition } from 'react-spring'
-import { useGesture } from 'react-use-gesture'
-import styled, { css } from 'styled-components/macro'
+import { DialogContent, DialogOverlay } from '@reach/dialog';
+import { transparentize } from 'polished';
+import React from 'react';
+import { animated, useSpring, useTransition } from 'react-spring';
+import { useGesture } from 'react-use-gesture';
+import styled, { css } from 'styled-components/macro';
 
-import { isMobile } from '../../utils/userAgent'
+import { isMobile } from '../../utils/userAgent';
 
-const AnimatedDialogOverlay = animated(DialogOverlay)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const AnimatedDialogOverlay = animated(DialogOverlay);
 const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
   &[data-reach-dialog-overlay] {
     z-index: 2;
@@ -21,9 +20,9 @@ const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
 
     background-color: ${({ theme }) => theme.modalBG};
   }
-`
+`;
 
-const AnimatedDialogContent = animated(DialogContent)
+const AnimatedDialogContent = animated(DialogContent);
 // destructure to not pass custom props to Dialog DOM element
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...rest }) => (
@@ -75,15 +74,15 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...r
       }
     `}
   }
-`
+`;
 
 interface ModalProps {
-  isOpen: boolean
-  onDismiss: () => void
-  minHeight?: number | false
-  maxHeight?: number
-  initialFocusRef?: React.RefObject<any>
-  children?: React.ReactNode
+  isOpen: boolean;
+  onDismiss: () => void;
+  minHeight?: number | false;
+  maxHeight?: number;
+  initialFocusRef?: React.RefObject<any>;
+  children?: React.ReactNode;
 }
 
 export default function Modal({
@@ -99,19 +98,19 @@ export default function Modal({
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
-  })
+  });
 
-  const [{ y }, set] = useSpring(() => ({ y: 0, config: { mass: 1, tension: 210, friction: 20 } }))
+  const [{ y }, set] = useSpring(() => ({ y: 0, config: { mass: 1, tension: 210, friction: 20 } }));
   const bind = useGesture({
     onDrag: (state) => {
       set({
         y: state.down ? state.movement[1] : 0,
-      })
+      });
       if (state.movement[1] > 300 || (state.velocity > 3 && state.direction[1] > 0)) {
-        onDismiss()
+        onDismiss();
       }
     },
-  })
+  });
 
   return (
     <>
@@ -145,5 +144,5 @@ export default function Modal({
           )
       )}
     </>
-  )
+  );
 }

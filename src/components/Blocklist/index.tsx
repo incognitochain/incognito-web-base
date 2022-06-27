@@ -1,6 +1,6 @@
-import { Trans } from '@lingui/macro'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { ReactNode, useMemo } from 'react'
+import { Trans } from '@lingui/macro';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { ReactNode, useMemo } from 'react';
 
 const BLOCKED_ADDRESSES: string[] = [
   '0x7Db418b5D567A4e0E8c59Ad71BE1FcE48f3E6107',
@@ -35,17 +35,17 @@ const BLOCKED_ADDRESSES: string[] = [
   '0x7FF9cFad3877F21d41Da833E2F775dB0569eE3D9',
   '0x098B716B8Aaf21512996dC57EB0615e2383E2f96',
   '0xfEC8A60023265364D066a1212fDE3930F6Ae8da7',
-]
+];
 
 export default function Blocklist({ children }: { children: ReactNode }) {
-  const { account } = useActiveWeb3React()
-  const blocked: boolean = useMemo(() => Boolean(account && BLOCKED_ADDRESSES.indexOf(account) !== -1), [account])
+  const { account } = useActiveWeb3React();
+  const blocked: boolean = useMemo(() => Boolean(account && BLOCKED_ADDRESSES.indexOf(account) !== -1), [account]);
   if (blocked) {
     return (
       <div>
         <Trans>Blocked address</Trans>
       </div>
-    )
+    );
   }
-  return <>{children}</>
+  return <>{children}</>;
 }

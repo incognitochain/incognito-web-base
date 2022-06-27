@@ -1,28 +1,28 @@
-import { Trans } from '@lingui/macro'
-import { Percent } from '@uniswap/sdk-core'
-import useTheme from 'hooks/useTheme'
-import { darken } from 'polished'
-import { ReactNode } from 'react'
-import { ArrowLeft } from 'react-feather'
-import { Link as HistoryLink, NavLink, useLocation } from 'react-router-dom'
-import { Box } from 'rebass'
-import { useAppDispatch } from 'state/hooks'
-import { resetMintState } from 'state/mint/actions'
-import { resetMintState as resetMintV3State } from 'state/mint/v3/actions'
-import styled from 'styled-components/macro'
-import { ThemedText } from 'theme'
+import { Trans } from '@lingui/macro';
+import { Percent } from '@uniswap/sdk-core';
+import useTheme from 'hooks/useTheme';
+import { darken } from 'polished';
+import { ReactNode } from 'react';
+import { ArrowLeft } from 'react-feather';
+import { Link as HistoryLink, NavLink, useLocation } from 'react-router-dom';
+import { Box } from 'rebass';
+import { useAppDispatch } from 'state/hooks';
+import { resetMintState } from 'state/mint/actions';
+import { resetMintState as resetMintV3State } from 'state/mint/v3/actions';
+import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 
-import Row, { RowBetween } from '../Row'
-import SettingsTab from '../Settings'
+import Row, { RowBetween } from '../Row';
+import SettingsTab from '../Settings';
 
 const Tabs = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: center;
   border-radius: 3rem;
   justify-content: space-evenly;
-`
+`;
 
-const activeClassName = 'ACTIVE'
+const activeClassName = 'ACTIVE';
 
 const StyledNavLink = styled(NavLink).attrs({
   activeClassName,
@@ -48,7 +48,7 @@ const StyledNavLink = styled(NavLink).attrs({
   :focus {
     color: ${({ theme }) => darken(0.1, theme.text1)};
   }
-`
+`;
 
 const StyledHistoryLink = styled(HistoryLink)<{ flex: string | undefined }>`
   flex: ${({ flex }) => flex ?? 'none'};
@@ -57,16 +57,16 @@ const StyledHistoryLink = styled(HistoryLink)<{ flex: string | undefined }>`
     flex: none;
     margin-right: 10px;
   `};
-`
+`;
 
 const ActiveText = styled.div`
   font-weight: 500;
   font-size: 20px;
-`
+`;
 
 const StyledArrowLeft = styled(ArrowLeft)`
   color: ${({ theme }) => theme.text1};
-`
+`;
 
 export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' }) {
   return (
@@ -78,7 +78,7 @@ export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' }) {
         <Trans>Pool</Trans>
       </StyledNavLink>
     </Tabs>
-  )
+  );
 }
 
 export function FindPoolTabs({ origin }: { origin: string }) {
@@ -93,7 +93,7 @@ export function FindPoolTabs({ origin }: { origin: string }) {
         </ActiveText>
       </RowBetween>
     </Tabs>
-  )
+  );
 }
 
 export function AddRemoveTabs({
@@ -103,22 +103,22 @@ export function AddRemoveTabs({
   positionID,
   children,
 }: {
-  adding: boolean
-  creating: boolean
-  defaultSlippage: Percent
-  positionID?: string | undefined
-  showBackLink?: boolean
-  children?: ReactNode | undefined
+  adding: boolean;
+  creating: boolean;
+  defaultSlippage: Percent;
+  positionID?: string | undefined;
+  showBackLink?: boolean;
+  children?: ReactNode | undefined;
 }) {
-  const theme = useTheme()
+  const theme = useTheme();
   // reset states on back
-  const dispatch = useAppDispatch()
-  const location = useLocation()
+  const dispatch = useAppDispatch();
+  const location = useLocation();
 
   // detect if back should redirect to v3 or v2 pool page
   const poolLink = location.pathname.includes('add/v2')
     ? '/pool/v2'
-    : '/pool' + (!!positionID ? `/${positionID.toString()}` : '')
+    : '/pool' + (!!positionID ? `/${positionID.toString()}` : '');
 
   return (
     <Tabs>
@@ -128,8 +128,8 @@ export function AddRemoveTabs({
           onClick={() => {
             if (adding) {
               // not 100% sure both of these are needed
-              dispatch(resetMintState())
-              dispatch(resetMintV3State())
+              dispatch(resetMintState());
+              dispatch(resetMintV3State());
             }
           }}
           flex={children ? '1' : undefined}
@@ -153,7 +153,7 @@ export function AddRemoveTabs({
         <SettingsTab placeholderSlippage={defaultSlippage} />
       </RowBetween>
     </Tabs>
-  )
+  );
 }
 
 export function CreateProposalTabs() {
@@ -166,5 +166,5 @@ export function CreateProposalTabs() {
         <ActiveText style={{ marginLeft: 'auto', marginRight: 'auto' }}>Create Proposal</ActiveText>
       </Row>
     </Tabs>
-  )
+  );
 }

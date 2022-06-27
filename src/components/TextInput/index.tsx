@@ -1,5 +1,5 @@
-import React, { memo, useCallback, useRef } from 'react'
-import styled from 'styled-components/macro'
+import React, { memo, useCallback, useRef } from 'react';
+import styled from 'styled-components/macro';
 
 const Input = styled.input<{ error?: boolean; fontSize?: string }>`
   font-size: ${({ fontSize }) => fontSize || '1.25rem'};
@@ -29,7 +29,7 @@ const Input = styled.input<{ error?: boolean; fontSize?: string }>`
   ::placeholder {
     color: ${({ theme }) => theme.text4};
   }
-`
+`;
 
 const TextAreaInput = styled.textarea<{ error?: boolean; fontSize?: string }>`
   font-size: ${({ fontSize }) => fontSize || '1.25rem'};
@@ -61,7 +61,7 @@ const TextAreaInput = styled.textarea<{ error?: boolean; fontSize?: string }>`
   ::placeholder {
     color: ${({ theme }) => theme.text4};
   }
-`
+`;
 
 export const TextInput = ({
   className,
@@ -70,18 +70,18 @@ export const TextInput = ({
   placeholder,
   fontSize,
 }: {
-  className?: string
-  value: string
-  onUserInput: (value: string) => void
-  placeholder: string
-  fontSize: string
+  className?: string;
+  value: string;
+  onUserInput: (value: string) => void;
+  placeholder: string;
+  fontSize: string;
 }) => {
   const handleInput = useCallback(
     (event) => {
-      onUserInput(event.target.value)
+      onUserInput(event.target.value);
     },
     [onUserInput]
-  )
+  );
 
   return (
     <div className={className}>
@@ -97,8 +97,8 @@ export const TextInput = ({
         fontSize={fontSize}
       />
     </div>
-  )
-}
+  );
+};
 
 export const ResizingTextArea = memo(
   ({
@@ -108,22 +108,22 @@ export const ResizingTextArea = memo(
     placeholder,
     fontSize,
   }: {
-    className?: string
-    value: string
-    onUserInput: (value: string) => void
-    placeholder: string
-    fontSize: string
+    className?: string;
+    value: string;
+    onUserInput: (value: string) => void;
+    placeholder: string;
+    fontSize: string;
   }) => {
-    const inputRef = useRef<HTMLTextAreaElement>(document.createElement('textarea'))
+    const inputRef = useRef<HTMLTextAreaElement>(document.createElement('textarea'));
 
     const handleInput = useCallback(
       (event) => {
-        inputRef.current.style.height = 'auto'
-        inputRef.current.style.height = inputRef.current.scrollHeight + 'px'
-        onUserInput(event.target.value)
+        inputRef.current.style.height = 'auto';
+        inputRef.current.style.height = inputRef.current.scrollHeight + 'px';
+        onUserInput(event.target.value);
       },
       [onUserInput]
-    )
+    );
 
     return (
       <TextAreaInput
@@ -139,8 +139,8 @@ export const ResizingTextArea = memo(
         fontSize={fontSize}
         ref={inputRef}
       />
-    )
+    );
   }
-)
+);
 
-ResizingTextArea.displayName = 'ResizingTextArea'
+ResizingTextArea.displayName = 'ResizingTextArea';

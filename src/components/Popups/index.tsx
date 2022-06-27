@@ -1,13 +1,13 @@
-import { SupportedChainId } from 'constants/chains'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import styled from 'styled-components/macro'
-import { MEDIA_WIDTHS } from 'theme'
+import { SupportedChainId } from 'constants/chains';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import styled from 'styled-components/macro';
+import { MEDIA_WIDTHS } from 'theme';
 
-import { useActivePopups } from '../../state/application/hooks'
-import { useURLWarningVisible } from '../../state/user/hooks'
-import { AutoColumn } from '../Column'
-import ClaimPopup from './ClaimPopup'
-import PopupItem from './PopupItem'
+import { useActivePopups } from '../../state/application/hooks';
+import { useURLWarningVisible } from '../../state/user/hooks';
+import { AutoColumn } from '../Column';
+import ClaimPopup from './ClaimPopup';
+import PopupItem from './PopupItem';
 
 const MobilePopupWrapper = styled.div<{ height: string | number }>`
   position: relative;
@@ -21,7 +21,7 @@ const MobilePopupWrapper = styled.div<{ height: string | number }>`
     display: block;
     padding-top: 20px;
   `};
-`
+`;
 
 const MobilePopupInner = styled.div`
   height: 99%;
@@ -33,11 +33,11 @@ const MobilePopupInner = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
-`
+`;
 
 const StopOverflowQuery = `@media screen and (min-width: ${MEDIA_WIDTHS.upToMedium + 1}px) and (max-width: ${
   MEDIA_WIDTHS.upToMedium + 500
-}px)`
+}px)`;
 
 const FixedPopupColumn = styled(AutoColumn)<{ extraPadding: boolean; xlPadding: boolean }>`
   position: fixed;
@@ -54,17 +54,17 @@ const FixedPopupColumn = styled(AutoColumn)<{ extraPadding: boolean; xlPadding: 
   ${StopOverflowQuery} {
     top: ${({ extraPadding, xlPadding }) => (xlPadding ? '64px' : extraPadding ? '64px' : '56px')};
   }
-`
+`;
 
 export default function Popups() {
   // get all popups
-  const activePopups = useActivePopups()
+  const activePopups = useActivePopups();
 
-  const urlWarningActive = useURLWarningVisible()
+  const urlWarningActive = useURLWarningVisible();
 
   // need extra padding if network is not L1 Ethereum
-  const { chainId } = useActiveWeb3React()
-  const isNotOnMainnet = Boolean(chainId && chainId !== SupportedChainId.MAINNET)
+  const { chainId } = useActiveWeb3React();
+  const isNotOnMainnet = Boolean(chainId && chainId !== SupportedChainId.MAINNET);
 
   return (
     <>
@@ -85,5 +85,5 @@ export default function Popups() {
         </MobilePopupInner>
       </MobilePopupWrapper>
     </>
-  )
+  );
 }

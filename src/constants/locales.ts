@@ -32,10 +32,10 @@ export const SUPPORTED_LOCALES = [
   'vi-VN',
   'zh-CN',
   'zh-TW',
-]
-export type SupportedLocale = typeof SUPPORTED_LOCALES[number] | 'pseudo'
+];
+export type SupportedLocale = typeof SUPPORTED_LOCALES[number] | 'pseudo';
 
-export const DEFAULT_LOCALE: SupportedLocale = 'en-US'
+export const DEFAULT_LOCALE: SupportedLocale = 'en-US';
 
 export const LOCALE_LABEL: { [locale in SupportedLocale]: string } = {
   'af-ZA': 'Afrikaans',
@@ -71,4 +71,4 @@ export const LOCALE_LABEL: { [locale in SupportedLocale]: string } = {
   'zh-CN': '简体中文',
   'zh-TW': '繁体中文',
   pseudo: 'ƥƨèúδô',
-}
+};

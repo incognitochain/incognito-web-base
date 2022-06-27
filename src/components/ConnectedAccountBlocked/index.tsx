@@ -1,34 +1,34 @@
-import { Trans } from '@lingui/macro'
-import CopyHelper from 'components/AccountDetails/Copy'
-import Column from 'components/Column'
-import useTheme from 'hooks/useTheme'
-import { AlertOctagon } from 'react-feather'
-import styled from 'styled-components/macro'
-import { ExternalLink, ThemedText } from 'theme'
+import { Trans } from '@lingui/macro';
+import CopyHelper from 'components/AccountDetails/Copy';
+import Column from 'components/Column';
+import useTheme from 'hooks/useTheme';
+import { AlertOctagon } from 'react-feather';
+import styled from 'styled-components/macro';
+import { ExternalLink, ThemedText } from 'theme';
 
-import Modal from '../Modal'
+import Modal from '../Modal';
 
 const ContentWrapper = styled(Column)`
   align-items: center;
   margin: 32px;
   text-align: center;
-`
+`;
 const WarningIcon = styled(AlertOctagon)`
   min-height: 22px;
   min-width: 22px;
   color: ${({ theme }) => theme.warning};
-`
+`;
 const Copy = styled(CopyHelper)`
   font-size: 12px;
-`
+`;
 
 interface ConnectedAccountBlockedProps {
-  account: string | null | undefined
-  isOpen: boolean
+  account: string | null | undefined;
+  isOpen: boolean;
 }
 
 export default function ConnectedAccountBlocked(props: ConnectedAccountBlockedProps) {
-  const theme = useTheme()
+  const theme = useTheme();
   return (
     <Modal isOpen={props.isOpen} onDismiss={Function.prototype()}>
       <ContentWrapper>
@@ -54,5 +54,5 @@ export default function ConnectedAccountBlocked(props: ConnectedAccountBlockedPr
         </Copy>
       </ContentWrapper>
     </Modal>
-  )
+  );
 }

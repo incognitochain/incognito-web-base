@@ -1,9 +1,9 @@
-import JSBI from 'jsbi'
-import { useSingleCallResult } from 'lib/hooks/multicall'
-import { useMemo } from 'react'
+import JSBI from 'jsbi';
+import { useSingleCallResult } from 'lib/hooks/multicall';
+import { useMemo } from 'react';
 
-import { useContract } from './useContract'
-import useENSAddress from './useENSAddress'
+import { useContract } from './useContract';
+import useENSAddress from './useENSAddress';
 
 const CHAIN_DATA_ABI = [
   {
@@ -13,15 +13,15 @@ const CHAIN_DATA_ABI = [
     stateMutability: 'view',
     type: 'function',
   },
-]
+];
 
 /**
  * Returns the price of 1 gas in WEI for the currently selected network using the chainlink fast gas price oracle
  */
 export default function useGasPrice(): JSBI | undefined {
-  const { address } = useENSAddress('fast-gas-gwei.data.eth')
-  const contract = useContract(address ?? undefined, CHAIN_DATA_ABI, false)
+  const { address } = useENSAddress('fast-gas-gwei.data.eth');
+  const contract = useContract(address ?? undefined, CHAIN_DATA_ABI, false);
 
-  const resultStr = useSingleCallResult(contract, 'latestAnswer').result?.[0]?.toString()
-  return useMemo(() => (typeof resultStr === 'string' ? JSBI.BigInt(resultStr) : undefined), [resultStr])
+  const resultStr = useSingleCallResult(contract, 'latestAnswer').result?.[0]?.toString();
+  return useMemo(() => (typeof resultStr === 'string' ? JSBI.BigInt(resultStr) : undefined), [resultStr]);
 }

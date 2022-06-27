@@ -1,15 +1,15 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/macro';
 // eslint-disable-next-line no-restricted-imports
-import { t } from '@lingui/macro'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { ReactNode, useCallback, useContext } from 'react'
-import styled, { ThemeContext } from 'styled-components/macro'
+import { t } from '@lingui/macro';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { ReactNode, useCallback, useContext } from 'react';
+import styled, { ThemeContext } from 'styled-components/macro';
 
-import useENS from '../../hooks/useENS'
-import { ExternalLink, ThemedText } from '../../theme'
-import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
-import { AutoColumn } from '../Column'
-import { RowBetween } from '../Row'
+import useENS from '../../hooks/useENS';
+import { ExternalLink, ThemedText } from '../../theme';
+import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
+import { AutoColumn } from '../Column';
+import { RowBetween } from '../Row';
 
 const InputPanel = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap}
@@ -18,7 +18,7 @@ const InputPanel = styled.div`
   background-color: ${({ theme }) => theme.bg1};
   z-index: 1;
   width: 100%;
-`
+`;
 
 const ContainerRow = styled.div<{ error: boolean }>`
   display: flex;
@@ -29,12 +29,12 @@ const ContainerRow = styled.div<{ error: boolean }>`
   transition: border-color 300ms ${({ error }) => (error ? 'step-end' : 'step-start')},
     color 500ms ${({ error }) => (error ? 'step-end' : 'step-start')};
   background-color: ${({ theme }) => theme.bg1};
-`
+`;
 
 const InputContainer = styled.div`
   flex: 1;
   padding: 1rem;
-`
+`;
 
 const Input = styled.input<{ error?: boolean }>`
   font-size: 1.25rem;
@@ -67,7 +67,7 @@ const Input = styled.input<{ error?: boolean }>`
   ::placeholder {
     color: ${({ theme }) => theme.text4};
   }
-`
+`;
 
 export default function AddressInputPanel({
   id,
@@ -77,30 +77,30 @@ export default function AddressInputPanel({
   value,
   onChange,
 }: {
-  id?: string
-  className?: string
-  label?: ReactNode
-  placeholder?: string
+  id?: string;
+  className?: string;
+  label?: ReactNode;
+  placeholder?: string;
   // the typed string value
-  value: string
+  value: string;
   // triggers whenever the typed value changes
-  onChange: (value: string) => void
+  onChange: (value: string) => void;
 }) {
-  const { chainId } = useActiveWeb3React()
-  const theme = useContext(ThemeContext)
+  const { chainId } = useActiveWeb3React();
+  const theme = useContext(ThemeContext);
 
-  const { address, loading, name } = useENS(value)
+  const { address, loading, name } = useENS(value);
 
   const handleInput = useCallback(
     (event) => {
-      const input = event.target.value
-      const withoutSpaces = input.replace(/\s+/g, '')
-      onChange(withoutSpaces)
+      const input = event.target.value;
+      const withoutSpaces = input.replace(/\s+/g, '');
+      onChange(withoutSpaces);
     },
     [onChange]
-  )
+  );
 
-  const error = Boolean(value.length > 0 && !loading && !address)
+  const error = Boolean(value.length > 0 && !loading && !address);
 
   return (
     <InputPanel id={id}>
@@ -137,5 +137,5 @@ export default function AddressInputPanel({
         </InputContainer>
       </ContainerRow>
     </InputPanel>
-  )
+  );
 }

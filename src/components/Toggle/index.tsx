@@ -1,6 +1,6 @@
-import { darken } from 'polished'
-import { useState } from 'react'
-import styled, { keyframes } from 'styled-components/macro'
+import { darken } from 'polished';
+import { useState } from 'react';
+import styled, { keyframes } from 'styled-components/macro';
 
 const Wrapper = styled.button<{ isActive?: boolean; activeElement?: boolean }>`
   align-items: center;
@@ -12,7 +12,7 @@ const Wrapper = styled.button<{ isActive?: boolean; activeElement?: boolean }>`
   outline: none;
   padding: 0.4rem 0.4rem;
   width: fit-content;
-`
+`;
 
 const turnOnToggle = keyframes`
   from {
@@ -23,7 +23,7 @@ const turnOnToggle = keyframes`
     margin-left: 2.2em;
     margin-right: 0em;
   }
-`
+`;
 
 const turnOffToggle = keyframes`
   from {
@@ -34,7 +34,7 @@ const turnOffToggle = keyframes`
     margin-left: 0em;
     margin-right: 2.2em;
   }
-`
+`;
 
 const ToggleElementHoverStyle = (hasBgColor: boolean, theme: any, isActive?: boolean) =>
   hasBgColor
@@ -44,7 +44,7 @@ const ToggleElementHoverStyle = (hasBgColor: boolean, theme: any, isActive?: boo
     : {
         background: isActive ? darken(0.05, theme.primary1) : darken(0.05, theme.bg4),
         color: isActive ? theme.white : theme.text3,
-      }
+      };
 
 const ToggleElement = styled.span<{ isActive?: boolean; bgColor?: string; isInitialToggleLoad?: boolean }>`
   animation: 0.1s
@@ -60,26 +60,26 @@ const ToggleElement = styled.span<{ isActive?: boolean; bgColor?: string; isInit
   margin-left: ${({ isActive }) => (isActive ? '2.2em' : '0em')};
   margin-right: ${({ isActive }) => (!isActive ? '2.2em' : '0em')};
   width: 24px;
-`
+`;
 
 interface ToggleProps {
-  id?: string
-  bgColor?: string
-  isActive: boolean
-  toggle: () => void
+  id?: string;
+  bgColor?: string;
+  isActive: boolean;
+  toggle: () => void;
 }
 
 export default function Toggle({ id, bgColor, isActive, toggle }: ToggleProps) {
-  const [isInitialToggleLoad, setIsInitialToggleLoad] = useState(true)
+  const [isInitialToggleLoad, setIsInitialToggleLoad] = useState(true);
 
   const switchToggle = () => {
-    toggle()
-    if (isInitialToggleLoad) setIsInitialToggleLoad(false)
-  }
+    toggle();
+    if (isInitialToggleLoad) setIsInitialToggleLoad(false);
+  };
 
   return (
     <Wrapper id={id} isActive={isActive} onClick={switchToggle}>
       <ToggleElement isActive={isActive} bgColor={bgColor} isInitialToggleLoad={isInitialToggleLoad} />
     </Wrapper>
-  )
+  );
 }

@@ -8,7 +8,7 @@ const EXPLORER_HOSTNAMES: { [hostname: string]: true } = {
   'kovan-optimistic.etherscan.io': true,
   'rinkeby-explorer.arbitrum.io': true,
   'arbiscan.io': true,
-}
+};
 
 /**
  * Returns the anonymized version of the given href, i.e. one that does not leak user information
@@ -17,16 +17,16 @@ const EXPLORER_HOSTNAMES: { [hostname: string]: true } = {
  */
 export function anonymizeLink(href: string): string {
   try {
-    const url = new URL(href)
+    const url = new URL(href);
     if (EXPLORER_HOSTNAMES[url.hostname]) {
-      const pathPieces = url.pathname.split('/')
+      const pathPieces = url.pathname.split('/');
 
-      const anonymizedPath = pathPieces.map((pc) => (/0x[a-fA-F0-9]+/.test(pc) ? '***' : pc)).join('/')
+      const anonymizedPath = pathPieces.map((pc) => (/0x[a-fA-F0-9]+/.test(pc) ? '***' : pc)).join('/');
 
-      return `${url.protocol}//${url.hostname}${anonymizedPath}`
+      return `${url.protocol}//${url.hostname}${anonymizedPath}`;
     }
-    return href
+    return href;
   } catch (error) {
-    return href
+    return href;
   }
 }

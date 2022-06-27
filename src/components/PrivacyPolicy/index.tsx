@@ -1,23 +1,23 @@
-import { Trans } from '@lingui/macro'
-import { sendEvent } from 'components/analytics'
-import Card, { DarkGreyCard } from 'components/Card'
-import Row, { AutoRow, RowBetween } from 'components/Row'
-import { useEffect, useRef } from 'react'
-import { ArrowDown, Info, X } from 'react-feather'
-import styled from 'styled-components/macro'
-import { ExternalLink, ThemedText } from 'theme'
-import { isMobile } from 'utils/userAgent'
+import { Trans } from '@lingui/macro';
+import { sendEvent } from 'components/analytics';
+import Card, { DarkGreyCard } from 'components/Card';
+import Row, { AutoRow, RowBetween } from 'components/Row';
+import { useEffect, useRef } from 'react';
+import { ArrowDown, Info, X } from 'react-feather';
+import styled from 'styled-components/macro';
+import { ExternalLink, ThemedText } from 'theme';
+import { isMobile } from 'utils/userAgent';
 
-import { useModalOpen, useTogglePrivacyPolicy } from '../../state/application/hooks'
-import { ApplicationModal } from '../../state/application/reducer'
-import { AutoColumn } from '../Column'
-import Modal from '../Modal'
+import { useModalOpen, useTogglePrivacyPolicy } from '../../state/application/hooks';
+import { ApplicationModal } from '../../state/application/reducer';
+import { AutoColumn } from '../Column';
+import Modal from '../Modal';
 
 const Wrapper = styled.div`
   max-height: 70vh;
   overflow: auto;
   padding: 0 1rem;
-`
+`;
 
 const StyledExternalCard = styled(Card)`
   background-color: ${({ theme }) => theme.primary5};
@@ -29,7 +29,7 @@ const StyledExternalCard = styled(Card)`
   :active {
     background-color: ${({ theme }) => theme.primary4};
   }
-`
+`;
 
 const HoverText = styled.div`
   text-decoration: none;
@@ -40,11 +40,11 @@ const HoverText = styled.div`
   :hover {
     cursor: pointer;
   }
-`
+`;
 
 const StyledLinkOut = styled(ArrowDown)`
   transform: rotate(230deg);
-`
+`;
 
 const EXTERNAL_APIS = [
   {
@@ -77,21 +77,21 @@ const EXTERNAL_APIS = [
     name: 'The Graph',
     description: <Trans>The app fetches blockchain data from The Graph’s hosted service.</Trans>,
   },
-]
+];
 
 export function PrivacyPolicyModal() {
-  const node = useRef<HTMLDivElement>()
-  const open = useModalOpen(ApplicationModal.PRIVACY_POLICY)
-  const toggle = useTogglePrivacyPolicy()
+  const node = useRef<HTMLDivElement>();
+  const open = useModalOpen(ApplicationModal.PRIVACY_POLICY);
+  const toggle = useTogglePrivacyPolicy();
 
   useEffect(() => {
-    if (!open) return
+    if (!open) return;
 
     sendEvent({
       category: 'Modal',
       action: 'Show Legal',
-    })
-  }, [open])
+    });
+  }, [open]);
 
   return (
     <Modal isOpen={open} onDismiss={() => toggle()}>
@@ -107,7 +107,7 @@ export function PrivacyPolicyModal() {
         <PrivacyPolicy />
       </AutoColumn>
     </Modal>
-  )
+  );
 }
 
 export function PrivacyPolicy() {
@@ -117,7 +117,7 @@ export function PrivacyPolicy() {
       onTouchMove={(e) => {
         // prevent modal gesture handler from dismissing modal when content is scrolling
         if (isMobile) {
-          e.stopPropagation()
+          e.stopPropagation();
         }
       }}
     >
@@ -177,5 +177,5 @@ export function PrivacyPolicy() {
         </AutoColumn>
       </AutoColumn>
     </Wrapper>
-  )
+  );
 }

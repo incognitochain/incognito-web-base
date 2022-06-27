@@ -1,4 +1,4 @@
-import { SupportedChainId } from '../constants/chains'
+import { SupportedChainId } from '../constants/chains';
 
 const ETHERSCAN_PREFIXES: { [chainId: number]: string } = {
   [SupportedChainId.MAINNET]: 'https://etherscan.io',
@@ -10,7 +10,7 @@ const ETHERSCAN_PREFIXES: { [chainId: number]: string } = {
   [SupportedChainId.OPTIMISTIC_KOVAN]: 'https://kovan-optimistic.etherscan.io',
   [SupportedChainId.POLYGON_MUMBAI]: 'https://mumbai.polygonscan.com',
   [SupportedChainId.POLYGON]: 'https://polygonscan.com',
-}
+};
 
 export enum ExplorerDataType {
   TRANSACTION = 'transaction',
@@ -29,49 +29,49 @@ export function getExplorerLink(chainId: number, data: string, type: ExplorerDat
   if (chainId === SupportedChainId.ARBITRUM_ONE) {
     switch (type) {
       case ExplorerDataType.TRANSACTION:
-        return `https://arbiscan.io/tx/${data}`
+        return `https://arbiscan.io/tx/${data}`;
       case ExplorerDataType.ADDRESS:
       case ExplorerDataType.TOKEN:
-        return `https://arbiscan.io/address/${data}`
+        return `https://arbiscan.io/address/${data}`;
       case ExplorerDataType.BLOCK:
-        return `https://arbiscan.io/block/${data}`
+        return `https://arbiscan.io/block/${data}`;
       default:
-        return `https://arbiscan.io/`
+        return `https://arbiscan.io/`;
     }
   }
 
   if (chainId === SupportedChainId.ARBITRUM_RINKEBY) {
     switch (type) {
       case ExplorerDataType.TRANSACTION:
-        return `https://rinkeby-explorer.arbitrum.io/tx/${data}`
+        return `https://rinkeby-explorer.arbitrum.io/tx/${data}`;
       case ExplorerDataType.ADDRESS:
       case ExplorerDataType.TOKEN:
-        return `https://rinkeby-explorer.arbitrum.io/address/${data}`
+        return `https://rinkeby-explorer.arbitrum.io/address/${data}`;
       case ExplorerDataType.BLOCK:
-        return `https://rinkeby-explorer.arbitrum.io/block/${data}`
+        return `https://rinkeby-explorer.arbitrum.io/block/${data}`;
       default:
-        return `https://rinkeby-explorer.arbitrum.io/`
+        return `https://rinkeby-explorer.arbitrum.io/`;
     }
   }
 
-  const prefix = ETHERSCAN_PREFIXES[chainId] ?? 'https://etherscan.io'
+  const prefix = ETHERSCAN_PREFIXES[chainId] ?? 'https://etherscan.io';
 
   switch (type) {
     case ExplorerDataType.TRANSACTION:
-      return `${prefix}/tx/${data}`
+      return `${prefix}/tx/${data}`;
 
     case ExplorerDataType.TOKEN:
-      return `${prefix}/token/${data}`
+      return `${prefix}/token/${data}`;
 
     case ExplorerDataType.BLOCK:
       if (chainId === SupportedChainId.OPTIMISM || chainId === SupportedChainId.OPTIMISTIC_KOVAN) {
-        return `${prefix}/tx/${data}`
+        return `${prefix}/tx/${data}`;
       }
-      return `${prefix}/block/${data}`
+      return `${prefix}/block/${data}`;
 
     case ExplorerDataType.ADDRESS:
-      return `${prefix}/address/${data}`
+      return `${prefix}/address/${data}`;
     default:
-      return `${prefix}`
+      return `${prefix}`;
   }
 }

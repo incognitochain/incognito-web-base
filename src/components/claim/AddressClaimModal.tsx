@@ -1,36 +1,36 @@
-import { isAddress } from '@ethersproject/address'
-import { Trans } from '@lingui/macro'
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useState } from 'react'
-import { Text } from 'rebass'
-import styled from 'styled-components/macro'
+import { isAddress } from '@ethersproject/address';
+import { Trans } from '@lingui/macro';
+import { CurrencyAmount, Token } from '@uniswap/sdk-core';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useState } from 'react';
+import { Text } from 'rebass';
+import styled from 'styled-components/macro';
 
-import Circle from '../../assets/images/blue-loader.svg'
-import tokenLogo from '../../assets/images/token-logo.png'
-import useENS from '../../hooks/useENS'
-import { useClaimCallback, useUserHasAvailableClaim, useUserUnclaimedAmount } from '../../state/claim/hooks'
-import { useIsTransactionPending } from '../../state/transactions/hooks'
-import { CloseIcon, CustomLightSpinner, ExternalLink, ThemedText, UniTokenAnimated } from '../../theme'
-import { shortenAddress } from '../../utils'
-import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
-import AddressInputPanel from '../AddressInputPanel'
-import { ButtonPrimary } from '../Button'
-import { AutoColumn, ColumnCenter } from '../Column'
-import Confetti from '../Confetti'
-import { Break, CardSection, DataCard } from '../earn/styled'
-import { CardBGImage, CardBGImageSmaller, CardNoise } from '../earn/styled'
-import Modal from '../Modal'
-import { RowBetween } from '../Row'
+import Circle from '../../assets/images/blue-loader.svg';
+import tokenLogo from '../../assets/images/token-logo.png';
+import useENS from '../../hooks/useENS';
+import { useClaimCallback, useUserHasAvailableClaim, useUserUnclaimedAmount } from '../../state/claim/hooks';
+import { useIsTransactionPending } from '../../state/transactions/hooks';
+import { CloseIcon, CustomLightSpinner, ExternalLink, ThemedText, UniTokenAnimated } from '../../theme';
+import { shortenAddress } from '../../utils';
+import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
+import AddressInputPanel from '../AddressInputPanel';
+import { ButtonPrimary } from '../Button';
+import { AutoColumn, ColumnCenter } from '../Column';
+import Confetti from '../Confetti';
+import { Break, CardSection, DataCard } from '../earn/styled';
+import { CardBGImage, CardBGImageSmaller, CardNoise } from '../earn/styled';
+import Modal from '../Modal';
+import { RowBetween } from '../Row';
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
-`
+`;
 
 const ModalUpper = styled(DataCard)`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   background: radial-gradient(76.02% 75.41% at 1.84% 0%, #ff007a 0%, #021d43 100%);
-`
+`;
 
 const ConfirmOrLoadingWrapper = styled.div<{ activeBG: boolean }>`
   width: 100%;
@@ -39,60 +39,60 @@ const ConfirmOrLoadingWrapper = styled.div<{ activeBG: boolean }>`
   background: ${({ activeBG }) =>
     activeBG &&
     'radial-gradient(76.02% 75.41% at 1.84% 0%, rgba(255, 0, 122, 0.2) 0%, rgba(33, 114, 229, 0.2) 100%), #FFFFFF;'};
-`
+`;
 
 const ConfirmedIcon = styled(ColumnCenter)`
   padding: 60px 0;
-`
+`;
 
 export default function AddressClaimModal({ isOpen, onDismiss }: { isOpen: boolean; onDismiss: () => void }) {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
   // state for smart contract input
-  const [typed, setTyped] = useState('')
+  const [typed, setTyped] = useState('');
   function handleRecipientType(val: string) {
-    setTyped(val)
+    setTyped(val);
   }
 
   // monitor for third party recipient of claim
-  const { address: parsedAddress } = useENS(typed)
+  const { address: parsedAddress } = useENS(typed);
 
   // used for UI loading states
-  const [attempting, setAttempting] = useState<boolean>(false)
+  const [attempting, setAttempting] = useState<boolean>(false);
 
   // monitor the status of the claim from contracts and txns
-  const { claimCallback } = useClaimCallback(parsedAddress)
-  const unclaimedAmount: CurrencyAmount<Token> | undefined = useUserUnclaimedAmount(parsedAddress)
+  const { claimCallback } = useClaimCallback(parsedAddress);
+  const unclaimedAmount: CurrencyAmount<Token> | undefined = useUserUnclaimedAmount(parsedAddress);
 
   // check if the user has something available
-  const hasAvailableClaim = useUserHasAvailableClaim(parsedAddress)
+  const hasAvailableClaim = useUserHasAvailableClaim(parsedAddress);
 
-  const [hash, setHash] = useState<string | undefined>()
+  const [hash, setHash] = useState<string | undefined>();
 
   // monitor the status of the claim from contracts and txns
-  const claimPending = useIsTransactionPending(hash ?? '')
-  const claimConfirmed = hash && !claimPending
+  const claimPending = useIsTransactionPending(hash ?? '');
+  const claimConfirmed = hash && !claimPending;
 
   // use the hash to monitor this txn
 
   function onClaim() {
-    setAttempting(true)
+    setAttempting(true);
     claimCallback()
       .then((hash) => {
-        setHash(hash)
+        setHash(hash);
       })
       // reset modal and log error
       .catch((error) => {
-        setAttempting(false)
-        console.log(error)
-      })
+        setAttempting(false);
+        console.log(error);
+      });
   }
 
   function wrappedOnDismiss() {
-    setAttempting(false)
-    setHash(undefined)
-    setTyped('')
-    onDismiss()
+    setAttempting(false);
+    setHash(undefined);
+    setTyped('');
+    onDismiss();
   }
 
   return (
@@ -200,5 +200,5 @@ export default function AddressClaimModal({ isOpen, onDismiss }: { isOpen: boole
         </ConfirmOrLoadingWrapper>
       )}
     </Modal>
-  )
+  );
 }

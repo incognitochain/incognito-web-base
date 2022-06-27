@@ -1,17 +1,17 @@
-import { skipToken } from '@reduxjs/toolkit/query/react'
-import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
-import { IMetric, MetricLoggerUnit, setGlobalMetric } from '@uniswap/smart-order-router'
-import { sendTiming } from 'components/analytics'
-import { useStablecoinAmountFromFiatValue } from 'hooks/useUSDCPrice'
-import { useRoutingAPIArguments } from 'lib/hooks/routing/useRoutingAPIArguments'
-import useIsValidBlock from 'lib/hooks/useIsValidBlock'
-import ms from 'ms.macro'
-import { useMemo } from 'react'
-import { useGetQuoteQuery } from 'state/routing/slice'
-import { useClientSideRouter } from 'state/user/hooks'
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core';
+import { IMetric, MetricLoggerUnit, setGlobalMetric } from '@uniswap/smart-order-router';
+import { sendTiming } from 'components/analytics';
+import { useStablecoinAmountFromFiatValue } from 'hooks/useUSDCPrice';
+import { useRoutingAPIArguments } from 'lib/hooks/routing/useRoutingAPIArguments';
+import useIsValidBlock from 'lib/hooks/useIsValidBlock';
+import ms from 'ms.macro';
+import { useMemo } from 'react';
+import { useGetQuoteQuery } from 'state/routing/slice';
+import { useClientSideRouter } from 'state/user/hooks';
 
-import { GetQuoteResult, InterfaceTrade, TradeState } from './types'
-import { computeRoutes, transformRoutesToTrade } from './utils'
+import { GetQuoteResult, InterfaceTrade, TradeState } from './types';
+import { computeRoutes, transformRoutesToTrade } from './utils';
 
 /**
  * Returns the best trade by invoking the routing api or the smart order router on the client
@@ -24,8 +24,8 @@ export function useRoutingAPITrade<TTradeType extends TradeType>(
   amountSpecified?: CurrencyAmount<Currency>,
   otherCurrency?: Currency
 ): {
-  state: TradeState
-  trade: InterfaceTrade<Currency, Currency, TTradeType> | undefined
+  state: TradeState;
+  trade: InterfaceTrade<Currency, Currency, TTradeType> | undefined;
 } {
   const [currencyIn, currencyOut]: [Currency | undefined, Currency | undefined] = useMemo(
     () =>
@@ -33,9 +33,9 @@ export function useRoutingAPITrade<TTradeType extends TradeType>(
         ? [amountSpecified?.currency, otherCurrency]
         : [otherCurrency, amountSpecified?.currency],
     [amountSpecified, otherCurrency, tradeType]
-  )
+  );
 
-  const [clientSideRouter] = useClientSideRouter()
+  const [clientSideRouter] = useClientSideRouter();
 
   const queryArgs = useRoutingAPIArguments({
     tokenIn: currencyIn,
@@ -43,31 +43,31 @@ export function useRoutingAPITrade<TTradeType extends TradeType>(
     amount: amountSpecified,
     tradeType,
     useClientSideRouter: clientSideRouter,
-  })
+  });
 
   const { isLoading, isError, data, currentData } = useGetQuoteQuery(queryArgs ?? skipToken, {
     pollingInterval: ms`15s`,
     refetchOnFocus: true,
-  })
+  });
 
-  const quoteResult: GetQuoteResult | undefined = useIsValidBlock(Number(data?.blockNumber) || 0) ? data : undefined
+  const quoteResult: GetQuoteResult | undefined = useIsValidBlock(Number(data?.blockNumber) || 0) ? data : undefined;
 
   const route = useMemo(
     () => computeRoutes(currencyIn, currencyOut, tradeType, quoteResult),
     [currencyIn, currencyOut, quoteResult, tradeType]
-  )
+  );
 
   // get USD gas cost of trade in active chains stablecoin amount
-  const gasUseEstimateUSD = useStablecoinAmountFromFiatValue(quoteResult?.gasUseEstimateUSD) ?? null
+  const gasUseEstimateUSD = useStablecoinAmountFromFiatValue(quoteResult?.gasUseEstimateUSD) ?? null;
 
-  const isSyncing = currentData !== data
+  const isSyncing = currentData !== data;
 
   return useMemo(() => {
     if (!currencyIn || !currencyOut) {
       return {
         state: TradeState.INVALID,
         trade: undefined,
-      }
+      };
     }
 
     if (isLoading && !quoteResult) {
@@ -75,17 +75,17 @@ export function useRoutingAPITrade<TTradeType extends TradeType>(
       return {
         state: TradeState.LOADING,
         trade: undefined,
-      }
+      };
     }
 
-    let otherAmount = undefined
+    let otherAmount = undefined;
     if (quoteResult) {
       if (tradeType === TradeType.EXACT_INPUT && currencyOut) {
-        otherAmount = CurrencyAmount.fromRawAmount(currencyOut, quoteResult.quote)
+        otherAmount = CurrencyAmount.fromRawAmount(currencyOut, quoteResult.quote);
       }
 
       if (tradeType === TradeType.EXACT_OUTPUT && currencyIn) {
-        otherAmount = CurrencyAmount.fromRawAmount(currencyIn, quoteResult.quote)
+        otherAmount = CurrencyAmount.fromRawAmount(currencyIn, quoteResult.quote);
       }
     }
 
@@ -93,18 +93,18 @@ export function useRoutingAPITrade<TTradeType extends TradeType>(
       return {
         state: TradeState.NO_ROUTE_FOUND,
         trade: undefined,
-      }
+      };
     }
 
     try {
-      const trade = transformRoutesToTrade(route, tradeType, gasUseEstimateUSD)
+      const trade = transformRoutesToTrade(route, tradeType, gasUseEstimateUSD);
       return {
         // always return VALID regardless of isFetching status
         state: isSyncing ? TradeState.SYNCING : TradeState.VALID,
         trade,
-      }
+      };
     } catch (e) {
-      return { state: TradeState.INVALID, trade: undefined }
+      return { state: TradeState.INVALID, trade: undefined };
     }
   }, [
     currencyIn,
@@ -117,18 +117,18 @@ export function useRoutingAPITrade<TTradeType extends TradeType>(
     queryArgs,
     gasUseEstimateUSD,
     isSyncing,
-  ])
+  ]);
 }
 
 // only want to enable this when app hook called
 class GAMetric extends IMetric {
   putDimensions() {
-    return
+    return;
   }
 
   putMetric(key: string, value: number, unit?: MetricLoggerUnit) {
-    sendTiming('Routing API', `${key} | ${unit}`, value, 'client')
+    sendTiming('Routing API', `${key} | ${unit}`, value, 'client');
   }
 }
 
-setGlobalMetric(new GAMetric())
+setGlobalMetric(new GAMetric());

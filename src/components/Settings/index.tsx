@@ -1,26 +1,26 @@
 // eslint-disable-next-line no-restricted-imports
-import { t, Trans } from '@lingui/macro'
-import { Percent } from '@uniswap/sdk-core'
-import { sendEvent } from 'components/analytics'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { AUTO_ROUTER_SUPPORTED_CHAINS } from 'lib/hooks/routing/clientSideSmartOrderRouter'
-import { useContext, useRef, useState } from 'react'
-import { Settings, X } from 'react-feather'
-import { Text } from 'rebass'
-import styled, { ThemeContext } from 'styled-components/macro'
+import { t, Trans } from '@lingui/macro';
+import { Percent } from '@uniswap/sdk-core';
+import { sendEvent } from 'components/analytics';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { AUTO_ROUTER_SUPPORTED_CHAINS } from 'lib/hooks/routing/clientSideSmartOrderRouter';
+import { useContext, useRef, useState } from 'react';
+import { Settings, X } from 'react-feather';
+import { Text } from 'rebass';
+import styled, { ThemeContext } from 'styled-components/macro';
 
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
-import { ApplicationModal } from '../../state/application/reducer'
-import { useClientSideRouter, useExpertModeManager } from '../../state/user/hooks'
-import { ThemedText } from '../../theme'
-import { ButtonError } from '../Button'
-import { AutoColumn } from '../Column'
-import Modal from '../Modal'
-import QuestionHelper from '../QuestionHelper'
-import { RowBetween, RowFixed } from '../Row'
-import Toggle from '../Toggle'
-import TransactionSettings from '../TransactionSettings'
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks';
+import { ApplicationModal } from '../../state/application/reducer';
+import { useClientSideRouter, useExpertModeManager } from '../../state/user/hooks';
+import { ThemedText } from '../../theme';
+import { ButtonError } from '../Button';
+import { AutoColumn } from '../Column';
+import Modal from '../Modal';
+import QuestionHelper from '../QuestionHelper';
+import { RowBetween, RowFixed } from '../Row';
+import Toggle from '../Toggle';
+import TransactionSettings from '../TransactionSettings';
 
 const StyledMenuIcon = styled(Settings)`
   height: 20px;
@@ -33,7 +33,7 @@ const StyledMenuIcon = styled(Settings)`
   :hover {
     opacity: 0.7;
   }
-`
+`;
 
 const StyledCloseIcon = styled(X)`
   height: 20px;
@@ -45,7 +45,7 @@ const StyledCloseIcon = styled(X)`
   > * {
     stroke: ${({ theme }) => theme.text1};
   }
-`
+`;
 
 const StyledMenuButton = styled.button`
   position: relative;
@@ -63,13 +63,13 @@ const StyledMenuButton = styled.button`
     cursor: pointer;
     outline: none;
   }
-`
+`;
 const EmojiWrapper = styled.div`
   position: absolute;
   bottom: -6px;
   right: 0px;
   font-size: 14px;
-`
+`;
 
 const StyledMenu = styled.div`
   margin-left: 0.5rem;
@@ -79,7 +79,7 @@ const StyledMenu = styled.div`
   position: relative;
   border: none;
   text-align: left;
-`
+`;
 
 const MenuFlyout = styled.span`
   min-width: 20.125rem;
@@ -101,13 +101,13 @@ const MenuFlyout = styled.span`
   `};
 
   user-select: none;
-`
+`;
 
 const Break = styled.div`
   width: 100%;
   height: 1px;
   background-color: ${({ theme }) => theme.bg3};
-`
+`;
 
 const ModalContentWrapper = styled.div`
   display: flex;
@@ -116,25 +116,25 @@ const ModalContentWrapper = styled.div`
   padding: 2rem 0;
   background-color: ${({ theme }) => theme.bg2};
   border-radius: 20px;
-`
+`;
 
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage: Percent }) {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
-  const node = useRef<HTMLDivElement>()
-  const open = useModalOpen(ApplicationModal.SETTINGS)
-  const toggle = useToggleSettingsMenu()
+  const node = useRef<HTMLDivElement>();
+  const open = useModalOpen(ApplicationModal.SETTINGS);
+  const toggle = useToggleSettingsMenu();
 
-  const theme = useContext(ThemeContext)
+  const theme = useContext(ThemeContext);
 
-  const [expertMode, toggleExpertMode] = useExpertModeManager()
+  const [expertMode, toggleExpertMode] = useExpertModeManager();
 
-  const [clientSideRouter, setClientSideRouter] = useClientSideRouter()
+  const [clientSideRouter, setClientSideRouter] = useClientSideRouter();
 
   // show confirmation view before turning on
-  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
-  useOnClickOutside(node, open ? toggle : undefined)
+  useOnClickOutside(node, open ? toggle : undefined);
 
   return (
     // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451
@@ -164,10 +164,10 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 error={true}
                 padding={'12px'}
                 onClick={() => {
-                  const confirmWord = t`confirm`
+                  const confirmWord = t`confirm`;
                   if (window.prompt(t`Please type the word "${confirmWord}" to enable expert mode.`) === confirmWord) {
-                    toggleExpertMode()
-                    setShowConfirmation(false)
+                    toggleExpertMode();
+                    setShowConfirmation(false);
                   }
                 }}
               >
@@ -214,8 +214,8 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                     sendEvent({
                       category: 'Routing',
                       action: clientSideRouter ? 'enable routing API' : 'disable routing API',
-                    })
-                    setClientSideRouter(!clientSideRouter)
+                    });
+                    setClientSideRouter(!clientSideRouter);
                   }}
                 />
               </RowBetween>
@@ -237,12 +237,12 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 toggle={
                   expertMode
                     ? () => {
-                        toggleExpertMode()
-                        setShowConfirmation(false)
+                        toggleExpertMode();
+                        setShowConfirmation(false);
                       }
                     : () => {
-                        toggle()
-                        setShowConfirmation(true)
+                        toggle();
+                        setShowConfirmation(true);
                       }
                 }
               />
@@ -251,5 +251,5 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
         </MenuFlyout>
       )}
     </StyledMenu>
-  )
+  );
 }

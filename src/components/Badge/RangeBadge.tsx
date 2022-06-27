@@ -1,20 +1,20 @@
-import { Trans } from '@lingui/macro'
-import Badge, { BadgeVariant } from 'components/Badge'
-import { AlertCircle } from 'react-feather'
-import styled from 'styled-components/macro'
+import { Trans } from '@lingui/macro';
+import Badge, { BadgeVariant } from 'components/Badge';
+import { AlertCircle } from 'react-feather';
+import styled from 'styled-components/macro';
 
-import { MouseoverTooltip } from '../../components/Tooltip'
+import { MouseoverTooltip } from '../../components/Tooltip';
 
 const BadgeWrapper = styled.div`
   font-size: 14px;
   display: flex;
   justify-content: flex-end;
-`
+`;
 
 const BadgeText = styled.div`
   font-weight: 500;
   font-size: 14px;
-`
+`;
 
 const ActiveDot = styled.span`
   background-color: ${({ theme }) => theme.success};
@@ -22,14 +22,14 @@ const ActiveDot = styled.span`
   height: 8px;
   width: 8px;
   margin-right: 4px;
-`
+`;
 
 export default function RangeBadge({
   removed,
   inRange,
 }: {
-  removed: boolean | undefined
-  inRange: boolean | undefined
+  removed: boolean | undefined;
+  inRange: boolean | undefined;
 }) {
   return (
     <BadgeWrapper>
@@ -76,5 +76,5 @@ export default function RangeBadge({
         </MouseoverTooltip>
       )}
     </BadgeWrapper>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import { BaseQueryFn } from '@reduxjs/toolkit/query'
-import { createApi } from '@reduxjs/toolkit/query/react'
-import { SupportedChainId } from 'constants/chains'
-import { DocumentNode } from 'graphql'
-import { ClientError, gql, GraphQLClient } from 'graphql-request'
-import { AppState } from 'state'
+import { BaseQueryFn } from '@reduxjs/toolkit/query';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { SupportedChainId } from 'constants/chains';
+import { DocumentNode } from 'graphql';
+import { ClientError, gql, GraphQLClient } from 'graphql-request';
+import { AppState } from 'state';
 
 // List of supported subgraphs. Note that the app currently only support one active subgraph at a time
 const CHAIN_SUBGRAPH_URL: Record<number, string> = {
@@ -15,7 +15,7 @@ const CHAIN_SUBGRAPH_URL: Record<number, string> = {
   [SupportedChainId.OPTIMISM]: 'https://api.thegraph.com/subgraphs/name/ianlapham/optimism-post-regenesis',
 
   [SupportedChainId.POLYGON]: 'https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v3-polygon',
-}
+};
 
 export const api = createApi({
   reducerPath: 'dataApi',
@@ -75,7 +75,7 @@ export const api = createApi({
       }),
     }),
   }),
-})
+});
 
 // Graphql query client wrapper that builds a dynamic url based on chain id
 function graphqlRequestBaseQuery(): BaseQueryFn<
@@ -86,9 +86,9 @@ function graphqlRequestBaseQuery(): BaseQueryFn<
 > {
   return async ({ document, variables }, { getState }) => {
     try {
-      const chainId = (getState() as AppState).application.chainId
+      const chainId = (getState() as AppState).application.chainId;
 
-      const subgraphUrl = chainId ? CHAIN_SUBGRAPH_URL[chainId] : undefined
+      const subgraphUrl = chainId ? CHAIN_SUBGRAPH_URL[chainId] : undefined;
 
       if (!subgraphUrl) {
         return {
@@ -97,16 +97,16 @@ function graphqlRequestBaseQuery(): BaseQueryFn<
             message: `Subgraph queries against ChainId ${chainId} are not supported.`,
             stack: '',
           },
-        }
+        };
       }
 
-      return { data: await new GraphQLClient(subgraphUrl).request(document, variables), meta: {} }
+      return { data: await new GraphQLClient(subgraphUrl).request(document, variables), meta: {} };
     } catch (error) {
       if (error instanceof ClientError) {
-        const { name, message, stack, request, response } = error
-        return { error: { name, message, stack }, meta: { request, response } }
+        const { name, message, stack, request, response } = error;
+        return { error: { name, message, stack }, meta: { request, response } };
       }
-      throw error
+      throw error;
     }
-  }
+  };
 }

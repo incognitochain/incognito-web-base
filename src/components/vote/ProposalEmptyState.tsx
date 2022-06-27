@@ -1,8 +1,8 @@
-import { Trans } from '@lingui/macro'
-import { SupportedChainId } from 'constants/chains'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import styled from 'styled-components/macro'
-import { ThemedText } from 'theme'
+import { Trans } from '@lingui/macro';
+import { SupportedChainId } from 'constants/chains';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 
 const EmptyProposals = styled.div`
   border: 1px solid ${({ theme }) => theme.text4};
@@ -12,16 +12,16 @@ const EmptyProposals = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;
 const Sub = styled.i`
   align-items: center;
   display: flex;
   justify-content: center;
   text-align: center;
-`
+`;
 interface EmptyStateProps {
-  HeaderContent: () => JSX.Element
-  SubHeaderContent: () => JSX.Element
+  HeaderContent: () => JSX.Element;
+  SubHeaderContent: () => JSX.Element;
 }
 const EmptyState = ({ HeaderContent, SubHeaderContent }: EmptyStateProps) => (
   <EmptyProposals>
@@ -34,10 +34,10 @@ const EmptyState = ({ HeaderContent, SubHeaderContent }: EmptyStateProps) => (
       </Sub>
     </ThemedText.SubHeader>
   </EmptyProposals>
-)
+);
 
 export default function ProposalEmptyState() {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
   if (chainId && chainId !== SupportedChainId.MAINNET) {
     return (
       <EmptyState
@@ -49,12 +49,12 @@ export default function ProposalEmptyState() {
           </Trans>
         )}
       />
-    )
+    );
   }
   return (
     <EmptyState
       HeaderContent={() => <Trans>No proposals found.</Trans>}
       SubHeaderContent={() => <Trans>Proposals submitted by community members will appear here.</Trans>}
     />
-  )
+  );
 }

@@ -1,7 +1,7 @@
 // a list of tokens by chain
-import { Currency, Token } from '@uniswap/sdk-core'
+import { Currency, Token } from '@uniswap/sdk-core';
 
-import { SupportedChainId } from './chains'
+import { SupportedChainId } from './chains';
 import {
   AMPL,
   DAI,
@@ -33,21 +33,21 @@ import {
   WETH_POLYGON,
   WETH_POLYGON_MUMBAI,
   WRAPPED_NATIVE_CURRENCY,
-} from './tokens'
+} from './tokens';
 
 type ChainTokenList = {
-  readonly [chainId: number]: Token[]
-}
+  readonly [chainId: number]: Token[];
+};
 
 type ChainCurrencyList = {
-  readonly [chainId: number]: Currency[]
-}
+  readonly [chainId: number]: Currency[];
+};
 
 const WRAPPED_NATIVE_CURRENCIES_ONLY: ChainTokenList = Object.fromEntries(
   Object.entries(WRAPPED_NATIVE_CURRENCY)
     .map(([key, value]) => [key, [value]])
     .filter(Boolean)
-)
+);
 
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
@@ -78,7 +78,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     USDT_POLYGON,
     WETH_POLYGON,
   ],
-}
+};
 export const ADDITIONAL_BASES: { [chainId: number]: { [tokenAddress: string]: Token[] } } = {
   [SupportedChainId.MAINNET]: {
     '0xF16E4d813f4DcfDe4c5b44f305c908742De84eF0': [ETH2X_FLI],
@@ -91,7 +91,7 @@ export const ADDITIONAL_BASES: { [chainId: number]: { [tokenAddress: string]: To
     [WBTC.address]: [renBTC],
     [renBTC.address]: [WBTC],
   },
-}
+};
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
  * tokens.
@@ -100,7 +100,7 @@ export const CUSTOM_BASES: { [chainId: number]: { [tokenAddress: string]: Token[
   [SupportedChainId.MAINNET]: {
     [AMPL.address]: [DAI, WRAPPED_NATIVE_CURRENCY[SupportedChainId.MAINNET] as Token],
   },
-}
+};
 
 /**
  * Shows up in the currency select for swap and add liquidity
@@ -163,7 +163,7 @@ export const COMMON_BASES: ChainCurrencyList = {
     WRAPPED_NATIVE_CURRENCY[SupportedChainId.POLYGON_MUMBAI] as Token,
     WETH_POLYGON_MUMBAI,
   ],
-}
+};
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
@@ -175,7 +175,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     USDT,
     WBTC,
   ],
-}
+};
 export const PINNED_PAIRS: { readonly [chainId: number]: [Token, Token][] } = {
   [SupportedChainId.MAINNET]: [
     [
@@ -191,4 +191,4 @@ export const PINNED_PAIRS: { readonly [chainId: number]: [Token, Token][] } = {
     [USDC_MAINNET, USDT],
     [DAI, USDT],
   ],
-}
+};

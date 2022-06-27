@@ -1,24 +1,24 @@
-import { Trans } from '@lingui/macro'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useContext } from 'react'
-import { ArrowUpCircle } from 'react-feather'
-import styled, { ThemeContext } from 'styled-components/macro'
+import { Trans } from '@lingui/macro';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useContext } from 'react';
+import { ArrowUpCircle } from 'react-feather';
+import styled, { ThemeContext } from 'styled-components/macro';
 
-import Circle from '../../assets/images/blue-loader.svg'
-import { CloseIcon, CustomLightSpinner, ThemedText } from '../../theme'
-import { ExternalLink } from '../../theme/components'
-import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
-import { AutoColumn, ColumnCenter } from '../Column'
-import { RowBetween } from '../Row'
+import Circle from '../../assets/images/blue-loader.svg';
+import { CloseIcon, CustomLightSpinner, ThemedText } from '../../theme';
+import { ExternalLink } from '../../theme/components';
+import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
+import { AutoColumn, ColumnCenter } from '../Column';
+import { RowBetween } from '../Row';
 
 const ConfirmOrLoadingWrapper = styled.div`
   width: 100%;
   padding: 24px;
-`
+`;
 
 const ConfirmedIcon = styled(ColumnCenter)`
   padding: 60px 0;
-`
+`;
 
 export function LoadingView({ children, onDismiss }: { children: any; onDismiss: () => void }) {
   return (
@@ -37,7 +37,7 @@ export function LoadingView({ children, onDismiss }: { children: any; onDismiss:
         </ThemedText.SubHeader>
       </AutoColumn>
     </ConfirmOrLoadingWrapper>
-  )
+  );
 }
 
 export function SubmittedView({
@@ -45,12 +45,12 @@ export function SubmittedView({
   onDismiss,
   hash,
 }: {
-  children: any
-  onDismiss: () => void
-  hash: string | undefined
+  children: any;
+  onDismiss: () => void;
+  hash: string | undefined;
 }) {
-  const theme = useContext(ThemeContext)
-  const { chainId } = useActiveWeb3React()
+  const theme = useContext(ThemeContext);
+  const { chainId } = useActiveWeb3React();
 
   return (
     <ConfirmOrLoadingWrapper>
@@ -75,5 +75,5 @@ export function SubmittedView({
         )}
       </AutoColumn>
     </ConfirmOrLoadingWrapper>
-  )
+  );
 }

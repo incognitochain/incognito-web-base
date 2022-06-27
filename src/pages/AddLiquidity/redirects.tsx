@@ -1,8 +1,8 @@
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { Redirect, RouteComponentProps } from 'react-router-dom'
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 
-import { WRAPPED_NATIVE_CURRENCY } from '../../constants/tokens'
-import AddLiquidity from './index'
+import { WRAPPED_NATIVE_CURRENCY } from '../../constants/tokens';
+import AddLiquidity from './index';
 
 export function RedirectDuplicateTokenIds(
   props: RouteComponentProps<{ currencyIdA: string; currencyIdB: string; feeAmount?: string }>
@@ -11,22 +11,22 @@ export function RedirectDuplicateTokenIds(
     match: {
       params: { currencyIdA, currencyIdB },
     },
-  } = props
+  } = props;
 
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
   // prevent weth + eth
   const isETHOrWETHA =
-    currencyIdA === 'ETH' || (chainId !== undefined && currencyIdA === WRAPPED_NATIVE_CURRENCY[chainId]?.address)
+    currencyIdA === 'ETH' || (chainId !== undefined && currencyIdA === WRAPPED_NATIVE_CURRENCY[chainId]?.address);
   const isETHOrWETHB =
-    currencyIdB === 'ETH' || (chainId !== undefined && currencyIdB === WRAPPED_NATIVE_CURRENCY[chainId]?.address)
+    currencyIdB === 'ETH' || (chainId !== undefined && currencyIdB === WRAPPED_NATIVE_CURRENCY[chainId]?.address);
 
   if (
     currencyIdA &&
     currencyIdB &&
     (currencyIdA.toLowerCase() === currencyIdB.toLowerCase() || (isETHOrWETHA && isETHOrWETHB))
   ) {
-    return <Redirect to={`/add/${currencyIdA}`} />
+    return <Redirect to={`/add/${currencyIdA}`} />;
   }
-  return <AddLiquidity {...props} />
+  return <AddLiquidity {...props} />;
 }

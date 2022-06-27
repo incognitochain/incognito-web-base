@@ -1,21 +1,21 @@
-import { Trans } from '@lingui/macro'
-import { CHAIN_INFO } from 'constants/chainInfo'
-import { SupportedChainId } from 'constants/chains'
-import { useContext } from 'react'
-import { AlertCircle } from 'react-feather'
-import styled, { ThemeContext } from 'styled-components/macro'
+import { Trans } from '@lingui/macro';
+import { CHAIN_INFO } from 'constants/chainInfo';
+import { SupportedChainId } from 'constants/chains';
+import { useContext } from 'react';
+import { AlertCircle } from 'react-feather';
+import styled, { ThemeContext } from 'styled-components/macro';
 
-import { ThemedText } from '../../theme'
-import { AutoColumn } from '../Column'
-import { AutoRow } from '../Row'
+import { ThemedText } from '../../theme';
+import { AutoColumn } from '../Column';
+import { AutoRow } from '../Row';
 
 const RowNoFlex = styled(AutoRow)`
   flex-wrap: nowrap;
-`
+`;
 
 export default function FailedNetworkSwitchPopup({ chainId }: { chainId: SupportedChainId }) {
-  const chainInfo = CHAIN_INFO[chainId]
-  const theme = useContext(ThemeContext)
+  const chainInfo = CHAIN_INFO[chainId];
+  const theme = useContext(ThemeContext);
 
   return (
     <RowNoFlex>
@@ -31,5 +31,5 @@ export default function FailedNetworkSwitchPopup({ chainId }: { chainId: Support
         </ThemedText.Body>
       </AutoColumn>
     </RowNoFlex>
-  )
+  );
 }

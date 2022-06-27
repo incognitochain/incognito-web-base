@@ -1,67 +1,67 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { Wallet } from 'connectors'
-import { SupportedLocale } from 'constants/locales'
+import { createSlice } from '@reduxjs/toolkit';
+import { Wallet } from 'connectors';
+import { SupportedLocale } from 'constants/locales';
 
-import { DEFAULT_DEADLINE_FROM_NOW } from '../../constants/misc'
-import { updateVersion } from '../global/actions'
-import { SerializedPair, SerializedToken } from './types'
+import { DEFAULT_DEADLINE_FROM_NOW } from '../../constants/misc';
+import { updateVersion } from '../global/actions';
+import { SerializedPair, SerializedToken } from './types';
 
-const currentTimestamp = () => new Date().getTime()
+const currentTimestamp = () => new Date().getTime();
 
 export interface UserState {
   // We want the user to be able to define which wallet they want to use, even if there are multiple connected wallets via web3-react.
   // If a user had previously connected a wallet but didn't have a wallet override set (because they connected prior to this field being added),
   // we want to handle that case by backfilling them manually. Once we backfill, we set the backfilled field to `true`.
   // After some period of time, our active users will have this property set so we can likely remove the backfilling logic.
-  selectedWalletBackfilled: boolean
-  selectedWallet?: Wallet
+  selectedWalletBackfilled: boolean;
+  selectedWallet?: Wallet;
 
   // the timestamp of the last updateVersion action
-  lastUpdateVersionTimestamp?: number
+  lastUpdateVersionTimestamp?: number;
 
-  matchesDarkMode: boolean // whether the dark mode media query matches
+  matchesDarkMode: boolean; // whether the dark mode media query matches
 
-  userDarkMode: boolean | null // the user's choice for dark mode or light mode
-  userLocale: SupportedLocale | null
+  userDarkMode: boolean | null; // the user's choice for dark mode or light mode
+  userLocale: SupportedLocale | null;
 
-  userExpertMode: boolean
+  userExpertMode: boolean;
 
-  userClientSideRouter: boolean // whether routes should be calculated with the client side router only
+  userClientSideRouter: boolean; // whether routes should be calculated with the client side router only
 
   // hides closed (inactive) positions across the app
-  userHideClosedPositions: boolean
+  userHideClosedPositions: boolean;
 
   // user defined slippage tolerance in bips, used in all txns
-  userSlippageTolerance: number | 'auto'
-  userSlippageToleranceHasBeenMigratedToAuto: boolean // temporary flag for migration status
+  userSlippageTolerance: number | 'auto';
+  userSlippageToleranceHasBeenMigratedToAuto: boolean; // temporary flag for migration status
 
   // deadline set by user in minutes, used in all txns
-  userDeadline: number
+  userDeadline: number;
 
   tokens: {
     [chainId: number]: {
-      [address: string]: SerializedToken
-    }
-  }
+      [address: string]: SerializedToken;
+    };
+  };
 
   pairs: {
     [chainId: number]: {
       // keyed by token0Address:token1Address
-      [key: string]: SerializedPair
-    }
-  }
+      [key: string]: SerializedPair;
+    };
+  };
 
-  timestamp: number
-  URLWarningVisible: boolean
+  timestamp: number;
+  URLWarningVisible: boolean;
 
   // undefined means has not gone through A/B split yet
-  showSurveyPopup: boolean | undefined
+  showSurveyPopup: boolean | undefined;
 
-  showDonationLink: boolean
+  showDonationLink: boolean;
 }
 
 function pairKey(token0Address: string, token1Address: string) {
-  return `${token0Address};${token1Address}`
+  return `${token0Address};${token1Address}`;
 }
 
 export const initialState: UserState = {
@@ -82,86 +82,86 @@ export const initialState: UserState = {
   URLWarningVisible: true,
   showSurveyPopup: undefined,
   showDonationLink: true,
-}
+};
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     updateSelectedWallet(state, { payload: { wallet } }) {
-      state.selectedWallet = wallet
-      state.selectedWalletBackfilled = true
+      state.selectedWallet = wallet;
+      state.selectedWalletBackfilled = true;
     },
     updateUserDarkMode(state, action) {
-      state.userDarkMode = action.payload.userDarkMode
-      state.timestamp = currentTimestamp()
+      state.userDarkMode = action.payload.userDarkMode;
+      state.timestamp = currentTimestamp();
     },
     updateMatchesDarkMode(state, action) {
-      state.matchesDarkMode = action.payload.matchesDarkMode
-      state.timestamp = currentTimestamp()
+      state.matchesDarkMode = action.payload.matchesDarkMode;
+      state.timestamp = currentTimestamp();
     },
     updateUserExpertMode(state, action) {
-      state.userExpertMode = action.payload.userExpertMode
-      state.timestamp = currentTimestamp()
+      state.userExpertMode = action.payload.userExpertMode;
+      state.timestamp = currentTimestamp();
     },
     updateUserLocale(state, action) {
-      state.userLocale = action.payload.userLocale
-      state.timestamp = currentTimestamp()
+      state.userLocale = action.payload.userLocale;
+      state.timestamp = currentTimestamp();
     },
     updateUserSlippageTolerance(state, action) {
-      state.userSlippageTolerance = action.payload.userSlippageTolerance
-      state.timestamp = currentTimestamp()
+      state.userSlippageTolerance = action.payload.userSlippageTolerance;
+      state.timestamp = currentTimestamp();
     },
     updateUserDeadline(state, action) {
-      state.userDeadline = action.payload.userDeadline
-      state.timestamp = currentTimestamp()
+      state.userDeadline = action.payload.userDeadline;
+      state.timestamp = currentTimestamp();
     },
     updateUserClientSideRouter(state, action) {
-      state.userClientSideRouter = action.payload.userClientSideRouter
+      state.userClientSideRouter = action.payload.userClientSideRouter;
     },
     updateHideClosedPositions(state, action) {
-      state.userHideClosedPositions = action.payload.userHideClosedPositions
+      state.userHideClosedPositions = action.payload.userHideClosedPositions;
     },
     updateShowSurveyPopup(state, action) {
-      state.showSurveyPopup = action.payload.showSurveyPopup
+      state.showSurveyPopup = action.payload.showSurveyPopup;
     },
     updateShowDonationLink(state, action) {
-      state.showDonationLink = action.payload.showDonationLink
+      state.showDonationLink = action.payload.showDonationLink;
     },
     addSerializedToken(state, { payload: { serializedToken } }) {
       if (!state.tokens) {
-        state.tokens = {}
+        state.tokens = {};
       }
-      state.tokens[serializedToken.chainId] = state.tokens[serializedToken.chainId] || {}
-      state.tokens[serializedToken.chainId][serializedToken.address] = serializedToken
-      state.timestamp = currentTimestamp()
+      state.tokens[serializedToken.chainId] = state.tokens[serializedToken.chainId] || {};
+      state.tokens[serializedToken.chainId][serializedToken.address] = serializedToken;
+      state.timestamp = currentTimestamp();
     },
     removeSerializedToken(state, { payload: { address, chainId } }) {
       if (!state.tokens) {
-        state.tokens = {}
+        state.tokens = {};
       }
-      state.tokens[chainId] = state.tokens[chainId] || {}
-      delete state.tokens[chainId][address]
-      state.timestamp = currentTimestamp()
+      state.tokens[chainId] = state.tokens[chainId] || {};
+      delete state.tokens[chainId][address];
+      state.timestamp = currentTimestamp();
     },
     addSerializedPair(state, { payload: { serializedPair } }) {
       if (
         serializedPair.token0.chainId === serializedPair.token1.chainId &&
         serializedPair.token0.address !== serializedPair.token1.address
       ) {
-        const chainId = serializedPair.token0.chainId
-        state.pairs[chainId] = state.pairs[chainId] || {}
-        state.pairs[chainId][pairKey(serializedPair.token0.address, serializedPair.token1.address)] = serializedPair
+        const chainId = serializedPair.token0.chainId;
+        state.pairs[chainId] = state.pairs[chainId] || {};
+        state.pairs[chainId][pairKey(serializedPair.token0.address, serializedPair.token1.address)] = serializedPair;
       }
-      state.timestamp = currentTimestamp()
+      state.timestamp = currentTimestamp();
     },
     removeSerializedPair(state, { payload: { chainId, tokenAAddress, tokenBAddress } }) {
       if (state.pairs[chainId]) {
         // just delete both keys if either exists
-        delete state.pairs[chainId][pairKey(tokenAAddress, tokenBAddress)]
-        delete state.pairs[chainId][pairKey(tokenBAddress, tokenAAddress)]
+        delete state.pairs[chainId][pairKey(tokenAAddress, tokenBAddress)];
+        delete state.pairs[chainId][pairKey(tokenBAddress, tokenAAddress)];
       }
-      state.timestamp = currentTimestamp()
+      state.timestamp = currentTimestamp();
     },
   },
   extraReducers: (builder) => {
@@ -174,14 +174,14 @@ const userSlice = createSlice({
         state.userSlippageTolerance < 0 ||
         state.userSlippageTolerance > 5000
       ) {
-        state.userSlippageTolerance = 'auto'
+        state.userSlippageTolerance = 'auto';
       } else {
         if (
           !state.userSlippageToleranceHasBeenMigratedToAuto &&
           [10, 50, 100].indexOf(state.userSlippageTolerance) !== -1
         ) {
-          state.userSlippageTolerance = 'auto'
-          state.userSlippageToleranceHasBeenMigratedToAuto = true
+          state.userSlippageTolerance = 'auto';
+          state.userSlippageToleranceHasBeenMigratedToAuto = true;
         }
       }
 
@@ -193,13 +193,13 @@ const userSlice = createSlice({
         state.userDeadline < 60 ||
         state.userDeadline > 180 * 60
       ) {
-        state.userDeadline = DEFAULT_DEADLINE_FROM_NOW
+        state.userDeadline = DEFAULT_DEADLINE_FROM_NOW;
       }
 
-      state.lastUpdateVersionTimestamp = currentTimestamp()
-    })
+      state.lastUpdateVersionTimestamp = currentTimestamp();
+    });
   },
-})
+});
 
 export const {
   updateSelectedWallet,
@@ -217,5 +217,5 @@ export const {
   updateUserExpertMode,
   updateUserLocale,
   updateUserSlippageTolerance,
-} = userSlice.actions
-export default userSlice.reducer
+} = userSlice.actions;
+export default userSlice.reducer;

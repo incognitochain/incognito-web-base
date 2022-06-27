@@ -1,11 +1,11 @@
-import { Trans } from '@lingui/macro'
-import { Token } from '@uniswap/sdk-core'
-import { ButtonPrimary } from 'components/Button'
-import { AlertCircle, ArrowLeft } from 'react-feather'
-import styled from 'styled-components/macro'
-import { CloseIcon, ThemedText } from 'theme'
+import { Trans } from '@lingui/macro';
+import { Token } from '@uniswap/sdk-core';
+import { ButtonPrimary } from 'components/Button';
+import { AlertCircle, ArrowLeft } from 'react-feather';
+import styled from 'styled-components/macro';
+import { CloseIcon, ThemedText } from 'theme';
 
-import TokenImportCard from './TokenImportCard'
+import TokenImportCard from './TokenImportCard';
 
 const Wrapper = styled.div`
   align-items: center;
@@ -14,20 +14,20 @@ const Wrapper = styled.div`
   flex: 1 1 auto;
   height: 100%;
   width: 100%;
-`
+`;
 const Button = styled(ButtonPrimary)`
   margin-top: 1em;
   padding: 10px 1em;
-`
+`;
 const Content = styled.div`
   padding: 1em;
-`
+`;
 const Copy = styled(ThemedText.Body)`
   text-align: center;
   margin: 0 2em 1em !important;
   font-weight: 400;
   font-size: 16px;
-`
+`;
 const Header = styled.div`
   align-items: center;
   display: flex;
@@ -35,16 +35,16 @@ const Header = styled.div`
   justify-content: space-between;
   padding: 20px;
   width: 100%;
-`
+`;
 const Icon = styled(AlertCircle)`
   stroke: ${({ theme }) => theme.text2};
   width: 48px;
   height: 48px;
-`
+`;
 interface BlockedTokenProps {
-  onBack: (() => void) | undefined
-  onDismiss: (() => void) | undefined
-  blockedTokens: Token[]
+  onBack: (() => void) | undefined;
+  onDismiss: (() => void) | undefined;
+  blockedTokens: Token[];
 }
 
 const BlockedToken = ({ onBack, onDismiss, blockedTokens }: BlockedTokenProps) => (
@@ -67,5 +67,5 @@ const BlockedToken = ({ onBack, onDismiss, blockedTokens }: BlockedTokenProps) =
       </Button>
     </Content>
   </Wrapper>
-)
-export default BlockedToken
+);
+export default BlockedToken;

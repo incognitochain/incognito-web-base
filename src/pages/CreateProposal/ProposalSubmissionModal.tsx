@@ -1,25 +1,25 @@
-import { Trans } from '@lingui/macro'
-import { ButtonPrimary } from 'components/Button'
-import { AutoColumn } from 'components/Column'
-import Modal from 'components/Modal'
-import { LoadingView, SubmittedView } from 'components/ModalViews'
-import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
-import { Text } from 'rebass'
-import { ThemeContext } from 'styled-components/macro'
-import { ExternalLink, ThemedText } from 'theme'
-import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink'
+import { Trans } from '@lingui/macro';
+import { ButtonPrimary } from 'components/Button';
+import { AutoColumn } from 'components/Column';
+import Modal from 'components/Modal';
+import { LoadingView, SubmittedView } from 'components/ModalViews';
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { Text } from 'rebass';
+import { ThemeContext } from 'styled-components/macro';
+import { ExternalLink, ThemedText } from 'theme';
+import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
 export const ProposalSubmissionModal = ({
   isOpen,
   hash,
   onDismiss,
 }: {
-  isOpen: boolean
-  hash: string | undefined
-  onDismiss: () => void
+  isOpen: boolean;
+  hash: string | undefined;
+  onDismiss: () => void;
 }) => {
-  const theme = useContext(ThemeContext)
+  const theme = useContext(ThemeContext);
 
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
@@ -53,5 +53,5 @@ export const ProposalSubmissionModal = ({
         </SubmittedView>
       )}
     </Modal>
-  )
-}
+  );
+};

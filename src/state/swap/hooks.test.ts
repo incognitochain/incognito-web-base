@@ -1,7 +1,7 @@
-import { parse } from 'qs'
+import { parse } from 'qs';
 
-import { Field } from './actions'
-import { queryParametersToSwapState } from './hooks'
+import { Field } from './actions';
+import { queryParametersToSwapState } from './hooks';
 
 describe('hooks', () => {
   describe('#queryParametersToSwapState', () => {
@@ -19,8 +19,8 @@ describe('hooks', () => {
         typedValue: '20.5',
         independentField: Field.OUTPUT,
         recipient: null,
-      })
-    })
+      });
+    });
 
     test('does not duplicate eth for invalid output token', () => {
       expect(
@@ -31,8 +31,8 @@ describe('hooks', () => {
         typedValue: '',
         independentField: Field.INPUT,
         recipient: null,
-      })
-    })
+      });
+    });
 
     test('output ETH only', () => {
       expect(
@@ -45,8 +45,8 @@ describe('hooks', () => {
         typedValue: '20.5',
         independentField: Field.INPUT,
         recipient: null,
-      })
-    })
+      });
+    });
 
     test('invalid recipient', () => {
       expect(
@@ -59,8 +59,8 @@ describe('hooks', () => {
         typedValue: '20.5',
         independentField: Field.INPUT,
         recipient: null,
-      })
-    })
+      });
+    });
 
     test('valid recipient', () => {
       expect(
@@ -76,8 +76,8 @@ describe('hooks', () => {
         typedValue: '20.5',
         independentField: Field.INPUT,
         recipient: '0x0fF2D1eFd7A57B7562b2bf27F3f37899dB27F4a5',
-      })
-    })
+      });
+    });
     test('accepts any recipient', () => {
       expect(
         queryParametersToSwapState(
@@ -92,7 +92,7 @@ describe('hooks', () => {
         typedValue: '20.5',
         independentField: Field.INPUT,
         recipient: 'bob.argent.xyz',
-      })
-    })
-  })
-})
+      });
+    });
+  });
+});

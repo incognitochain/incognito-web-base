@@ -1,26 +1,26 @@
-import { Trans } from '@lingui/macro'
-import { Currency, CurrencyAmount, Percent, Token } from '@uniswap/sdk-core'
-import { Pair } from '@uniswap/v2-sdk'
-import { AutoColumn } from 'components/Column'
-import { LoadingOpacityContainer, loadingOpacityMixin } from 'components/Loader/styled'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { darken } from 'polished'
-import { ReactNode, useCallback, useState } from 'react'
-import { Lock } from 'react-feather'
-import styled from 'styled-components/macro'
-import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
+import { Trans } from '@lingui/macro';
+import { Currency, CurrencyAmount, Percent, Token } from '@uniswap/sdk-core';
+import { Pair } from '@uniswap/v2-sdk';
+import { AutoColumn } from 'components/Column';
+import { LoadingOpacityContainer, loadingOpacityMixin } from 'components/Loader/styled';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { darken } from 'polished';
+import { ReactNode, useCallback, useState } from 'react';
+import { Lock } from 'react-feather';
+import styled from 'styled-components/macro';
+import { formatCurrencyAmount } from 'utils/formatCurrencyAmount';
 
-import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
-import useTheme from '../../hooks/useTheme'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { ThemedText } from '../../theme'
-import { ButtonGray } from '../Button'
-import CurrencyLogo from '../CurrencyLogo'
-import DoubleCurrencyLogo from '../DoubleLogo'
-import { Input as NumericalInput } from '../NumericalInput'
-import { RowBetween, RowFixed } from '../Row'
-import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
-import { FiatValue } from './FiatValue'
+import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg';
+import useTheme from '../../hooks/useTheme';
+import { useCurrencyBalance } from '../../state/wallet/hooks';
+import { ThemedText } from '../../theme';
+import { ButtonGray } from '../Button';
+import CurrencyLogo from '../CurrencyLogo';
+import DoubleCurrencyLogo from '../DoubleLogo';
+import { Input as NumericalInput } from '../NumericalInput';
+import { RowBetween, RowFixed } from '../Row';
+import CurrencySearchModal from '../SearchModal/CurrencySearchModal';
+import { FiatValue } from './FiatValue';
 
 const InputPanel = styled.div<{ hideInput?: boolean }>`
   ${({ theme }) => theme.flexColumnNoWrap}
@@ -31,7 +31,7 @@ const InputPanel = styled.div<{ hideInput?: boolean }>`
   width: ${({ hideInput }) => (hideInput ? '100%' : 'initial')};
   transition: height 1s ease;
   will-change: height;
-`
+`;
 
 const FixedContainer = styled.div`
   width: 100%;
@@ -43,7 +43,7 @@ const FixedContainer = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 2;
-`
+`;
 
 const Container = styled.div<{ hideInput: boolean }>`
   border-radius: ${({ hideInput }) => (hideInput ? '16px' : '20px')};
@@ -54,7 +54,7 @@ const Container = styled.div<{ hideInput: boolean }>`
   :hover {
     border: 1px solid ${({ theme, hideInput }) => (hideInput ? ' transparent' : theme.bg3)};
   }
-`
+`;
 
 const CurrencySelect = styled(ButtonGray)<{ visible: boolean; selected: boolean; hideInput?: boolean }>`
   align-items: center;
@@ -79,14 +79,14 @@ const CurrencySelect = styled(ButtonGray)<{ visible: boolean; selected: boolean;
     background-color: ${({ selected, theme }) => (selected ? theme.bg3 : darken(0.05, theme.primary1))};
   }
   visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
-`
+`;
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: center;
   justify-content: space-between;
   padding: ${({ selected }) => (selected ? ' 1rem 1rem 0.75rem 1rem' : '1rem 1rem 1rem 1rem')};
-`
+`;
 
 const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -99,18 +99,18 @@ const LabelRow = styled.div`
     cursor: pointer;
     color: ${({ theme }) => darken(0.2, theme.text2)};
   }
-`
+`;
 
 const FiatRow = styled(LabelRow)`
   justify-content: flex-end;
-`
+`;
 
 const Aligner = styled.span`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-`
+`;
 
 const StyledDropDown = styled(DropDown)<{ selected: boolean }>`
   margin: 0 0.25rem 0 0.35rem;
@@ -120,12 +120,12 @@ const StyledDropDown = styled(DropDown)<{ selected: boolean }>`
     stroke: ${({ selected, theme }) => (selected ? theme.text1 : theme.white)};
     stroke-width: 1.5px;
   }
-`
+`;
 
 const StyledTokenName = styled.span<{ active?: boolean }>`
   ${({ active }) => (active ? '  margin: 0 0.25rem 0 0.25rem;' : '  margin: 0 0.25rem 0 0.25rem;')}
   font-size:  ${({ active }) => (active ? '18px' : '18px')};
-`
+`;
 
 const StyledBalanceMax = styled.button<{ disabled?: boolean }>`
   background-color: transparent;
@@ -148,34 +148,34 @@ const StyledBalanceMax = styled.button<{ disabled?: boolean }>`
   :focus {
     outline: none;
   }
-`
+`;
 
 const StyledNumericalInput = styled(NumericalInput)<{ $loading: boolean }>`
   ${loadingOpacityMixin};
   text-align: left;
-`
+`;
 
 interface CurrencyInputPanelProps {
-  value: string
-  onUserInput: (value: string) => void
-  onMax?: () => void
-  showMaxButton: boolean
-  label?: ReactNode
-  onCurrencySelect?: (currency: Currency) => void
-  currency?: Currency | null
-  hideBalance?: boolean
-  pair?: Pair | null
-  hideInput?: boolean
-  otherCurrency?: Currency | null
-  fiatValue?: CurrencyAmount<Token> | null
-  priceImpact?: Percent
-  id: string
-  showCommonBases?: boolean
-  showCurrencyAmount?: boolean
-  disableNonToken?: boolean
-  renderBalance?: (amount: CurrencyAmount<Currency>) => ReactNode
-  locked?: boolean
-  loading?: boolean
+  value: string;
+  onUserInput: (value: string) => void;
+  onMax?: () => void;
+  showMaxButton: boolean;
+  label?: ReactNode;
+  onCurrencySelect?: (currency: Currency) => void;
+  currency?: Currency | null;
+  hideBalance?: boolean;
+  pair?: Pair | null;
+  hideInput?: boolean;
+  otherCurrency?: Currency | null;
+  fiatValue?: CurrencyAmount<Token> | null;
+  priceImpact?: Percent;
+  id: string;
+  showCommonBases?: boolean;
+  showCurrencyAmount?: boolean;
+  disableNonToken?: boolean;
+  renderBalance?: (amount: CurrencyAmount<Currency>) => ReactNode;
+  locked?: boolean;
+  loading?: boolean;
 }
 
 export default function CurrencyInputPanel({
@@ -200,14 +200,14 @@ export default function CurrencyInputPanel({
   loading = false,
   ...rest
 }: CurrencyInputPanelProps) {
-  const [modalOpen, setModalOpen] = useState(false)
-  const { account } = useActiveWeb3React()
-  const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
-  const theme = useTheme()
+  const [modalOpen, setModalOpen] = useState(false);
+  const { account } = useActiveWeb3React();
+  const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined);
+  const theme = useTheme();
 
   const handleDismissSearch = useCallback(() => {
-    setModalOpen(false)
-  }, [setModalOpen])
+    setModalOpen(false);
+  }, [setModalOpen]);
 
   return (
     <InputPanel id={id} hideInput={hideInput} {...rest}>
@@ -239,7 +239,7 @@ export default function CurrencyInputPanel({
             className="open-currency-select-button"
             onClick={() => {
               if (onCurrencySelect) {
-                setModalOpen(true)
+                setModalOpen(true);
               }
             }}
           >
@@ -319,5 +319,5 @@ export default function CurrencyInputPanel({
         />
       )}
     </InputPanel>
-  )
+  );
 }

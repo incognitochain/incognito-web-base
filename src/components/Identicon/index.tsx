@@ -1,8 +1,8 @@
-import jazzicon from '@metamask/jazzicon'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import useENSAvatar from 'hooks/useENSAvatar'
-import { useLayoutEffect, useMemo, useRef, useState } from 'react'
-import styled from 'styled-components/macro'
+import jazzicon from '@metamask/jazzicon';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import useENSAvatar from 'hooks/useENSAvatar';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import styled from 'styled-components/macro';
 
 const StyledIdenticon = styled.div`
   height: 1rem;
@@ -10,35 +10,35 @@ const StyledIdenticon = styled.div`
   border-radius: 1.125rem;
   background-color: ${({ theme }) => theme.bg4};
   font-size: initial;
-`
+`;
 
 const StyledAvatar = styled.img`
   height: inherit;
   width: inherit;
   border-radius: inherit;
-`
+`;
 
 export default function Identicon() {
-  const { account } = useActiveWeb3React()
-  const { avatar } = useENSAvatar(account ?? undefined)
-  const [fetchable, setFetchable] = useState(true)
+  const { account } = useActiveWeb3React();
+  const { avatar } = useENSAvatar(account ?? undefined);
+  const [fetchable, setFetchable] = useState(true);
 
-  const icon = useMemo(() => account && jazzicon(16, parseInt(account.slice(2, 10), 16)), [account])
-  const iconRef = useRef<HTMLDivElement>(null)
+  const icon = useMemo(() => account && jazzicon(16, parseInt(account.slice(2, 10), 16)), [account]);
+  const iconRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
-    const current = iconRef.current
+    const current = iconRef.current;
     if (icon) {
-      current?.appendChild(icon)
+      current?.appendChild(icon);
       return () => {
         try {
-          current?.removeChild(icon)
+          current?.removeChild(icon);
         } catch (e) {
-          console.error('Avatar icon not found')
+          console.error('Avatar icon not found');
         }
-      }
+      };
     }
-    return
-  }, [icon, iconRef])
+    return;
+  }, [icon, iconRef]);
 
   return (
     <StyledIdenticon>
@@ -48,5 +48,5 @@ export default function Identicon() {
         <span ref={iconRef} />
       )}
     </StyledIdenticon>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
-import { useMemo } from 'react'
+import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core';
+import { useMemo } from 'react';
 
 /**
  * Returns query arguments for the Routing API query or undefined if the
@@ -13,11 +13,11 @@ export function useRoutingAPIArguments({
   tradeType,
   useClientSideRouter,
 }: {
-  tokenIn: Currency | undefined
-  tokenOut: Currency | undefined
-  amount: CurrencyAmount<Currency> | undefined
-  tradeType: TradeType
-  useClientSideRouter: boolean
+  tokenIn: Currency | undefined;
+  tokenOut: Currency | undefined;
+  amount: CurrencyAmount<Currency> | undefined;
+  tradeType: TradeType;
+  useClientSideRouter: boolean;
 }) {
   return useMemo(
     () =>
@@ -37,5 +37,5 @@ export function useRoutingAPIArguments({
             type: (tradeType === TradeType.EXACT_INPUT ? 'exactIn' : 'exactOut') as 'exactIn' | 'exactOut',
           },
     [amount, tokenIn, tokenOut, tradeType, useClientSideRouter]
-  )
+  );
 }

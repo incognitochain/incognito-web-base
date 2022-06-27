@@ -1,7 +1,7 @@
-import { api as generatedApi } from './generated'
+import { api as generatedApi } from './generated';
 
 // tag that should be applied to queries that need to be invalidated when the chain changes
-export const CHAIN_TAG = 'Chain'
+export const CHAIN_TAG = 'Chain';
 
 // enhanced api to provide/invalidate tags
 export const api = generatedApi.enhanceEndpoints({
@@ -14,6 +14,6 @@ export const api = generatedApi.enhanceEndpoints({
       providesTags: [CHAIN_TAG],
     },
   },
-})
+});
 
-export const { useAllV3TicksQuery, useFeeTierDistributionQuery } = api
+export const { useAllV3TicksQuery, useFeeTierDistributionQuery } = api;

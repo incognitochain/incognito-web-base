@@ -1,25 +1,25 @@
-import { Trans } from '@lingui/macro'
-import { Percent, Price, Token } from '@uniswap/sdk-core'
-import { Position } from '@uniswap/v3-sdk'
-import Badge from 'components/Badge'
-import RangeBadge from 'components/Badge/RangeBadge'
-import DoubleCurrencyLogo from 'components/DoubleLogo'
-import HoverInlineText from 'components/HoverInlineText'
-import Loader from 'components/Loader'
-import { RowBetween } from 'components/Row'
-import { useToken } from 'hooks/Tokens'
-import useIsTickAtLimit from 'hooks/useIsTickAtLimit'
-import { usePool } from 'hooks/usePools'
-import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
-import { Bound } from 'state/mint/v3/actions'
-import styled from 'styled-components/macro'
-import { HideSmall, MEDIA_WIDTHS, SmallOnly } from 'theme'
-import { PositionDetails } from 'types/position'
-import { formatTickPrice } from 'utils/formatTickPrice'
-import { unwrappedToken } from 'utils/unwrappedToken'
+import { Trans } from '@lingui/macro';
+import { Percent, Price, Token } from '@uniswap/sdk-core';
+import { Position } from '@uniswap/v3-sdk';
+import Badge from 'components/Badge';
+import RangeBadge from 'components/Badge/RangeBadge';
+import DoubleCurrencyLogo from 'components/DoubleLogo';
+import HoverInlineText from 'components/HoverInlineText';
+import Loader from 'components/Loader';
+import { RowBetween } from 'components/Row';
+import { useToken } from 'hooks/Tokens';
+import useIsTickAtLimit from 'hooks/useIsTickAtLimit';
+import { usePool } from 'hooks/usePools';
+import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { Bound } from 'state/mint/v3/actions';
+import styled from 'styled-components/macro';
+import { HideSmall, MEDIA_WIDTHS, SmallOnly } from 'theme';
+import { PositionDetails } from 'types/position';
+import { formatTickPrice } from 'utils/formatTickPrice';
+import { unwrappedToken } from 'utils/unwrappedToken';
 
-import { DAI, USDC_MAINNET, USDT, WBTC, WRAPPED_NATIVE_CURRENCY } from '../../constants/tokens'
+import { DAI, USDC_MAINNET, USDT, WBTC, WRAPPED_NATIVE_CURRENCY } from '../../constants/tokens';
 
 const LinkRow = styled(Link)`
   align-items: center;
@@ -56,7 +56,7 @@ const LinkRow = styled(Link)`
     flex-direction: column;
     row-gap: 12px;
   `};
-`
+`;
 
 const BadgeText = styled.div`
   font-weight: 500;
@@ -64,11 +64,11 @@ const BadgeText = styled.div`
   ${({ theme }) => theme.mediaWidth.upToSmall`
     font-size: 12px;
   `};
-`
+`;
 
 const DataLineItem = styled.div`
   font-size: 14px;
-`
+`;
 
 const RangeLineItem = styled(DataLineItem)`
   display: flex;
@@ -83,7 +83,7 @@ const RangeLineItem = styled(DataLineItem)`
     border-radius: 12px;
     padding: 8px 0;
 `};
-`
+`;
 
 const DoubleArrow = styled.span`
   margin: 0 2px;
@@ -92,13 +92,13 @@ const DoubleArrow = styled.span`
     margin: 4px;
     padding: 20px;
   `};
-`
+`;
 
 const RangeText = styled.span`
   /* background-color: ${({ theme }) => theme.bg2}; */
   padding: 0.25rem 0.5rem;
   border-radius: 8px;
-`
+`;
 
 const ExtentsText = styled.span`
   color: ${({ theme }) => theme.text3};
@@ -107,7 +107,7 @@ const ExtentsText = styled.span`
   ${({ theme }) => theme.mediaWidth.upToSmall`
     display: none;
   `};
-`
+`;
 
 const PrimaryPositionIdData = styled.div`
   display: flex;
@@ -116,7 +116,7 @@ const PrimaryPositionIdData = styled.div`
   > * {
     margin-right: 8px;
   }
-`
+`;
 
 const DataText = styled.div`
   font-weight: 600;
@@ -125,45 +125,45 @@ const DataText = styled.div`
   ${({ theme }) => theme.mediaWidth.upToSmall`
     font-size: 14px;
   `};
-`
+`;
 
 interface PositionListItemProps {
-  positionDetails: PositionDetails
+  positionDetails: PositionDetails;
 }
 
 export function getPriceOrderingFromPositionForUI(position?: Position): {
-  priceLower?: Price<Token, Token>
-  priceUpper?: Price<Token, Token>
-  quote?: Token
-  base?: Token
+  priceLower?: Price<Token, Token>;
+  priceUpper?: Price<Token, Token>;
+  quote?: Token;
+  base?: Token;
 } {
   if (!position) {
-    return {}
+    return {};
   }
 
-  const token0 = position.amount0.currency
-  const token1 = position.amount1.currency
+  const token0 = position.amount0.currency;
+  const token1 = position.amount1.currency;
 
   // if token0 is a dollar-stable asset, set it as the quote token
-  const stables = [DAI, USDC_MAINNET, USDT]
+  const stables = [DAI, USDC_MAINNET, USDT];
   if (stables.some((stable) => stable.equals(token0))) {
     return {
       priceLower: position.token0PriceUpper.invert(),
       priceUpper: position.token0PriceLower.invert(),
       quote: token0,
       base: token1,
-    }
+    };
   }
 
   // if token1 is an ETH-/BTC-stable asset, set it as the base token
-  const bases = [...Object.values(WRAPPED_NATIVE_CURRENCY), WBTC]
+  const bases = [...Object.values(WRAPPED_NATIVE_CURRENCY), WBTC];
   if (bases.some((base) => base && base.equals(token1))) {
     return {
       priceLower: position.token0PriceUpper.invert(),
       priceUpper: position.token0PriceLower.invert(),
       quote: token0,
       base: token1,
-    }
+    };
   }
 
   // if both prices are below 1, invert
@@ -173,7 +173,7 @@ export function getPriceOrderingFromPositionForUI(position?: Position): {
       priceUpper: position.token0PriceLower.invert(),
       quote: token0,
       base: token1,
-    }
+    };
   }
 
   // otherwise, just return the default
@@ -182,7 +182,7 @@ export function getPriceOrderingFromPositionForUI(position?: Position): {
     priceUpper: position.token0PriceUpper,
     quote: token1,
     base: token0,
-  }
+  };
 }
 
 export default function PositionListItem({ positionDetails }: PositionListItemProps) {
@@ -193,38 +193,38 @@ export default function PositionListItem({ positionDetails }: PositionListItemPr
     liquidity,
     tickLower,
     tickUpper,
-  } = positionDetails
+  } = positionDetails;
 
-  const token0 = useToken(token0Address)
-  const token1 = useToken(token1Address)
+  const token0 = useToken(token0Address);
+  const token1 = useToken(token1Address);
 
-  const currency0 = token0 ? unwrappedToken(token0) : undefined
-  const currency1 = token1 ? unwrappedToken(token1) : undefined
+  const currency0 = token0 ? unwrappedToken(token0) : undefined;
+  const currency1 = token1 ? unwrappedToken(token1) : undefined;
 
   // construct Position from details returned
-  const [, pool] = usePool(currency0 ?? undefined, currency1 ?? undefined, feeAmount)
+  const [, pool] = usePool(currency0 ?? undefined, currency1 ?? undefined, feeAmount);
 
   const position = useMemo(() => {
     if (pool) {
-      return new Position({ pool, liquidity: liquidity.toString(), tickLower, tickUpper })
+      return new Position({ pool, liquidity: liquidity.toString(), tickLower, tickUpper });
     }
-    return undefined
-  }, [liquidity, pool, tickLower, tickUpper])
+    return undefined;
+  }, [liquidity, pool, tickLower, tickUpper]);
 
-  const tickAtLimit = useIsTickAtLimit(feeAmount, tickLower, tickUpper)
+  const tickAtLimit = useIsTickAtLimit(feeAmount, tickLower, tickUpper);
 
   // prices
-  const { priceLower, priceUpper, quote, base } = getPriceOrderingFromPositionForUI(position)
+  const { priceLower, priceUpper, quote, base } = getPriceOrderingFromPositionForUI(position);
 
-  const currencyQuote = quote && unwrappedToken(quote)
-  const currencyBase = base && unwrappedToken(base)
+  const currencyQuote = quote && unwrappedToken(quote);
+  const currencyBase = base && unwrappedToken(base);
 
   // check if price is within range
-  const outOfRange: boolean = pool ? pool.tickCurrent < tickLower || pool.tickCurrent >= tickUpper : false
+  const outOfRange: boolean = pool ? pool.tickCurrent < tickLower || pool.tickCurrent >= tickUpper : false;
 
-  const positionSummaryLink = '/pool/' + positionDetails.tokenId
+  const positionSummaryLink = '/pool/' + positionDetails.tokenId;
 
-  const removed = liquidity?.eq(0)
+  const removed = liquidity?.eq(0);
 
   return (
     <LinkRow to={positionSummaryLink}>
@@ -275,5 +275,5 @@ export default function PositionListItem({ positionDetails }: PositionListItemPr
         <Loader />
       )}
     </LinkRow>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { Trans } from '@lingui/macro'
-import PositionListItem from 'components/PositionListItem'
-import Toggle from 'components/Toggle'
-import React from 'react'
-import styled from 'styled-components/macro'
-import { MEDIA_WIDTHS } from 'theme'
-import { PositionDetails } from 'types/position'
+import { Trans } from '@lingui/macro';
+import PositionListItem from 'components/PositionListItem';
+import Toggle from 'components/Toggle';
+import React from 'react';
+import styled from 'styled-components/macro';
+import { MEDIA_WIDTHS } from 'theme';
+import { PositionDetails } from 'types/position';
 
 const DesktopHeader = styled.div`
   display: none;
@@ -21,7 +21,7 @@ const DesktopHeader = styled.div`
       margin-right: 12px;
     }
   }
-`
+`;
 
 const MobileHeader = styled.div`
   font-weight: medium;
@@ -41,31 +41,31 @@ const MobileHeader = styled.div`
     flex-direction: column;
     align-items: start;
   }
-`
+`;
 
 const ToggleWrap = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-`
+`;
 
 const ToggleLabel = styled.div`
   opacity: 0.6;
   margin-right: 10px;
-`
+`;
 
 const MobileTogglePosition = styled.div`
   @media screen and (max-width: ${MEDIA_WIDTHS.upToExtraSmall}px) {
     position: absolute;
     right: 20px;
   }
-`
+`;
 
 type PositionListProps = React.PropsWithChildren<{
-  positions: PositionDetails[]
-  setUserHideClosedPositions: any
-  userHideClosedPositions: boolean
-}>
+  positions: PositionDetails[];
+  setUserHideClosedPositions: any;
+  userHideClosedPositions: boolean;
+}>;
 
 export default function PositionList({
   positions,
@@ -87,7 +87,7 @@ export default function PositionList({
             id="desktop-hide-closed-positions"
             isActive={!userHideClosedPositions}
             toggle={() => {
-              setUserHideClosedPositions(!userHideClosedPositions)
+              setUserHideClosedPositions(!userHideClosedPositions);
             }}
           />
         </ToggleWrap>
@@ -103,15 +103,15 @@ export default function PositionList({
               id="mobile-hide-closed-positions"
               isActive={!userHideClosedPositions}
               toggle={() => {
-                setUserHideClosedPositions(!userHideClosedPositions)
+                setUserHideClosedPositions(!userHideClosedPositions);
               }}
             />
           </MobileTogglePosition>
         </ToggleWrap>
       </MobileHeader>
       {positions.map((p) => {
-        return <PositionListItem key={p.tokenId.toString()} positionDetails={p} />
+        return <PositionListItem key={p.tokenId.toString()} positionDetails={p} />;
       })}
     </>
-  )
+  );
 }

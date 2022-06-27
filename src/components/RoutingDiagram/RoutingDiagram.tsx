@@ -1,28 +1,28 @@
-import { Trans } from '@lingui/macro'
-import { Currency } from '@uniswap/sdk-core'
-import { FeeAmount } from '@uniswap/v3-sdk'
-import Badge from 'components/Badge'
-import CurrencyLogo from 'components/CurrencyLogo'
-import DoubleCurrencyLogo from 'components/DoubleLogo'
-import Row, { AutoRow } from 'components/Row'
-import { RoutingDiagramEntry } from 'components/swap/SwapRoute'
-import { useTokenInfoFromActiveList } from 'hooks/useTokenInfoFromActiveList'
-import { Box } from 'rebass'
-import styled from 'styled-components/macro'
-import { ThemedText, Z_INDEX } from 'theme'
+import { Trans } from '@lingui/macro';
+import { Currency } from '@uniswap/sdk-core';
+import { FeeAmount } from '@uniswap/v3-sdk';
+import Badge from 'components/Badge';
+import CurrencyLogo from 'components/CurrencyLogo';
+import DoubleCurrencyLogo from 'components/DoubleLogo';
+import Row, { AutoRow } from 'components/Row';
+import { RoutingDiagramEntry } from 'components/swap/SwapRoute';
+import { useTokenInfoFromActiveList } from 'hooks/useTokenInfoFromActiveList';
+import { Box } from 'rebass';
+import styled from 'styled-components/macro';
+import { ThemedText, Z_INDEX } from 'theme';
 
-import { ReactComponent as DotLine } from '../../assets/svg/dot_line.svg'
-import { MouseoverTooltip } from '../Tooltip'
+import { ReactComponent as DotLine } from '../../assets/svg/dot_line.svg';
+import { MouseoverTooltip } from '../Tooltip';
 
 const Wrapper = styled(Box)`
   align-items: center;
   width: 100%;
-`
+`;
 
 const RouteContainerRow = styled(Row)`
   display: grid;
   grid-template-columns: 24px 1fr 24px;
-`
+`;
 
 const RouteRow = styled(Row)`
   align-items: center;
@@ -30,12 +30,12 @@ const RouteRow = styled(Row)`
   justify-content: center;
   padding: 0.1rem 0.5rem;
   position: relative;
-`
+`;
 
 const PoolBadge = styled(Badge)`
   display: flex;
   padding: 4px 4px;
-`
+`;
 
 const DottedLine = styled.div`
   display: flex;
@@ -44,13 +44,13 @@ const DottedLine = styled.div`
   width: calc(100%);
   z-index: 1;
   opacity: 0.5;
-`
+`;
 
 const DotColor = styled(DotLine)`
   path {
     stroke: ${({ theme }) => theme.bg4};
   }
-`
+`;
 
 const OpaqueBadge = styled(Badge)`
   background-color: ${({ theme }) => theme.bg2};
@@ -62,7 +62,7 @@ const OpaqueBadge = styled(Badge)`
   justify-content: start;
   padding: 4px 6px 4px 4px;
   z-index: ${Z_INDEX.sticky};
-`
+`;
 
 const ProtocolBadge = styled(Badge)`
   background-color: ${({ theme }) => theme.bg3};
@@ -71,23 +71,23 @@ const ProtocolBadge = styled(Badge)`
   font-size: 10px;
   padding: 2px 4px;
   z-index: ${Z_INDEX.sticky + 1};
-`
+`;
 
 const BadgeText = styled(ThemedText.Small)`
   word-break: normal;
-`
+`;
 
 export default function RoutingDiagram({
   currencyIn,
   currencyOut,
   routes,
 }: {
-  currencyIn: Currency
-  currencyOut: Currency
-  routes: RoutingDiagramEntry[]
+  currencyIn: Currency;
+  currencyOut: Currency;
+  routes: RoutingDiagramEntry[];
 }) {
-  const tokenIn = useTokenInfoFromActiveList(currencyIn)
-  const tokenOut = useTokenInfoFromActiveList(currencyOut)
+  const tokenIn = useTokenInfoFromActiveList(currencyIn);
+  const tokenOut = useTokenInfoFromActiveList(currencyOut);
 
   return (
     <Wrapper>
@@ -99,7 +99,7 @@ export default function RoutingDiagram({
         </RouteContainerRow>
       ))}
     </Wrapper>
-  )
+  );
 }
 
 function Route({ entry: { percent, path, protocol } }: { entry: RoutingDiagramEntry }) {
@@ -122,12 +122,12 @@ function Route({ entry: { percent, path, protocol } }: { entry: RoutingDiagramEn
         ))}
       </AutoRow>
     </RouteRow>
-  )
+  );
 }
 
 function Pool({ currency0, currency1, feeAmount }: { currency0: Currency; currency1: Currency; feeAmount: FeeAmount }) {
-  const tokenInfo0 = useTokenInfoFromActiveList(currency0)
-  const tokenInfo1 = useTokenInfoFromActiveList(currency1)
+  const tokenInfo0 = useTokenInfoFromActiveList(currency0);
+  const tokenInfo1 = useTokenInfoFromActiveList(currency1);
 
   // TODO - link pool icon to info.uniswap.org via query params
   return (
@@ -141,5 +141,5 @@ function Pool({ currency0, currency1, feeAmount }: { currency0: Currency; curren
         <ThemedText.Small fontSize={14}>{feeAmount / 10000}%</ThemedText.Small>
       </PoolBadge>
     </MouseoverTooltip>
-  )
+  );
 }

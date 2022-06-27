@@ -1,20 +1,20 @@
 // eslint-disable-next-line no-restricted-imports
-import { t, Trans } from '@lingui/macro'
-import { ResizingTextArea, TextInput } from 'components/TextInput'
-import React, { memo } from 'react'
-import { Text } from 'rebass'
-import styled from 'styled-components/macro'
+import { t, Trans } from '@lingui/macro';
+import { ResizingTextArea, TextInput } from 'components/TextInput';
+import React, { memo } from 'react';
+import { Text } from 'rebass';
+import styled from 'styled-components/macro';
 
 const ProposalEditorHeader = styled(Text)`
   font-size: 14px;
   font-weight: 500;
   color: ${({ theme }) => theme.text2};
-`
+`;
 
 const ProposalTitle = memo(styled(TextInput)`
   margin-top: 10.5px;
   margin-bottom: 7.5px;
-`)
+`);
 
 const ProposalEditorContainer = styled.div`
   margin-top: 10px;
@@ -22,7 +22,7 @@ const ProposalEditorContainer = styled.div`
   border-radius: 20px;
   border: 1px solid ${({ theme }) => theme.bg2};
   background-color: ${({ theme }) => theme.bg1};
-`
+`;
 
 export const ProposalEditor = ({
   className,
@@ -31,11 +31,11 @@ export const ProposalEditor = ({
   onTitleInput,
   onBodyInput,
 }: {
-  className?: string
-  title: string
-  body: string
-  onTitleInput: (title: string) => void
-  onBodyInput: (body: string) => void
+  className?: string;
+  title: string;
+  body: string;
+  onTitleInput: (title: string) => void;
+  onBodyInput: (body: string) => void;
 }) => {
   const bodyPlaceholder = `## Summary
 
@@ -49,7 +49,7 @@ Insert your methodology here
   
 Insert your conclusion here
   
-  `
+  `;
 
   return (
     <ProposalEditorContainer className={className}>
@@ -60,5 +60,5 @@ Insert your conclusion here
       <hr />
       <ResizingTextArea value={body} onUserInput={onBodyInput} placeholder={bodyPlaceholder} fontSize="1rem" />
     </ProposalEditorContainer>
-  )
-}
+  );
+};

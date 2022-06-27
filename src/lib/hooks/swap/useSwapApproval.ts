@@ -1,14 +1,14 @@
-import { Protocol, Trade } from '@uniswap/router-sdk'
-import { Currency, CurrencyAmount, Percent, Token, TradeType } from '@uniswap/sdk-core'
-import { Pair, Route as V2Route, Trade as V2Trade } from '@uniswap/v2-sdk'
-import { Pool, Route as V3Route, Trade as V3Trade } from '@uniswap/v3-sdk'
-import { SWAP_ROUTER_ADDRESSES, V2_ROUTER_ADDRESS, V3_ROUTER_ADDRESS } from 'constants/addresses'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useMemo } from 'react'
-import { getTxOptimizedSwapRouter, SwapRouterVersion } from 'utils/getTxOptimizedSwapRouter'
+import { Protocol, Trade } from '@uniswap/router-sdk';
+import { Currency, CurrencyAmount, Percent, Token, TradeType } from '@uniswap/sdk-core';
+import { Pair, Route as V2Route, Trade as V2Trade } from '@uniswap/v2-sdk';
+import { Pool, Route as V3Route, Trade as V3Trade } from '@uniswap/v3-sdk';
+import { SWAP_ROUTER_ADDRESSES, V2_ROUTER_ADDRESS, V3_ROUTER_ADDRESS } from 'constants/addresses';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useMemo } from 'react';
+import { getTxOptimizedSwapRouter, SwapRouterVersion } from 'utils/getTxOptimizedSwapRouter';
 
-import { ApprovalState, useApproval, useApprovalStateForSpender } from '../useApproval'
-export { ApprovalState } from '../useApproval'
+import { ApprovalState, useApproval, useApprovalStateForSpender } from '../useApproval';
+export { ApprovalState } from '../useApproval';
 
 /** Returns approval state for all known swap routers */
 function useSwapApprovalStates(
@@ -16,21 +16,21 @@ function useSwapApprovalStates(
   allowedSlippage: Percent,
   useIsPendingApproval: (token?: Token, spender?: string) => boolean
 ): { v2: ApprovalState; v3: ApprovalState; v2V3: ApprovalState } {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
   const amountToApprove = useMemo(
     () => (trade && trade.inputAmount.currency.isToken ? trade.maximumAmountIn(allowedSlippage) : undefined),
     [trade, allowedSlippage]
-  )
+  );
 
-  const v2RouterAddress = chainId ? V2_ROUTER_ADDRESS[chainId] : undefined
-  const v3RouterAddress = chainId ? V3_ROUTER_ADDRESS[chainId] : undefined
-  const swapRouterAddress = chainId ? SWAP_ROUTER_ADDRESSES[chainId] : undefined
-  const v2 = useApprovalStateForSpender(amountToApprove, v2RouterAddress, useIsPendingApproval)
-  const v3 = useApprovalStateForSpender(amountToApprove, v3RouterAddress, useIsPendingApproval)
-  const v2V3 = useApprovalStateForSpender(amountToApprove, swapRouterAddress, useIsPendingApproval)
+  const v2RouterAddress = chainId ? V2_ROUTER_ADDRESS[chainId] : undefined;
+  const v3RouterAddress = chainId ? V3_ROUTER_ADDRESS[chainId] : undefined;
+  const swapRouterAddress = chainId ? SWAP_ROUTER_ADDRESSES[chainId] : undefined;
+  const v2 = useApprovalStateForSpender(amountToApprove, v2RouterAddress, useIsPendingApproval);
+  const v3 = useApprovalStateForSpender(amountToApprove, v3RouterAddress, useIsPendingApproval);
+  const v2V3 = useApprovalStateForSpender(amountToApprove, swapRouterAddress, useIsPendingApproval);
 
-  return useMemo(() => ({ v2, v3, v2V3 }), [v2, v2V3, v3])
+  return useMemo(() => ({ v2, v3, v2V3 }), [v2, v2V3, v3]);
 }
 
 export function useSwapRouterAddress(
@@ -40,7 +40,7 @@ export function useSwapRouterAddress(
     | Trade<Currency, Currency, TradeType>
     | undefined
 ) {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
   return useMemo(
     () =>
       chainId
@@ -51,7 +51,7 @@ export function useSwapRouterAddress(
           : SWAP_ROUTER_ADDRESSES[chainId]
         : undefined,
     [chainId, trade]
-  )
+  );
 }
 
 // wraps useApproveCallback in the context of a swap
@@ -68,11 +68,11 @@ export default function useSwapApproval(
   const amountToApprove = useMemo(
     () => amount || (trade && trade.inputAmount.currency.isToken ? trade.maximumAmountIn(allowedSlippage) : undefined),
     [amount, trade, allowedSlippage]
-  )
-  const spender = useSwapRouterAddress(trade)
+  );
+  const spender = useSwapRouterAddress(trade);
 
-  const approval = useApproval(amountToApprove, spender, useIsPendingApproval)
-  return approval
+  const approval = useApproval(amountToApprove, spender, useIsPendingApproval);
+  return approval;
 }
 
 export function useSwapApprovalOptimizedTrade(
@@ -84,28 +84,28 @@ export function useSwapApprovalOptimizedTrade(
   | V3Trade<Currency, Currency, TradeType>
   | Trade<Currency, Currency, TradeType>
   | undefined {
-  const onlyV2Routes = trade?.routes.every((route) => route.protocol === Protocol.V2)
-  const onlyV3Routes = trade?.routes.every((route) => route.protocol === Protocol.V3)
-  const tradeHasSplits = (trade?.routes.length ?? 0) > 1
+  const onlyV2Routes = trade?.routes.every((route) => route.protocol === Protocol.V2);
+  const onlyV3Routes = trade?.routes.every((route) => route.protocol === Protocol.V3);
+  const tradeHasSplits = (trade?.routes.length ?? 0) > 1;
 
-  const approvalStates = useSwapApprovalStates(trade, allowedSlippage, useIsPendingApproval)
+  const approvalStates = useSwapApprovalStates(trade, allowedSlippage, useIsPendingApproval);
 
   const optimizedSwapRouter = useMemo(
     () => getTxOptimizedSwapRouter({ onlyV2Routes, onlyV3Routes, tradeHasSplits, approvalStates }),
     [approvalStates, tradeHasSplits, onlyV2Routes, onlyV3Routes]
-  )
+  );
 
   return useMemo(() => {
-    if (!trade) return undefined
+    if (!trade) return undefined;
 
     try {
       switch (optimizedSwapRouter) {
         case SwapRouterVersion.V2V3:
-          return trade
+          return trade;
         case SwapRouterVersion.V2:
-          const pairs = trade.swaps[0].route.pools.filter((pool) => pool instanceof Pair) as Pair[]
-          const v2Route = new V2Route(pairs, trade.inputAmount.currency, trade.outputAmount.currency)
-          return new V2Trade(v2Route, trade.inputAmount, trade.tradeType)
+          const pairs = trade.swaps[0].route.pools.filter((pool) => pool instanceof Pair) as Pair[];
+          const v2Route = new V2Route(pairs, trade.inputAmount.currency, trade.outputAmount.currency);
+          return new V2Trade(v2Route, trade.inputAmount, trade.tradeType);
         case SwapRouterVersion.V3:
           return V3Trade.createUncheckedTradeWithMultipleRoutes({
             routes: trade.swaps.map(({ route, inputAmount, outputAmount }) => ({
@@ -118,14 +118,14 @@ export function useSwapApprovalOptimizedTrade(
               outputAmount,
             })),
             tradeType: trade.tradeType,
-          })
+          });
         default:
-          return undefined
+          return undefined;
       }
     } catch (e) {
       // TODO(#2989): remove try-catch
-      console.debug(e)
-      return undefined
+      console.debug(e);
+      return undefined;
     }
-  }, [trade, optimizedSwapRouter])
+  }, [trade, optimizedSwapRouter]);
 }

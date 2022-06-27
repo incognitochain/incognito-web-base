@@ -1,5 +1,5 @@
-import { useCallback } from 'react'
-import styled from 'styled-components/macro'
+import { useCallback } from 'react';
+import styled from 'styled-components/macro';
 
 const StyledRangeInput = styled.input<{ size: number }>`
   -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
@@ -85,15 +85,15 @@ const StyledRangeInput = styled.input<{ size: number }>`
   &::-ms-fill-upper {
     background: ${({ theme }) => theme.bg3};
   }
-`
+`;
 
 interface InputSliderProps {
-  value: number
-  onChange: (value: number) => void
-  step?: number
-  min?: number
-  max?: number
-  size?: number
+  value: number;
+  onChange: (value: number) => void;
+  step?: number;
+  min?: number;
+  max?: number;
+  size?: number;
 }
 
 export default function Slider({
@@ -107,10 +107,10 @@ export default function Slider({
 }: InputSliderProps) {
   const changeCallback = useCallback(
     (e) => {
-      onChange(parseInt(e.target.value))
+      onChange(parseInt(e.target.value));
     },
     [onChange]
-  )
+  );
 
   return (
     <StyledRangeInput
@@ -125,5 +125,5 @@ export default function Slider({
       min={min}
       max={max}
     />
-  )
+  );
 }

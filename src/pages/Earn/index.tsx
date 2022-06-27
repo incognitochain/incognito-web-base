@@ -1,28 +1,28 @@
-import { Trans } from '@lingui/macro'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import JSBI from 'jsbi'
-import styled from 'styled-components/macro'
+import { Trans } from '@lingui/macro';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import JSBI from 'jsbi';
+import styled from 'styled-components/macro';
 
-import { OutlineCard } from '../../components/Card'
-import { AutoColumn } from '../../components/Column'
-import PoolCard from '../../components/earn/PoolCard'
-import { CardBGImage, CardNoise, CardSection, DataCard } from '../../components/earn/styled'
-import Loader from '../../components/Loader'
-import { RowBetween } from '../../components/Row'
-import { BIG_INT_ZERO } from '../../constants/misc'
-import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/stake/hooks'
-import { ExternalLink, ThemedText } from '../../theme'
-import { Countdown } from './Countdown'
+import { OutlineCard } from '../../components/Card';
+import { AutoColumn } from '../../components/Column';
+import PoolCard from '../../components/earn/PoolCard';
+import { CardBGImage, CardNoise, CardSection, DataCard } from '../../components/earn/styled';
+import Loader from '../../components/Loader';
+import { RowBetween } from '../../components/Row';
+import { BIG_INT_ZERO } from '../../constants/misc';
+import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/stake/hooks';
+import { ExternalLink, ThemedText } from '../../theme';
+import { Countdown } from './Countdown';
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
   width: 100%;
-`
+`;
 
 const TopSection = styled(AutoColumn)`
   max-width: 720px;
   width: 100%;
-`
+`;
 
 const PoolSection = styled.div`
   display: grid;
@@ -31,28 +31,28 @@ const PoolSection = styled.div`
   row-gap: 15px;
   width: 100%;
   justify-self: center;
-`
+`;
 
 const DataRow = styled(RowBetween)`
   ${({ theme }) => theme.mediaWidth.upToSmall`
 flex-direction: column;
 `};
-`
+`;
 
 export default function Earn() {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
   // staking info for connected account
-  const stakingInfos = useStakingInfo()
+  const stakingInfos = useStakingInfo();
 
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
    */
-  const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.quotient, BIG_INT_ZERO))
+  const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.quotient, BIG_INT_ZERO));
 
   // toggle copy if rewards are inactive
-  const stakingRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
+  const stakingRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0);
 
   return (
     <PageWrapper gap="lg" justify="center">
@@ -112,11 +112,11 @@ export default function Earn() {
           ) : (
             stakingInfosWithBalance?.map((stakingInfo) => {
               // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
+              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />;
             })
           )}
         </PoolSection>
       </AutoColumn>
     </PageWrapper>
-  )
+  );
 }

@@ -1,28 +1,28 @@
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useContext } from 'react'
-import { AlertCircle, CheckCircle } from 'react-feather'
-import styled, { ThemeContext } from 'styled-components/macro'
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useContext } from 'react';
+import { AlertCircle, CheckCircle } from 'react-feather';
+import styled, { ThemeContext } from 'styled-components/macro';
 
-import { useTransaction } from '../../state/transactions/hooks'
-import { ThemedText } from '../../theme'
-import { ExternalLink } from '../../theme'
-import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
-import { TransactionSummary } from '../AccountDetails/TransactionSummary'
-import { AutoColumn } from '../Column'
-import { AutoRow } from '../Row'
+import { useTransaction } from '../../state/transactions/hooks';
+import { ThemedText } from '../../theme';
+import { ExternalLink } from '../../theme';
+import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
+import { TransactionSummary } from '../AccountDetails/TransactionSummary';
+import { AutoColumn } from '../Column';
+import { AutoRow } from '../Row';
 
 const RowNoFlex = styled(AutoRow)`
   flex-wrap: nowrap;
-`
+`;
 
 export default function TransactionPopup({ hash }: { hash: string }) {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
-  const tx = useTransaction(hash)
-  const theme = useContext(ThemeContext)
+  const tx = useTransaction(hash);
+  const theme = useContext(ThemeContext);
 
-  if (!tx) return null
-  const success = Boolean(tx.receipt && tx.receipt.status === 1)
+  if (!tx) return null;
+  const success = Boolean(tx.receipt && tx.receipt.status === 1);
 
   return (
     <RowNoFlex>
@@ -40,5 +40,5 @@ export default function TransactionPopup({ hash }: { hash: string }) {
         )}
       </AutoColumn>
     </RowNoFlex>
-  )
+  );
 }

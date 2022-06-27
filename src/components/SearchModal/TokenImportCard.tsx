@@ -1,23 +1,23 @@
-import { Trans } from '@lingui/macro'
-import { Token } from '@uniswap/sdk-core'
-import { TokenList } from '@uniswap/token-lists'
-import Card from 'components/Card'
-import { AutoColumn } from 'components/Column'
-import CurrencyLogo from 'components/CurrencyLogo'
-import ListLogo from 'components/ListLogo'
-import { RowFixed } from 'components/Row'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { transparentize } from 'polished'
-import { AlertCircle } from 'react-feather'
-import styled, { useTheme } from 'styled-components/macro'
-import { ExternalLink, ThemedText } from 'theme'
-import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink'
+import { Trans } from '@lingui/macro';
+import { Token } from '@uniswap/sdk-core';
+import { TokenList } from '@uniswap/token-lists';
+import Card from 'components/Card';
+import { AutoColumn } from 'components/Column';
+import CurrencyLogo from 'components/CurrencyLogo';
+import ListLogo from 'components/ListLogo';
+import { RowFixed } from 'components/Row';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { transparentize } from 'polished';
+import { AlertCircle } from 'react-feather';
+import styled, { useTheme } from 'styled-components/macro';
+import { ExternalLink, ThemedText } from 'theme';
+import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
 const WarningWrapper = styled(Card)<{ highWarning: boolean }>`
   background-color: ${({ theme, highWarning }) =>
     highWarning ? transparentize(0.8, theme.red1) : transparentize(0.8, theme.yellow2)};
   width: fit-content;
-`
+`;
 
 const AddressText = styled(ThemedText.Blue)`
   font-size: 12px;
@@ -26,14 +26,14 @@ const AddressText = styled(ThemedText.Blue)`
   ${({ theme }) => theme.mediaWidth.upToSmall`
     font-size: 10px;
   `}
-`
+`;
 interface TokenImportCardProps {
-  list?: TokenList
-  token: Token
+  list?: TokenList;
+  token: Token;
 }
 const TokenImportCard = ({ list, token }: TokenImportCardProps) => {
-  const theme = useTheme()
-  const { chainId } = useActiveWeb3React()
+  const theme = useTheme();
+  const { chainId } = useActiveWeb3React();
   return (
     <Card backgroundColor={theme.bg2} padding="2rem">
       <AutoColumn gap="10px" justify="center">
@@ -70,7 +70,7 @@ const TokenImportCard = ({ list, token }: TokenImportCardProps) => {
         )}
       </AutoColumn>
     </Card>
-  )
-}
+  );
+};
 
-export default TokenImportCard
+export default TokenImportCard;

@@ -1,30 +1,30 @@
-import { Trans } from '@lingui/macro'
-import { CurrencyAmount, Percent, Token } from '@uniswap/sdk-core'
-import { Pair } from '@uniswap/v2-sdk'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import JSBI from 'jsbi'
-import { transparentize } from 'polished'
-import { useState } from 'react'
-import { ChevronDown, ChevronUp } from 'react-feather'
-import { Link } from 'react-router-dom'
-import { Text } from 'rebass'
-import styled from 'styled-components/macro'
+import { Trans } from '@lingui/macro';
+import { CurrencyAmount, Percent, Token } from '@uniswap/sdk-core';
+import { Pair } from '@uniswap/v2-sdk';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import JSBI from 'jsbi';
+import { transparentize } from 'polished';
+import { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'react-feather';
+import { Link } from 'react-router-dom';
+import { Text } from 'rebass';
+import styled from 'styled-components/macro';
 
-import { BIG_INT_ZERO } from '../../constants/misc'
-import { useColor } from '../../hooks/useColor'
-import { useTotalSupply } from '../../hooks/useTotalSupply'
-import { useTokenBalance } from '../../state/wallet/hooks'
-import { currencyId } from '../../utils/currencyId'
-import { unwrappedToken } from '../../utils/unwrappedToken'
-import { ButtonEmpty, ButtonPrimary, ButtonSecondary } from '../Button'
-import { LightCard } from '../Card'
-import { AutoColumn } from '../Column'
-import CurrencyLogo from '../CurrencyLogo'
-import DoubleCurrencyLogo from '../DoubleLogo'
-import { CardNoise } from '../earn/styled'
-import { AutoRow, RowBetween, RowFixed } from '../Row'
-import { Dots } from '../swap/styleds'
-import { FixedHeightRow } from '.'
+import { BIG_INT_ZERO } from '../../constants/misc';
+import { useColor } from '../../hooks/useColor';
+import { useTotalSupply } from '../../hooks/useTotalSupply';
+import { useTokenBalance } from '../../state/wallet/hooks';
+import { currencyId } from '../../utils/currencyId';
+import { unwrappedToken } from '../../utils/unwrappedToken';
+import { ButtonEmpty, ButtonPrimary, ButtonSecondary } from '../Button';
+import { LightCard } from '../Card';
+import { AutoColumn } from '../Column';
+import CurrencyLogo from '../CurrencyLogo';
+import DoubleCurrencyLogo from '../DoubleLogo';
+import { CardNoise } from '../earn/styled';
+import { AutoRow, RowBetween, RowFixed } from '../Row';
+import { Dots } from '../swap/styleds';
+import { FixedHeightRow } from '.';
 
 const StyledPositionCard = styled(LightCard)<{ bgColor: any }>`
   border: none;
@@ -32,35 +32,35 @@ const StyledPositionCard = styled(LightCard)<{ bgColor: any }>`
     `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, bgColor)} 0%, ${theme.bg3} 100%) `};
   position: relative;
   overflow: hidden;
-`
+`;
 
 interface PositionCardProps {
-  pair: Pair
-  showUnwrapped?: boolean
-  border?: string
-  stakedBalance?: CurrencyAmount<Token> // optional balance to indicate that liquidity is deposited in mining pool
+  pair: Pair;
+  showUnwrapped?: boolean;
+  border?: string;
+  stakedBalance?: CurrencyAmount<Token>; // optional balance to indicate that liquidity is deposited in mining pool
 }
 
 export default function V2PositionCard({ pair, border, stakedBalance }: PositionCardProps) {
-  const { account } = useActiveWeb3React()
+  const { account } = useActiveWeb3React();
 
-  const currency0 = unwrappedToken(pair.token0)
-  const currency1 = unwrappedToken(pair.token1)
+  const currency0 = unwrappedToken(pair.token0);
+  const currency1 = unwrappedToken(pair.token1);
 
-  const [showMore, setShowMore] = useState(false)
+  const [showMore, setShowMore] = useState(false);
 
-  const userDefaultPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
-  const totalPoolTokens = useTotalSupply(pair.liquidityToken)
+  const userDefaultPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken);
+  const totalPoolTokens = useTotalSupply(pair.liquidityToken);
 
   // if staked balance balance provided, add to standard liquidity amount
-  const userPoolBalance = stakedBalance ? userDefaultPoolBalance?.add(stakedBalance) : userDefaultPoolBalance
+  const userPoolBalance = stakedBalance ? userDefaultPoolBalance?.add(stakedBalance) : userDefaultPoolBalance;
 
   const poolTokenPercentage =
     !!userPoolBalance &&
     !!totalPoolTokens &&
     JSBI.greaterThanOrEqual(totalPoolTokens.quotient, userPoolBalance.quotient)
       ? new Percent(userPoolBalance.quotient, totalPoolTokens.quotient)
-      : undefined
+      : undefined;
 
   const [token0Deposited, token1Deposited] =
     !!pair &&
@@ -72,9 +72,9 @@ export default function V2PositionCard({ pair, border, stakedBalance }: Position
           pair.getLiquidityValue(pair.token0, totalPoolTokens, userPoolBalance, false),
           pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false),
         ]
-      : [undefined, undefined]
+      : [undefined, undefined];
 
-  const backgroundColor = useColor(pair?.token0)
+  const backgroundColor = useColor(pair?.token0);
 
   return (
     <StyledPositionCard border={border} bgColor={backgroundColor}>
@@ -208,5 +208,5 @@ export default function V2PositionCard({ pair, border, stakedBalance }: Position
         )}
       </AutoColumn>
     </StyledPositionCard>
-  )
+  );
 }

@@ -6,17 +6,17 @@
 // ***********************************************************
 
 // Import commands.ts using ES2015 syntax:
-import { injected } from './ethereum'
-import assert = require('assert')
+import { injected } from './ethereum';
+import assert = require('assert');
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface ApplicationWindow {
-      ethereum: typeof injected
+      ethereum: typeof injected;
     }
     interface VisitOptions {
-      serviceWorker?: true
+      serviceWorker?: true;
     }
   }
 }
@@ -26,27 +26,26 @@ declare global {
 Cypress.Commands.overwrite(
   'visit',
   (original, url: string | Partial<Cypress.VisitOptions>, options?: Partial<Cypress.VisitOptions>) => {
-    assert(typeof url === 'string')
-    console.log("SANG TEST::: ", options);
+    assert(typeof url === 'string');
     cy.intercept('/service-worker.js', options?.serviceWorker ? undefined : { statusCode: 404 }).then(() => {
       original({
         ...options,
         url: (url.startsWith('/') && url.length > 2 && !url.startsWith('/#') ? `/#${url}` : url) + '?chain=rinkeby',
         onBeforeLoad(win) {
-          options?.onBeforeLoad?.(win)
-          win.localStorage.clear()
-          win.ethereum = injected
+          options?.onBeforeLoad?.(win);
+          win.localStorage.clear();
+          win.ethereum = injected;
         },
-      })
-    })
+      });
+    });
   }
-)
+);
 
 beforeEach(() => {
   // Infura security policies are based on Origin headers.
   // These are stripped by cypress because chromeWebSecurity === false; this adds them back in.
   cy.intercept(/infura.io/, (res) => {
-    res.headers['origin'] = 'http://localhost:3000'
-    res.continue()
-  })
-})
+    res.headers['origin'] = 'http://localhost:3000';
+    res.continue();
+  });
+});

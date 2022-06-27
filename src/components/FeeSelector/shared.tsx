@@ -1,7 +1,7 @@
-import { Trans } from '@lingui/macro'
-import { FeeAmount } from '@uniswap/v3-sdk'
-import { ALL_SUPPORTED_CHAIN_IDS, SupportedChainId } from 'constants/chains'
-import { ReactNode } from 'react'
+import { Trans } from '@lingui/macro';
+import { FeeAmount } from '@uniswap/v3-sdk';
+import { ALL_SUPPORTED_CHAIN_IDS, SupportedChainId } from 'constants/chains';
+import { ReactNode } from 'react';
 
 export const FEE_AMOUNT_DETAIL: Record<
   FeeAmount,
@@ -27,4 +27,4 @@ export const FEE_AMOUNT_DETAIL: Record<
     description: <Trans>Best for exotic pairs.</Trans>,
     supportedChains: ALL_SUPPORTED_CHAIN_IDS,
   },
-}
+};

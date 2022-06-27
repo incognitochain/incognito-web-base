@@ -29,7 +29,7 @@ export const brushHandlePath = (height: number) =>
     'q 0 2 -2 2', // rounded corner
     'h -12', // horizontal line
     `z`, // close path
-  ].join(' ')
+  ].join(' ');
 
 export const brushHandleAccentPath = () =>
   [
@@ -39,16 +39,16 @@ export const brushHandleAccentPath = () =>
     'm 9 7', // move to second accent
     'v 14', // vertical line
     'z',
-  ].join(' ')
+  ].join(' ');
 
 export const OffScreenHandle = ({
   color,
   size = 10,
   margin = 10,
 }: {
-  color: string
-  size?: number
-  margin?: number
+  color: string;
+  size?: number;
+  margin?: number;
 }) => (
   <polygon
     points={`0 0, ${size} ${size}, 0 ${size}`}
@@ -58,4 +58,4 @@ export const OffScreenHandle = ({
     strokeWidth="4"
     strokeLinejoin="round"
   />
-)
+);

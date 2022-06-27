@@ -1,13 +1,13 @@
-import { Trans } from '@lingui/macro'
-import { Currency, CurrencyAmount, Token, TradeType } from '@uniswap/sdk-core'
-import { RowBetween } from 'components/Row'
-import { MouseoverTooltipContent } from 'components/Tooltip'
-import { Info } from 'react-feather'
-import { InterfaceTrade } from 'state/routing/types'
-import styled from 'styled-components/macro'
-import { ThemedText } from 'theme'
+import { Trans } from '@lingui/macro';
+import { Currency, CurrencyAmount, Token, TradeType } from '@uniswap/sdk-core';
+import { RowBetween } from 'components/Row';
+import { MouseoverTooltipContent } from 'components/Tooltip';
+import { Info } from 'react-feather';
+import { InterfaceTrade } from 'state/routing/types';
+import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 
-import { ResponsiveTooltipContainer } from './styleds'
+import { ResponsiveTooltipContainer } from './styleds';
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.bg1};
@@ -16,11 +16,11 @@ const Wrapper = styled.div`
   padding: 14px;
   margin-top: -20px;
   padding-top: 32px;
-`
+`;
 
 const StyledInfoIcon = styled(Info)`
   stroke: ${({ theme }) => theme.text3};
-`
+`;
 
 /**
  * @returns Dropdown card for showing edge case warnings outside of button
@@ -29,18 +29,18 @@ export default function SwapWarningDropdown({
   fiatValueInput,
   trade,
 }: {
-  fiatValueInput: CurrencyAmount<Token> | null
-  trade: InterfaceTrade<Currency, Currency, TradeType> | undefined
+  fiatValueInput: CurrencyAmount<Token> | null;
+  trade: InterfaceTrade<Currency, Currency, TradeType> | undefined;
 }) {
   // gas cost estimate is more than half of input value
   const showNetworkFeeWarning = Boolean(
     fiatValueInput &&
       trade?.gasUseEstimateUSD &&
       parseFloat(trade.gasUseEstimateUSD.toSignificant(6)) > parseFloat(fiatValueInput.toFixed(6)) / 2
-  )
+  );
 
   if (!showNetworkFeeWarning) {
-    return null
+    return null;
   }
 
   return (
@@ -71,5 +71,5 @@ export default function SwapWarningDropdown({
         </RowBetween>
       ) : null}
     </Wrapper>
-  )
+  );
 }

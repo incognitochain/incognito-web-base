@@ -1,9 +1,9 @@
 // include style rules in snapshots
-import 'jest-styled-components'
+import 'jest-styled-components';
 
-import { fireEvent, render, screen } from 'test-utils'
+import { fireEvent, render, screen } from 'test-utils';
 
-import { ResizingTextArea, TextInput } from './'
+import { ResizingTextArea, TextInput } from './';
 
 describe('TextInput', () => {
   it('renders correctly', () => {
@@ -15,12 +15,12 @@ describe('TextInput', () => {
         placeholder="Test Placeholder"
         fontSize="12"
       />
-    )
-    expect(asFragment()).toMatchSnapshot()
-  })
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
 
   it('calls the handler on user input', () => {
-    const onUserInputSpy = jest.fn()
+    const onUserInputSpy = jest.fn();
     render(
       <TextInput
         className="testing"
@@ -29,14 +29,14 @@ describe('TextInput', () => {
         placeholder="Test Placeholder"
         fontSize="12"
       />
-    )
+    );
 
-    fireEvent.change(screen.getByPlaceholderText('Test Placeholder'), { target: { value: 'New value' } })
+    fireEvent.change(screen.getByPlaceholderText('Test Placeholder'), { target: { value: 'New value' } });
 
-    expect(onUserInputSpy).toHaveBeenCalledWith('New value')
-    expect(onUserInputSpy).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(onUserInputSpy).toHaveBeenCalledWith('New value');
+    expect(onUserInputSpy).toHaveBeenCalledTimes(1);
+  });
+});
 
 describe('ResizableTextArea', () => {
   it('renders correctly', () => {
@@ -48,12 +48,12 @@ describe('ResizableTextArea', () => {
         placeholder="Test Placeholder"
         fontSize="12"
       />
-    )
-    expect(asFragment()).toMatchSnapshot()
-  })
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
 
   it('calls the handler on user input', () => {
-    const onUserInputSpy = jest.fn()
+    const onUserInputSpy = jest.fn();
     render(
       <ResizingTextArea
         className="testing"
@@ -62,11 +62,11 @@ describe('ResizableTextArea', () => {
         placeholder="Test Placeholder"
         fontSize="12"
       />
-    )
+    );
 
-    fireEvent.change(screen.getByPlaceholderText('Test Placeholder'), { target: { value: 'New value' } })
+    fireEvent.change(screen.getByPlaceholderText('Test Placeholder'), { target: { value: 'New value' } });
 
-    expect(onUserInputSpy).toHaveBeenCalledWith('New value')
-    expect(onUserInputSpy).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(onUserInputSpy).toHaveBeenCalledWith('New value');
+    expect(onUserInputSpy).toHaveBeenCalledTimes(1);
+  });
+});

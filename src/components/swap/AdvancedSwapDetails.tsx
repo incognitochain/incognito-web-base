@@ -1,31 +1,31 @@
-import { Trans } from '@lingui/macro'
-import { Currency, Percent, TradeType } from '@uniswap/sdk-core'
-import Card from 'components/Card'
-import { LoadingRows } from 'components/Loader/styled'
-import { SUPPORTED_GAS_ESTIMATE_CHAIN_IDS } from 'constants/chains'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import useNativeCurrency from 'lib/hooks/useNativeCurrency'
-import { useContext, useMemo } from 'react'
-import { InterfaceTrade } from 'state/routing/types'
-import styled, { ThemeContext } from 'styled-components/macro'
+import { Trans } from '@lingui/macro';
+import { Currency, Percent, TradeType } from '@uniswap/sdk-core';
+import Card from 'components/Card';
+import { LoadingRows } from 'components/Loader/styled';
+import { SUPPORTED_GAS_ESTIMATE_CHAIN_IDS } from 'constants/chains';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import useNativeCurrency from 'lib/hooks/useNativeCurrency';
+import { useContext, useMemo } from 'react';
+import { InterfaceTrade } from 'state/routing/types';
+import styled, { ThemeContext } from 'styled-components/macro';
 
-import { Separator, ThemedText } from '../../theme'
-import { computeRealizedLPFeePercent } from '../../utils/prices'
-import { AutoColumn } from '../Column'
-import { RowBetween, RowFixed } from '../Row'
-import { MouseoverTooltip } from '../Tooltip'
-import FormattedPriceImpact from './FormattedPriceImpact'
+import { Separator, ThemedText } from '../../theme';
+import { computeRealizedLPFeePercent } from '../../utils/prices';
+import { AutoColumn } from '../Column';
+import { RowBetween, RowFixed } from '../Row';
+import { MouseoverTooltip } from '../Tooltip';
+import FormattedPriceImpact from './FormattedPriceImpact';
 
 const StyledCard = styled(Card)`
   padding: 0;
-`
+`;
 
 interface AdvancedSwapDetailsProps {
-  trade?: InterfaceTrade<Currency, Currency, TradeType>
-  allowedSlippage: Percent
-  syncing?: boolean
-  hideRouteDiagram?: boolean
-  hideInfoTooltips?: boolean
+  trade?: InterfaceTrade<Currency, Currency, TradeType>;
+  allowedSlippage: Percent;
+  syncing?: boolean;
+  hideRouteDiagram?: boolean;
+  hideInfoTooltips?: boolean;
 }
 
 function TextWithLoadingPlaceholder({
@@ -33,9 +33,9 @@ function TextWithLoadingPlaceholder({
   width,
   children,
 }: {
-  syncing: boolean
-  width: number
-  children: JSX.Element
+  syncing: boolean;
+  width: number;
+  children: JSX.Element;
 }) {
   return syncing ? (
     <LoadingRows>
@@ -43,7 +43,7 @@ function TextWithLoadingPlaceholder({
     </LoadingRows>
   ) : (
     children
-  )
+  );
 }
 
 export function AdvancedSwapDetails({
@@ -52,17 +52,17 @@ export function AdvancedSwapDetails({
   syncing = false,
   hideInfoTooltips = false,
 }: AdvancedSwapDetailsProps) {
-  const theme = useContext(ThemeContext)
-  const { chainId } = useActiveWeb3React()
-  const nativeCurrency = useNativeCurrency()
+  const theme = useContext(ThemeContext);
+  const { chainId } = useActiveWeb3React();
+  const nativeCurrency = useNativeCurrency();
 
   const { expectedOutputAmount, priceImpact } = useMemo(() => {
-    if (!trade) return { expectedOutputAmount: undefined, priceImpact: undefined }
-    const expectedOutputAmount = trade.outputAmount
-    const realizedLpFeePercent = computeRealizedLPFeePercent(trade)
-    const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent)
-    return { expectedOutputAmount, priceImpact }
-  }, [trade])
+    if (!trade) return { expectedOutputAmount: undefined, priceImpact: undefined };
+    const expectedOutputAmount = trade.outputAmount;
+    const realizedLpFeePercent = computeRealizedLPFeePercent(trade);
+    const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent);
+    return { expectedOutputAmount, priceImpact };
+  }, [trade]);
 
   return !trade ? null : (
     <StyledCard>
@@ -161,5 +161,5 @@ export function AdvancedSwapDetails({
         )}
       </AutoColumn>
     </StyledCard>
-  )
+  );
 }

@@ -1,25 +1,25 @@
-import React, { useMemo } from 'react'
-import { Text, TextProps as TextPropsOriginal } from 'rebass'
+import React, { useMemo } from 'react';
+import { Text, TextProps as TextPropsOriginal } from 'rebass';
 import styled, {
   createGlobalStyle,
   css,
   DefaultTheme,
   ThemeProvider as StyledComponentsThemeProvider,
-} from 'styled-components/macro'
+} from 'styled-components/macro';
 
-import { useIsDarkMode } from '../state/user/hooks'
-import { Colors } from './styled'
+import { useIsDarkMode } from '../state/user/hooks';
+import { Colors } from './styled';
 
-export * from './components'
+export * from './components';
 
-type TextProps = Omit<TextPropsOriginal, 'css'>
+type TextProps = Omit<TextPropsOriginal, 'css'>;
 
 export const MEDIA_WIDTHS = {
   upToExtraSmall: 500,
   upToSmall: 720,
   upToMedium: 960,
   upToLarge: 1280,
-}
+};
 
 // Migrating to a standard z-index system https://getbootstrap.com/docs/5.0/layout/z-index/
 // Please avoid using deprecated numbers
@@ -38,18 +38,18 @@ export enum Z_INDEX {
 
 const mediaWidthTemplates: { [width in keyof typeof MEDIA_WIDTHS]: typeof css } = Object.keys(MEDIA_WIDTHS).reduce(
   (accumulator, size) => {
-    ;(accumulator as any)[size] = (a: any, b: any, c: any) => css`
+    (accumulator as any)[size] = (a: any, b: any, c: any) => css`
       @media (max-width: ${(MEDIA_WIDTHS as any)[size]}px) {
         ${css(a, b, c)}
       }
-    `
-    return accumulator
+    `;
+    return accumulator;
   },
   {}
-) as any
+) as any;
 
-const white = '#FFFFFF'
-const black = '#000000'
+const white = '#FFFFFF';
+const black = '#000000';
 
 function colors(darkMode: boolean): Colors {
   return {
@@ -110,7 +110,7 @@ function colors(darkMode: boolean): Colors {
     // dont wanna forget these blue yet
     blue4: darkMode ? '#153d6f70' : '#C4D9F8',
     // blue5: darkMode ? '#153d6f70' : '#EBF4FF',
-  }
+  };
 }
 
 function theme(darkMode: boolean): DefaultTheme {
@@ -138,74 +138,74 @@ function theme(darkMode: boolean): DefaultTheme {
       display: flex;
       flex-flow: row nowrap;
     `,
-  }
+  };
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const darkMode = useIsDarkMode()
+  const darkMode = useIsDarkMode();
 
-  const themeObject = useMemo(() => theme(darkMode), [darkMode])
+  const themeObject = useMemo(() => theme(darkMode), [darkMode]);
 
-  return <StyledComponentsThemeProvider theme={themeObject}>{children}</StyledComponentsThemeProvider>
+  return <StyledComponentsThemeProvider theme={themeObject}>{children}</StyledComponentsThemeProvider>;
 }
 
 const TextWrapper = styled(Text)<{ color: keyof Colors }>`
   color: ${({ color, theme }) => (theme as any)[color]};
-`
+`;
 
 /**
  * Preset styles of the Rebass Text component
  */
 export const ThemedText = {
   Main(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'text2'} {...props} />
+    return <TextWrapper fontWeight={500} color={'text2'} {...props} />;
   },
   Link(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'primary1'} {...props} />
+    return <TextWrapper fontWeight={500} color={'primary1'} {...props} />;
   },
   Label(props: TextProps) {
-    return <TextWrapper fontWeight={600} color={'text1'} {...props} />
+    return <TextWrapper fontWeight={600} color={'text1'} {...props} />;
   },
   Black(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'text1'} {...props} />
+    return <TextWrapper fontWeight={500} color={'text1'} {...props} />;
   },
   White(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'white'} {...props} />
+    return <TextWrapper fontWeight={500} color={'white'} {...props} />;
   },
   Body(props: TextProps) {
-    return <TextWrapper fontWeight={400} fontSize={16} color={'text1'} {...props} />
+    return <TextWrapper fontWeight={400} fontSize={16} color={'text1'} {...props} />;
   },
   LargeHeader(props: TextProps) {
-    return <TextWrapper fontWeight={600} fontSize={24} {...props} />
+    return <TextWrapper fontWeight={600} fontSize={24} {...props} />;
   },
   MediumHeader(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={20} {...props} />
+    return <TextWrapper fontWeight={500} fontSize={20} {...props} />;
   },
   SubHeader(props: TextProps) {
-    return <TextWrapper fontWeight={400} fontSize={14} {...props} />
+    return <TextWrapper fontWeight={400} fontSize={14} {...props} />;
   },
   Small(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={11} {...props} />
+    return <TextWrapper fontWeight={500} fontSize={11} {...props} />;
   },
   Blue(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'blue1'} {...props} />
+    return <TextWrapper fontWeight={500} color={'blue1'} {...props} />;
   },
   Yellow(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'yellow3'} {...props} />
+    return <TextWrapper fontWeight={500} color={'yellow3'} {...props} />;
   },
   DarkGray(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'text3'} {...props} />
+    return <TextWrapper fontWeight={500} color={'text3'} {...props} />;
   },
   Gray(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'bg3'} {...props} />
+    return <TextWrapper fontWeight={500} color={'bg3'} {...props} />;
   },
   Italic(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={12} fontStyle={'italic'} color={'text2'} {...props} />
+    return <TextWrapper fontWeight={500} fontSize={12} fontStyle={'italic'} color={'text2'} {...props} />;
   },
   Error({ error, ...props }: { error: boolean } & TextProps) {
-    return <TextWrapper fontWeight={500} color={error ? 'red1' : 'text2'} {...props} />
+    return <TextWrapper fontWeight={500} color={error ? 'red1' : 'text2'} {...props} />;
   },
-}
+};
 
 export const ThemedGlobalStyle = createGlobalStyle`
 html {
@@ -216,4 +216,4 @@ html {
 a {
  color: ${({ theme }) => theme.blue1}; 
 }
-`
+`;

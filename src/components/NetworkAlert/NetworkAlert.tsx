@@ -1,26 +1,26 @@
-import { Trans } from '@lingui/macro'
-import { CHAIN_INFO } from 'constants/chainInfo'
-import { SupportedChainId } from 'constants/chains'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { ArrowUpRight } from 'react-feather'
-import { useDarkModeManager } from 'state/user/hooks'
-import styled from 'styled-components/macro'
-import { ExternalLink, HideSmall } from 'theme'
+import { Trans } from '@lingui/macro';
+import { CHAIN_INFO } from 'constants/chainInfo';
+import { SupportedChainId } from 'constants/chains';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { ArrowUpRight } from 'react-feather';
+import { useDarkModeManager } from 'state/user/hooks';
+import styled from 'styled-components/macro';
+import { ExternalLink, HideSmall } from 'theme';
 
-import { AutoRow } from '../Row'
+import { AutoRow } from '../Row';
 
 const L2Icon = styled.img`
   width: 24px;
   height: 24px;
   margin-right: 16px;
-`
+`;
 
 export const Controls = styled.div`
   align-items: center;
   display: flex;
   justify-content: flex-start;
   padding: 0 20px 20px 20px;
-`
+`;
 
 const BodyText = styled.div`
   color: ${({ color }) => color};
@@ -29,11 +29,11 @@ const BodyText = styled.div`
   justify-content: flex-start;
   margin: 8px;
   font-size: 14px;
-`
+`;
 const RootWrapper = styled.div`
   position: relative;
   margin-top: 16px;
-`
+`;
 
 const SHOULD_SHOW_ALERT = {
   [SupportedChainId.OPTIMISM]: true,
@@ -42,12 +42,12 @@ const SHOULD_SHOW_ALERT = {
   [SupportedChainId.ARBITRUM_RINKEBY]: true,
   [SupportedChainId.POLYGON]: true,
   [SupportedChainId.POLYGON_MUMBAI]: true,
-}
+};
 
-type NetworkAlertChains = keyof typeof SHOULD_SHOW_ALERT
+type NetworkAlertChains = keyof typeof SHOULD_SHOW_ALERT;
 
 const BG_COLORS_BY_DARK_MODE_AND_CHAIN_ID: {
-  [darkMode in 'dark' | 'light']: { [chainId in NetworkAlertChains]: string }
+  [darkMode in 'dark' | 'light']: { [chainId in NetworkAlertChains]: string };
 } = {
   dark: {
     [SupportedChainId.POLYGON]:
@@ -77,7 +77,7 @@ const BG_COLORS_BY_DARK_MODE_AND_CHAIN_ID: {
     [SupportedChainId.ARBITRUM_RINKEBY]:
       'radial-gradient(285% 8200% at 30% 50%, rgba(40, 160, 240, 0.1) 0%, rgba(219, 255, 0, 0) 100%),radial-gradient(circle at top left, hsla(206, 50%, 75%, 0.01), hsla(215, 79%, 51%, 0.12)), hsla(0, 0%, 100%, 0.1)',
   },
-}
+};
 
 const ContentWrapper = styled.div<{ chainId: NetworkAlertChains; darkMode: boolean; logoUrl: string }>`
   background: ${({ chainId, darkMode }) => BG_COLORS_BY_DARK_MODE_AND_CHAIN_ID[darkMode ? 'dark' : 'light'][chainId]};
@@ -100,12 +100,12 @@ const ContentWrapper = styled.div<{ chainId: NetworkAlertChains; darkMode: boole
     width: 300px;
     z-index: -1;
   }
-`
+`;
 const Header = styled.h2`
   font-weight: 600;
   font-size: 16px;
   margin: 0;
-`
+`;
 
 const LinkOutToBridge = styled(ExternalLink)`
   align-items: center;
@@ -118,13 +118,13 @@ const LinkOutToBridge = styled(ExternalLink)`
   margin-right: 12px;
   text-decoration: none !important;
   width: 100%;
-`
+`;
 
 const StyledArrowUpRight = styled(ArrowUpRight)`
   margin-left: 12px;
   width: 24px;
   height: 24px;
-`
+`;
 
 const TEXT_COLORS: { [chainId in NetworkAlertChains]: string } = {
   [SupportedChainId.POLYGON]: 'rgba(130, 71, 229)',
@@ -133,22 +133,22 @@ const TEXT_COLORS: { [chainId in NetworkAlertChains]: string } = {
   [SupportedChainId.OPTIMISTIC_KOVAN]: '#ff3856',
   [SupportedChainId.ARBITRUM_ONE]: '#0490ed',
   [SupportedChainId.ARBITRUM_RINKEBY]: '#0490ed',
-}
+};
 
 function shouldShowAlert(chainId: number | undefined): chainId is NetworkAlertChains {
-  return Boolean(chainId && SHOULD_SHOW_ALERT[chainId as unknown as NetworkAlertChains])
+  return Boolean(chainId && SHOULD_SHOW_ALERT[chainId as unknown as NetworkAlertChains]);
 }
 
 export function NetworkAlert() {
-  const { chainId } = useActiveWeb3React()
-  const [darkMode] = useDarkModeManager()
+  const { chainId } = useActiveWeb3React();
+  const [darkMode] = useDarkModeManager();
 
   if (!shouldShowAlert(chainId)) {
-    return null
+    return null;
   }
 
-  const { label, logoUrl, bridge } = CHAIN_INFO[chainId]
-  const textColor = TEXT_COLORS[chainId]
+  const { label, logoUrl, bridge } = CHAIN_INFO[chainId];
+  const textColor = TEXT_COLORS[chainId];
 
   return bridge ? (
     <RootWrapper>
@@ -169,5 +169,5 @@ export function NetworkAlert() {
         </LinkOutToBridge>
       </ContentWrapper>
     </RootWrapper>
-  ) : null
+  ) : null;
 }

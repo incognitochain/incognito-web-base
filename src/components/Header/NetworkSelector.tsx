@@ -1,23 +1,23 @@
-import { Trans } from '@lingui/macro'
-import { getWalletForConnector } from 'connectors'
-import { CHAIN_INFO } from 'constants/chainInfo'
-import { CHAIN_IDS_TO_NAMES, SupportedChainId } from 'constants/chains'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useOnClickOutside } from 'hooks/useOnClickOutside'
-import useParsedQueryString from 'hooks/useParsedQueryString'
-import usePrevious from 'hooks/usePrevious'
-import { ParsedQs } from 'qs'
-import { useCallback, useEffect, useRef } from 'react'
-import { ArrowDownCircle, ChevronDown } from 'react-feather'
-import { useHistory } from 'react-router-dom'
-import { useModalOpen, useToggleModal } from 'state/application/hooks'
-import { addPopup, ApplicationModal } from 'state/application/reducer'
-import { useAppDispatch } from 'state/hooks'
-import { updateWalletError } from 'state/wallet/reducer'
-import styled from 'styled-components/macro'
-import { ExternalLink, MEDIA_WIDTHS } from 'theme'
-import { replaceURLParam } from 'utils/routes'
-import { isChainAllowed, switchChain } from 'utils/switchChain'
+import { Trans } from '@lingui/macro';
+import { getWalletForConnector } from 'connectors';
+import { CHAIN_INFO } from 'constants/chainInfo';
+import { CHAIN_IDS_TO_NAMES, SupportedChainId } from 'constants/chains';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useOnClickOutside } from 'hooks/useOnClickOutside';
+import useParsedQueryString from 'hooks/useParsedQueryString';
+import usePrevious from 'hooks/usePrevious';
+import { ParsedQs } from 'qs';
+import { useCallback, useEffect, useRef } from 'react';
+import { ArrowDownCircle, ChevronDown } from 'react-feather';
+import { useHistory } from 'react-router-dom';
+import { useModalOpen, useToggleModal } from 'state/application/hooks';
+import { addPopup, ApplicationModal } from 'state/application/reducer';
+import { useAppDispatch } from 'state/hooks';
+import { updateWalletError } from 'state/wallet/reducer';
+import styled from 'styled-components/macro';
+import { ExternalLink, MEDIA_WIDTHS } from 'theme';
+import { replaceURLParam } from 'utils/routes';
+import { isChainAllowed, switchChain } from 'utils/switchChain';
 
 const ActiveRowLinkList = styled.div`
   display: flex;
@@ -39,18 +39,18 @@ const ActiveRowLinkList = styled.div`
     margin-top: 0px;
     padding-top: 10px;
   }
-`
+`;
 const ActiveRowWrapper = styled.div`
   background-color: ${({ theme }) => theme.bg1};
   border-radius: 8px;
   cursor: pointer;
   padding: 8px;
   width: 100%;
-`
+`;
 const FlyoutHeader = styled.div`
   color: ${({ theme }) => theme.text2};
   font-weight: 400;
-`
+`;
 const FlyoutMenu = styled.div`
   position: absolute;
   top: 54px;
@@ -60,7 +60,7 @@ const FlyoutMenu = styled.div`
   @media screen and (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
     top: 40px;
   }
-`
+`;
 const FlyoutMenuContents = styled.div`
   align-items: flex-start;
   background-color: ${({ theme }) => theme.bg0};
@@ -75,7 +75,7 @@ const FlyoutMenuContents = styled.div`
   & > *:not(:last-child) {
     margin-bottom: 12px;
   }
-`
+`;
 const FlyoutRow = styled.div<{ active: boolean }>`
   align-items: center;
   background-color: ${({ active, theme }) => (active ? theme.bg1 : 'transparent')};
@@ -87,40 +87,40 @@ const FlyoutRow = styled.div<{ active: boolean }>`
   padding: 6px 8px;
   text-align: left;
   width: 100%;
-`
+`;
 const FlyoutRowActiveIndicator = styled.div`
   background-color: ${({ theme }) => theme.green1};
   border-radius: 50%;
   height: 9px;
   width: 9px;
-`
+`;
 
 const CircleContainer = styled.div`
   width: 20px;
   display: flex;
   justify-content: center;
-`
+`;
 
 const LinkOutCircle = styled(ArrowDownCircle)`
   transform: rotate(230deg);
   width: 16px;
   height: 16px;
-`
+`;
 const Logo = styled.img`
   height: 20px;
   width: 20px;
   margin-right: 8px;
-`
+`;
 const NetworkLabel = styled.div`
   flex: 1 1 auto;
-`
+`;
 const SelectorLabel = styled(NetworkLabel)`
   display: none;
   @media screen and (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
     display: block;
     margin-right: 8px;
   }
-`
+`;
 const SelectorControls = styled.div<{ interactive: boolean }>`
   align-items: center;
   background-color: ${({ theme }) => theme.bg0};
@@ -132,65 +132,65 @@ const SelectorControls = styled.div<{ interactive: boolean }>`
   font-weight: 500;
   justify-content: space-between;
   padding: 6px 8px;
-`
+`;
 const SelectorLogo = styled(Logo)<{ interactive?: boolean }>`
   margin-right: ${({ interactive }) => (interactive ? 8 : 0)}px;
   @media screen and (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
     margin-right: 8px;
   }
-`
+`;
 const SelectorWrapper = styled.div`
   @media screen and (min-width: ${MEDIA_WIDTHS.upToSmall}px) {
     position: relative;
   }
-`
+`;
 const StyledChevronDown = styled(ChevronDown)`
   width: 16px;
-`
+`;
 const BridgeLabel = ({ chainId }: { chainId: SupportedChainId }) => {
   switch (chainId) {
     case SupportedChainId.ARBITRUM_ONE:
     case SupportedChainId.ARBITRUM_RINKEBY:
-      return <Trans>Arbitrum Bridge</Trans>
+      return <Trans>Arbitrum Bridge</Trans>;
     case SupportedChainId.OPTIMISM:
     case SupportedChainId.OPTIMISTIC_KOVAN:
-      return <Trans>Optimism Bridge</Trans>
+      return <Trans>Optimism Bridge</Trans>;
     case SupportedChainId.POLYGON:
     case SupportedChainId.POLYGON_MUMBAI:
-      return <Trans>Polygon Bridge</Trans>
+      return <Trans>Polygon Bridge</Trans>;
     default:
-      return <Trans>Bridge</Trans>
+      return <Trans>Bridge</Trans>;
   }
-}
+};
 const ExplorerLabel = ({ chainId }: { chainId: SupportedChainId }) => {
   switch (chainId) {
     case SupportedChainId.ARBITRUM_ONE:
     case SupportedChainId.ARBITRUM_RINKEBY:
-      return <Trans>Arbiscan</Trans>
+      return <Trans>Arbiscan</Trans>;
     case SupportedChainId.OPTIMISM:
     case SupportedChainId.OPTIMISTIC_KOVAN:
-      return <Trans>Optimistic Etherscan</Trans>
+      return <Trans>Optimistic Etherscan</Trans>;
     case SupportedChainId.POLYGON:
     case SupportedChainId.POLYGON_MUMBAI:
-      return <Trans>Polygonscan</Trans>
+      return <Trans>Polygonscan</Trans>;
     default:
-      return <Trans>Etherscan</Trans>
+      return <Trans>Etherscan</Trans>;
   }
-}
+};
 
 function Row({
   targetChain,
   onSelectChain,
 }: {
-  targetChain: SupportedChainId
-  onSelectChain: (targetChain: number) => void
+  targetChain: SupportedChainId;
+  onSelectChain: (targetChain: number) => void;
 }) {
-  const { provider, chainId } = useActiveWeb3React()
+  const { provider, chainId } = useActiveWeb3React();
   if (!provider || !chainId) {
-    return null
+    return null;
   }
-  const active = chainId === targetChain
-  const { helpCenterUrl, explorer, bridge, label, logoUrl } = CHAIN_INFO[targetChain]
+  const active = chainId === targetChain;
+  const { helpCenterUrl, explorer, bridge, label, logoUrl } = CHAIN_INFO[targetChain];
 
   const rowContent = (
     <FlyoutRow onClick={() => onSelectChain(targetChain)} active={active}>
@@ -202,7 +202,7 @@ function Row({
         </CircleContainer>
       )}
     </FlyoutRow>
-  )
+  );
 
   if (active) {
     return (
@@ -235,107 +235,107 @@ function Row({
           )}
         </ActiveRowLinkList>
       </ActiveRowWrapper>
-    )
+    );
   }
-  return rowContent
+  return rowContent;
 }
 
 const getParsedChainId = (parsedQs?: ParsedQs) => {
-  const chain = parsedQs?.chain
-  if (!chain || typeof chain !== 'string') return { urlChain: undefined, urlChainId: undefined }
+  const chain = parsedQs?.chain;
+  if (!chain || typeof chain !== 'string') return { urlChain: undefined, urlChainId: undefined };
 
-  return { urlChain: chain.toLowerCase(), urlChainId: getChainIdFromName(chain) }
-}
+  return { urlChain: chain.toLowerCase(), urlChainId: getChainIdFromName(chain) };
+};
 
 const getChainIdFromName = (name: string) => {
-  const entry = Object.entries(CHAIN_IDS_TO_NAMES).find(([_, n]) => n === name)
-  const chainId = entry?.[0]
-  return chainId ? parseInt(chainId) : undefined
-}
+  const entry = Object.entries(CHAIN_IDS_TO_NAMES).find(([_, n]) => n === name);
+  const chainId = entry?.[0];
+  return chainId ? parseInt(chainId) : undefined;
+};
 
 const getChainNameFromId = (id: string | number) => {
   // casting here may not be right but fine to return undefined if it's not a supported chain ID
-  return CHAIN_IDS_TO_NAMES[id as SupportedChainId] || ''
-}
+  return CHAIN_IDS_TO_NAMES[id as SupportedChainId] || '';
+};
 
 const NETWORK_SELECTOR_CHAINS = [
   SupportedChainId.MAINNET,
   SupportedChainId.POLYGON,
   SupportedChainId.OPTIMISM,
   SupportedChainId.ARBITRUM_ONE,
-]
+];
 
 export default function NetworkSelector() {
-  const dispatch = useAppDispatch()
-  const { chainId, provider, connector } = useActiveWeb3React()
-  const parsedQs = useParsedQueryString()
-  const { urlChain, urlChainId } = getParsedChainId(parsedQs)
-  const prevChainId = usePrevious(chainId)
-  const node = useRef<HTMLDivElement>()
-  const open = useModalOpen(ApplicationModal.NETWORK_SELECTOR)
-  const toggle = useToggleModal(ApplicationModal.NETWORK_SELECTOR)
-  useOnClickOutside(node, open ? toggle : undefined)
+  const dispatch = useAppDispatch();
+  const { chainId, provider, connector } = useActiveWeb3React();
+  const parsedQs = useParsedQueryString();
+  const { urlChain, urlChainId } = getParsedChainId(parsedQs);
+  const prevChainId = usePrevious(chainId);
+  const node = useRef<HTMLDivElement>();
+  const open = useModalOpen(ApplicationModal.NETWORK_SELECTOR);
+  const toggle = useToggleModal(ApplicationModal.NETWORK_SELECTOR);
+  useOnClickOutside(node, open ? toggle : undefined);
 
-  const history = useHistory()
+  const history = useHistory();
 
-  const info = chainId ? CHAIN_INFO[chainId] : undefined
+  const info = chainId ? CHAIN_INFO[chainId] : undefined;
 
   const onSelectChain = useCallback(
     async (targetChain: number, skipToggle?: boolean) => {
-      if (!connector) return
+      if (!connector) return;
 
-      const wallet = getWalletForConnector(connector)
+      const wallet = getWalletForConnector(connector);
 
       try {
-        dispatch(updateWalletError({ wallet, error: undefined }))
-        await switchChain(connector, targetChain)
+        dispatch(updateWalletError({ wallet, error: undefined }));
+        await switchChain(connector, targetChain);
         if (!skipToggle) {
-          toggle()
+          toggle();
         }
         history.replace({
           search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(targetChain)),
-        })
+        });
       } catch (error) {
-        console.error('Failed to switch networks', error)
+        console.error('Failed to switch networks', error);
 
         // we want app network <-> chainId param to be in sync, so if user changes the network by changing the URL
         // but the request fails, revert the URL back to current chainId
         if (chainId) {
-          history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) })
+          history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) });
         }
 
         if (!skipToggle) {
-          toggle()
+          toggle();
         }
 
-        dispatch(updateWalletError({ wallet, error: error.message }))
-        dispatch(addPopup({ content: { failedSwitchNetwork: targetChain }, key: `failed-network-switch` }))
+        dispatch(updateWalletError({ wallet, error: error.message }));
+        dispatch(addPopup({ content: { failedSwitchNetwork: targetChain }, key: `failed-network-switch` }));
       }
     },
     [connector, toggle, dispatch, history, chainId]
-  )
+  );
 
   useEffect(() => {
-    if (!chainId || !prevChainId) return
+    if (!chainId || !prevChainId) return;
 
     // when network change originates from wallet or dropdown selector, just update URL
     if (chainId !== prevChainId) {
-      history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) })
+      history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) });
       // otherwise assume network change originates from URL
     } else if (urlChainId && urlChainId !== chainId) {
-      onSelectChain(urlChainId, true)
+      onSelectChain(urlChainId, true);
     }
-  }, [chainId, urlChainId, prevChainId, onSelectChain, history])
+  }, [chainId, urlChainId, prevChainId, onSelectChain, history]);
 
   // set chain parameter on initial load if not there
   useEffect(() => {
     if (chainId && !urlChainId) {
-      history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) })
+      history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) });
     }
-  }, [chainId, history, urlChainId, urlChain])
+  }, [chainId, history, urlChainId, urlChain]);
 
   if (!chainId || !info || !provider) {
-    return null
+    return null;
   }
 
   return (
@@ -360,5 +360,5 @@ export default function NetworkSelector() {
         </FlyoutMenu>
       )}
     </SelectorWrapper>
-  )
+  );
 }

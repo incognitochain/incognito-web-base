@@ -1,23 +1,23 @@
-import { Connector } from '@web3-react/types'
+import { Connector } from '@web3-react/types';
 
-import INJECTED_ICON_URL from '../assets/images/arrow-right.svg'
-import COINBASE_ICON_URL from '../assets/images/coinbaseWalletIcon.svg'
-import FORTMATIC_ICON_URL from '../assets/images/fortmaticIcon.png'
-import METAMASK_ICON_URL from '../assets/images/metamask.png'
-import WALLETCONNECT_ICON_URL from '../assets/images/walletConnectIcon.svg'
-import { coinbaseWallet, fortmatic, injected, Wallet, walletConnect } from '../connectors'
+import INJECTED_ICON_URL from '../assets/images/arrow-right.svg';
+import COINBASE_ICON_URL from '../assets/images/coinbaseWalletIcon.svg';
+import FORTMATIC_ICON_URL from '../assets/images/fortmaticIcon.png';
+import METAMASK_ICON_URL from '../assets/images/metamask.png';
+import WALLETCONNECT_ICON_URL from '../assets/images/walletConnectIcon.svg';
+import { coinbaseWallet, fortmatic, injected, Wallet, walletConnect } from '../connectors';
 
 interface WalletInfo {
-  connector?: Connector
-  wallet?: Wallet
-  name: string
-  iconURL: string
-  description: string
-  href: string | null
-  color: string
-  primary?: true
-  mobile?: true
-  mobileOnly?: true
+  connector?: Connector;
+  wallet?: Wallet;
+  name: string;
+  iconURL: string;
+  description: string;
+  href: string | null;
+  color: string;
+  primary?: true;
+  mobile?: true;
+  mobileOnly?: true;
 }
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
@@ -78,4 +78,4 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#6748FF',
     mobile: true,
   },
-}
+};

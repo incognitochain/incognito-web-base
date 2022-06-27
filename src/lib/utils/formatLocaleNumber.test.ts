@@ -1,8 +1,8 @@
-import { SUPPORTED_LOCALES, SupportedLocale } from 'constants/locales'
+import { SUPPORTED_LOCALES, SupportedLocale } from 'constants/locales';
 
-import formatLocaleNumber from './formatLocaleNumber'
+import formatLocaleNumber from './formatLocaleNumber';
 
-const INPUT = 4000000.123 // 4 million
+const INPUT = 4000000.123; // 4 million
 
 function expectedOutput(l: SupportedLocale): string {
   switch (l) {
@@ -13,11 +13,11 @@ function expectedOutput(l: SupportedLocale): string {
     case 'zh-CN':
     case 'sw-TZ':
     case 'zh-TW':
-      return `4,000,000.123`
+      return `4,000,000.123`;
     case 'fr-FR':
-      return `4 000 000,123`
+      return `4 000 000,123`;
     case 'ar-SA':
-      return `٤٬٠٠٠٬٠٠٠٫١٢٣`
+      return `٤٬٠٠٠٬٠٠٠٫١٢٣`;
     case 'cs-CZ':
     case 'fi-FI':
     case 'af-ZA':
@@ -28,7 +28,7 @@ function expectedOutput(l: SupportedLocale): string {
     case 'ru-RU':
     case 'sv-SE':
     case 'uk-UA':
-      return `4 000 000,123`
+      return `4 000 000,123`;
     case 'ca-ES':
     case 'da-DK':
     case 'de-DE':
@@ -42,9 +42,9 @@ function expectedOutput(l: SupportedLocale): string {
     case 'sr-SP':
     case 'tr-TR':
     case 'vi-VN':
-      return `4.000.000,123`
+      return `4.000.000,123`;
     default:
-      throw new Error('unreachable')
+      throw new Error('unreachable');
   }
 }
 
@@ -52,11 +52,11 @@ const TEST_MATRIX = SUPPORTED_LOCALES.map((locale) => ({
   locale,
   input: INPUT,
   expected: expectedOutput(locale),
-}))
+}));
 
 describe('formatLocaleNumber', () => {
   test.concurrent.each(TEST_MATRIX)('should format correctly for %p', async ({ locale, input, expected }) => {
-    const result = formatLocaleNumber({ number: input, locale })
-    expect(result).toEqual(expected)
-  })
-})
+    const result = formatLocaleNumber({ number: input, locale });
+    expect(result).toEqual(expected);
+  });
+});

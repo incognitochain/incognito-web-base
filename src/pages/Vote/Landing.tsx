@@ -1,41 +1,41 @@
-import { Trans } from '@lingui/macro'
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
-import { ButtonPrimary } from 'components/Button'
-import { AutoColumn } from 'components/Column'
-import { CardBGImage, CardNoise, CardSection, DataCard } from 'components/earn/styled'
-import FormattedCurrencyAmount from 'components/FormattedCurrencyAmount'
-import Loader from 'components/Loader'
-import { AutoRow, RowBetween, RowFixed } from 'components/Row'
-import { SwitchLocaleLink } from 'components/SwitchLocaleLink'
-import Toggle from 'components/Toggle'
-import DelegateModal from 'components/vote/DelegateModal'
-import ProposalEmptyState from 'components/vote/ProposalEmptyState'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import JSBI from 'jsbi'
-import { darken } from 'polished'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from 'rebass/styled-components'
-import { useModalOpen, useToggleDelegateModal } from 'state/application/hooks'
-import { ApplicationModal } from 'state/application/reducer'
-import { ProposalData, ProposalState } from 'state/governance/hooks'
-import { useAllProposalData, useUserDelegatee, useUserVotes } from 'state/governance/hooks'
-import { useTokenBalance } from 'state/wallet/hooks'
-import styled from 'styled-components/macro'
-import { ExternalLink, ThemedText } from 'theme'
-import { shortenAddress } from 'utils'
-import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink'
+import { Trans } from '@lingui/macro';
+import { CurrencyAmount, Token } from '@uniswap/sdk-core';
+import { ButtonPrimary } from 'components/Button';
+import { AutoColumn } from 'components/Column';
+import { CardBGImage, CardNoise, CardSection, DataCard } from 'components/earn/styled';
+import FormattedCurrencyAmount from 'components/FormattedCurrencyAmount';
+import Loader from 'components/Loader';
+import { AutoRow, RowBetween, RowFixed } from 'components/Row';
+import { SwitchLocaleLink } from 'components/SwitchLocaleLink';
+import Toggle from 'components/Toggle';
+import DelegateModal from 'components/vote/DelegateModal';
+import ProposalEmptyState from 'components/vote/ProposalEmptyState';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import JSBI from 'jsbi';
+import { darken } from 'polished';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from 'rebass/styled-components';
+import { useModalOpen, useToggleDelegateModal } from 'state/application/hooks';
+import { ApplicationModal } from 'state/application/reducer';
+import { ProposalData, ProposalState } from 'state/governance/hooks';
+import { useAllProposalData, useUserDelegatee, useUserVotes } from 'state/governance/hooks';
+import { useTokenBalance } from 'state/wallet/hooks';
+import styled from 'styled-components/macro';
+import { ExternalLink, ThemedText } from 'theme';
+import { shortenAddress } from 'utils';
+import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
-import { ZERO_ADDRESS } from '../../constants/misc'
-import { UNI } from '../../constants/tokens'
-import { ProposalStatus } from './styled'
+import { ZERO_ADDRESS } from '../../constants/misc';
+import { UNI } from '../../constants/tokens';
+import { ProposalStatus } from './styled';
 
-const PageWrapper = styled(AutoColumn)``
+const PageWrapper = styled(AutoColumn)``;
 
 const TopSection = styled(AutoColumn)`
   max-width: 640px;
   width: 100%;
-`
+`;
 
 const Proposal = styled(Button)`
   padding: 0.75rem 1rem;
@@ -57,12 +57,12 @@ const Proposal = styled(Button)`
   &:hover {
     background-color: ${({ theme }) => darken(0.05, theme.bg1)};
   }
-`
+`;
 
 const ProposalNumber = styled.span`
   opacity: 0.6;
   flex: 0 0 40px;
-`
+`;
 
 const ProposalTitle = styled.span`
   font-weight: 600;
@@ -71,19 +71,19 @@ const ProposalTitle = styled.span`
   white-space: initial;
   word-wrap: break-word;
   padding-right: 10px;
-`
+`;
 
 const VoteCard = styled(DataCard)`
   background: radial-gradient(76.02% 75.41% at 1.84% 0%, #27ae60 0%, #000000 100%);
   overflow: hidden;
-`
+`;
 
 const WrapSmall = styled(RowBetween)`
   margin-bottom: 1rem;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     flex-wrap: wrap;
   `};
-`
+`;
 
 const TextButton = styled(ThemedText.Main)`
   color: ${({ theme }) => theme.primary1};
@@ -91,7 +91,7 @@ const TextButton = styled(ThemedText.Main)`
     cursor: pointer;
     text-decoration: underline;
   }
-`
+`;
 
 const AddressButton = styled.div`
   border: 1px solid ${({ theme }) => theme.bg3};
@@ -100,36 +100,36 @@ const AddressButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const StyledExternalLink = styled(ExternalLink)`
   color: ${({ theme }) => theme.text1};
-`
+`;
 
 export default function Landing() {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React();
 
-  const [hideCancelled, setHideCancelled] = useState(true)
+  const [hideCancelled, setHideCancelled] = useState(true);
 
   // toggle for showing delegation modal
-  const showDelegateModal = useModalOpen(ApplicationModal.DELEGATE)
-  const toggleDelegateModal = useToggleDelegateModal()
+  const showDelegateModal = useModalOpen(ApplicationModal.DELEGATE);
+  const toggleDelegateModal = useToggleDelegateModal();
 
   // get data to list all proposals
-  const { data: allProposals, loading: loadingProposals } = useAllProposalData()
+  const { data: allProposals, loading: loadingProposals } = useAllProposalData();
 
   // user data
-  const { loading: loadingAvailableVotes, votes: availableVotes } = useUserVotes()
+  const { loading: loadingAvailableVotes, votes: availableVotes } = useUserVotes();
   const uniBalance: CurrencyAmount<Token> | undefined = useTokenBalance(
     account ?? undefined,
     chainId ? UNI[chainId] : undefined
-  )
-  const userDelegatee: string | undefined = useUserDelegatee()
+  );
+  const userDelegatee: string | undefined = useUserDelegatee();
 
   // show delegation option if they have have a balance, but have not delegated
   const showUnlockVoting = Boolean(
     uniBalance && JSBI.notEqual(uniBalance.quotient, JSBI.BigInt(0)) && userDelegatee === ZERO_ADDRESS
-  )
+  );
   return (
     <>
       <PageWrapper gap="lg" justify="center">
@@ -268,7 +268,7 @@ export default function Landing() {
                   <ProposalTitle>{p.title}</ProposalTitle>
                   <ProposalStatus status={p.status} />
                 </Proposal>
-              )
+              );
             })}
         </TopSection>
 
@@ -278,5 +278,5 @@ export default function Landing() {
       </PageWrapper>
       <SwitchLocaleLink />
     </>
-  )
+  );
 }

@@ -1,11 +1,11 @@
-import ethereumLogoUrl from 'assets/images/ethereum-logo.png'
-import arbitrumLogoUrl from 'assets/svg/arbitrum_logo.svg'
-import optimismLogoUrl from 'assets/svg/optimistic_ethereum.svg'
-import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg'
-import ms from 'ms.macro'
+import ethereumLogoUrl from 'assets/images/ethereum-logo.png';
+import arbitrumLogoUrl from 'assets/svg/arbitrum_logo.svg';
+import optimismLogoUrl from 'assets/svg/optimistic_ethereum.svg';
+import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
+import ms from 'ms.macro';
 
-import { SupportedChainId, SupportedL1ChainId, SupportedL2ChainId } from './chains'
-import { ARBITRUM_LIST, OPTIMISM_LIST } from './lists'
+import { SupportedChainId, SupportedL1ChainId, SupportedL2ChainId } from './chains';
+import { ARBITRUM_LIST, OPTIMISM_LIST } from './lists';
 
 export enum NetworkType {
   L1,
@@ -13,37 +13,37 @@ export enum NetworkType {
 }
 
 interface BaseChainInfo {
-  readonly networkType: NetworkType
-  readonly blockWaitMsBeforeWarning?: number
-  readonly docs: string
-  readonly bridge?: string
-  readonly explorer: string
-  readonly infoLink: string
-  readonly logoUrl: string
-  readonly label: string
-  readonly helpCenterUrl?: string
+  readonly networkType: NetworkType;
+  readonly blockWaitMsBeforeWarning?: number;
+  readonly docs: string;
+  readonly bridge?: string;
+  readonly explorer: string;
+  readonly infoLink: string;
+  readonly logoUrl: string;
+  readonly label: string;
+  readonly helpCenterUrl?: string;
   readonly nativeCurrency: {
-    name: string // e.g. 'Goerli ETH',
-    symbol: string // e.g. 'gorETH',
-    decimals: number // e.g. 18,
-  }
+    name: string; // e.g. 'Goerli ETH',
+    symbol: string; // e.g. 'gorETH',
+    decimals: number; // e.g. 18,
+  };
 }
 
 export interface L1ChainInfo extends BaseChainInfo {
-  readonly networkType: NetworkType.L1
+  readonly networkType: NetworkType.L1;
 }
 
 export interface L2ChainInfo extends BaseChainInfo {
-  readonly networkType: NetworkType.L2
-  readonly bridge: string
-  readonly statusPage?: string
-  readonly defaultListUrl: string
+  readonly networkType: NetworkType.L2;
+  readonly bridge: string;
+  readonly statusPage?: string;
+  readonly defaultListUrl: string;
 }
 
 export type ChainInfoMap = { readonly [chainId: number]: L1ChainInfo | L2ChainInfo } & {
-  readonly [chainId in SupportedL2ChainId]: L2ChainInfo
+  readonly [chainId in SupportedL2ChainId]: L2ChainInfo;
 } &
-  { readonly [chainId in SupportedL1ChainId]: L1ChainInfo }
+  { readonly [chainId in SupportedL1ChainId]: L1ChainInfo };
 
 export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.MAINNET]: {
@@ -167,4 +167,4 @@ export const CHAIN_INFO: ChainInfoMap = {
     logoUrl: polygonMaticLogo,
     nativeCurrency: { name: 'Polygon Mumbai Matic', symbol: 'mMATIC', decimals: 18 },
   },
-}
+};

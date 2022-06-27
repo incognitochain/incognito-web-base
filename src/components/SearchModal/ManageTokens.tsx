@@ -1,29 +1,29 @@
-import { Trans } from '@lingui/macro'
-import { Token } from '@uniswap/sdk-core'
-import Card from 'components/Card'
-import Column from 'components/Column'
-import CurrencyLogo from 'components/CurrencyLogo'
-import Row, { RowBetween, RowFixed } from 'components/Row'
-import { useToken } from 'hooks/Tokens'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { RefObject, useCallback, useMemo, useRef, useState } from 'react'
-import { useRemoveUserAddedToken, useUserAddedTokens } from 'state/user/hooks'
-import styled from 'styled-components/macro'
-import { ButtonText, ExternalLink, ExternalLinkIcon, ThemedText, TrashIcon } from 'theme'
-import { isAddress } from 'utils'
+import { Trans } from '@lingui/macro';
+import { Token } from '@uniswap/sdk-core';
+import Card from 'components/Card';
+import Column from 'components/Column';
+import CurrencyLogo from 'components/CurrencyLogo';
+import Row, { RowBetween, RowFixed } from 'components/Row';
+import { useToken } from 'hooks/Tokens';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
+import { useRemoveUserAddedToken, useUserAddedTokens } from 'state/user/hooks';
+import styled from 'styled-components/macro';
+import { ButtonText, ExternalLink, ExternalLinkIcon, ThemedText, TrashIcon } from 'theme';
+import { isAddress } from 'utils';
 
-import useTheme from '../../hooks/useTheme'
-import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
-import { CurrencyModalView } from './CurrencySearchModal'
-import ImportRow from './ImportRow'
-import { PaddedColumn, SearchInput, Separator } from './styleds'
+import useTheme from '../../hooks/useTheme';
+import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
+import { CurrencyModalView } from './CurrencySearchModal';
+import ImportRow from './ImportRow';
+import { PaddedColumn, SearchInput, Separator } from './styleds';
 
 const Wrapper = styled.div`
   width: 100%;
   height: calc(100% - 60px);
   position: relative;
   padding-bottom: 80px;
-`
+`;
 
 const Footer = styled.div`
   position: absolute;
@@ -35,43 +35,43 @@ const Footer = styled.div`
   border-top: 1px solid ${({ theme }) => theme.bg3};
   padding: 20px;
   text-align: center;
-`
+`;
 
 export default function ManageTokens({
   setModalView,
   setImportToken,
 }: {
-  setModalView: (view: CurrencyModalView) => void
-  setImportToken: (token: Token) => void
+  setModalView: (view: CurrencyModalView) => void;
+  setImportToken: (token: Token) => void;
 }) {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
-  const [searchQuery, setSearchQuery] = useState<string>('')
-  const theme = useTheme()
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const theme = useTheme();
 
   // manage focus on modal show
-  const inputRef = useRef<HTMLInputElement>()
+  const inputRef = useRef<HTMLInputElement>();
   const handleInput = useCallback((event) => {
-    const input = event.target.value
-    const checksummedInput = isAddress(input)
-    setSearchQuery(checksummedInput || input)
-  }, [])
+    const input = event.target.value;
+    const checksummedInput = isAddress(input);
+    setSearchQuery(checksummedInput || input);
+  }, []);
 
   // if they input an address, use it
-  const isAddressSearch = isAddress(searchQuery)
-  const searchToken = useToken(searchQuery)
+  const isAddressSearch = isAddress(searchQuery);
+  const searchToken = useToken(searchQuery);
 
   // all tokens for local lisr
-  const userAddedTokens: Token[] = useUserAddedTokens()
-  const removeToken = useRemoveUserAddedToken()
+  const userAddedTokens: Token[] = useUserAddedTokens();
+  const removeToken = useRemoveUserAddedToken();
 
   const handleRemoveAll = useCallback(() => {
     if (chainId && userAddedTokens) {
       userAddedTokens.map((token) => {
-        return removeToken(chainId, token.address)
-      })
+        return removeToken(chainId, token.address);
+      });
     }
-  }, [removeToken, userAddedTokens, chainId])
+  }, [removeToken, userAddedTokens, chainId]);
 
   const tokenList = useMemo(() => {
     return (
@@ -92,8 +92,8 @@ export default function ManageTokens({
           </RowFixed>
         </RowBetween>
       ))
-    )
-  }, [userAddedTokens, chainId, removeToken])
+    );
+  }, [userAddedTokens, chainId, removeToken]);
 
   return (
     <Wrapper>
@@ -149,5 +149,5 @@ export default function ManageTokens({
         </ThemedText.DarkGray>
       </Footer>
     </Wrapper>
-  )
+  );
 }

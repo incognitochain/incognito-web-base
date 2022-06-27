@@ -1,30 +1,30 @@
-import { Trans } from '@lingui/macro'
-import useScrollPosition from '@react-hook/window-scroll'
-import { CHAIN_INFO } from 'constants/chainInfo'
-import { SupportedChainId } from 'constants/chains'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import useTheme from 'hooks/useTheme'
-import { darken } from 'polished'
-import { NavLink } from 'react-router-dom'
-import { Text } from 'rebass'
-import { useShowClaimPopup, useToggleSelfClaimModal } from 'state/application/hooks'
-import { useUserHasAvailableClaim } from 'state/claim/hooks'
-import { useUserHasSubmittedClaim } from 'state/transactions/hooks'
-import { useDarkModeManager } from 'state/user/hooks'
-import { useNativeCurrencyBalances } from 'state/wallet/hooks'
-import styled from 'styled-components/macro'
-import { isChainAllowed } from 'utils/switchChain'
+import { Trans } from '@lingui/macro';
+import useScrollPosition from '@react-hook/window-scroll';
+import { CHAIN_INFO } from 'constants/chainInfo';
+import { SupportedChainId } from 'constants/chains';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import useTheme from 'hooks/useTheme';
+import { darken } from 'polished';
+import { NavLink } from 'react-router-dom';
+import { Text } from 'rebass';
+import { useShowClaimPopup, useToggleSelfClaimModal } from 'state/application/hooks';
+import { useUserHasAvailableClaim } from 'state/claim/hooks';
+import { useUserHasSubmittedClaim } from 'state/transactions/hooks';
+import { useDarkModeManager } from 'state/user/hooks';
+import { useNativeCurrencyBalances } from 'state/wallet/hooks';
+import styled from 'styled-components/macro';
+import { isChainAllowed } from 'utils/switchChain';
 
-import { ReactComponent as Logo } from '../../assets/svg/logo.svg'
-import { ExternalLink, ThemedText } from '../../theme'
-import ClaimModal from '../claim/ClaimModal'
-import { CardNoise } from '../earn/styled'
-import Menu from '../Menu'
-import Row from '../Row'
-import { Dots } from '../swap/styleds'
-import Web3Status from '../Web3Status'
-import HolidayOrnament from './HolidayOrnament'
-import NetworkSelector from './NetworkSelector'
+import { ReactComponent as Logo } from '../../assets/svg/logo.svg';
+import { ExternalLink, ThemedText } from '../../theme';
+import ClaimModal from '../claim/ClaimModal';
+import { CardNoise } from '../earn/styled';
+import Menu from '../Menu';
+import Row from '../Row';
+import { Dots } from '../swap/styleds';
+import Web3Status from '../Web3Status';
+import HolidayOrnament from './HolidayOrnament';
+import NetworkSelector from './NetworkSelector';
 
 const HeaderFrame = styled.div<{ showBackground: boolean }>`
   display: grid;
@@ -60,14 +60,14 @@ const HeaderFrame = styled.div<{ showBackground: boolean }>`
     padding:  1rem;
     grid-template-columns: 36px 1fr;
   `};
-`
+`;
 
 const HeaderControls = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-self: flex-end;
-`
+`;
 
 const HeaderElement = styled.div`
   display: flex;
@@ -85,7 +85,7 @@ const HeaderElement = styled.div`
   ${({ theme }) => theme.mediaWidth.upToMedium`
     align-items: center;
   `};
-`
+`;
 
 const HeaderLinks = styled(Row)`
   justify-self: center;
@@ -117,7 +117,7 @@ const HeaderLinks = styled(Row)`
     border: 1px solid ${({ theme }) => theme.bg2};
     box-shadow: 0px 6px 10px rgb(0 0 0 / 2%);
   `};
-`
+`;
 
 const AccountElement = styled.div<{ active: boolean }>`
   display: flex;
@@ -132,7 +132,7 @@ const AccountElement = styled.div<{ active: boolean }>`
   :focus {
     border: 1px solid blue;
   }
-`
+`;
 
 const UNIAmount = styled(AccountElement)`
   color: white;
@@ -141,7 +141,7 @@ const UNIAmount = styled(AccountElement)`
   font-weight: 500;
   background-color: ${({ theme }) => theme.bg3};
   background: radial-gradient(174.47% 188.91% at 1.84% 0%, #ff007a 0%, #2172e5 100%), #edeef2;
-`
+`;
 
 const UNIWrapper = styled.span`
   width: fit-content;
@@ -155,13 +155,13 @@ const UNIWrapper = styled.span`
   :active {
     opacity: 0.9;
   }
-`
+`;
 
 const BalanceText = styled(Text)`
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
     display: none;
   `};
-`
+`;
 
 const Title = styled.a`
   display: flex;
@@ -175,7 +175,7 @@ const Title = styled.a`
   :hover {
     cursor: pointer;
   }
-`
+`;
 
 const UniIcon = styled.div`
   transition: transform 0.3s ease;
@@ -184,9 +184,9 @@ const UniIcon = styled.div`
   }
 
   position: relative;
-`
+`;
 
-const activeClassName = 'ACTIVE'
+const activeClassName = 'ACTIVE';
 
 const StyledNavLink = styled(NavLink).attrs({
   activeClassName,
@@ -216,7 +216,7 @@ const StyledNavLink = styled(NavLink).attrs({
   :focus {
     color: ${({ theme }) => darken(0.1, theme.text1)};
   }
-`
+`;
 
 const StyledExternalLink = styled(ExternalLink).attrs({
   activeClassName,
@@ -244,31 +244,31 @@ const StyledExternalLink = styled(ExternalLink).attrs({
     color: ${({ theme }) => darken(0.1, theme.text1)};
     text-decoration: none;
   }
-`
+`;
 
 export default function Header() {
-  const { account, chainId, connector } = useActiveWeb3React()
+  const { account, chainId, connector } = useActiveWeb3React();
 
-  const chainAllowed = chainId && isChainAllowed(connector, chainId)
+  const chainAllowed = chainId && isChainAllowed(connector, chainId);
 
-  const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
-  const [darkMode] = useDarkModeManager()
-  const { white, black } = useTheme()
+  const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? ''];
+  const [darkMode] = useDarkModeManager();
+  const { white, black } = useTheme();
 
-  const toggleClaimModal = useToggleSelfClaimModal()
+  const toggleClaimModal = useToggleSelfClaimModal();
 
-  const availableClaim: boolean = useUserHasAvailableClaim(account)
+  const availableClaim: boolean = useUserHasAvailableClaim(account);
 
-  const { claimTxn } = useUserHasSubmittedClaim(account ?? undefined)
+  const { claimTxn } = useUserHasSubmittedClaim(account ?? undefined);
 
-  const showClaimPopup = useShowClaimPopup()
+  const showClaimPopup = useShowClaimPopup();
 
-  const scrollY = useScrollPosition()
+  const scrollY = useScrollPosition();
 
   const {
     infoLink,
     nativeCurrency: { symbol: nativeCurrencySymbol },
-  } = CHAIN_INFO[!chainId || !chainAllowed ? SupportedChainId.MAINNET : chainId]
+  } = CHAIN_INFO[!chainId || !chainAllowed ? SupportedChainId.MAINNET : chainId];
 
   return (
     <HeaderFrame showBackground={scrollY > 45}>
@@ -344,5 +344,5 @@ export default function Header() {
         </HeaderElement>
       </HeaderControls>
     </HeaderFrame>
-  )
+  );
 }

@@ -1,27 +1,27 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { SwapRouter, Trade } from '@uniswap/router-sdk'
-import { Currency, Percent, TradeType } from '@uniswap/sdk-core'
-import { Router as V2SwapRouter, Trade as V2Trade } from '@uniswap/v2-sdk'
-import { FeeOptions, SwapRouter as V3SwapRouter, Trade as V3Trade } from '@uniswap/v3-sdk'
-import { SWAP_ROUTER_ADDRESSES, V3_ROUTER_ADDRESS } from 'constants/addresses'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useMemo } from 'react'
-import approveAmountCalldata from 'utils/approveAmountCalldata'
+import { BigNumber } from '@ethersproject/bignumber';
+import { SwapRouter, Trade } from '@uniswap/router-sdk';
+import { Currency, Percent, TradeType } from '@uniswap/sdk-core';
+import { Router as V2SwapRouter, Trade as V2Trade } from '@uniswap/v2-sdk';
+import { FeeOptions, SwapRouter as V3SwapRouter, Trade as V3Trade } from '@uniswap/v3-sdk';
+import { SWAP_ROUTER_ADDRESSES, V3_ROUTER_ADDRESS } from 'constants/addresses';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useMemo } from 'react';
+import approveAmountCalldata from 'utils/approveAmountCalldata';
 
-import { useArgentWalletContract } from './useArgentWalletContract'
-import { useV2RouterContract } from './useContract'
-import useENS from './useENS'
-import { SignatureData } from './useERC20Permit'
+import { useArgentWalletContract } from './useArgentWalletContract';
+import { useV2RouterContract } from './useContract';
+import useENS from './useENS';
+import { SignatureData } from './useERC20Permit';
 
 export type AnyTrade =
   | V2Trade<Currency, Currency, TradeType>
   | V3Trade<Currency, Currency, TradeType>
-  | Trade<Currency, Currency, TradeType>
+  | Trade<Currency, Currency, TradeType>;
 
 interface SwapCall {
-  address: string
-  calldata: string
-  value: string
+  address: string;
+  calldata: string;
+  value: string;
 }
 
 /**
@@ -39,19 +39,19 @@ export function useSwapCallArguments(
   deadline: BigNumber | undefined,
   feeOptions: FeeOptions | undefined
 ): SwapCall[] {
-  const { account, chainId, provider } = useActiveWeb3React()
+  const { account, chainId, provider } = useActiveWeb3React();
 
-  const { address: recipientAddress } = useENS(recipientAddressOrName)
-  const recipient = recipientAddressOrName === null ? account : recipientAddress
-  const routerContract = useV2RouterContract()
-  const argentWalletContract = useArgentWalletContract()
+  const { address: recipientAddress } = useENS(recipientAddressOrName);
+  const recipient = recipientAddressOrName === null ? account : recipientAddress;
+  const routerContract = useV2RouterContract();
+  const argentWalletContract = useArgentWalletContract();
 
   return useMemo(() => {
-    if (!trade || !recipient || !provider || !account || !chainId || !deadline) return []
+    if (!trade || !recipient || !provider || !account || !chainId || !deadline) return [];
 
     if (trade instanceof V2Trade) {
-      if (!routerContract) return []
-      const swapMethods = []
+      if (!routerContract) return [];
+      const swapMethods = [];
 
       swapMethods.push(
         V2SwapRouter.swapCallParameters(trade, {
@@ -60,7 +60,7 @@ export function useSwapCallArguments(
           recipient,
           deadline: deadline.toNumber(),
         })
-      )
+      );
 
       if (trade.tradeType === TradeType.EXACT_INPUT) {
         swapMethods.push(
@@ -70,7 +70,7 @@ export function useSwapCallArguments(
             recipient,
             deadline: deadline.toNumber(),
           })
-        )
+        );
       }
       return swapMethods.map(({ methodName, args, value }) => {
         if (argentWalletContract && trade.inputAmount.currency.isToken) {
@@ -87,15 +87,15 @@ export function useSwapCallArguments(
               ],
             ]),
             value: '0x0',
-          }
+          };
         } else {
           return {
             address: routerContract.address,
             calldata: routerContract.interface.encodeFunctionData(methodName, args),
             value,
-          }
+          };
         }
-      })
+      });
     } else {
       // swap options shared by v3 and v2+v3 swap routers
       const sharedSwapOptions = {
@@ -122,14 +122,14 @@ export function useSwapCallArguments(
                     },
             }
           : {}),
-      }
+      };
 
       const swapRouterAddress = chainId
         ? trade instanceof V3Trade
           ? V3_ROUTER_ADDRESS[chainId]
           : SWAP_ROUTER_ADDRESSES[chainId]
-        : undefined
-      if (!swapRouterAddress) return []
+        : undefined;
+      if (!swapRouterAddress) return [];
 
       const { value, calldata } =
         trade instanceof V3Trade
@@ -140,7 +140,7 @@ export function useSwapCallArguments(
           : SwapRouter.swapCallParameters(trade, {
               ...sharedSwapOptions,
               deadlineOrPreviousBlockhash: deadline.toString(),
-            })
+            });
 
       if (argentWalletContract && trade.inputAmount.currency.isToken) {
         return [
@@ -158,7 +158,7 @@ export function useSwapCallArguments(
             ]),
             value: '0x0',
           },
-        ]
+        ];
       }
       return [
         {
@@ -166,7 +166,7 @@ export function useSwapCallArguments(
           calldata,
           value,
         },
-      ]
+      ];
     }
   }, [
     account,
@@ -180,5 +180,5 @@ export function useSwapCallArguments(
     routerContract,
     signatureData,
     trade,
-  ])
+  ]);
 }

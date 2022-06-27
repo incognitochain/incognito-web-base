@@ -1,11 +1,11 @@
-import { Trans } from '@lingui/macro'
-import { SupportedChainId } from 'constants/chains'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { AlertOctagon } from 'react-feather'
-import styled from 'styled-components/macro'
-import { ExternalLink } from 'theme'
+import { Trans } from '@lingui/macro';
+import { SupportedChainId } from 'constants/chains';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { AlertOctagon } from 'react-feather';
+import styled from 'styled-components/macro';
+import { ExternalLink } from 'theme';
 
-import { isL2ChainId } from '../../utils/chains'
+import { isL2ChainId } from '../../utils/chains';
 
 const Root = styled.div`
   background-color: ${({ theme }) => (theme.darkMode ? '#888D9B' : '#CED0D9')};
@@ -18,16 +18,16 @@ const Root = styled.div`
   padding: 16px;
   width: 100%;
   max-width: 880px;
-`
+`;
 const WarningIcon = styled(AlertOctagon)`
   margin: auto 16px auto 0;
   min-height: 22px;
   min-width: 22px;
-`
+`;
 const ReadMoreLink = styled(ExternalLink)`
   color: black;
   text-decoration: underline;
-`
+`;
 
 function Wrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -35,16 +35,16 @@ function Wrapper({ children }: { children: React.ReactNode }) {
       <WarningIcon />
       <div>{children}</div>
     </Root>
-  )
+  );
 }
 
 /**
  * Shows a downtime warning for the network if it's relevant
  */
 export default function DowntimeWarning() {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
   if (!isL2ChainId(chainId)) {
-    return null
+    return null;
   }
 
   switch (chainId) {
@@ -61,7 +61,7 @@ export default function DowntimeWarning() {
             </ReadMoreLink>
           </Trans>
         </Wrapper>
-      )
+      );
     case SupportedChainId.ARBITRUM_ONE:
     case SupportedChainId.ARBITRUM_RINKEBY:
       return (
@@ -74,9 +74,9 @@ export default function DowntimeWarning() {
             </ReadMoreLink>
           </Trans>
         </Wrapper>
-      )
+      );
 
     default:
-      return null
+      return null;
   }
 }

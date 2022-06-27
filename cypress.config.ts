@@ -1,4 +1,4 @@
-import { defineConfig } from 'cypress'
+import { defineConfig } from 'cypress';
 
 export default defineConfig({
   projectId: 'yp82ef',
@@ -12,9 +12,9 @@ export default defineConfig({
         // Only enable Chrome.
         // Electron (the default) has issues injecting window.ethereum before pageload, so it is not viable.
         browsers: config.browsers.filter(({ name }) => name === 'chrome'),
-      }
+      };
     },
     baseUrl: 'http://localhost:3000',
     specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
   },
-})
+});

@@ -1,39 +1,39 @@
-import { Trans } from '@lingui/macro'
-import { Pair } from '@uniswap/v2-sdk'
-import { UNSUPPORTED_V2POOL_CHAIN_IDS } from 'constants/chains'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import JSBI from 'jsbi'
-import { useContext, useMemo } from 'react'
-import { ChevronsRight } from 'react-feather'
-import { Link } from 'react-router-dom'
-import { Text } from 'rebass'
-import styled, { ThemeContext } from 'styled-components/macro'
+import { Trans } from '@lingui/macro';
+import { Pair } from '@uniswap/v2-sdk';
+import { UNSUPPORTED_V2POOL_CHAIN_IDS } from 'constants/chains';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import JSBI from 'jsbi';
+import { useContext, useMemo } from 'react';
+import { ChevronsRight } from 'react-feather';
+import { Link } from 'react-router-dom';
+import { Text } from 'rebass';
+import styled, { ThemeContext } from 'styled-components/macro';
 
-import { ButtonOutlined, ButtonPrimary, ButtonSecondary } from '../../components/Button'
-import Card from '../../components/Card'
-import { AutoColumn } from '../../components/Column'
-import { CardBGImage, CardNoise, CardSection, DataCard } from '../../components/earn/styled'
-import { SwapPoolTabs } from '../../components/NavigationTabs'
-import FullPositionCard from '../../components/PositionCard'
-import { RowBetween, RowFixed } from '../../components/Row'
-import { Dots } from '../../components/swap/styleds'
-import { SwitchLocaleLink } from '../../components/SwitchLocaleLink'
-import { BIG_INT_ZERO } from '../../constants/misc'
-import { useV2Pairs } from '../../hooks/useV2Pairs'
-import { useStakingInfo } from '../../state/stake/hooks'
-import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
-import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
-import { ExternalLink, HideSmall, ThemedText } from '../../theme'
+import { ButtonOutlined, ButtonPrimary, ButtonSecondary } from '../../components/Button';
+import Card from '../../components/Card';
+import { AutoColumn } from '../../components/Column';
+import { CardBGImage, CardNoise, CardSection, DataCard } from '../../components/earn/styled';
+import { SwapPoolTabs } from '../../components/NavigationTabs';
+import FullPositionCard from '../../components/PositionCard';
+import { RowBetween, RowFixed } from '../../components/Row';
+import { Dots } from '../../components/swap/styleds';
+import { SwitchLocaleLink } from '../../components/SwitchLocaleLink';
+import { BIG_INT_ZERO } from '../../constants/misc';
+import { useV2Pairs } from '../../hooks/useV2Pairs';
+import { useStakingInfo } from '../../state/stake/hooks';
+import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks';
+import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks';
+import { ExternalLink, HideSmall, ThemedText } from '../../theme';
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
   width: 100%;
-`
+`;
 
 const VoteCard = styled(DataCard)`
   background: radial-gradient(76.02% 75.41% at 1.84% 0%, #27ae60 0%, #000000 100%);
   overflow: hidden;
-`
+`;
 
 const TitleRow = styled(RowBetween)`
   ${({ theme }) => theme.mediaWidth.upToSmall`
@@ -42,7 +42,7 @@ const TitleRow = styled(RowBetween)`
     width: 100%;
     flex-direction: column-reverse;
   `};
-`
+`;
 
 const ButtonRow = styled(RowFixed)`
   gap: 8px;
@@ -51,7 +51,7 @@ const ButtonRow = styled(RowFixed)`
     flex-direction: row-reverse;
     justify-content: space-between;
   `};
-`
+`;
 
 const ResponsiveButtonPrimary = styled(ButtonPrimary)`
   width: fit-content;
@@ -59,14 +59,14 @@ const ResponsiveButtonPrimary = styled(ButtonPrimary)`
   ${({ theme }) => theme.mediaWidth.upToSmall`
     width: 48%;
   `};
-`
+`;
 
 const ResponsiveButtonSecondary = styled(ButtonSecondary)`
   width: fit-content;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     width: 48%;
   `};
-`
+`;
 
 const EmptyProposals = styled.div`
   border: 1px solid ${({ theme }) => theme.text4};
@@ -76,32 +76,32 @@ const EmptyProposals = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const Layer2Prompt = styled(EmptyProposals)`
   margin-top: 16px;
-`
+`;
 
 export default function Pool() {
-  const theme = useContext(ThemeContext)
-  const { account, chainId } = useActiveWeb3React()
-  const unsupportedV2Network = chainId && UNSUPPORTED_V2POOL_CHAIN_IDS.includes(chainId)
+  const theme = useContext(ThemeContext);
+  const { account, chainId } = useActiveWeb3React();
+  const unsupportedV2Network = chainId && UNSUPPORTED_V2POOL_CHAIN_IDS.includes(chainId);
 
   // fetch the user's balances of all tracked V2 LP tokens
-  let trackedTokenPairs = useTrackedTokenPairs()
-  if (unsupportedV2Network) trackedTokenPairs = []
+  let trackedTokenPairs = useTrackedTokenPairs();
+  if (unsupportedV2Network) trackedTokenPairs = [];
   const tokenPairsWithLiquidityTokens = useMemo(
     () => trackedTokenPairs.map((tokens) => ({ liquidityToken: toV2LiquidityToken(tokens), tokens })),
     [trackedTokenPairs]
-  )
+  );
   const liquidityTokens = useMemo(
     () => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
     [tokenPairsWithLiquidityTokens]
-  )
+  );
   const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesWithLoadingIndicator(
     account ?? undefined,
     liquidityTokens
-  )
+  );
 
   // fetch the reserves for all V2 pools in which the user has a balance
   const liquidityTokensWithBalances = useMemo(
@@ -110,20 +110,22 @@ export default function Pool() {
         v2PairsBalances[liquidityToken.address]?.greaterThan('0')
       ),
     [tokenPairsWithLiquidityTokens, v2PairsBalances]
-  )
+  );
 
-  const v2Pairs = useV2Pairs(liquidityTokensWithBalances.map(({ tokens }) => tokens))
+  const v2Pairs = useV2Pairs(liquidityTokensWithBalances.map(({ tokens }) => tokens));
   const v2IsLoading =
-    fetchingV2PairBalances || v2Pairs?.length < liquidityTokensWithBalances.length || v2Pairs?.some((V2Pair) => !V2Pair)
+    fetchingV2PairBalances ||
+    v2Pairs?.length < liquidityTokensWithBalances.length ||
+    v2Pairs?.some((V2Pair) => !V2Pair);
 
-  const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
+  const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair));
 
   // show liquidity even if its deposited in rewards contract
-  const stakingInfo = useStakingInfo()
+  const stakingInfo = useStakingInfo();
   const stakingInfosWithBalance = stakingInfo?.filter((pool) =>
     JSBI.greaterThan(pool.stakedAmount.quotient, BIG_INT_ZERO)
-  )
-  const stakingPairs = useV2Pairs(stakingInfosWithBalance?.map((stakingInfo) => stakingInfo.tokens))
+  );
+  const stakingPairs = useV2Pairs(stakingInfosWithBalance?.map((stakingInfo) => stakingInfo.tokens));
 
   // remove any pairs that also are included in pairs with stake in mining pool
   const v2PairsWithoutStakedAmount = allV2PairsWithLiquidity.filter((v2Pair) => {
@@ -131,8 +133,8 @@ export default function Pool() {
       stakingPairs
         ?.map((stakingPair) => stakingPair[1])
         .filter((stakingPair) => stakingPair?.liquidityToken.address === v2Pair.liquidityToken.address).length === 0
-    )
-  })
+    );
+  });
 
   return (
     <>
@@ -277,5 +279,5 @@ export default function Pool() {
       </PageWrapper>
       <SwitchLocaleLink />
     </>
-  )
+  );
 }

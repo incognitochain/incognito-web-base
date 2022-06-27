@@ -53,6 +53,6 @@ const linguiConfig = {
   runtimeConfigModule: ['@lingui/core', 'i18n'],
   sourceLocale: 'en-US',
   pseudoLocale: 'pseudo',
-}
+};
 
-export default linguiConfig
+export default linguiConfig;

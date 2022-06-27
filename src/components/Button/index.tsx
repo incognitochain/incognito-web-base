@@ -1,19 +1,19 @@
-import useTheme from 'hooks/useTheme'
-import { darken } from 'polished'
-import { Check, ChevronDown } from 'react-feather'
-import { Button as RebassButton, ButtonProps as ButtonPropsOriginal } from 'rebass/styled-components'
-import styled from 'styled-components/macro'
+import useTheme from 'hooks/useTheme';
+import { darken } from 'polished';
+import { Check, ChevronDown } from 'react-feather';
+import { Button as RebassButton, ButtonProps as ButtonPropsOriginal } from 'rebass/styled-components';
+import styled from 'styled-components/macro';
 
-import { RowBetween } from '../Row'
+import { RowBetween } from '../Row';
 
-type ButtonProps = Omit<ButtonPropsOriginal, 'css'>
+type ButtonProps = Omit<ButtonPropsOriginal, 'css'>;
 
 export const BaseButton = styled(RebassButton)<
   {
-    padding?: string
-    width?: string
-    $borderRadius?: string
-    altDisabledStyle?: boolean
+    padding?: string;
+    width?: string;
+    $borderRadius?: string;
+    altDisabledStyle?: boolean;
   } & ButtonProps
 >`
   padding: ${({ padding }) => padding ?? '16px'};
@@ -49,7 +49,7 @@ export const BaseButton = styled(RebassButton)<
   > a {
     text-decoration: none;
   }
-`
+`;
 
 export const ButtonPrimary = styled(BaseButton)`
   background-color: ${({ theme }) => theme.primary1};
@@ -75,7 +75,7 @@ export const ButtonPrimary = styled(BaseButton)`
     border: 1px solid transparent;
     outline: none;
   }
-`
+`;
 
 export const ButtonLight = styled(BaseButton)`
   background-color: ${({ theme }) => theme.primary5};
@@ -103,7 +103,7 @@ export const ButtonLight = styled(BaseButton)`
       outline: none;
     }
   }
-`
+`;
 
 export const ButtonGray = styled(BaseButton)`
   background-color: ${({ theme }) => theme.bg1};
@@ -117,7 +117,7 @@ export const ButtonGray = styled(BaseButton)`
   &:active {
     background-color: ${({ theme, disabled }) => !disabled && darken(0.1, theme.bg2)};
   }
-`
+`;
 
 export const ButtonSecondary = styled(BaseButton)`
   border: 1px solid ${({ theme }) => theme.primary4};
@@ -145,7 +145,7 @@ export const ButtonSecondary = styled(BaseButton)`
   a:hover {
     text-decoration: none;
   }
-`
+`;
 
 export const ButtonOutlined = styled(BaseButton)`
   border: 1px solid ${({ theme }) => theme.bg2};
@@ -164,7 +164,7 @@ export const ButtonOutlined = styled(BaseButton)`
     opacity: 50%;
     cursor: auto;
   }
-`
+`;
 
 export const ButtonYellow = styled(BaseButton)`
   background-color: ${({ theme }) => theme.yellow3};
@@ -185,7 +185,7 @@ export const ButtonYellow = styled(BaseButton)`
     opacity: 50%;
     cursor: auto;
   }
-`
+`;
 
 export const ButtonEmpty = styled(BaseButton)`
   background-color: transparent;
@@ -207,7 +207,7 @@ export const ButtonEmpty = styled(BaseButton)`
     opacity: 50%;
     cursor: auto;
   }
-`
+`;
 
 export const ButtonText = styled(BaseButton)`
   padding: 0;
@@ -229,7 +229,7 @@ export const ButtonText = styled(BaseButton)`
     opacity: 50%;
     cursor: auto;
   }
-`
+`;
 
 const ButtonConfirmedStyle = styled(BaseButton)`
   background-color: ${({ theme }) => theme.bg3};
@@ -242,7 +242,7 @@ const ButtonConfirmedStyle = styled(BaseButton)`
     color: ${({ theme }) => theme.text2};
     cursor: auto;
   }
-`
+`;
 
 const ButtonErrorStyle = styled(BaseButton)`
   background-color: ${({ theme }) => theme.red1};
@@ -266,7 +266,7 @@ const ButtonErrorStyle = styled(BaseButton)`
     background-color: ${({ theme }) => theme.red1};
     border: 1px solid ${({ theme }) => theme.red1};
   }
-`
+`;
 
 export function ButtonConfirmed({
   confirmed,
@@ -274,17 +274,17 @@ export function ButtonConfirmed({
   ...rest
 }: { confirmed?: boolean; altDisabledStyle?: boolean } & ButtonProps) {
   if (confirmed) {
-    return <ButtonConfirmedStyle {...rest} />
+    return <ButtonConfirmedStyle {...rest} />;
   } else {
-    return <ButtonPrimary {...rest} altDisabledStyle={altDisabledStyle} />
+    return <ButtonPrimary {...rest} altDisabledStyle={altDisabledStyle} />;
   }
 }
 
 export function ButtonError({ error, ...rest }: { error?: boolean } & ButtonProps) {
   if (error) {
-    return <ButtonErrorStyle {...rest} />
+    return <ButtonErrorStyle {...rest} />;
   } else {
-    return <ButtonPrimary {...rest} />
+    return <ButtonPrimary {...rest} />;
   }
 }
 
@@ -296,7 +296,7 @@ export function ButtonDropdown({ disabled = false, children, ...rest }: { disabl
         <ChevronDown size={24} />
       </RowBetween>
     </ButtonPrimary>
-  )
+  );
 }
 
 export function ButtonDropdownLight({ disabled = false, children, ...rest }: { disabled?: boolean } & ButtonProps) {
@@ -307,13 +307,13 @@ export function ButtonDropdownLight({ disabled = false, children, ...rest }: { d
         <ChevronDown size={24} />
       </RowBetween>
     </ButtonOutlined>
-  )
+  );
 }
 
 const ActiveOutlined = styled(ButtonOutlined)`
   border: 1px solid;
   border-color: ${({ theme }) => theme.primary1};
-`
+`;
 
 const Circle = styled.div`
   height: 17px;
@@ -323,7 +323,7 @@ const Circle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const CheckboxWrapper = styled.div`
   width: 20px;
@@ -331,21 +331,21 @@ const CheckboxWrapper = styled.div`
   position: absolute;
   top: 11px;
   right: 15px;
-`
+`;
 
 const ResponsiveCheck = styled(Check)`
   size: 13px;
-`
+`;
 
 export function ButtonRadioChecked({ active = false, children, ...rest }: { active?: boolean } & ButtonProps) {
-  const theme = useTheme()
+  const theme = useTheme();
 
   if (!active) {
     return (
       <ButtonOutlined $borderRadius="12px" padding="12px 8px" {...rest}>
         {<RowBetween>{children}</RowBetween>}
       </ButtonOutlined>
-    )
+    );
   } else {
     return (
       <ActiveOutlined {...rest} padding="12px 8px" $borderRadius="12px">
@@ -360,6 +360,6 @@ export function ButtonRadioChecked({ active = false, children, ...rest }: { acti
           </RowBetween>
         }
       </ActiveOutlined>
-    )
+    );
   }
 }

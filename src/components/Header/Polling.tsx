@@ -1,21 +1,21 @@
-import { Trans } from '@lingui/macro'
-import { RowFixed } from 'components/Row'
-import { CHAIN_INFO } from 'constants/chainInfo'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
-import useGasPrice from 'hooks/useGasPrice'
-import useMachineTimeMs from 'hooks/useMachineTime'
-import useTheme from 'hooks/useTheme'
-import JSBI from 'jsbi'
-import useBlockNumber from 'lib/hooks/useBlockNumber'
-import ms from 'ms.macro'
-import { useEffect, useState } from 'react'
-import styled, { keyframes } from 'styled-components/macro'
-import { ExternalLink, ThemedText } from 'theme'
-import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink'
+import { Trans } from '@lingui/macro';
+import { RowFixed } from 'components/Row';
+import { CHAIN_INFO } from 'constants/chainInfo';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp';
+import useGasPrice from 'hooks/useGasPrice';
+import useMachineTimeMs from 'hooks/useMachineTime';
+import useTheme from 'hooks/useTheme';
+import JSBI from 'jsbi';
+import useBlockNumber from 'lib/hooks/useBlockNumber';
+import ms from 'ms.macro';
+import { useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components/macro';
+import { ExternalLink, ThemedText } from 'theme';
+import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
-import { MouseoverTooltip } from '../Tooltip'
-import { ChainConnectivityWarning } from './ChainConnectivityWarning'
+import { MouseoverTooltip } from '../Tooltip';
+import { ChainConnectivityWarning } from './ChainConnectivityWarning';
 
 const StyledPolling = styled.div<{ warning: boolean }>`
   position: fixed;
@@ -30,7 +30,7 @@ const StyledPolling = styled.div<{ warning: boolean }>`
   ${({ theme }) => theme.mediaWidth.upToMedium`
     display: none;
   `}
-`
+`;
 const StyledPollingNumber = styled(ThemedText.Small)<{ breathe: boolean; hovering: boolean }>`
   transition: opacity 0.25s ease;
   opacity: ${({ breathe, hovering }) => (hovering ? 0.7 : breathe ? 1 : 0.5)};
@@ -45,7 +45,7 @@ const StyledPollingNumber = styled(ThemedText.Small)<{ breathe: boolean; hoverin
     text-decoration: none;
     color: unset;
   }
-`
+`;
 const StyledPollingDot = styled.div<{ warning: boolean }>`
   width: 8px;
   height: 8px;
@@ -55,7 +55,7 @@ const StyledPollingDot = styled.div<{ warning: boolean }>`
   position: relative;
   background-color: ${({ theme, warning }) => (warning ? theme.yellow3 : theme.green1)};
   transition: 250ms ease background-color;
-`
+`;
 
 const StyledGasDot = styled.div`
   background-color: ${({ theme }) => theme.text3};
@@ -66,7 +66,7 @@ const StyledGasDot = styled.div`
   position: relative;
   transition: 250ms ease background-color;
   width: 4px;
-`
+`;
 
 const rotate360 = keyframes`
   from {
@@ -75,7 +75,7 @@ const rotate360 = keyframes`
   to {
     transform: rotate(360deg);
   }
-`
+`;
 
 const Spinner = styled.div<{ warning: boolean }>`
   animation: ${rotate360} 1s cubic-bezier(0.83, 0, 0.17, 1) infinite;
@@ -94,45 +94,45 @@ const Spinner = styled.div<{ warning: boolean }>`
 
   left: -3px;
   top: -3px;
-`
+`;
 
-const DEFAULT_MS_BEFORE_WARNING = ms`10m`
-const NETWORK_HEALTH_CHECK_MS = ms`10s`
+const DEFAULT_MS_BEFORE_WARNING = ms`10m`;
+const NETWORK_HEALTH_CHECK_MS = ms`10s`;
 
 export default function Polling() {
-  const { chainId } = useActiveWeb3React()
-  const blockNumber = useBlockNumber()
-  const [isMounting, setIsMounting] = useState(false)
-  const [isHover, setIsHover] = useState(false)
-  const machineTime = useMachineTimeMs(NETWORK_HEALTH_CHECK_MS)
-  const blockTime = useCurrentBlockTimestamp()
-  const theme = useTheme()
+  const { chainId } = useActiveWeb3React();
+  const blockNumber = useBlockNumber();
+  const [isMounting, setIsMounting] = useState(false);
+  const [isHover, setIsHover] = useState(false);
+  const machineTime = useMachineTimeMs(NETWORK_HEALTH_CHECK_MS);
+  const blockTime = useCurrentBlockTimestamp();
+  const theme = useTheme();
 
-  const ethGasPrice = useGasPrice()
-  const priceGwei = ethGasPrice ? JSBI.divide(ethGasPrice, JSBI.BigInt(1000000000)) : undefined
+  const ethGasPrice = useGasPrice();
+  const priceGwei = ethGasPrice ? JSBI.divide(ethGasPrice, JSBI.BigInt(1000000000)) : undefined;
 
   const waitMsBeforeWarning =
-    (chainId ? CHAIN_INFO[chainId]?.blockWaitMsBeforeWarning : DEFAULT_MS_BEFORE_WARNING) ?? DEFAULT_MS_BEFORE_WARNING
+    (chainId ? CHAIN_INFO[chainId]?.blockWaitMsBeforeWarning : DEFAULT_MS_BEFORE_WARNING) ?? DEFAULT_MS_BEFORE_WARNING;
 
-  const warning = Boolean(!!blockTime && machineTime - blockTime.mul(1000).toNumber() > waitMsBeforeWarning)
+  const warning = Boolean(!!blockTime && machineTime - blockTime.mul(1000).toNumber() > waitMsBeforeWarning);
 
   useEffect(
     () => {
       if (!blockNumber) {
-        return
+        return;
       }
 
-      setIsMounting(true)
-      const mountingTimer = setTimeout(() => setIsMounting(false), 1000)
+      setIsMounting(true);
+      const mountingTimer = setTimeout(() => setIsMounting(false), 1000);
 
       // this will clear Timeout when component unmount like in willComponentUnmount
       return () => {
-        clearTimeout(mountingTimer)
-      }
+        clearTimeout(mountingTimer);
+      };
     },
     [blockNumber] //useEffect will run only one time
     //if you pass a value to array, like this [data] than clearTimeout will run every time this value changes (useEffect re-run)
-  )
+  );
 
   //TODO - chainlink gas oracle is really slow. Can we get a better data source?
 
@@ -177,5 +177,5 @@ export default function Polling() {
         {warning && <ChainConnectivityWarning />}
       </RowFixed>
     </>
-  )
+  );
 }

@@ -1,43 +1,43 @@
-import { Currency } from '@uniswap/sdk-core'
-import { FeeAmount } from '@uniswap/v3-sdk'
-import { TickProcessed, usePoolActiveLiquidity } from 'hooks/usePoolTickData'
-import { useCallback, useMemo } from 'react'
+import { Currency } from '@uniswap/sdk-core';
+import { FeeAmount } from '@uniswap/v3-sdk';
+import { TickProcessed, usePoolActiveLiquidity } from 'hooks/usePoolTickData';
+import { useCallback, useMemo } from 'react';
 
-import { ChartEntry } from './types'
+import { ChartEntry } from './types';
 
 export function useDensityChartData({
   currencyA,
   currencyB,
   feeAmount,
 }: {
-  currencyA: Currency | undefined
-  currencyB: Currency | undefined
-  feeAmount: FeeAmount | undefined
+  currencyA: Currency | undefined;
+  currencyB: Currency | undefined;
+  feeAmount: FeeAmount | undefined;
 }) {
-  const { isLoading, isUninitialized, isError, error, data } = usePoolActiveLiquidity(currencyA, currencyB, feeAmount)
+  const { isLoading, isUninitialized, isError, error, data } = usePoolActiveLiquidity(currencyA, currencyB, feeAmount);
 
   const formatData = useCallback(() => {
     if (!data?.length) {
-      return undefined
+      return undefined;
     }
 
-    const newData: ChartEntry[] = []
+    const newData: ChartEntry[] = [];
 
     for (let i = 0; i < data.length; i++) {
-      const t: TickProcessed = data[i]
+      const t: TickProcessed = data[i];
 
       const chartEntry = {
         activeLiquidity: parseFloat(t.liquidityActive.toString()),
         price0: parseFloat(t.price0),
-      }
+      };
 
       if (chartEntry.activeLiquidity > 0) {
-        newData.push(chartEntry)
+        newData.push(chartEntry);
       }
     }
 
-    return newData
-  }, [data])
+    return newData;
+  }, [data]);
 
   return useMemo(() => {
     return {
@@ -46,6 +46,6 @@ export function useDensityChartData({
       isError,
       error,
       formattedData: !isLoading && !isUninitialized ? formatData() : undefined,
-    }
-  }, [isLoading, isUninitialized, isError, error, formatData])
+    };
+  }, [isLoading, isUninitialized, isError, error, formatData]);
 }

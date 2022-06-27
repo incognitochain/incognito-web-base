@@ -1,11 +1,11 @@
-import { useRef } from 'react'
+import { useRef } from 'react';
 
-let uniqueId = 0
-const getUniqueId = () => uniqueId++
+let uniqueId = 0;
+const getUniqueId = () => uniqueId++;
 
 export default function AutoRouterIcon({ className, id }: { className?: string; id?: string }) {
-  const componentIdRef = useRef(id ?? getUniqueId())
-  const componentId = `AutoRouterIconGradient${componentIdRef.current}`
+  const componentIdRef = useRef(id ?? getUniqueId());
+  const componentId = `AutoRouterIconGradient${componentIdRef.current}`;
 
   return (
     <svg
@@ -31,5 +31,5 @@ export default function AutoRouterIcon({ className, id }: { className?: string; 
         stroke={`url(#${componentId})`}
       />
     </svg>
-  )
+  );
 }

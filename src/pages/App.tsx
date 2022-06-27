@@ -1,40 +1,40 @@
-import Loader from 'components/Loader'
-import TopLevelModals from 'components/TopLevelModals'
-import ApeModeQueryParamReader from 'hooks/useApeModeQueryParamReader'
-import { lazy, Suspense } from 'react'
-import { useEffect } from 'react'
-import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom'
-import styled from 'styled-components/macro'
+import Loader from 'components/Loader';
+import TopLevelModals from 'components/TopLevelModals';
+import ApeModeQueryParamReader from 'hooks/useApeModeQueryParamReader';
+import { lazy, Suspense } from 'react';
+import { useEffect } from 'react';
+import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import styled from 'styled-components/macro';
 
-import { useAnalyticsReporter } from '../components/analytics'
-import ErrorBoundary from '../components/ErrorBoundary'
-import Header from '../components/Header'
-import Polling from '../components/Header/Polling'
-import Popups from '../components/Popups'
-import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader'
-import AddLiquidity from './AddLiquidity'
-import { RedirectDuplicateTokenIds } from './AddLiquidity/redirects'
-import { RedirectDuplicateTokenIdsV2 } from './AddLiquidityV2/redirects'
-import Earn from './Earn'
-import Manage from './Earn/Manage'
-import MigrateV2 from './MigrateV2'
-import MigrateV2Pair from './MigrateV2/MigrateV2Pair'
-import Pool from './Pool'
-import { PositionPage } from './Pool/PositionPage'
-import PoolV2 from './Pool/v2'
-import PoolFinder from './PoolFinder'
-import RemoveLiquidity from './RemoveLiquidity'
-import RemoveLiquidityV3 from './RemoveLiquidity/V3'
-import Swap from './Swap'
-import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
+import { useAnalyticsReporter } from '../components/analytics';
+import ErrorBoundary from '../components/ErrorBoundary';
+import Header from '../components/Header';
+import Polling from '../components/Header/Polling';
+import Popups from '../components/Popups';
+import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader';
+import AddLiquidity from './AddLiquidity';
+import { RedirectDuplicateTokenIds } from './AddLiquidity/redirects';
+import { RedirectDuplicateTokenIdsV2 } from './AddLiquidityV2/redirects';
+import Earn from './Earn';
+import Manage from './Earn/Manage';
+import MigrateV2 from './MigrateV2';
+import MigrateV2Pair from './MigrateV2/MigrateV2Pair';
+import Pool from './Pool';
+import { PositionPage } from './Pool/PositionPage';
+import PoolV2 from './Pool/v2';
+import PoolFinder from './PoolFinder';
+import RemoveLiquidity from './RemoveLiquidity';
+import RemoveLiquidityV3 from './RemoveLiquidity/V3';
+import Swap from './Swap';
+import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects';
 
-const Vote = lazy(() => import('./Vote'))
+const Vote = lazy(() => import('./Vote'));
 
 const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;
   align-items: flex-start;
-`
+`;
 
 const BodyWrapper = styled.div`
   display: flex;
@@ -48,7 +48,7 @@ const BodyWrapper = styled.div`
   ${({ theme }) => theme.mediaWidth.upToSmall`
     padding: 4rem 8px 16px 8px;
   `};
-`
+`;
 
 const HeaderWrapper = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -57,24 +57,24 @@ const HeaderWrapper = styled.div`
   position: fixed;
   top: 0;
   z-index: 2;
-`
+`;
 
 const Marginer = styled.div`
   margin-top: 5rem;
-`
+`;
 
 export default function App() {
-  const history = useHistory()
-  useAnalyticsReporter(useLocation())
+  const history = useHistory();
+  useAnalyticsReporter(useLocation());
 
   useEffect(() => {
     const unlisten = history.listen(() => {
-      window.scrollTo(0, 0)
-    })
+      window.scrollTo(0, 0);
+    });
     return () => {
-      unlisten()
-    }
-  }, [history])
+      unlisten();
+    };
+  }, [history]);
 
   return (
     <ErrorBoundary>
@@ -135,5 +135,5 @@ export default function App() {
         </BodyWrapper>
       </AppWrapper>
     </ErrorBoundary>
-  )
+  );
 }

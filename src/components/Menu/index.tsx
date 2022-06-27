@@ -1,12 +1,12 @@
 // eslint-disable-next-line no-restricted-imports
-import { t, Trans } from '@lingui/macro'
-import { PrivacyPolicyModal } from 'components/PrivacyPolicy'
-import { L2_CHAIN_IDS } from 'constants/chains'
-import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from 'constants/locales'
-import { useActiveLocale } from 'hooks/useActiveLocale'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useLocationLinkProps } from 'hooks/useLocationLinkProps'
-import React, { useEffect, useRef, useState } from 'react'
+import { t, Trans } from '@lingui/macro';
+import { PrivacyPolicyModal } from 'components/PrivacyPolicy';
+import { L2_CHAIN_IDS } from 'constants/chains';
+import { LOCALE_LABEL, SUPPORTED_LOCALES, SupportedLocale } from 'constants/locales';
+import { useActiveLocale } from 'hooks/useActiveLocale';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useLocationLinkProps } from 'hooks/useLocationLinkProps';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   BookOpen,
   Check,
@@ -19,17 +19,17 @@ import {
   MessageCircle,
   Moon,
   Sun,
-} from 'react-feather'
-import { Link } from 'react-router-dom'
-import { useDarkModeManager } from 'state/user/hooks'
-import styled, { css } from 'styled-components/macro'
+} from 'react-feather';
+import { Link } from 'react-router-dom';
+import { useDarkModeManager } from 'state/user/hooks';
+import styled, { css } from 'styled-components/macro';
 
-import { ReactComponent as MenuIcon } from '../../assets/images/menu.svg'
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import { useModalOpen, useToggleModal } from '../../state/application/hooks'
-import { ApplicationModal } from '../../state/application/reducer'
-import { ExternalLink } from '../../theme'
-import { ButtonPrimary } from '../Button'
+import { ReactComponent as MenuIcon } from '../../assets/images/menu.svg';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { useModalOpen, useToggleModal } from '../../state/application/hooks';
+import { ApplicationModal } from '../../state/application/reducer';
+import { ExternalLink } from '../../theme';
+import { ButtonPrimary } from '../Button';
 
 export enum FlyoutAlignment {
   LEFT = 'LEFT',
@@ -40,7 +40,7 @@ const StyledMenuIcon = styled(MenuIcon)`
   path {
     stroke: ${({ theme }) => theme.text1};
   }
-`
+`;
 
 const StyledMenuButton = styled.button`
   width: 100%;
@@ -65,13 +65,13 @@ const StyledMenuButton = styled.button`
   svg {
     margin-top: 2px;
   }
-`
+`;
 
 const UNIbutton = styled(ButtonPrimary)`
   background-color: ${({ theme }) => theme.bg3};
   background: radial-gradient(174.47% 188.91% at 1.84% 0%, #ff007a 0%, #2172e5 100%), #edeef2;
   border: none;
-`
+`;
 
 const StyledMenu = styled.div`
   display: flex;
@@ -80,7 +80,7 @@ const StyledMenu = styled.div`
   position: relative;
   border: none;
   text-align: left;
-`
+`;
 
 const MenuFlyout = styled.span<{ flyoutAlignment?: FlyoutAlignment }>`
   min-width: 196px;
@@ -112,7 +112,7 @@ const MenuFlyout = styled.span<{ flyoutAlignment?: FlyoutAlignment }>`
     right: 0;
     left: unset;
   `};
-`
+`;
 
 const MenuItem = styled(ExternalLink)`
   display: flex;
@@ -127,7 +127,7 @@ const MenuItem = styled(ExternalLink)`
     cursor: pointer;
     text-decoration: none;
   }
-`
+`;
 
 const InternalMenuItem = styled(Link)`
   flex: 1;
@@ -141,7 +141,7 @@ const InternalMenuItem = styled(Link)`
   > svg {
     margin-right: 8px;
   }
-`
+`;
 
 const InternalLinkMenuItem = styled(InternalMenuItem)`
   display: flex;
@@ -155,7 +155,7 @@ const InternalLinkMenuItem = styled(InternalMenuItem)`
     cursor: pointer;
     text-decoration: none;
   }
-`
+`;
 
 const ToggleMenuItem = styled.button`
   background-color: transparent;
@@ -176,23 +176,23 @@ const ToggleMenuItem = styled.button`
     cursor: pointer;
     text-decoration: none;
   }
-`
+`;
 
 function LanguageMenuItem({ locale, active, key }: { locale: SupportedLocale; active: boolean; key: string }) {
-  const { to, onClick } = useLocationLinkProps(locale)
+  const { to, onClick } = useLocationLinkProps(locale);
 
-  if (!to) return null
+  if (!to) return null;
 
   return (
     <InternalLinkMenuItem onClick={onClick} key={key} to={to}>
       <div>{LOCALE_LABEL[locale]}</div>
       {active && <Check opacity={0.6} size={16} />}
     </InternalLinkMenuItem>
-  )
+  );
 }
 
 function LanguageMenu({ close }: { close: () => void }) {
-  const activeLocale = useActiveLocale()
+  const activeLocale = useActiveLocale();
 
   return (
     <MenuFlyout>
@@ -203,27 +203,27 @@ function LanguageMenu({ close }: { close: () => void }) {
         <LanguageMenuItem locale={locale} active={activeLocale === locale} key={locale} />
       ))}
     </MenuFlyout>
-  )
+  );
 }
 
 export default function Menu() {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React();
 
-  const node = useRef<HTMLDivElement>()
-  const open = useModalOpen(ApplicationModal.MENU)
-  const toggleMenu = useToggleModal(ApplicationModal.MENU)
-  useOnClickOutside(node, open ? toggleMenu : undefined)
-  const togglePrivacyPolicy = useToggleModal(ApplicationModal.PRIVACY_POLICY)
-  const openClaimModal = useToggleModal(ApplicationModal.ADDRESS_CLAIM)
-  const showUNIClaimOption = Boolean(!!account && !!chainId && !L2_CHAIN_IDS.includes(chainId))
+  const node = useRef<HTMLDivElement>();
+  const open = useModalOpen(ApplicationModal.MENU);
+  const toggleMenu = useToggleModal(ApplicationModal.MENU);
+  useOnClickOutside(node, open ? toggleMenu : undefined);
+  const togglePrivacyPolicy = useToggleModal(ApplicationModal.PRIVACY_POLICY);
+  const openClaimModal = useToggleModal(ApplicationModal.ADDRESS_CLAIM);
+  const showUNIClaimOption = Boolean(!!account && !!chainId && !L2_CHAIN_IDS.includes(chainId));
 
-  const [darkMode, toggleDarkMode] = useDarkModeManager()
+  const [darkMode, toggleDarkMode] = useDarkModeManager();
 
-  const [menu, setMenu] = useState<'main' | 'lang'>('main')
+  const [menu, setMenu] = useState<'main' | 'lang'>('main');
 
   useEffect(() => {
-    setMenu('main')
-  }, [open])
+    setMenu('main');
+  }, [open]);
 
   return (
     <>
@@ -237,7 +237,7 @@ export default function Menu() {
           (() => {
             switch (menu) {
               case 'lang':
-                return <LanguageMenu close={() => setMenu('main')} />
+                return <LanguageMenu close={() => setMenu('main')} />;
               case 'main':
               default:
                 return (
@@ -300,44 +300,44 @@ export default function Menu() {
                       </UNIbutton>
                     )}
                   </MenuFlyout>
-                )
+                );
             }
           })()}
       </StyledMenu>
       <PrivacyPolicyModal />
     </>
-  )
+  );
 }
 
 interface NewMenuProps {
-  flyoutAlignment?: FlyoutAlignment
-  ToggleUI?: React.FunctionComponent
+  flyoutAlignment?: FlyoutAlignment;
+  ToggleUI?: React.FunctionComponent;
   menuItems: {
-    content: any
-    link: string
-    external: boolean
-  }[]
+    content: any;
+    link: string;
+    external: boolean;
+  }[];
 }
 
 const NewMenuFlyout = styled(MenuFlyout)`
   top: 3rem !important;
-`
+`;
 const NewMenuItem = styled(InternalMenuItem)`
   width: max-content;
   text-decoration: none;
-`
+`;
 
 const ExternalMenuItem = styled(MenuItem)`
   width: max-content;
   text-decoration: none;
-`
+`;
 
 export const NewMenu = ({ flyoutAlignment = FlyoutAlignment.RIGHT, ToggleUI, menuItems, ...rest }: NewMenuProps) => {
-  const node = useRef<HTMLDivElement>()
-  const open = useModalOpen(ApplicationModal.POOL_OVERVIEW_OPTIONS)
-  const toggle = useToggleModal(ApplicationModal.POOL_OVERVIEW_OPTIONS)
-  useOnClickOutside(node, open ? toggle : undefined)
-  const ToggleElement = ToggleUI || StyledMenuIcon
+  const node = useRef<HTMLDivElement>();
+  const open = useModalOpen(ApplicationModal.POOL_OVERVIEW_OPTIONS);
+  const toggle = useToggleModal(ApplicationModal.POOL_OVERVIEW_OPTIONS);
+  useOnClickOutside(node, open ? toggle : undefined);
+  const ToggleElement = ToggleUI || StyledMenuIcon;
   return (
     <StyledMenu ref={node as any} {...rest}>
       <ToggleElement onClick={toggle} />
@@ -357,5 +357,5 @@ export const NewMenu = ({ flyoutAlignment = FlyoutAlignment.RIGHT, ToggleUI, men
         </NewMenuFlyout>
       )}
     </StyledMenu>
-  )
-}
+  );
+};

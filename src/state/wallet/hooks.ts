@@ -1,13 +1,13 @@
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import JSBI from 'jsbi'
-import { useTokenBalance, useTokenBalancesWithLoadingIndicator } from 'lib/hooks/useCurrencyBalance'
-import { useMemo } from 'react'
+import { CurrencyAmount, Token } from '@uniswap/sdk-core';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import JSBI from 'jsbi';
+import { useTokenBalance, useTokenBalancesWithLoadingIndicator } from 'lib/hooks/useCurrencyBalance';
+import { useMemo } from 'react';
 
-import { UNI } from '../../constants/tokens'
-import { useAllTokens } from '../../hooks/Tokens'
-import { useUserUnclaimedAmount } from '../claim/hooks'
-import { useTotalUniEarned } from '../stake/hooks'
+import { UNI } from '../../constants/tokens';
+import { useAllTokens } from '../../hooks/Tokens';
+import { useUserUnclaimedAmount } from '../claim/hooks';
+import { useTotalUniEarned } from '../stake/hooks';
 
 export {
   default as useCurrencyBalance,
@@ -16,28 +16,28 @@ export {
   useTokenBalance,
   useTokenBalances,
   useTokenBalancesWithLoadingIndicator,
-} from 'lib/hooks/useCurrencyBalance'
+} from 'lib/hooks/useCurrencyBalance';
 
 // mimics useAllBalances
 export function useAllTokenBalances(): [{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }, boolean] {
-  const { account } = useActiveWeb3React()
-  const allTokens = useAllTokens()
-  const allTokensArray = useMemo(() => Object.values(allTokens ?? {}), [allTokens])
-  const [balances, balancesIsLoading] = useTokenBalancesWithLoadingIndicator(account ?? undefined, allTokensArray)
-  return [balances ?? {}, balancesIsLoading]
+  const { account } = useActiveWeb3React();
+  const allTokens = useAllTokens();
+  const allTokensArray = useMemo(() => Object.values(allTokens ?? {}), [allTokens]);
+  const [balances, balancesIsLoading] = useTokenBalancesWithLoadingIndicator(account ?? undefined, allTokensArray);
+  return [balances ?? {}, balancesIsLoading];
 }
 
 // get the total owned, unclaimed, and unharvested UNI for account
 export function useAggregateUniBalance(): CurrencyAmount<Token> | undefined {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React();
 
-  const uni = chainId ? UNI[chainId] : undefined
+  const uni = chainId ? UNI[chainId] : undefined;
 
-  const uniBalance: CurrencyAmount<Token> | undefined = useTokenBalance(account ?? undefined, uni)
-  const uniUnclaimed: CurrencyAmount<Token> | undefined = useUserUnclaimedAmount(account)
-  const uniUnHarvested: CurrencyAmount<Token> | undefined = useTotalUniEarned()
+  const uniBalance: CurrencyAmount<Token> | undefined = useTokenBalance(account ?? undefined, uni);
+  const uniUnclaimed: CurrencyAmount<Token> | undefined = useUserUnclaimedAmount(account);
+  const uniUnHarvested: CurrencyAmount<Token> | undefined = useTotalUniEarned();
 
-  if (!uni) return undefined
+  if (!uni) return undefined;
 
   return CurrencyAmount.fromRawAmount(
     uni,
@@ -45,5 +45,5 @@ export function useAggregateUniBalance(): CurrencyAmount<Token> | undefined {
       JSBI.add(uniBalance?.quotient ?? JSBI.BigInt(0), uniUnclaimed?.quotient ?? JSBI.BigInt(0)),
       uniUnHarvested?.quotient ?? JSBI.BigInt(0)
     )
-  )
+  );
 }

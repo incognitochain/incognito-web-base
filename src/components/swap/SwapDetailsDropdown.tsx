@@ -1,42 +1,42 @@
-import { Trans } from '@lingui/macro'
-import { Currency, Percent, TradeType } from '@uniswap/sdk-core'
-import AnimatedDropdown from 'components/AnimatedDropdown'
-import Card, { OutlineCard } from 'components/Card'
-import { AutoColumn } from 'components/Column'
-import { LoadingOpacityContainer } from 'components/Loader/styled'
-import Row, { RowBetween, RowFixed } from 'components/Row'
-import { MouseoverTooltipContent } from 'components/Tooltip'
-import { SUPPORTED_GAS_ESTIMATE_CHAIN_IDS } from 'constants/chains'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { darken } from 'polished'
-import { useState } from 'react'
-import { ChevronDown, Info } from 'react-feather'
-import { InterfaceTrade } from 'state/routing/types'
-import styled, { keyframes, useTheme } from 'styled-components/macro'
-import { HideSmall, ThemedText } from 'theme'
+import { Trans } from '@lingui/macro';
+import { Currency, Percent, TradeType } from '@uniswap/sdk-core';
+import AnimatedDropdown from 'components/AnimatedDropdown';
+import Card, { OutlineCard } from 'components/Card';
+import { AutoColumn } from 'components/Column';
+import { LoadingOpacityContainer } from 'components/Loader/styled';
+import Row, { RowBetween, RowFixed } from 'components/Row';
+import { MouseoverTooltipContent } from 'components/Tooltip';
+import { SUPPORTED_GAS_ESTIMATE_CHAIN_IDS } from 'constants/chains';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { darken } from 'polished';
+import { useState } from 'react';
+import { ChevronDown, Info } from 'react-feather';
+import { InterfaceTrade } from 'state/routing/types';
+import styled, { keyframes, useTheme } from 'styled-components/macro';
+import { HideSmall, ThemedText } from 'theme';
 
-import { AdvancedSwapDetails } from './AdvancedSwapDetails'
-import GasEstimateBadge from './GasEstimateBadge'
-import { ResponsiveTooltipContainer } from './styleds'
-import SwapRoute from './SwapRoute'
-import TradePrice from './TradePrice'
+import { AdvancedSwapDetails } from './AdvancedSwapDetails';
+import GasEstimateBadge from './GasEstimateBadge';
+import { ResponsiveTooltipContainer } from './styleds';
+import SwapRoute from './SwapRoute';
+import TradePrice from './TradePrice';
 
 const Wrapper = styled(Row)`
   width: 100%;
   justify-content: center;
-`
+`;
 
 const StyledInfoIcon = styled(Info)`
   height: 16px;
   width: 16px;
   margin-right: 4px;
   color: ${({ theme }) => theme.text3};
-`
+`;
 
 const StyledCard = styled(OutlineCard)`
   padding: 12px;
   border: 1px solid ${({ theme }) => theme.bg2};
-`
+`;
 
 const StyledHeaderRow = styled(RowBetween)<{ disabled: boolean; open: boolean }>`
   padding: 4px 8px;
@@ -49,12 +49,12 @@ const StyledHeaderRow = styled(RowBetween)<{ disabled: boolean; open: boolean }>
   :hover {
     background-color: ${({ theme, disabled }) => (disabled ? theme.bg1 : darken(0.015, theme.bg1))};
   }
-`
+`;
 
 const RotatingArrow = styled(ChevronDown)<{ open?: boolean }>`
   transform: ${({ open }) => (open ? 'rotate(180deg)' : 'none')};
   transition: transform 0.1s linear;
-`
+`;
 
 const StyledPolling = styled.div`
   display: flex;
@@ -69,7 +69,7 @@ const StyledPolling = styled.div`
   ${({ theme }) => theme.mediaWidth.upToMedium`
     display: none;
   `}
-`
+`;
 
 const StyledPollingDot = styled.div`
   width: 8px;
@@ -80,7 +80,7 @@ const StyledPollingDot = styled.div`
   position: relative;
   background-color: ${({ theme }) => theme.bg2};
   transition: 250ms ease background-color;
-`
+`;
 
 const rotate360 = keyframes`
   from {
@@ -89,7 +89,7 @@ const rotate360 = keyframes`
   to {
     transform: rotate(360deg);
   }
-`
+`;
 
 const Spinner = styled.div`
   animation: ${rotate360} 1s cubic-bezier(0.83, 0, 0.17, 1) infinite;
@@ -106,15 +106,15 @@ const Spinner = styled.div`
   transition: 250ms ease border-color;
   left: -3px;
   top: -3px;
-`
+`;
 
 interface SwapDetailsInlineProps {
-  trade: InterfaceTrade<Currency, Currency, TradeType> | undefined
-  syncing: boolean
-  loading: boolean
-  showInverted: boolean
-  setShowInverted: React.Dispatch<React.SetStateAction<boolean>>
-  allowedSlippage: Percent
+  trade: InterfaceTrade<Currency, Currency, TradeType> | undefined;
+  syncing: boolean;
+  loading: boolean;
+  showInverted: boolean;
+  setShowInverted: React.Dispatch<React.SetStateAction<boolean>>;
+  allowedSlippage: Percent;
 }
 
 export default function SwapDetailsDropdown({
@@ -125,9 +125,9 @@ export default function SwapDetailsDropdown({
   setShowInverted,
   allowedSlippage,
 }: SwapDetailsInlineProps) {
-  const theme = useTheme()
-  const { chainId } = useActiveWeb3React()
-  const [showDetails, setShowDetails] = useState(false)
+  const theme = useTheme();
+  const { chainId } = useActiveWeb3React();
+  const [showDetails, setShowDetails] = useState(false);
 
   return (
     <Wrapper>
@@ -204,5 +204,5 @@ export default function SwapDetailsDropdown({
         </AnimatedDropdown>
       </AutoColumn>
     </Wrapper>
-  )
+  );
 }

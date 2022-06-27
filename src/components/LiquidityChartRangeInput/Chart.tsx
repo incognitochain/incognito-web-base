@@ -1,16 +1,16 @@
-import { max, scaleLinear, ZoomTransform } from 'd3'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Bound } from 'state/mint/v3/actions'
+import { max, scaleLinear, ZoomTransform } from 'd3';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Bound } from 'state/mint/v3/actions';
 
-import { Area } from './Area'
-import { AxisBottom } from './AxisBottom'
-import { Brush } from './Brush'
-import { Line } from './Line'
-import { ChartEntry, LiquidityChartRangeInputProps } from './types'
-import Zoom, { ZoomOverlay } from './Zoom'
+import { Area } from './Area';
+import { AxisBottom } from './AxisBottom';
+import { Brush } from './Brush';
+import { Line } from './Line';
+import { ChartEntry, LiquidityChartRangeInputProps } from './types';
+import Zoom, { ZoomOverlay } from './Zoom';
 
-export const xAccessor = (d: ChartEntry) => d.price0
-export const yAccessor = (d: ChartEntry) => d.activeLiquidity
+export const xAccessor = (d: ChartEntry) => d.price0;
+export const yAccessor = (d: ChartEntry) => d.activeLiquidity;
 
 export function Chart({
   id = 'liquidityChartRangeInput',
@@ -25,14 +25,14 @@ export function Chart({
   onBrushDomainChange,
   zoomLevels,
 }: LiquidityChartRangeInputProps) {
-  const zoomRef = useRef<SVGRectElement | null>(null)
+  const zoomRef = useRef<SVGRectElement | null>(null);
 
-  const [zoom, setZoom] = useState<ZoomTransform | null>(null)
+  const [zoom, setZoom] = useState<ZoomTransform | null>(null);
 
   const [innerHeight, innerWidth] = useMemo(
     () => [height - margins.top - margins.bottom, width - margins.left - margins.right],
     [width, height, margins]
-  )
+  );
 
   const { xScale, yScale } = useMemo(() => {
     const scales = {
@@ -42,26 +42,26 @@ export function Chart({
       yScale: scaleLinear()
         .domain([0, max(series, yAccessor)] as number[])
         .range([innerHeight, 0]),
-    }
+    };
 
     if (zoom) {
-      const newXscale = zoom.rescaleX(scales.xScale)
-      scales.xScale.domain(newXscale.domain())
+      const newXscale = zoom.rescaleX(scales.xScale);
+      scales.xScale.domain(newXscale.domain());
     }
 
-    return scales
-  }, [current, zoomLevels.initialMin, zoomLevels.initialMax, innerWidth, series, innerHeight, zoom])
+    return scales;
+  }, [current, zoomLevels.initialMin, zoomLevels.initialMax, innerWidth, series, innerHeight, zoom]);
 
   useEffect(() => {
     // reset zoom as necessary
-    setZoom(null)
-  }, [zoomLevels])
+    setZoom(null);
+  }, [zoomLevels]);
 
   useEffect(() => {
     if (!brushDomain) {
-      onBrushDomainChange(xScale.domain() as [number, number], undefined)
+      onBrushDomainChange(xScale.domain() as [number, number], undefined);
     }
-  }, [brushDomain, onBrushDomainChange, xScale])
+  }, [brushDomain, onBrushDomainChange, xScale]);
 
   return (
     <>
@@ -78,7 +78,7 @@ export function Chart({
           onBrushDomainChange(
             [current * zoomLevels.initialMin, current * zoomLevels.initialMax] as [number, number],
             'reset'
-          )
+          );
         }}
         showResetButton={Boolean(ticksAtLimit[Bound.LOWER] || ticksAtLimit[Bound.UPPER])}
         zoomLevels={zoomLevels}
@@ -143,5 +143,5 @@ export function Chart({
         </g>
       </svg>
     </>
-  )
+  );
 }

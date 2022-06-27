@@ -1,5 +1,5 @@
-import type { TokenInfo, TokenList } from '@uniswap/token-lists'
-import type { Ajv, ValidateFunction } from 'ajv'
+import type { TokenInfo, TokenList } from '@uniswap/token-lists';
+import type { Ajv, ValidateFunction } from 'ajv';
 
 enum ValidationSchema {
   LIST = 'list',
@@ -7,7 +7,7 @@ enum ValidationSchema {
 }
 
 const validator = new Promise<Ajv>(async (resolve) => {
-  const [ajv, schema] = await Promise.all([import('ajv'), import('@uniswap/token-lists/src/tokenlist.schema.json')])
+  const [ajv, schema] = await Promise.all([import('ajv'), import('@uniswap/token-lists/src/tokenlist.schema.json')]);
   const validator = new ajv.default({ allErrors: true })
     .addSchema(schema, ValidationSchema.LIST)
     // Adds a meta scheme of Pick<TokenList, 'tokens'>
@@ -18,15 +18,15 @@ const validator = new Promise<Ajv>(async (resolve) => {
         required: ['tokens'],
       },
       ValidationSchema.TOKENS
-    )
-  resolve(validator)
-})
+    );
+  resolve(validator);
+});
 
 function getValidationErrors(validate: ValidateFunction | undefined): string {
   return (
     validate?.errors?.map((error) => [error.dataPath, error.message].filter(Boolean).join(' ')).join('; ') ??
     'unknown error'
-  )
+  );
 }
 
 /**
@@ -34,11 +34,11 @@ function getValidationErrors(validate: ValidateFunction | undefined): string {
  * @param json the TokenInfo[] to validate
  */
 export async function validateTokens(json: TokenInfo[]): Promise<TokenInfo[]> {
-  const validate = (await validator).getSchema(ValidationSchema.TOKENS)
+  const validate = (await validator).getSchema(ValidationSchema.TOKENS);
   if (validate?.({ tokens: json })) {
-    return json
+    return json;
   }
-  throw new Error(`Token list failed validation: ${getValidationErrors(validate)}`)
+  throw new Error(`Token list failed validation: ${getValidationErrors(validate)}`);
 }
 
 /**
@@ -46,9 +46,9 @@ export async function validateTokens(json: TokenInfo[]): Promise<TokenInfo[]> {
  * @param json the TokenList to validate
  */
 export default async function validateTokenList(json: TokenList): Promise<TokenList> {
-  const validate = (await validator).getSchema(ValidationSchema.LIST)
+  const validate = (await validator).getSchema(ValidationSchema.LIST);
   if (validate?.(json)) {
-    return json
+    return json;
   }
-  throw new Error(`Token list failed validation: ${getValidationErrors(validate)}`)
+  throw new Error(`Token list failed validation: ${getValidationErrors(validate)}`);
 }

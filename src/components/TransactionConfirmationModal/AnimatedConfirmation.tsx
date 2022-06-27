@@ -1,10 +1,10 @@
-import useTheme from 'hooks/useTheme'
-import styled, { keyframes } from 'styled-components/macro'
+import useTheme from 'hooks/useTheme';
+import styled, { keyframes } from 'styled-components/macro';
 
 const Wrapper = styled.div`
   height: 90px;
   width: 90px;
-`
+`;
 
 const dash = keyframes`
   0% {
@@ -13,7 +13,7 @@ const dash = keyframes`
   100% {
     stroke-dashoffset: 0;
   }
-`
+`;
 
 const dashCheck = keyframes`
   0% {
@@ -22,14 +22,14 @@ const dashCheck = keyframes`
   100% {
     stroke-dashoffset: 900;
   }
-`
+`;
 
 const Circle = styled.circle`
   stroke-dasharray: 1000;
   stroke-dashoffset: 0;
   -webkit-animation: ${dash} 0.9s ease-in-out;
   animation: ${dash} 0.9s ease-in-out;
-`
+`;
 
 const PolyLine = styled.polyline`
   stroke-dasharray: 1000;
@@ -37,10 +37,10 @@ const PolyLine = styled.polyline`
   stroke-dashoffset: -100;
   -webkit-animation: ${dashCheck} 0.9s 0.35s ease-in-out forwards;
   animation: ${dashCheck} 0.9s 0.35s ease-in-out forwards;
-`
+`;
 
 export default function AnimatedConfirmation() {
-  const theme = useTheme()
+  const theme = useTheme();
 
   return (
     <Wrapper className="w4rAnimated_checkmark">
@@ -66,5 +66,5 @@ export default function AnimatedConfirmation() {
         />
       </svg>
     </Wrapper>
-  )
+  );
 }

@@ -1,19 +1,19 @@
-import { loadingOpacityMixin } from 'components/Loader/styled'
-import { TooltipContainer } from 'components/Tooltip'
-import { transparentize } from 'polished'
-import { ReactNode } from 'react'
-import { AlertTriangle } from 'react-feather'
-import { Text } from 'rebass'
-import styled, { css } from 'styled-components/macro'
+import { loadingOpacityMixin } from 'components/Loader/styled';
+import { TooltipContainer } from 'components/Tooltip';
+import { transparentize } from 'polished';
+import { ReactNode } from 'react';
+import { AlertTriangle } from 'react-feather';
+import { Text } from 'rebass';
+import styled, { css } from 'styled-components/macro';
 
-import { ThemedText } from '../../theme'
-import { AutoColumn } from '../Column'
-import TradePrice from './TradePrice'
+import { ThemedText } from '../../theme';
+import { AutoColumn } from '../Column';
+import TradePrice from './TradePrice';
 
 export const Wrapper = styled.div`
   position: relative;
   padding: 8px;
-`
+`;
 
 export const ArrowWrapper = styled.div<{ clickable: boolean }>`
   padding: 4px;
@@ -37,13 +37,13 @@ export const ArrowWrapper = styled.div<{ clickable: boolean }>`
           }
         `
       : null}
-`
+`;
 
 export const SectionBreak = styled.div`
   height: 1px;
   width: 100%;
   background-color: ${({ theme }) => theme.bg3};
-`
+`;
 
 export const ErrorText = styled(Text)<{ severity?: 0 | 1 | 2 | 3 | 4 }>`
   color: ${({ theme, severity }) =>
@@ -54,14 +54,14 @@ export const ErrorText = styled(Text)<{ severity?: 0 | 1 | 2 | 3 | 4 }>`
       : severity === 1
       ? theme.text1
       : theme.text2};
-`
+`;
 
 export const TruncatedText = styled(Text)`
   text-overflow: ellipsis;
   max-width: 220px;
   overflow: hidden;
   text-align: right;
-`
+`;
 
 // styles
 export const Dots = styled.span`
@@ -83,7 +83,7 @@ export const Dots = styled.span`
       content: '...';
     }
   }
-`
+`;
 
 const SwapCallbackErrorInner = styled.div`
   background-color: ${({ theme }) => transparentize(0.9, theme.red1)};
@@ -101,7 +101,7 @@ const SwapCallbackErrorInner = styled.div`
     margin: 0;
     font-weight: 500;
   }
-`
+`;
 
 const SwapCallbackErrorInnerAlertTriangle = styled.div`
   background-color: ${({ theme }) => transparentize(0.9, theme.red1)};
@@ -112,7 +112,7 @@ const SwapCallbackErrorInnerAlertTriangle = styled.div`
   border-radius: 12px;
   min-width: 48px;
   height: 48px;
-`
+`;
 
 export function SwapCallbackError({ error }: { error: ReactNode }) {
   return (
@@ -122,7 +122,7 @@ export function SwapCallbackError({ error }: { error: ReactNode }) {
       </SwapCallbackErrorInnerAlertTriangle>
       <p style={{ wordBreak: 'break-word' }}>{error}</p>
     </SwapCallbackErrorInner>
-  )
+  );
 }
 
 export const SwapShowAcceptChanges = styled(AutoColumn)`
@@ -131,12 +131,12 @@ export const SwapShowAcceptChanges = styled(AutoColumn)`
   padding: 0.5rem;
   border-radius: 12px;
   margin-top: 8px;
-`
+`;
 
 export const TransactionDetailsLabel = styled(ThemedText.Black)`
   border-bottom: 1px solid ${({ theme }) => theme.bg2};
   padding-bottom: 0.5rem;
-`
+`;
 
 export const ResponsiveTooltipContainer = styled(TooltipContainer)<{ origin?: string; width?: string }>`
   background-color: ${({ theme }) => theme.bg0};
@@ -148,8 +148,8 @@ export const ResponsiveTooltipContainer = styled(TooltipContainer)<{ origin?: st
     transform: scale(0.8);
     transform-origin: ${origin ?? 'top left'};
   `}
-`
+`;
 
 export const StyledTradePrice = styled(TradePrice)<{ $loading: boolean }>`
   ${loadingOpacityMixin}
-`
+`;

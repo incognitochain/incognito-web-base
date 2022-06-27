@@ -1,12 +1,12 @@
-import { Trans } from '@lingui/macro'
-import { AutoColumn } from 'components/Column'
-import { CHAIN_INFO } from 'constants/chainInfo'
-import { SupportedChainId } from 'constants/chains'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import styled from 'styled-components/macro'
-import { ThemedText } from 'theme'
+import { Trans } from '@lingui/macro';
+import { AutoColumn } from 'components/Column';
+import { CHAIN_INFO } from 'constants/chainInfo';
+import { SupportedChainId } from 'constants/chains';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 
-import { ExternalLink } from '../../theme'
+import { ExternalLink } from '../../theme';
 
 const CTASection = styled.section`
   display: grid;
@@ -18,7 +18,7 @@ const CTASection = styled.section`
     grid-template-columns: auto;
     grid-template-rows: auto;
   `};
-`
+`;
 
 const CTA1 = styled(ExternalLink)`
   padding: 16px;
@@ -44,7 +44,7 @@ const CTA1 = styled(ExternalLink)`
       text-decoration: none !important;
     }
   }
-`
+`;
 
 const CTA2 = styled(ExternalLink)`
   position: relative;
@@ -68,7 +68,7 @@ const CTA2 = styled(ExternalLink)`
       text-decoration: none !important;
     }
   }
-`
+`;
 
 const HeaderText = styled(ThemedText.Label)`
   align-items: center;
@@ -79,7 +79,7 @@ const HeaderText = styled(ThemedText.Label)`
   ${({ theme }) => theme.mediaWidth.upToMedium`
     font-size: 16px;
   `};
-`
+`;
 
 const ResponsiveColumn = styled(AutoColumn)`
   grid-template-columns: 1fr;
@@ -90,11 +90,11 @@ const ResponsiveColumn = styled(AutoColumn)`
     gap: 8px;
   `};
   justify-content: space-between;
-`
+`;
 
 export default function CTACards() {
-  const { chainId } = useActiveWeb3React()
-  const { infoLink } = CHAIN_INFO[chainId ? chainId : SupportedChainId.MAINNET]
+  const { chainId } = useActiveWeb3React();
+  const { infoLink } = CHAIN_INFO[chainId ? chainId : SupportedChainId.MAINNET];
   return (
     <CTASection>
       <CTA1 href={'https://help.uniswap.org/en/articles/5391541-providing-liquidity-on-uniswap-v3'}>
@@ -118,5 +118,5 @@ export default function CTACards() {
         </ResponsiveColumn>
       </CTA2>
     </CTASection>
-  )
+  );
 }

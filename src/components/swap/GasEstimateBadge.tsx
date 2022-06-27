@@ -1,17 +1,17 @@
-import { Trans } from '@lingui/macro'
-import { Currency, TradeType } from '@uniswap/sdk-core'
-import { sendEvent } from 'components/analytics'
-import { AutoColumn } from 'components/Column'
-import { LoadingOpacityContainer } from 'components/Loader/styled'
-import { RowFixed } from 'components/Row'
-import { MouseoverTooltipContent } from 'components/Tooltip'
-import { InterfaceTrade } from 'state/routing/types'
-import styled from 'styled-components/macro'
-import { ThemedText } from 'theme'
+import { Trans } from '@lingui/macro';
+import { Currency, TradeType } from '@uniswap/sdk-core';
+import { sendEvent } from 'components/analytics';
+import { AutoColumn } from 'components/Column';
+import { LoadingOpacityContainer } from 'components/Loader/styled';
+import { RowFixed } from 'components/Row';
+import { MouseoverTooltipContent } from 'components/Tooltip';
+import { InterfaceTrade } from 'state/routing/types';
+import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 
-import { ReactComponent as GasIcon } from '../../assets/images/gas-icon.svg'
-import { ResponsiveTooltipContainer } from './styleds'
-import SwapRoute from './SwapRoute'
+import { ReactComponent as GasIcon } from '../../assets/images/gas-icon.svg';
+import { ResponsiveTooltipContainer } from './styleds';
+import SwapRoute from './SwapRoute';
 
 const GasWrapper = styled(RowFixed)`
   border-radius: 8px;
@@ -22,14 +22,14 @@ const GasWrapper = styled(RowFixed)`
   font-size: 14px;
   font-weight: 500;
   user-select: none;
-`
+`;
 const StyledGasIcon = styled(GasIcon)`
   margin-right: 4px;
   height: 14px;
   & > * {
     stroke: ${({ theme }) => theme.text3};
   }
-`
+`;
 
 export default function GasEstimateBadge({
   trade,
@@ -37,16 +37,16 @@ export default function GasEstimateBadge({
   showRoute,
   disableHover,
 }: {
-  trade: InterfaceTrade<Currency, Currency, TradeType> | undefined | null // dollar amount in active chain's stablecoin
-  loading: boolean
-  showRoute?: boolean // show route instead of gas estimation summary
-  disableHover?: boolean
+  trade: InterfaceTrade<Currency, Currency, TradeType> | undefined | null; // dollar amount in active chain's stablecoin
+  loading: boolean;
+  showRoute?: boolean; // show route instead of gas estimation summary
+  disableHover?: boolean;
 }) {
   const formattedGasPriceString = trade?.gasUseEstimateUSD
     ? trade.gasUseEstimateUSD.toFixed(2) === '0.00'
       ? '<$0.01'
       : '$' + trade.gasUseEstimateUSD.toFixed(2)
-    : undefined
+    : undefined;
 
   return (
     <MouseoverTooltipContent
@@ -98,5 +98,5 @@ export default function GasEstimateBadge({
         </GasWrapper>
       </LoadingOpacityContainer>
     </MouseoverTooltipContent>
-  )
+  );
 }

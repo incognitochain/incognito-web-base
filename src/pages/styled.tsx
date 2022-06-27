@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro'
+import styled from 'styled-components/macro';
 
 export const IframeBodyWrapper = styled.div`
   display: flex;
@@ -9,4 +9,4 @@ export const IframeBodyWrapper = styled.div`
   align-items: center;
   flex: 1;
   z-index: 1;
-`
+`;

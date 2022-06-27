@@ -1,24 +1,24 @@
-import { Trans } from '@lingui/macro'
-import { Connector } from '@web3-react/types'
-import CopyHelper from 'components/AccountDetails/Copy'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useCallback, useContext } from 'react'
-import { ExternalLink as LinkIcon } from 'react-feather'
-import { useAppDispatch } from 'state/hooks'
-import { updateSelectedWallet } from 'state/user/reducer'
-import styled, { ThemeContext } from 'styled-components/macro'
+import { Trans } from '@lingui/macro';
+import { Connector } from '@web3-react/types';
+import CopyHelper from 'components/AccountDetails/Copy';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useCallback, useContext } from 'react';
+import { ExternalLink as LinkIcon } from 'react-feather';
+import { useAppDispatch } from 'state/hooks';
+import { updateSelectedWallet } from 'state/user/reducer';
+import styled, { ThemeContext } from 'styled-components/macro';
 
-import { ReactComponent as Close } from '../../assets/images/x.svg'
-import { coinbaseWallet, injected } from '../../connectors'
-import { SUPPORTED_WALLETS } from '../../constants/wallet'
-import { clearAllTransactions } from '../../state/transactions/reducer'
-import { ExternalLink, LinkStyledButton, ThemedText } from '../../theme'
-import { shortenAddress } from '../../utils'
-import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
-import { ButtonSecondary } from '../Button'
-import StatusIcon from '../Identicon/StatusIcon'
-import { AutoRow } from '../Row'
-import Transaction from './Transaction'
+import { ReactComponent as Close } from '../../assets/images/x.svg';
+import { coinbaseWallet, injected } from '../../connectors';
+import { SUPPORTED_WALLETS } from '../../constants/wallet';
+import { clearAllTransactions } from '../../state/transactions/reducer';
+import { ExternalLink, LinkStyledButton, ThemedText } from '../../theme';
+import { shortenAddress } from '../../utils';
+import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
+import { ButtonSecondary } from '../Button';
+import StatusIcon from '../Identicon/StatusIcon';
+import { AutoRow } from '../Row';
+import Transaction from './Transaction';
 
 const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
@@ -28,7 +28,7 @@ const HeaderRow = styled.div`
   ${({ theme }) => theme.mediaWidth.upToMedium`
     padding: 1rem;
   `};
-`
+`;
 
 const UpperSection = styled.div`
   position: relative;
@@ -48,7 +48,7 @@ const UpperSection = styled.div`
     margin-top: 0;
     font-weight: 500;
   }
-`
+`;
 
 const InfoCard = styled.div`
   padding: 1rem;
@@ -58,7 +58,7 @@ const InfoCard = styled.div`
   display: grid;
   grid-row-gap: 12px;
   margin-bottom: 20px;
-`
+`;
 
 const AccountGroupingRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
@@ -71,12 +71,12 @@ const AccountGroupingRow = styled.div`
     ${({ theme }) => theme.flexRowNoWrap}
     align-items: center;
   }
-`
+`;
 
 const AccountSection = styled.div`
   padding: 0rem 1rem;
   ${({ theme }) => theme.mediaWidth.upToMedium`padding: 0rem 1rem 1.5rem 1rem;`};
-`
+`;
 
 const YourAccount = styled.div`
   h5 {
@@ -88,7 +88,7 @@ const YourAccount = styled.div`
     margin: 0;
     font-weight: 500;
   }
-`
+`;
 
 const LowerSection = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap}
@@ -104,7 +104,7 @@ const LowerSection = styled.div`
     font-weight: 400;
     color: ${({ theme }) => theme.text3};
   }
-`
+`;
 
 const AccountControl = styled.div`
   display: flex;
@@ -126,7 +126,7 @@ const AccountControl = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-`
+`;
 
 const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
   font-size: 0.825rem;
@@ -137,7 +137,7 @@ const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
   :hover {
     color: ${({ theme }) => theme.text2};
   }
-`
+`;
 
 const CloseIcon = styled.div`
   position: absolute;
@@ -147,20 +147,20 @@ const CloseIcon = styled.div`
     cursor: pointer;
     opacity: 0.6;
   }
-`
+`;
 
 const CloseColor = styled(Close)`
   path {
     stroke: ${({ theme }) => theme.text4};
   }
-`
+`;
 
 const WalletName = styled.div`
   width: initial;
   font-size: 0.825rem;
   font-weight: 500;
   color: ${({ theme }) => theme.text3};
-`
+`;
 
 const IconWrapper = styled.div<{ size?: number }>`
   ${({ theme }) => theme.flexColumnNoWrap};
@@ -175,19 +175,19 @@ const IconWrapper = styled.div<{ size?: number }>`
   ${({ theme }) => theme.mediaWidth.upToMedium`
     align-items: flex-end;
   `};
-`
+`;
 
 function WrappedStatusIcon({ connector }: { connector: Connector }) {
   return (
     <IconWrapper size={16}>
       <StatusIcon connector={connector} />
     </IconWrapper>
-  )
+  );
 }
 
 const TransactionListWrapper = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap};
-`
+`;
 
 const WalletAction = styled(ButtonSecondary)`
   width: fit-content;
@@ -199,24 +199,24 @@ const WalletAction = styled(ButtonSecondary)`
     cursor: pointer;
     text-decoration: underline;
   }
-`
+`;
 
 function renderTransactions(transactions: string[]) {
   return (
     <TransactionListWrapper>
       {transactions.map((hash, i) => {
-        return <Transaction key={i} hash={hash} />
+        return <Transaction key={i} hash={hash} />;
       })}
     </TransactionListWrapper>
-  )
+  );
 }
 
 interface AccountDetailsProps {
-  toggleWalletModal: () => void
-  pendingTransactions: string[]
-  confirmedTransactions: string[]
-  ENSName?: string
-  openOptions: () => void
+  toggleWalletModal: () => void;
+  pendingTransactions: string[];
+  confirmedTransactions: string[];
+  ENSName?: string;
+  openOptions: () => void;
 }
 
 export default function AccountDetails({
@@ -226,29 +226,29 @@ export default function AccountDetails({
   ENSName,
   openOptions,
 }: AccountDetailsProps) {
-  const { chainId, account, connector } = useActiveWeb3React()
-  const theme = useContext(ThemeContext)
-  const dispatch = useAppDispatch()
+  const { chainId, account, connector } = useActiveWeb3React();
+  const theme = useContext(ThemeContext);
+  const dispatch = useAppDispatch();
 
   function formatConnectorName() {
-    const { ethereum } = window
-    const isMetaMask = !!(ethereum && ethereum.isMetaMask)
+    const { ethereum } = window;
+    const isMetaMask = !!(ethereum && ethereum.isMetaMask);
     const name = Object.keys(SUPPORTED_WALLETS)
       .filter(
         (k) =>
           SUPPORTED_WALLETS[k].connector === connector && (connector !== injected || isMetaMask === (k === 'METAMASK'))
       )
-      .map((k) => SUPPORTED_WALLETS[k].name)[0]
+      .map((k) => SUPPORTED_WALLETS[k].name)[0];
     return (
       <WalletName>
         <Trans>Connected with {name}</Trans>
       </WalletName>
-    )
+    );
   }
 
   const clearAllTransactionsCallback = useCallback(() => {
-    if (chainId) dispatch(clearAllTransactions({ chainId }))
-  }, [dispatch, chainId])
+    if (chainId) dispatch(clearAllTransactions({ chainId }));
+  }, [dispatch, chainId]);
 
   return (
     <>
@@ -270,9 +270,9 @@ export default function AccountDetails({
                     <WalletAction
                       style={{ fontSize: '.825rem', fontWeight: 400, marginRight: '8px' }}
                       onClick={() => {
-                        connector.deactivate ? connector.deactivate() : connector.resetState()
-                        dispatch(updateSelectedWallet({ wallet: undefined }))
-                        openOptions()
+                        connector.deactivate ? connector.deactivate() : connector.resetState();
+                        dispatch(updateSelectedWallet({ wallet: undefined }));
+                        openOptions();
                       }}
                       data-cy="wallet-disconnect"
                     >
@@ -282,7 +282,7 @@ export default function AccountDetails({
                   <WalletAction
                     style={{ fontSize: '.825rem', fontWeight: 400 }}
                     onClick={() => {
-                      openOptions()
+                      openOptions();
                     }}
                     data-cy="wallet-change"
                   >
@@ -389,5 +389,5 @@ export default function AccountDetails({
         </LowerSection>
       )}
     </>
-  )
+  );
 }

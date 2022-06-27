@@ -1,7 +1,7 @@
-import { readableColor } from 'polished'
-import { PropsWithChildren } from 'react'
-import styled, { DefaultTheme } from 'styled-components/macro'
-import { Color } from 'theme/styled'
+import { readableColor } from 'polished';
+import { PropsWithChildren } from 'react';
+import styled, { DefaultTheme } from 'styled-components/macro';
+import { Color } from 'theme/styled';
 
 export enum BadgeVariant {
   DEFAULT = 'DEFAULT',
@@ -14,47 +14,47 @@ export enum BadgeVariant {
 }
 
 interface BadgeProps {
-  variant?: BadgeVariant
+  variant?: BadgeVariant;
 }
 
 function pickBackgroundColor(variant: BadgeVariant | undefined, theme: DefaultTheme): Color {
   switch (variant) {
     case BadgeVariant.NEGATIVE:
-      return theme.error
+      return theme.error;
     case BadgeVariant.POSITIVE:
-      return theme.success
+      return theme.success;
     case BadgeVariant.PRIMARY:
-      return theme.primary1
+      return theme.primary1;
     case BadgeVariant.WARNING:
-      return theme.warning
+      return theme.warning;
     case BadgeVariant.WARNING_OUTLINE:
-      return 'transparent'
+      return 'transparent';
     default:
-      return theme.bg2
+      return theme.bg2;
   }
 }
 
 function pickBorder(variant: BadgeVariant | undefined, theme: DefaultTheme): string {
   switch (variant) {
     case BadgeVariant.WARNING_OUTLINE:
-      return `1px solid ${theme.warning}`
+      return `1px solid ${theme.warning}`;
     default:
-      return 'unset'
+      return 'unset';
   }
 }
 
 function pickFontColor(variant: BadgeVariant | undefined, theme: DefaultTheme): string {
   switch (variant) {
     case BadgeVariant.NEGATIVE:
-      return readableColor(theme.error)
+      return readableColor(theme.error);
     case BadgeVariant.POSITIVE:
-      return readableColor(theme.success)
+      return readableColor(theme.success);
     case BadgeVariant.WARNING:
-      return readableColor(theme.warning)
+      return readableColor(theme.warning);
     case BadgeVariant.WARNING_OUTLINE:
-      return theme.warning
+      return theme.warning;
     default:
-      return readableColor(theme.bg2)
+      return readableColor(theme.bg2);
   }
 }
 
@@ -68,6 +68,6 @@ const Badge = styled.div<PropsWithChildren<BadgeProps>>`
   padding: 4px 6px;
   justify-content: center;
   font-weight: 500;
-`
+`;
 
-export default Badge
+export default Badge;

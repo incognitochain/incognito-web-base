@@ -1,16 +1,16 @@
-import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
-import { Pair, Trade } from '@uniswap/v2-sdk'
-import { useMemo } from 'react'
-import { isTradeBetter } from 'utils/isTradeBetter'
+import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core';
+import { Pair, Trade } from '@uniswap/v2-sdk';
+import { useMemo } from 'react';
+import { isTradeBetter } from 'utils/isTradeBetter';
 
-import { BETTER_TRADE_LESS_HOPS_THRESHOLD } from '../constants/misc'
-import { useAllCurrencyCombinations } from './useAllCurrencyCombinations'
-import { PairState, useV2Pairs } from './useV2Pairs'
+import { BETTER_TRADE_LESS_HOPS_THRESHOLD } from '../constants/misc';
+import { useAllCurrencyCombinations } from './useAllCurrencyCombinations';
+import { PairState, useV2Pairs } from './useV2Pairs';
 
 function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): Pair[] {
-  const allCurrencyCombinations = useAllCurrencyCombinations(currencyA, currencyB)
+  const allCurrencyCombinations = useAllCurrencyCombinations(currencyA, currencyB);
 
-  const allPairs = useV2Pairs(allCurrencyCombinations)
+  const allPairs = useV2Pairs(allCurrencyCombinations);
 
   return useMemo(
     () =>
@@ -21,10 +21,10 @@ function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): Pair[] {
           .map(([, pair]) => pair)
       ),
     [allPairs]
-  )
+  );
 }
 
-const MAX_HOPS = 3
+const MAX_HOPS = 3;
 
 /**
  * Returns the best v2 trade for a desired swap
@@ -44,44 +44,44 @@ export function useBestV2Trade(
         ? [amountSpecified?.currency, otherCurrency]
         : [otherCurrency, amountSpecified?.currency],
     [tradeType, amountSpecified, otherCurrency]
-  )
-  const allowedPairs = useAllCommonPairs(currencyIn, currencyOut)
+  );
+  const allowedPairs = useAllCommonPairs(currencyIn, currencyOut);
 
   return useMemo(() => {
     if (amountSpecified && currencyIn && currencyOut && allowedPairs.length > 0) {
       if (maxHops === 1) {
-        const options = { maxHops: 1, maxNumResults: 1 }
+        const options = { maxHops: 1, maxNumResults: 1 };
         if (tradeType === TradeType.EXACT_INPUT) {
-          const amountIn = amountSpecified
-          return Trade.bestTradeExactIn(allowedPairs, amountIn, currencyOut, options)[0] ?? null
+          const amountIn = amountSpecified;
+          return Trade.bestTradeExactIn(allowedPairs, amountIn, currencyOut, options)[0] ?? null;
         } else {
-          const amountOut = amountSpecified
-          return Trade.bestTradeExactOut(allowedPairs, currencyIn, amountOut, options)[0] ?? null
+          const amountOut = amountSpecified;
+          return Trade.bestTradeExactOut(allowedPairs, currencyIn, amountOut, options)[0] ?? null;
         }
       }
 
       // search through trades with varying hops, find best trade out of them
-      let bestTradeSoFar: Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT> | null = null
+      let bestTradeSoFar: Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT> | null = null;
       for (let i = 1; i <= maxHops; i++) {
-        const options = { maxHops: i, maxNumResults: 1 }
-        let currentTrade: Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT> | null
+        const options = { maxHops: i, maxNumResults: 1 };
+        let currentTrade: Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT> | null;
 
         if (tradeType === TradeType.EXACT_INPUT) {
-          const amountIn = amountSpecified
-          currentTrade = Trade.bestTradeExactIn(allowedPairs, amountIn, currencyOut, options)[0] ?? null
+          const amountIn = amountSpecified;
+          currentTrade = Trade.bestTradeExactIn(allowedPairs, amountIn, currencyOut, options)[0] ?? null;
         } else {
-          const amountOut = amountSpecified
-          currentTrade = Trade.bestTradeExactOut(allowedPairs, currencyIn, amountOut, options)[0] ?? null
+          const amountOut = amountSpecified;
+          currentTrade = Trade.bestTradeExactOut(allowedPairs, currencyIn, amountOut, options)[0] ?? null;
         }
 
         // if current trade is best yet, save it
         if (isTradeBetter(bestTradeSoFar, currentTrade, BETTER_TRADE_LESS_HOPS_THRESHOLD)) {
-          bestTradeSoFar = currentTrade
+          bestTradeSoFar = currentTrade;
         }
       }
-      return bestTradeSoFar
+      return bestTradeSoFar;
     }
 
-    return null
-  }, [tradeType, amountSpecified, currencyIn, currencyOut, allowedPairs, maxHops])
+    return null;
+  }, [tradeType, amountSpecified, currencyIn, currencyOut, allowedPairs, maxHops]);
 }
