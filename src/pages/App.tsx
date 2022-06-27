@@ -1,18 +1,16 @@
+import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Header from 'components/Core/Header';
 import Polling from 'components/Core/Header/Polling';
 import Loader from 'components/Loader';
+import Popups from 'components/Popups';
 import TopLevelModals from 'components/TopLevelModals';
 import ApeModeQueryParamReader from 'hooks/useApeModeQueryParamReader';
+import Swap, { RedirectToSwap } from 'pages/Swap';
 import { Suspense } from 'react';
 import { useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-
-import ErrorBoundary from '../components/ErrorBoundary';
-import Popups from '../components/Popups';
-import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader';
-import Swap from './Swap';
-import { RedirectToSwap } from './Swap/redirects';
+import DarkModeQueryParamReader from 'theme/DarkModeQueryParamReader';
 
 const AppWrapper = styled.div`
   display: flex;

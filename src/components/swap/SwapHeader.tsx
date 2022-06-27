@@ -1,9 +1,9 @@
 import { Trans } from '@lingui/macro';
 import { Percent } from '@uniswap/sdk-core';
+import { RowBetween, RowFixed } from 'components/Core/Row';
 import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 
-import { ThemedText } from '../../theme';
-import { RowBetween, RowFixed } from '../Row';
 import SettingsTab from '../Settings';
 
 const StyledSwapHeader = styled.div`
