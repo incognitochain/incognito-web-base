@@ -3,25 +3,24 @@ import 'inter-ui';
 import 'polyfills';
 import 'components/analytics';
 
+import Web3Provider from 'components/Web3Provider';
 import { BlockNumberProvider } from 'lib/hooks/useBlockNumber';
 import { MulticallUpdater } from 'lib/state/multicall';
+import App from 'pages/App';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
+import store from 'state';
 import ApplicationUpdater from 'state/application/updater';
+import ListsUpdater from 'state/lists/updater';
+import LogsUpdater from 'state/logs/updater';
+import TransactionUpdater from 'state/transactions/updater';
+import UserUpdater from 'state/user/updater';
+import ThemeProvider, { ThemedGlobalStyle } from 'theme';
+import RadialGradientByChainUpdater from 'theme/RadialGradientByChainUpdater';
 
-import Web3Provider from './components/Web3Provider';
 import { LanguageProvider } from './i18n';
-import App from './pages/App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import store from './state';
-import ListsUpdater from './state/lists/updater';
-import LogsUpdater from './state/logs/updater';
-import TransactionUpdater from './state/transactions/updater';
-import UserUpdater from './state/user/updater';
-import ThemeProvider, { ThemedGlobalStyle } from './theme';
-import RadialGradientByChainUpdater from './theme/RadialGradientByChainUpdater';
 
 if (!!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false;
@@ -61,7 +60,3 @@ ReactDOM.render(
   </StrictMode>,
   document.getElementById('root')
 );
-
-if (process.env.REACT_APP_SERVICE_WORKER !== 'false') {
-  serviceWorkerRegistration.register();
-}
