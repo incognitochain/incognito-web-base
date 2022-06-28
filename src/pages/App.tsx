@@ -4,8 +4,7 @@ import Polling from 'components/Core/Header/Polling';
 import Loader from 'components/Loader';
 import Popups from 'components/Popups';
 import TopLevelModals from 'components/TopLevelModals';
-import ApeModeQueryParamReader from 'hooks/useApeModeQueryParamReader';
-import Swap, { RedirectToSwap } from 'pages/Swap';
+import Swap, { RedirectPathToSwapOnly, RedirectToSwap } from 'pages/Swap';
 import { Suspense } from 'react';
 import { useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
@@ -59,7 +58,6 @@ export default function App() {
   return (
     <ErrorBoundary>
       <Route component={DarkModeQueryParamReader} />
-      <Route component={ApeModeQueryParamReader} />
       <AppWrapper>
         <HeaderWrapper>
           <Header />
@@ -72,6 +70,7 @@ export default function App() {
             <Switch>
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
               <Route exact strict path="/swap" component={Swap} />
+              <Route component={RedirectPathToSwapOnly} />
             </Switch>
           </Suspense>
           <Marginer />
