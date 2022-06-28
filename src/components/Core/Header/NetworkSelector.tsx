@@ -190,7 +190,7 @@ function Row({
     return null;
   }
   const active = chainId === targetChain;
-  const { helpCenterUrl, explorer, bridge, label, logoUrl } = CHAIN_INFO[targetChain];
+  const { explorer, label, logoUrl } = CHAIN_INFO[targetChain];
 
   const rowContent = (
     <FlyoutRow onClick={() => onSelectChain(targetChain)} active={active}>
@@ -209,25 +209,9 @@ function Row({
       <ActiveRowWrapper>
         {rowContent}
         <ActiveRowLinkList>
-          {bridge && (
-            <ExternalLink href={bridge}>
-              <BridgeLabel chainId={chainId} />
-              <CircleContainer>
-                <LinkOutCircle />
-              </CircleContainer>
-            </ExternalLink>
-          )}
           {explorer && (
             <ExternalLink href={explorer}>
               <ExplorerLabel chainId={chainId} />
-              <CircleContainer>
-                <LinkOutCircle />
-              </CircleContainer>
-            </ExternalLink>
-          )}
-          {helpCenterUrl && (
-            <ExternalLink href={helpCenterUrl}>
-              <Trans>Help Center</Trans>
               <CircleContainer>
                 <LinkOutCircle />
               </CircleContainer>
@@ -280,7 +264,6 @@ export default function NetworkSelector() {
       if (!connector) return;
 
       const wallet = getWalletForConnector(connector);
-
       try {
         dispatch(updateWalletError({ wallet, error: undefined }));
         await switchChain(connector, targetChain);

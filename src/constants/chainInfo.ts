@@ -117,7 +117,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.BSC]: {
     networkType: NetworkType.L1,
     docs: 'https://incognito.org/',
-    explorer: 'https://etherscan.io/',
+    explorer: 'https://bscscan.com/',
     infoLink: 'https://info.uniswap.org/#/',
     label: 'BSC',
     logoUrl: bnbChainLogo,
@@ -128,7 +128,7 @@ export const CHAIN_INFO: ChainInfoMap = {
     docs: 'https://incognito.org/',
     explorer: 'https://etherscan.io/',
     infoLink: 'https://info.uniswap.org/#/',
-    label: 'BSC Testnet',
+    label: 'BSC Chain Testnet',
     logoUrl: bnbChainLogo,
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   },
