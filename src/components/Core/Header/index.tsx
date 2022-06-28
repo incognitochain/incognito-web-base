@@ -1,15 +1,16 @@
 import useScrollPosition from '@react-hook/window-scroll';
 import { ReactComponent as Logo } from 'assets/svg/logo.svg';
-import Menu from 'components/Core/Menu';
 import Web3Status from 'components/Core/Web3Status';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useTheme from 'hooks/useTheme';
 import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
 
+import NetworkSelector from './NetworkSelector';
+
 const HeaderFrame = styled.div<{ showBackground: boolean }>`
   display: grid;
-  grid-template-columns: 120px 120px;
+  grid-template-columns: 142px 120px;
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
@@ -80,17 +81,17 @@ const Title = styled.a`
   }
 `;
 
-const UniIcon = styled.div`
+const IncognitoIcon = styled.div`
   transition: transform 0.3s ease;
   :hover {
-    transform: rotate(-5deg);
+    transform: rotate(-1deg);
   }
 
   position: relative;
 `;
 
 export default function Header() {
-  const { account, chainId, connector } = useActiveWeb3React();
+  const { account } = useActiveWeb3React();
   const [darkMode] = useDarkModeManager();
   const { white, black } = useTheme();
 
@@ -99,22 +100,22 @@ export default function Header() {
   return (
     <HeaderFrame showBackground={scrollY > 45}>
       <Title href=".">
-        <UniIcon>
-          <Logo fill={darkMode ? white : black} width="24px" height="100%" title="logo" />
-        </UniIcon>
+        <IncognitoIcon>
+          <Logo fill={darkMode ? white : black} width="142" height="100%" title="logo" />
+        </IncognitoIcon>
       </Title>
       <HeaderControls>
-        {/*<HeaderElement>*/}
-        {/*  <NetworkSelector />*/}
-        {/*</HeaderElement>*/}
+        <HeaderElement>
+          <NetworkSelector />
+        </HeaderElement>
         <HeaderElement>
           <AccountElement active={!!account}>
             <Web3Status />
           </AccountElement>
         </HeaderElement>
-        <HeaderElement>
-          <Menu />
-        </HeaderElement>
+        {/*<HeaderElement>*/}
+        {/*  <Menu />*/}
+        {/*</HeaderElement>*/}
       </HeaderControls>
     </HeaderFrame>
   );

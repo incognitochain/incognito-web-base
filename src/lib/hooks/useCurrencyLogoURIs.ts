@@ -1,11 +1,10 @@
 import { Currency } from '@uniswap/sdk-core';
+import EthereumLogo from 'assets/images/ethereum-logo.png';
+import MaticLogo from 'assets/svg/matic-token-icon.svg';
 import { SupportedChainId } from 'constants/chains';
 import useHttpLocations from 'hooks/useHttpLocations';
 import { useMemo } from 'react';
 import { WrappedTokenInfo } from 'state/lists/wrappedTokenInfo';
-
-import EthereumLogo from '../../assets/images/ethereum-logo.png';
-import MaticLogo from '../../assets/svg/matic-token-icon.svg';
 
 type Network = 'ethereum' | 'arbitrum' | 'optimism';
 
@@ -13,8 +12,6 @@ function chainIdToNetworkName(networkId: SupportedChainId): Network {
   switch (networkId) {
     case SupportedChainId.MAINNET:
       return 'ethereum';
-    case SupportedChainId.ARBITRUM_ONE:
-      return 'arbitrum';
     case SupportedChainId.OPTIMISM:
       return 'optimism';
     default:
@@ -34,7 +31,7 @@ function getNativeLogoURI(chainId: SupportedChainId = SupportedChainId.MAINNET):
 
 function getTokenLogoURI(address: string, chainId: SupportedChainId = SupportedChainId.MAINNET): string | void {
   const networkName = chainIdToNetworkName(chainId);
-  const networksWithUrls = [SupportedChainId.ARBITRUM_ONE, SupportedChainId.MAINNET, SupportedChainId.OPTIMISM];
+  const networksWithUrls = [SupportedChainId.MAINNET, SupportedChainId.OPTIMISM];
   if (networksWithUrls.includes(chainId)) {
     return `https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/${networkName}/assets/${address}/logo.png`;
   }

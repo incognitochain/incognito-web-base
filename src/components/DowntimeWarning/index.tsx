@@ -62,20 +62,6 @@ export default function DowntimeWarning() {
           </Trans>
         </Wrapper>
       );
-    case SupportedChainId.ARBITRUM_ONE:
-    case SupportedChainId.ARBITRUM_RINKEBY:
-      return (
-        <Wrapper>
-          <Trans>
-            Arbitrum is in Beta and may experience downtime. During downtime, your position will not earn fees and you
-            will be unable to remove liquidity.{' '}
-            <ReadMoreLink href="https://help.uniswap.org/en/articles/5576122-arbitrum-network-downtime">
-              Read more.
-            </ReadMoreLink>
-          </Trans>
-        </Wrapper>
-      );
-
     default:
       return null;
   }

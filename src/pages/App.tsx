@@ -1,6 +1,5 @@
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Header from 'components/Core/Header';
-import Polling from 'components/Core/Header/Polling';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
 import TopLevelModals from 'components/TopLevelModals';
@@ -64,7 +63,6 @@ export default function App() {
         </HeaderWrapper>
         <BodyWrapper>
           <Popups />
-          <Polling />
           <TopLevelModals />
           <Suspense fallback={<Loader />}>
             <Switch>

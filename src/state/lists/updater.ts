@@ -1,6 +1,6 @@
 import { getVersionUpgrade, minVersionBump, VersionUpgrade } from '@uniswap/token-lists';
 import { SupportedChainId } from 'constants/chains';
-import { ARBITRUM_LIST, OPTIMISM_LIST, UNSUPPORTED_LIST_URLS } from 'constants/lists';
+import { OPTIMISM_LIST, UNSUPPORTED_LIST_URLS } from 'constants/lists';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useInterval from 'lib/hooks/useInterval';
 import { useCallback, useEffect } from 'react';
@@ -32,9 +32,6 @@ export default function Updater(): null {
   useEffect(() => {
     if (chainId && [SupportedChainId.OPTIMISM, SupportedChainId.OPTIMISTIC_KOVAN].includes(chainId)) {
       dispatch(enableList(OPTIMISM_LIST));
-    }
-    if (chainId && [SupportedChainId.ARBITRUM_ONE, SupportedChainId.ARBITRUM_RINKEBY].includes(chainId)) {
-      dispatch(enableList(ARBITRUM_LIST));
     }
   }, [chainId, dispatch]);
   // fetch all lists every 10 minutes, but only after we initialize provider

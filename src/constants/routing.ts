@@ -5,7 +5,6 @@ import { SupportedChainId } from './chains';
 import {
   AMPL,
   DAI,
-  DAI_ARBITRUM_ONE,
   DAI_OPTIMISM,
   DAI_POLYGON,
   ETH2X_FLI,
@@ -18,16 +17,13 @@ import {
   sETH2,
   SWISE,
   TRIBE,
-  USDC_ARBITRUM,
   USDC_MAINNET,
   USDC_OPTIMISM,
   USDC_POLYGON,
   USDT,
-  USDT_ARBITRUM_ONE,
   USDT_OPTIMISM,
   USDT_POLYGON,
   WBTC,
-  WBTC_ARBITRUM_ONE,
   WBTC_OPTIMISM,
   WBTC_POLYGON,
   WETH_POLYGON,
@@ -64,12 +60,6 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     DAI_OPTIMISM,
     USDT_OPTIMISM,
     WBTC_OPTIMISM,
-  ],
-  [SupportedChainId.ARBITRUM_ONE]: [
-    ...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.ARBITRUM_ONE],
-    DAI_ARBITRUM_ONE,
-    USDT_ARBITRUM_ONE,
-    WBTC_ARBITRUM_ONE,
   ],
   [SupportedChainId.POLYGON]: [
     ...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.POLYGON],
@@ -114,33 +104,9 @@ export const COMMON_BASES: ChainCurrencyList = {
     WBTC,
     WRAPPED_NATIVE_CURRENCY[SupportedChainId.MAINNET] as Token,
   ],
-  [SupportedChainId.ROPSTEN]: [
-    nativeOnChain(SupportedChainId.ROPSTEN),
-    WRAPPED_NATIVE_CURRENCY[SupportedChainId.ROPSTEN] as Token,
-  ],
-  [SupportedChainId.RINKEBY]: [
-    nativeOnChain(SupportedChainId.RINKEBY),
-    WRAPPED_NATIVE_CURRENCY[SupportedChainId.RINKEBY] as Token,
-  ],
-  [SupportedChainId.GOERLI]: [
-    nativeOnChain(SupportedChainId.GOERLI),
-    WRAPPED_NATIVE_CURRENCY[SupportedChainId.GOERLI] as Token,
-  ],
   [SupportedChainId.KOVAN]: [
     nativeOnChain(SupportedChainId.KOVAN),
     WRAPPED_NATIVE_CURRENCY[SupportedChainId.KOVAN] as Token,
-  ],
-  [SupportedChainId.ARBITRUM_ONE]: [
-    nativeOnChain(SupportedChainId.ARBITRUM_ONE),
-    DAI_ARBITRUM_ONE,
-    USDC_ARBITRUM,
-    USDT_ARBITRUM_ONE,
-    WBTC_ARBITRUM_ONE,
-    WRAPPED_NATIVE_CURRENCY[SupportedChainId.ARBITRUM_ONE] as Token,
-  ],
-  [SupportedChainId.ARBITRUM_RINKEBY]: [
-    nativeOnChain(SupportedChainId.ARBITRUM_RINKEBY),
-    WRAPPED_NATIVE_CURRENCY[SupportedChainId.ARBITRUM_RINKEBY] as Token,
   ],
   [SupportedChainId.OPTIMISM]: [
     nativeOnChain(SupportedChainId.OPTIMISM),
