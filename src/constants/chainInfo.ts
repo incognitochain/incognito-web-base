@@ -1,4 +1,5 @@
 import ethereumLogoUrl from 'assets/images/ethereum-logo.png';
+import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
 import optimismLogoUrl from 'assets/svg/optimistic_ethereum.svg';
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
 import ms from 'ms.macro';
@@ -119,7 +120,7 @@ export const CHAIN_INFO: ChainInfoMap = {
     explorer: 'https://etherscan.io/',
     infoLink: 'https://info.uniswap.org/#/',
     label: 'BSC',
-    logoUrl: ethereumLogoUrl,
+    logoUrl: bnbChainLogo,
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   },
   [SupportedChainId.BSC_TESTNET]: {
@@ -128,7 +129,7 @@ export const CHAIN_INFO: ChainInfoMap = {
     explorer: 'https://etherscan.io/',
     infoLink: 'https://info.uniswap.org/#/',
     label: 'BSC Testnet',
-    logoUrl: ethereumLogoUrl,
+    logoUrl: bnbChainLogo,
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   },
 };
