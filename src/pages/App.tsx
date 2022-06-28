@@ -9,6 +9,7 @@ import { Suspense } from 'react';
 import { useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
+import { DarkModeQueryParamReader } from 'theme';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -56,7 +57,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <Route component={ThemeDarkModeQueryParamReader} />
+      <Route component={DarkModeQueryParamReader} />
       <AppWrapper>
         <HeaderWrapper>
           <Header />
