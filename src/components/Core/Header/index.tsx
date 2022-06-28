@@ -56,15 +56,9 @@ const AccountElement = styled.div<{ active: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: ${({ theme, active }) => (!active ? theme.bg0 : theme.bg0)};
-  border-radius: 16px;
   white-space: nowrap;
   width: 100%;
   height: 40px;
-
-  :focus {
-    border: 1px solid blue;
-  }
 `;
 
 const Title = styled.a`

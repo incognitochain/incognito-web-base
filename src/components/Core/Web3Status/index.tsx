@@ -2,7 +2,7 @@
 import { t, Trans } from '@lingui/macro';
 import { useWeb3React } from '@web3-react/core';
 import { Connector } from '@web3-react/types';
-import { ButtonSecondary } from 'components/Core/Button';
+import { ButtonPrimary } from 'components/Core/Button';
 import StatusIcon from 'components/Core/Identicon/StatusIcon';
 import Loader from 'components/Core/Loader';
 import { RowBetween } from 'components/Core/Row';
@@ -30,12 +30,12 @@ const IconWrapper = styled.div<{ size?: number }>`
   }
 `;
 
-const Web3StatusGeneric = styled(ButtonSecondary)`
+const Web3StatusGeneric = styled(ButtonPrimary)`
   ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
   align-items: center;
   padding: 0.5rem;
-  border-radius: 14px;
+  border-radius: 8px;
   cursor: pointer;
   user-select: none;
   height: 36px;
@@ -57,36 +57,25 @@ const Web3StatusError = styled(Web3StatusGeneric)`
 `;
 
 const Web3StatusConnect = styled(Web3StatusGeneric)<{ faded?: boolean }>`
-  background-color: ${({ theme }) => theme.primary4};
-  border: none;
-
   color: ${({ theme }) => theme.primaryText1};
   font-weight: 500;
-
-  :hover,
-  :focus {
-    border: 1px solid ${({ theme }) => darken(0.05, theme.primary4)};
-    color: ${({ theme }) => theme.primaryText1};
-  }
+  border: none;
 
   ${({ faded }) =>
     faded &&
     css`
-      background-color: ${({ theme }) => theme.primary5};
-      border: 1px solid ${({ theme }) => theme.primary5};
-      color: ${({ theme }) => theme.primaryText1};
-
+      background-color: ${({ theme }) => theme.btn1};
+      color: ${({ theme }) => theme.primary5};
       :hover,
       :focus {
-        border: 1px solid ${({ theme }) => darken(0.05, theme.primary4)};
-        color: ${({ theme }) => darken(0.05, theme.primaryText1)};
+        color: ${({ theme }) => darken(0.05, theme.primary5)};
       }
     `}
 `;
 
 const Web3StatusConnected = styled(Web3StatusGeneric)<{ pending?: boolean }>`
   background-color: ${({ pending, theme }) => (pending ? theme.primary1 : theme.bg1)};
-  border: 1px solid ${({ pending, theme }) => (pending ? theme.primary1 : theme.bg1)};
+  border: none;
   color: ${({ pending, theme }) => (pending ? theme.white : theme.text1)};
   font-weight: 500;
   :hover,
@@ -200,9 +189,7 @@ function Web3StatusInner() {
   } else {
     return (
       <Web3StatusConnect id="connect-wallet" onClick={toggleWalletModal} faded={!account}>
-        <Text>
-          <Trans>Connect Wallet</Trans>
-        </Text>
+        <Text>Connect Wallet</Text>
       </Web3StatusConnect>
     );
   }
