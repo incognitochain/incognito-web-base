@@ -14,7 +14,7 @@ import { currencyId } from '../../utils/currencyId';
 import { unwrappedToken } from '../../utils/unwrappedToken';
 import { ButtonPrimary } from '../Button';
 import { AutoColumn } from '../Column';
-import DoubleCurrencyLogo from '../DoubleLogo';
+import DoubleCurrencyLogo from '../Core/DoubleLogo';
 import { RowBetween } from '../Row';
 import { Break, CardBGImage, CardNoise } from './styled';
 

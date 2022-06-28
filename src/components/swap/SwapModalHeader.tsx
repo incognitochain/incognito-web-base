@@ -13,8 +13,8 @@ import { computeFiatValuePriceImpact } from '../../utils/computeFiatValuePriceIm
 import { ButtonPrimary } from '../Button';
 import { LightCard } from '../Card';
 import { AutoColumn } from '../Column';
-import { FiatValue } from '../CurrencyInputPanel/FiatValue';
-import CurrencyLogo from '../CurrencyLogo';
+import { FiatValue } from '../Core/CurrencyInputPanel/FiatValue';
+import CurrencyLogo from '../Core/CurrencyLogo';
 import { RowBetween, RowFixed } from '../Row';
 import TradePrice from '../swap/TradePrice';
 import { AdvancedSwapDetails } from './AdvancedSwapDetails';

@@ -3,7 +3,7 @@ import useCurrencyLogoURIs from 'lib/hooks/useCurrencyLogoURIs';
 import React from 'react';
 import styled from 'styled-components/macro';
 
-import Logo from '../Logo';
+import Logo from '../../Logo';
 
 const StyledLogo = styled(Logo)<{ size: string }>`
   width: ${({ size }) => size};

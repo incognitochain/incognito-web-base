@@ -4,8 +4,8 @@ import Modal from 'components/Modal';
 import usePrevious from 'hooks/usePrevious';
 import { useCallback, useEffect, useState } from 'react';
 
-import useLast from '../../hooks/useLast';
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo';
+import useLast from '../../../hooks/useLast';
+import { WrappedTokenInfo } from '../../../state/lists/wrappedTokenInfo';
 import { CurrencySearch } from './CurrencySearch';
 import { ImportList } from './ImportList';
 import { ImportToken } from './ImportToken';

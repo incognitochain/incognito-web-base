@@ -2,7 +2,7 @@ import { Trans } from '@lingui/macro';
 import { Token } from '@uniswap/sdk-core';
 import { ButtonPrimary } from 'components/Button';
 import { AutoColumn } from 'components/Column';
-import CurrencyLogo from 'components/CurrencyLogo';
+import CurrencyLogo from 'components/Core/CurrencyLogo';
 import ListLogo from 'components/ListLogo';
 import { AutoRow, RowFixed } from 'components/Row';
 import { useIsTokenActive, useIsUserAddedToken } from 'hooks/Tokens';
@@ -12,7 +12,7 @@ import { CheckCircle } from 'react-feather';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo';
+import { WrappedTokenInfo } from '../../../state/lists/wrappedTokenInfo';
 
 const TokenSection = styled.div<{ dim?: boolean }>`
   padding: 4px 20px;

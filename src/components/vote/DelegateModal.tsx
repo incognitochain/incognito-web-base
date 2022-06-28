@@ -12,9 +12,9 @@ import { UNI } from '../../constants/tokens';
 import { useDelegateCallback } from '../../state/governance/hooks';
 import { useTokenBalance } from '../../state/wallet/hooks';
 import { ThemedText } from '../../theme';
-import AddressInputPanel from '../AddressInputPanel';
 import { ButtonPrimary } from '../Button';
 import { AutoColumn } from '../Column';
+import AddressInputPanel from '../Core/AddressInputPanel';
 import { LoadingView, SubmittedView } from '../ModalViews';
 import { RowBetween } from '../Row';
 

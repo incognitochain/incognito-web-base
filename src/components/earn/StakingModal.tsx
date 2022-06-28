@@ -20,7 +20,7 @@ import { formatCurrencyAmount } from '../../utils/formatCurrencyAmount';
 import { maxAmountSpend } from '../../utils/maxAmountSpend';
 import { ButtonConfirmed, ButtonError } from '../Button';
 import { AutoColumn } from '../Column';
-import CurrencyInputPanel from '../CurrencyInputPanel';
+import CurrencyInputPanel from '../Core/CurrencyInputPanel';
 import { LoadingView, SubmittedView } from '../ModalViews';
 import ProgressCircles from '../ProgressSteps';
 import { RowBetween } from '../Row';

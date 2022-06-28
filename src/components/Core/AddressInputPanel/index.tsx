@@ -1,15 +1,14 @@
 import { Trans } from '@lingui/macro';
 // eslint-disable-next-line no-restricted-imports
 import { t } from '@lingui/macro';
+import { AutoColumn } from 'components/Core/Column';
+import { RowBetween } from 'components/Core/Row';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import useENS from 'hooks/useENS';
 import { ReactNode, useCallback, useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components/macro';
-
-import useENS from '../../hooks/useENS';
-import { ExternalLink, ThemedText } from '../../theme';
-import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
-import { AutoColumn } from '../Column';
-import { RowBetween } from '../Row';
+import { ExternalLink, ThemedText } from 'theme';
+import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
 const InputPanel = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap}

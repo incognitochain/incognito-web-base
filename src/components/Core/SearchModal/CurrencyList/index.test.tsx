@@ -3,7 +3,7 @@ import { DAI, USDC_MAINNET, WBTC } from 'constants/tokens';
 import * as mockJSBI from 'jsbi';
 import { render } from 'test-utils';
 
-import CurrencyList from '.';
+import CurrencyList from './index';
 
 const noOp = function () {
   // do nothing

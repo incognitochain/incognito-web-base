@@ -1,25 +1,25 @@
 import { Trans } from '@lingui/macro';
 import { Currency, CurrencyAmount, Percent, Token } from '@uniswap/sdk-core';
 import { Pair } from '@uniswap/v2-sdk';
+import { ReactComponent as DropDown } from 'assets/images/dropdown.svg';
 import { AutoColumn } from 'components/Column';
+import { ButtonGray } from 'components/Core/Button';
+import CurrencyLogo from 'components/Core/CurrencyLogo';
+import DoubleCurrencyLogo from 'components/Core/DoubleLogo';
+import { Input as NumericalInput } from 'components/Core/NumericalInput';
+import { RowBetween, RowFixed } from 'components/Core/Row';
+import CurrencySearchModal from 'components/Core/SearchModal/CurrencySearchModal';
 import { LoadingOpacityContainer, loadingOpacityMixin } from 'components/Loader/styled';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import useTheme from 'hooks/useTheme';
 import { darken } from 'polished';
 import { ReactNode, useCallback, useState } from 'react';
 import { Lock } from 'react-feather';
+import { useCurrencyBalance } from 'state/wallet/hooks';
 import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 import { formatCurrencyAmount } from 'utils/formatCurrencyAmount';
 
-import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg';
-import useTheme from '../../hooks/useTheme';
-import { useCurrencyBalance } from '../../state/wallet/hooks';
-import { ThemedText } from '../../theme';
-import { ButtonGray } from '../Button';
-import CurrencyLogo from '../CurrencyLogo';
-import DoubleCurrencyLogo from '../DoubleLogo';
-import { Input as NumericalInput } from '../NumericalInput';
-import { RowBetween, RowFixed } from '../Row';
-import CurrencySearchModal from '../SearchModal/CurrencySearchModal';
 import { FiatValue } from './FiatValue';
 
 const InputPanel = styled.div<{ hideInput?: boolean }>`

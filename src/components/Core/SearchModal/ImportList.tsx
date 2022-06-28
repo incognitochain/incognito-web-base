@@ -17,7 +17,7 @@ import { useAllLists } from 'state/lists/hooks';
 import styled from 'styled-components/macro';
 import { CloseIcon, ThemedText } from 'theme';
 
-import { ExternalLink } from '../../theme';
+import { ExternalLink } from '../../../theme';
 import { CurrencyModalView } from './CurrencySearchModal';
 import { Checkbox, PaddedColumn, TextDot } from './styleds';
 

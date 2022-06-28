@@ -18,12 +18,12 @@ import { Text } from 'rebass';
 import { TradeState } from 'state/routing/types';
 import styled, { ThemeContext } from 'styled-components/macro';
 
-import AddressInputPanel from '../../components/AddressInputPanel';
 import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button';
 import { GreyCard } from '../../components/Card';
 import { AutoColumn } from '../../components/Column';
-import CurrencyInputPanel from '../../components/CurrencyInputPanel';
-import CurrencyLogo from '../../components/CurrencyLogo';
+import AddressInputPanel from '../../components/Core/AddressInputPanel';
+import CurrencyInputPanel from '../../components/Core/CurrencyInputPanel';
+import CurrencyLogo from '../../components/Core/CurrencyLogo';
 import Loader from '../../components/Loader';
 import { AutoRow } from '../../components/Row';
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee';

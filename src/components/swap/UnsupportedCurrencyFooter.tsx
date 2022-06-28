@@ -3,7 +3,7 @@ import { Currency } from '@uniswap/sdk-core';
 import { ButtonEmpty } from 'components/Button';
 import Card, { OutlineCard } from 'components/Card';
 import { AutoColumn } from 'components/Column';
-import CurrencyLogo from 'components/CurrencyLogo';
+import CurrencyLogo from 'components/Core/CurrencyLogo';
 import Modal from 'components/Modal';
 import { AutoRow, RowBetween } from 'components/Row';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
