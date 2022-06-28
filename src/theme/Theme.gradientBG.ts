@@ -24,17 +24,15 @@ const setBackground = (newValues: TargetBackgroundStyles) =>
       backgroundRadialGradientElement.style[key as keyof typeof backgroundResetStyles] = value;
     }
   });
+
 export default function RadialGradientByChainUpdater(): null {
   const { chainId } = useActiveWeb3React();
   const [darkMode] = useDarkModeManager();
-  // manage background color
   useEffect(() => {
-    if (!backgroundRadialGradientElement) {
-      return;
-    }
+    if (!backgroundRadialGradientElement) return;
     setBackground(backgroundResetStyles);
-    const lightGradient = 'radial-gradient(150% 100% at 50% 0%, #FFFBF2 2%, #FFF4F9 53%, #FFFFFF 100%)';
-    const darkGradient = 'radial-gradient(150% 100% at 50% 0%, #1A1A1A 2%, #373B3B 53%, #1B1C1C 100%)';
+    const lightGradient = 'radial-gradient(150% 100% at 50% 100%, #4E504E 0%, #1E2121 50%, #191919 100%)';
+    const darkGradient = 'radial-gradient(150% 100% at 50% 100%, #555555 0%, #1E2121 50%, #191919 100%)';
     backgroundRadialGradientElement.style.background = darkMode ? darkGradient : lightGradient;
   }, [darkMode, chainId]);
   return null;

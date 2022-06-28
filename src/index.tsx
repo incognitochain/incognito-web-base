@@ -16,8 +16,7 @@ import ListsUpdater from 'state/lists/updater';
 import LogsUpdater from 'state/logs/updater';
 import TransactionUpdater from 'state/transactions/updater';
 import UserUpdater from 'state/user/updater';
-import ThemeProvider, { ThemedGlobalStyle } from 'theme';
-import RadialGradientByChainUpdater from 'theme/RadialGradientByChainUpdater';
+import { RadialGradientByChainUpdater, ThemedGlobalStyle, ThemeProvider } from 'theme';
 
 import { LanguageProvider } from './i18n';
 
