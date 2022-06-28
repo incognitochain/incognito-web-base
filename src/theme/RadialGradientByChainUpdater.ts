@@ -34,7 +34,7 @@ export default function RadialGradientByChainUpdater(): null {
     }
     setBackground(backgroundResetStyles);
     const lightGradient = 'radial-gradient(150% 100% at 50% 0%, #FFFBF2 2%, #FFF4F9 53%, #FFFFFF 100%)';
-    const darkGradient = 'radial-gradient(150% 100% at 50% 0%, #3E2E38 2%, #2C1F2D 53%, #1F2128 100%)';
+    const darkGradient = 'radial-gradient(150% 100% at 50% 0%, #1A1A1A 2%, #373B3B 53%, #1B1C1C 100%)';
     backgroundRadialGradientElement.style.background = darkMode ? darkGradient : lightGradient;
   }, [darkMode, chainId]);
   return null;
