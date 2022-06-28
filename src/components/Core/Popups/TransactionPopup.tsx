@@ -1,15 +1,13 @@
+import { TransactionSummary } from 'components/Core/AccountDetails/TransactionSummary';
+import { AutoColumn } from 'components/Core/Column';
+import { AutoRow } from 'components/Core/Row';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useContext } from 'react';
 import { AlertCircle, CheckCircle } from 'react-feather';
+import { useTransaction } from 'state/transactions/hooks';
 import styled, { ThemeContext } from 'styled-components/macro';
-
-import { useTransaction } from '../../state/transactions/hooks';
-import { ThemedText } from '../../theme';
-import { ExternalLink } from '../../theme';
-import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
-import { TransactionSummary } from '../AccountDetails/TransactionSummary';
-import { AutoColumn } from '../Column';
-import { AutoRow } from '../Row';
+import { ExternalLink, ThemedText } from 'theme';
+import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
 const RowNoFlex = styled(AutoRow)`
   flex-wrap: nowrap;

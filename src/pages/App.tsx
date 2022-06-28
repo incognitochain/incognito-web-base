@@ -1,8 +1,8 @@
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Header from 'components/Core/Header';
 import Polling from 'components/Core/Header/Polling';
+import Popups from 'components/Core/Popups';
 import Loader from 'components/Loader';
-import Popups from 'components/Popups';
 import TopLevelModals from 'components/TopLevelModals';
 import Swap, { RedirectPathToSwapOnly, RedirectToSwap } from 'pages/Swap';
 import { Suspense } from 'react';

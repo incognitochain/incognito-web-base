@@ -1,10 +1,9 @@
 import { Trans } from '@lingui/macro';
 import { Connector } from '@web3-react/types';
 import { ReactComponent as Close } from 'assets/images/x.svg';
-import CopyHelper from 'components/AccountDetails/Copy';
+import CopyHelper from 'components/Core/AccountDetails/Copy';
 import { ButtonSecondary } from 'components/Core/Button';
 import StatusIcon from 'components/Core/Identicon/StatusIcon';
-import { AutoRow } from 'components/Core/Row';
 import { coinbaseWallet, injected } from 'connectors';
 import { SUPPORTED_WALLETS } from 'constants/wallet';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
@@ -14,7 +13,7 @@ import { useAppDispatch } from 'state/hooks';
 import { clearAllTransactions } from 'state/transactions/reducer';
 import { updateSelectedWallet } from 'state/user/reducer';
 import styled, { ThemeContext } from 'styled-components/macro';
-import { ExternalLink, LinkStyledButton, ThemedText } from 'theme';
+import { ExternalLink } from 'theme';
 import { shortenAddress } from 'utils';
 import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
@@ -368,26 +367,26 @@ export default function AccountDetails({
           </YourAccount>
         </AccountSection>
       </UpperSection>
-      {!!pendingTransactions.length || !!confirmedTransactions.length ? (
-        <LowerSection>
-          <AutoRow mb={'1rem'} style={{ justifyContent: 'space-between' }}>
-            <ThemedText.Body>
-              <Trans>Recent Transactions</Trans>
-            </ThemedText.Body>
-            <LinkStyledButton onClick={clearAllTransactionsCallback}>
-              <Trans>(clear all)</Trans>
-            </LinkStyledButton>
-          </AutoRow>
-          {renderTransactions(pendingTransactions)}
-          {renderTransactions(confirmedTransactions)}
-        </LowerSection>
-      ) : (
-        <LowerSection>
-          <ThemedText.Body color={theme.text1}>
-            <Trans>Your transactions will appear here...</Trans>
-          </ThemedText.Body>
-        </LowerSection>
-      )}
+      {/*{!!pendingTransactions.length || !!confirmedTransactions.length ? (*/}
+      {/*  <LowerSection>*/}
+      {/*    <AutoRow mb={'1rem'} style={{ justifyContent: 'space-between' }}>*/}
+      {/*      <ThemedText.Body>*/}
+      {/*        <Trans>Recent Transactions</Trans>*/}
+      {/*      </ThemedText.Body>*/}
+      {/*      <LinkStyledButton onClick={clearAllTransactionsCallback}>*/}
+      {/*        <Trans>(clear all)</Trans>*/}
+      {/*      </LinkStyledButton>*/}
+      {/*    </AutoRow>*/}
+      {/*    {renderTransactions(pendingTransactions)}*/}
+      {/*    {renderTransactions(confirmedTransactions)}*/}
+      {/*  </LowerSection>*/}
+      {/*) : (*/}
+      {/*  <LowerSection>*/}
+      {/*    <ThemedText.Body color={theme.text1}>*/}
+      {/*      <Trans>Your transactions will appear here...</Trans>*/}
+      {/*    </ThemedText.Body>*/}
+      {/*  </LowerSection>*/}
+      {/*)}*/}
     </>
   );
 }

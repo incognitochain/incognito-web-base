@@ -16,9 +16,9 @@ import Circle from '../../assets/images/blue-loader.svg';
 import { ExternalLink } from '../../theme';
 import { CloseIcon, CustomLightSpinner } from '../../theme';
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
-import { TransactionSummary } from '../AccountDetails/TransactionSummary';
 import { ButtonLight, ButtonPrimary } from '../Button';
 import { AutoColumn, ColumnCenter } from '../Column';
+import { TransactionSummary } from '../Core/AccountDetails/TransactionSummary';
 import { RowBetween, RowFixed } from '../Row';
 import AnimatedConfirmation from './AnimatedConfirmation';
 

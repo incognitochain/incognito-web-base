@@ -3,9 +3,9 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import styled from 'styled-components/macro';
 import { MEDIA_WIDTHS } from 'theme';
 
-import { useActivePopups } from '../../state/application/hooks';
-import { useURLWarningVisible } from '../../state/user/hooks';
-import { AutoColumn } from '../Column';
+import { useActivePopups } from '../../../state/application/hooks';
+import { useURLWarningVisible } from '../../../state/user/hooks';
+import { AutoColumn } from '../../Column';
 import PopupItem from './PopupItem';
 
 const MobilePopupWrapper = styled.div<{ height: string | number }>`

@@ -20,8 +20,8 @@ import { useModalOpen, useWalletModalToggle } from '../../state/application/hook
 import { ApplicationModal } from '../../state/application/reducer';
 import { ExternalLink, ThemedText } from '../../theme';
 import { isMobile } from '../../utils/userAgent';
-import AccountDetails from '../AccountDetails';
 import { LightCard } from '../Card';
+import AccountDetails from '../Core/AccountDetails';
 import Option from './Option';
 import PendingView from './PendingView';
 
