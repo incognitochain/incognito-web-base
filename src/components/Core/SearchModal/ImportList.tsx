@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
 import { TokenList } from '@uniswap/token-lists';
-import { ButtonPrimary } from 'components/Button';
+import { ButtonPrimary } from 'components/Core/Button';
 import Card from 'components/Core/Card';
 import { AutoColumn } from 'components/Core/Column';
 import ListLogo from 'components/Core/ListLogo';

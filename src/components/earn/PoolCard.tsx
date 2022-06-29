@@ -12,7 +12,7 @@ import { StakingInfo } from '../../state/stake/hooks';
 import { StyledInternalLink, ThemedText } from '../../theme';
 import { currencyId } from '../../utils/currencyId';
 import { unwrappedToken } from '../../utils/unwrappedToken';
-import { ButtonPrimary } from '../Button';
+import { ButtonPrimary } from '../Core/Button';
 import { AutoColumn } from '../Core/Column';
 import DoubleCurrencyLogo from '../Core/DoubleLogo';
 import { RowBetween } from '../Row';

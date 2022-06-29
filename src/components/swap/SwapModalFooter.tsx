@@ -4,7 +4,7 @@ import { Currency, TradeType } from '@uniswap/sdk-core';
 import { ReactNode } from 'react';
 import { Text } from 'rebass';
 
-import { ButtonError } from '../Button';
+import { ButtonError } from '../Core/Button';
 import { AutoRow } from '../Row';
 import { SwapCallbackError } from './styleds';
 

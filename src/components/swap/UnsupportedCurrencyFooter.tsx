@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
 import { Currency } from '@uniswap/sdk-core';
-import { ButtonEmpty } from 'components/Button';
+import { ButtonEmpty } from 'components/Core/Button';
 import Card, { OutlineCard } from 'components/Core/Card';
 import { AutoColumn } from 'components/Core/Column';
 import CurrencyLogo from 'components/Core/CurrencyLogo';

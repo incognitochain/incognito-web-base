@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/macro';
-import { ButtonOutlined } from 'components/Button';
+import { ButtonOutlined } from 'components/Core/Button';
 import { AutoRow } from 'components/Row';
 import React from 'react';
 import styled from 'styled-components/macro';

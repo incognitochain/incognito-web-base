@@ -18,8 +18,8 @@ import { Text } from 'rebass';
 import { TradeState } from 'state/routing/types';
 import styled, { ThemeContext } from 'styled-components/macro';
 
-import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button';
 import AddressInputPanel from '../../components/Core/AddressInputPanel';
+import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/Core/Button';
 import { GreyCard } from '../../components/Core/Card';
 import { AutoColumn } from '../../components/Core/Column';
 import CurrencyInputPanel from '../../components/Core/CurrencyInputPanel';

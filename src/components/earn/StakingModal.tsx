@@ -18,7 +18,7 @@ import { TransactionType } from '../../state/transactions/types';
 import { CloseIcon, ThemedText } from '../../theme';
 import { formatCurrencyAmount } from '../../utils/formatCurrencyAmount';
 import { maxAmountSpend } from '../../utils/maxAmountSpend';
-import { ButtonConfirmed, ButtonError } from '../Button';
+import { ButtonConfirmed, ButtonError } from '../Core/Button';
 import { AutoColumn } from '../Core/Column';
 import CurrencyInputPanel from '../Core/CurrencyInputPanel';
 import { LoadingView, SubmittedView } from '../ModalViews';

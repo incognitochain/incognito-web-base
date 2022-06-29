@@ -12,7 +12,7 @@ import { VoteOption } from '../../state/governance/types';
 import { CustomLightSpinner, ThemedText } from '../../theme';
 import { ExternalLink } from '../../theme';
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
-import { ButtonPrimary } from '../Button';
+import { ButtonPrimary } from '../Core/Button';
 import { AutoColumn, ColumnCenter } from '../Core/Column';
 import { RowBetween } from '../Row';
 

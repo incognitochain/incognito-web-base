@@ -1,7 +1,7 @@
 import { Plural, Trans } from '@lingui/macro';
 import { Currency, Token } from '@uniswap/sdk-core';
 import { TokenList } from '@uniswap/token-lists';
-import { ButtonPrimary } from 'components/Button';
+import { ButtonPrimary } from 'components/Core/Button';
 import { AutoColumn } from 'components/Core/Column';
 import { RowBetween } from 'components/Row';
 import { SectionBreak } from 'components/swap/styleds';

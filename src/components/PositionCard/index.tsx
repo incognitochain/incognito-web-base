@@ -17,7 +17,7 @@ import { useTokenBalance } from '../../state/wallet/hooks';
 import { ExternalLink, ThemedText } from '../../theme';
 import { currencyId } from '../../utils/currencyId';
 import { unwrappedToken } from '../../utils/unwrappedToken';
-import { ButtonEmpty, ButtonPrimary, ButtonSecondary } from '../Button';
+import { ButtonEmpty, ButtonPrimary, ButtonSecondary } from '../Core/Button';
 import { GreyCard, LightCard } from '../Core/Card';
 import { AutoColumn } from '../Core/Column';
 import CurrencyLogo from '../Core/CurrencyLogo';

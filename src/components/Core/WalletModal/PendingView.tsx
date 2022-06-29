@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
 import { Connector } from '@web3-react/types';
-import { ButtonEmpty, ButtonPrimary } from 'components/Button';
+import { ButtonEmpty, ButtonPrimary } from 'components/Core/Button';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 

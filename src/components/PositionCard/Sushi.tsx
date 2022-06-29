@@ -8,7 +8,7 @@ import styled from 'styled-components/macro';
 
 import { useColor } from '../../hooks/useColor';
 import { unwrappedToken } from '../../utils/unwrappedToken';
-import { ButtonEmpty } from '../Button';
+import { ButtonEmpty } from '../Core/Button';
 import { LightCard } from '../Core/Card';
 import { AutoColumn } from '../Core/Column';
 import DoubleCurrencyLogo from '../Core/DoubleLogo';

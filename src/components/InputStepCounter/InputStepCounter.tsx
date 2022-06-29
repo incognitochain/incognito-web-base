@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
 import { FeeAmount } from '@uniswap/v3-sdk';
-import { ButtonGray } from 'components/Button';
+import { ButtonGray } from 'components/Core/Button';
 import { OutlineCard } from 'components/Core/Card';
 import { AutoColumn } from 'components/Core/Column';
 import { ReactNode, useCallback, useEffect, useState } from 'react';

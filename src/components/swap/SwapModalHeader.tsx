@@ -10,7 +10,7 @@ import { useUSDCValue } from '../../hooks/useUSDCPrice';
 import { ThemedText } from '../../theme';
 import { isAddress, shortenAddress } from '../../utils';
 import { computeFiatValuePriceImpact } from '../../utils/computeFiatValuePriceImpact';
-import { ButtonPrimary } from '../Button';
+import { ButtonPrimary } from '../Core/Button';
 import { LightCard } from '../Core/Card';
 import { AutoColumn } from '../Core/Column';
 import { FiatValue } from '../Core/CurrencyInputPanel/FiatValue';

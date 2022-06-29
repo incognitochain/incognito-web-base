@@ -14,7 +14,7 @@ import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hoo
 import { ApplicationModal } from '../../state/application/reducer';
 import { useClientSideRouter, useExpertModeManager } from '../../state/user/hooks';
 import { ThemedText } from '../../theme';
-import { ButtonError } from '../Button';
+import { ButtonError } from '../Core/Button';
 import { AutoColumn } from '../Core/Column';
 import QuestionHelper from '../QuestionHelper';
 import { RowBetween, RowFixed } from '../Row';

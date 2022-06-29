@@ -16,8 +16,8 @@ import { useClaimCallback, useUserClaimData, useUserUnclaimedAmount } from '../.
 import { useUserHasSubmittedClaim } from '../../state/transactions/hooks';
 import { CloseIcon, CustomLightSpinner, ExternalLink, ThemedText, UniTokenAnimated } from '../../theme';
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
-import { ButtonPrimary } from '../Button';
 import Confetti from '../Confetti';
+import { ButtonPrimary } from '../Core/Button';
 import { AutoColumn, ColumnCenter } from '../Core/Column';
 import { Break, CardBGImage, CardBGImageSmaller, CardNoise, CardSection, DataCard } from '../earn/styled';
 import { RowBetween } from '../Row';

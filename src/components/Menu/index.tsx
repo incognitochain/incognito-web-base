@@ -29,7 +29,7 @@ import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { useModalOpen, useToggleModal } from '../../state/application/hooks';
 import { ApplicationModal } from '../../state/application/reducer';
 import { ExternalLink } from '../../theme';
-import { ButtonPrimary } from '../Button';
+import { ButtonPrimary } from '../Core/Button';
 
 export enum FlyoutAlignment {
   LEFT = 'LEFT',
