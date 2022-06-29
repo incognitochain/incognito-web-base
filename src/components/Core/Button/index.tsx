@@ -20,7 +20,7 @@ export const BaseButton = styled(RebassButton)<
   width: ${({ width }) => width ?? '100%'};
   font-weight: 500;
   text-align: center;
-  border-radius: ${({ $borderRadius }) => $borderRadius ?? '20px'};
+  border-radius: ${({ $borderRadius }) => $borderRadius ?? '8px'};
   outline: none;
   border: 1px solid transparent;
   color: ${({ theme }) => theme.text1};
@@ -363,3 +363,7 @@ export function ButtonRadioChecked({ active = false, children, ...rest }: { acti
     );
   }
 }
+
+export const ButtonBasic = styled(BaseButton)`
+  background-color: ${({ theme }) => theme.bg3};
+`;

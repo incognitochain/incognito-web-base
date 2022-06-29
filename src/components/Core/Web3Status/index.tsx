@@ -2,7 +2,7 @@
 import { t, Trans } from '@lingui/macro';
 import { useWeb3React } from '@web3-react/core';
 import { Connector } from '@web3-react/types';
-import { ButtonPrimary } from 'components/Core/Button';
+import { ButtonBasic } from 'components/Core/Button';
 import StatusIcon from 'components/Core/Identicon/StatusIcon';
 import Loader from 'components/Core/Loader';
 import { RowBetween } from 'components/Core/Row';
@@ -30,7 +30,7 @@ const IconWrapper = styled.div<{ size?: number }>`
   }
 `;
 
-const Web3StatusGeneric = styled(ButtonPrimary)`
+const Web3StatusGeneric = styled(ButtonBasic)`
   ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
   align-items: center;
@@ -38,7 +38,7 @@ const Web3StatusGeneric = styled(ButtonPrimary)`
   border-radius: 8px;
   cursor: pointer;
   user-select: none;
-  height: 36px;
+  height: 40px;
   margin-right: 2px;
   margin-left: 1px;
   :focus {
@@ -74,9 +74,9 @@ const Web3StatusConnect = styled(Web3StatusGeneric)<{ faded?: boolean }>`
 `;
 
 const Web3StatusConnected = styled(Web3StatusGeneric)<{ pending?: boolean }>`
-  background-color: ${({ pending, theme }) => (pending ? theme.primary1 : theme.bg1)};
+  background-color: ${({ pending, theme }) => (pending ? theme.primary1 : theme.bg3)};
   border: none;
-  color: ${({ pending, theme }) => (pending ? theme.white : theme.text1)};
+  color: ${({ theme }) => theme.primary5};
   font-weight: 500;
   :hover,
   :focus {
