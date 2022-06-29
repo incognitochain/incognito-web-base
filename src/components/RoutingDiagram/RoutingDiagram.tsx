@@ -4,7 +4,7 @@ import { FeeAmount } from '@uniswap/v3-sdk';
 import Badge from 'components/Badge';
 import CurrencyLogo from 'components/Core/CurrencyLogo';
 import DoubleCurrencyLogo from 'components/Core/DoubleLogo';
-import Row, { AutoRow } from 'components/Row';
+import Row, { AutoRow } from 'components/Core/Row';
 import { RoutingDiagramEntry } from 'components/swap/SwapRoute';
 import { useTokenInfoFromActiveList } from 'hooks/useTokenInfoFromActiveList';
 import { Box } from 'rebass';

@@ -3,7 +3,7 @@ import { Token } from '@uniswap/sdk-core';
 import Card from 'components/Core/Card';
 import Column from 'components/Core/Column';
 import CurrencyLogo from 'components/Core/CurrencyLogo';
-import Row, { RowBetween, RowFixed } from 'components/Row';
+import Row, { RowBetween, RowFixed } from 'components/Core/Row';
 import { useToken } from 'hooks/Tokens';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { RefObject, useCallback, useMemo, useRef, useState } from 'react';

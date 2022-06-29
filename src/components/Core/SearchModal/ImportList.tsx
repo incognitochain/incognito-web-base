@@ -4,7 +4,7 @@ import { ButtonPrimary } from 'components/Core/Button';
 import Card from 'components/Core/Card';
 import { AutoColumn } from 'components/Core/Column';
 import ListLogo from 'components/Core/ListLogo';
-import { AutoRow, RowBetween, RowFixed } from 'components/Row';
+import { AutoRow, RowBetween, RowFixed } from 'components/Core/Row';
 import { SectionBreak } from 'components/swap/styleds';
 import { useFetchListCallback } from 'hooks/useFetchListCallback';
 import useTheme from 'hooks/useTheme';
@@ -69,9 +69,9 @@ export function ImportList({ listURL, list, setModalView, onDismiss }: ImportPro
       <PaddedColumn gap="14px" style={{ width: '100%', flex: '1 1' }}>
         <RowBetween>
           <ArrowLeft style={{ cursor: 'pointer' }} onClick={() => setModalView(CurrencyModalView.manage)} />
-          <ThemedText.MediumHeader>
+          <ThemedText.MediumLabel>
             <Trans>Import List</Trans>
-          </ThemedText.MediumHeader>
+          </ThemedText.MediumLabel>
           <CloseIcon onClick={onDismiss} />
         </RowBetween>
       </PaddedColumn>

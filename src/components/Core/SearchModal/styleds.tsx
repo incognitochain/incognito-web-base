@@ -1,8 +1,8 @@
 import { LoadingRows as BaseLoadingRows } from 'components/Core/Loader/styled';
 import styled from 'styled-components/macro';
 
-import { RowBetween } from '../../Row';
 import { AutoColumn } from '../Column';
+import { RowBetween } from '../Row';
 
 export const TextDot = styled.div`
   height: 3px;

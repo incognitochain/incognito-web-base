@@ -5,7 +5,7 @@ import Card from 'components/Core/Card';
 import { AutoColumn } from 'components/Core/Column';
 import CurrencyLogo from 'components/Core/CurrencyLogo';
 import ListLogo from 'components/Core/ListLogo';
-import { RowFixed } from 'components/Row';
+import { RowFixed } from 'components/Core/Row';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { transparentize } from 'polished';
 import { AlertCircle } from 'react-feather';

@@ -5,14 +5,13 @@ import Card, { OutlineCard } from 'components/Core/Card';
 import { AutoColumn } from 'components/Core/Column';
 import CurrencyLogo from 'components/Core/CurrencyLogo';
 import Modal from 'components/Core/Modal';
-import { AutoRow, RowBetween } from 'components/Row';
+import { AutoRow, RowBetween } from 'components/Core/Row';
+import { useUnsupportedTokens } from 'hooks/Tokens';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useState } from 'react';
 import styled from 'styled-components/macro';
 import { CloseIcon, ExternalLink, ThemedText, Z_INDEX } from 'theme';
-
-import { useUnsupportedTokens } from '../../hooks/Tokens';
-import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
+import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
 const DetailsFooter = styled.div<{ show: boolean }>`
   padding-top: calc(16px + 2rem);
@@ -70,9 +69,9 @@ export default function UnsupportedCurrencyFooter({
         <Card padding="2rem">
           <AutoColumn gap="lg">
             <RowBetween>
-              <ThemedText.MediumHeader>
+              <ThemedText.MediumLabel>
                 <Trans>Unsupported Assets</Trans>
-              </ThemedText.MediumHeader>
+              </ThemedText.MediumLabel>
               <CloseIcon onClick={() => setShowDetails(false)} />
             </RowBetween>
             {tokens.map((token) => {

@@ -15,7 +15,7 @@ import { LightCard } from '../Core/Card';
 import { AutoColumn } from '../Core/Column';
 import { FiatValue } from '../Core/CurrencyInputPanel/FiatValue';
 import CurrencyLogo from '../Core/CurrencyLogo';
-import { RowBetween, RowFixed } from '../Row';
+import { RowBetween, RowFixed } from '../Core/Row';
 import TradePrice from '../swap/TradePrice';
 import { AdvancedSwapDetails } from './AdvancedSwapDetails';
 import { SwapShowAcceptChanges, TruncatedText } from './styleds';

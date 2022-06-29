@@ -12,8 +12,8 @@ import styled, { ThemeContext } from 'styled-components/macro';
 import { Separator, ThemedText } from '../../theme';
 import { computeRealizedLPFeePercent } from '../../utils/prices';
 import { AutoColumn } from '../Core/Column';
+import { RowBetween, RowFixed } from '../Core/Row';
 import { MouseoverTooltip } from '../Core/Tooltip';
-import { RowBetween, RowFixed } from '../Row';
 import FormattedPriceImpact from './FormattedPriceImpact';
 
 const StyledCard = styled(Card)`
@@ -78,9 +78,9 @@ export function AdvancedSwapDetails({
               }
               disableHover={hideInfoTooltips}
             >
-              <ThemedText.SubHeader color={theme.text1}>
+              <ThemedText.SuperSmallLabel color={theme.text1}>
                 <Trans>Expected Output</Trans>
-              </ThemedText.SubHeader>
+              </ThemedText.SuperSmallLabel>
             </MouseoverTooltip>
           </RowFixed>
           <TextWithLoadingPlaceholder syncing={syncing} width={65}>
@@ -97,9 +97,9 @@ export function AdvancedSwapDetails({
               text={<Trans>The impact your trade has on the market price of this pool.</Trans>}
               disableHover={hideInfoTooltips}
             >
-              <ThemedText.SubHeader color={theme.text1}>
+              <ThemedText.SuperSmallLabel color={theme.text1}>
                 <Trans>Price Impact</Trans>
-              </ThemedText.SubHeader>
+              </ThemedText.SuperSmallLabel>
             </MouseoverTooltip>
           </RowFixed>
           <TextWithLoadingPlaceholder syncing={syncing} width={50}>
@@ -120,14 +120,14 @@ export function AdvancedSwapDetails({
               }
               disableHover={hideInfoTooltips}
             >
-              <ThemedText.SubHeader color={theme.text3}>
+              <ThemedText.SuperSmallLabel color={theme.text3}>
                 {trade.tradeType === TradeType.EXACT_INPUT ? (
                   <Trans>Minimum received</Trans>
                 ) : (
                   <Trans>Maximum sent</Trans>
                 )}{' '}
                 <Trans>after slippage</Trans> ({allowedSlippage.toFixed(2)}%)
-              </ThemedText.SubHeader>
+              </ThemedText.SuperSmallLabel>
             </MouseoverTooltip>
           </RowFixed>
           <TextWithLoadingPlaceholder syncing={syncing} width={70}>
@@ -148,9 +148,9 @@ export function AdvancedSwapDetails({
               }
               disableHover={hideInfoTooltips}
             >
-              <ThemedText.SubHeader color={theme.text3}>
+              <ThemedText.SuperSmallLabel color={theme.text3}>
                 <Trans>Network Fee</Trans>
-              </ThemedText.SubHeader>
+              </ThemedText.SuperSmallLabel>
             </MouseoverTooltip>
             <TextWithLoadingPlaceholder syncing={syncing} width={50}>
               <ThemedText.Black textAlign="right" fontSize={14} color={theme.text3}>

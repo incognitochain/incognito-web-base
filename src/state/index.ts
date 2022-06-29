@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
+import { reducer as tabs } from 'components/Core/Tabs';
 import multicall from 'lib/state/multicall';
 import { load, save } from 'redux-localstorage-simple';
 
@@ -26,6 +27,7 @@ const store = configureStore({
     lists,
     logs,
     [routingApi.reducerPath]: routingApi.reducer,
+    tabs,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: true })

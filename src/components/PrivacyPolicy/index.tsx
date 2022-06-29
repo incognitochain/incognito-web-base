@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/macro';
 import Card, { DarkGreyCard } from 'components/Core/Card';
 import Modal from 'components/Core/Modal';
-import Row, { AutoRow, RowBetween } from 'components/Row';
+import Row, { AutoRow, RowBetween } from 'components/Core/Row';
 import { useRef } from 'react';
 import { ArrowDown, Info, X } from 'react-feather';
 import styled from 'styled-components/macro';
@@ -87,9 +87,9 @@ export function PrivacyPolicyModal() {
     <Modal isOpen={open} onDismiss={() => toggle()}>
       <AutoColumn gap="12px" ref={node as any}>
         <RowBetween padding="1rem 1rem 0.5rem 1rem">
-          <ThemedText.MediumHeader>
+          <ThemedText.MediumLabel>
             <Trans>Legal & Privacy</Trans>
-          </ThemedText.MediumHeader>
+          </ThemedText.MediumLabel>
           <HoverText onClick={() => toggle()}>
             <X size={24} />
           </HoverText>

@@ -4,7 +4,7 @@ import { ButtonPrimary } from 'components/Core/Button';
 import { AutoColumn } from 'components/Core/Column';
 import CurrencyLogo from 'components/Core/CurrencyLogo';
 import ListLogo from 'components/Core/ListLogo';
-import { AutoRow, RowFixed } from 'components/Row';
+import { AutoRow, RowFixed } from 'components/Core/Row';
 import { useIsTokenActive, useIsUserAddedToken } from 'hooks/Tokens';
 import useTheme from 'hooks/useTheme';
 import { CSSProperties } from 'react';

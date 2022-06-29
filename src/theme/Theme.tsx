@@ -205,11 +205,17 @@ export const ThemedText = {
   LargeHeader(props: TextProps) {
     return <TextWrapper fontWeight={600} fontSize={24} {...props} />;
   },
-  MediumHeader(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={20} {...props} />;
+  SuperSmallLabel(props: TextProps) {
+    return <TextWrapper fontWeight={500} fontSize={14} {...props} />;
   },
-  SubHeader(props: TextProps) {
-    return <TextWrapper fontWeight={400} fontSize={14} {...props} />;
+  SmallLabel(props: TextProps) {
+    return <TextWrapper fontWeight={500} fontSize={14} {...props} />;
+  },
+  RegularLabel(props: TextProps) {
+    return <TextWrapper fontWeight={500} fontSize={16} {...props} />;
+  },
+  MediumLabel(props: TextProps) {
+    return <TextWrapper fontWeight={500} fontSize={18} {...props} />;
   },
   Small(props: TextProps) {
     return <TextWrapper fontWeight={500} fontSize={11} {...props} />;

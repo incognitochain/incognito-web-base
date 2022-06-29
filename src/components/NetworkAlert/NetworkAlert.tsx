@@ -7,7 +7,7 @@ import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
 import { ExternalLink, HideSmall } from 'theme';
 
-import { AutoRow } from '../Row';
+import { AutoRow } from '../Core/Row';
 
 const L2Icon = styled.img`
   width: 24px;

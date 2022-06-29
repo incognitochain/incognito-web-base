@@ -11,8 +11,8 @@ import styled, { ThemeContext } from 'styled-components/macro';
 
 import { ThemedText } from '../../theme';
 import { AutoColumn } from '../Core/Column';
+import { RowBetween, RowFixed } from '../Core/Row';
 import QuestionHelper from '../QuestionHelper';
-import { RowBetween, RowFixed } from '../Row';
 
 enum SlippageError {
   InvalidInput = 'InvalidInput',

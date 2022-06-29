@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 import { Text } from 'rebass';
 
 import { ButtonError } from '../Core/Button';
-import { AutoRow } from '../Row';
+import { AutoRow } from '../Core/Row';
 import { SwapCallbackError } from './styleds';
 
 export default function SwapModalFooter({

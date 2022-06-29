@@ -1,7 +1,7 @@
 import { Currency } from '@uniswap/sdk-core';
 import { AutoColumn } from 'components/Core/Column';
 import CurrencyLogo from 'components/Core/CurrencyLogo';
-import { AutoRow } from 'components/Row';
+import { AutoRow } from 'components/Core/Row';
 import { COMMON_BASES } from 'constants/routing';
 import { useTokenInfoFromActiveList } from 'hooks/useTokenInfoFromActiveList';
 import { Text } from 'rebass';

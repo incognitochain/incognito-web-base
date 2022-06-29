@@ -3,7 +3,7 @@ import { Currency, Token } from '@uniswap/sdk-core';
 import { TokenList } from '@uniswap/token-lists';
 import { ButtonPrimary } from 'components/Core/Button';
 import { AutoColumn } from 'components/Core/Column';
-import { RowBetween } from 'components/Row';
+import { RowBetween } from 'components/Core/Row';
 import { SectionBreak } from 'components/swap/styleds';
 import { useUnsupportedTokens } from 'hooks/Tokens';
 import useTheme from 'hooks/useTheme';
@@ -47,9 +47,9 @@ export function ImportToken(props: ImportProps) {
       <PaddedColumn gap="14px" style={{ width: '100%', flex: '1 1' }}>
         <RowBetween>
           {onBack ? <ArrowLeft style={{ cursor: 'pointer' }} onClick={onBack} /> : <div />}
-          <ThemedText.MediumHeader>
+          <ThemedText.MediumLabel>
             <Plural value={tokens.length} _1="Import token" other="Import tokens" />
-          </ThemedText.MediumHeader>
+          </ThemedText.MediumLabel>
           {onDismiss ? <CloseIcon onClick={onDismiss} /> : <div />}
         </RowBetween>
       </PaddedColumn>

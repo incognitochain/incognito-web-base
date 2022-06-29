@@ -25,7 +25,7 @@ import { AutoColumn } from '../../components/Core/Column';
 import CurrencyInputPanel from '../../components/Core/CurrencyInputPanel';
 import CurrencyLogo from '../../components/Core/CurrencyLogo';
 import Loader from '../../components/Core/Loader';
-import { AutoRow } from '../../components/Row';
+import { AutoRow } from '../../components/Core/Row';
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee';
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal';
 import { ArrowWrapper, SwapCallbackError, Wrapper } from '../../components/swap/styleds';

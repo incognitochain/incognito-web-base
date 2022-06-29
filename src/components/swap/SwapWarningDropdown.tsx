@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/macro';
 import { Currency, CurrencyAmount, Token, TradeType } from '@uniswap/sdk-core';
+import { RowBetween } from 'components/Core/Row';
 import { MouseoverTooltipContent } from 'components/Core/Tooltip';
-import { RowBetween } from 'components/Row';
 import { Info } from 'react-feather';
 import { InterfaceTrade } from 'state/routing/types';
 import styled from 'styled-components/macro';

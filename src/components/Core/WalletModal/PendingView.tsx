@@ -1,10 +1,9 @@
 import { Trans } from '@lingui/macro';
 import { Connector } from '@web3-react/types';
 import { ButtonEmpty, ButtonPrimary } from 'components/Core/Button';
+import Loader from 'components/Core/Loader';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
-
-import Loader from '../Loader';
 
 const PendingSection = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap};
@@ -63,9 +62,9 @@ export default function PendingView({
         <LoadingWrapper>
           {error ? (
             <ErrorGroup>
-              <ThemedText.MediumHeader marginBottom={12}>
+              <ThemedText.MediumLabel marginBottom={12}>
                 <Trans>Error connecting</Trans>
-              </ThemedText.MediumHeader>
+              </ThemedText.MediumLabel>
               <ThemedText.Body fontSize={14} marginBottom={36} textAlign="center">
                 <Trans>
                   The connection attempt failed. Please click try again and follow the steps to connect in your wallet.

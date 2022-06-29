@@ -51,9 +51,9 @@ const BlockedToken = ({ onBack, onDismiss, blockedTokens }: BlockedTokenProps) =
   <Wrapper>
     <Header>
       {onBack ? <ArrowLeft style={{ cursor: 'pointer' }} onClick={onBack} /> : <div />}
-      <ThemedText.MediumHeader>
+      <ThemedText.MediumLabel>
         <Trans>Token not supported</Trans>
-      </ThemedText.MediumHeader>
+      </ThemedText.MediumLabel>
       {onDismiss ? <CloseIcon onClick={onDismiss} /> : <div />}
     </Header>
     <Icon />

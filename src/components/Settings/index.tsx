@@ -16,9 +16,9 @@ import { useClientSideRouter, useExpertModeManager } from '../../state/user/hook
 import { ThemedText } from '../../theme';
 import { ButtonError } from '../Core/Button';
 import { AutoColumn } from '../Core/Column';
+import { RowBetween, RowFixed } from '../Core/Row';
 import Toggle from '../Core/Toggle';
 import QuestionHelper from '../QuestionHelper';
-import { RowBetween, RowFixed } from '../Row';
 import TransactionSettings from '../TransactionSettings';
 
 const StyledMenuIcon = styled(Settings)`

@@ -21,10 +21,10 @@ import { acceptListUpdate, disableList, enableList, removeList } from '../../../
 import { useActiveListUrls, useAllLists, useIsListActive } from '../../../state/lists/hooks';
 import { ExternalLink, IconWrapper, LinkStyledButton, ThemedText } from '../../../theme';
 import listVersionLabel from '../../../utils/listVersionLabel';
-import Row, { RowBetween, RowFixed } from '../../Row';
 import { ButtonEmpty, ButtonPrimary } from '../Button';
 import Column, { AutoColumn } from '../Column';
 import ListLogo from '../ListLogo';
+import Row, { RowBetween, RowFixed } from '../Row';
 import Toggle from '../Toggle';
 import { CurrencyModalView } from './CurrencySearchModal';
 import { PaddedColumn, SearchInput, Separator, SeparatorDark } from './styleds';
