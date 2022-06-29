@@ -7,7 +7,7 @@ import { ReactComponent as Close } from 'assets/images/x.svg';
 import AccountDetails from 'components/Core/AccountDetails';
 import { AutoColumn } from 'components/Core/Column';
 import Modal from 'components/Core/Modal';
-import { fortmatic, getWalletForConnector, injected } from 'connectors';
+import { getWalletForConnector, injected } from 'connectors';
 import { SUPPORTED_WALLETS } from 'constants/wallet';
 import { useCallback, useEffect, useState } from 'react';
 import { ArrowLeft } from 'react-feather';
@@ -149,12 +149,6 @@ export default function WalletModal({
     async (connector: Connector) => {
       const wallet = getWalletForConnector(connector);
       try {
-        // Fortmatic opens it's own modal on activation to log in. This modal has a tabIndex
-        // collision into the WalletModal, so we special case by closing the modal.
-        if (connector === fortmatic) {
-          toggleWalletModal();
-        }
-
         setPendingConnector(connector);
         setWalletView(WALLET_VIEWS.PENDING);
         dispatch(updateWalletError({ wallet, error: undefined }));
