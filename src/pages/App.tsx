@@ -2,7 +2,6 @@ import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Header from 'components/Core/Header';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
-import TopLevelModals from 'components/TopLevelModals';
 import Swap, { RedirectPathToSwapOnly, RedirectToSwap } from 'pages/Swap';
 import { Suspense } from 'react';
 import { useEffect } from 'react';
@@ -63,7 +62,6 @@ export default function App() {
         </HeaderWrapper>
         <BodyWrapper>
           <Popups />
-          <TopLevelModals />
           <Suspense fallback={<Loader />}>
             <Switch>
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
