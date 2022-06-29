@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/macro';
-import Card, { DarkGreyCard } from 'components/Card';
+import Card, { DarkGreyCard } from 'components/Core/Card';
 import Modal from 'components/Modal';
 import Row, { AutoRow, RowBetween } from 'components/Row';
 import { useRef } from 'react';
@@ -10,7 +10,7 @@ import { isMobile } from 'utils/userAgent';
 
 import { useModalOpen, useTogglePrivacyPolicy } from '../../state/application/hooks';
 import { ApplicationModal } from '../../state/application/reducer';
-import { AutoColumn } from '../Column';
+import { AutoColumn } from '../Core/Column';
 
 const Wrapper = styled.div`
   max-height: 70vh;

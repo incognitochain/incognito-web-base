@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import { ThemeContext } from 'styled-components/macro';
 
 import { ThemedText } from '../../theme';
-import { AutoColumn } from '../Column';
+import { AutoColumn } from '../Core/Column';
 
 const Wrapper = styled(AutoColumn)`
   margin-right: 8px;

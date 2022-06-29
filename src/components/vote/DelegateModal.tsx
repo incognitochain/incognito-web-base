@@ -13,8 +13,8 @@ import { useDelegateCallback } from '../../state/governance/hooks';
 import { useTokenBalance } from '../../state/wallet/hooks';
 import { ThemedText } from '../../theme';
 import { ButtonPrimary } from '../Button';
-import { AutoColumn } from '../Column';
 import AddressInputPanel from '../Core/AddressInputPanel';
+import { AutoColumn } from '../Core/Column';
 import { LoadingView, SubmittedView } from '../ModalViews';
 import { RowBetween } from '../Row';
 

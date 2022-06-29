@@ -12,14 +12,14 @@ import { Text } from 'rebass';
 import { useIsTransactionConfirmed, useTransaction } from 'state/transactions/hooks';
 import styled, { ThemeContext } from 'styled-components/macro';
 
-import Circle from '../../assets/images/blue-loader.svg';
-import { ExternalLink } from '../../theme';
-import { CloseIcon, CustomLightSpinner } from '../../theme';
-import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
-import { ButtonLight, ButtonPrimary } from '../Button';
+import Circle from '../../../assets/images/blue-loader.svg';
+import { ExternalLink } from '../../../theme';
+import { CloseIcon, CustomLightSpinner } from '../../../theme';
+import { ExplorerDataType, getExplorerLink } from '../../../utils/getExplorerLink';
+import { ButtonLight, ButtonPrimary } from '../../Button';
+import { RowBetween, RowFixed } from '../../Row';
+import { TransactionSummary } from '../AccountDetails/TransactionSummary';
 import { AutoColumn, ColumnCenter } from '../Column';
-import { TransactionSummary } from '../Core/AccountDetails/TransactionSummary';
-import { RowBetween, RowFixed } from '../Row';
 import AnimatedConfirmation from './AnimatedConfirmation';
 
 const Wrapper = styled.div`

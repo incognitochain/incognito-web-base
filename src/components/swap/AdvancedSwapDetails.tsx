@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
 import { Currency, Percent, TradeType } from '@uniswap/sdk-core';
-import Card from 'components/Card';
+import Card from 'components/Core/Card';
 import { LoadingRows } from 'components/Loader/styled';
 import { SUPPORTED_GAS_ESTIMATE_CHAIN_IDS } from 'constants/chains';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
@@ -11,7 +11,7 @@ import styled, { ThemeContext } from 'styled-components/macro';
 
 import { Separator, ThemedText } from '../../theme';
 import { computeRealizedLPFeePercent } from '../../utils/prices';
-import { AutoColumn } from '../Column';
+import { AutoColumn } from '../Core/Column';
 import { RowBetween, RowFixed } from '../Row';
 import { MouseoverTooltip } from '../Tooltip';
 import FormattedPriceImpact from './FormattedPriceImpact';

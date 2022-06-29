@@ -6,8 +6,8 @@ import { AlertCircle } from 'react-feather';
 import styled, { ThemeContext } from 'styled-components/macro';
 
 import { ThemedText } from '../../../theme';
-import { AutoColumn } from '../../Column';
 import { AutoRow } from '../../Row';
+import { AutoColumn } from '../Column';
 
 const RowNoFlex = styled(AutoRow)`
   flex-wrap: nowrap;

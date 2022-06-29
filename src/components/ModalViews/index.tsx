@@ -8,7 +8,7 @@ import Circle from '../../assets/images/blue-loader.svg';
 import { CloseIcon, CustomLightSpinner, ThemedText } from '../../theme';
 import { ExternalLink } from '../../theme/components';
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
-import { AutoColumn, ColumnCenter } from '../Column';
+import { AutoColumn, ColumnCenter } from '../Core/Column';
 import { RowBetween } from '../Row';
 
 const ConfirmOrLoadingWrapper = styled.div`

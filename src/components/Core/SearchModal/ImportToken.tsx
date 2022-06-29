@@ -2,7 +2,7 @@ import { Plural, Trans } from '@lingui/macro';
 import { Currency, Token } from '@uniswap/sdk-core';
 import { TokenList } from '@uniswap/token-lists';
 import { ButtonPrimary } from 'components/Button';
-import { AutoColumn } from 'components/Column';
+import { AutoColumn } from 'components/Core/Column';
 import { RowBetween } from 'components/Row';
 import { SectionBreak } from 'components/swap/styleds';
 import { useUnsupportedTokens } from 'hooks/Tokens';

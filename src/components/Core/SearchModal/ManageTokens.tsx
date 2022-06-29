@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/macro';
 import { Token } from '@uniswap/sdk-core';
-import Card from 'components/Card';
-import Column from 'components/Column';
+import Card from 'components/Core/Card';
+import Column from 'components/Core/Column';
 import CurrencyLogo from 'components/Core/CurrencyLogo';
 import Row, { RowBetween, RowFixed } from 'components/Row';
 import { useToken } from 'hooks/Tokens';

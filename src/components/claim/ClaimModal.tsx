@@ -17,8 +17,8 @@ import { useUserHasSubmittedClaim } from '../../state/transactions/hooks';
 import { CloseIcon, CustomLightSpinner, ExternalLink, ThemedText, UniTokenAnimated } from '../../theme';
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
 import { ButtonPrimary } from '../Button';
-import { AutoColumn, ColumnCenter } from '../Column';
 import Confetti from '../Confetti';
+import { AutoColumn, ColumnCenter } from '../Core/Column';
 import { Break, CardBGImage, CardBGImageSmaller, CardNoise, CardSection, DataCard } from '../earn/styled';
 import { RowBetween } from '../Row';
 

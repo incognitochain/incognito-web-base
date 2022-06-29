@@ -4,7 +4,7 @@ import { Currency, Percent, TradeType } from '@uniswap/sdk-core';
 import { Pair } from '@uniswap/v2-sdk';
 import { FeeAmount } from '@uniswap/v3-sdk';
 import AnimatedDropdown from 'components/AnimatedDropdown';
-import { AutoColumn } from 'components/Column';
+import { AutoColumn } from 'components/Core/Column';
 import { LoadingRows } from 'components/Loader/styled';
 import RoutingDiagram from 'components/RoutingDiagram/RoutingDiagram';
 import { AutoRow, RowBetween } from 'components/Row';

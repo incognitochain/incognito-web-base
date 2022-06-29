@@ -1,10 +1,10 @@
 import { Trans } from '@lingui/macro';
 import { Token } from '@uniswap/sdk-core';
 import { TokenList } from '@uniswap/token-lists';
-import Card from 'components/Card';
-import { AutoColumn } from 'components/Column';
+import Card from 'components/Core/Card';
+import { AutoColumn } from 'components/Core/Column';
 import CurrencyLogo from 'components/Core/CurrencyLogo';
-import ListLogo from 'components/ListLogo';
+import ListLogo from 'components/Core/ListLogo';
 import { RowFixed } from 'components/Row';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { transparentize } from 'polished';

@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { t, Trans } from '@lingui/macro';
 import { TokenList } from '@uniswap/token-lists';
-import Card from 'components/Card';
+import Card from 'components/Core/Card';
 import { UNSUPPORTED_LIST_URLS } from 'constants/lists';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useListColor } from 'hooks/useColor';
@@ -22,10 +22,10 @@ import { useActiveListUrls, useAllLists, useIsListActive } from '../../../state/
 import { ExternalLink, IconWrapper, LinkStyledButton, ThemedText } from '../../../theme';
 import listVersionLabel from '../../../utils/listVersionLabel';
 import { ButtonEmpty, ButtonPrimary } from '../../Button';
-import Column, { AutoColumn } from '../../Column';
-import ListLogo from '../../ListLogo';
 import Row, { RowBetween, RowFixed } from '../../Row';
 import Toggle from '../../Toggle';
+import Column, { AutoColumn } from '../Column';
+import ListLogo from '../ListLogo';
 import { CurrencyModalView } from './CurrencySearchModal';
 import { PaddedColumn, SearchInput, Separator, SeparatorDark } from './styleds';
 

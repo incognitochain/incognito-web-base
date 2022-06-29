@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/macro';
 import { Currency, Price, Token } from '@uniswap/sdk-core';
 import { FeeAmount } from '@uniswap/v3-sdk';
-import { AutoColumn, ColumnCenter } from 'components/Column';
+import { AutoColumn, ColumnCenter } from 'components/Core/Column';
 import Loader from 'components/Loader';
 import { format } from 'd3';
 import { useColor } from 'hooks/useColor';

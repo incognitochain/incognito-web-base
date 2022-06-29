@@ -1,8 +1,8 @@
 import { Trans } from '@lingui/macro';
 import { FeeAmount } from '@uniswap/v3-sdk';
 import { ButtonGray } from 'components/Button';
-import { OutlineCard } from 'components/Card';
-import { AutoColumn } from 'components/Column';
+import { OutlineCard } from 'components/Core/Card';
+import { AutoColumn } from 'components/Core/Column';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Minus, Plus } from 'react-feather';
 import styled, { keyframes } from 'styled-components/macro';

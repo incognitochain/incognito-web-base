@@ -1,9 +1,9 @@
 import { Trans } from '@lingui/macro';
 import { TokenList } from '@uniswap/token-lists';
 import { ButtonPrimary } from 'components/Button';
-import Card from 'components/Card';
-import { AutoColumn } from 'components/Column';
-import ListLogo from 'components/ListLogo';
+import Card from 'components/Core/Card';
+import { AutoColumn } from 'components/Core/Column';
+import ListLogo from 'components/Core/ListLogo';
 import { AutoRow, RowBetween, RowFixed } from 'components/Row';
 import { SectionBreak } from 'components/swap/styleds';
 import { useFetchListCallback } from 'hooks/useFetchListCallback';

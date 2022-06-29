@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
 import { Currency, TradeType } from '@uniswap/sdk-core';
-import { AutoColumn } from 'components/Column';
+import { AutoColumn } from 'components/Core/Column';
 import { LoadingOpacityContainer } from 'components/Loader/styled';
 import { RowFixed } from 'components/Row';
 import { MouseoverTooltipContent } from 'components/Tooltip';

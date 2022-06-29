@@ -7,17 +7,13 @@ import StatusIcon from 'components/Core/Identicon/StatusIcon';
 import { coinbaseWallet, injected } from 'connectors';
 import { SUPPORTED_WALLETS } from 'constants/wallet';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
-import { useCallback, useContext } from 'react';
 import { ExternalLink as LinkIcon } from 'react-feather';
 import { useAppDispatch } from 'state/hooks';
-import { clearAllTransactions } from 'state/transactions/reducer';
 import { updateSelectedWallet } from 'state/user/reducer';
-import styled, { ThemeContext } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 import { ExternalLink } from 'theme';
 import { shortenAddress } from 'utils';
 import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
-
-import Transaction from './Transaction';
 
 const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
@@ -51,7 +47,7 @@ const UpperSection = styled.div`
 
 const InfoCard = styled.div`
   padding: 1rem;
-  border: 1px solid ${({ theme }) => theme.bg3};
+  border: 1px solid ${({ theme }) => theme.border1};
   border-radius: 20px;
   position: relative;
   display: grid;
@@ -184,10 +180,6 @@ function WrappedStatusIcon({ connector }: { connector: Connector }) {
   );
 }
 
-const TransactionListWrapper = styled.div`
-  ${({ theme }) => theme.flexColumnNoWrap};
-`;
-
 const WalletAction = styled(ButtonSecondary)`
   width: fit-content;
   font-weight: 400;
@@ -200,16 +192,6 @@ const WalletAction = styled(ButtonSecondary)`
   }
 `;
 
-function renderTransactions(transactions: string[]) {
-  return (
-    <TransactionListWrapper>
-      {transactions.map((hash, i) => {
-        return <Transaction key={i} hash={hash} />;
-      })}
-    </TransactionListWrapper>
-  );
-}
-
 interface AccountDetailsProps {
   toggleWalletModal: () => void;
   pendingTransactions: string[];
@@ -218,15 +200,8 @@ interface AccountDetailsProps {
   openOptions: () => void;
 }
 
-export default function AccountDetails({
-  toggleWalletModal,
-  pendingTransactions,
-  confirmedTransactions,
-  ENSName,
-  openOptions,
-}: AccountDetailsProps) {
+export default function AccountDetails({ toggleWalletModal, ENSName, openOptions }: AccountDetailsProps) {
   const { chainId, account, connector } = useActiveWeb3React();
-  const theme = useContext(ThemeContext);
   const dispatch = useAppDispatch();
 
   function formatConnectorName() {
@@ -238,16 +213,8 @@ export default function AccountDetails({
           SUPPORTED_WALLETS[k].connector === connector && (connector !== injected || isMetaMask === (k === 'METAMASK'))
       )
       .map((k) => SUPPORTED_WALLETS[k].name)[0];
-    return (
-      <WalletName>
-        <Trans>Connected with {name}</Trans>
-      </WalletName>
-    );
+    return <WalletName>Connected with {name}</WalletName>;
   }
-
-  const clearAllTransactionsCallback = useCallback(() => {
-    if (chainId) dispatch(clearAllTransactions({ chainId }));
-  }, [dispatch, chainId]);
 
   return (
     <>
@@ -275,7 +242,7 @@ export default function AccountDetails({
                       }}
                       data-cy="wallet-disconnect"
                     >
-                      <Trans>Disconnect</Trans>
+                      Disconnect
                     </WalletAction>
                   )}
                   <WalletAction

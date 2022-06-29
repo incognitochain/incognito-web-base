@@ -19,9 +19,9 @@ import { TradeState } from 'state/routing/types';
 import styled, { ThemeContext } from 'styled-components/macro';
 
 import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button';
-import { GreyCard } from '../../components/Card';
-import { AutoColumn } from '../../components/Column';
 import AddressInputPanel from '../../components/Core/AddressInputPanel';
+import { GreyCard } from '../../components/Core/Card';
+import { AutoColumn } from '../../components/Core/Column';
 import CurrencyInputPanel from '../../components/Core/CurrencyInputPanel';
 import CurrencyLogo from '../../components/Core/CurrencyLogo';
 import Loader from '../../components/Loader';

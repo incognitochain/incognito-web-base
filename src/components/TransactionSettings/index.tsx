@@ -10,7 +10,7 @@ import { useSetUserSlippageTolerance, useUserSlippageTolerance, useUserTransacti
 import styled, { ThemeContext } from 'styled-components/macro';
 
 import { ThemedText } from '../../theme';
-import { AutoColumn } from '../Column';
+import { AutoColumn } from '../Core/Column';
 import QuestionHelper from '../QuestionHelper';
 import { RowBetween, RowFixed } from '../Row';
 

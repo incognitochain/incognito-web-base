@@ -1,5 +1,5 @@
 import { Currency } from '@uniswap/sdk-core';
-import { AutoColumn } from 'components/Column';
+import { AutoColumn } from 'components/Core/Column';
 import CurrencyLogo from 'components/Core/CurrencyLogo';
 import { AutoRow } from 'components/Row';
 import { COMMON_BASES } from 'constants/routing';

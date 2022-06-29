@@ -1,9 +1,9 @@
 import { Trans } from '@lingui/macro';
 import { Token } from '@uniswap/sdk-core';
 import { ButtonPrimary } from 'components/Button';
-import { AutoColumn } from 'components/Column';
+import { AutoColumn } from 'components/Core/Column';
 import CurrencyLogo from 'components/Core/CurrencyLogo';
-import ListLogo from 'components/ListLogo';
+import ListLogo from 'components/Core/ListLogo';
 import { AutoRow, RowFixed } from 'components/Row';
 import { useIsTokenActive, useIsUserAddedToken } from 'hooks/Tokens';
 import useTheme from 'hooks/useTheme';

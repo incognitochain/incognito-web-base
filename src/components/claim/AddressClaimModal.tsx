@@ -16,9 +16,9 @@ import { CloseIcon, CustomLightSpinner, ExternalLink, ThemedText, UniTokenAnimat
 import { shortenAddress } from '../../utils';
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
 import { ButtonPrimary } from '../Button';
-import { AutoColumn, ColumnCenter } from '../Column';
 import Confetti from '../Confetti';
 import AddressInputPanel from '../Core/AddressInputPanel';
+import { AutoColumn, ColumnCenter } from '../Core/Column';
 import { Break, CardSection, DataCard } from '../earn/styled';
 import { CardBGImage, CardBGImageSmaller, CardNoise } from '../earn/styled';
 import { RowBetween } from '../Row';

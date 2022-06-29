@@ -15,7 +15,7 @@ import { ApplicationModal } from '../../state/application/reducer';
 import { useClientSideRouter, useExpertModeManager } from '../../state/user/hooks';
 import { ThemedText } from '../../theme';
 import { ButtonError } from '../Button';
-import { AutoColumn } from '../Column';
+import { AutoColumn } from '../Core/Column';
 import QuestionHelper from '../QuestionHelper';
 import { RowBetween, RowFixed } from '../Row';
 import Toggle from '../Toggle';

@@ -1,8 +1,8 @@
 import { Trans } from '@lingui/macro';
 import { Currency, Percent, TradeType } from '@uniswap/sdk-core';
 import AnimatedDropdown from 'components/AnimatedDropdown';
-import Card, { OutlineCard } from 'components/Card';
-import { AutoColumn } from 'components/Column';
+import Card, { OutlineCard } from 'components/Core/Card';
+import { AutoColumn } from 'components/Core/Column';
 import { LoadingOpacityContainer } from 'components/Loader/styled';
 import Row, { RowBetween, RowFixed } from 'components/Row';
 import { MouseoverTooltipContent } from 'components/Tooltip';

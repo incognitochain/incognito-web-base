@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/macro';
 import { useWeb3React } from '@web3-react/core';
 import { Connector } from '@web3-react/types';
-import { AutoColumn } from 'components/Column';
+import { AutoColumn } from 'components/Core/Column';
 import Modal from 'components/Modal';
 import { AutoRow } from 'components/Row';
 import { useCallback, useEffect, useState } from 'react';
@@ -20,8 +20,8 @@ import { useModalOpen, useWalletModalToggle } from '../../state/application/hook
 import { ApplicationModal } from '../../state/application/reducer';
 import { ExternalLink, ThemedText } from '../../theme';
 import { isMobile } from '../../utils/userAgent';
-import { LightCard } from '../Card';
 import AccountDetails from '../Core/AccountDetails';
+import { LightCard } from '../Core/Card';
 import Option from './Option';
 import PendingView from './PendingView';
 

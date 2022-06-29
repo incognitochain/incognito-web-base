@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
 import { Currency, Price, Token } from '@uniswap/sdk-core';
-import { AutoColumn } from 'components/Column';
+import { AutoColumn } from 'components/Core/Column';
 import StepCounter from 'components/InputStepCounter/InputStepCounter';
 import { RowBetween } from 'components/Row';
 import { Bound } from 'state/mint/v3/actions';

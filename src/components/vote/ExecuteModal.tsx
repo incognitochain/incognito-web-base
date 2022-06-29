@@ -11,7 +11,7 @@ import { CustomLightSpinner, ThemedText } from '../../theme';
 import { ExternalLink } from '../../theme';
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink';
 import { ButtonPrimary } from '../Button';
-import { AutoColumn, ColumnCenter } from '../Column';
+import { AutoColumn, ColumnCenter } from '../Core/Column';
 import { RowBetween } from '../Row';
 
 const ContentWrapper = styled(AutoColumn)`

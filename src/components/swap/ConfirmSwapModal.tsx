@@ -8,7 +8,7 @@ import { tradeMeaningfullyDiffers } from 'utils/tradeMeaningFullyDiffer';
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
   TransactionErrorContent,
-} from '../TransactionConfirmationModal';
+} from '../Core/TransactionConfirmationModal';
 import SwapModalFooter from './SwapModalFooter';
 import SwapModalHeader from './SwapModalHeader';
 

@@ -7,7 +7,7 @@ import { Text } from 'rebass';
 import styled, { css } from 'styled-components/macro';
 
 import { ThemedText } from '../../theme';
-import { AutoColumn } from '../Column';
+import { AutoColumn } from '../Core/Column';
 import TradePrice from './TradePrice';
 
 export const Wrapper = styled.div`

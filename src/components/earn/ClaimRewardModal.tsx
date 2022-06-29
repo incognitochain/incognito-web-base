@@ -12,7 +12,7 @@ import { useTransactionAdder } from '../../state/transactions/hooks';
 import { TransactionType } from '../../state/transactions/types';
 import { CloseIcon, ThemedText } from '../../theme';
 import { ButtonError } from '../Button';
-import { AutoColumn } from '../Column';
+import { AutoColumn } from '../Core/Column';
 import { LoadingView, SubmittedView } from '../ModalViews';
 import { RowBetween } from '../Row';
 

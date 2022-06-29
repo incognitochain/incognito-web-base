@@ -5,7 +5,7 @@ import { MEDIA_WIDTHS } from 'theme';
 
 import { useActivePopups } from '../../../state/application/hooks';
 import { useURLWarningVisible } from '../../../state/user/hooks';
-import { AutoColumn } from '../../Column';
+import { AutoColumn } from '../Column';
 import PopupItem from './PopupItem';
 
 const MobilePopupWrapper = styled.div<{ height: string | number }>`
