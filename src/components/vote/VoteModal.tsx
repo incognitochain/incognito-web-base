@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/macro';
-import Modal from 'components/Modal';
+import Modal from 'components/Core/Modal';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useContext, useState } from 'react';
 import { ArrowUpCircle, X } from 'react-feather';

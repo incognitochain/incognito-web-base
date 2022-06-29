@@ -22,10 +22,10 @@ import { useActiveListUrls, useAllLists, useIsListActive } from '../../../state/
 import { ExternalLink, IconWrapper, LinkStyledButton, ThemedText } from '../../../theme';
 import listVersionLabel from '../../../utils/listVersionLabel';
 import Row, { RowBetween, RowFixed } from '../../Row';
-import Toggle from '../../Toggle';
 import { ButtonEmpty, ButtonPrimary } from '../Button';
 import Column, { AutoColumn } from '../Column';
 import ListLogo from '../ListLogo';
+import Toggle from '../Toggle';
 import { CurrencyModalView } from './CurrencySearchModal';
 import { PaddedColumn, SearchInput, Separator, SeparatorDark } from './styleds';
 

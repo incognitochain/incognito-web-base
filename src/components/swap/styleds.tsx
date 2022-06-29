@@ -1,5 +1,5 @@
-import { loadingOpacityMixin } from 'components/Loader/styled';
-import { TooltipContainer } from 'components/Tooltip';
+import { loadingOpacityMixin } from 'components/Core/Loader/styled';
+import { TooltipContainer } from 'components/Core/Tooltip';
 import { transparentize } from 'polished';
 import { ReactNode } from 'react';
 import { AlertTriangle } from 'react-feather';

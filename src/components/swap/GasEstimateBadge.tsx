@@ -1,9 +1,9 @@
 import { Trans } from '@lingui/macro';
 import { Currency, TradeType } from '@uniswap/sdk-core';
 import { AutoColumn } from 'components/Core/Column';
-import { LoadingOpacityContainer } from 'components/Loader/styled';
+import { LoadingOpacityContainer } from 'components/Core/Loader/styled';
+import { MouseoverTooltipContent } from 'components/Core/Tooltip';
 import { RowFixed } from 'components/Row';
-import { MouseoverTooltipContent } from 'components/Tooltip';
 import { InterfaceTrade } from 'state/routing/types';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';

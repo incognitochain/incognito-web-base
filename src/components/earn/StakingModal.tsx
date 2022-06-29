@@ -3,7 +3,7 @@ import { Trans } from '@lingui/macro';
 import StakingRewardsJson from '@uniswap/liquidity-staker/build/StakingRewards.json';
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
 import { Pair } from '@uniswap/v2-sdk';
-import Modal from 'components/Modal';
+import Modal from 'components/Core/Modal';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useV2LiquidityTokenPermit } from 'hooks/useV2LiquidityTokenPermit';
 import { useCallback, useState } from 'react';

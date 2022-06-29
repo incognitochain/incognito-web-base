@@ -3,7 +3,7 @@ import Badge, { BadgeVariant } from 'components/Badge';
 import { AlertCircle } from 'react-feather';
 import styled from 'styled-components/macro';
 
-import { MouseoverTooltip } from '../../components/Tooltip';
+import { MouseoverTooltip } from '../Core/Tooltip';
 
 const BadgeWrapper = styled.div`
   font-size: 14px;

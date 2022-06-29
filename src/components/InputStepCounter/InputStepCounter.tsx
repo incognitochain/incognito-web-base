@@ -8,7 +8,7 @@ import { Minus, Plus } from 'react-feather';
 import styled, { keyframes } from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
-import { Input as NumericalInput } from '../NumericalInput';
+import { Input as NumericalInput } from '../Core/NumericalInput';
 
 const pulse = (color: string) => keyframes`
   0% {

@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useState } from 'react';
 import styled from 'styled-components/macro';
 
-import Tooltip from '../Tooltip';
+import Tooltip from '../Core/Tooltip';
 
 const QuestionWrapper = styled.div`
   display: flex;

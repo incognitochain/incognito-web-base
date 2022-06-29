@@ -5,10 +5,8 @@ import MetamaskIcon from 'assets/images/metamask.png';
 import TallyIcon from 'assets/images/tally.png';
 import { ReactComponent as Close } from 'assets/images/x.svg';
 import AccountDetails from 'components/Core/AccountDetails';
-import { LightCard } from 'components/Core/Card';
 import { AutoColumn } from 'components/Core/Column';
-import Modal from 'components/Modal';
-import { AutoRow } from 'components/Row';
+import Modal from 'components/Core/Modal';
 import { fortmatic, getWalletForConnector, injected } from 'connectors';
 import { SUPPORTED_WALLETS } from 'constants/wallet';
 import { useCallback, useEffect, useState } from 'react';
@@ -19,7 +17,6 @@ import { useAppDispatch, useAppSelector } from 'state/hooks';
 import { updateSelectedWallet } from 'state/user/reducer';
 import { updateWalletError } from 'state/wallet/reducer';
 import styled from 'styled-components/macro';
-import { ExternalLink, ThemedText } from 'theme';
 import { isMobile } from 'utils/userAgent';
 
 import Option from './Option';
@@ -326,28 +323,6 @@ export default function WalletModal({
               />
             )}
             {walletView !== WALLET_VIEWS.PENDING && <OptionGrid data-cy="option-grid">{getOptions()}</OptionGrid>}
-            {!pendingError && (
-              <LightCard>
-                <AutoRow style={{ flexWrap: 'nowrap' }}>
-                  <ThemedText.Body fontSize={12}>
-                    <Trans>
-                      By connecting a wallet, you agree to Uniswap Labs’{' '}
-                      <ExternalLink
-                        style={{ textDecoration: 'underline' }}
-                        href="https://uniswap.org/terms-of-service/"
-                      >
-                        Terms of Service
-                      </ExternalLink>{' '}
-                      and acknowledge that you have read and understand the Uniswap{' '}
-                      <ExternalLink style={{ textDecoration: 'underline' }} href="https://uniswap.org/disclaimer/">
-                        Protocol Disclaimer
-                      </ExternalLink>
-                      .
-                    </Trans>
-                  </ThemedText.Body>
-                </AutoRow>
-              </LightCard>
-            )}
           </AutoColumn>
         </ContentWrapper>
       </UpperSection>

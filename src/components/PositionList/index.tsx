@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
+import Toggle from 'components/Core/Toggle';
 import PositionListItem from 'components/PositionListItem';
-import Toggle from 'components/Toggle';
 import React from 'react';
 import styled from 'styled-components/macro';
 import { MEDIA_WIDTHS } from 'theme';

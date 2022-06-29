@@ -1,6 +1,6 @@
 import { Currency, Token } from '@uniswap/sdk-core';
 import { TokenList } from '@uniswap/token-lists';
-import Modal from 'components/Modal';
+import Modal from 'components/Core/Modal';
 import usePrevious from 'hooks/usePrevious';
 import { useCallback, useEffect, useState } from 'react';
 

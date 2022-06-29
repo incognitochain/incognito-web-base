@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/macro';
 import { Currency, Percent, TradeType } from '@uniswap/sdk-core';
 import Card from 'components/Core/Card';
-import { LoadingRows } from 'components/Loader/styled';
+import { LoadingRows } from 'components/Core/Loader/styled';
 import { SUPPORTED_GAS_ESTIMATE_CHAIN_IDS } from 'constants/chains';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useNativeCurrency from 'lib/hooks/useNativeCurrency';
@@ -12,8 +12,8 @@ import styled, { ThemeContext } from 'styled-components/macro';
 import { Separator, ThemedText } from '../../theme';
 import { computeRealizedLPFeePercent } from '../../utils/prices';
 import { AutoColumn } from '../Core/Column';
+import { MouseoverTooltip } from '../Core/Tooltip';
 import { RowBetween, RowFixed } from '../Row';
-import { MouseoverTooltip } from '../Tooltip';
 import FormattedPriceImpact from './FormattedPriceImpact';
 
 const StyledCard = styled(Card)`

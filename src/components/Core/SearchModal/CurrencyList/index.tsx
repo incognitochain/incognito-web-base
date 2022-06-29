@@ -16,11 +16,11 @@ import { WrappedTokenInfo } from '../../../../state/lists/wrappedTokenInfo';
 import { useCurrencyBalance } from '../../../../state/wallet/hooks';
 import { ThemedText } from '../../../../theme';
 import { isTokenOnList } from '../../../../utils';
-import Loader from '../../../Loader';
 import { RowBetween, RowFixed } from '../../../Row';
-import { MouseoverTooltip } from '../../../Tooltip';
 import Column from '../../Column';
 import CurrencyLogo from '../../CurrencyLogo';
+import Loader from '../../Loader';
+import { MouseoverTooltip } from '../../Tooltip';
 import ImportRow from '../ImportRow';
 import { LoadingRows, MenuItem } from '../styleds';
 

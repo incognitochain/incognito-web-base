@@ -1,7 +1,7 @@
 import { isAddress } from '@ethersproject/address';
 import { Trans } from '@lingui/macro';
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
-import Modal from 'components/Modal';
+import Modal from 'components/Core/Modal';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import JSBI from 'jsbi';
 import { useEffect, useState } from 'react';

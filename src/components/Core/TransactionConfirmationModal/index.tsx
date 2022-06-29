@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/macro';
 import { Currency } from '@uniswap/sdk-core';
 import Badge from 'components/Badge';
-import Modal from 'components/Modal';
+import Modal from 'components/Core/Modal';
 import { CHAIN_INFO } from 'constants/chainInfo';
 import { L2_CHAIN_IDS, SupportedL2ChainId } from 'constants/chains';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';

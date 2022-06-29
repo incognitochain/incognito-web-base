@@ -12,7 +12,7 @@ import styled from 'styled-components/macro';
 import { ThemedText, Z_INDEX } from 'theme';
 
 import { ReactComponent as DotLine } from '../../assets/svg/dot_line.svg';
-import { MouseoverTooltip } from '../Tooltip';
+import { MouseoverTooltip } from '../Core/Tooltip';
 
 const Wrapper = styled(Box)`
   align-items: center;

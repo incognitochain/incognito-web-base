@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { t, Trans } from '@lingui/macro';
 import { Percent } from '@uniswap/sdk-core';
-import Modal from 'components/Modal';
+import Modal from 'components/Core/Modal';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { AUTO_ROUTER_SUPPORTED_CHAINS } from 'lib/hooks/routing/clientSideSmartOrderRouter';
 import { useContext, useRef, useState } from 'react';
@@ -16,9 +16,9 @@ import { useClientSideRouter, useExpertModeManager } from '../../state/user/hook
 import { ThemedText } from '../../theme';
 import { ButtonError } from '../Core/Button';
 import { AutoColumn } from '../Core/Column';
+import Toggle from '../Core/Toggle';
 import QuestionHelper from '../QuestionHelper';
 import { RowBetween, RowFixed } from '../Row';
-import Toggle from '../Toggle';
 import TransactionSettings from '../TransactionSettings';
 
 const StyledMenuIcon = styled(Settings)`

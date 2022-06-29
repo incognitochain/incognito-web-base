@@ -2,7 +2,7 @@ import '@reach/dialog/styles.css';
 import 'inter-ui';
 import 'polyfills';
 
-import Web3Provider from 'components/Web3Provider';
+import Web3Provider from 'components/Core/Web3Provider';
 import { BlockNumberProvider } from 'lib/hooks/useBlockNumber';
 import { MulticallUpdater } from 'lib/state/multicall';
 import App from 'pages/App';

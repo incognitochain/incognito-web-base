@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
 import Card, { DarkGreyCard } from 'components/Core/Card';
-import Modal from 'components/Modal';
+import Modal from 'components/Core/Modal';
 import Row, { AutoRow, RowBetween } from 'components/Row';
 import { useRef } from 'react';
 import { ArrowDown, Info, X } from 'react-feather';

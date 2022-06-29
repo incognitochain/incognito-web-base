@@ -4,7 +4,7 @@ import { ButtonEmpty } from 'components/Core/Button';
 import Card, { OutlineCard } from 'components/Core/Card';
 import { AutoColumn } from 'components/Core/Column';
 import CurrencyLogo from 'components/Core/CurrencyLogo';
-import Modal from 'components/Modal';
+import Modal from 'components/Core/Modal';
 import { AutoRow, RowBetween } from 'components/Row';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useState } from 'react';

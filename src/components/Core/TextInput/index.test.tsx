@@ -3,7 +3,7 @@ import 'jest-styled-components';
 
 import { fireEvent, render, screen } from 'test-utils';
 
-import { ResizingTextArea, TextInput } from './';
+import { ResizingTextArea, TextInput } from './index';
 
 describe('TextInput', () => {
   it('renders correctly', () => {

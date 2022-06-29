@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
 import Column from 'components/Core/Column';
-import Modal from 'components/Modal';
+import Modal from 'components/Core/Modal';
 import { AlertOctagon } from 'react-feather';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
