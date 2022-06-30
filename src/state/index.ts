@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { reducer as tabs } from 'components/Core/Tabs';
 import multicall from 'lib/state/multicall';
-import { reducer as formReducer } from 'redux-form';
+import { reducer as form } from 'redux-form';
 import { load, save } from 'redux-localstorage-simple';
 import logger from 'redux-logger';
 
@@ -31,7 +31,7 @@ const store = configureStore({
     token,
     [routingApi.reducerPath]: routingApi.reducer,
     tabs,
-    formReducer,
+    form,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -5,11 +5,12 @@ import React from 'react';
 import { Field } from 'redux-form';
 
 const Form = React.memo((props: any) => {
-  const { handleSubmit } = props;
+  const { handleSubmit, onChangeField } = props;
   const handleSwap = () => console.log('SWAP');
   return (
     <form onSubmit={handleSubmit(handleSwap)}>
       <Field
+        onChange={(e: any) => onChangeField(e, FORM_CONFIGS.formAddress)}
         component={InputField}
         name={FORM_CONFIGS.formAddress}
         inputType={INPUT_FIELD.address}

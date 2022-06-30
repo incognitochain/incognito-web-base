@@ -9,8 +9,8 @@ import enhanceInit from './Swap.enhanceInit';
 const enhance = (WrappedComponent: any) => {
   const SwapComp = (props: any) => {
     const dispatch = useAppDispatch();
-    const onChangeField = async (value: string, field: string) => {
-      const val: any = value;
+    const onChangeField = async (e: any, field: string) => {
+      const val = e.target.value;
       dispatch(change(FORM_CONFIGS.formName, field, val));
       dispatch(focus(FORM_CONFIGS.formName, field));
     };

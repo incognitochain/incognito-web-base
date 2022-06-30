@@ -35,8 +35,7 @@ interface ITextAreaProps {
 
 export const InputComp = React.memo((props: IInputProps) => {
   const { input: inputProps, componentProps } = props;
-  console.log('SANG', props);
-  return <Input className="fs-large" type="text" autoComplete="off" {...inputProps} {...componentProps} />;
+  return <Input type="text" autoComplete="off" {...inputProps} {...componentProps} />;
 });
 
 InputComp.displayName = 'Input';
