@@ -210,13 +210,13 @@ export const ThemedText = {
     return <TextWrapper fontWeight={500} fontSize={14} {...props} />;
   },
   SmallLabel(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={14} {...props} />;
+    return <TextWrapper fontWeight={500} fontSize={14} style={{ lineHeight: '20px' }} {...props} />;
   },
   RegularLabel(props: TextProps) {
     return <TextWrapper fontWeight={500} fontSize={16} {...props} />;
   },
   MediumLabel(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={18} {...props} />;
+    return <TextWrapper fontWeight={500} fontSize={18} style={{ lineHeight: '28px' }} {...props} />;
   },
   Small(props: TextProps) {
     return <TextWrapper fontWeight={500} fontSize={11} {...props} />;
