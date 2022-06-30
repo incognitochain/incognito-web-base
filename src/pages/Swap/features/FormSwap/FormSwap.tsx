@@ -11,9 +11,37 @@ const Styled = styled.div`
   }
 `;
 
-const Form = React.memo((props: any) => {
+const FormSwap = React.memo((props: any) => {
   const { handleSubmit } = props;
   const handleSwap = () => console.log('SWAP');
+
+  const renderFormDeposit = () => {
+    return (
+      <>
+        <Field
+          component={InputField}
+          name={FORM_CONFIGS.sellAmount}
+          inputType={INPUT_FIELD.amount}
+          leftTitle="Total amount"
+          componentProps={{
+            placeholder: 'Amount',
+          }}
+        />
+        <Field
+          component={InputField}
+          name={FORM_CONFIGS.formAddress}
+          inputType={INPUT_FIELD.address}
+          leftTitle="Address"
+          componentProps={{
+            placeholder: 'Your Address',
+          }}
+        />
+      </>
+    );
+  };
+
+  const renderForm = () => null;
+
   return (
     <Styled>
       <form onSubmit={handleSubmit(handleSwap)}>
@@ -40,6 +68,6 @@ const Form = React.memo((props: any) => {
   );
 });
 
-Form.displayName = 'FormSwap';
+FormSwap.displayName = 'FormSwap';
 
-export default Form;
+export default FormSwap;

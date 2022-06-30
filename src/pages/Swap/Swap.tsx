@@ -1,16 +1,27 @@
 import { TAB_LIST, Tabs } from 'components/Core/Tabs';
+import { selectedTabSelector } from 'components/Core/Tabs/Tabs.selectors';
 import AppBody from 'pages/AppBody';
+import { useAppSelector } from 'state/hooks';
 
-import { FormSwap } from './features/Form';
+import { FormDeposit } from './features/FormDeposit';
+import { FormSwap } from './features/FormSwap';
 import enhance from './Swap.enhance';
 
 const Swap = (props: any) => {
-  // const { account, chainId } = useActiveWeb3React();
+  const { SWAP: HEADER_TAB } = TAB_LIST;
+  const selectedTab = useAppSelector(selectedTabSelector)(HEADER_TAB.rootTab);
+
+  const renderForm = () => {
+    console.log(selectedTab);
+    if (selectedTab === HEADER_TAB.tabNames[0]) return <FormDeposit {...props} />;
+    return <FormSwap {...props} />;
+  };
+
   return (
     <>
       <AppBody>
-        <Tabs {...TAB_LIST.SWAP} />
-        <FormSwap {...props} />
+        <Tabs {...HEADER_TAB} />
+        {renderForm()}
       </AppBody>
     </>
   );

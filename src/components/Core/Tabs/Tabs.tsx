@@ -18,16 +18,22 @@ const Styled = styled(Row)`
 `;
 
 const Tabs = React.memo((props: ITabsProps) => {
-  const { tabNames, rootTab } = props;
+  const { tabNames, rootTab, onChangeTab } = props;
 
   const dispatch = useAppDispatch();
   const selectedTab = useAppSelector(selectedTabSelector)(rootTab);
 
-  const onChangeTab = ({ tabName }: { tabName: string }) => dispatch(changeTab({ tab: tabName, rootTab }));
+  const _onChangeTab = ({ tabName }: { tabName: string }) => {
+    if (tabName === selectedTab) return;
+    dispatch(changeTab({ tab: tabName, rootTab }));
+    if (onChangeTab instanceof Function) {
+      onChangeTab();
+    }
+  };
 
   const forceChangeTab = () => {
     if (selectedTab) return;
-    onChangeTab({ tabName: tabNames[0] });
+    _onChangeTab({ tabName: tabNames[0] });
   };
 
   React.useEffect(() => forceChangeTab(), []);
@@ -41,7 +47,7 @@ const Tabs = React.memo((props: ITabsProps) => {
             className="tab-title "
             color={isActive ? 'primary5' : 'primary7'}
             key={tabName}
-            onClick={() => onChangeTab({ tabName })}
+            onClick={() => _onChangeTab({ tabName })}
           >
             {tabName}
           </ThemedText.MediumLabel>

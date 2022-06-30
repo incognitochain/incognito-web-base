@@ -14,6 +14,8 @@ const enhanceInit = (WrappedComp: any) => {
     const [init, setInit] = React.useState(false);
     const isInitingForm = init;
 
+    const resetForm = () => dispatch(reset(FORM_CONFIGS.formName));
+
     const initData = () => {
       if (init) {
         return;
@@ -21,7 +23,7 @@ const enhanceInit = (WrappedComp: any) => {
       try {
         setInit(false);
         batch(() => {
-          dispatch(reset(FORM_CONFIGS.formName));
+          resetForm();
         });
       } catch (error) {
         console.log('INIT SWAP DATA ERROR: ', error);
@@ -34,7 +36,7 @@ const enhanceInit = (WrappedComp: any) => {
       initData();
     }, []);
 
-    return <WrappedComp {...{ ...props, isInitingForm }} />;
+    return <WrappedComp {...{ ...props, isInitingForm, resetForm }} />;
   };
   SwapInit.displayName = 'Swap.init';
   return SwapInit;
