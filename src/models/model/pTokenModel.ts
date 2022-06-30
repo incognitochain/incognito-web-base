@@ -1,5 +1,3 @@
-import TokenModel from './TokenModel';
-
 class PToken {
   id?: any;
   address?: any;
@@ -29,11 +27,12 @@ class PToken {
   image?: any;
   hasSameSymbol?: boolean;
   listChildToken?: any;
+  listUnifiedToken?: any;
   parentID?: any;
 
   constructor(data: any = {}, pTokens = []) {
     const pairPrv = data?.CurrentPrvPool !== 0;
-    this.id = data.ID;
+    this.id = data.TokenID;
     this.address = data.ContractID;
     this.createdAt = data.CreatedAt;
     this.updatedAt = data.UpdatedAt;
@@ -70,22 +69,15 @@ class PToken {
     } else {
       this.listChildToken = [];
     }
-  }
-
-  /**
-   * Convert to data structure of token which stored in wallet object
-   */
-  convertToToken() {
-    return TokenModel.toJson({
-      id: this.tokenId,
-      isPrivacy: true,
-      name: this.name,
-      symbol: this.pSymbol,
-      isInit: false,
-      // listTxs,
-      // image,
-      // amount
-    });
+    if (data && data.ListUnifiedToken instanceof Array) {
+      this.listUnifiedToken = data.ListUnifiedToken.map((item: any) => {
+        const newItem = new PToken(item);
+        newItem.parentID = item.ParentID;
+        return newItem;
+      });
+    } else {
+      this.listUnifiedToken = [];
+    }
   }
 }
 

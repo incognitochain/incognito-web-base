@@ -9,6 +9,8 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { DarkModeQueryParamReader } from 'theme';
 
+import enhance from './App.enhance';
+
 const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;
@@ -42,7 +44,7 @@ const Marginer = styled.div`
   margin-top: 5rem;
 `;
 
-export default function App() {
+const App = () => {
   const history = useHistory();
   useEffect(() => {
     const unlisten = history.listen(() => {
@@ -74,4 +76,6 @@ export default function App() {
       </AppWrapper>
     </ErrorBoundary>
   );
-}
+};
+
+export default enhance(App);
