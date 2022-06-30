@@ -25,10 +25,12 @@ const Tabs = React.memo((props: ITabsProps) => {
 
   const onChangeTab = ({ tabName }: { tabName: string }) => dispatch(changeTab({ tab: tabName, rootTab }));
 
-  React.useEffect(() => {
+  const forceChangeTab = () => {
     if (selectedTab) return;
     onChangeTab({ tabName: tabNames[0] });
-  }, []);
+  };
+
+  React.useEffect(() => forceChangeTab(), []);
 
   return (
     <Styled>
