@@ -5,6 +5,8 @@ import React from 'react';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
+import { Selection } from '../Selection';
+
 const Styled = styled.div`
   .wrap-input-panel {
     margin-top: 16px;
@@ -27,6 +29,8 @@ const FormDeposit = React.memo((props: any) => {
             placeholder: 'Amount',
           }}
         />
+        <Selection />
+        <Selection />
         <Field
           component={InputField}
           name={FORM_CONFIGS.formAddress}

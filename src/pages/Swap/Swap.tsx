@@ -12,7 +12,7 @@ const Swap = (props: any) => {
   const selectedTab = useAppSelector(selectedTabSelector)(HEADER_TAB.rootTab);
 
   const renderForm = () => {
-    console.log(selectedTab);
+    // Deposit
     if (selectedTab === HEADER_TAB.tabNames[0]) return <FormDeposit {...props} />;
     return <FormSwap {...props} />;
   };
