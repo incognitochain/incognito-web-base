@@ -1,5 +1,6 @@
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
+import { VerticalSpace } from 'components/Core/Space';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { Field } from 'redux-form';
@@ -7,11 +8,7 @@ import styled from 'styled-components/macro';
 
 import { Selection } from '../Selection';
 
-const Styled = styled.div`
-  .wrap-input-panel {
-    margin-top: 16px;
-  }
-`;
+const Styled = styled.div``;
 
 const FormDeposit = React.memo((props: any) => {
   const { handleSubmit } = props;
@@ -20,6 +17,7 @@ const FormDeposit = React.memo((props: any) => {
   return (
     <Styled>
       <form onSubmit={handleSubmit(handleDeposit)}>
+        <VerticalSpace />
         <Field
           component={InputField}
           name={FORM_CONFIGS.sellAmount}
@@ -29,8 +27,11 @@ const FormDeposit = React.memo((props: any) => {
             placeholder: 'Amount',
           }}
         />
-        <Selection />
-        <Selection />
+        <VerticalSpace />
+        <Selection title="Form" />
+        <VerticalSpace />
+        <Selection title="To" />
+        <VerticalSpace />
         <Field
           component={InputField}
           name={FORM_CONFIGS.formAddress}

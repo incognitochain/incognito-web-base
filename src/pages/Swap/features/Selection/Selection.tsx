@@ -1,7 +1,22 @@
+import Row from 'components/Core/Row';
 import React from 'react';
+import { ThemedText } from 'theme';
 
-const Selection = React.memo(() => {
-  return null;
+interface ISelection {
+  title: string;
+}
+
+const Selection = React.memo((props: ISelection) => {
+  const { title } = props;
+  return (
+    <>
+      <Row>
+        <ThemedText.SmallLabel fontWeight={400} color="primary8">
+          {title}
+        </ThemedText.SmallLabel>
+      </Row>
+    </>
+  );
 });
 
 Selection.displayName = 'Selection';
