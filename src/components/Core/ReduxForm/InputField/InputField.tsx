@@ -99,7 +99,7 @@ const InputField = (props: IInputFieldProps) => {
     }
   };
   return (
-    <InputPanel>
+    <InputPanel className="wrap-input-panel">
       {renderHeader()}
       {renderInput()}
       {renderError()}
