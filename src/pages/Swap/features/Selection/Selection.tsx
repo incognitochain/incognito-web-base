@@ -14,6 +14,22 @@ const MainStyled = styled(Row)`
   min-height: 88px;
   background-color: ${({ theme }) => theme.primary14};
   margin-top: 4px;
+  display: flex;
+  .section {
+    padding: 16px;
+    flex: 1;
+  }
+  .selection-item {
+    width: 100%;
+    min-height: 52px;
+  }
+  .line {
+    background-color: red;
+    width: 1px;
+    height: 85px;
+    transform: translateX(50%);
+    top: 0;
+  }
 `;
 
 const Selection = React.memo((props: ISelection) => {
@@ -30,7 +46,21 @@ const Selection = React.memo((props: ISelection) => {
           </ThemedText.SmallLabel>
         )}
       </RowBetween>
-      <MainStyled />
+      <MainStyled>
+        <div className="section">
+          <ThemedText.SmallLabel fontWeight={400} color="primary8">
+            Token
+          </ThemedText.SmallLabel>
+          <div className="selection-item" />
+        </div>
+        <div className="line" />
+        <div className="section">
+          <ThemedText.SmallLabel fontWeight={400} color="primary8">
+            Network
+          </ThemedText.SmallLabel>
+          <div className="selection-item" />
+        </div>
+      </MainStyled>
     </>
   );
 });
