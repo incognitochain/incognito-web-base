@@ -6,16 +6,16 @@ import { Field } from 'redux-form';
 
 const Form = React.memo((props: any) => {
   const { handleSubmit } = props;
-  const handleSwap = () => console.log('SANG');
+  const handleSwap = () => console.log('SWAP');
   return (
     <form onSubmit={handleSubmit(handleSwap)}>
       <Field
         component={InputField}
-        name={FORM_CONFIGS.sellAmount}
-        inputType={INPUT_FIELD.amount}
+        name={FORM_CONFIGS.formAddress}
+        inputType={INPUT_FIELD.address}
+        leftTitle="Address"
         componentProps={{
-          placeholder: 'Amount',
-          autoFocus: true,
+          placeholder: 'Your Address',
         }}
       />
     </form>

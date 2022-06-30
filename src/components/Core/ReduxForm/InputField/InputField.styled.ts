@@ -1,5 +1,55 @@
 import styled from 'styled-components/macro';
 
+import { RowBetween } from '../../Row';
+
+export const InputPanel = styled.div`
+  ${({ theme }) => theme.flexColumnNoWrap}
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  .wrap-input-header {
+    margin-bottom: 4px;
+    justify-content: space-between;
+  }
+  .input-container {
+  }
+`;
+
+export const InputContainer = styled(RowBetween)`
+  background-color: ${({ theme }) => theme.primary14};
+  border-radius: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+`;
+
+export const Input = styled.input`
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+  border: none;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  min-height: 56px;
+  color: ${({ theme }) => theme.primary5};
+  background-color: transparent;
+  ::placeholder {
+    color: ${({ theme }) => theme.primary7};
+  }
+  padding: 0;
+  -webkit-appearance: textfield;
+
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+`;
+
 export const Styled = styled.div`
   margin-bottom: 16px;
 

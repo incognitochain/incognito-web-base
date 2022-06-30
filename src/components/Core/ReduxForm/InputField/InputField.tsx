@@ -1,9 +1,11 @@
 import Row from 'components/Core/Row';
 import React from 'react';
 import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form';
+import { ThemedText } from 'theme';
 
+import { ButtonMax } from '../../Button/ButtonMax';
 import { INPUT_FIELD } from './InputField.constant';
-import { Styled } from './InputField.styled';
+import { Input, InputContainer, InputPanel } from './InputField.styled';
 
 export interface IInputFieldProps {
   meta: WrappedFieldMetaProps;
@@ -31,12 +33,13 @@ interface ITextAreaProps {
   componentProps: React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 }
 
-export const Input = React.memo((props: IInputProps) => {
+export const InputComp = React.memo((props: IInputProps) => {
   const { input: inputProps, componentProps } = props;
-  return <input className="fs-large" type="text" autoComplete="off" {...inputProps} {...componentProps} />;
+  console.log('SANG', props);
+  return <Input className="fs-large" type="text" autoComplete="off" {...inputProps} {...componentProps} />;
 });
 
-Input.displayName = 'Input';
+InputComp.displayName = 'Input';
 
 export const TextArea = React.memo((props: ITextAreaProps) => {
   const { input: inputProps, componentProps } = props;
@@ -46,25 +49,9 @@ export const TextArea = React.memo((props: ITextAreaProps) => {
 TextArea.displayName = 'TextArea';
 
 const InputField = (props: IInputFieldProps) => {
-  const {
-    meta,
-    input,
-    componentProps,
-    inputType,
-    subtitle,
-    suffix,
-    onClickMax,
-    onClickAddressBook,
-    onClickScan,
-    warning,
-    errorCustom,
-    leftTitle,
-    rightTitle,
-  } = props;
+  const { meta, input, componentProps, inputType, onClickMax, warning, errorCustom, leftTitle, rightTitle } = props;
   const { error: errorMeta, touched, submitting } = meta;
   const error = errorMeta || errorCustom;
-  const [togglePassword, setTogglePassword] = React.useState(false);
-  const handleTogglePassword = () => setTogglePassword(!togglePassword);
   const renderError = () => {
     if (submitting) {
       return null;
@@ -80,8 +67,12 @@ const InputField = (props: IInputFieldProps) => {
   const renderHeader = () => {
     return (
       <Row className="wrap-input-header">
-        <p className="fs-small fw-regular">{leftTitle}</p>
-        {rightTitle && <p className="fs-small fw-regular">{rightTitle}</p>}
+        <ThemedText.SmallLabel fontWeight={400} color="primary8">
+          {leftTitle}
+        </ThemedText.SmallLabel>
+        <ThemedText.SmallLabel fontWeight={400} color="primary8">
+          {rightTitle}
+        </ThemedText.SmallLabel>
       </Row>
     );
   };
@@ -89,33 +80,31 @@ const InputField = (props: IInputFieldProps) => {
     switch (inputType) {
       case INPUT_FIELD.amount:
         return (
-          <div className="input-container input-amount">
-            <Input {...{ input, componentProps }} />
-            {/*<div className="sub-icon">*/}
-            {/*  <MaxBtn onClick={onClickMax} />*/}
-            {/*</div>*/}
-          </div>
+          <InputContainer className="input-container input-amount">
+            <InputComp {...{ input, componentProps }} />
+            <ButtonMax onClick={onClickMax} />
+          </InputContainer>
         );
       case INPUT_FIELD.address:
         return (
-          <div className="input-container input-address">
-            <Input {...{ input, componentProps }} />
-          </div>
+          <InputContainer className="input-container input-address">
+            <InputComp {...{ input, componentProps }} />
+          </InputContainer>
         );
       default:
         return (
-          <div className="input-container">
-            <Input {...{ input, componentProps }} />
-          </div>
+          <InputContainer className="input-container">
+            <InputComp {...{ input, componentProps }} />
+          </InputContainer>
         );
     }
   };
   return (
-    <Styled>
+    <InputPanel>
       {renderHeader()}
       {renderInput()}
       {renderError()}
-    </Styled>
+    </InputPanel>
   );
 };
 

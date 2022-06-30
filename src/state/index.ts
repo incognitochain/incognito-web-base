@@ -3,6 +3,7 @@ import { reducer as tabs } from 'components/Core/Tabs';
 import multicall from 'lib/state/multicall';
 import { reducer as formReducer } from 'redux-form';
 import { load, save } from 'redux-localstorage-simple';
+import logger from 'redux-logger';
 
 import application from './application/reducer';
 import { updateVersion } from './global/actions';
@@ -38,6 +39,7 @@ const store = configureStore({
       serializableCheck: false,
     })
       .concat(routingApi.middleware)
+      .concat([logger])
       .concat(save({ states: PERSISTED_KEYS, debounce: 1000 })),
   preloadedState: load({ states: PERSISTED_KEYS, disableWarnings: process.env.NODE_ENV === 'test' }),
 });

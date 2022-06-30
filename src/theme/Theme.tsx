@@ -132,6 +132,7 @@ function colors(darkMode: boolean): Colors {
     primary11: '#F5F5F5',
     primary12: '#F9F9F9',
     primary13: '#FCFCFC',
+    primary14: '#252525',
 
     // Buttons
     btn1: '#1A73E8',
@@ -185,7 +186,7 @@ const TextWrapper = styled(Text)<{ color: keyof Colors }>`
  */
 export const ThemedText = {
   Main(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'text2'} {...props} />;
+    return <TextWrapper fontWeight={500} color={'primary8'} {...props} />;
   },
   Link(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'primary1'} {...props} />;

@@ -1,13 +1,21 @@
 import React from 'react';
 import { compose } from 'redux';
-import { reduxForm } from 'redux-form';
+import { change, focus, reduxForm } from 'redux-form';
 
+import { useAppDispatch } from '../../state/hooks';
 import { FORM_CONFIGS } from './Swap.constant';
 import enhanceInit from './Swap.enhanceInit';
 
 const enhance = (WrappedComponent: any) => {
   const SwapComp = (props: any) => {
-    return <WrappedComponent {...{ ...props }} />;
+    const dispatch = useAppDispatch();
+    const onChangeField = async (value: string, field: string) => {
+      const val: any = value;
+      dispatch(change(FORM_CONFIGS.formName, field, val));
+      dispatch(focus(FORM_CONFIGS.formName, field));
+    };
+
+    return <WrappedComponent {...{ ...props, onChangeField }} />;
   };
   SwapComp.displayName = 'Swap.enhance';
   return SwapComp;
