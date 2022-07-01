@@ -120,7 +120,7 @@ function getConnectorListItemForWallet(wallet: Wallet) {
 
 export function useConnectors(selectedWallet: Wallet | undefined) {
   return useMemo(() => {
-    const connectors: ConnectorListItem[] = [{ connector: gnosisSafe, hooks: gnosisSafeHooks }];
+    const connectors: ConnectorListItem[] = [];
     if (selectedWallet) {
       connectors.push(getConnectorListItemForWallet(selectedWallet));
     }
