@@ -101,6 +101,7 @@ function colors(darkMode: boolean): Colors {
     border2: '#DDDDDD',
     border3: '#F2F2F2',
     border4: '#F2F4F5',
+    border5: '#474646',
 
     // Background
     // backgrounds / greys
@@ -242,12 +243,18 @@ export const ThemedText = {
 };
 
 export const ThemedGlobalStyle = createGlobalStyle`
-html {
-  color: ${({ theme }) => theme.text1};
-  background-color: ${({ theme }) => theme.bg1} !important;
-}
-
-a {
- color: ${({ theme }) => theme.blue1}; 
-}
+  html {
+    color: ${({ theme }) => theme.text1};
+    background-color: ${({ theme }) => theme.bg1} !important;
+  }
+  
+  a {
+   color: ${({ theme }) => theme.blue1}; 
+  }
+  .border-hover {
+    border: 1px solid ${({ theme }) => theme.border1};
+    :hover {
+      border: 1px solid ${({ theme }) => theme.border5};
+    }
+  }
 `;

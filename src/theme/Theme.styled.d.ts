@@ -51,6 +51,7 @@ export interface Colors {
   border2: Color;
   border3: Color;
   border4: Color;
+  border5: Color;
 
   // Background
   bg1: Color;

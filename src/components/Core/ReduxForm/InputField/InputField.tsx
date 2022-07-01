@@ -79,20 +79,20 @@ const InputField = (props: IInputFieldProps) => {
     switch (inputType) {
       case INPUT_FIELD.amount:
         return (
-          <InputContainer className="input-container input-amount">
+          <InputContainer className="border-hover input-container input-amount">
             <InputComp {...{ input, componentProps }} />
             <ButtonMax onClick={onClickMax} />
           </InputContainer>
         );
       case INPUT_FIELD.address:
         return (
-          <InputContainer className="input-container input-address">
+          <InputContainer className="border-hover input-container input-address">
             <InputComp {...{ input, componentProps }} />
           </InputContainer>
         );
       default:
         return (
-          <InputContainer className="input-container">
+          <InputContainer className="border-hover input-container">
             <InputComp {...{ input, componentProps }} />
           </InputContainer>
         );

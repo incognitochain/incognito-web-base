@@ -47,15 +47,12 @@ export const ButtonMaxStyled = styled.button<
   > a {
     text-decoration: none;
   }
-  :hover {
-    border: 1px solid ${({ theme }) => theme.border1};
-  }
 `;
 
 export const ButtonMax = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const { ...rest } = props;
   return (
-    <ButtonMaxStyled type="button" {...rest}>
+    <ButtonMaxStyled type="button" className="border-hover" {...rest}>
       Max
     </ButtonMaxStyled>
   );
