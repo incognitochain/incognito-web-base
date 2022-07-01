@@ -17,6 +17,7 @@ export const InputPanel = styled.div`
 
 export const InputContainer = styled(RowBetween)`
   background-color: ${({ theme }) => theme.primary14};
+  border: 1px solid ${({ theme }) => theme.border1};
   border-radius: 8px;
   padding-left: 16px;
   padding-right: 16px;

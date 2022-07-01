@@ -9,26 +9,27 @@ interface ISelection {
 }
 
 const MainStyled = styled(Row)`
-  border: 1px solid #363636;
+  border: 1px solid ${({ theme }) => theme.border1};
   border-radius: 8px;
   min-height: 88px;
   background-color: ${({ theme }) => theme.primary14};
   margin-top: 4px;
-  display: flex;
+  position: relative;
   .section {
     padding: 16px;
     flex: 1;
   }
   .selection-item {
     width: 100%;
-    min-height: 52px;
+    height: 52px;
   }
   .line {
-    background-color: red;
+    background-color: ${({ theme }) => theme.border1};
     width: 1px;
-    height: 85px;
-    transform: translateX(50%);
     top: 0;
+    position: absolute;
+    bottom: 0;
+    left: 49%;
   }
 `;
 
