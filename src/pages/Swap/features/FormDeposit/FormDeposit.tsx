@@ -28,7 +28,7 @@ const FormDeposit = React.memo((props: any) => {
           }}
         />
         <VerticalSpace />
-        <Selection title="Form" />
+        <Selection title="From" />
         <VerticalSpace />
         <Selection title="To" />
         <VerticalSpace />

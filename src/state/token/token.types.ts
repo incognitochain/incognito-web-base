@@ -12,15 +12,21 @@ interface ITokenPayload {
   [key: string]: PToken;
 }
 
+export interface ITokenGroupByNetwork {
+  [key: string]: PToken[];
+}
+
 export interface ITokenReducer {
   isFetching: boolean;
   pTokens: ITokenPayload;
   depositable: PToken[];
+  groupByNetwork: ITokenGroupByNetwork;
 }
 
 export interface TokenSetPayLoad {
   pTokens: ITokenPayload;
   depositable: PToken[];
+  groupByNetwork: ITokenGroupByNetwork;
 }
 
 export interface TokenFetchingPayLoad {

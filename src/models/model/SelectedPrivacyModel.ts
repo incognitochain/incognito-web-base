@@ -126,8 +126,8 @@ class SelectedPrivacy {
     this.externalPriceUSD = pTokenData?.externalPriceUSD || 0;
     this.pricePrv = pTokenData?.pricePrv || 0;
     this.pairWithPrv = pTokenData?.pairPrv;
-    this.isUSDT = this.tokenId === BIG_COINS.USDT;
-    this.isPRV = this.tokenId === BIG_COINS.PRV;
+    this.isUSDT = this.tokenId === BIG_COINS.USDT.tokenID;
+    this.isPRV = this.tokenId === BIG_COINS.PRV.tokenID;
     this.symbol = this.externalSymbol || this.symbol || '';
     this.listChildToken = pTokenData?.listChildToken;
     this.listUnifiedToken = pTokenData?.listUnifiedToken;

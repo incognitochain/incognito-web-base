@@ -48,7 +48,9 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
     const groupByNetwork: any = {};
     flattenTokens.forEach((token) => {
       const currencyType = token.currencyType;
-      const findCurrency = Object.keys(GROUP_NETWORK).find((key) => GROUP_NETWORK[key].includes(currencyType));
+      const findCurrency = Object.keys(GROUP_NETWORK).find((key) => {
+        return GROUP_NETWORK[key].includes(currencyType);
+      });
       if (!findCurrency) return;
       if (groupByNetwork[findCurrency]) {
         groupByNetwork[findCurrency].push(token);
@@ -56,8 +58,7 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
         groupByNetwork[findCurrency] = [token];
       }
     });
-
-    dispatch(actionSetPTokens({ pTokens, depositable }));
+    dispatch(actionSetPTokens({ pTokens, depositable, groupByNetwork }));
   } catch (e) {
     console.log('GET PTOKEN WITH ERROR: ', e);
   } finally {

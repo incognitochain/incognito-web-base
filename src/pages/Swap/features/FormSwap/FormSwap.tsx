@@ -18,7 +18,7 @@ const FormSwap = React.memo((props: any) => {
     <Styled>
       <form onSubmit={handleSubmit(handleSwap)}>
         <VerticalSpace />
-        <Selection title="Form" />
+        <Selection title="From" />
         <VerticalSpace />
         <Selection title="To" />
         <VerticalSpace />
