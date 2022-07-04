@@ -10,11 +10,13 @@ const rotate = keyframes`
 `;
 
 const StyledSVG = styled.svg<{ size: string; stroke?: string }>`
-  animation: 2s ${rotate} linear infinite;
+  animation: 1.5s ${rotate} linear infinite;
   height: ${({ size }) => size};
   width: ${({ size }) => size};
+  position: relative;
+  left: 49%;
   path {
-    stroke: ${({ stroke, theme }) => stroke ?? theme.primary1};
+    stroke: ${({ stroke, theme }) => stroke ?? theme.primary2};
   }
 `;
 
@@ -23,7 +25,7 @@ const StyledSVG = styled.svg<{ size: string; stroke?: string }>`
  * need ...rest for layered styles on top
  */
 export default function Loader({
-  size = '16px',
+  size = '34px',
   stroke,
   ...rest
 }: {

@@ -13,6 +13,7 @@ export const BodyWrapper = styled.main<{ margin?: string; maxWidth?: string }>`
   margin-right: auto;
   z-index: ${Z_INDEX.deprecated_content};
   padding: 24px;
+  min-height: 200px;
 `;
 
 /**

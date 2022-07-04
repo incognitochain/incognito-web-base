@@ -2,7 +2,9 @@ import { TAB_LIST, Tabs } from 'components/Core/Tabs';
 import { selectedTabSelector } from 'components/Core/Tabs/Tabs.selectors';
 import AppBody from 'pages/AppBody';
 import { useAppSelector } from 'state/hooks';
+import { isFetchingSelectors as isFetchingTokenSelector } from 'state/token';
 
+import Loader from '../../components/Core/Loader';
 import { FormDeposit } from './features/FormDeposit';
 import { FormSwap } from './features/FormSwap';
 import enhance from './Swap.enhance';
@@ -10,6 +12,7 @@ import enhance from './Swap.enhance';
 const Swap = (props: any) => {
   const { SWAP: HEADER_TAB } = TAB_LIST;
   const selectedTab = useAppSelector(selectedTabSelector)(HEADER_TAB.rootTab);
+  const isFetching = useAppSelector(isFetchingTokenSelector);
 
   const renderForm = () => {
     // Deposit
@@ -17,12 +20,16 @@ const Swap = (props: any) => {
     return <FormSwap {...props} />;
   };
 
+  const renderContent = () => (
+    <>
+      <Tabs {...HEADER_TAB} />
+      {renderForm()}
+    </>
+  );
+
   return (
     <>
-      <AppBody>
-        <Tabs {...HEADER_TAB} />
-        {renderForm()}
-      </AppBody>
+      <AppBody>{isFetching ? <Loader /> : renderContent()}</AppBody>
     </>
   );
 };
