@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { reducer as tabs } from 'components/Core/Tabs';
 import multicall from 'lib/state/multicall';
+import swap from 'pages/Swap/Swap.reducer';
 import { reducer as form } from 'redux-form';
 import { load, save } from 'redux-localstorage-simple';
 import logger from 'redux-logger';
@@ -10,7 +11,7 @@ import { updateVersion } from './global/actions';
 import lists from './lists/reducer';
 import logs from './logs/slice';
 import { routingApi } from './routing/slice';
-import swap from './swap/reducer';
+// import swap from './swap/reducer';
 import token from './token/token.reducer';
 import transactions from './transactions/reducer';
 import user from './user/reducer';

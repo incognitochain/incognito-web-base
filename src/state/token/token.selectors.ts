@@ -6,4 +6,8 @@ export const tokenSelectors = createSelector(
   (token) => token
 );
 
+export const isFetchingSelectors = createSelector(tokenSelectors, (token) => token.isFetching);
+
 export const pTokensSelector = createSelector(tokenSelectors, ({ pTokens }) => pTokens || {});
+
+export const depositableSelectors = createSelector(tokenSelectors, (token) => token.depositable);

@@ -30,6 +30,7 @@ class PToken {
   listUnifiedToken?: any;
   parentID?: any;
   parentTokenID?: string;
+  movedUnifiedToken?: boolean;
 
   constructor(data: any = {}, pTokens = []) {
     const pairPrv = data?.CurrentPrvPool !== 0;
@@ -62,6 +63,7 @@ class PToken {
     const tokens = pTokens && pTokens.filter((_token: any) => _token.Symbol && _token.Symbol === data.Symbol);
     this.parentTokenID = data.TokenID;
     this.hasSameSymbol = tokens && tokens.length > 1;
+    this.movedUnifiedToken = data?.MovedUnifiedToken;
     if (data && data.ListChildToken instanceof Array) {
       this.listChildToken = data.ListChildToken.map((item: any) => {
         const newItem = new PToken(item);
