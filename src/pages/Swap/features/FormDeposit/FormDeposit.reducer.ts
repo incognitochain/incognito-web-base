@@ -1,3 +1,5 @@
+import { isMainnet } from 'config';
+import { SupportedChainId } from 'constants/chains';
 import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { Reducer } from 'redux';
 
@@ -7,14 +9,15 @@ const initialState: IFormDepositReducer = {
   isFetching: false,
   sellToken: {
     tokenID: BIG_COINS.ETH.tokenID,
-    currencyType: PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
-    chainID: 1,
+    currency: PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
+    chainID: isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN,
     networkName: MAIN_NETWORK_NAME.ETHEREUM,
   },
   buyToken: {
     tokenID: BIG_COINS.ETH.tokenID,
-    currencyType: PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
+    currency: PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
     networkName: MAIN_NETWORK_NAME.INCOGNITO,
+    chainID: 0,
   },
 };
 

@@ -1,6 +1,22 @@
-import { CRYPTO_ICON_URL, PRIVATE_TOKEN_CURRENCY_TYPE, PRIVATE_TOKEN_TYPE, PRV } from 'constants/token';
+import { SupportedChainId } from 'constants/chains';
+import {
+  CRYPTO_ICON_URL,
+  MAIN_NETWORK_NAME,
+  PRIVATE_TOKEN_CURRENCY_TYPE,
+  PRIVATE_TOKEN_TYPE,
+  PRV,
+} from 'constants/token';
+import isEmpty from 'lodash/isEmpty';
+import { getChainIDByCurrency, getNetworkNameByCurrency } from 'utils/token';
 
 const PRVIDSTR = PRV.id;
+
+export interface ITokenNetwork {
+  tokenID: string;
+  chainID: SupportedChainId;
+  networkName: MAIN_NETWORK_NAME;
+  currency: number;
+}
 
 class PToken {
   tokenID: string;
@@ -15,6 +31,9 @@ class PToken {
   name: string;
   shortName: string;
   network: string;
+  networkName?: MAIN_NETWORK_NAME;
+  supportedNetwork?: ITokenNetwork[];
+  chainID?: SupportedChainId;
   iconUrl: string;
 
   contractID: any;
@@ -125,6 +144,9 @@ class PToken {
       (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM);
     this.isCentralized = !this.isPRV && !this.isDecentralized;
 
+    this.networkName = getNetworkNameByCurrency({ currency: this.currencyType });
+    this.chainID = getChainIDByCurrency({ currency: this.currencyType });
+
     if (data && data.ListChildToken instanceof Array) {
       this.listChildToken = data.ListChildToken.map((item: any) => {
         const newItem = new PToken(item);
@@ -142,6 +164,31 @@ class PToken {
       });
     } else {
       this.listUnifiedToken = [];
+    }
+
+    const listChild = isEmpty(this.listUnifiedToken) ? this.listUnifiedToken : this.listUnifiedToken;
+    this.supportedNetwork = [];
+    if (!isEmpty(listChild)) {
+      const temp = listChild.map((token) => {
+        const { currencyType, networkName, chainID, tokenID } = token;
+        return {
+          currency: currencyType,
+          networkName,
+          chainID,
+          tokenID,
+        };
+      });
+      temp.forEach((data: any) => {
+        const { currency, chainID, networkName } = data;
+        if (!currency && !chainID && networkName) return;
+        this.supportedNetwork?.push(data);
+      });
+    } else {
+      if (!!this.currencyType && !!this.chainID && !!this.networkName) {
+        this.supportedNetwork = [
+          { currency: this.currencyType, networkName: this.networkName, chainID: this.chainID, tokenID: this.tokenID },
+        ];
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-import { MAIN_NETWORK_NAME } from '../../../../constants';
+import { ITokenNetwork } from 'models/model/pTokenModel';
 
 export enum FormDepositActionType {
   FETCHING_ESTIMATE_FEE = 'FORM_DEPOSIT/FETCHING_ESTIMATE_FEE',
@@ -7,17 +7,8 @@ export enum FormDepositActionType {
 
 export interface IFormDepositReducer {
   isFetching: boolean;
-  sellToken: {
-    tokenID: string;
-    currencyType: number;
-    chainID: number;
-    networkName: MAIN_NETWORK_NAME;
-  };
-  buyToken: {
-    tokenID: string;
-    currencyType: number;
-    networkName: MAIN_NETWORK_NAME;
-  };
+  sellToken: ITokenNetwork;
+  buyToken: ITokenNetwork;
 }
 
 export type FormDepositActions = any;

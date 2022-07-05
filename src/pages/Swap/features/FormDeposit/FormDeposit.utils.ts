@@ -32,7 +32,6 @@ const getDepositData = ({
   const _sellToken = getDepositTokenData(sellToken.tokenID);
   const _sellTokenParent = getDataByTokenID(_sellToken.parentTokenID);
 
-  console.log('SANG TEST::: ', _sellTokenList);
   return {
     sellTokenList: _sellTokenList,
     sellToken: _sellToken,
