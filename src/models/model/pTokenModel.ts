@@ -56,6 +56,7 @@ class PToken {
   isMainBSC: boolean;
   isMainBNB: boolean;
   isMainMATIC: boolean;
+  isMainEVMToken: boolean;
 
   isIncognitoToken: boolean;
   isErc20Token: boolean;
@@ -124,6 +125,7 @@ class PToken {
     this.isMainBSC = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB;
     this.isMainBNB = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BNB;
     this.isMainMATIC = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC;
+    this.isMainEVMToken = this.isMainETH || this.isMainBSC || this.isMainBNB || this.isMainMATIC;
 
     // pToken is private token (pETH <=> ETH, pBTC <=> BTC, ...)
     this.isIncognitoToken = !this.isPToken && !this.isMainCrypto;

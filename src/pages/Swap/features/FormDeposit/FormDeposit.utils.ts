@@ -9,6 +9,7 @@ export interface IDepositData {
   sellTokenList: PToken[];
   sellNetworkList: ITokenNetwork[];
   sellToken: SelectedPrivacy;
+  sellTokenPoor: ITokenNetwork;
   sellTokenParent: SelectedPrivacy;
   sellNetworkName: string;
 }
@@ -39,6 +40,7 @@ const getDepositData = ({
     sellNetworkList: _sellNetworkList || [],
     sellToken: _sellToken,
     sellTokenParent: _sellTokenParent,
+    sellTokenPoor: sellToken,
     sellNetworkName,
   };
 };

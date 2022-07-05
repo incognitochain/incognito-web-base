@@ -1,6 +1,8 @@
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import { useCurrencyBalance } from 'lib/hooks/useTokenBalance';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { Field } from 'redux-form';
@@ -16,7 +18,12 @@ const FormDeposit = React.memo((props: any) => {
   const { handleSubmit } = props;
   const handleDeposit = () => console.log('DEPOSIT');
 
-  const { sellNetworkName, sellToken } = useAppSelector(depositDataSelector);
+  const { sellNetworkName, sellToken, sellTokenPoor } = useAppSelector(depositDataSelector);
+  const { account } = useActiveWeb3React();
+  const balance = useCurrencyBalance(account, sellToken);
+  if (balance) {
+    console.log('SANG TESTT', balance);
+  }
 
   return (
     <Styled>

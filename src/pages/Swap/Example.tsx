@@ -500,7 +500,7 @@
 //                             size={'20px'}
 //                             style={{ marginRight: '8px', flexShrink: 0 }}
 //                           />
-//                           {/* we need to shorten this string on mobile */}
+//                           {/!* we need to shorten this string on mobile *!/}
 //                           {approvalState === ApprovalState.APPROVED || signatureState === UseERC20PermitState.SIGNED ? (
 //                             <Trans>You can now trade {currencies[Field.INPUT]?.symbol}</Trans>
 //                           ) : (
