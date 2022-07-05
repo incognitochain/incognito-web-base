@@ -1,9 +1,12 @@
+import { Interface } from '@ethersproject/abi';
 import { Currency, CurrencyAmount } from '@uniswap/sdk-core';
 import { useWeb3React } from '@web3-react/core';
+import ERC20ABI from 'abis/erc20.json';
+import { Erc20Interface } from 'abis/types/Erc20';
 import { nativeOnChain } from 'constants/tokens';
 import { useInterfaceMulticall } from 'hooks/useContract';
 import JSBI from 'jsbi';
-import { useSingleContractMultipleData } from 'lib/hooks/multicall';
+import { useMultipleContractSingleData, useSingleContractMultipleData } from 'lib/hooks/multicall';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { useMemo } from 'react';
 import { isAddress } from 'utils';
@@ -16,7 +19,6 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
 } {
   const { chainId } = useWeb3React();
   const multicallContract = useInterfaceMulticall();
-
   const validAddressInputs: [string][] = useMemo(
     () =>
       uncheckedAddresses
@@ -36,26 +38,73 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
       validAddressInputs.reduce<{ [address: string]: CurrencyAmount<Currency> }>((memo, [address], i) => {
         const value = results?.[i]?.result?.[0];
         if (value && chainId) {
-          console.log(
-            'SANG TEST::: ',
-            CurrencyAmount.fromRawAmount(nativeOnChain(chainId), JSBI.BigInt(value.toString()))
-          );
-        }
-        if (value && chainId)
+          console.log('SANG TEST', value);
           memo[address] = CurrencyAmount.fromRawAmount(nativeOnChain(chainId), JSBI.BigInt(value.toString()));
+        }
         return memo;
       }, {}),
     [validAddressInputs, chainId, results]
   );
 }
 
+const ERC20Interface = new Interface(ERC20ABI) as Erc20Interface;
+const tokenBalancesGasRequirement = { gasRequired: 185_000 };
+
+/**
+ * Returns a map of token addresses to their eventually consistent token balances for a single account.
+ */
+export function useTokenBalancesWithLoadingIndicator(
+  address?: string,
+  tokens?: (any | undefined)[]
+): [{ [tokenAddress: string]: CurrencyAmount<any> | undefined }, boolean] {
+  const validatedTokens: any[] = useMemo(
+    () => tokens?.filter((t?: any): t is any => isAddress(t?.address) !== false) ?? [],
+    [tokens]
+  );
+  const validatedTokenAddresses = useMemo(() => validatedTokens.map((vt) => vt.address), [validatedTokens]);
+
+  const balances = useMultipleContractSingleData(
+    validatedTokenAddresses,
+    ERC20Interface,
+    'balanceOf',
+    useMemo(() => [address], [address]),
+    tokenBalancesGasRequirement
+  );
+
+  const anyLoading: boolean = useMemo(() => balances.some((callState) => callState.loading), [balances]);
+
+  return useMemo(
+    () => [
+      address && validatedTokens.length > 0
+        ? validatedTokens.reduce<{ [tokenAddress: string]: CurrencyAmount<any> | undefined }>((memo, token, i) => {
+            const value = balances?.[i]?.result?.[0];
+            const amount = value ? JSBI.BigInt(value.toString()) : undefined;
+            if (amount) {
+              memo[token.address] = CurrencyAmount.fromRawAmount(token, amount);
+            }
+            return memo;
+          }, {})
+        : {},
+      anyLoading,
+    ],
+    [address, validatedTokens, anyLoading, balances]
+  );
+}
+
+export function useTokenBalances(
+  address?: string,
+  tokens?: (any | undefined)[]
+): { [tokenAddress: string]: CurrencyAmount<any> | undefined } {
+  return useTokenBalancesWithLoadingIndicator(address, tokens)[0];
+}
+
 const useCurrencyBalances = (account?: string, currencies?: (SelectedPrivacy | undefined)[]): any => {
-  // const tokens = useMemo(
-  //   () => currencies?.filter((currency): currency is Token => currency?.isToken ?? false) ?? [],
-  //   [currencies]
-  // );
-  //
-  // const tokenBalances = useTokenBalances(account, tokens);
+  const tokens = useMemo(
+    () => currencies?.filter((currency) => !currency?.isMainEVMToken ?? false) ?? [],
+    [currencies]
+  );
+
+  const tokenBalances = useTokenBalances(account, tokens);
   const containsMainEVM: boolean = useMemo(
     () => currencies?.some((currency) => currency?.isMainEVMToken) ?? false,
     [currencies]
@@ -69,7 +118,7 @@ const useCurrencyBalances = (account?: string, currencies?: (SelectedPrivacy | u
       currencies?.map((currency) => {
         if (!account || !currency) return undefined;
         if (currency.isMainEVMToken) return nativeBalance[account];
-        // if (!currency.isMainEVMToken) return tokenBalances[currency.address];
+        if (currency.contractID) return tokenBalances[currency.contractID];
         return undefined;
       }) ?? [],
     [account, currencies]

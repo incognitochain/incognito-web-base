@@ -13,9 +13,16 @@ export const MULTICALL_ADDRESS: AddressMap = {
     SupportedChainId.OPTIMISM,
     SupportedChainId.POLYGON_MUMBAI,
     SupportedChainId.POLYGON,
+  ]),
+  ...constructSameAddressMap('0x47A307e3167820daf22a377D777371753758f59c', [
     SupportedChainId.BSC,
     SupportedChainId.BSC_TESTNET,
   ]),
+  // TODO FANTOM
+  // ...constructSameAddressMap('0xB1395e098c0a847CC719Bcf1Fc8114421a9F8232', [
+  //   SupportedChainId.BSC,
+  //   SupportedChainId.BSC_TESTNET,
+  // ]),
 };
 export const V2_FACTORY_ADDRESSES: AddressMap = constructSameAddressMap(V2_FACTORY_ADDRESS);
 

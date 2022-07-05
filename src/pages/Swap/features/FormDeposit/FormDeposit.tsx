@@ -21,9 +21,6 @@ const FormDeposit = React.memo((props: any) => {
   const { sellNetworkName, sellToken, sellTokenPoor } = useAppSelector(depositDataSelector);
   const { account } = useActiveWeb3React();
   const balance = useCurrencyBalance(account, sellToken);
-  if (balance) {
-    console.log('SANG TESTT', balance);
-  }
 
   return (
     <Styled>
