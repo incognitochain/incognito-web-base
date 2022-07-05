@@ -1,4 +1,5 @@
 import { AxiosInstance } from 'axios';
+import { API_SERVICE } from 'config';
 import PTokenModel from 'models/model/pTokenModel';
 import createAxiosInstance from 'services/axios';
 
@@ -6,8 +7,7 @@ class RpcClient {
   http: AxiosInstance;
   constructor() {
     // const url = 'http://51.161.117.193:9898/';
-    const url = 'https://api-coinservice-staging.incognito.org/';
-    this.http = createAxiosInstance({ baseURL: url });
+    this.http = createAxiosInstance({ baseURL: API_SERVICE });
   }
 
   getTokens() {

@@ -4,7 +4,7 @@ import { ITokenReducer, TokenActions, TokenActionType } from 'state/token/token.
 const initialState: ITokenReducer = {
   isFetching: false,
   pTokens: {},
-  depositable: [],
+  depositable: {},
   groupByNetwork: {},
 };
 

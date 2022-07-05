@@ -29,11 +29,11 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
   try {
     dispatch(actionFetchingPTokens({ isFetching: true }));
     const list = (await getTokenListNoCache()) || [];
-    const pTokens = keyBy(list, 'tokenId');
-    const depositable = list.filter(({ movedUnifiedToken }) => !movedUnifiedToken);
+    const pTokens = keyBy(list, 'tokenID');
+    const depositableList = list.filter(({ movedUnifiedToken }) => !movedUnifiedToken);
 
     // flatten tokens
-    const flattenTokens = depositable.reduce((tokens: PTokenModel[], currToken) => {
+    const flattenTokens = depositableList.reduce((tokens: PTokenModel[], currToken) => {
       let _tokens: PTokenModel[] = [currToken];
       if (currToken.listChildToken && currToken.listChildToken.length > 0) {
         _tokens = currToken.listChildToken;
@@ -58,8 +58,8 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
         groupByNetwork[findCurrency] = [token];
       }
     });
-
-    dispatch(actionSetPTokens({ pTokens, depositable: flattenTokens, groupByNetwork }));
+    const depositable = keyBy(flattenTokens, 'tokenID');
+    dispatch(actionSetPTokens({ pTokens, depositable, groupByNetwork }));
   } catch (e) {
     console.log('GET PTOKEN WITH ERROR: ', e);
   } finally {

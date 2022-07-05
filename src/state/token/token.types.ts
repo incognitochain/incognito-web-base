@@ -19,13 +19,13 @@ export interface ITokenGroupByNetwork {
 export interface ITokenReducer {
   isFetching: boolean;
   pTokens: ITokenPayload;
-  depositable: PToken[];
+  depositable: ITokenPayload;
   groupByNetwork: ITokenGroupByNetwork;
 }
 
 export interface TokenSetPayLoad {
   pTokens: ITokenPayload;
-  depositable: PToken[];
+  depositable: ITokenPayload;
   groupByNetwork: ITokenGroupByNetwork;
 }
 

@@ -30,7 +30,7 @@ export const getDepositTokenDataSelector = createSelector(
   depositableSelectors,
   (depositable) =>
     (tokenID: string): SelectedPrivacy => {
-      const token: any = depositable.find((token) => token.tokenID === tokenID);
+      const token = depositable[tokenID];
       return new SelectedPrivacyModel(token);
     }
 );

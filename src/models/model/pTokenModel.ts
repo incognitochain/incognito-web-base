@@ -48,6 +48,8 @@ class PToken {
   isDecentralized: boolean;
   isCentralized: boolean;
 
+  // chainID: number;
+
   getIconUrl({ url }: { url: string }) {
     if (this.tokenID === PRVIDSTR) {
       return 'https://statics.incognito.org/wallet/cryptocurrency-icons/32@2x/color/prv@2x.png';

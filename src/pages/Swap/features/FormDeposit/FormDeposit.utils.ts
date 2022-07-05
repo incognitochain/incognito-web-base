@@ -8,6 +8,7 @@ import { IFormDepositReducer } from './FormDeposit.types';
 export interface IDepositData {
   sellTokenList: PToken[];
   sellToken: SelectedPrivacy;
+  sellTokenParent: SelectedPrivacy;
   sellNetworkName: string;
 }
 
@@ -29,10 +30,13 @@ const getDepositData = ({
   // Sell tokens
   const _sellTokenList = groupNetwork[sellNetworkName];
   const _sellToken = getDepositTokenData(sellToken.tokenID);
-  // const sellParentToken = getDataByTokenID(selectedSellToken.parentTokenID);
+  const _sellTokenParent = getDataByTokenID(_sellToken.parentTokenID);
+
+  console.log('SANG TEST::: ', _sellTokenList);
   return {
     sellTokenList: _sellTokenList,
     sellToken: _sellToken,
+    sellTokenParent: _sellTokenParent,
     sellNetworkName,
   };
 };

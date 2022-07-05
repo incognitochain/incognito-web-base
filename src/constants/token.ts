@@ -1,5 +1,6 @@
+import { isMainnet } from 'config';
+
 const CRYPTO_ICON_URL = 'https://statics.incognito.org/cmc/symbols/128x128';
-const isMainnet = false;
 
 const PRV = {
   id: '0000000000000000000000000000000000000000000000000000000000000004',
