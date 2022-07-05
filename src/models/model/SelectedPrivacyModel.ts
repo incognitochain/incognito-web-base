@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js';
 import {
   BIG_COINS,
   CRYPTO_ICON_URL,
@@ -7,8 +6,6 @@ import {
   PRIVATE_TOKEN_TYPE,
   PRV,
 } from 'constants/token';
-import convert from 'utils/convert';
-import format from 'utils/format';
 
 const PRVIDSTR = PRV.id;
 
@@ -59,6 +56,7 @@ class SelectedPrivacy {
   isBNB: boolean;
   isMATIC: boolean;
   tokenId: string;
+  parentTokenID: string;
 
   priceUsd: any;
   pricePrv: any;
@@ -102,6 +100,7 @@ class SelectedPrivacy {
     this.displayName = this.combineData(`Privacy ${pTokenData?.symbol}`, isUnknown ? unknownText : 'Privacy');
 
     this.tokenId = _tokenID ? _tokenID : this.isMainCrypto ? PRVIDSTR : tokenId;
+    this.parentTokenID = pTokenData.parentTokenID;
     this.contractId = pTokenData.contractId;
     this.decimals = this.isMainCrypto ? DECIMALS.MAIN_CRYPTO_CURRENCY : pTokenData.decimals;
     this.pDecimals = this.isMainCrypto ? DECIMALS.MAIN_CRYPTO_CURRENCY : pTokenData.pDecimals || 0;
@@ -148,50 +147,50 @@ class SelectedPrivacy {
 
     // amount
     // const followToken = followTokens.find(({ id }) => id === tokenId);
-    const followToken = undefined;
-    if (followToken) {
-      const { amount } = followToken;
-      this.amount = new BigNumber(amount || '0').toNumber();
-
-      const formatPriceByUsd = format.formatAmount({
-        humanAmount: this.priceUsd,
-        decimals: this.pDecimals,
-        decimalDigits: false,
-      });
-
-      const formatPriceByPrv = format.formatAmount({
-        humanAmount: this.pricePrv,
-        decimals: this.pDecimals,
-        decimalDigits: false,
-      });
-
-      const formatAmount = format.amountVer2({
-        originalAmount: Number(amount || 0),
-        decimals: this.pDecimals,
-      });
-
-      const formatAmountNoClip = format.formatAmount({
-        originalAmount: Number(amount || 0),
-        decimals: this.pDecimals,
-        decimalDigits: true,
-        clipAmount: false,
-      });
-
-      const formatBalanceByUsd = format.amountVer2({
-        originalAmount: convert.toOriginalAmount({
-          humanAmount: new BigNumber(convert.toString({ text: formatAmount.toString() }))
-            .multipliedBy(convert.toString({ text: formatPriceByUsd }))
-            .toString(),
-          decimals: this.pDecimals,
-        }),
-        decimals: this.pDecimals,
-      });
-      this.formatPriceByUsd = formatPriceByUsd;
-      this.formatPriceByPrv = formatPriceByPrv;
-      this.formatAmount = formatAmount;
-      this.formatAmountNoClip = formatAmountNoClip;
-      this.formatBalanceByUsd = formatBalanceByUsd;
-    }
+    // const followToken = undefined;
+    // if (followToken) {
+    //   const { amount } = followToken;
+    //   this.amount = new BigNumber(amount || '0').toNumber();
+    //
+    //   const formatPriceByUsd = format.formatAmount({
+    //     humanAmount: this.priceUsd,
+    //     decimals: this.pDecimals,
+    //     decimalDigits: false,
+    //   });
+    //
+    //   const formatPriceByPrv = format.formatAmount({
+    //     humanAmount: this.pricePrv,
+    //     decimals: this.pDecimals,
+    //     decimalDigits: false,
+    //   });
+    //
+    //   const formatAmount = format.amountVer2({
+    //     originalAmount: Number(amount || 0),
+    //     decimals: this.pDecimals,
+    //   });
+    //
+    //   const formatAmountNoClip = format.formatAmount({
+    //     originalAmount: Number(amount || 0),
+    //     decimals: this.pDecimals,
+    //     decimalDigits: true,
+    //     clipAmount: false,
+    //   });
+    //
+    //   const formatBalanceByUsd = format.amountVer2({
+    //     originalAmount: convert.toOriginalAmount({
+    //       humanAmount: new BigNumber(convert.toString({ text: formatAmount.toString() }))
+    //         .multipliedBy(convert.toString({ text: formatPriceByUsd }))
+    //         .toString(),
+    //       decimals: this.pDecimals,
+    //     }),
+    //     decimals: this.pDecimals,
+    //   });
+    //   this.formatPriceByUsd = formatPriceByUsd;
+    //   this.formatPriceByPrv = formatPriceByPrv;
+    //   this.formatAmount = formatAmount;
+    //   this.formatAmountNoClip = formatAmountNoClip;
+    //   this.formatBalanceByUsd = formatBalanceByUsd;
+    // }
   }
 
   getIconUrl({ url }: { url: string }) {

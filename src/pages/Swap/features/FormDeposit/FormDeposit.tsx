@@ -4,15 +4,19 @@ import { VerticalSpace } from 'components/Core/Space';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { Field } from 'redux-form';
+import { useAppSelector } from 'state/hooks';
 import styled from 'styled-components/macro';
 
 import { Selection } from '../Selection';
+import { depositDataSelector } from './FormDeposit.selectors';
 
 const Styled = styled.div``;
 
 const FormDeposit = React.memo((props: any) => {
   const { handleSubmit } = props;
   const handleDeposit = () => console.log('DEPOSIT');
+
+  const { selectedNetworkName, selectedSellToken } = useAppSelector(depositDataSelector);
 
   return (
     <Styled>
@@ -28,7 +32,7 @@ const FormDeposit = React.memo((props: any) => {
           }}
         />
         <VerticalSpace />
-        <Selection title="From" />
+        <Selection title="From" leftValue={selectedSellToken.symbol} rightValue={selectedNetworkName} />
         <VerticalSpace />
         <Selection title="To" />
         <VerticalSpace />

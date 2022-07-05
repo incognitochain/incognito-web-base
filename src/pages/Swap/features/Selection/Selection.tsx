@@ -6,6 +6,8 @@ import { ThemedText } from 'theme';
 interface ISelection {
   title: string;
   rightLabel?: string;
+  rightValue?: string;
+  leftValue?: string;
 }
 
 const MainStyled = styled(Row)`
@@ -34,7 +36,7 @@ const MainStyled = styled(Row)`
 `;
 
 const Selection = React.memo((props: ISelection) => {
-  const { title, rightLabel } = props;
+  const { title, rightLabel, rightValue, leftValue } = props;
   return (
     <>
       <RowBetween>
@@ -52,14 +54,26 @@ const Selection = React.memo((props: ISelection) => {
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
             Token
           </ThemedText.SmallLabel>
-          <div className="selection-item" />
+          <div className="selection-item">
+            {!!leftValue && (
+              <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                {leftValue}
+              </ThemedText.SmallLabel>
+            )}
+          </div>
         </div>
         <div className="line" />
         <div className="section">
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
             Network
           </ThemedText.SmallLabel>
-          <div className="selection-item" />
+          <div className="selection-item">
+            {!!rightValue && (
+              <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                {rightValue}
+              </ThemedText.SmallLabel>
+            )}
+          </div>
         </div>
       </MainStyled>
     </>
