@@ -16,7 +16,7 @@ const FormDeposit = React.memo((props: any) => {
   const { handleSubmit } = props;
   const handleDeposit = () => console.log('DEPOSIT');
 
-  const { selectedNetworkName, selectedSellToken } = useAppSelector(depositDataSelector);
+  const { sellNetworkName, sellToken } = useAppSelector(depositDataSelector);
 
   return (
     <Styled>
@@ -32,7 +32,7 @@ const FormDeposit = React.memo((props: any) => {
           }}
         />
         <VerticalSpace />
-        <Selection title="From" leftValue={selectedSellToken.symbol} rightValue={selectedNetworkName} />
+        <Selection title="From" leftValue={sellToken.symbol} rightValue={sellNetworkName} />
         <VerticalSpace />
         <Selection title="To" />
         <VerticalSpace />

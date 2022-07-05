@@ -19,8 +19,8 @@ const rpcClient = new RpcClient();
 
 const getTokenListNoCache = async (): Promise<PTokenModel[]> => {
   const tokens: PTokenModel[] =
-    (await rpcClient.getTokens().then((res: any) => res.map((token: any) => new PTokenModel(token, res)))) || [];
-  return tokens.filter(({ tokenId }) => !!tokenId);
+    (await rpcClient.getTokens().then((res: any) => res.map((token: any) => new PTokenModel(token)))) || [];
+  return tokens.filter(({ tokenID }) => !!tokenID);
 };
 
 export { getTokenListNoCache };

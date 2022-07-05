@@ -6,9 +6,9 @@ import { groupNetworkSelectors } from 'state/token';
 import { IFormDepositReducer } from './FormDeposit.types';
 
 export interface IDepositData {
-  selectableSellTokens: PToken[];
-  selectedSellToken: SelectedPrivacy;
-  selectedNetworkName: string;
+  sellTokenList: PToken[];
+  sellToken: SelectedPrivacy;
+  sellNetworkName: string;
 }
 
 const getDepositData = ({
@@ -19,7 +19,7 @@ const getDepositData = ({
 }: {
   deposit: IFormDepositReducer;
   getDataByTokenID: (tokenID: string) => SelectedPrivacy;
-  getDepositTokenData: (tokenID: string) => SelectedPrivacy | null;
+  getDepositTokenData: (tokenID: string) => SelectedPrivacy;
   state: AppState;
 }): IDepositData => {
   const { sellToken, buyToken } = deposit;
@@ -27,13 +27,13 @@ const getDepositData = ({
   const groupNetwork = groupNetworkSelectors(state);
 
   // Sell tokens
-  const selectableSellTokens = groupNetwork[sellNetworkName];
-  const selectedSellToken = getDataByTokenID(sellToken.tokenID);
-  const sellParentToken = getDataByTokenID(selectedSellToken.parentTokenID);
+  const _sellTokenList = groupNetwork[sellNetworkName];
+  const _sellToken = getDepositTokenData(sellToken.tokenID);
+  // const sellParentToken = getDataByTokenID(selectedSellToken.parentTokenID);
   return {
-    selectableSellTokens,
-    selectedSellToken,
-    selectedNetworkName: sellNetworkName,
+    sellTokenList: _sellTokenList,
+    sellToken: _sellToken,
+    sellNetworkName,
   };
 };
 

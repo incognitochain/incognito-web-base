@@ -58,7 +58,8 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
         groupByNetwork[findCurrency] = [token];
       }
     });
-    dispatch(actionSetPTokens({ pTokens, depositable, groupByNetwork }));
+
+    dispatch(actionSetPTokens({ pTokens, depositable: flattenTokens, groupByNetwork }));
   } catch (e) {
     console.log('GET PTOKEN WITH ERROR: ', e);
   } finally {
