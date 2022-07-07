@@ -1,13 +1,18 @@
 import Row, { RowBetween } from 'components/Core/Row';
+import { useModal } from 'components/Modal';
+import PToken from 'models/model/pTokenModel';
 import React from 'react';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
+
+import ModalTokens from '../../../../components/Modal/Modal.tokens';
 
 interface ISelection {
   title: string;
   rightLabel?: string;
   rightValue?: string;
   leftValue?: string;
+  tokens?: PToken[];
 }
 
 const MainStyled = styled(Row)`
@@ -36,7 +41,20 @@ const MainStyled = styled(Row)`
 `;
 
 const Selection = React.memo((props: ISelection) => {
-  const { title, rightLabel, rightValue, leftValue } = props;
+  const { title, rightLabel, rightValue, leftValue, tokens } = props;
+  const { setModal } = useModal();
+
+  const showTokensList = () => {
+    if (!tokens || tokens.length === 0) return;
+    setModal({
+      closable: true,
+      data: <ModalTokens tokens={tokens} />,
+      isTransparent: false,
+      rightHeader: undefined,
+      title: 'Select a Token',
+    });
+  };
+
   return (
     <>
       <RowBetween>
@@ -54,7 +72,7 @@ const Selection = React.memo((props: ISelection) => {
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
             Token
           </ThemedText.SmallLabel>
-          <div className="selection-item">
+          <div className="selection-item" onClick={showTokensList}>
             {!!leftValue && (
               <ThemedText.SmallLabel fontWeight={400} color="primary8">
                 {leftValue}

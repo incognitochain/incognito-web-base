@@ -94,7 +94,6 @@ class PToken {
     this.parentTokenID = data.TokenID;
 
     this.symbol = data.Symbol;
-    this.iconUrl = this.getIconUrl({ url: data.Image });
     this.name = data.Name;
     this.shortName = this.name;
     if (this.shortName) {
@@ -167,6 +166,8 @@ class PToken {
     } else {
       this.listUnifiedToken = [];
     }
+
+    this.iconUrl = this.getIconUrl({ url: data.Image });
 
     const listChild = isEmpty(this.listUnifiedToken) ? this.listUnifiedToken : this.listUnifiedToken;
     this.supportedNetwork = [];

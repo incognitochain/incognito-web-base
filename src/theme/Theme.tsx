@@ -207,6 +207,9 @@ export const ThemedText = {
   LargeHeader(props: TextProps) {
     return <TextWrapper fontWeight={600} fontSize={24} {...props} />;
   },
+  Small(props: TextProps) {
+    return <TextWrapper fontWeight={500} fontSize={11} {...props} />;
+  },
   SuperSmallLabel(props: TextProps) {
     return <TextWrapper fontWeight={500} fontSize={14} {...props} />;
   },
@@ -219,8 +222,8 @@ export const ThemedText = {
   MediumLabel(props: TextProps) {
     return <TextWrapper fontWeight={500} fontSize={18} style={{ lineHeight: '28px' }} {...props} />;
   },
-  Small(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={11} {...props} />;
+  AvgMediumLabel(props: TextProps) {
+    return <TextWrapper fontWeight={500} fontSize={20} style={{ lineHeight: '28px' }} {...props} />;
   },
   Blue(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'blue1'} {...props} />;
@@ -256,5 +259,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
     :hover {
       border: 1px solid ${({ theme }) => theme.border5};
     }
+  }
+  ::-webkit-scrollbar {
+    display: block;
   }
 `;

@@ -2,7 +2,6 @@ import { ButtonConfirmed } from 'components/Core/Button';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
-import useApproveToken from 'lib/hooks/useApproveToken';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { Field, InjectedFormProps } from 'redux-form';
@@ -18,17 +17,16 @@ import { depositDataSelector } from './FormDeposit.selectors';
 const Styled = styled.div``;
 interface IProps extends InjectedFormProps<any, any>, IDeposit, TInnerAddress {}
 
-const FormDeposit = React.memo((props: IProps) => {
-  const { handleSubmit, button, validateAddress, warningAddress, disabledForm } = props;
+const FormDeposit = (props: IProps) => {
+  const { handleSubmit, button, validateAddress, warningAddress, disabledForm, sellNetworkList, sellTokenList } = props;
   const handleDeposit = () => console.log('DEPOSIT');
   const { sellNetworkName, sellToken } = useAppSelector(depositDataSelector);
-  const balance = useApproveToken({ token: sellToken });
 
   return (
     <Styled>
       <form onSubmit={handleSubmit(handleDeposit)}>
         <VerticalSpace />
-        <Selection title="From" leftValue={sellToken.symbol} rightValue={sellNetworkName} />
+        <Selection title="From" leftValue={sellToken.symbol} rightValue={sellNetworkName} tokens={sellTokenList} />
         <VerticalSpace />
         <Selection title="To" />
         <VerticalSpace />
@@ -60,7 +58,7 @@ const FormDeposit = React.memo((props: IProps) => {
       </form>
     </Styled>
   );
-}) as any;
+};
 
 FormDeposit.displayName = 'FormDeposit';
 

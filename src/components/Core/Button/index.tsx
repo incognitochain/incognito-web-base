@@ -66,14 +66,9 @@ export const ButtonPrimary = styled(BaseButton)`
     background-color: ${({ theme }) => darken(0.1, theme.btn1)};
   }
   &:disabled {
-    background-color: ${({ theme, altDisabledStyle, disabled }) =>
-      altDisabledStyle ? (disabled ? theme.primary1 : theme.bg2) : theme.bg2};
-    color: ${({ altDisabledStyle, disabled, theme }) =>
-      altDisabledStyle ? (disabled ? theme.white : theme.text2) : theme.text2};
+    background-color: ${({ theme, disabled }) => darken(disabled ? 0.01 : 1, theme.btn1)};
     cursor: auto;
     box-shadow: none;
-    border: 1px solid transparent;
-    outline: none;
   }
 `;
 
@@ -210,8 +205,6 @@ export const ButtonText = styled(BaseButton)`
 const ButtonConfirmedStyle = styled(BaseButton)`
   background-color: ${({ theme }) => theme.bg3};
   color: ${({ theme }) => theme.text1};
-  /* border: 1px solid ${({ theme }) => theme.green1}; */
-
   &:disabled {
     opacity: 50%;
     background-color: ${({ theme }) => theme.bg2};
