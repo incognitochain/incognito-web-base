@@ -1,8 +1,7 @@
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
-import useActiveWeb3React from 'hooks/useActiveWeb3React';
-import { useCurrencyBalance } from 'lib/hooks/useTokenBalance';
+import { useTokenContract } from 'hooks/useContract';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { Field } from 'redux-form';
@@ -18,9 +17,12 @@ const FormDeposit = React.memo((props: any) => {
   const { handleSubmit } = props;
   const handleDeposit = () => console.log('DEPOSIT');
 
-  const { sellNetworkName, sellToken, sellTokenPoor } = useAppSelector(depositDataSelector);
-  const { account } = useActiveWeb3React();
-  const balance = useCurrencyBalance(account, sellToken);
+  const { sellNetworkName, sellToken } = useAppSelector(depositDataSelector);
+  const contract = useTokenContract('0x0000000000000000000000000000000000000000', false);
+
+  // React.useEffect(async () => {
+  //   const balance = await contract?.balanceOf();
+  // }, []);
 
   return (
     <Styled>

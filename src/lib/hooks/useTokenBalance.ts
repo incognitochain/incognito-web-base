@@ -58,10 +58,10 @@ export function useTokenBalancesWithLoadingIndicator(
   tokens?: (any | undefined)[]
 ): [{ [tokenAddress: string]: CurrencyAmount<any> | undefined }, boolean] {
   const validatedTokens: any[] = useMemo(
-    () => tokens?.filter((t?: any): t is any => isAddress(t?.address) !== false) ?? [],
+    () => tokens?.filter((t?: any): t is any => isAddress(t?.contractID) !== false) ?? [],
     [tokens]
   );
-  const validatedTokenAddresses = useMemo(() => validatedTokens.map((vt) => vt.address), [validatedTokens]);
+  const validatedTokenAddresses = useMemo(() => validatedTokens.map((vt) => vt.contractID), [validatedTokens]);
 
   const balances = useMultipleContractSingleData(
     validatedTokenAddresses,
@@ -70,6 +70,7 @@ export function useTokenBalancesWithLoadingIndicator(
     useMemo(() => [address], [address]),
     tokenBalancesGasRequirement
   );
+  console.log('SANG TEST: ', balances);
 
   const anyLoading: boolean = useMemo(() => balances.some((callState) => callState.loading), [balances]);
 
