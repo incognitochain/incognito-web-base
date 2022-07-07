@@ -1,7 +1,7 @@
 import Row, { RowBetween } from 'components/Core/Row';
-import { useModal } from 'components/Modal';
+import { NetworkModal, useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
-import PToken from 'models/model/pTokenModel';
+import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import React from 'react';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
@@ -12,7 +12,9 @@ interface ISelection {
   rightValue?: string;
   leftValue?: string;
   tokens?: PToken[];
+  networks?: ITokenNetwork[];
   onSelectToken?: ({ token }: { token: PToken }) => void;
+  onSelectNetwork?: ({ network }: { network: ITokenNetwork }) => void;
 }
 
 const MainStyled = styled(Row)`
@@ -41,7 +43,7 @@ const MainStyled = styled(Row)`
 `;
 
 const Selection = React.memo((props: ISelection) => {
-  const { title, rightLabel, rightValue, leftValue, tokens, onSelectToken } = props;
+  const { title, rightLabel, rightValue, leftValue, tokens, onSelectToken, networks, onSelectNetwork } = props;
   const { setModal } = useModal();
 
   const showTokensList = () => {
@@ -49,6 +51,17 @@ const Selection = React.memo((props: ISelection) => {
     setModal({
       closable: true,
       data: <ModalTokens tokens={tokens} onSelect={onSelectToken} />,
+      isTransparent: false,
+      rightHeader: undefined,
+      title: 'Select a Token',
+    });
+  };
+
+  const showNetworkList = () => {
+    if (!networks || networks.length === 0) return;
+    setModal({
+      closable: true,
+      data: <NetworkModal networks={networks} onSelect={onSelectNetwork} />,
       isTransparent: false,
       rightHeader: undefined,
       title: 'Select a Token',
@@ -85,7 +98,7 @@ const Selection = React.memo((props: ISelection) => {
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
             Network
           </ThemedText.SmallLabel>
-          <div className="selection-item">
+          <div className="selection-item" onClick={showNetworkList}>
             {!!rightValue && (
               <ThemedText.SmallLabel fontWeight={400} color="primary8">
                 {rightValue}

@@ -1,8 +1,8 @@
+import { MAIN_NETWORK_NAME } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { AppDispatch, AppState } from 'state';
+import { getDepositTokenDataSelector, getPrivacyByTokenIDSelectors } from 'state/token';
 
-import { MAIN_NETWORK_NAME } from '../../../../constants';
-import { getPrivacyByTokenIDSelectors } from '../../../../state/token';
 import { DepositSetTokenAction, DepositSetTokenPayLoad, FormDepositActionType } from './FormDeposit.types';
 
 const actionSetToken = (payload: DepositSetTokenPayLoad): DepositSetTokenAction => ({
@@ -36,5 +36,36 @@ export const actionFilterSetToken =
       );
     } catch (error) {
       console.log('ACTION FILTER TOKEN ERROR: ', error);
+    }
+  };
+
+export const actionFilterTokenByNetwork =
+  ({ network }: { network: ITokenNetwork }) =>
+  async (dispatch: AppDispatch, getState: AppState & any) => {
+    try {
+      const token = getDepositTokenDataSelector(getState())(network.identify);
+      const parentToken = getPrivacyByTokenIDSelectors(getState())(token.parentTokenID);
+      console.log('SANG ', parentToken);
+      if (!network.currency || !network.chainID) return;
+      const sellToken: ITokenNetwork = {
+        identify: network.identify,
+        chainID: network.chainID,
+        currency: network.currency,
+        networkName: network.networkName,
+      };
+      const buyToken: ITokenNetwork = {
+        identify: parentToken.identify,
+        chainID: parentToken.chainID,
+        currency: parentToken.currencyType,
+        networkName: parentToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+      };
+      dispatch(
+        actionSetToken({
+          sellToken,
+          buyToken,
+        })
+      );
+    } catch (error) {
+      console.log('ACTION FILTER TOKEN BY NETWORK ERROR: ', error);
     }
   };

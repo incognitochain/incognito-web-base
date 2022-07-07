@@ -1,3 +1,7 @@
+import ethereumLogoUrl from 'assets/images/ethereum-logo.png';
+import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
+import optimismLogoUrl from 'assets/svg/optimistic_ethereum.svg';
+import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
 import { isMainnet } from 'config';
 
 const CRYPTO_ICON_URL = 'https://statics.incognito.org/cmc/symbols/128x128';
@@ -81,6 +85,9 @@ const BIG_COINS = {
       ? 'ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f'
       : 'ffd8d42dc40a8d166ea4848baf8b5f6e9fe0e9c30d60062eb7d44a8df9e00854',
   },
+  ETH_UNIFIED: {
+    tokenID: 'b366fa400c36e6bbcf24ac3e99c90406ddc64346ab0b7ba21e159b83d938812d',
+  },
 };
 
 const PRIVATE_TOKEN_TYPE = {
@@ -111,6 +118,23 @@ const GROUP_NETWORK: IGroupNetwork = {
   [MAIN_NETWORK_NAME.FANTOM]: [PRIVATE_TOKEN_CURRENCY_TYPE.FTM, PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20],
 };
 
+const ROOT_NETWORK_IMG: any = {
+  [PRIVATE_TOKEN_CURRENCY_TYPE.ETH]: ethereumLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.ERC20]: ethereumLogoUrl,
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.BNB]: bnbChainLogo,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.BNB_BEP2]: bnbChainLogo,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20]: bnbChainLogo,
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.MATIC]: polygonMaticLogo,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20]: polygonMaticLogo,
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.FTM]: optimismLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20]: optimismLogoUrl,
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN]: optimismLogoUrl,
+};
+
 export {
   BIG_COINS,
   CRYPTO_ICON_URL,
@@ -122,4 +146,5 @@ export {
   PRIVATE_TOKEN_CURRENCY_TYPE,
   PRIVATE_TOKEN_TYPE,
   PRV,
+  ROOT_NETWORK_IMG,
 };

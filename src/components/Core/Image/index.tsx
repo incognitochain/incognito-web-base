@@ -1,6 +1,6 @@
 import React, { ImgHTMLAttributes } from 'react';
 
-import imgLogo from './inc_logo.png';
+import imgLogo from '../../../assets/images/inc_logo.png';
 
 interface IProps extends ImgHTMLAttributes<any> {
   iconUrl: string;

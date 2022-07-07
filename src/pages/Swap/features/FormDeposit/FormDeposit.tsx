@@ -5,7 +5,6 @@ import { VerticalSpace } from 'components/Core/Space';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { Field, InjectedFormProps } from 'redux-form';
-import { useAppSelector } from 'state/hooks';
 import styled from 'styled-components/macro';
 
 import { Selection } from '../Selection';
@@ -13,7 +12,6 @@ import enhance from './FormDeposit.enhance';
 import { TInner as TInnerAddress } from './FormDeposit.enhanceAddressValidator';
 import { TInter as TInnerSelect } from './FormDeposit.enhanceSelect';
 import { IDeposit } from './FormDeposit.hook';
-import { depositDataSelector } from './FormDeposit.selectors';
 
 const Styled = styled.div``;
 interface IProps extends InjectedFormProps<any, any>, IDeposit, TInnerAddress, TInnerSelect {}
@@ -29,9 +27,10 @@ const FormDeposit = (props: IProps) => {
     sellTokenList,
     onSelectNetwork,
     onSelectToken,
+    sellNetworkName,
+    sellToken,
   } = props;
   const handleDeposit = () => console.log('DEPOSIT');
-  const { sellNetworkName, sellToken } = useAppSelector(depositDataSelector);
 
   return (
     <Styled>
@@ -42,7 +41,9 @@ const FormDeposit = (props: IProps) => {
           leftValue={sellToken.symbol}
           rightValue={sellNetworkName}
           tokens={sellTokenList}
+          networks={sellNetworkList}
           onSelectToken={onSelectToken}
+          onSelectNetwork={onSelectNetwork}
         />
         <VerticalSpace />
         <Selection title="To" />
@@ -66,6 +67,7 @@ const FormDeposit = (props: IProps) => {
           leftTitle="Total amount"
           componentProps={{
             placeholder: 'Amount',
+            type: 'number',
           }}
         />
         <VerticalSpace />

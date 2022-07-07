@@ -48,7 +48,9 @@ const getDepositData = ({
   const _sellTokenList = groupNetwork[sellNetworkName];
   const _sellToken = getDepositTokenData(sellIdentify);
   const _sellTokenParent = getDataByTokenID(_sellToken.parentTokenID);
-  const _sellNetworkList = _sellTokenParent.supportedNetwork;
+  const _sellNetworkList = _sellTokenParent.supportedNetwork?.filter(
+    ({ currency }) => currency !== _sellToken.currencyType
+  );
 
   const disabledForm = !valid || submitting || !isIncognitoAddress;
 

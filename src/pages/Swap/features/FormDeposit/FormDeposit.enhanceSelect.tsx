@@ -1,8 +1,8 @@
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import React from 'react';
+import { useAppDispatch } from 'state/hooks';
 
-import { useAppDispatch } from '../../../../state/hooks';
-import { actionFilterSetToken } from './FormDeposit.actions';
+import { actionFilterSetToken, actionFilterTokenByNetwork } from './FormDeposit.actions';
 
 export interface TInter {
   onSelectToken: ({ token }: { token: PToken }) => void;
@@ -16,7 +16,13 @@ const enhanceSelect = (WrappedComponent: any) => {
       dispatch(actionFilterSetToken({ token }));
     };
 
-    return <WrappedComponent {...{ ...props, onSelectToken: handleSelectToken }} />;
+    const handleSelectNetwork = ({ network }: { network: ITokenNetwork }) => {
+      dispatch(actionFilterTokenByNetwork({ network }));
+    };
+
+    return (
+      <WrappedComponent {...{ ...props, onSelectToken: handleSelectToken, onSelectNetwork: handleSelectNetwork }} />
+    );
   };
   FormDepositComp.displayName = 'FormDeposit.enhanceSelect';
   return FormDepositComp;

@@ -1,6 +1,7 @@
 import useActiveBalance from 'lib/hooks/useActiveBalance';
 import useApproveToken from 'lib/hooks/useApproveToken';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
+import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import React from 'react';
 import { useAppSelector } from 'state/hooks';
 
@@ -11,13 +12,15 @@ export interface IDeposit {
   disabledForm: boolean;
   sellTokenList: PToken[];
   sellNetworkList: ITokenNetwork[];
+  sellNetworkName: string;
+  sellToken: SelectedPrivacy;
   button: {
     text: string;
     disabled: boolean;
   };
 }
 export const useDeposit = (): IDeposit => {
-  const { sellToken, isIncognitoAddress, disabledForm, sellTokenList, sellNetworkList } =
+  const { sellToken, isIncognitoAddress, disabledForm, sellTokenList, sellNetworkList, sellNetworkName } =
     useAppSelector(depositDataSelector);
   const { isApproved, approvedAllowance, checkIsApproved, handleApproveToken, isApproving, isCheckingApprove } =
     useApproveToken({ token: sellToken });
@@ -51,5 +54,7 @@ export const useDeposit = (): IDeposit => {
     disabledForm,
     sellTokenList,
     sellNetworkList,
+    sellNetworkName,
+    sellToken,
   };
 };

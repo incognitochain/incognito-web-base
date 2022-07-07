@@ -173,12 +173,12 @@ class PToken {
     this.supportedNetwork = [];
     if (!isEmpty(listChild)) {
       const temp = listChild.map((token) => {
-        const { currencyType, networkName, chainID, tokenID } = token;
+        const { currencyType, networkName, chainID, identify } = token;
         return {
           currency: currencyType,
           networkName,
           chainID,
-          tokenID,
+          identify,
         };
       });
       temp.forEach((data: any) => {
