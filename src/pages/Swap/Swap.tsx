@@ -13,8 +13,6 @@ const Swap = (props: any) => {
   const { SWAP: HEADER_TAB } = TAB_LIST;
   const selectedTab = useAppSelector(selectedTabSelector)(HEADER_TAB.rootTab);
   const isFetching = useAppSelector(isFetchingTokenSelector);
-  // const approvalOptimizedTrade = useApprovalOptimizedTrade(trade, allowedSlippage);
-  // const [approvalState, approveCallback] = useApproveCallbackFromTrade(approvalOptimizedTrade, allowedSlippage);
 
   const renderForm = () => {
     // Deposit

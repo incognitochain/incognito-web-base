@@ -7,6 +7,7 @@ import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
 import { Selection } from '../Selection';
+import enhance from './FromSwap.enhance';
 
 const Styled = styled.div``;
 
@@ -48,4 +49,4 @@ const FormSwap = React.memo((props: any) => {
 
 FormSwap.displayName = 'FormSwap';
 
-export default FormSwap;
+export default enhance(FormSwap);

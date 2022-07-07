@@ -1,6 +1,6 @@
 import React from 'react';
 import { compose } from 'redux';
-import { change, focus, reduxForm } from 'redux-form';
+import { change, focus } from 'redux-form';
 
 import { useAppDispatch } from '../../state/hooks';
 import { FORM_CONFIGS } from './Swap.constant';
@@ -21,10 +21,4 @@ const enhance = (WrappedComponent: any) => {
   return SwapComp;
 };
 
-export default compose(
-  reduxForm({
-    form: FORM_CONFIGS.formName,
-  }),
-  enhanceInit,
-  enhance
-) as any;
+export default compose(enhanceInit, enhance) as any;

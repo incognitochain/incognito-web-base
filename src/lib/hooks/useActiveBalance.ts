@@ -10,9 +10,10 @@ export interface IActiveBalance {
   balance: string;
   decimals: number;
   isLoading: boolean;
+  loadBalance: () => void;
 }
 
-const useActiveBalance = ({ token }: { token: SelectedPrivacy }) => {
+const useActiveBalance = ({ token }: { token: SelectedPrivacy }): IActiveBalance => {
   const [state, setState] = React.useState<{
     balance: string;
     decimals: number;
@@ -52,7 +53,10 @@ const useActiveBalance = ({ token }: { token: SelectedPrivacy }) => {
   }, [account, chainId, token.tokenID]);
 
   return {
-    ...state,
+    balance: state.balance,
+    decimals: state.decimals,
+    isLoading: state.isLoading,
+    loadBalance: onLoadBalance,
   };
 };
 

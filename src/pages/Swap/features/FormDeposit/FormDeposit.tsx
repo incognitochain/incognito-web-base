@@ -1,30 +1,48 @@
+import { ButtonConfirmed } from 'components/Core/Button';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
+import useApproveToken from 'lib/hooks/useApproveToken';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
-import { Field } from 'redux-form';
+import { Field, InjectedFormProps } from 'redux-form';
 import { useAppSelector } from 'state/hooks';
 import styled from 'styled-components/macro';
 
-import useApproveToken from '../../../../lib/hooks/useApproveToken';
 import { Selection } from '../Selection';
+import enhance from './FormDeposit.enhance';
+import { TInner as TInnerAddress } from './FormDeposit.enhanceAddressValidator';
+import { IDeposit } from './FormDeposit.hook';
 import { depositDataSelector } from './FormDeposit.selectors';
 
 const Styled = styled.div``;
+interface IProps extends InjectedFormProps<any, any>, IDeposit, TInnerAddress {}
 
-const FormDeposit = React.memo((props: any) => {
-  const { handleSubmit } = props;
+const FormDeposit = React.memo((props: IProps) => {
+  const { handleSubmit, button, validateAddress, warningAddress, disabledForm } = props;
   const handleDeposit = () => console.log('DEPOSIT');
   const { sellNetworkName, sellToken } = useAppSelector(depositDataSelector);
   const balance = useApproveToken({ token: sellToken });
-  // React.useEffect(async () => {
-  //   const balance = await contract?.balanceOf();
-  // }, []);
 
   return (
     <Styled>
       <form onSubmit={handleSubmit(handleDeposit)}>
+        <VerticalSpace />
+        <Selection title="From" leftValue={sellToken.symbol} rightValue={sellNetworkName} />
+        <VerticalSpace />
+        <Selection title="To" />
+        <VerticalSpace />
+        <Field
+          component={InputField}
+          name={FORM_CONFIGS.toAddress}
+          inputType={INPUT_FIELD.address}
+          leftTitle="Address"
+          componentProps={{
+            placeholder: 'Incognito Address',
+          }}
+          validate={validateAddress}
+          warning={warningAddress}
+        />
         <VerticalSpace />
         <Field
           component={InputField}
@@ -36,24 +54,14 @@ const FormDeposit = React.memo((props: any) => {
           }}
         />
         <VerticalSpace />
-        <Selection title="From" leftValue={sellToken.symbol} rightValue={sellNetworkName} />
-        <VerticalSpace />
-        <Selection title="To" />
-        <VerticalSpace />
-        <Field
-          component={InputField}
-          name={FORM_CONFIGS.formAddress}
-          inputType={INPUT_FIELD.address}
-          leftTitle="Address"
-          componentProps={{
-            placeholder: 'Your Address',
-          }}
-        />
+        <ButtonConfirmed type="submit" disabled={button.disabled || disabledForm}>
+          {button.text}
+        </ButtonConfirmed>
       </form>
     </Styled>
   );
-});
+}) as any;
 
 FormDeposit.displayName = 'FormDeposit';
 
-export default FormDeposit;
+export default enhance(FormDeposit) as any;
