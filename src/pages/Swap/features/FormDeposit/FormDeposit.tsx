@@ -1,13 +1,13 @@
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
-import { useTokenContract } from 'hooks/useContract';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { Field } from 'redux-form';
 import { useAppSelector } from 'state/hooks';
 import styled from 'styled-components/macro';
 
+import useApproveToken from '../../../../lib/hooks/useApproveToken';
 import { Selection } from '../Selection';
 import { depositDataSelector } from './FormDeposit.selectors';
 
@@ -16,10 +16,8 @@ const Styled = styled.div``;
 const FormDeposit = React.memo((props: any) => {
   const { handleSubmit } = props;
   const handleDeposit = () => console.log('DEPOSIT');
-
   const { sellNetworkName, sellToken } = useAppSelector(depositDataSelector);
-  const contract = useTokenContract('0x0000000000000000000000000000000000000000', false);
-
+  const balance = useApproveToken({ token: sellToken });
   // React.useEffect(async () => {
   //   const balance = await contract?.balanceOf();
   // }, []);

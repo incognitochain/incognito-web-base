@@ -38,7 +38,6 @@ export function useNativeCurrencyBalances(uncheckedAddresses?: (string | undefin
       validAddressInputs.reduce<{ [address: string]: CurrencyAmount<Currency> }>((memo, [address], i) => {
         const value = results?.[i]?.result?.[0];
         if (value && chainId) {
-          console.log('SANG TEST', value);
           memo[address] = CurrencyAmount.fromRawAmount(nativeOnChain(chainId), JSBI.BigInt(value.toString()));
         }
         return memo;
@@ -70,7 +69,6 @@ export function useTokenBalancesWithLoadingIndicator(
     useMemo(() => [address], [address]),
     tokenBalancesGasRequirement
   );
-  console.log('SANG TEST: ', balances);
 
   const anyLoading: boolean = useMemo(() => balances.some((callState) => callState.loading), [balances]);
 

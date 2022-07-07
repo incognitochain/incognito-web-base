@@ -8,7 +8,8 @@ import { FormDepositActions, IFormDepositReducer } from './FormDeposit.types';
 const initialState: IFormDepositReducer = {
   isFetching: false,
   sellToken: {
-    tokenID: BIG_COINS.ETH.tokenID,
+    // tokenID: BIG_COINS.ETH.tokenID,
+    tokenID: 'c7545459764224a000a9b323850648acf271186238210ce474b505cd17cc93a0',
     currency: PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
     chainID: isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN,
     networkName: MAIN_NETWORK_NAME.ETHEREUM,

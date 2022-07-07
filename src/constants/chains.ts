@@ -1,6 +1,7 @@
 /**
  * List of all the networks supported by the Uniswap Interface
  */
+
 export enum SupportedChainId {
   MAINNET = 1,
   KOVAN = 42,
@@ -13,6 +14,9 @@ export enum SupportedChainId {
 
   BSC = 56,
   BSC_TESTNET = 97,
+
+  FTM = 56,
+  FTM_TESTNET = 97,
 }
 
 export const CHAIN_IDS_TO_NAMES = {

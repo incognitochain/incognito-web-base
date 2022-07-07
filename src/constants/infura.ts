@@ -1,4 +1,5 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
+import Web3 from 'web3';
 
 import { SupportedChainId } from './chains';
 
@@ -23,4 +24,35 @@ export const INFURA_NETWORK_URLS: { [key in SupportedChainId]: string } = {
   // TODO:
   [SupportedChainId.BSC]: `https://bsc-dataseed1.ninicoin.io`,
   [SupportedChainId.BSC_TESTNET]: `https://data-seed-prebsc-1-s1.binance.org:8545`,
+  [SupportedChainId.FTM]: `https://bsc-dataseed1.ninicoin.io`,
+  [SupportedChainId.FTM_TESTNET]: `https://data-seed-prebsc-1-s1.binance.org:8545`,
+};
+
+/**
+ * These are the network URLs used by the interface when there is not another available source of chain data
+ */
+export const INC_CONTRACT_ADDRESS: { [key in SupportedChainId]: string } = {
+  [SupportedChainId.MAINNET]: '0x43D037A562099A4C2c95b1E2120cc43054450629',
+  [SupportedChainId.KOVAN]: '0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7',
+
+  [SupportedChainId.OPTIMISM]: '0x43D037A562099A4C2c95b1E2120cc43054450629',
+  [SupportedChainId.OPTIMISTIC_KOVAN]: '0x43D037A562099A4C2c95b1E2120cc43054450629',
+
+  [SupportedChainId.POLYGON]: '0x43D037A562099A4C2c95b1E2120cc43054450629',
+  [SupportedChainId.POLYGON_MUMBAI]: '0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7',
+
+  [SupportedChainId.BSC]: '0x43D037A562099A4C2c95b1E2120cc43054450629',
+  [SupportedChainId.BSC_TESTNET]: '0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7',
+
+  // TODO:
+  [SupportedChainId.FTM]: '0x43D037A562099A4C2c95b1E2120cc43054450629',
+  [SupportedChainId.FTM_TESTNET]: '0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7',
+};
+
+export const getWeb3 = ({ chainId }: { chainId: SupportedChainId }): Web3 => {
+  return new Web3(INFURA_NETWORK_URLS[chainId]);
+};
+
+export const getINCContractAddress = ({ chainId }: { chainId: SupportedChainId }): string => {
+  return INC_CONTRACT_ADDRESS[chainId];
 };
