@@ -26,7 +26,10 @@ export const useDeposit = (): IDeposit => {
   const button = React.useMemo(() => {
     let text = 'Deposit';
     let disabled = false;
-    if (isApproving) {
+    if (disabledForm) {
+      text = 'Deposit';
+      disabled = true;
+    } else if (isApproving) {
       text = 'Approving';
       disabled = true;
     } else if (isCheckingApprove || isLoading) {
@@ -34,13 +37,13 @@ export const useDeposit = (): IDeposit => {
       disabled = true;
     } else if (!isApproved) {
       text = 'Approve';
-      disabled = true;
+      disabled = false;
     }
     return {
       text,
       disabled,
     };
-  }, [isApproving, isApproving, isCheckingApprove, isLoading]);
+  }, [isApproving, isApproving, isCheckingApprove, isLoading, disabledForm]);
 
   return {
     button,

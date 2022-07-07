@@ -1,11 +1,12 @@
 import PToken from 'models/model/pTokenModel';
 import React from 'react';
 import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 
-import { ThemedText } from '../../theme';
 import Column from '../Core/Column';
 import { Image } from '../Core/Image';
 import Row from '../Core/Row';
+import { useModal } from './Modal.provider';
 
 const Styled = styled(Column)`
   width: 100%;
@@ -28,16 +29,24 @@ const Item = styled(Row)`
 
 interface IProps {
   tokens: PToken[];
+  onSelect: ({ token }: { token: PToken }) => void;
 }
 
 const TokenModal = (props: IProps & any) => {
-  const { tokens } = props;
-  const renderItem = (data: PToken) => {
+  const { tokens, onSelect } = props;
+  const { closeModal } = useModal();
+  const renderItem = (token: PToken) => {
     return (
-      <Item key={data.tokenID}>
-        <Image iconUrl={data.iconUrl} />
+      <Item
+        key={token.tokenID}
+        onClick={() => {
+          closeModal();
+          onSelect({ token });
+        }}
+      >
+        <Image iconUrl={token.iconUrl} />
         <ThemedText.RegularLabel color="primary5" style={{ marginLeft: 12 }}>
-          {data.symbol}
+          {token.symbol}
         </ThemedText.RegularLabel>
       </Item>
     );

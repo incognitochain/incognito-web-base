@@ -1,8 +1,8 @@
 import { ITokenNetwork } from 'models/model/pTokenModel';
+import { Action } from 'redux';
 
 export enum FormDepositActionType {
-  FETCHING_ESTIMATE_FEE = 'FORM_DEPOSIT/FETCHING_ESTIMATE_FEE',
-  SET_ESTIMATE_FEE = 'FORM_DEPOSIT/SET_ESTIMATE_FEE',
+  SET_TOKEN = 'FORM_DEPOSIT/SET_TOKEN',
 }
 
 export interface IFormDepositReducer {
@@ -11,4 +11,14 @@ export interface IFormDepositReducer {
   buyToken: ITokenNetwork;
 }
 
-export type FormDepositActions = any;
+export interface DepositSetTokenPayLoad {
+  sellToken?: ITokenNetwork;
+  buyToken?: ITokenNetwork;
+}
+
+export interface DepositSetTokenAction extends Action {
+  type: FormDepositActionType.SET_TOKEN;
+  payload: DepositSetTokenPayLoad;
+}
+
+export type FormDepositActions = DepositSetTokenAction;

@@ -19,9 +19,9 @@ export const groupNetworkSelectors = createSelector(tokenSelectors, (token) => t
 export const getPrivacyByTokenIDSelectors = createSelector(
   tokenSelectors,
   (tokens) =>
-    (tokenID: string): SelectedPrivacy => {
+    (id: string): SelectedPrivacy => {
       const pTokens = tokens.pTokens;
-      const token = pTokens[tokenID];
+      const token = pTokens[id];
       return new SelectedPrivacyModel(token);
     }
 );
@@ -29,8 +29,8 @@ export const getPrivacyByTokenIDSelectors = createSelector(
 export const getDepositTokenDataSelector = createSelector(
   depositableSelectors,
   (depositable) =>
-    (tokenID: string): SelectedPrivacy => {
-      const token = depositable[tokenID];
+    (id: string): SelectedPrivacy => {
+      const token = depositable[id];
       return new SelectedPrivacyModel(token);
     }
 );

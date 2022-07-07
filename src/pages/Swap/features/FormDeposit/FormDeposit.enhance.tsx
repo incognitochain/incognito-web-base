@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { reduxForm } from 'redux-form';
 
 import enhanceAddressValidation from './FormDeposit.enhanceAddressValidator';
+import enhanceSelect from './FormDeposit.enhanceSelect';
 import { useDeposit } from './FormDeposit.hook';
 
 const enhanceInit = (WrappedComponent: any) => {
@@ -20,5 +21,6 @@ export default compose(
     form: FORM_CONFIGS.formName,
   }),
   enhanceInit,
-  enhanceAddressValidation
+  enhanceAddressValidation,
+  enhanceSelect
 ) as any;

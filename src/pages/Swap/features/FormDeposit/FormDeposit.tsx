@@ -11,14 +11,25 @@ import styled from 'styled-components/macro';
 import { Selection } from '../Selection';
 import enhance from './FormDeposit.enhance';
 import { TInner as TInnerAddress } from './FormDeposit.enhanceAddressValidator';
+import { TInter as TInnerSelect } from './FormDeposit.enhanceSelect';
 import { IDeposit } from './FormDeposit.hook';
 import { depositDataSelector } from './FormDeposit.selectors';
 
 const Styled = styled.div``;
-interface IProps extends InjectedFormProps<any, any>, IDeposit, TInnerAddress {}
+interface IProps extends InjectedFormProps<any, any>, IDeposit, TInnerAddress, TInnerSelect {}
 
 const FormDeposit = (props: IProps) => {
-  const { handleSubmit, button, validateAddress, warningAddress, disabledForm, sellNetworkList, sellTokenList } = props;
+  const {
+    handleSubmit,
+    button,
+    validateAddress,
+    warningAddress,
+    disabledForm,
+    sellNetworkList,
+    sellTokenList,
+    onSelectNetwork,
+    onSelectToken,
+  } = props;
   const handleDeposit = () => console.log('DEPOSIT');
   const { sellNetworkName, sellToken } = useAppSelector(depositDataSelector);
 
@@ -26,7 +37,13 @@ const FormDeposit = (props: IProps) => {
     <Styled>
       <form onSubmit={handleSubmit(handleDeposit)}>
         <VerticalSpace />
-        <Selection title="From" leftValue={sellToken.symbol} rightValue={sellNetworkName} tokens={sellTokenList} />
+        <Selection
+          title="From"
+          leftValue={sellToken.symbol}
+          rightValue={sellNetworkName}
+          tokens={sellTokenList}
+          onSelectToken={onSelectToken}
+        />
         <VerticalSpace />
         <Selection title="To" />
         <VerticalSpace />

@@ -29,7 +29,7 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
   try {
     dispatch(actionFetchingPTokens({ isFetching: true }));
     const list = (await getTokenListNoCache()) || [];
-    const pTokens = keyBy(list, 'tokenID');
+    const pTokens = keyBy(list, 'identify');
     const depositableList = list.filter(({ movedUnifiedToken }) => !movedUnifiedToken);
 
     // flatten tokens
@@ -58,7 +58,7 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
         groupByNetwork[findCurrency] = [token];
       }
     });
-    const depositable = keyBy(flattenTokens, 'tokenID');
+    const depositable = keyBy(flattenTokens, 'identify');
     dispatch(actionSetPTokens({ pTokens, depositable, groupByNetwork }));
   } catch (e) {
     console.log('GET PTOKEN WITH ERROR: ', e);

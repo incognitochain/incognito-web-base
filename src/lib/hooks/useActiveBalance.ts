@@ -28,7 +28,7 @@ const useActiveBalance = ({ token }: { token: SelectedPrivacy }): IActiveBalance
       if (!account || !chainId || !token) return;
       setState((value) => ({ ...value, isLoading: true }));
       const isNativeToken = token.isMainEVMToken;
-      let decimals = 18;
+      let decimals = token.decimals || 18;
       let balance = '0';
       if (isNativeToken) {
         const web3 = getWeb3({ chainId });

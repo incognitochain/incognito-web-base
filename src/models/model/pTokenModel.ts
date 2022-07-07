@@ -12,13 +12,14 @@ import { getChainIDByCurrency, getNetworkNameByCurrency } from 'utils/token';
 const PRVIDSTR = PRV.id;
 
 export interface ITokenNetwork {
-  tokenID: string;
-  chainID: SupportedChainId;
+  identify: string;
+  chainID?: SupportedChainId;
   networkName: MAIN_NETWORK_NAME;
   currency: number;
 }
 
 class PToken {
+  identify: string;
   tokenID: string;
   isPRV: boolean;
   parentTokenID: string;
@@ -91,7 +92,6 @@ class PToken {
   constructor(data: any = {}) {
     this.tokenID = data.TokenID;
     this.isPRV = this.tokenID === PRVIDSTR;
-    this.parentTokenID = data.TokenID;
 
     this.symbol = data.Symbol;
     this.name = data.Name;
@@ -147,11 +147,12 @@ class PToken {
 
     this.networkName = getNetworkNameByCurrency({ currency: this.currencyType });
     this.chainID = getChainIDByCurrency({ currency: this.currencyType });
-
+    this.identify = `${this.tokenID}-${this.currencyType}`;
+    this.parentTokenID = this.identify;
     if (data && data.ListChildToken instanceof Array) {
       this.listChildToken = data.ListChildToken.map((item: any) => {
         const newItem = new PToken(item);
-        newItem.parentTokenID = data.TokenID;
+        newItem.parentTokenID = `${data.TokenID}-${data.CurrencyType}`;
         return newItem;
       });
     } else {
@@ -160,7 +161,7 @@ class PToken {
     if (data && data.ListUnifiedToken instanceof Array) {
       this.listUnifiedToken = data.ListUnifiedToken.map((item: any) => {
         const newItem = new PToken(item);
-        newItem.parentTokenID = data.TokenID;
+        newItem.parentTokenID = `${data.TokenID}-${data.CurrencyType}`;
         return newItem;
       });
     } else {
@@ -168,7 +169,6 @@ class PToken {
     }
 
     this.iconUrl = this.getIconUrl({ url: data.Image });
-
     const listChild = isEmpty(this.listUnifiedToken) ? this.listUnifiedToken : this.listUnifiedToken;
     this.supportedNetwork = [];
     if (!isEmpty(listChild)) {
@@ -189,7 +189,12 @@ class PToken {
     } else {
       if (!!this.currencyType && !!this.chainID && !!this.networkName) {
         this.supportedNetwork = [
-          { currency: this.currencyType, networkName: this.networkName, chainID: this.chainID, tokenID: this.tokenID },
+          {
+            currency: this.currencyType,
+            networkName: this.networkName,
+            chainID: this.chainID,
+            identify: this.identify,
+          },
         ];
       }
     }

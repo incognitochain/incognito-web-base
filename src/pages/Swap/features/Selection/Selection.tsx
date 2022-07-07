@@ -1,11 +1,10 @@
 import Row, { RowBetween } from 'components/Core/Row';
 import { useModal } from 'components/Modal';
+import ModalTokens from 'components/Modal/Modal.tokens';
 import PToken from 'models/model/pTokenModel';
 import React from 'react';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
-
-import ModalTokens from '../../../../components/Modal/Modal.tokens';
 
 interface ISelection {
   title: string;
@@ -13,6 +12,7 @@ interface ISelection {
   rightValue?: string;
   leftValue?: string;
   tokens?: PToken[];
+  onSelectToken?: ({ token }: { token: PToken }) => void;
 }
 
 const MainStyled = styled(Row)`
@@ -41,14 +41,14 @@ const MainStyled = styled(Row)`
 `;
 
 const Selection = React.memo((props: ISelection) => {
-  const { title, rightLabel, rightValue, leftValue, tokens } = props;
+  const { title, rightLabel, rightValue, leftValue, tokens, onSelectToken } = props;
   const { setModal } = useModal();
 
   const showTokensList = () => {
     if (!tokens || tokens.length === 0) return;
     setModal({
       closable: true,
-      data: <ModalTokens tokens={tokens} />,
+      data: <ModalTokens tokens={tokens} onSelect={onSelectToken} />,
       isTransparent: false,
       rightHeader: undefined,
       title: 'Select a Token',

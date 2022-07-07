@@ -32,7 +32,7 @@ const getDepositData = ({
   state: AppState;
 }): IDepositData => {
   const { sellToken, buyToken } = deposit;
-  const { networkName: sellNetworkName, tokenID: sellTokenID } = sellToken;
+  const { networkName: sellNetworkName, identify: sellIdentify } = sellToken;
   const groupNetwork = groupNetworkSelectors(state);
 
   const formSelector = formValueSelector(FORM_CONFIGS.formName);
@@ -46,7 +46,7 @@ const getDepositData = ({
 
   // Sell tokens
   const _sellTokenList = groupNetwork[sellNetworkName];
-  const _sellToken = getDepositTokenData(sellToken.tokenID);
+  const _sellToken = getDepositTokenData(sellIdentify);
   const _sellTokenParent = getDataByTokenID(_sellToken.parentTokenID);
   const _sellNetworkList = _sellTokenParent.supportedNetwork;
 
