@@ -4,15 +4,16 @@ import { compose } from 'redux';
 import { reduxForm } from 'redux-form';
 
 import enhanceAddressValidation from './FormDeposit.enhanceAddressValidator';
+import enhanceAmountValidator from './FormDeposit.enhanceAmountValidator';
+import enhanceInit from './FormDeposit.enhanceInit';
 import enhanceSelect from './FormDeposit.enhanceSelect';
-import { useDeposit } from './FormDeposit.hook';
+import enhanceDeposit from './FormDeposit.enhanceSend';
 
-const enhanceInit = (WrappedComponent: any) => {
+const enhance = (WrappedComponent: any) => {
   const FormDepositComp = (props: any) => {
-    const data = useDeposit();
-    return <WrappedComponent {...{ ...props, ...data }} />;
+    return <WrappedComponent {...{ ...props }} />;
   };
-  FormDepositComp.displayName = 'FormDeposit.enhanceInit';
+  FormDepositComp.displayName = 'FormDeposit.enhance';
   return FormDepositComp;
 };
 
@@ -22,5 +23,8 @@ export default compose(
   }),
   enhanceInit,
   enhanceAddressValidation,
-  enhanceSelect
+  enhanceAmountValidator,
+  enhanceSelect,
+  enhanceDeposit,
+  enhance
 ) as any;
