@@ -14,14 +14,26 @@ export interface IDeposit {
   sellNetworkList: ITokenNetwork[];
   sellNetworkName: string;
   sellToken: SelectedPrivacy;
+
+  buyToken: SelectedPrivacy;
+  buyNetworkName: string;
   button: {
     text: string;
     disabled: boolean;
   };
 }
 export const useDeposit = (): IDeposit => {
-  const { sellToken, isIncognitoAddress, disabledForm, sellTokenList, sellNetworkList, sellNetworkName } =
-    useAppSelector(depositDataSelector);
+  const {
+    sellToken,
+    isIncognitoAddress,
+    disabledForm,
+    sellTokenList,
+    sellNetworkList,
+    sellNetworkName,
+
+    buyToken,
+    buyNetworkName,
+  } = useAppSelector(depositDataSelector);
   const { isApproved, approvedAllowance, checkIsApproved, handleApproveToken, isApproving, isCheckingApprove } =
     useApproveToken({ token: sellToken });
   const { balance, decimals, isLoading, loadBalance: onLoadBalance } = useActiveBalance({ token: sellToken });
@@ -56,5 +68,8 @@ export const useDeposit = (): IDeposit => {
     sellNetworkList,
     sellNetworkName,
     sellToken,
+
+    buyToken,
+    buyNetworkName,
   };
 };

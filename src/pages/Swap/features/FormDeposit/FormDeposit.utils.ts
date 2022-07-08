@@ -7,6 +7,7 @@ import { formValueSelector, isSubmitting, isValid } from 'redux-form';
 import { AppState } from 'state';
 import { groupNetworkSelectors } from 'state/token';
 
+import { MAIN_NETWORK_NAME } from '../../../../constants';
 import { IFormDepositReducer } from './FormDeposit.types';
 const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
 
@@ -16,6 +17,9 @@ export interface IDepositData {
   sellToken: SelectedPrivacy;
   sellTokenParent: SelectedPrivacy;
   sellNetworkName: string;
+
+  buyToken: SelectedPrivacy;
+  buyNetworkName: string;
   isIncognitoAddress: boolean;
   disabledForm: boolean;
 }
@@ -33,6 +37,8 @@ const getDepositData = ({
 }): IDepositData => {
   const { sellToken, buyToken } = deposit;
   const { networkName: sellNetworkName, identify: sellIdentify } = sellToken;
+  const { networkName: buyNetworkName, identify: buyIdentify } = buyToken;
+
   const groupNetwork = groupNetworkSelectors(state);
 
   const formSelector = formValueSelector(FORM_CONFIGS.formName);
@@ -52,6 +58,10 @@ const getDepositData = ({
     ({ currency }) => currency !== _sellToken.currencyType
   );
 
+  // Buy token
+  const _buyToken = getDataByTokenID(buyIdentify);
+  const _buyNetworkName = MAIN_NETWORK_NAME.INCOGNITO;
+
   const disabledForm = !valid || submitting || !isIncognitoAddress;
 
   return {
@@ -60,6 +70,9 @@ const getDepositData = ({
     sellToken: _sellToken,
     sellTokenParent: _sellTokenParent,
     sellNetworkName,
+
+    buyToken: _buyToken,
+    buyNetworkName: _buyNetworkName,
 
     isIncognitoAddress,
     disabledForm,

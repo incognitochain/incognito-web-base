@@ -241,7 +241,10 @@ export const ThemedText = {
     return <TextWrapper fontWeight={500} fontSize={12} fontStyle={'italic'} color={'text2'} {...props} />;
   },
   Error({ error, ...props }: { error: boolean } & TextProps) {
-    return <TextWrapper fontWeight={500} color={error ? 'red1' : 'text2'} {...props} />;
+    return <TextWrapper fontWeight={500} fontSize={14} color={error ? 'content4' : 'text2'} {...props} />;
+  },
+  Warning({ warning, ...props }: { warning: boolean } & TextProps) {
+    return <TextWrapper fontWeight={500} fontSize={14} color={warning ? 'warning' : 'text2'} {...props} />;
   },
 };
 
@@ -262,5 +265,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
   }
   ::-webkit-scrollbar {
     display: block;
+  }
+  .error {
+    color: ${({ theme }) => theme.content4};
   }
 `;

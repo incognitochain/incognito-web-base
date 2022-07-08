@@ -1,4 +1,4 @@
-import { MAIN_NETWORK_NAME } from 'constants/token';
+import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { AppDispatch, AppState } from 'state';
 import { getDepositTokenDataSelector, getPrivacyByTokenIDSelectors } from 'state/token';
@@ -23,9 +23,9 @@ export const actionFilterSetToken =
         networkName: token.networkName,
       };
       const buyToken: ITokenNetwork = {
-        identify: token.identify,
+        identify: parentToken.identify,
         chainID: parentToken.chainID,
-        currency: parentToken.currencyType,
+        currency: parentToken.currencyType || PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
         networkName: parentToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
       };
       dispatch(
@@ -45,7 +45,6 @@ export const actionFilterTokenByNetwork =
     try {
       const token = getDepositTokenDataSelector(getState())(network.identify);
       const parentToken = getPrivacyByTokenIDSelectors(getState())(token.parentTokenID);
-      console.log('SANG ', parentToken);
       if (!network.currency || !network.chainID) return;
       const sellToken: ITokenNetwork = {
         identify: network.identify,

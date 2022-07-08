@@ -1,8 +1,11 @@
+import { Image } from 'components/Core/Image';
 import Row, { RowBetween } from 'components/Core/Row';
 import { NetworkModal, useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
+import { ROOT_NETWORK_IMG } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import React from 'react';
+import { ChevronDown } from 'react-feather';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
@@ -11,6 +14,8 @@ interface ISelection {
   rightLabel?: string;
   rightValue?: string;
   leftValue?: string;
+  iconUrl?: string;
+  currency?: number;
   tokens?: PToken[];
   networks?: ITokenNetwork[];
   onSelectToken?: ({ token }: { token: PToken }) => void;
@@ -31,6 +36,7 @@ const MainStyled = styled(Row)`
   .selection-item {
     width: 100%;
     height: 52px;
+    cursor: pointer;
   }
   .line {
     background-color: ${({ theme }) => theme.border1};
@@ -40,14 +46,37 @@ const MainStyled = styled(Row)`
     bottom: 0;
     left: 49%;
   }
+  .hover-item {
+    :hover {
+      background-color: ${({ theme }) => theme.bg4};
+      padding-left: 6px;
+      padding-right: 4px;
+      border-radius: 8px;
+      transform: scale(1); /* you need a scale here to allow it to transition in both directions */
+      transition: 0.2s all ease;
+    }
+  }
 `;
 
 const Selection = React.memo((props: ISelection) => {
-  const { title, rightLabel, rightValue, leftValue, tokens, onSelectToken, networks, onSelectNetwork } = props;
+  const {
+    title,
+    iconUrl,
+    rightLabel,
+    rightValue,
+    leftValue,
+    tokens,
+    onSelectToken,
+    networks,
+    onSelectNetwork,
+    currency,
+  } = props;
   const { setModal } = useModal();
+  const isHideNetwork = !networks || networks.length === 0;
+  const isHideToken = !tokens || tokens.length === 0;
 
   const showTokensList = () => {
-    if (!tokens || tokens.length === 0) return;
+    if (isHideToken) return;
     setModal({
       closable: true,
       data: <ModalTokens tokens={tokens} onSelect={onSelectToken} />,
@@ -58,7 +87,7 @@ const Selection = React.memo((props: ISelection) => {
   };
 
   const showNetworkList = () => {
-    if (!networks || networks.length === 0) return;
+    if (isHideNetwork) return;
     setModal({
       closable: true,
       data: <NetworkModal networks={networks} onSelect={onSelectNetwork} />,
@@ -85,26 +114,34 @@ const Selection = React.memo((props: ISelection) => {
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
             Token
           </ThemedText.SmallLabel>
-          <div className="selection-item" onClick={showTokensList}>
-            {!!leftValue && (
-              <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                {leftValue}
-              </ThemedText.SmallLabel>
-            )}
-          </div>
+          <RowBetween className={`selection-item hover-item`} onClick={showTokensList}>
+            <Row>
+              {!!iconUrl && <Image iconUrl={iconUrl} />}
+              {!!leftValue && (
+                <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="primary5">
+                  {leftValue}
+                </ThemedText.RegularLabel>
+              )}
+            </Row>
+            {!isHideToken && <ChevronDown size={24} />}
+          </RowBetween>
         </div>
         <div className="line" />
         <div className="section">
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
             Network
           </ThemedText.SmallLabel>
-          <div className="selection-item" onClick={showNetworkList}>
-            {!!rightValue && (
-              <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                {rightValue}
-              </ThemedText.SmallLabel>
-            )}
-          </div>
+          <RowBetween className="selection-item hover-item" onClick={showNetworkList}>
+            <Row>
+              {!!currency && <Image iconUrl={ROOT_NETWORK_IMG[currency]} />}
+              {!!rightValue && (
+                <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="primary5">
+                  {rightValue}
+                </ThemedText.RegularLabel>
+              )}
+            </Row>
+            {!isHideNetwork && <ChevronDown size={24} />}
+          </RowBetween>
         </div>
       </MainStyled>
     </>

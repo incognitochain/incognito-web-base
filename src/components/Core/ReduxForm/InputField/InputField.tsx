@@ -51,14 +51,24 @@ const InputField = (props: IInputFieldProps) => {
   const { meta, input, componentProps, inputType, onClickMax, warning, errorCustom, leftTitle, rightTitle } = props;
   const { error: errorMeta, touched, submitting } = meta;
   const error = errorMeta || errorCustom;
+  const isError = touched && error;
+  const isWarning = touched && warning;
   const renderError = () => {
     if (submitting) {
       return null;
     }
     return (
       <>
-        {(touched && error && <p className={`error fs-small fw-regular`}>{error}</p>) ||
-          (touched && warning && <p className={`warning fs-small fw-regular`}>{warning}</p>)}
+        {(isError && (
+          <ThemedText.Error marginTop="4px" error className={`error`}>
+            {error}
+          </ThemedText.Error>
+        )) ||
+          (isWarning && (
+            <ThemedText.Warning marginTop="4px" warning className={`warning`}>
+              {warning}
+            </ThemedText.Warning>
+          ))}
       </>
     );
   };

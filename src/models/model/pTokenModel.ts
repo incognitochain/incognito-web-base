@@ -169,7 +169,7 @@ class PToken {
     }
 
     this.iconUrl = this.getIconUrl({ url: data.Image });
-    const listChild = isEmpty(this.listUnifiedToken) ? this.listUnifiedToken : this.listUnifiedToken;
+    const listChild = isEmpty(this.listUnifiedToken) ? this.listChildToken : this.listUnifiedToken;
     this.supportedNetwork = [];
     if (!isEmpty(listChild)) {
       const temp = listChild.map((token) => {

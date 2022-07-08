@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import isEmpty from 'lodash/isEmpty';
 import convert from 'utils/convert';
 import format from 'utils/format';
+const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
 
 const isSafeInteger = (number: number) => Math.abs(number) <= Number.MAX_SAFE_INTEGER;
 
@@ -55,9 +56,9 @@ const incognitoAddress = (message?: string) => (value: string) => {
   // if (isOldPaymentAddress(value)) {
   //   return message || 'Require an Incognito address V2';
   // }
-  // if (!isPaymentAddress(value)) {
-  //   return message || 'Use Unshield to exit Incognito';
-  // }
+  if (!isPaymentAddress(value)) {
+    return message || 'Please enter Incognito address';
+  }
   return undefined;
 };
 

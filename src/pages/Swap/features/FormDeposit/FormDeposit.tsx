@@ -2,6 +2,7 @@ import { ButtonConfirmed } from 'components/Core/Button';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
+import { PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { Field, InjectedFormProps } from 'redux-form';
@@ -29,6 +30,9 @@ const FormDeposit = (props: IProps) => {
     onSelectToken,
     sellNetworkName,
     sellToken,
+
+    buyToken,
+    buyNetworkName,
   } = props;
   const handleDeposit = () => console.log('DEPOSIT');
 
@@ -41,12 +45,20 @@ const FormDeposit = (props: IProps) => {
           leftValue={sellToken.symbol}
           rightValue={sellNetworkName}
           tokens={sellTokenList}
+          iconUrl={sellToken.iconUrl}
           networks={sellNetworkList}
           onSelectToken={onSelectToken}
           onSelectNetwork={onSelectNetwork}
+          currency={sellToken.currencyType}
         />
         <VerticalSpace />
-        <Selection title="To" />
+        <Selection
+          title="To"
+          rightValue={buyNetworkName}
+          currency={PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}
+          leftValue={buyToken.symbol}
+          iconUrl={buyToken.iconUrl}
+        />
         <VerticalSpace />
         <Field
           component={InputField}

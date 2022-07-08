@@ -1,5 +1,6 @@
 import ethereumLogoUrl from 'assets/images/ethereum-logo.png';
 import ftmLogoUrl from 'assets/images/ftm_logo.png';
+import incognitoLogoUrl from 'assets/images/inc_logo.png';
 import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
 import optimismLogoUrl from 'assets/svg/optimistic_ethereum.svg';
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
@@ -133,7 +134,8 @@ const ROOT_NETWORK_IMG: any = {
   [PRIVATE_TOKEN_CURRENCY_TYPE.FTM]: optimismLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20]: ftmLogoUrl,
 
-  [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN]: ftmLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN]: incognitoLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]: incognitoLogoUrl,
 };
 
 export {
