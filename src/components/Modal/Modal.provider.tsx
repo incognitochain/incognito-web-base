@@ -20,10 +20,12 @@ const Styled = styled.div<{ isTransparent: boolean }>`
   justify-content: center;
   align-items: center;
   background: #1e2121;
+  .break-line {
+    po
+  }
   .modal-content-wrapper {
     overflow: hidden;
     position: absolute;
-    min-height: 80%;
   }
   .close-icon {
     z-index: 2;
@@ -66,7 +68,7 @@ const Modal = (props: IProps) => {
   const renderModalContent = () => {
     return (
       <AppBody className="modal-content-wrapper" ref={ref}>
-        <RowBetween>
+        <RowBetween className="header">
           <ThemedText.AvgMediumLabel color="primary5">{title}</ThemedText.AvgMediumLabel>
           <CloseIcon onClick={() => closeModal && closeModal()} />
         </RowBetween>

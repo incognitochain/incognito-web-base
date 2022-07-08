@@ -1,3 +1,5 @@
+import { useModal } from 'components/Modal';
+import LoadingTransaction from 'components/Modal/Modal.transaction';
 import React from 'react';
 
 export interface TInter {
@@ -16,6 +18,8 @@ const enhanceSend = (WrappedComponent: any) => {
       handleLoadBalance,
     } = props;
 
+    const { setModal, clearAllModal } = useModal();
+
     const _handleDepositERC20 = async () => {
       try {
         if (!isApproved) {
@@ -33,6 +37,13 @@ const enhanceSend = (WrappedComponent: any) => {
 
     const onSend = async () => {
       try {
+        setModal({
+          isTransparent: false,
+          rightHeader: undefined,
+          title: '',
+          closable: true,
+          data: <LoadingTransaction pendingText="Waiting For Confirmation" />,
+        });
         if (sellToken.isMainEVMToken) {
           await _handleDepositEVM();
         } else {
@@ -41,11 +52,12 @@ const enhanceSend = (WrappedComponent: any) => {
         if (handleLoadBalance) {
           handleLoadBalance();
         }
+        clearAllModal();
       } catch (error) {
+        clearAllModal();
         console.log('SEND WITH ERROR: ', error);
       }
     };
-
     return <WrappedComponent {...{ ...props, onSend }} />;
   };
   FormDepositComp.displayName = 'FormDeposit.enhanceDeposit';

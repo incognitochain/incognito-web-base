@@ -93,7 +93,7 @@ const Selection = React.memo((props: ISelection) => {
       data: <NetworkModal networks={networks} onSelect={onSelectNetwork} />,
       isTransparent: false,
       rightHeader: undefined,
-      title: 'Select a Token',
+      title: 'Select network',
     });
   };
 
