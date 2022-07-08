@@ -1,9 +1,11 @@
+import { BigNumber } from 'bignumber.js';
 import useActiveBalance from 'lib/hooks/useActiveBalance';
 import useApproveToken from 'lib/hooks/useApproveToken';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import React from 'react';
 import { useAppSelector } from 'state/hooks';
+import convert from 'utils/convert';
 
 import { depositDataSelector } from './FormDeposit.selectors';
 
@@ -21,6 +23,11 @@ export interface IDeposit {
     text: string;
     disabled: boolean;
   };
+
+  amount: {
+    maximumAmountText: string;
+    maximumAmount: string;
+  };
 }
 export const useDeposit = (): IDeposit => {
   const {
@@ -33,6 +40,8 @@ export const useDeposit = (): IDeposit => {
 
     buyToken,
     buyNetworkName,
+
+    inputOriginalAmount,
   } = useAppSelector(depositDataSelector);
   const { isApproved, approvedAllowance, checkIsApproved, handleApproveToken, isApproving, isCheckingApprove } =
     useApproveToken({ token: sellToken });
@@ -60,6 +69,19 @@ export const useDeposit = (): IDeposit => {
     };
   }, [isApproving, isApproving, isCheckingApprove, isLoading, disabledForm]);
 
+  const amount = React.useMemo(() => {
+    const maximumAmountText = convert
+      .toHumanAmount({
+        decimals,
+        originalAmount: new BigNumber(balance || 0).toNumber(),
+      })
+      .toString();
+    return {
+      maximumAmountText,
+      maximumAmount: balance,
+    };
+  }, [balance, decimals, inputOriginalAmount]);
+
   return {
     button,
     isIncognitoAddress,
@@ -71,5 +93,7 @@ export const useDeposit = (): IDeposit => {
 
     buyToken,
     buyNetworkName,
+
+    amount,
   };
 };

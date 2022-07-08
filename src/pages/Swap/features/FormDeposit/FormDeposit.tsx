@@ -11,28 +11,33 @@ import styled from 'styled-components/macro';
 import { Selection } from '../Selection';
 import enhance from './FormDeposit.enhance';
 import { TInner as TInnerAddress } from './FormDeposit.enhanceAddressValidator';
+import { TInner as TInnerAmount } from './FormDeposit.enhanceAmountValidator';
 import { TInter as TInnerSelect } from './FormDeposit.enhanceSelect';
 import { IDeposit } from './FormDeposit.hook';
 
 const Styled = styled.div``;
-interface IProps extends InjectedFormProps<any, any>, IDeposit, TInnerAddress, TInnerSelect {}
+interface IProps extends InjectedFormProps<any, any>, IDeposit, TInnerAddress, TInnerAmount, TInnerSelect {}
 
 const FormDeposit = (props: IProps) => {
   const {
     handleSubmit,
     button,
-    validateAddress,
-    warningAddress,
     disabledForm,
     sellNetworkList,
     sellTokenList,
-    onSelectNetwork,
-    onSelectToken,
     sellNetworkName,
     sellToken,
 
     buyToken,
     buyNetworkName,
+
+    validateAddress,
+    warningAddress,
+    validateAmount,
+
+    onSelectNetwork,
+    onSelectToken,
+    onClickMax,
   } = props;
   const handleDeposit = () => console.log('DEPOSIT');
 
@@ -81,6 +86,8 @@ const FormDeposit = (props: IProps) => {
             placeholder: 'Amount',
             type: 'number',
           }}
+          validate={validateAmount}
+          onClickMax={onClickMax}
         />
         <VerticalSpace />
         <ButtonConfirmed type="submit" disabled={button.disabled || disabledForm}>

@@ -1,4 +1,6 @@
 // const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
+import { BigNumber } from 'bignumber.js';
+import { MAIN_NETWORK_NAME } from 'constants/token';
 import isEmpty from 'lodash/isEmpty';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
@@ -6,8 +8,8 @@ import { FORM_CONFIGS } from 'pages/Swap';
 import { formValueSelector, isSubmitting, isValid } from 'redux-form';
 import { AppState } from 'state';
 import { groupNetworkSelectors } from 'state/token';
+import convert from 'utils/convert';
 
-import { MAIN_NETWORK_NAME } from '../../../../constants';
 import { IFormDepositReducer } from './FormDeposit.types';
 const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
 
@@ -17,6 +19,9 @@ export interface IDepositData {
   sellToken: SelectedPrivacy;
   sellTokenParent: SelectedPrivacy;
   sellNetworkName: string;
+
+  inputAmount: string;
+  inputOriginalAmount: number;
 
   buyToken: SelectedPrivacy;
   buyNetworkName: string;
@@ -37,7 +42,7 @@ const getDepositData = ({
 }): IDepositData => {
   const { sellToken, buyToken } = deposit;
   const { networkName: sellNetworkName, identify: sellIdentify } = sellToken;
-  const { networkName: buyNetworkName, identify: buyIdentify } = buyToken;
+  const { identify: buyIdentify } = buyToken;
 
   const groupNetwork = groupNetworkSelectors(state);
 
@@ -62,7 +67,15 @@ const getDepositData = ({
   const _buyToken = getDataByTokenID(buyIdentify);
   const _buyNetworkName = MAIN_NETWORK_NAME.INCOGNITO;
 
-  const disabledForm = !valid || submitting || !isIncognitoAddress;
+  // amount validator
+  const inputOriginalAmount =
+    convert.toOriginalAmount({
+      decimals: _sellToken.decimals,
+      humanAmount: inputAmount,
+      round: false,
+    }) || 0;
+
+  const disabledForm = !valid || submitting || !isIncognitoAddress || new BigNumber(inputOriginalAmount).lte(0);
 
   return {
     sellTokenList: _sellTokenList,
@@ -76,6 +89,9 @@ const getDepositData = ({
 
     isIncognitoAddress,
     disabledForm,
+
+    inputAmount,
+    inputOriginalAmount,
   };
 };
 
