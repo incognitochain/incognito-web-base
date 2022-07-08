@@ -27,6 +27,8 @@ export interface IDepositData {
   buyNetworkName: string;
   isIncognitoAddress: boolean;
   disabledForm: boolean;
+
+  inputAddress: string;
 }
 
 const getDepositData = ({
@@ -91,6 +93,7 @@ const getDepositData = ({
     disabledForm,
 
     inputAmount,
+    inputAddress,
     inputOriginalAmount,
   };
 };

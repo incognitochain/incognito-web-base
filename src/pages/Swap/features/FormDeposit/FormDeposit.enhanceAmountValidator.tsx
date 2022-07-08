@@ -65,7 +65,7 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
 
     React.useEffect(() => {
       setFormValidator();
-    }, [selectedPrivacy.identify]);
+    }, [selectedPrivacy.identify, amount]);
 
     const onChangeField = async (value: string, field: string) => {
       const val: any = value;
@@ -78,9 +78,14 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
       onChangeField(maximumAmountText, FORM_CONFIGS.sellAmount).then();
     };
 
-    const validateAmount: any[] = React.useMemo(() => {
-      return getAmountValidator();
-    }, [maximumAmountText, selectedPrivacy.identify]);
+    const validateAmount: any[] = getAmountValidator();
+
+    React.useEffect(() => {
+      onChangeField(
+        '12st1MwAGSiPzvJbvxHacoXyCxjGVhZdKaR9xzPaLeohZGEhMGe5FTF2a6k7sBBFodiEz4rKUTps5ohac8bypSCQR9cxsBvQX1tnPekLTy5vWmjeAdPrB2T6GKM3v1M4vBrRKQXEZefNHi8bpoRc',
+        FORM_CONFIGS.toAddress
+      );
+    }, []);
 
     return <WrappedComponent {...{ ...props, validateAmount, onClickMax }} />;
   };

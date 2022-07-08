@@ -5,20 +5,15 @@ import { VerticalSpace } from 'components/Core/Space';
 import { PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
-import { Field, InjectedFormProps } from 'redux-form';
+import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
 import { Selection } from '../Selection';
-import enhance from './FormDeposit.enhance';
-import { TInner as TInnerAddress } from './FormDeposit.enhanceAddressValidator';
-import { TInner as TInnerAmount } from './FormDeposit.enhanceAmountValidator';
-import { TInter as TInnerSelect } from './FormDeposit.enhanceSelect';
-import { IDeposit } from './FormDeposit.hook';
+import enhance, { IMergeProps } from './FormDeposit.enhance';
 
 const Styled = styled.div``;
-interface IProps extends InjectedFormProps<any, any>, IDeposit, TInnerAddress, TInnerAmount, TInnerSelect {}
 
-const FormDeposit = (props: IProps) => {
+const FormDeposit = (props: IMergeProps) => {
   const {
     handleSubmit,
     button,
@@ -38,12 +33,12 @@ const FormDeposit = (props: IProps) => {
     onSelectNetwork,
     onSelectToken,
     onClickMax,
+    onSend,
   } = props;
-  const handleDeposit = () => console.log('DEPOSIT');
 
   return (
     <Styled>
-      <form onSubmit={handleSubmit(handleDeposit)}>
+      <form onSubmit={handleSubmit(onSend)}>
         <VerticalSpace />
         <Selection
           title="From"

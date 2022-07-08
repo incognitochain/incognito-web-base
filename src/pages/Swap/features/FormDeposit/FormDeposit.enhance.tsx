@@ -1,16 +1,21 @@
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { compose } from 'redux';
-import { reduxForm } from 'redux-form';
+import { InjectedFormProps, reduxForm } from 'redux-form';
 
-import enhanceAddressValidation from './FormDeposit.enhanceAddressValidator';
-import enhanceAmountValidator from './FormDeposit.enhanceAmountValidator';
+import enhanceAddressValidation, { TInner as TInnerAddress } from './FormDeposit.enhanceAddressValidator';
+import enhanceAmountValidator, { TInner as TInnerAmount } from './FormDeposit.enhanceAmountValidator';
 import enhanceInit from './FormDeposit.enhanceInit';
-import enhanceSelect from './FormDeposit.enhanceSelect';
+import enhanceSelect, { TInter as TInnerSelect } from './FormDeposit.enhanceSelect';
 import enhanceDeposit from './FormDeposit.enhanceSend';
+import { IDeposit } from './FormDeposit.hook';
+
+export interface IMergeProps extends InjectedFormProps<any, any>, IDeposit, TInnerAddress, TInnerAmount, TInnerSelect {
+  onSend: () => void;
+}
 
 const enhance = (WrappedComponent: any) => {
-  const FormDepositComp = (props: any) => {
+  const FormDepositComp = (props: IMergeProps & any) => {
     return <WrappedComponent {...{ ...props }} />;
   };
   FormDepositComp.displayName = 'FormDeposit.enhance';
