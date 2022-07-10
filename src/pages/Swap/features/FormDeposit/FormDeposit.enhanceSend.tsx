@@ -2,6 +2,8 @@ import { useModal } from 'components/Modal';
 import LoadingTransaction from 'components/Modal/Modal.transaction';
 import React from 'react';
 
+import { TransactionSubmittedContent } from '../../../../components/Core/TransactionConfirmationModal';
+
 export interface TInter {
   onSend: () => void;
 }
@@ -28,7 +30,7 @@ const enhanceSend = (WrappedComponent: any) => {
           await checkIsApproved();
         }
         // Handle deposit ERC20
-        await handleDepositERC20();
+        return await handleDepositERC20();
       } catch (error) {
         throw error;
       }
@@ -37,6 +39,7 @@ const enhanceSend = (WrappedComponent: any) => {
 
     const onSend = async () => {
       try {
+        let tx;
         setModal({
           isTransparent: false,
           rightHeader: undefined,
@@ -45,14 +48,23 @@ const enhanceSend = (WrappedComponent: any) => {
           data: <LoadingTransaction pendingText="Waiting For Confirmation" />,
         });
         if (sellToken.isMainEVMToken) {
-          await _handleDepositEVM();
+          tx = await _handleDepositEVM();
         } else {
-          await _handleDepositERC20();
+          tx = await _handleDepositERC20();
         }
+        clearAllModal();
         if (handleLoadBalance) {
           handleLoadBalance();
         }
-        clearAllModal();
+        if (tx.hash) {
+          setModal({
+            isTransparent: false,
+            rightHeader: undefined,
+            title: '',
+            closable: true,
+            data: <TransactionSubmittedContent chainId={sellToken.currencyType} hash={tx.hash} inline />,
+          });
+        }
       } catch (error) {
         clearAllModal();
         console.log('SEND WITH ERROR: ', error);

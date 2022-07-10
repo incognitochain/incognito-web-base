@@ -1,15 +1,20 @@
+import { DialogOverlay } from '@reach/dialog';
 import useOutsideRef from 'hooks/useDetectClickOutside';
 import { isArray } from 'lodash';
 import isEmpty from 'lodash/isEmpty';
 import last from 'lodash/last';
 import AppBody from 'pages/AppBody';
 import React, { useContext } from 'react';
+import { animated } from 'react-spring';
 import styled from 'styled-components/macro';
 import { CloseIcon, ThemedText } from 'theme';
 
 import { RowBetween } from '../Core/Row';
 
-const Styled = styled.div<{ isTransparent: boolean }>`
+const AnimatedDialogOverlay = animated(DialogOverlay);
+const StyledDialogOverlay = styled(AnimatedDialogOverlay)``;
+
+const Styled = styled(StyledDialogOverlay)<{ isTransparent: boolean }>`
   position: fixed;
   left: 0;
   top: 0;
@@ -19,9 +24,7 @@ const Styled = styled.div<{ isTransparent: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #1e2121;
   .break-line {
-    po
   }
   .modal-content-wrapper {
     overflow: hidden;

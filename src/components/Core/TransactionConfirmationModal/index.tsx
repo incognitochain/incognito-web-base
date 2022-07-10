@@ -7,7 +7,7 @@ import { L2_CHAIN_IDS, SupportedL2ChainId } from 'constants/chains';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useCurrencyLogoURIs from 'lib/hooks/useCurrencyLogoURIs';
 import { ReactNode, useCallback, useContext, useState } from 'react';
-import { AlertCircle, AlertTriangle, ArrowUpCircle, CheckCircle } from 'react-feather';
+import { AlertCircle, AlertTriangle, ArrowUpCircle } from 'react-feather';
 import { Text } from 'rebass';
 import { useIsTransactionConfirmed, useTransaction } from 'state/transactions/hooks';
 import styled, { ThemeContext } from 'styled-components/macro';
@@ -17,7 +17,7 @@ import { ExternalLink } from '../../../theme';
 import { CloseIcon, CustomLightSpinner } from '../../../theme';
 import { ExplorerDataType, getExplorerLink } from '../../../utils/getExplorerLink';
 import { TransactionSummary } from '../AccountDetails/TransactionSummary';
-import { ButtonLight, ButtonPrimary } from '../Button';
+import { ButtonPrimary } from '../Button';
 import { AutoColumn, ColumnCenter } from '../Column';
 import { RowBetween, RowFixed } from '../Row';
 import AnimatedConfirmation from './AnimatedConfirmation';
@@ -81,14 +81,14 @@ function ConfirmationPendingContent({
     </Wrapper>
   );
 }
-function TransactionSubmittedContent({
+export function TransactionSubmittedContent({
   onDismiss,
   chainId,
   hash,
   currencyToAdd,
   inline,
 }: {
-  onDismiss: () => void;
+  onDismiss?: () => void;
   hash: string | undefined;
   chainId: number;
   currencyToAdd?: Currency | undefined;
@@ -119,12 +119,12 @@ function TransactionSubmittedContent({
   return (
     <Wrapper>
       <Section inline={inline}>
-        {!inline && (
-          <RowBetween>
-            <div />
-            <CloseIcon onClick={onDismiss} />
-          </RowBetween>
-        )}
+        {/*{!inline && (*/}
+        {/*  <RowBetween>*/}
+        {/*    <div />*/}
+        {/*    <CloseIcon onClick={onDismiss} />*/}
+        {/*  </RowBetween>*/}
+        {/*)}*/}
         <ConfirmedIcon inline={inline}>
           <ArrowUpCircle strokeWidth={0.5} size={inline ? '40px' : '90px'} color={theme.primary1} />
         </ConfirmedIcon>
@@ -139,25 +139,25 @@ function TransactionSubmittedContent({
               </Text>
             </ExternalLink>
           )}
-          {currencyToAdd && connector.watchAsset && (
-            <ButtonLight mt="12px" padding="6px 12px" width="fit-content" onClick={addToken}>
-              {!success ? (
-                <RowFixed>
-                  <Trans>Add {currencyToAdd.symbol}</Trans>
-                </RowFixed>
-              ) : (
-                <RowFixed>
-                  <Trans>Added {currencyToAdd.symbol} </Trans>
-                  <CheckCircle size={'16px'} stroke={theme.green1} style={{ marginLeft: '6px' }} />
-                </RowFixed>
-              )}
-            </ButtonLight>
-          )}
-          <ButtonPrimary onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
-            <Text fontWeight={500} fontSize={20}>
-              {inline ? <Trans>Return</Trans> : <Trans>Close</Trans>}
-            </Text>
-          </ButtonPrimary>
+          {/*{currencyToAdd && connector.watchAsset && (*/}
+          {/*  <ButtonLight mt="12px" padding="6px 12px" width="fit-content" onClick={addToken}>*/}
+          {/*    {!success ? (*/}
+          {/*      <RowFixed>*/}
+          {/*        <Trans>Add {currencyToAdd.symbol}</Trans>*/}
+          {/*      </RowFixed>*/}
+          {/*    ) : (*/}
+          {/*      <RowFixed>*/}
+          {/*        <Trans>Added {currencyToAdd.symbol} </Trans>*/}
+          {/*        <CheckCircle size={'16px'} stroke={theme.green1} style={{ marginLeft: '6px' }} />*/}
+          {/*      </RowFixed>*/}
+          {/*    )}*/}
+          {/*  </ButtonLight>*/}
+          {/*)}*/}
+          {/*<ButtonPrimary onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>*/}
+          {/*  <Text fontWeight={500} fontSize={20}>*/}
+          {/*    {inline ? <Trans>Return</Trans> : <Trans>Close</Trans>}*/}
+          {/*  </Text>*/}
+          {/*</ButtonPrimary>*/}
         </AutoColumn>
       </Section>
     </Wrapper>

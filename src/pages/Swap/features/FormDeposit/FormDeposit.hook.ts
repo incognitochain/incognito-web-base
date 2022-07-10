@@ -84,6 +84,7 @@ export const useDeposit = (): IDeposit => {
         data: depData,
       });
       await tx.wait();
+      return tx;
     } catch (error) {
       throw error;
     }
@@ -107,6 +108,7 @@ export const useDeposit = (): IDeposit => {
         gasLimit: 100000,
       });
       await tx.wait();
+      return tx;
     } catch (error) {
       throw error;
     }
