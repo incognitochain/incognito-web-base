@@ -51,6 +51,7 @@ const InfoCard = styled.div`
   position: relative;
   display: grid;
   grid-row-gap: 12px;
+  padding-bottom: 24px;
 `;
 
 const AccountGroupingRow = styled.div`
