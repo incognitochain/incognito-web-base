@@ -105,8 +105,7 @@ function colors(darkMode: boolean): Colors {
 
     // Background
     // backgrounds / greys
-    bg0: darkMode ? '#191B1F' : '#FFF',
-    bg1: '#F2F2F2',
+    bg1: '#303030',
     bg2: '#1A1A1A',
     bg3: '#303030',
     bg4: '#404040',
@@ -209,9 +208,6 @@ export const ThemedText = {
   },
   Small(props: TextProps) {
     return <TextWrapper fontWeight={500} fontSize={11} {...props} />;
-  },
-  SuperSmallLabel(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={14} {...props} />;
   },
   SmallLabel(props: TextProps) {
     return <TextWrapper fontWeight={500} fontSize={14} style={{ lineHeight: '20px' }} {...props} />;

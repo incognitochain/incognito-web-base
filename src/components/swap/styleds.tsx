@@ -26,7 +26,7 @@ export const ArrowWrapper = styled.div<{ clickable: boolean }>`
   left: calc(50% - 16px);
   /* transform: rotate(90deg); */
   background-color: ${({ theme }) => theme.bg1};
-  border: 4px solid ${({ theme }) => theme.bg0};
+  border: 4px solid ${({ theme }) => theme.bg1};
   z-index: 2;
   ${({ clickable }) =>
     clickable
@@ -139,7 +139,7 @@ export const TransactionDetailsLabel = styled(ThemedText.Black)`
 `;
 
 export const ResponsiveTooltipContainer = styled(TooltipContainer)<{ origin?: string; width?: string }>`
-  background-color: ${({ theme }) => theme.bg0};
+  background-color: ${({ theme }) => theme.bg1};
   border: 1px solid ${({ theme }) => theme.bg2};
   padding: 1rem;
   width: ${({ width }) => width ?? 'auto'};

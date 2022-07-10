@@ -7,13 +7,15 @@ import StatusIcon from 'components/Core/Identicon/StatusIcon';
 import { coinbaseWallet, injected } from 'connectors';
 import { SUPPORTED_WALLETS } from 'constants/wallet';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import React from 'react';
 import { ExternalLink as LinkIcon } from 'react-feather';
 import { useAppDispatch } from 'state/hooks';
-import { updateSelectedWallet } from 'state/user/reducer';
 import styled from 'styled-components/macro';
-import { ExternalLink } from 'theme';
+import { ExternalLink, ThemedText } from 'theme';
 import { shortenAddress } from 'utils';
 import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
+
+import { updateSelectedWallet } from '../../../state/user/reducer';
 
 const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
@@ -46,13 +48,9 @@ const UpperSection = styled.div`
 `;
 
 const InfoCard = styled.div`
-  padding: 1rem;
-  border: 1px solid ${({ theme }) => theme.border1};
-  border-radius: 20px;
   position: relative;
   display: grid;
   grid-row-gap: 12px;
-  margin-bottom: 20px;
 `;
 
 const AccountGroupingRow = styled.div`
@@ -150,11 +148,11 @@ const CloseColor = styled(Close)`
   }
 `;
 
-const WalletName = styled.div`
+const WalletName = styled(ThemedText.SmallLabel)`
   width: initial;
   font-size: 0.825rem;
   font-weight: 500;
-  color: ${({ theme }) => theme.text3};
+  color: ${({ theme }) => theme.primary8};
 `;
 
 const IconWrapper = styled.div<{ size?: number }>`
@@ -185,7 +183,8 @@ const WalletAction = styled(ButtonSecondary)`
   font-weight: 400;
   margin-left: 8px;
   font-size: 0.825rem;
-  padding: 4px 6px;
+  padding: 6px 12px;
+  background-color: ${({ theme }) => theme.primary14};
   :hover {
     cursor: pointer;
     text-decoration: underline;
@@ -223,39 +222,12 @@ export default function AccountDetails({ toggleWalletModal, ENSName, openOptions
           <CloseColor />
         </CloseIcon>
         <HeaderRow>
-          <Trans>Account</Trans>
+          <ThemedText.AvgMediumLabel color="primary5">Account</ThemedText.AvgMediumLabel>
         </HeaderRow>
         <AccountSection>
           <YourAccount>
             <InfoCard>
-              <AccountGroupingRow>
-                {formatConnectorName()}
-                <div>
-                  {/* Coinbase Wallet reloads the page right now, which breaks the selectedWallet from being set properly on localStorage */}
-                  {connector !== coinbaseWallet && (
-                    <WalletAction
-                      style={{ fontSize: '.825rem', fontWeight: 400, marginRight: '8px' }}
-                      onClick={() => {
-                        connector.deactivate ? connector.deactivate() : connector.resetState();
-                        dispatch(updateSelectedWallet({ wallet: undefined }));
-                        openOptions();
-                      }}
-                      data-cy="wallet-disconnect"
-                    >
-                      Disconnect
-                    </WalletAction>
-                  )}
-                  <WalletAction
-                    style={{ fontSize: '.825rem', fontWeight: 400 }}
-                    onClick={() => {
-                      openOptions();
-                    }}
-                    data-cy="wallet-change"
-                  >
-                    <Trans>Change</Trans>
-                  </WalletAction>
-                </div>
-              </AccountGroupingRow>
+              <AccountGroupingRow>{formatConnectorName()}</AccountGroupingRow>
               <AccountGroupingRow id="web3-account-identifier-row">
                 <AccountControl>
                   {ENSName ? (
@@ -269,7 +241,32 @@ export default function AccountDetails({ toggleWalletModal, ENSName, openOptions
                     <>
                       <div>
                         {connector && <WrappedStatusIcon connector={connector} />}
-                        <p> {account && shortenAddress(account)}</p>
+                        <ThemedText.RegularLabel> {account && shortenAddress(account)}</ThemedText.RegularLabel>
+                      </div>
+                      <div>
+                        {/* Coinbase Wallet reloads the page right now, which breaks the selectedWallet from being set properly on localStorage */}
+                        {connector !== coinbaseWallet && (
+                          <WalletAction
+                            style={{ fontSize: '.825rem', fontWeight: 500, marginRight: '8px' }}
+                            onClick={() => {
+                              connector.deactivate ? connector.deactivate() : connector.resetState();
+                              dispatch(updateSelectedWallet({ wallet: undefined }));
+                              openOptions();
+                            }}
+                            data-cy="wallet-disconnect"
+                          >
+                            Disconnect
+                          </WalletAction>
+                        )}
+                        <WalletAction
+                          style={{ fontSize: '.825rem', fontWeight: 500 }}
+                          onClick={() => {
+                            openOptions();
+                          }}
+                          data-cy="wallet-change"
+                        >
+                          Change
+                        </WalletAction>
                       </div>
                     </>
                   )}
@@ -320,9 +317,7 @@ export default function AccountDetails({ toggleWalletModal, ENSName, openOptions
                             href={getExplorerLink(chainId, account, ExplorerDataType.ADDRESS)}
                           >
                             <LinkIcon size={16} />
-                            <span style={{ marginLeft: '4px' }}>
-                              <Trans>View on Explorer</Trans>
-                            </span>
+                            <span style={{ marginLeft: '4px' }}>View on Explorer</span>
                           </AddressLink>
                         )}
                       </div>

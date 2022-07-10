@@ -14,6 +14,9 @@ export const BodyWrapper = styled.main<{ margin?: string; maxWidth?: string }>`
   z-index: ${Z_INDEX.deprecated_content};
   padding: 24px;
   min-height: 200px;
+  .loader {
+    left: 50%;
+  }
 `;
 
 /**

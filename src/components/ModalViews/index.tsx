@@ -31,9 +31,9 @@ export function LoadingView({ children, onDismiss }: { children: any; onDismiss:
       </ConfirmedIcon>
       <AutoColumn gap="100px" justify={'center'}>
         {children}
-        <ThemedText.SuperSmallLabel>
+        <ThemedText.SmallLabel>
           <Trans>Confirm this transaction in your wallet</Trans>
-        </ThemedText.SuperSmallLabel>
+        </ThemedText.SmallLabel>
       </AutoColumn>
     </ConfirmOrLoadingWrapper>
   );
@@ -67,9 +67,9 @@ export function SubmittedView({
             href={getExplorerLink(chainId, hash, ExplorerDataType.TRANSACTION)}
             style={{ marginLeft: '4px' }}
           >
-            <ThemedText.SuperSmallLabel>
+            <ThemedText.SmallLabel>
               <Trans>View transaction on Explorer</Trans>
-            </ThemedText.SuperSmallLabel>
+            </ThemedText.SmallLabel>
           </ExternalLink>
         )}
       </AutoColumn>
