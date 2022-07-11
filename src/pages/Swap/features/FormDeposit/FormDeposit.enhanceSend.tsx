@@ -1,8 +1,8 @@
+import { TransactionSubmittedContent } from 'components/Core/TransactionConfirmationModal';
 import { useModal } from 'components/Modal';
 import LoadingTransaction from 'components/Modal/Modal.transaction';
 import React from 'react';
-
-import { TransactionSubmittedContent } from '../../../../components/Core/TransactionConfirmationModal';
+import { submitDepositTx } from 'services/rpcClient';
 
 export interface TInter {
   onSend: () => void;
@@ -18,6 +18,7 @@ const enhanceSend = (WrappedComponent: any) => {
       handleDepositEVM,
       sellToken,
       handleLoadBalance,
+      sellTokenParent,
     } = props;
 
     const { setModal, clearAllModal } = useModal();
@@ -53,6 +54,15 @@ const enhanceSend = (WrappedComponent: any) => {
         } else {
           tx = await _handleDepositERC20();
         }
+        try {
+          await submitDepositTx({
+            hash: tx.hash,
+            tokenID: sellTokenParent.tokenID,
+            chainID: sellToken.currencyType,
+          });
+        } catch (error) {
+          console.log('SUBMIT TRANSACTION ERROR: ', error);
+        }
         clearAllModal();
         if (handleLoadBalance) {
           handleLoadBalance();
@@ -63,7 +73,7 @@ const enhanceSend = (WrappedComponent: any) => {
             rightHeader: undefined,
             title: '',
             closable: true,
-            data: <TransactionSubmittedContent chainId={sellToken.chainID} hash={tx.hash} inline />,
+            data: <TransactionSubmittedContent chainId={sellToken.chainID} hash={tx.hash} />,
           });
         }
       } catch (error) {

@@ -22,6 +22,7 @@ export interface IDeposit {
   sellNetworkList: ITokenNetwork[];
   sellNetworkName: string;
   sellToken: SelectedPrivacy;
+  sellTokenParent: SelectedPrivacy;
 
   buyToken: SelectedPrivacy;
   buyNetworkName: string;
@@ -55,6 +56,7 @@ export const useDeposit = (): IDeposit => {
     sellTokenList,
     sellNetworkList,
     sellNetworkName,
+    sellTokenParent,
 
     buyToken,
     buyNetworkName,
@@ -168,6 +170,7 @@ export const useDeposit = (): IDeposit => {
     sellNetworkList,
     sellNetworkName,
     sellToken,
+    sellTokenParent,
 
     buyToken,
     buyNetworkName,
