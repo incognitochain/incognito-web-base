@@ -8,6 +8,7 @@ import logger from 'redux-logger';
 
 import application from './application/reducer';
 import { updateVersion } from './global/actions';
+import incognitoWallet from './incognitoWallet/incognitoWallet.reducer';
 import lists from './lists/reducer';
 import logs from './logs/slice';
 import { routingApi } from './routing/slice';
@@ -33,6 +34,7 @@ const store = configureStore({
     [routingApi.reducerPath]: routingApi.reducer,
     tabs,
     form,
+    incognitoWallet,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

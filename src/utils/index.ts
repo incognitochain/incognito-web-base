@@ -54,3 +54,10 @@ export function isTokenOnList(chainTokenMap: ChainTokenMap, token?: Token): bool
 export function formattedFeeAmount(feeAmount: FeeAmount): number {
   return feeAmount / 10000;
 }
+
+export function shortenIncognitoAddress(address: string, chars = 4): string {
+  if (!address || address.length < 1) {
+    throw Error(`Invalid address.`);
+  }
+  return `${address.substring(0, chars)}...${address.substring(address.length - chars)}`;
+}

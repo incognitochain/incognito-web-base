@@ -6,8 +6,8 @@ import useTheme from 'hooks/useTheme';
 import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
 
+import IncognitoWallet from '../IncognitoWallet';
 import NetworkSelector from './NetworkSelector';
-
 const HeaderFrame = styled.div<{ showBackground: boolean }>`
   display: grid;
   grid-template-columns: 142px 120px;
@@ -110,6 +110,10 @@ export default function Header() {
         {/*<HeaderElement>*/}
         {/*  <Menu />*/}
         {/*</HeaderElement>*/}
+
+        <HeaderElement>
+          <IncognitoWallet />
+        </HeaderElement>
       </HeaderControls>
     </HeaderFrame>
   );

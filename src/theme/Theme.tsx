@@ -265,4 +265,11 @@ export const ThemedGlobalStyle = createGlobalStyle`
   .error {
     color: ${({ theme }) => theme.content4};
   }
+
+  .button-hover {
+    :hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
 `;
