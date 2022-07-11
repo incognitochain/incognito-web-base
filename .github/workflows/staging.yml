@@ -52,6 +52,8 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
           echo "IMAGE_ID=$IMAGE_ID" >> $GITHUB_ENV
+          echo "GITHUB_RUN_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
+          echo "GITHUB_RUN_NUMBER=$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
           echo "IMAGE_TAGS=$IMAGE_ID:$VERSION,$IMAGE_ID:$GITHUB_RUN_ID" >> $GITHUB_ENV
       -
         name: Build and push image to github packages
