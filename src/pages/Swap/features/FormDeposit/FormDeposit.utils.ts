@@ -1,6 +1,6 @@
 // const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
 import { BigNumber } from 'bignumber.js';
-import { MAIN_NETWORK_NAME } from 'constants/token';
+import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import isEmpty from 'lodash/isEmpty';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
@@ -62,7 +62,7 @@ const getDepositData = ({
   const _sellToken = getDepositTokenData(sellIdentify);
   const _sellTokenParent = getDataByTokenID(_sellToken.parentTokenID);
   const _sellNetworkList = _sellTokenParent.supportedNetwork?.filter(
-    ({ currency }) => currency !== _sellToken.currencyType
+    ({ currency }) => currency !== _sellToken.currencyType && currency !== PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN
   );
 
   // Buy token

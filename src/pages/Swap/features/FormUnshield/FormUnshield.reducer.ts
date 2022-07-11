@@ -8,16 +8,16 @@ import { FormDepositActionType, FormUnshieldActions, IFormUnshieldReducer } from
 const initialState: IFormUnshieldReducer = {
   isFetching: false,
   sellToken: {
+    identify: `${BIG_COINS.ETH_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
+    currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
+    networkName: MAIN_NETWORK_NAME.INCOGNITO,
+    chainID: isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN,
+  },
+  buyToken: {
     identify: `${BIG_COINS.ETH.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.ETH}`,
     currency: PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
     chainID: isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN,
     networkName: MAIN_NETWORK_NAME.ETHEREUM,
-  },
-  buyToken: {
-    identify: `${BIG_COINS.ETH_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
-    currency: PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
-    networkName: MAIN_NETWORK_NAME.INCOGNITO,
-    chainID: 0,
   },
 };
 

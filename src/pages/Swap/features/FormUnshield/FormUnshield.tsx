@@ -1,20 +1,21 @@
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
+import { Selection } from 'pages/Swap/features/Selection';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
-import { Selection } from '../Selection';
 import enhance from './FormUnshield.enhance';
+import { useUnshield } from './FormUnshield.hook';
 
 const Styled = styled.div``;
 
 const FormUnshield = React.memo((props: any) => {
   const { handleSubmit } = props;
   const handleSwap = () => console.log('SWAP');
-
+  const data = useUnshield();
   return (
     <Styled>
       <form onSubmit={handleSubmit(handleSwap)}>
@@ -25,11 +26,11 @@ const FormUnshield = React.memo((props: any) => {
         <VerticalSpace />
         <Field
           component={InputField}
-          name={FORM_CONFIGS.formAddress}
+          name={FORM_CONFIGS.toAddress}
           inputType={INPUT_FIELD.address}
           leftTitle="Address"
           componentProps={{
-            placeholder: 'Your Address',
+            placeholder: 'Your External Address',
           }}
         />
         <VerticalSpace />
