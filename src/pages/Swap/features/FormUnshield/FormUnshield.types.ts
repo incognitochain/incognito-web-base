@@ -11,14 +11,14 @@ export interface IFormUnshieldReducer {
   buyToken: ITokenNetwork;
 }
 
-export interface SwapSetTokenPayLoad {
+export interface UnshieldSetTokenPayLoad {
   sellToken?: ITokenNetwork;
   buyToken?: ITokenNetwork;
 }
 
-export interface SwapSetTokenAction extends Action {
+export interface UnshieldSetTokenAction extends Action {
   type: FormDepositActionType.SET_TOKEN;
-  payload: SwapSetTokenPayLoad;
+  payload: UnshieldSetTokenPayLoad;
 }
 
-export type FormUnshieldActions = SwapSetTokenAction;
+export type FormUnshieldActions = UnshieldSetTokenAction;
