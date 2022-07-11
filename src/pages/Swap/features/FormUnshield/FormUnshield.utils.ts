@@ -49,6 +49,7 @@ const getUnshieldData = ({
   // buy token
   const _buyToken = getDataByTokenID(_sellToken.parentTokenID);
   const _buyNetworkList = _buyToken.supportedNetwork;
+
   return {
     unshieldAddress: inputAddress,
     sellToken: _sellToken,

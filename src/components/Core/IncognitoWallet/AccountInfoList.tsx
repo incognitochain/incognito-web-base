@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { useSelector } from 'react-redux';
-import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
+import { incognitoWalletAccountsSelector } from 'state/incognitoWallet';
 import styled from 'styled-components/macro';
 const Styled = styled.div`
   position: absolute;
@@ -13,7 +13,7 @@ const Styled = styled.div`
 `;
 const AccountInfoList = () => {
   // const dispatch = useDispatch();
-  const accountList = useSelector(incognitoWalletAccountSelector);
+  const accountList = useSelector(incognitoWalletAccountsSelector);
   if (!accountList || accountList.length < 1) return null;
   return (
     <Styled>

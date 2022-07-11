@@ -4,6 +4,8 @@ import SelectedPrivacyModel from 'models/model/SelectedPrivacyModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { AppState } from 'state';
 
+import { incognitoWalletAccountSelector } from '../incognitoWallet';
+
 export const tokenSelectors = createSelector(
   (state: AppState) => state.token,
   (token) => token
@@ -33,19 +35,29 @@ export const groupNetworkSelectors = createSelector(tokenSelectors, (token) => t
 
 export const getPrivacyByTokenIDSelectors = createSelector(
   tokenSelectors,
-  (tokens) =>
+  incognitoWalletAccountSelector,
+  (tokens, incAccount) =>
     (id: string): SelectedPrivacy => {
       const pTokens = tokens.pTokens;
       const token = pTokens[id];
-      return new SelectedPrivacyModel(token);
+      let followTokens = [];
+      if (incAccount) {
+        followTokens = incAccount.balances || [];
+      }
+      return new SelectedPrivacyModel(token, followTokens);
     }
 );
 
 export const getDepositTokenDataSelector = createSelector(
   depositableSelectors,
-  (depositable) =>
+  incognitoWalletAccountSelector,
+  (depositable, incAccount) =>
     (id: string): SelectedPrivacy => {
       const token = depositable[id];
-      return new SelectedPrivacyModel(token);
+      let followTokens = [];
+      if (incAccount) {
+        followTokens = incAccount.balances || [];
+      }
+      return new SelectedPrivacyModel(token, followTokens);
     }
 );

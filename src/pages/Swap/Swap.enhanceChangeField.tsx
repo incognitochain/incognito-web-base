@@ -3,7 +3,7 @@ import React from 'react';
 import { change, focus } from 'redux-form';
 import { useAppDispatch } from 'state/hooks';
 
-import { IDeposit } from './FormDeposit.hook';
+import { IDeposit } from './features/FormDeposit/FormDeposit.hook';
 
 export interface TInner {
   onChangeField: (value: string, field: string) => any;

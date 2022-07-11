@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { useAppSelector } from 'state/hooks';
 import convert from 'utils/convert';
 
-import { AccountInfo, incognitoWalletAccountSelector } from '../../../../state/incognitoWallet';
+import { AccountInfo, incognitoWalletAccountsSelector } from '../../../../state/incognitoWallet';
 import { depositDataSelector } from './FormDeposit.selectors';
 
 export interface IDeposit {
@@ -69,7 +69,7 @@ export const useDeposit = (): IDeposit => {
     amount: inputOriginalAmount,
   });
   const { balance, decimals, isLoading, loadBalance: onLoadBalance } = useActiveBalance({ token: sellToken });
-  const incAccounts = useSelector(incognitoWalletAccountSelector);
+  const incAccounts = useSelector(incognitoWalletAccountsSelector);
 
   const handleDepositEVM = async () => {
     try {

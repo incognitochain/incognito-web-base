@@ -1,11 +1,11 @@
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
+import enhanceChangeField, { TInner as TInnerChangeField } from 'pages/Swap/Swap.enhanceChangeField';
 import React from 'react';
 import { compose } from 'redux';
 import { InjectedFormProps, reduxForm } from 'redux-form';
 
 import enhanceAddressValidation, { TInner as TInnerAddress } from './FormDeposit.enhanceAddressValidator';
 import enhanceAmountValidator, { TInner as TInnerAmount } from './FormDeposit.enhanceAmountValidator';
-import enhanceChangeField, { TInner as TInnerChangeField } from './FormDeposit.enhanceChangeField';
 import enhanceInit from './FormDeposit.enhanceInit';
 import enhanceSelect, { TInter as TInnerSelect } from './FormDeposit.enhanceSelect';
 import { TInter as TInnerSend } from './FormDeposit.enhanceSend';
