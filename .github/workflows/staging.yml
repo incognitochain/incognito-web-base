@@ -68,6 +68,7 @@ jobs:
       - name: executing remote ssh commands to rollout new version
         uses: appleboy/ssh-action@master
         with:
+          context: .
           host: ${{ secrets.STAGING_REMOTE_SSH_HOST }}
           username: ${{ secrets.STAGING_REMOTE_SSH_USER }}
           key: ${{ secrets.STAGING_REMOTE_SSH_PRIVATE_KEY }}
