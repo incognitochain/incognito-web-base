@@ -20,7 +20,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: incognito-webapp-staging
+      IMAGE_NAME: incognito-web-base
     permissions:
       packages: write
       contents: read
