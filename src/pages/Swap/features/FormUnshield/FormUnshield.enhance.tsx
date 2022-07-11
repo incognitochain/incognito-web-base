@@ -4,11 +4,11 @@ import { compose } from 'redux';
 import { reduxForm } from 'redux-form';
 
 const enhance = (WrappedComponent: any) => {
-  const FormSwapComp = (props: any) => {
+  const FormUnshieldComp = (props: any) => {
     return <WrappedComponent {...{ ...props }} />;
   };
-  FormSwapComp.displayName = 'FormSwap.enhance';
-  return FormSwapComp;
+  FormUnshieldComp.displayName = 'FormUnshield.enhance';
+  return FormUnshieldComp;
 };
 
 export default compose(

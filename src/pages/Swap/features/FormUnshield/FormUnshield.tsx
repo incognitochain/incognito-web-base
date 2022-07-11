@@ -7,11 +7,11 @@ import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
 import { Selection } from '../Selection';
-import enhance from './FromSwap.enhance';
+import enhance from './FormUnshield.enhance';
 
 const Styled = styled.div``;
 
-const FormSwap = React.memo((props: any) => {
+const FormUnshield = React.memo((props: any) => {
   const { handleSubmit } = props;
   const handleSwap = () => console.log('SWAP');
 
@@ -47,6 +47,6 @@ const FormSwap = React.memo((props: any) => {
   );
 });
 
-FormSwap.displayName = 'FormSwap';
+FormUnshield.displayName = 'FormUnshield';
 
-export default enhance(FormSwap);
+export default enhance(FormUnshield);
