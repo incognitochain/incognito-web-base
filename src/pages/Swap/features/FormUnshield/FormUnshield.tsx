@@ -8,15 +8,24 @@ import React from 'react';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
-import enhance from './FormUnshield.enhance';
-import { useUnshield } from './FormUnshield.hook';
+import enhance, { IMergeProps } from './FormUnshield.enhance';
 
 const Styled = styled.div``;
 
-const FormUnshield = React.memo((props: any) => {
-  const { handleSubmit } = props;
+const FormUnshield = React.memo((props: IMergeProps) => {
+  const {
+    handleSubmit,
+    sellToken,
+    sellTokenList,
+    buyToken,
+    buyNetworkList,
+    buyCurrency,
+    buyNetworkName,
+
+    onSelectToken,
+    onSelectNetwork,
+  } = props;
   const handleSwap = () => console.log('SWAP');
-  const { sellToken, sellTokenList, buyToken, buyNetworkList, buyCurrency, buyNetworkName } = useUnshield();
   return (
     <Styled>
       <form onSubmit={handleSubmit(handleSwap)}>
@@ -28,6 +37,7 @@ const FormUnshield = React.memo((props: any) => {
           tokens={sellTokenList}
           leftValue={sellToken.symbol}
           iconUrl={sellToken.iconUrl}
+          onSelectToken={onSelectToken}
         />
         <VerticalSpace />
         <Selection
@@ -37,6 +47,7 @@ const FormUnshield = React.memo((props: any) => {
           networks={buyNetworkList}
           currency={buyCurrency}
           rightValue={buyNetworkName}
+          onSelectNetwork={onSelectNetwork}
         />
         <VerticalSpace />
         <Field
