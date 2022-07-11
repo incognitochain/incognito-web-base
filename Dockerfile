@@ -9,6 +9,7 @@ COPY . ./
 COPY .env.${BUILD_ENV} .env
 RUN mkdir -p src/locales
 RUN yarn install
+RUN yarn i18n:compile
 RUN yarn build:$BUILD_ENV
 
 # production environment
