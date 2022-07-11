@@ -6,12 +6,19 @@ import createAxiosInstance from 'services/axios';
 class RpcClient {
   http: AxiosInstance;
   constructor() {
-    // const url = 'http://51.161.117.193:9898/';
     this.http = createAxiosInstance({ baseURL: API_SERVICE });
   }
 
   getTokens() {
-    return this.http.get('coins/tokenlist');
+    return this.http.get('tokenlist');
+  }
+
+  submitDepositTxHash({ hash, chainID, tokenID }: { hash: string; chainID: number; tokenID: string }) {
+    return this.http.post('submitshieldtx', {
+      Txhash: hash,
+      Network: chainID,
+      TokenID: tokenID,
+    });
   }
 }
 
@@ -23,5 +30,21 @@ const getTokenListNoCache = async (): Promise<PTokenModel[]> => {
   return tokens.filter(({ tokenID }) => !!tokenID);
 };
 
-export { getTokenListNoCache };
+const submitDepositTx = async ({
+  hash,
+  chainID,
+  tokenID,
+}: {
+  hash: string;
+  chainID: number;
+  tokenID: string;
+}): Promise<any> => {
+  return rpcClient.submitDepositTxHash({
+    hash,
+    chainID,
+    tokenID,
+  });
+};
+
+export { getTokenListNoCache, submitDepositTx };
 export default rpcClient;
