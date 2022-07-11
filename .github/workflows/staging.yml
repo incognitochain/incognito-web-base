@@ -60,7 +60,7 @@ jobs:
           context: .
           build-args: BUILD_ENV=staging
           push: true
-          tags: ${{ env.IMAGE_TAG }}
+          tags: ${{ env.IMAGE_TAGS }}
           labels: "runnumber=${GITHUB_RUN_ID}"
           cache-from: type=gha
           cache-to: type=gha,mode=max
