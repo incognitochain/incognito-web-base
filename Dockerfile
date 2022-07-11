@@ -5,10 +5,10 @@ ARG BUILD_ENV=production
 WORKDIR /app
 COPY package.json ./
 COPY yarn.lock* ./
-RUN mkdir -p src/locales
-RUN yarn install
 COPY . ./
 COPY .env.${BUILD_ENV} .env
+RUN mkdir -p src/locales
+RUN yarn install
 RUN yarn build:$BUILD_ENV
 
 # production environment
