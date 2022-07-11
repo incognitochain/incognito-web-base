@@ -1,7 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 import { getINCContractAddress, getWeb3 } from 'constants/infura';
 // eslint-disable-next-line no-restricted-imports
-import { ContractTransaction } from 'ethers';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { useTokenContract } from 'hooks/useContract';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
@@ -59,8 +58,8 @@ const useApproveToken = ({ token, amount }: { token: SelectedPrivacy; amount: nu
     return nonce;
   };
 
-  const handleApproveToken = async (): Promise<ContractTransaction | undefined> => {
-    let tx: ContractTransaction | undefined;
+  const handleApproveToken = async () => {
+    let tx;
     try {
       if (!account || !chainId || token.isMainEVMToken) return;
       setState((value) => ({ ...value, isApproving: true }));
@@ -85,7 +84,6 @@ const useApproveToken = ({ token, amount }: { token: SelectedPrivacy; amount: nu
 
   const isApproved = React.useMemo(() => {
     if (token.isMainEVMToken) return true;
-    console.log('SANG TEST: ', state);
     return new BigNumber(state.approvedAllowance).gt(amount || 0);
   }, [token.identify, state.approvedAllowance, amount]);
 

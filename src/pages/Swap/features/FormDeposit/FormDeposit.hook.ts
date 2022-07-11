@@ -8,9 +8,11 @@ import useApproveToken from 'lib/hooks/useApproveToken';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useAppSelector } from 'state/hooks';
 import convert from 'utils/convert';
 
+import { AccountInfo, incognitoWalletAccountSelector } from '../../../../state/incognitoWallet';
 import { depositDataSelector } from './FormDeposit.selectors';
 
 export interface IDeposit {
@@ -41,6 +43,8 @@ export interface IDeposit {
   handleDepositERC20: () => any;
   handleDepositEVM: () => any;
   handleLoadBalance: () => any;
+
+  incAccount: AccountInfo | undefined;
 }
 export const useDeposit = (): IDeposit => {
   const { account, chainId, provider } = useActiveWeb3React();
@@ -65,6 +69,7 @@ export const useDeposit = (): IDeposit => {
     amount: inputOriginalAmount,
   });
   const { balance, decimals, isLoading, loadBalance: onLoadBalance } = useActiveBalance({ token: sellToken });
+  const incAccounts = useSelector(incognitoWalletAccountSelector);
 
   const handleDepositEVM = async () => {
     try {
@@ -150,6 +155,11 @@ export const useDeposit = (): IDeposit => {
     };
   }, [isApproving, isApproving, isCheckingApprove, isLoading, disabledForm]);
 
+  const incAccount = React.useMemo(() => {
+    if (!incAccounts || incAccounts.length === 0) return undefined;
+    return incAccounts[0];
+  }, [incAccounts]);
+
   return {
     button,
     isIncognitoAddress,
@@ -170,5 +180,7 @@ export const useDeposit = (): IDeposit => {
     handleDepositERC20,
     handleDepositEVM,
     handleLoadBalance: onLoadBalance,
+
+    incAccount,
   };
 };

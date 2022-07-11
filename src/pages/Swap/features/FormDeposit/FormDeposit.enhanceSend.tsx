@@ -26,8 +26,9 @@ const enhanceSend = (WrappedComponent: any) => {
       try {
         if (!isApproved) {
           // Check Approve
-          await handleApproveToken();
+          const tx = await handleApproveToken();
           await checkIsApproved();
+          return tx;
         }
         // Handle deposit ERC20
         return await handleDepositERC20();
@@ -62,7 +63,7 @@ const enhanceSend = (WrappedComponent: any) => {
             rightHeader: undefined,
             title: '',
             closable: true,
-            data: <TransactionSubmittedContent chainId={sellToken.currencyType} hash={tx.hash} inline />,
+            data: <TransactionSubmittedContent chainId={sellToken.chainID} hash={tx.hash} inline />,
           });
         }
       } catch (error) {

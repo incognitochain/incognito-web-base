@@ -3,14 +3,13 @@ import { validator } from 'components/Core/ReduxForm';
 import debounce from 'lodash/debounce';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
-import { change, focus } from 'redux-form';
-import { useAppDispatch } from 'state/hooks';
 import convert from 'utils/convert';
 
 import { IDeposit } from './FormDeposit.hook';
 
 export interface TInner {
   validateAmount: () => any;
+  onChangeField: (value: string, field: string) => any;
   onClickMax: () => any;
 }
 
@@ -26,8 +25,7 @@ const initialState: IState = {
 
 const enhanceAmountValidator = (WrappedComponent: any) => {
   const FormDepositComp = (props: IDeposit & any) => {
-    const { amount, sellToken: selectedPrivacy } = props;
-    const dispatch = useAppDispatch();
+    const { amount, sellToken: selectedPrivacy, onChangeField } = props;
     const { maximumAmountText } = amount;
     const [state, setState] = React.useState({ ...initialState });
     const { maxAmountValidator, minAmountValidator } = state;
@@ -67,25 +65,12 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
       setFormValidator();
     }, [selectedPrivacy.identify, amount]);
 
-    const onChangeField = async (value: string, field: string) => {
-      const val: any = value;
-      dispatch(change(FORM_CONFIGS.formName, field, val));
-      dispatch(focus(FORM_CONFIGS.formName, field));
-    };
-
     const onClickMax = async () => {
       if (!maximumAmountText) return;
       onChangeField(maximumAmountText, FORM_CONFIGS.sellAmount).then();
     };
 
     const validateAmount: any[] = getAmountValidator();
-
-    React.useEffect(() => {
-      onChangeField(
-        '12st1MwAGSiPzvJbvxHacoXyCxjGVhZdKaR9xzPaLeohZGEhMGe5FTF2a6k7sBBFodiEz4rKUTps5ohac8bypSCQR9cxsBvQX1tnPekLTy5vWmjeAdPrB2T6GKM3v1M4vBrRKQXEZefNHi8bpoRc',
-        FORM_CONFIGS.toAddress
-      );
-    }, []);
 
     return <WrappedComponent {...{ ...props, validateAmount, onClickMax }} />;
   };

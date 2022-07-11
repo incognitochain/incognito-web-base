@@ -107,6 +107,11 @@ const IncognitoWallet = () => {
         if (result.state === 'unlocked') {
           const data = await incognito.request({ method: 'wallet_getPaymentAddress', params: {} });
           setWalletState(shortenIncognitoAddress(data.result));
+          const { result } = await incognito.request({ method: 'wallet_requestAccounts', params: {} });
+          console.log('wallet_requestAccounts result ', result);
+          if (result && result.accounts) {
+            dispatch(incognitoWalletSetAccount(result.accounts));
+          }
         } else {
           setWalletState(CONNECT_WALLET);
         }
