@@ -74,6 +74,7 @@ jobs:
           key: ${{ secrets.STAGING_REMOTE_SSH_PRIVATE_KEY }}
           port: ${{ secrets.STAGING_REMOTE_SSH_PORT }}
           script: |
-            kubectl -n incognito-webapp-staging set image deployment.apps/webapp main-container=${{ env.IMAGE_ID }}:${{ GITHUB_RUN_ID }} --record
-            kubectl -n incognito-webapp-staging label deployment webapp github_run_number=${GITHUB_RUN_ID}
+            kubectl -n incognito-webapp-staging set image deployment.apps/webapp main-container=${{ env.IMAGE_ID }}:${{ env.GITHUB_RUN_ID }} --record
+            kubectl -n incognito-webapp-staging label deployment webapp github_run_number=${env.GITHUB_RUN_NUMBER}
+            kubectl -n incognito-webapp-staging label deployment webapp github_run_id=${env.GITHUB_RUN_ID}
             kubectl -n incognito-webapp-staging rollout status deployment.apps/webapp
