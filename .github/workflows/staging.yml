@@ -51,7 +51,7 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          echo "IMAGE_TAG=$IMAGE_ID:$VERSION" >> $GITHUB_ENV
+          echo "IMAGE_TAGS=$IMAGE_ID:$VERSION,$IMAGE_ID:$GITHUB_RUN_ID" >> $GITHUB_ENV
       -
         name: Build and push image to github packages
         uses: docker/build-push-action@v2
@@ -72,5 +72,6 @@ jobs:
           key: ${{ secrets.STAGING_REMOTE_SSH_PRIVATE_KEY }}
           port: ${{ secrets.STAGING_REMOTE_SSH_PORT }}
           script: |
-            kubectl -n incognito-webapp-staging set image deployment.apps/webapp main-container=${{ env.IMAGE_TAG }} --record
+            kubectl -n incognito-webapp-staging set image deployment.apps/webapp main-container=${{ IMAGE_ID }}:${{ GITHUB_RUN_ID }} --record
+            kubectl -n incognito-webapp-staging label deployment webapp github_run_number=${GITHUB_RUN_ID}
             kubectl -n incognito-webapp-staging rollout status deployment.apps/webapp
