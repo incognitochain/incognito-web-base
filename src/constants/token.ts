@@ -85,7 +85,7 @@ const BIG_COINS = {
   ETH: {
     tokenID: isMainnet
       ? 'ffd8d42dc40a8d166ea4848baf8b5f6e912ad79875f4373070b59392b1756c8f'
-      : 'a474ec7214b16ad6a6a355e732f2f511d8f2aa79cb4bd498ca46b05f3cfb0e53',
+      : 'ffd8d42dc40a8d166ea4848baf8b5f6e9fe0e9c30d60062eb7d44a8df9e00854',
   },
   ETH_UNIFIED: {
     tokenID: 'b366fa400c36e6bbcf24ac3e99c90406ddc64346ab0b7ba21e159b83d938812d',
