@@ -65,6 +65,8 @@ const getDepositData = ({
     ({ currency }) => currency !== _sellToken.currencyType
   );
 
+  console.log('SANG TEST: ', _sellToken);
+
   // Buy token
   const _buyToken = getDataByTokenID(buyIdentify);
   const _buyNetworkName = MAIN_NETWORK_NAME.INCOGNITO;

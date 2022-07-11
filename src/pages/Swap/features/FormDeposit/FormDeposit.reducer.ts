@@ -8,10 +8,10 @@ import { FormDepositActions, FormDepositActionType, IFormDepositReducer } from '
 const initialState: IFormDepositReducer = {
   isFetching: false,
   sellToken: {
-    identify: `${BIG_COINS.ETH.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20}`,
-    currency: PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20,
+    identify: `${BIG_COINS.ETH.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.ETH}`,
+    currency: PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
     chainID: isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN,
-    networkName: MAIN_NETWORK_NAME.BSC,
+    networkName: MAIN_NETWORK_NAME.ETHEREUM,
   },
   buyToken: {
     identify: `${BIG_COINS.ETH_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
