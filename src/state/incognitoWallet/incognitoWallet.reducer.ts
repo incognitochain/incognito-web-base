@@ -28,9 +28,10 @@ export const reducer: Reducer<IncognitoWalletReducer, IncognitoWalletActions & a
     }
 
     case IncognitoWalletActionType.SET_STATE: {
+      const { walletState = 'locked' } = action.payload;
       return {
         ...state,
-        walletState: 'uninitialized',
+        walletState,
       };
     }
 

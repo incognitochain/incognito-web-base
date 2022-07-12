@@ -3,7 +3,7 @@ import Modal from 'components/Core/Modal';
 import useTheme from 'hooks/useTheme';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { incognitoWalletSetAccount } from 'state/incognitoWallet';
+import { incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
 import { AccountInfo, WalletState } from 'state/incognitoWallet/incognitoWallet.reducer';
 import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
@@ -59,12 +59,15 @@ const IncognitoWallet = () => {
     if (incognito) {
       incognito.on('stateChanged', async (result: any) => {
         console.log('result: ', result);
-        if (result.state === 'unlocked') {
-          const data = await incognito.request({ method: 'wallet_getPaymentAddress', params: {} });
-          setWalletState(shortenIncognitoAddress(data.result));
-        }
-        if (result.state === 'locked') {
-          setWalletState(CONNECT_WALLET);
+        if (result) {
+          if (result.state === 'unlocked') {
+            dispatch(incognitoWalletSetAccount(result.accounts));
+          }
+          if (result.state === 'locked') {
+            setWalletState(CONNECT_WALLET);
+            dispatch(incognitoWalletSetAccount([]));
+          }
+          dispatch(incognitoWalletSetState(result.state));
         }
       });
 
@@ -75,6 +78,7 @@ const IncognitoWallet = () => {
         if (accountInfo) {
           setWalletState(shortenIncognitoAddress(accountInfo.paymentAddress));
         }
+        dispatch(incognitoWalletSetAccount(updatedAccounts));
       });
     }
   };

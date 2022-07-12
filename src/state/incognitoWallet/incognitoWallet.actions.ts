@@ -1,5 +1,9 @@
-import { AccountInfo } from './incognitoWallet.reducer';
-import { IncognitoWalletActionType, IncognitoWalletSetAccountAction } from './incognitoWallet.types';
+import { AccountInfo, WalletState } from './incognitoWallet.reducer';
+import {
+  IncognitoWalletActionType,
+  IncognitoWalletSetAccountAction,
+  IncognitoWalletSetStateAction,
+} from './incognitoWallet.types';
 
 const incognitoWalletSetAccount = (accounts: AccountInfo[]): IncognitoWalletSetAccountAction => ({
   type: IncognitoWalletActionType.SET_ACCOUNTS,
@@ -8,4 +12,11 @@ const incognitoWalletSetAccount = (accounts: AccountInfo[]): IncognitoWalletSetA
   },
 });
 
-export { incognitoWalletSetAccount };
+const incognitoWalletSetState = (state: WalletState): IncognitoWalletSetStateAction => ({
+  type: IncognitoWalletActionType.SET_STATE,
+  payload: {
+    walletState: state,
+  },
+});
+
+export { incognitoWalletSetAccount, incognitoWalletSetState };

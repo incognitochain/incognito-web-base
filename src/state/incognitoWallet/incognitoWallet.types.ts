@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { AccountInfo } from './incognitoWallet.reducer';
+import { AccountInfo, WalletState } from './incognitoWallet.reducer';
 
 export enum IncognitoWalletActionType {
   GET_STATE = 'INCOGNITO_WALLET/GET_STATE',
@@ -18,7 +18,7 @@ export interface IncognitoWalletGetStateAction extends Action {
 export interface IncognitoWalletSetStateAction extends Action {
   type: IncognitoWalletActionType.SET_STATE;
   payload: {
-    walletState: string;
+    walletState: WalletState;
   };
 }
 
