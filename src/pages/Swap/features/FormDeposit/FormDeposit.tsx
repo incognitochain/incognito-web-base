@@ -26,6 +26,8 @@ const FormDeposit = (props: IMergeProps) => {
     buyToken,
     buyNetworkName,
 
+    amount,
+
     validateAddress,
     warningAddress,
     validateAmount,
@@ -77,6 +79,7 @@ const FormDeposit = (props: IMergeProps) => {
           name={FORM_CONFIGS.sellAmount}
           inputType={INPUT_FIELD.amount}
           leftTitle="Total amount"
+          rightTitle={amount.maxAmountFormatedText}
           componentProps={{
             placeholder: 'Amount',
             type: 'number',

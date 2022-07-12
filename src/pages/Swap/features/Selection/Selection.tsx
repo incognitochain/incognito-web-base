@@ -30,13 +30,14 @@ const MainStyled = styled(Row)`
   margin-top: 4px;
   position: relative;
   .section {
-    padding: 16px;
+    padding: 16px 16px 4px 16px;
     flex: 1;
   }
   .selection-item {
     width: 100%;
     cursor: pointer;
     padding-top: 12px;
+    padding-bottom: 12px;
   }
   .line {
     background-color: ${({ theme }) => theme.border1};

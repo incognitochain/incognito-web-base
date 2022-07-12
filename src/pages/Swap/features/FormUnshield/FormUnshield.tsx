@@ -29,7 +29,6 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     onSelectNetwork,
   } = props;
 
-  console.log('SANG TEST: ', maxAmountFormatedText);
   const handleSwap = () => console.log('SWAP');
   return (
     <Styled>

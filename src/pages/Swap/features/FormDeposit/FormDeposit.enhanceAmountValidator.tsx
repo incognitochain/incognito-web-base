@@ -26,13 +26,13 @@ const initialState: IState = {
 const enhanceAmountValidator = (WrappedComponent: any) => {
   const FormDepositComp = (props: IDeposit & any) => {
     const { amount, sellToken: selectedPrivacy, onChangeField } = props;
-    const { maximumAmountText } = amount;
+    const { maxAmountText } = amount;
     const [state, setState] = React.useState({ ...initialState });
     const { maxAmountValidator, minAmountValidator } = state;
 
     const setFormValidator = debounce(async () => {
       const maxAmountNum = convert.toNumber({
-        text: maximumAmountText,
+        text: maxAmountText,
         autoCorrect: true,
       });
       let currentState = { ...state };
@@ -42,7 +42,7 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
           maxAmountValidator: validator.maxValue(
             maxAmountNum,
             new BigNumber(maxAmountNum).toNumber() > 0
-              ? `Max amount you can deposit is ${amount.maximumAmountText} ${selectedPrivacy?.symbol}`
+              ? `Max amount you can deposit is ${amount.maxAmountText} ${selectedPrivacy?.symbol}`
               : 'Your balance is insufficient.'
           ),
         };
@@ -66,8 +66,8 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
     }, [selectedPrivacy.identify, amount]);
 
     const onClickMax = async () => {
-      if (!maximumAmountText) return;
-      onChangeField(maximumAmountText, FORM_CONFIGS.sellAmount).then();
+      if (!maxAmountText) return;
+      onChangeField(maxAmountText, FORM_CONFIGS.sellAmount).then();
     };
 
     const validateAmount: any[] = getAmountValidator();

@@ -14,6 +14,7 @@ import { AccountInfo, incognitoWalletAccountsSelector } from 'state/incognitoWal
 import convert from 'utils/convert';
 
 import { submitDepositTx } from '../../../../services/rpcClient';
+import format from '../../../../utils/format';
 import { depositDataSelector } from './FormDeposit.selectors';
 
 export interface IDeposit {
@@ -33,9 +34,10 @@ export interface IDeposit {
   };
 
   amount: {
-    maximumAmountText: string;
-    maximumAmount: string;
+    maxAmountText: string;
+    maxAmount: string;
     inputOriginalAmount: number;
+    maxAmountFormatedText: string;
   };
 
   isApproved: boolean;
@@ -141,16 +143,32 @@ export const useDeposit = (): IDeposit => {
   };
 
   const amount = React.useMemo(() => {
-    const maximumAmountText = convert
+    const maxAmountEtherText = convert
       .toHumanAmount({
         decimals,
         originalAmount: new BigNumber(balance || 0).toNumber(),
       })
       .toString();
+    const maxAmountOriginal = convert.toOriginalAmount({
+      humanAmount: maxAmountEtherText,
+      decimals: sellToken.pDecimals,
+      round: false,
+    });
+
+    const maxAmount = convert.toHumanAmount({
+      decimals: sellToken.pDecimals,
+      originalAmount: new BigNumber(Math.floor(maxAmountOriginal || 0)).toNumber(),
+    });
+
+    const maxAmountFormatedText = format.amountVer2({
+      decimals: sellToken.pDecimals,
+      originalAmount: new BigNumber(Math.floor(maxAmountOriginal || 0)).toNumber(),
+    });
     return {
-      maximumAmountText,
-      maximumAmount: balance,
+      maxAmountText: maxAmount.toString(),
+      maxAmount: balance,
       inputOriginalAmount,
+      maxAmountFormatedText: `${maxAmountFormatedText} ${sellToken.symbol}`,
     };
   }, [balance, decimals, inputOriginalAmount]);
 
