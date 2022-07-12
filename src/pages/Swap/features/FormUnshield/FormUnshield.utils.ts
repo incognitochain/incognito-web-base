@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js';
 import { MAIN_NETWORK_NAME } from 'constants/token';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
@@ -6,7 +7,9 @@ import { formValueSelector, isSubmitting, isValid } from 'redux-form';
 import { AppState } from 'state';
 import { unshieldableTokens } from 'state/token';
 
+import convert from '../../../../utils/convert';
 import { IFormUnshieldReducer } from './FormUnshield.types';
+const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
 
 export interface IUnshieldData {
   unshieldAddress: string;
@@ -49,6 +52,18 @@ const getUnshieldData = ({
   // buy token
   const _buyToken = getDataByTokenID(_sellToken.parentTokenID);
   const _buyNetworkList = _buyToken.supportedNetwork;
+
+  const isExternalAddress = !isPaymentAddress(inputAddress);
+
+  // amount validator
+  const inputOriginalAmount =
+    convert.toOriginalAmount({
+      decimals: _sellToken.pDecimals,
+      humanAmount: inputAmount,
+      round: false,
+    }) || 0;
+
+  const disabledForm = !valid || submitting || !isExternalAddress || new BigNumber(inputOriginalAmount).lte(0);
 
   return {
     unshieldAddress: inputAddress,

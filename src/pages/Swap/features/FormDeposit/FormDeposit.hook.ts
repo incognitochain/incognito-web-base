@@ -10,9 +10,10 @@ import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useAppSelector } from 'state/hooks';
+import { AccountInfo, incognitoWalletAccountsSelector } from 'state/incognitoWallet';
 import convert from 'utils/convert';
 
-import { AccountInfo, incognitoWalletAccountsSelector } from '../../../../state/incognitoWallet';
+import { submitDepositTx } from '../../../../services/rpcClient';
 import { depositDataSelector } from './FormDeposit.selectors';
 
 export interface IDeposit {
@@ -73,6 +74,18 @@ export const useDeposit = (): IDeposit => {
   const { balance, decimals, isLoading, loadBalance: onLoadBalance } = useActiveBalance({ token: sellToken });
   const incAccounts = useSelector(incognitoWalletAccountsSelector);
 
+  const handleSubmitHash = async ({ hash }: { hash: string }) => {
+    try {
+      await submitDepositTx({
+        hash,
+        tokenID: sellTokenParent.tokenID,
+        chainID: sellToken.currencyType,
+      });
+    } catch (error) {
+      console.log('SUBMIT TRANSACTION ERROR: ', error);
+    }
+  };
+
   const handleDepositEVM = async () => {
     try {
       if (!chainId || !account) return;
@@ -90,6 +103,9 @@ export const useDeposit = (): IDeposit => {
         value: sendAmount,
         data: depData,
       });
+      if (!!tx.hash) {
+        await handleSubmitHash({ hash: tx.hash });
+      }
       await tx.wait();
       return tx;
     } catch (error) {
@@ -114,6 +130,9 @@ export const useDeposit = (): IDeposit => {
         data: depData,
         gasLimit: 100000,
       });
+      if (!!tx.hash) {
+        await handleSubmitHash({ hash: tx.hash });
+      }
       await tx.wait();
       return tx;
     } catch (error) {
