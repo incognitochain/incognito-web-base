@@ -52,6 +52,9 @@ const TokenModal = (props: IProps & any) => {
         <ThemedText.RegularLabel color="primary5" style={{ marginLeft: 12 }}>
           {token.symbol}
         </ThemedText.RegularLabel>
+        <ThemedText.RegularLabel color="primary5" style={{ marginLeft: 12 }}>
+          {token.networkName}
+        </ThemedText.RegularLabel>
       </Item>
     );
   };

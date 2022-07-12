@@ -48,10 +48,9 @@ export const actionChangeSellToken =
         currency: token.currencyType,
         networkName: token.networkName,
       };
-
       let _buyToken = parentToken;
       if (parentToken.hasChild) {
-        _buyToken = parentToken.listChildToken[0];
+        _buyToken = parentToken.listUnifiedToken[0];
       }
       const buyToken: ITokenNetwork = {
         identify: _buyToken.identify,
