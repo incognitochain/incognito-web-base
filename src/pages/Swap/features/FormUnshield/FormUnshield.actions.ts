@@ -3,10 +3,10 @@ import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { AppDispatch, AppState } from 'state';
 import { getPrivacyByTokenIDSelectors } from 'state/token';
 
-import { FormDepositActionType, UnshieldSetTokenAction, UnshieldSetTokenPayLoad } from './FormUnshield.types';
+import { FormUnshieldActionType, UnshieldSetTokenAction, UnshieldSetTokenPayLoad } from './FormUnshield.types';
 
 const actionSetToken = (payload: UnshieldSetTokenPayLoad): UnshieldSetTokenAction => ({
-  type: FormDepositActionType.SET_TOKEN,
+  type: FormUnshieldActionType.SET_TOKEN,
   payload,
 });
 
