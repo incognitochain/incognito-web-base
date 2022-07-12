@@ -79,7 +79,7 @@ export const useDeposit = (): IDeposit => {
       await submitDepositTx({
         hash,
         tokenID: sellTokenParent.tokenID,
-        chainID: sellToken.currencyType,
+        networkID: sellToken.networkID,
       });
     } catch (error) {
       console.log('SUBMIT TRANSACTION ERROR: ', error);

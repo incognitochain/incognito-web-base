@@ -49,6 +49,7 @@ class PToken {
 
   isVerified: boolean;
   currencyType: number;
+  networkID: number;
 
   listChildToken: PToken[];
   listUnifiedToken: PToken[];
@@ -114,6 +115,7 @@ class PToken {
     this.pDecimals = data.PDecimals;
     this.isVerified = data.Verified;
     this.currencyType = data.CurrencyType; // including ERC20, BEP1, BEP2,...
+    this.networkID = data.NetworkID;
     this.priceUSD = data?.PriceUsd;
     this.pricePRV = data?.PricePrv || 0;
 

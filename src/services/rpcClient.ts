@@ -13,10 +13,10 @@ class RpcClient {
     return this.http.get('tokenlist');
   }
 
-  submitDepositTxHash({ hash, chainID, tokenID }: { hash: string; chainID: number; tokenID: string }) {
+  submitDepositTxHash({ hash, networkID, tokenID }: { hash: string; networkID: number; tokenID: string }) {
     return this.http.post('submitshieldtx', {
       Txhash: hash,
-      Network: chainID,
+      Network: networkID,
       TokenID: tokenID,
     });
   }
@@ -32,16 +32,16 @@ const getTokenListNoCache = async (): Promise<PTokenModel[]> => {
 
 const submitDepositTx = async ({
   hash,
-  chainID,
+  networkID,
   tokenID,
 }: {
   hash: string;
-  chainID: number;
+  networkID: number;
   tokenID: string;
 }): Promise<any> => {
   return rpcClient.submitDepositTxHash({
     hash,
-    chainID,
+    networkID,
     tokenID,
   });
 };
