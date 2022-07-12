@@ -35,8 +35,8 @@ const MainStyled = styled(Row)`
   }
   .selection-item {
     width: 100%;
-    height: 52px;
     cursor: pointer;
+    padding-top: 12px;
   }
   .line {
     background-color: ${({ theme }) => theme.border1};

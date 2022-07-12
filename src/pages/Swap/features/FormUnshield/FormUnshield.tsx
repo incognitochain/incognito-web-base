@@ -21,12 +21,15 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     buyNetworkList,
     buyCurrency,
     buyNetworkName,
+    maxAmountFormatedText,
 
     validateAddress,
     warningAddress,
     onSelectToken,
     onSelectNetwork,
   } = props;
+
+  console.log('SANG TEST: ', maxAmountFormatedText);
   const handleSwap = () => console.log('SWAP');
   return (
     <Styled>
@@ -69,6 +72,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           name={FORM_CONFIGS.sellAmount}
           inputType={INPUT_FIELD.amount}
           leftTitle="Total amount"
+          rightTitle={maxAmountFormatedText}
           componentProps={{
             placeholder: 'Amount',
           }}

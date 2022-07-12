@@ -10,7 +10,6 @@ import { unshieldableTokens } from 'state/token';
 import convert from 'utils/convert';
 
 import { IFormUnshieldReducer } from './FormUnshield.types';
-const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
 
 export interface IUnshieldData {
   unshieldAddress: string;
@@ -24,6 +23,11 @@ export interface IUnshieldData {
   buyNetworkName: MAIN_NETWORK_NAME;
 
   isExternalAddress: boolean;
+  disabledForm: boolean;
+
+  maxAmountNoClip?: string;
+  maxAmountText?: string;
+  maxAmountFormatedText: string;
 }
 
 const getUnshieldData = ({
@@ -65,6 +69,9 @@ const getUnshieldData = ({
       humanAmount: inputAmount,
       round: false,
     }) || 0;
+  const maxAmountNoClip = _sellToken.formatAmountNoClip;
+  const maxAmountText = _sellToken.formatAmount;
+  const maxAmountFormatedText = `${_sellToken.formatAmount || 0} ${_sellToken.symbol}`;
 
   const disabledForm = !valid || submitting || !isExternalAddress || new BigNumber(inputOriginalAmount).lte(0);
 
@@ -78,7 +85,13 @@ const getUnshieldData = ({
     buyCurrency,
     buyNetworkName,
 
+    maxAmountNoClip,
+    maxAmountText,
+    maxAmountFormatedText,
+
     isExternalAddress,
+
+    disabledForm,
   };
 };
 

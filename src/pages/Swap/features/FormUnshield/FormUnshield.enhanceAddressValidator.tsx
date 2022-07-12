@@ -1,6 +1,7 @@
 import { validator } from 'components/Core/ReduxForm';
-import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
+
+import { FORM_CONFIGS } from '../../Swap.constant';
 
 export interface TInner {
   validateAddress: () => any;
@@ -9,7 +10,7 @@ export interface TInner {
 
 const enhanceAddressValidation = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: any) => {
-    const { isExternalAddress, onChangeField, incAccount } = props;
+    const { isExternalAddress, onChangeField, unshieldAddress, web3Account } = props;
     const getAddressValidator = React.useCallback(() => {
       return validator.combinedEtherAddress;
     }, [isExternalAddress]);
@@ -20,10 +21,10 @@ const enhanceAddressValidation = (WrappedComponent: any) => {
     const warningAddress = getWarningAddress();
 
     React.useEffect(() => {
-      if (incAccount && incAccount.paymentAddress && onChangeField) {
-        onChangeField(incAccount.paymentAddress, FORM_CONFIGS.toAddress);
+      if (!unshieldAddress && web3Account && onChangeField) {
+        onChangeField(web3Account, FORM_CONFIGS.toAddress);
       }
-    }, [incAccount]);
+    }, [unshieldAddress, web3Account]);
 
     return <WrappedComponent {...{ ...props, validateAddress, warningAddress }} />;
   };
