@@ -6,7 +6,7 @@ import { useAppSelector } from 'state/hooks';
 import { isFetchingSelectors as isFetchingTokenSelector } from 'state/token';
 
 import { FormDeposit } from './features/FormDeposit';
-import { FormSwap } from './features/FormSwap';
+import { FormUnshield } from './features/FormUnshield';
 import enhance from './Swap.enhance';
 
 const Swap = (props: any) => {
@@ -17,7 +17,7 @@ const Swap = (props: any) => {
   const renderForm = () => {
     // Deposit
     if (selectedTab === HEADER_TAB.tabNames[0]) return <FormDeposit {...props} />;
-    return <FormSwap {...props} />;
+    return <FormUnshield {...props} />;
   };
 
   const renderContent = () => (

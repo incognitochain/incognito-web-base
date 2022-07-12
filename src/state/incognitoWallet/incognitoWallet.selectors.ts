@@ -6,10 +6,15 @@ export const incognitoWalletSelector = createSelector(
   (incognitoWallet) => incognitoWallet
 );
 
-export const incognitoWalletAccountSelector = createSelector(
+export const incognitoWalletAccountsSelector = createSelector(
   (state: AppState) => state.incognitoWallet,
   (incognitoWallet) => incognitoWallet.accounts
 );
+
+export const incognitoWalletAccountSelector = createSelector(incognitoWalletAccountsSelector, (incAccounts) => {
+  if (!incAccounts || incAccounts.length === 0) return undefined;
+  return incAccounts[0];
+});
 
 export const incognitoWalletStateSelector = createSelector(
   (state: AppState) => state.incognitoWallet,

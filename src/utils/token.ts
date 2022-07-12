@@ -21,6 +21,9 @@ const getChainIDByCurrency = ({ currency }: { currency: number }): SupportedChai
     case PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20:
       chainID = isMainnet ? SupportedChainId.POLYGON : SupportedChainId.POLYGON_MUMBAI;
       break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN:
+      chainID = 25;
+      break;
   }
   return chainID;
 };

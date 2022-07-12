@@ -11,6 +11,10 @@ import { selectedTabSelector } from './Tabs.selectors';
 const Styled = styled(Row)`
   .tab-title {
     cursor: pointer;
+    :hover {
+      transform: scale(1.05); /* you need a scale here to allow it to transition in both directions */
+      transition: 0.1s all ease;
+    }
   }
   .tab-title ~ .tab-title {
     margin-left: 24px;
@@ -44,7 +48,7 @@ const Tabs = React.memo((props: ITabsProps) => {
         const isActive = tabName === selectedTab;
         return (
           <ThemedText.MediumLabel
-            className="tab-title "
+            className="tab-title"
             color={isActive ? 'primary5' : 'primary7'}
             key={tabName}
             onClick={() => _onChangeTab({ tabName })}
