@@ -22,11 +22,16 @@ export const actionChangeSellToken =
         currency: token.currencyType,
         networkName: token.networkName,
       };
+
+      let _buyToken = parentToken;
+      if (parentToken.hasChild) {
+        _buyToken = parentToken.listChildToken[0];
+      }
       const buyToken: ITokenNetwork = {
-        identify: parentToken.identify,
-        chainID: parentToken.chainID,
-        currency: parentToken.currencyType,
-        networkName: parentToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+        identify: _buyToken.identify,
+        chainID: _buyToken.chainID,
+        currency: _buyToken.currencyType,
+        networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
       };
 
       dispatch(
