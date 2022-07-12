@@ -3,7 +3,7 @@ import { SupportedChainId } from 'constants/chains';
 import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { Reducer } from 'redux';
 
-import { FormDepositActionType, FormUnshieldActions, IFormUnshieldReducer } from './FormUnshield.types';
+import { FormUnshieldActions, FormUnshieldActionType, IFormUnshieldReducer } from './FormUnshield.types';
 
 const initialState: IFormUnshieldReducer = {
   isFetching: false,
@@ -26,7 +26,7 @@ export const reducer: Reducer<IFormUnshieldReducer, FormUnshieldActions & any> =
   action: FormUnshieldActions
 ): IFormUnshieldReducer => {
   switch (action.type) {
-    case FormDepositActionType.SET_TOKEN: {
+    case FormUnshieldActionType.SET_TOKEN: {
       const { sellToken, buyToken } = action.payload;
       return {
         ...state,

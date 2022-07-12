@@ -1,8 +1,8 @@
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import { Action } from 'redux';
 
-export enum FormDepositActionType {
-  SET_TOKEN = 'FORM_DEPOSIT/SET_TOKEN',
+export enum FormUnshieldActionType {
+  SET_TOKEN = 'FORM_UNSHIELD/SET_TOKEN',
 }
 
 export interface IFormUnshieldReducer {
@@ -17,7 +17,7 @@ export interface UnshieldSetTokenPayLoad {
 }
 
 export interface UnshieldSetTokenAction extends Action {
-  type: FormDepositActionType.SET_TOKEN;
+  type: FormUnshieldActionType.SET_TOKEN;
   payload: UnshieldSetTokenPayLoad;
 }
 
