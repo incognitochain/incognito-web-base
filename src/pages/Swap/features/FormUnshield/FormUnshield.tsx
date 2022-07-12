@@ -21,7 +21,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     buyNetworkList,
     buyCurrency,
     buyNetworkName,
-    maxAmountFormatedText,
+    amount,
 
     validateAddress,
     warningAddress,
@@ -71,7 +71,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           name={FORM_CONFIGS.sellAmount}
           inputType={INPUT_FIELD.amount}
           leftTitle="Total amount"
-          rightTitle={maxAmountFormatedText}
+          rightTitle={amount?.maxAmountFormatedText}
           componentProps={{
             placeholder: 'Amount',
           }}

@@ -2,6 +2,7 @@ import { MAIN_NETWORK_NAME } from 'constants/token';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
+import { useMemo } from 'react';
 import { useAppSelector } from 'state/hooks';
 
 import { unshieldDataSelector } from './FormUnshield.selectors';
@@ -19,9 +20,11 @@ export interface IUnshield {
   isExternalAddress: boolean;
   web3Account?: string;
 
-  maxAmountNoClip?: string;
-  maxAmountText?: string;
-  maxAmountFormatedText: string;
+  amount: {
+    maxAmountNoClip?: string;
+    maxAmountText?: string;
+    maxAmountFormatedText: string;
+  };
 }
 
 export const useUnshield = (): IUnshield => {
@@ -41,6 +44,15 @@ export const useUnshield = (): IUnshield => {
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
+
+  const amount = useMemo(() => {
+    return {
+      maxAmountNoClip,
+      maxAmountText,
+      maxAmountFormatedText,
+    };
+  }, [maxAmountNoClip, maxAmountText, maxAmountFormatedText]);
+
   return {
     sellToken,
     sellTokenList,
@@ -54,8 +66,6 @@ export const useUnshield = (): IUnshield => {
     web3Account,
     isExternalAddress,
 
-    maxAmountNoClip,
-    maxAmountText,
-    maxAmountFormatedText,
+    amount,
   };
 };

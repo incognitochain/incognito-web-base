@@ -10,7 +10,7 @@ import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useAppSelector } from 'state/hooks';
-import { AccountInfo, incognitoWalletAccountsSelector } from 'state/incognitoWallet';
+import { AccountInfo, incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import convert from 'utils/convert';
 
 import { submitDepositTx } from '../../../../services/rpcClient';
@@ -74,7 +74,7 @@ export const useDeposit = (): IDeposit => {
     amount: inputOriginalAmount,
   });
   const { balance, decimals, isLoading, loadBalance: onLoadBalance } = useActiveBalance({ token: sellToken });
-  const incAccounts = useSelector(incognitoWalletAccountsSelector);
+  const _incAccount = useSelector(incognitoWalletAccountSelector);
 
   const handleSubmitHash = async ({ hash }: { hash: string }) => {
     try {
@@ -195,9 +195,9 @@ export const useDeposit = (): IDeposit => {
   }, [isApproving, isApproving, isCheckingApprove, isLoading, disabledForm]);
 
   const incAccount = React.useMemo(() => {
-    if (!incAccounts || incAccounts.length === 0) return undefined;
-    return incAccounts[0];
-  }, [incAccounts]);
+    if (!_incAccount) return undefined;
+    return _incAccount;
+  }, [_incAccount]);
 
   return {
     button,

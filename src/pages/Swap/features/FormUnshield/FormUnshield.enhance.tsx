@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import { InjectedFormProps, reduxForm } from 'redux-form';
 
 import enhanceAddressValidation, { TInner as TInnerAddress } from './FormUnshield.enhanceAddressValidator';
+import enhanceAmountValidator, { TInner as TInnerAmount } from './FormUnshield.enhanceAmountValidator';
 import enhanceInit from './FormUnshield.enhanceInit';
 import enhanceSelect, { TInter as TInnerSelect } from './FormUnshield.enhanceSelect';
 import { IUnshield } from './FormUnshield.hook';
@@ -14,7 +15,8 @@ export interface IMergeProps
     IUnshield,
     TInnerChangeField,
     TInnerSelect,
-    TInnerAddress {}
+    TInnerAddress,
+    TInnerAmount {}
 
 const enhance = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: any) => {
@@ -31,6 +33,7 @@ export default compose(
   enhanceInit,
   enhanceChangeField,
   enhanceAddressValidation,
+  enhanceAmountValidator,
   enhanceSelect,
   enhance
 ) as any;
