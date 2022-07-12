@@ -61,11 +61,26 @@ const getDepositData = ({
   const _sellTokenList = groupNetwork[sellNetworkName];
   const _sellToken = getDepositTokenData(sellIdentify);
   const _sellTokenParent = getDataByTokenID(_sellToken.parentTokenID);
-  const _sellNetworkList = _sellTokenParent.supportedNetwork?.filter(
-    ({ currency }) => currency !== _sellToken.currencyType && currency !== PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN
-  );
+  const _sellNetworkList =
+    _sellTokenParent.supportedNetwork?.filter(
+      ({ currency }) => currency !== PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN
+    ) || [];
 
-  console.log('SANG TEST: ', _sellToken);
+  Object.keys(groupNetwork).forEach((networkName) => {
+    const isExist = (_sellNetworkList || []).find(({ networkName: _networkName }) => _networkName === networkName);
+    if (!isExist) {
+      const defaultToken =
+        groupNetwork[networkName] && groupNetwork[networkName].find(({ networkName }) => !!networkName);
+      if (defaultToken) {
+        _sellNetworkList.push({
+          identify: defaultToken.identify,
+          chainID: defaultToken.chainID,
+          currency: defaultToken.currencyType,
+          networkName: defaultToken.networkName as MAIN_NETWORK_NAME,
+        });
+      }
+    }
+  });
 
   // Buy token
   const _buyToken = getDataByTokenID(buyIdentify);
