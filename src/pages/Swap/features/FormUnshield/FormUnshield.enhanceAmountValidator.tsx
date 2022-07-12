@@ -72,6 +72,12 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
 
     const validateAmount: any[] = getAmountValidator();
 
+    React.useEffect(() => {
+      setTimeout(() => {
+        onClickMax();
+      }, 500);
+    }, [maxAmountText]);
+
     return <WrappedComponent {...{ ...props, validateAmount, onClickMax }} />;
   };
   FormUnshieldComp.displayName = 'FormUnshield.enhanceAmountValidator';

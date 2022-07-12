@@ -1,14 +1,32 @@
 import { MAIN_NETWORK_NAME } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
+import { rpcClient } from 'services';
 import { AppDispatch, AppState } from 'state';
 import { getPrivacyByTokenIDSelectors } from 'state/token';
 
-import { rpcClient } from '../../../../services';
 import { unshieldDataSelector } from './FormUnshield.selectors';
-import { FormUnshieldActionType, UnshieldSetTokenAction, UnshieldSetTokenPayLoad } from './FormUnshield.types';
+import {
+  FormUnshieldActionType,
+  UnshieldFetchingUserFeePayLoad,
+  UnshieldSetFetchingUserFeeAction,
+  UnshieldSetTokenAction,
+  UnshieldSetTokenPayLoad,
+  UnshieldSetUserFeeAction,
+  UnshieldSetUserFeePayLoad,
+} from './FormUnshield.types';
 
 const actionSetToken = (payload: UnshieldSetTokenPayLoad): UnshieldSetTokenAction => ({
   type: FormUnshieldActionType.SET_TOKEN,
+  payload,
+});
+
+const actionSetUserFee = (payload: UnshieldSetUserFeePayLoad): UnshieldSetUserFeeAction => ({
+  type: FormUnshieldActionType.SET_USER_FEE,
+  payload,
+});
+
+const actionSetFetchingFee = (payload: UnshieldFetchingUserFeePayLoad): UnshieldSetFetchingUserFeeAction => ({
+  type: FormUnshieldActionType.FETCHING_FEE,
   payload,
 });
 
@@ -59,21 +77,24 @@ export const actionChangeBuyNetwork =
 
 export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {
-    const { inputAmount, inputOriginalAmount, sellToken, incAddress, unshieldAddress } = unshieldDataSelector(
+    const { inputAmount, inputOriginalAmount, buyToken, incAddress, unshieldAddress } = unshieldDataSelector(
       getState()
     );
     if (!inputAmount) return;
+    dispatch(actionSetFetchingFee({ isFetchingFee: true }));
     const payload = {
       network: 'eth',
       incognitoAmount: inputOriginalAmount,
       paymentAddress: unshieldAddress,
-      privacyTokenAddress: sellToken.tokenID,
+      privacyTokenAddress: buyToken.tokenID,
       requestedAmount: inputAmount,
       walletAddress: incAddress,
     };
     const data = await rpcClient.estimateFee(payload);
-    console.log('SANG TEST: ', data);
+    dispatch(actionSetUserFee({ fee: data }));
   } catch (error) {
     console.log('ACTION FILTER TOKEN ERROR: ', error);
+  } finally {
+    dispatch(actionSetFetchingFee({ isFetchingFee: false }));
   }
 };

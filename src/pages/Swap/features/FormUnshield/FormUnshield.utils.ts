@@ -48,7 +48,7 @@ const getUnshieldData = ({
 }): IUnshieldData => {
   const { sellToken, buyToken } = unshield;
   const { networkName: sellNetworkName, identify: sellIdentify, currency: sellCurrency } = sellToken;
-  const { currency: buyCurrency, networkName: buyNetworkName } = buyToken;
+  const { currency: buyCurrency, networkName: buyNetworkName, identify: buyIdentify } = buyToken;
 
   const formSelector = formValueSelector(FORM_CONFIGS.formName);
   const valid = isValid(FORM_CONFIGS.formName)(state);
@@ -62,8 +62,9 @@ const getUnshieldData = ({
   const _sellTokenList = unshieldableTokens(state);
 
   // buy token
-  const _buyToken = getDataByTokenID(_sellToken.parentTokenID);
-  const _buyNetworkList = _buyToken.supportedNetwork;
+  const _buyToken = getDepositTokenData(buyIdentify);
+  const _buyParentToken = getDataByTokenID(_sellToken.parentTokenID);
+  const _buyNetworkList = _buyParentToken.supportedNetwork;
 
   const isExternalAddress = isEtherAddress(inputAddress);
 

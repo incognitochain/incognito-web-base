@@ -1,12 +1,15 @@
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import { Action } from 'redux';
+import { IEstimateFee } from 'services/rpcClient';
 
 export enum FormUnshieldActionType {
   SET_TOKEN = 'FORM_UNSHIELD/SET_TOKEN',
+  FETCHING_FEE = 'FORM_UNSHIELD/FETCHING_FEE',
+  SET_USER_FEE = 'FORM_UNSHIELD/SET_USER_FEE',
 }
 
 export interface IFormUnshieldState {
-  isFetching: boolean;
+  isFetchingFee: boolean;
   sellToken: ITokenNetwork;
   buyToken: ITokenNetwork;
 
@@ -14,10 +17,8 @@ export interface IFormUnshieldState {
   networkFee: number;
   networkFeeToken: string;
 
-  // Token | PRV
-  burnFee: number;
-  burnFeeToken: string;
-  userFee: any;
+  isUseBurnFeeLevel1: boolean;
+  userFee: IEstimateFee | undefined;
 }
 
 export interface UnshieldSetTokenPayLoad {
@@ -30,4 +31,22 @@ export interface UnshieldSetTokenAction extends Action {
   payload: UnshieldSetTokenPayLoad;
 }
 
-export type FormUnshieldActions = UnshieldSetTokenAction;
+export interface UnshieldSetUserFeePayLoad {
+  fee: IEstimateFee | undefined;
+}
+
+export interface UnshieldSetUserFeeAction extends Action {
+  type: FormUnshieldActionType.SET_USER_FEE;
+  payload: UnshieldSetUserFeePayLoad;
+}
+
+export interface UnshieldFetchingUserFeePayLoad {
+  isFetchingFee: boolean;
+}
+
+export interface UnshieldSetFetchingUserFeeAction extends Action {
+  type: FormUnshieldActionType.FETCHING_FEE;
+  payload: UnshieldFetchingUserFeePayLoad;
+}
+
+export type FormUnshieldActions = UnshieldSetTokenAction | UnshieldSetUserFeeAction | UnshieldSetFetchingUserFeeAction;

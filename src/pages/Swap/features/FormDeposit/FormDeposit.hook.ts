@@ -170,7 +170,7 @@ export const useDeposit = (): IDeposit => {
       inputOriginalAmount,
       maxAmountFormatedText: `${maxAmountFormatedText} ${sellToken.symbol}`,
     };
-  }, [balance, decimals, inputOriginalAmount]);
+  }, [balance, decimals, inputOriginalAmount, sellToken.amount, sellToken.identify]);
 
   const button = React.useMemo(() => {
     let text = 'Deposit';

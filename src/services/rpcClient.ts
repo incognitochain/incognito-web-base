@@ -9,13 +9,25 @@ interface ISummitEtherHash {
   tokenID: string;
 }
 
-interface IEstimateFee {
+interface IEstimateFeePayload {
   network: string; // eth, bsc, plg, ftm”: (= ethereum, binance smart chain, polygon, fantom)
   requestedAmount: string; // amount with decimal.
   incognitoAmount: string;
   paymentAddress: string;
   privacyTokenAddress: string;
   walletAddress: string; // for history.
+}
+
+export interface IFee {
+  level1: string;
+  level2: string;
+}
+
+export interface IEstimateFee {
+  feeAddress: string;
+  id: number;
+  fee: IFee;
+  isUseTokenFee: boolean;
 }
 
 class RpcClient {
@@ -36,16 +48,16 @@ class RpcClient {
     });
   }
 
-  estimateFee({
+  async estimateFee({
     network,
     requestedAmount,
     incognitoAmount,
     paymentAddress,
     privacyTokenAddress,
     walletAddress,
-  }: IEstimateFee) {
+  }: IEstimateFeePayload): Promise<IEstimateFee | undefined> {
     const addressType = 2;
-    return this.http.post('genunshieldaddress', {
+    const data: any = await this.http.post('genunshieldaddress', {
       Network: network,
       RequestedAmount: requestedAmount,
       AddressType: addressType,
@@ -54,6 +66,17 @@ class RpcClient {
       PrivacyTokenAddress: privacyTokenAddress,
       WalletAddress: walletAddress,
     });
+    const feeType = data?.TokenFees ? data.TokenFees : data.PrivacyFees;
+    const fee: IFee = {
+      level1: feeType.Level1,
+      level2: feeType.Level2,
+    };
+    return {
+      fee,
+      feeAddress: data.FeeAddress,
+      id: data.ID,
+      isUseTokenFee: !!data?.TokenFees,
+    };
   }
 }
 

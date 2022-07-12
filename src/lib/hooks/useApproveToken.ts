@@ -24,13 +24,14 @@ const useApproveToken = ({ token, amount }: { token: SelectedPrivacy; amount: nu
     approvedAllowance: string;
   }>(initValue);
 
-  const { account, chainId } = useActiveWeb3React();
+  const { account, chainId: web3ChainID } = useActiveWeb3React();
+  const chainId = token.chainID;
   const contract = useTokenContract(token.contractID ? token.contractID : null, true);
 
   const checkIsApproved = async () => {
     let allowanceText = '0';
     try {
-      if (!account || !chainId) return;
+      if (!account || !chainId || web3ChainID !== chainId) return;
       setState((value) => ({ ...value, isCheckingApprove: true }));
       const INC_CONTRACT = getINCContractAddress({ chainId });
       const allowance = await contract?.allowance(account, INC_CONTRACT);
@@ -61,7 +62,7 @@ const useApproveToken = ({ token, amount }: { token: SelectedPrivacy; amount: nu
   const handleApproveToken = async () => {
     let tx;
     try {
-      if (!account || !chainId || token.isMainEVMToken) return;
+      if (!account || !chainId || token.isMainEVMToken || web3ChainID === chainId) return;
       setState((value) => ({ ...value, isApproving: true }));
       const approveMax = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
       const INC_CONTRACT = getINCContractAddress({ chainId });
@@ -80,7 +81,7 @@ const useApproveToken = ({ token, amount }: { token: SelectedPrivacy; amount: nu
   React.useEffect((): any => {
     if (!account || !chainId || token.isMainEVMToken) return;
     checkIsApproved().then();
-  }, [account, chainId, token.identify]);
+  }, [account, chainId, token.identify, web3ChainID]);
 
   const isApproved = React.useMemo(() => {
     if (token.isMainEVMToken) return true;
