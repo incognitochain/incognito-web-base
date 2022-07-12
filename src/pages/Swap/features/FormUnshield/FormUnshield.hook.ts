@@ -25,6 +25,7 @@ export interface IUnshield {
     maxAmountText?: string;
     maxAmountFormatedText: string;
   };
+  incAddress: string;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -41,6 +42,11 @@ export const useUnshield = (): IUnshield => {
     maxAmountNoClip,
     maxAmountText,
     maxAmountFormatedText,
+
+    inputAmount,
+    inputOriginalAmount,
+
+    incAddress,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
@@ -50,8 +56,10 @@ export const useUnshield = (): IUnshield => {
       maxAmountNoClip,
       maxAmountText,
       maxAmountFormatedText,
+      inputAmount,
+      inputOriginalAmount,
     };
-  }, [maxAmountNoClip, maxAmountText, maxAmountFormatedText]);
+  }, [maxAmountNoClip, maxAmountText, maxAmountFormatedText, inputAmount, inputOriginalAmount]);
 
   return {
     sellToken,
@@ -67,5 +75,6 @@ export const useUnshield = (): IUnshield => {
     isExternalAddress,
 
     amount,
+    incAddress,
   };
 };

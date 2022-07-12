@@ -27,6 +27,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     warningAddress,
     onSelectToken,
     onSelectNetwork,
+    validateAmount,
+    onClickMax,
   } = props;
 
   const handleSwap = () => console.log('SWAP');
@@ -75,6 +77,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           componentProps={{
             placeholder: 'Amount',
           }}
+          validate={validateAmount}
+          onClickMax={onClickMax}
         />
       </form>
     </Styled>

@@ -1,18 +1,20 @@
 import { BigNumber } from 'bignumber.js';
-import { MAIN_NETWORK_NAME } from 'constants/token';
+import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
 import { isAddress as isEtherAddress } from 'ethers/lib/utils';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { formValueSelector, isSubmitting, isValid } from 'redux-form';
 import { AppState } from 'state';
+import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { unshieldableTokens } from 'state/token';
 import convert from 'utils/convert';
 
-import { IFormUnshieldReducer } from './FormUnshield.types';
+import { IFormUnshieldState } from './FormUnshield.types';
 
 export interface IUnshieldData {
   unshieldAddress: string;
+  incAddress: string;
 
   sellToken: SelectedPrivacy;
   sellTokenList: SelectedPrivacy[];
@@ -28,6 +30,9 @@ export interface IUnshieldData {
   maxAmountNoClip?: string;
   maxAmountText?: string;
   maxAmountFormatedText: string;
+
+  inputAmount: string;
+  inputOriginalAmount: string;
 }
 
 const getUnshieldData = ({
@@ -36,7 +41,7 @@ const getUnshieldData = ({
   getDepositTokenData,
   state,
 }: {
-  unshield: IFormUnshieldReducer;
+  unshield: IFormUnshieldState;
   getDataByTokenID: (tokenID: string) => SelectedPrivacy;
   getDepositTokenData: (tokenID: string) => SelectedPrivacy;
   state: AppState;
@@ -73,10 +78,20 @@ const getUnshieldData = ({
   const maxAmountText = _sellToken.formatAmount;
   const maxAmountFormatedText = `${_sellToken.formatAmount || 0} ${_sellToken.symbol}`;
 
-  const disabledForm = !valid || submitting || !isExternalAddress || new BigNumber(inputOriginalAmount).lte(0);
+  const incAccount = incognitoWalletAccountSelector(state);
+  const nativeToken = getDataByTokenID(PRV.identify);
+  let incAddress = '';
+  if (incAccount) {
+    incAddress = incAccount.paymentAddress;
+    // let maxAmount: number = new BigNumber(sendTokenAmount)
+    //   .minus(sellToken.toke === networkFeeTokenID ? networkFee : 0)
+    //   .toNumber();
+  }
+
+  const disabledForm =
+    !valid || submitting || !isExternalAddress || new BigNumber(inputOriginalAmount).lte(0) || !incAccount;
 
   return {
-    unshieldAddress: inputAddress,
     sellToken: _sellToken,
     sellTokenList: _sellTokenList,
 
@@ -90,8 +105,13 @@ const getUnshieldData = ({
     maxAmountFormatedText,
 
     isExternalAddress,
+    unshieldAddress: inputAddress,
+    incAddress,
 
     disabledForm,
+
+    inputAmount,
+    inputOriginalAmount: inputOriginalAmount.toString(),
   };
 };
 

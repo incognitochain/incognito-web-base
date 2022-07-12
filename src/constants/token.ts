@@ -4,11 +4,12 @@ import incognitoLogoUrl from 'assets/images/inc_logo.png';
 import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
 import { isMainnet } from 'config';
+const { PRVIDSTR } = require('incognito-chain-web-js/build/web/wallet');
 
 const CRYPTO_ICON_URL = 'https://statics.incognito.org/cmc/symbols/128x128';
 
 const PRV = {
-  id: '0000000000000000000000000000000000000000000000000000000000000004',
+  id: PRVIDSTR,
   name: 'Privacy',
   displayName: 'Privacy',
   symbol: 'PRV',
@@ -16,6 +17,7 @@ const PRV = {
   hasIcon: true,
   originalSymbol: 'PRV',
   isVerified: true,
+  identify: `${PRVIDSTR}-${0}`,
 };
 
 const NETWORK_NAME = {

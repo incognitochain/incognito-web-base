@@ -5,10 +5,19 @@ export enum FormUnshieldActionType {
   SET_TOKEN = 'FORM_UNSHIELD/SET_TOKEN',
 }
 
-export interface IFormUnshieldReducer {
+export interface IFormUnshieldState {
   isFetching: boolean;
   sellToken: ITokenNetwork;
   buyToken: ITokenNetwork;
+
+  // Native Token -> PRV
+  networkFee: number;
+  networkFeeToken: string;
+
+  // Token | PRV
+  burnFee: number;
+  burnFeeToken: string;
+  userFee: any;
 }
 
 export interface UnshieldSetTokenPayLoad {

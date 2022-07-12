@@ -3,6 +3,8 @@ import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { AppDispatch, AppState } from 'state';
 import { getPrivacyByTokenIDSelectors } from 'state/token';
 
+import { rpcClient } from '../../../../services';
+import { unshieldDataSelector } from './FormUnshield.selectors';
 import { FormUnshieldActionType, UnshieldSetTokenAction, UnshieldSetTokenPayLoad } from './FormUnshield.types';
 
 const actionSetToken = (payload: UnshieldSetTokenPayLoad): UnshieldSetTokenAction => ({
@@ -54,3 +56,24 @@ export const actionChangeBuyNetwork =
       console.log('ACTION FILTER TOKEN ERROR: ', error);
     }
   };
+
+export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: AppState & any) => {
+  try {
+    const { inputAmount, inputOriginalAmount, sellToken, incAddress, unshieldAddress } = unshieldDataSelector(
+      getState()
+    );
+    if (!inputAmount) return;
+    const payload = {
+      network: 'eth',
+      incognitoAmount: inputOriginalAmount,
+      paymentAddress: unshieldAddress,
+      privacyTokenAddress: sellToken.tokenID,
+      requestedAmount: inputAmount,
+      walletAddress: incAddress,
+    };
+    const data = await rpcClient.estimateFee(payload);
+    console.log('SANG TEST: ', data);
+  } catch (error) {
+    console.log('ACTION FILTER TOKEN ERROR: ', error);
+  }
+};

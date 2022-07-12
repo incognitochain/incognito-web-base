@@ -3,9 +3,9 @@ import { SupportedChainId } from 'constants/chains';
 import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { Reducer } from 'redux';
 
-import { FormUnshieldActions, FormUnshieldActionType, IFormUnshieldReducer } from './FormUnshield.types';
+import { FormUnshieldActions, FormUnshieldActionType, IFormUnshieldState } from './FormUnshield.types';
 
-const initialState: IFormUnshieldReducer = {
+const initialState: IFormUnshieldState = {
   isFetching: false,
   sellToken: {
     identify: `${BIG_COINS.ETH_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
@@ -19,12 +19,19 @@ const initialState: IFormUnshieldReducer = {
     chainID: isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN,
     networkName: MAIN_NETWORK_NAME.ETHEREUM,
   },
+  networkFee: 0,
+  networkFeeToken: '',
+
+  burnFee: 0,
+  burnFeeToken: '',
+
+  userFee: null,
 };
 
-export const reducer: Reducer<IFormUnshieldReducer, FormUnshieldActions & any> = (
+export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
   state = initialState,
   action: FormUnshieldActions
-): IFormUnshieldReducer => {
+): IFormUnshieldState => {
   switch (action.type) {
     case FormUnshieldActionType.SET_TOKEN: {
       const { sellToken, buyToken } = action.payload;
