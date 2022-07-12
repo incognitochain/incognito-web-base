@@ -1,13 +1,15 @@
-import { MAIN_NETWORK_NAME } from 'constants/token';
+import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { rpcClient } from 'services';
 import { AppDispatch, AppState } from 'state';
 import { getPrivacyByTokenIDSelectors } from 'state/token';
 
+import convert from '../../../../utils/convert';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import {
   FormUnshieldActionType,
   UnshieldFetchingUserFeePayLoad,
+  UnshieldResetUserFeeAction,
   UnshieldSetFetchingUserFeeAction,
   UnshieldSetTokenAction,
   UnshieldSetTokenPayLoad,
@@ -28,6 +30,10 @@ const actionSetUserFee = (payload: UnshieldSetUserFeePayLoad): UnshieldSetUserFe
 const actionSetFetchingFee = (payload: UnshieldFetchingUserFeePayLoad): UnshieldSetFetchingUserFeeAction => ({
   type: FormUnshieldActionType.FETCHING_FEE,
   payload,
+});
+
+const actionResetFee = (): UnshieldResetUserFeeAction => ({
+  type: FormUnshieldActionType.RESET_FEE,
 });
 
 export const actionChangeSellToken =
@@ -69,9 +75,13 @@ export const actionChangeBuyNetwork =
   ({ network }: { network: ITokenNetwork }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
-      console.log('HIHI');
+      dispatch(
+        actionSetToken({
+          buyToken: { ...network },
+        })
+      );
     } catch (error) {
-      console.log('ACTION FILTER TOKEN ERROR: ', error);
+      console.log('ACTION CHANGE BUY NETWORK ERROR: ', error);
     }
   };
 
@@ -80,14 +90,26 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
     const { inputAmount, inputOriginalAmount, buyToken, incAddress, unshieldAddress } = unshieldDataSelector(
       getState()
     );
-    if (!inputAmount) return;
+    if (!incAddress || !unshieldAddress) return;
     dispatch(actionSetFetchingFee({ isFetchingFee: true }));
+    let network = '';
+    if (buyToken.isErc20Token || buyToken.isMainETH) {
+      network = 'eth';
+    } else if (buyToken.isPolygonErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC) {
+      network = 'plg';
+    } else if (buyToken.isFantomErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM) {
+      network = 'ftm';
+    } else if (buyToken.isBep20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
+      network = 'bsc';
+    }
     const payload = {
-      network: 'eth',
-      incognitoAmount: inputOriginalAmount,
+      network,
+      incognitoAmount:
+        inputOriginalAmount ||
+        convert.toOriginalAmount({ humanAmount: '1', round: false, decimals: buyToken.pDecimals }).toString(),
       paymentAddress: unshieldAddress,
       privacyTokenAddress: buyToken.tokenID,
-      requestedAmount: inputAmount,
+      requestedAmount: inputAmount || '1',
       walletAddress: incAddress,
     };
     const data = await rpcClient.estimateFee(payload);

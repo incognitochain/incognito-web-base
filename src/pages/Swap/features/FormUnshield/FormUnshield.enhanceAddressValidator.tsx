@@ -14,7 +14,8 @@ export interface TInner {
 const enhanceAddressValidation = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: any) => {
     const dispatch = useAppDispatch();
-    const { isExternalAddress, onChangeField, unshieldAddress, web3Account, incAddress, amount } = props;
+    const refCountChangeField = React.useRef<any>(null);
+    const { isExternalAddress, onChangeField, unshieldAddress, web3Account, incAddress, inputAmount, buyToken } = props;
     const getAddressValidator = React.useCallback(() => {
       return validator.combinedEtherAddress;
     }, [isExternalAddress]);
@@ -31,14 +32,23 @@ const enhanceAddressValidation = (WrappedComponent: any) => {
     const debounceEstimateFee = debounce(onEstimateFee, 500);
 
     React.useEffect(() => {
-      if (!unshieldAddress && web3Account && onChangeField) {
+      if (!unshieldAddress && web3Account && onChangeField && !refCountChangeField.current) {
         onChangeField(web3Account, FORM_CONFIGS.toAddress);
+        refCountChangeField.current = true;
       }
 
       if (unshieldAddress && isExternalAddress && incAddress) {
         debounceEstimateFee();
       }
-    }, [unshieldAddress, web3Account, isExternalAddress, incAddress, amount]);
+    }, [
+      unshieldAddress,
+      web3Account,
+      isExternalAddress,
+      incAddress,
+      inputAmount,
+      buyToken.tokenID,
+      refCountChangeField.current,
+    ]);
 
     return <WrappedComponent {...{ ...props, validateAddress, warningAddress }} />;
   };

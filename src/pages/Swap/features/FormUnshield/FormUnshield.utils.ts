@@ -9,6 +9,7 @@ import { AppState } from 'state';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { unshieldableTokens } from 'state/token';
 import convert from 'utils/convert';
+import format from 'utils/format';
 
 import { IFormUnshieldState } from './FormUnshield.types';
 
@@ -27,9 +28,12 @@ export interface IUnshieldData {
   isExternalAddress: boolean;
   disabledForm: boolean;
 
-  maxAmountNoClip?: string;
-  maxAmountText?: string;
-  maxAmountFormatedText: string;
+  userAmountNoClip?: string;
+  userAmount?: string;
+  userAmountFormatedText: string;
+
+  minAmountText: string;
+  maxAmountText: string;
 
   inputAmount: string;
   inputOriginalAmount: string;
@@ -46,7 +50,7 @@ const getUnshieldData = ({
   getDepositTokenData: (tokenID: string) => SelectedPrivacy;
   state: AppState;
 }): IUnshieldData => {
-  const { sellToken, buyToken } = unshield;
+  const { sellToken, buyToken, userFee, networkFee, isFetchingFee, networkFeeToken, isUseBurnFeeLevel1 } = unshield;
   const { networkName: sellNetworkName, identify: sellIdentify, currency: sellCurrency } = sellToken;
   const { currency: buyCurrency, networkName: buyNetworkName, identify: buyIdentify } = buyToken;
 
@@ -75,22 +79,58 @@ const getUnshieldData = ({
       humanAmount: inputAmount,
       round: false,
     }) || 0;
-  const maxAmountNoClip = _sellToken.formatAmountNoClip;
-  const maxAmountText = _sellToken.formatAmount;
-  const maxAmountFormatedText = `${_sellToken.formatAmount || 0} ${_sellToken.symbol}`;
+  const userAmountNoClip = _sellToken.formatAmountNoClip;
+  const userAmount = _sellToken.formatAmount;
+  const userAmountFormatedText = `${_sellToken.formatAmount || 0} ${_sellToken.symbol}`;
 
   const incAccount = incognitoWalletAccountSelector(state);
   const nativeToken = getDataByTokenID(PRV.identify);
-  let incAddress = '';
-  if (incAccount) {
-    incAddress = incAccount.paymentAddress;
-    // let maxAmount: number = new BigNumber(sendTokenAmount)
-    //   .minus(sellToken.toke === networkFeeTokenID ? networkFee : 0)
-    //   .toNumber();
+  const incAddress = incAccount ? incAccount.paymentAddress : '';
+
+  const enoughNetworkFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(networkFee);
+  let maxAmountText = '';
+  let minAmountText = '';
+  if (userFee) {
+    const { fee, isUseTokenFee } = userFee;
+    const burnFee = isUseBurnFeeLevel1 ? fee.level1 : fee.level2;
+    const burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
+
+    const minAmount: number = new BigNumber(_sellToken.identify === networkFeeToken ? 1 + networkFee : 1)
+      // .plus(_sellToken.identify === burnFeeTokenIdentify ? burnFee : 0)
+      .toNumber();
+
+    let maxAmount: number = new BigNumber(_sellToken.amount || 0)
+      .minus(isUseTokenFee ? 0 : networkFee)
+      .minus(_sellToken.identify === burnFeeTokenIdentify ? burnFee : 0)
+      .toNumber();
+
+    if (maxAmount <= 0) {
+      maxAmount = 0;
+    }
+
+    maxAmountText = convert
+      .toHumanAmount({
+        originalAmount: maxAmount,
+        decimals: _sellToken.pDecimals,
+      })
+      .toString();
+
+    minAmountText = format.formatAmount({
+      originalAmount: minAmount,
+      decimals: _sellToken.pDecimals,
+      clipAmount: false,
+    });
   }
 
   const disabledForm =
-    !valid || submitting || !isExternalAddress || new BigNumber(inputOriginalAmount).lte(0) || !incAccount;
+    !valid ||
+    submitting ||
+    !isExternalAddress ||
+    new BigNumber(inputOriginalAmount).lte(0) ||
+    !incAccount ||
+    !networkFee ||
+    isFetchingFee ||
+    !enoughNetworkFee;
 
   return {
     sellToken: _sellToken,
@@ -101,9 +141,11 @@ const getUnshieldData = ({
     buyCurrency,
     buyNetworkName,
 
-    maxAmountNoClip,
+    userAmountNoClip,
+    userAmount,
+    userAmountFormatedText,
+    minAmountText,
     maxAmountText,
-    maxAmountFormatedText,
 
     isExternalAddress,
     unshieldAddress: inputAddress,

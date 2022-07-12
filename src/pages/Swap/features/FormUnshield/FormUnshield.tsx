@@ -8,6 +8,7 @@ import React from 'react';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
+import { ButtonConfirmed } from '../../../../components/Core/Button';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
 
 const Styled = styled.div``;
@@ -21,7 +22,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     buyNetworkList,
     buyCurrency,
     buyNetworkName,
-    amount,
+    userAmountFormatedText,
 
     validateAddress,
     warningAddress,
@@ -73,13 +74,16 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           name={FORM_CONFIGS.sellAmount}
           inputType={INPUT_FIELD.amount}
           leftTitle="Total amount"
-          rightTitle={amount?.maxAmountFormatedText}
+          rightTitle={userAmountFormatedText}
           componentProps={{
             placeholder: 'Amount',
+            type: 'number',
           }}
           validate={validateAmount}
           onClickMax={onClickMax}
         />
+        <VerticalSpace />
+        <ButtonConfirmed type="submit">Swap</ButtonConfirmed>
       </form>
     </Styled>
   );

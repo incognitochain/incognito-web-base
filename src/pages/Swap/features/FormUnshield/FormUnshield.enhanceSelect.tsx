@@ -2,7 +2,7 @@ import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import React from 'react';
 import { useAppDispatch } from 'state/hooks';
 
-import { actionChangeSellToken } from './FormUnshield.actions';
+import { actionChangeBuyNetwork, actionChangeSellToken } from './FormUnshield.actions';
 
 export interface TInter {
   onSelectToken: ({ token }: { token: PToken }) => void;
@@ -17,7 +17,7 @@ const enhanceSelect = (WrappedComponent: any) => {
     };
 
     const handleSelectNetwork = ({ network }: { network: ITokenNetwork }) => {
-      // dispatch(actionChangeSellToken({ network }));
+      dispatch(actionChangeBuyNetwork({ network }));
     };
 
     return (

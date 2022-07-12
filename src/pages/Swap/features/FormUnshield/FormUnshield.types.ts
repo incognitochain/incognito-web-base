@@ -6,6 +6,7 @@ export enum FormUnshieldActionType {
   SET_TOKEN = 'FORM_UNSHIELD/SET_TOKEN',
   FETCHING_FEE = 'FORM_UNSHIELD/FETCHING_FEE',
   SET_USER_FEE = 'FORM_UNSHIELD/SET_USER_FEE',
+  RESET_FEE = 'FORM_UNSHIELD/RESET_FEE',
 }
 
 export interface IFormUnshieldState {
@@ -49,4 +50,12 @@ export interface UnshieldSetFetchingUserFeeAction extends Action {
   payload: UnshieldFetchingUserFeePayLoad;
 }
 
-export type FormUnshieldActions = UnshieldSetTokenAction | UnshieldSetUserFeeAction | UnshieldSetFetchingUserFeeAction;
+export interface UnshieldResetUserFeeAction extends Action {
+  type: FormUnshieldActionType.RESET_FEE;
+}
+
+export type FormUnshieldActions =
+  | UnshieldSetTokenAction
+  | UnshieldSetUserFeeAction
+  | UnshieldSetFetchingUserFeeAction
+  | UnshieldResetUserFeeAction;

@@ -17,7 +17,6 @@ const FormDeposit = (props: IMergeProps) => {
   const {
     handleSubmit,
     button,
-    disabledForm,
     sellNetworkList,
     sellTokenList,
     sellNetworkName,
@@ -88,9 +87,7 @@ const FormDeposit = (props: IMergeProps) => {
           onClickMax={onClickMax}
         />
         <VerticalSpace />
-        <ButtonConfirmed type="submit" disabled={button.disabled || disabledForm}>
-          {button.text}
-        </ButtonConfirmed>
+        <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
       </form>
     </Styled>
   );

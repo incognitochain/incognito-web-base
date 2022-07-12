@@ -9,7 +9,7 @@ const getChainIDByCurrency = ({ currency }: { currency: number }): SupportedChai
     case PRIVATE_TOKEN_CURRENCY_TYPE.ERC20:
       chainID = isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN;
       break;
-    case PRIVATE_TOKEN_CURRENCY_TYPE.BNB:
+    case PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB:
     case PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20:
       chainID = isMainnet ? SupportedChainId.BSC : SupportedChainId.BSC_TESTNET;
       break;
@@ -35,7 +35,7 @@ const getNetworkNameByCurrency = ({ currency }: { currency: number }): MAIN_NETW
     case PRIVATE_TOKEN_CURRENCY_TYPE.ERC20:
       networkName = MAIN_NETWORK_NAME.ETHEREUM;
       break;
-    case PRIVATE_TOKEN_CURRENCY_TYPE.BNB:
+    case PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB:
     case PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20:
       networkName = MAIN_NETWORK_NAME.BSC;
       break;

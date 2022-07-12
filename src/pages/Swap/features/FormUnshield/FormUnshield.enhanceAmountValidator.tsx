@@ -5,7 +5,7 @@ import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import convert from 'utils/convert';
 
-import { IUnshield } from './FormUnshield.hook';
+import { IMergeProps } from './FormUnshield.enhance';
 
 export interface TInner {
   validateAmount: () => any;
@@ -24,9 +24,8 @@ const initialState: IState = {
 };
 
 const enhanceAmountValidator = (WrappedComponent: any) => {
-  const FormUnshieldComp = (props: IUnshield & any) => {
-    const { amount, sellToken: selectedPrivacy, onChangeField } = props;
-    const { maxAmountText } = amount;
+  const FormUnshieldComp = (props: IMergeProps) => {
+    const { maxAmountText, sellToken: selectedPrivacy, onChangeField, userAmount } = props;
     const [state, setState] = React.useState({ ...initialState });
     const { maxAmountValidator, minAmountValidator } = state;
 
@@ -42,7 +41,7 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
           maxAmountValidator: validator.maxValue(
             maxAmountNum,
             new BigNumber(maxAmountNum).toNumber() > 0
-              ? `Max amount you can deposit is ${amount.maxAmountText} ${selectedPrivacy?.symbol}`
+              ? `Max amount you can swap is ${maxAmountText} ${selectedPrivacy?.symbol}`
               : 'Your balance is insufficient.'
           ),
         };
@@ -63,20 +62,13 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
 
     React.useEffect(() => {
       setFormValidator();
-    }, [selectedPrivacy.identify, amount]);
+    }, [selectedPrivacy.identify, maxAmountText]);
 
     const onClickMax = async () => {
-      if (!maxAmountText) return;
-      onChangeField(maxAmountText, FORM_CONFIGS.sellAmount).then();
+      onChangeField(maxAmountText || userAmount || '0', FORM_CONFIGS.sellAmount).then();
     };
 
     const validateAmount: any[] = getAmountValidator();
-
-    React.useEffect(() => {
-      setTimeout(() => {
-        onClickMax();
-      }, 500);
-    }, [maxAmountText]);
 
     return <WrappedComponent {...{ ...props, validateAmount, onClickMax }} />;
   };
