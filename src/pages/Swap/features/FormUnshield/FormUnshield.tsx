@@ -22,6 +22,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     buyCurrency,
     buyNetworkName,
 
+    validateAddress,
+    warningAddress,
     onSelectToken,
     onSelectNetwork,
   } = props;
@@ -58,6 +60,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           componentProps={{
             placeholder: 'Your External Address',
           }}
+          validate={validateAddress}
+          warning={warningAddress}
         />
         <VerticalSpace />
         <Field

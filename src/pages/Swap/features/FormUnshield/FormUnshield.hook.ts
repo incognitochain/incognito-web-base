@@ -15,11 +15,21 @@ export interface IUnshield {
   buyNetworkList: ITokenNetwork[] | undefined;
   buyCurrency: number;
   buyNetworkName: MAIN_NETWORK_NAME;
+
+  isExternalAddress: boolean;
 }
 
 export const useUnshield = (): IUnshield => {
-  const { unshieldAddress, sellToken, sellTokenList, buyToken, buyNetworkList, buyCurrency, buyNetworkName } =
-    useAppSelector(unshieldDataSelector);
+  const {
+    unshieldAddress,
+    sellToken,
+    sellTokenList,
+    buyToken,
+    buyNetworkList,
+    buyCurrency,
+    buyNetworkName,
+    isExternalAddress,
+  } = useAppSelector(unshieldDataSelector);
   return {
     sellToken,
     unshieldAddress,
@@ -29,5 +39,7 @@ export const useUnshield = (): IUnshield => {
     buyNetworkList,
     buyCurrency,
     buyNetworkName,
+
+    isExternalAddress,
   };
 };

@@ -1,13 +1,14 @@
 import { BigNumber } from 'bignumber.js';
 import { MAIN_NETWORK_NAME } from 'constants/token';
+import { isAddress as isEtherAddress } from 'ethers/lib/utils';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { formValueSelector, isSubmitting, isValid } from 'redux-form';
 import { AppState } from 'state';
 import { unshieldableTokens } from 'state/token';
+import convert from 'utils/convert';
 
-import convert from '../../../../utils/convert';
 import { IFormUnshieldReducer } from './FormUnshield.types';
 const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
 
@@ -21,6 +22,8 @@ export interface IUnshieldData {
   buyNetworkList: ITokenNetwork[] | undefined;
   buyCurrency: number;
   buyNetworkName: MAIN_NETWORK_NAME;
+
+  isExternalAddress: boolean;
 }
 
 const getUnshieldData = ({
@@ -53,7 +56,7 @@ const getUnshieldData = ({
   const _buyToken = getDataByTokenID(_sellToken.parentTokenID);
   const _buyNetworkList = _buyToken.supportedNetwork;
 
-  const isExternalAddress = !isPaymentAddress(inputAddress);
+  const isExternalAddress = isEtherAddress(inputAddress);
 
   // amount validator
   const inputOriginalAmount =
@@ -74,6 +77,8 @@ const getUnshieldData = ({
     buyNetworkList: _buyNetworkList,
     buyCurrency,
     buyNetworkName,
+
+    isExternalAddress,
   };
 };
 
