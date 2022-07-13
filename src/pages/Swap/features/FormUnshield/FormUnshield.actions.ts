@@ -86,7 +86,7 @@ export const actionChangeBuyNetwork =
 
 export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {
-    const { inputAmount, inputOriginalAmount, buyToken, incAddress, unshieldAddress } = unshieldDataSelector(
+    const { inputAmount, inputOriginalAmount, buyToken, incAddress, unshieldAddress, sellToken } = unshieldDataSelector(
       getState()
     );
     if (!incAddress || !unshieldAddress) return;
@@ -110,6 +110,7 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
       privacyTokenAddress: buyToken.tokenID,
       requestedAmount: inputAmount || '1',
       walletAddress: incAddress,
+      unifiedTokenID: sellToken.tokenID,
     };
     const data = await rpcClient.estimateFee(payload);
     dispatch(actionSetUserFee({ fee: data }));

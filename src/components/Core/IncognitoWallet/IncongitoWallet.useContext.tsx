@@ -9,17 +9,36 @@ interface IncognitoWalletContextType {
   requestSignTransaction: ({
     networkFee,
     networkFeeToken,
+    isUnshield,
+    isUnified,
     burnFee,
     burnFeeToken,
-    sendTokenID,
+    burnFeeID,
+    burnAmount,
+    burnAmountText,
+    burnToken,
+    receiverAddress,
     feeAddress,
+    receiverTokenID,
+    estimatedBurnAmount,
+    estimatedExpectedAmount,
   }: {
     networkFee: number;
-    networkFeeToken: number;
+    networkFeeToken: string;
     burnFee: string;
     burnFeeToken: string;
     sendTokenID: string;
     feeAddress: string;
+    isUnshield: boolean;
+    isUnified: boolean;
+    burnFeeID: number | undefined;
+    burnAmount: string;
+    burnAmountText: string;
+    burnToken: string;
+    receiverAddress: string;
+    receiverTokenID: string;
+    estimatedBurnAmount: number;
+    estimatedExpectedAmount: number;
   }) => any;
 }
 
@@ -78,16 +97,16 @@ const IncognitoWalletProvider = (props: any) => {
     return incognitoAccounts;
   };
 
-  const requestSignTransaction = async () => {
+  const requestSignTransaction = async (payload: any) => {
     const incognito = getIncognitoInject();
     try {
       if (!incognito) return;
       const { result }: { result: { state: WalletState } } = await incognito.request({
         method: 'wallet_signTransaction',
-        params: {},
+        params: {
+          ...payload,
+        },
       });
-
-      console.log('SANG TEST: ', result);
     } catch (e) {
       console.log('REQUEST SIGN TRANSACTION WITH ERROR: ', e);
     }

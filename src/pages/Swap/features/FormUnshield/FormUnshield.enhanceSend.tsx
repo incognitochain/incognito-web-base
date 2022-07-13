@@ -13,32 +13,49 @@ export interface TInner {
 
 const enhanceSend = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: IMergeProps) => {
-    const { disabledForm, buyToken, fee } = props;
+    const { disabledForm, buyToken, sellToken, fee, inputOriginalAmount, inputAddress, inputAmount } = props;
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
 
     const handleUnshieldToken = async () => {
-      if (!fee) return;
+      const {
+        feeAddress,
+        networkFee,
+        networkFeeToken,
+        burnFee,
+        burnFeeToken,
+        id,
+        estimatedBurnAmount,
+        estimatedExpectedAmount,
+      } = fee;
+      if (sellToken.hasChild && (!estimatedBurnAmount || !estimatedExpectedAmount)) return;
       try {
-        const { feeAddress, networkFee, networkFeeToken, burnFee, burnFeeToken } = fee;
-        console.log('SANG TEST::: ', feeAddress);
+        const payload: any = {
+          networkFee,
+          networkFeeToken,
+
+          isUnshield: true,
+          isUnified: sellToken.hasChild,
+
+          burnFee,
+          burnFeeToken,
+          burnFeeID: String(id),
+
+          burnAmount: inputOriginalAmount,
+          burnToken: sellToken.tokenID,
+          burnAmountText: inputAmount,
+
+          receiverAddress: inputAddress,
+          feeAddress,
+
+          receiverTokenID: buyToken.tokenID,
+          estimatedBurnAmount, // estimate fee unified
+          estimatedExpectedAmount, // estimate fee unified
+        };
+        const tx = await requestSignTransaction(payload);
       } catch (e) {
         console.log('HANDLE UNSHIELD WITH ERROR');
       }
-      // const prvPayments = [
-      //   {
-      //     PaymentAddress: tempAddress,
-      //     Amount: String(originalFee),
-      //   },
-      // ];
-      //
-      // const tokenPayments = [
-      //   {
-      //     PaymentAddress: tempAddress,
-      //     Amount: String(originalAmount),
-      //   },
-      // ];
-      // requestSignTransaction();
     };
 
     const onSend = async () => {

@@ -19,6 +19,10 @@ export interface IFee {
   burnFee?: string;
   burnFeeToken?: string;
   feeAddress?: string;
+  isUseTokenFee?: boolean;
+  id?: number;
+  estimatedBurnAmount: number;
+  estimatedExpectedAmount: number;
 }
 
 export interface IUnshieldData {
@@ -45,6 +49,7 @@ export interface IUnshieldData {
 
   inputAmount: string;
   inputOriginalAmount: string;
+  inputAddress: string;
 
   fee: IFee;
 }
@@ -61,6 +66,7 @@ const getUnshieldData = ({
   state: AppState;
 }): IUnshieldData => {
   const { sellToken, buyToken, userFee, networkFee, isFetchingFee, networkFeeToken, isUseBurnFeeLevel1 } = unshield;
+  let _networkFee = networkFee;
   const { networkName: sellNetworkName, identify: sellIdentify, currency: sellCurrency } = sellToken;
   const { currency: buyCurrency, networkName: buyNetworkName, identify: buyIdentify } = buyToken;
 
@@ -97,35 +103,46 @@ const getUnshieldData = ({
   const nativeToken = getDataByTokenID(PRV.identify);
   const incAddress = incAccount ? incAccount.paymentAddress : '';
 
-  const enoughNetworkFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(networkFee);
+  const enoughNetworkFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(_networkFee);
   let maxAmountText = '';
   let minAmountText = '';
 
   let combineFee: IFee = {
-    networkFee,
-    networkFeeToken,
+    networkFee: _networkFee,
+    networkFeeToken: PRV.id,
+    estimatedBurnAmount: 0,
+    estimatedExpectedAmount: 0,
   };
 
   if (userFee) {
-    const { fee, isUseTokenFee } = userFee;
-    const burnFee = isUseBurnFeeLevel1 ? fee.level1 : fee.level2;
+    const { fee, isUseTokenFee, id, feeAddress, estimatedBurnAmount, estimatedExpectedAmount, estimateFee } = userFee;
+    let burnFee = isUseBurnFeeLevel1 ? fee.level1 : fee.level2;
     const burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
     const burnFeeToken = isUseTokenFee ? _sellToken.tokenID : PRV.id;
 
+    if (_sellToken.identify === burnFeeTokenIdentify) {
+      burnFee += estimateFee;
+    } else {
+      _networkFee += estimateFee;
+    }
     combineFee = {
-      networkFee,
-      networkFeeToken,
+      networkFee: _networkFee,
+      networkFeeToken: PRV.id,
       burnFee,
       burnFeeToken,
-      feeAddress: userFee.feeAddress,
+      feeAddress,
+      isUseTokenFee,
+      id,
+      estimatedBurnAmount,
+      estimatedExpectedAmount,
     };
 
-    const minAmount: number = new BigNumber(_sellToken.identify === networkFeeToken ? 1 + networkFee : 1)
+    const minAmount: number = new BigNumber(_sellToken.identify === networkFeeToken ? 1 + _networkFee : 1)
       .plus(_sellToken.identify === burnFeeTokenIdentify ? burnFee : 0)
       .toNumber();
 
     let maxAmount: number = new BigNumber(_sellToken.amount || 0)
-      .minus(isUseTokenFee ? 0 : networkFee)
+      .minus(isUseTokenFee ? 0 : _networkFee)
       .minus(_sellToken.identify === burnFeeTokenIdentify ? burnFee : 0)
       .toNumber();
 
@@ -153,7 +170,7 @@ const getUnshieldData = ({
     !isExternalAddress ||
     new BigNumber(inputOriginalAmount).lte(0) ||
     !incAccount ||
-    !networkFee ||
+    !_networkFee ||
     isFetchingFee ||
     !enoughNetworkFee;
 
@@ -182,6 +199,7 @@ const getUnshieldData = ({
     inputOriginalAmount: inputOriginalAmount.toString(),
 
     fee: combineFee,
+    inputAddress,
   };
 };
 

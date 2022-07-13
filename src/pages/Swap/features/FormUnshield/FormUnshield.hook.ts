@@ -33,6 +33,8 @@ export interface IUnshield {
 
   disabledForm: boolean;
   fee: IFee;
+
+  inputAddress: string;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -58,6 +60,7 @@ export const useUnshield = (): IUnshield => {
     incAddress,
     disabledForm,
     fee,
+    inputAddress,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
@@ -88,5 +91,7 @@ export const useUnshield = (): IUnshield => {
 
     disabledForm,
     fee,
+
+    inputAddress,
   };
 };

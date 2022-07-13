@@ -16,6 +16,7 @@ interface IUserFeePayload {
   paymentAddress: string;
   privacyTokenAddress: string;
   walletAddress: string; // for history.
+  unifiedTokenID: string;
 }
 
 export interface IFee {
@@ -28,6 +29,9 @@ export interface IUserFee {
   id: number;
   fee: IFee;
   isUseTokenFee: boolean;
+  estimateFee: number;
+  estimatedBurnAmount: number;
+  estimatedExpectedAmount: number;
 }
 
 class RpcClient {
@@ -55,6 +59,7 @@ class RpcClient {
     paymentAddress,
     privacyTokenAddress,
     walletAddress,
+    unifiedTokenID,
   }: IUserFeePayload): Promise<IUserFee | undefined> {
     const addressType = 2;
     const data: any = await this.http.post('genunshieldaddress', {
@@ -65,17 +70,27 @@ class RpcClient {
       PaymentAddress: paymentAddress,
       PrivacyTokenAddress: privacyTokenAddress,
       WalletAddress: walletAddress,
+      UnifiedTokenID: unifiedTokenID,
     });
     const feeType = data?.TokenFees ? data.TokenFees : data.PrivacyFees;
     const fee: IFee = {
       level1: feeType.Level1,
       level2: feeType.Level2,
     };
+
+    const estimateData = data.EstimateReceivedAmount || {};
+    const estimateFee = estimateData?.Fee || 0;
+    const estimatedBurnAmount = estimateData?.BurntAmount || 0;
+    const estimatedExpectedAmount = estimateData?.ExpectedAmount || 0;
+
     return {
       fee,
       feeAddress: data.FeeAddress,
       id: data.ID,
       isUseTokenFee: !!data?.TokenFees,
+      estimateFee,
+      estimatedBurnAmount,
+      estimatedExpectedAmount,
     };
   }
 }
