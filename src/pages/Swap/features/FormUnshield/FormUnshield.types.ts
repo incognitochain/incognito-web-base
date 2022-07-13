@@ -1,6 +1,6 @@
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import { Action } from 'redux';
-import { IEstimateFee } from 'services/rpcClient';
+import { IUserFee } from 'services/rpcClient';
 
 export enum FormUnshieldActionType {
   SET_TOKEN = 'FORM_UNSHIELD/SET_TOKEN',
@@ -19,7 +19,7 @@ export interface IFormUnshieldState {
   networkFeeToken: string;
 
   isUseBurnFeeLevel1: boolean;
-  userFee: IEstimateFee | undefined;
+  userFee: IUserFee | undefined;
 }
 
 export interface UnshieldSetTokenPayLoad {
@@ -33,7 +33,7 @@ export interface UnshieldSetTokenAction extends Action {
 }
 
 export interface UnshieldSetUserFeePayLoad {
-  fee: IEstimateFee | undefined;
+  fee: IUserFee | undefined;
 }
 
 export interface UnshieldSetUserFeeAction extends Action {

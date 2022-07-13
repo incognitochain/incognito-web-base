@@ -13,6 +13,14 @@ import format from 'utils/format';
 
 import { IFormUnshieldState } from './FormUnshield.types';
 
+export interface IFee {
+  networkFee: number;
+  networkFeeToken: string;
+  burnFee?: string;
+  burnFeeToken?: string;
+  feeAddress?: string;
+}
+
 export interface IUnshieldData {
   unshieldAddress: string;
   incAddress: string;
@@ -37,6 +45,8 @@ export interface IUnshieldData {
 
   inputAmount: string;
   inputOriginalAmount: string;
+
+  fee: IFee;
 }
 
 const getUnshieldData = ({
@@ -90,13 +100,28 @@ const getUnshieldData = ({
   const enoughNetworkFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(networkFee);
   let maxAmountText = '';
   let minAmountText = '';
+
+  let combineFee: IFee = {
+    networkFee,
+    networkFeeToken,
+  };
+
   if (userFee) {
     const { fee, isUseTokenFee } = userFee;
     const burnFee = isUseBurnFeeLevel1 ? fee.level1 : fee.level2;
     const burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
+    const burnFeeToken = isUseTokenFee ? _sellToken.tokenID : PRV.id;
+
+    combineFee = {
+      networkFee,
+      networkFeeToken,
+      burnFee,
+      burnFeeToken,
+      feeAddress: userFee.feeAddress,
+    };
 
     const minAmount: number = new BigNumber(_sellToken.identify === networkFeeToken ? 1 + networkFee : 1)
-      // .plus(_sellToken.identify === burnFeeTokenIdentify ? burnFee : 0)
+      .plus(_sellToken.identify === burnFeeTokenIdentify ? burnFee : 0)
       .toNumber();
 
     let maxAmount: number = new BigNumber(_sellToken.amount || 0)
@@ -155,6 +180,8 @@ const getUnshieldData = ({
 
     inputAmount,
     inputOriginalAmount: inputOriginalAmount.toString(),
+
+    fee: combineFee,
   };
 };
 

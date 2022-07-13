@@ -1,5 +1,4 @@
 import { ButtonConfirmed } from 'components/Core/Button';
-import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
@@ -31,13 +30,12 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     onSelectNetwork,
     validateAmount,
     onClickMax,
+    onSend,
   } = props;
 
-  const { requestSignTransaction } = useIncognitoWallet();
-  const handleSwap = () => requestSignTransaction && requestSignTransaction();
   return (
     <Styled>
-      <form onSubmit={handleSubmit(handleSwap)}>
+      <form onSubmit={handleSubmit(onSend)}>
         <VerticalSpace />
         <Selection
           title="From"

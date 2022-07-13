@@ -8,6 +8,7 @@ import enhanceAddressValidation, { TInner as TInnerAddress } from './FormUnshiel
 import enhanceAmountValidator, { TInner as TInnerAmount } from './FormUnshield.enhanceAmountValidator';
 import enhanceInit from './FormUnshield.enhanceInit';
 import enhanceSelect, { TInter as TInnerSelect } from './FormUnshield.enhanceSelect';
+import enhanceSend, { TInner as TInnerSend } from './FormUnshield.enhanceSend';
 import { IUnshield } from './FormUnshield.hook';
 
 export interface IMergeProps
@@ -16,7 +17,8 @@ export interface IMergeProps
     TInnerChangeField,
     TInnerSelect,
     TInnerAddress,
-    TInnerAmount {}
+    TInnerAmount,
+    TInnerSend {}
 
 const enhance = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: any) => {
@@ -35,5 +37,6 @@ export default compose(
   enhanceAddressValidation,
   enhanceAmountValidator,
   enhanceSelect,
+  enhanceSend,
   enhance
 ) as any;

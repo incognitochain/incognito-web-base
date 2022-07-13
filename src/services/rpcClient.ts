@@ -9,7 +9,7 @@ interface ISummitEtherHash {
   tokenID: string;
 }
 
-interface IEstimateFeePayload {
+interface IUserFeePayload {
   network: string; // eth, bsc, plg, ftm”: (= ethereum, binance smart chain, polygon, fantom)
   requestedAmount: string; // amount with decimal.
   incognitoAmount: string;
@@ -23,7 +23,7 @@ export interface IFee {
   level2: string;
 }
 
-export interface IEstimateFee {
+export interface IUserFee {
   feeAddress: string;
   id: number;
   fee: IFee;
@@ -55,7 +55,7 @@ class RpcClient {
     paymentAddress,
     privacyTokenAddress,
     walletAddress,
-  }: IEstimateFeePayload): Promise<IEstimateFee | undefined> {
+  }: IUserFeePayload): Promise<IUserFee | undefined> {
     const addressType = 2;
     const data: any = await this.http.post('genunshieldaddress', {
       Network: network,

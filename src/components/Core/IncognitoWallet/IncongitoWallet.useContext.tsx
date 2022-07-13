@@ -6,7 +6,21 @@ interface IncognitoWalletContextType {
   isIncognitoInstalled: () => boolean;
   getWalletState: () => Promise<WalletState | undefined>;
   requestIncognitoAccount: () => Promise<AccountInfo[] | undefined>;
-  requestSignTransaction: () => any;
+  requestSignTransaction: ({
+    networkFee,
+    networkFeeToken,
+    burnFee,
+    burnFeeToken,
+    sendTokenID,
+    feeAddress,
+  }: {
+    networkFee: number;
+    networkFeeToken: number;
+    burnFee: string;
+    burnFeeToken: string;
+    sendTokenID: string;
+    feeAddress: string;
+  }) => any;
 }
 
 export const IncognitoWalletContext = React.createContext<IncognitoWalletContextType>({

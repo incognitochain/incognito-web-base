@@ -5,6 +5,7 @@ import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { useAppSelector } from 'state/hooks';
 
 import { unshieldDataSelector } from './FormUnshield.selectors';
+import { IFee } from './FormUnshield.utils';
 
 export interface IUnshield {
   sellToken: SelectedPrivacy;
@@ -29,6 +30,9 @@ export interface IUnshield {
   minAmountText: string;
 
   incAddress: string;
+
+  disabledForm: boolean;
+  fee: IFee;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -52,6 +56,8 @@ export const useUnshield = (): IUnshield => {
     maxAmountText,
 
     incAddress,
+    disabledForm,
+    fee,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
@@ -79,5 +85,8 @@ export const useUnshield = (): IUnshield => {
     userAmountFormatedText,
     minAmountText,
     maxAmountText,
+
+    disabledForm,
+    fee,
   };
 };
