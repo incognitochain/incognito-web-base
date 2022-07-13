@@ -1,3 +1,5 @@
+import { ButtonConfirmed } from 'components/Core/Button';
+import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
@@ -8,7 +10,6 @@ import React from 'react';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
-import { ButtonConfirmed } from '../../../../components/Core/Button';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
 
 const Styled = styled.div``;
@@ -32,7 +33,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     onClickMax,
   } = props;
 
-  const handleSwap = () => console.log('SWAP');
+  const { requestSignTransaction } = useIncognitoWallet();
+  const handleSwap = () => requestSignTransaction && requestSignTransaction();
   return (
     <Styled>
       <form onSubmit={handleSubmit(handleSwap)}>

@@ -6,12 +6,14 @@ interface IncognitoWalletContextType {
   isIncognitoInstalled: () => boolean;
   getWalletState: () => Promise<WalletState | undefined>;
   requestIncognitoAccount: () => Promise<AccountInfo[] | undefined>;
+  requestSignTransaction: () => any;
 }
 
 export const IncognitoWalletContext = React.createContext<IncognitoWalletContextType>({
   isIncognitoInstalled: () => false,
   getWalletState: async () => undefined,
   requestIncognitoAccount: async () => undefined,
+  requestSignTransaction: () => null,
 });
 
 const IncognitoWalletProvider = (props: any) => {
@@ -62,12 +64,28 @@ const IncognitoWalletProvider = (props: any) => {
     return incognitoAccounts;
   };
 
+  const requestSignTransaction = async () => {
+    const incognito = getIncognitoInject();
+    try {
+      if (!incognito) return;
+      const { result }: { result: { state: WalletState } } = await incognito.request({
+        method: 'wallet_signTransaction',
+        params: {},
+      });
+
+      console.log('SANG TEST: ', result);
+    } catch (e) {
+      console.log('REQUEST SIGN TRANSACTION WITH ERROR: ', e);
+    }
+  };
+
   return (
     <IncognitoWalletContext.Provider
       value={{
         isIncognitoInstalled,
         getWalletState,
         requestIncognitoAccount,
+        requestSignTransaction,
       }}
     >
       <>{children}</>
