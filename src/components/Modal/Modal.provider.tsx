@@ -53,7 +53,7 @@ const Styled = styled(StyledDialogOverlay)<{ isTransparent: boolean }>`
     text-align: center;
   }
   .min-height {
-    min-height: 850px;
+    min-height: 90vh;
   }
 `;
 
