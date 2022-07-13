@@ -1,5 +1,7 @@
+import { useFuse } from 'hooks/useFuse';
 import PToken from 'models/model/pTokenModel';
-import React from 'react';
+import SearchTokenBar from 'pages/Swap/features/Selection/SearchTokenBar';
+import React, { useCallback } from 'react';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
@@ -9,7 +11,7 @@ import Row from '../Core/Row';
 import { useModal } from './Modal.provider';
 
 const Styled = styled(Column)`
-  margin-top: 24px;
+  padding-top: 10px;
   width: 100%;
   overflow-y: auto;
   max-height: 70vh;
@@ -39,7 +41,27 @@ interface IProps {
 const TokenModal = (props: IProps & any) => {
   const { tokens, onSelect } = props;
   const { closeModal } = useModal();
-  const renderItem = (token: PToken) => {
+  const [tokensShow = [], onSearchTokens] = useFuse(tokens, {
+    keys: ['displayName', 'name', 'symbol', 'pSymbol'],
+    matchAllOnEmptyQuery: true,
+    isCaseSensitive: false,
+    findAllMatches: true,
+    includeMatches: false,
+    includeScore: true,
+    useExtendedSearch: false,
+    threshold: 0,
+    location: 0,
+    distance: 2,
+    maxPatternLength: 32,
+  });
+
+  const keySearchChange = (key: string) => {
+    if (typeof onSearchTokens === 'function') {
+      onSearchTokens(key);
+    }
+  };
+
+  const renderItem = useCallback((token: PToken) => {
     return (
       <Item
         key={token.tokenID}
@@ -57,9 +79,14 @@ const TokenModal = (props: IProps & any) => {
         </ThemedText.RegularLabel>
       </Item>
     );
-  };
+  }, []);
 
-  return <Styled>{tokens.map(renderItem)}</Styled>;
+  return (
+    <>
+      <SearchTokenBar keySearchChange={keySearchChange} />
+      {Array.isArray(tokensShow) && <Styled>{tokensShow.map(renderItem)}</Styled>}
+    </>
+  );
 };
 
 TokenModal.displayName = 'TokenModal';

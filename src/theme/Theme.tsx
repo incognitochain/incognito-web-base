@@ -261,6 +261,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
   }
   ::-webkit-scrollbar {
     display: block;
+    width: 0;
   }
   .error {
     color: ${({ theme }) => theme.content4};

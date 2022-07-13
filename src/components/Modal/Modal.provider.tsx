@@ -52,6 +52,9 @@ const Styled = styled(StyledDialogOverlay)<{ isTransparent: boolean }>`
     margin-bottom: 8px;
     text-align: center;
   }
+  .min-height {
+    min-height: 850px;
+  }
 `;
 
 export interface IProps {
@@ -63,14 +66,14 @@ const Modal = (props: IProps) => {
   const { modalState, closeModal } = props;
   const lastModal = last(modalState);
   const ref: any = React.useRef({});
-  const { data: modalData, title, rightHeader, isTransparent, closable } = lastModal || {};
+  const { data: modalData, title, rightHeader, isTransparent, closable, isSearchTokenModal } = lastModal || {};
   useOutsideRef(ref, closable ? closeModal : undefined);
   if (isEmpty(lastModal)) {
     return null;
   }
   const renderModalContent = () => {
     return (
-      <AppBody className="modal-content-wrapper" ref={ref}>
+      <AppBody className={`modal-content-wrapper ${isSearchTokenModal ? 'min-height' : ''}`} ref={ref}>
         <RowBetween className="header">
           <ThemedText.AvgMediumLabel color="primary5">{title}</ThemedText.AvgMediumLabel>
           <CloseIcon onClick={() => closeModal && closeModal()} />
@@ -89,7 +92,8 @@ const Modal = (props: IProps) => {
 
 interface SetModalProps {
   data: React.ReactNode;
-  title?: string;
+  title?: string | React.ReactNode;
+  isSearchTokenModal?: boolean;
   rightHeader?: React.ReactNode;
   isTransparent: boolean;
   closable?: boolean;

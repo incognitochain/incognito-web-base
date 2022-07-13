@@ -84,6 +84,7 @@ const Selection = React.memo((props: ISelection) => {
       isTransparent: false,
       rightHeader: undefined,
       title: 'Select a Token',
+      isSearchTokenModal: true,
     });
   };
 
