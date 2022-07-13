@@ -2,6 +2,7 @@ import { MAIN_NETWORK_NAME } from 'constants/token';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
+import { useMemo } from 'react';
 import { useAppSelector } from 'state/hooks';
 
 import { unshieldDataSelector } from './FormUnshield.selectors';
@@ -35,6 +36,8 @@ export interface IUnshield {
   fee: IFee;
 
   inputAddress: string;
+
+  buttonText: string;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -61,9 +64,12 @@ export const useUnshield = (): IUnshield => {
     disabledForm,
     fee,
     inputAddress,
+    isFetching,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
+
+  const buttonText = useMemo(() => (isFetching ? 'Estimate fee...' : 'Swap'), [isFetching]);
 
   return {
     sellToken,
@@ -93,5 +99,7 @@ export const useUnshield = (): IUnshield => {
     fee,
 
     inputAddress,
+
+    buttonText,
   };
 };

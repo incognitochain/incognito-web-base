@@ -29,7 +29,7 @@ const enhanceAddressValidation = (WrappedComponent: any) => {
       dispatch(actionEstimateFee());
     };
 
-    const debounceEstimateFee = debounce(onEstimateFee, 500);
+    const debounceEstimateFee = debounce(onEstimateFee, 300);
 
     React.useEffect(() => {
       if (!unshieldAddress && web3Account && onChangeField && !refCountChangeField.current) {

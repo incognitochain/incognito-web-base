@@ -117,6 +117,8 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
   } catch (error) {
     console.log('ACTION FILTER TOKEN ERROR: ', error);
   } finally {
-    dispatch(actionSetFetchingFee({ isFetchingFee: false }));
+    setTimeout(() => {
+      dispatch(actionSetFetchingFee({ isFetchingFee: false }));
+    }, 200);
   }
 };

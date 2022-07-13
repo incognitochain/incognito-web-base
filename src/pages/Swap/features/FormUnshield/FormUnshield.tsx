@@ -23,6 +23,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     buyCurrency,
     buyNetworkName,
     userAmountFormatedText,
+    buttonText,
 
     validateAddress,
     warningAddress,
@@ -83,7 +84,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           onClickMax={onClickMax}
         />
         <VerticalSpace />
-        <ButtonConfirmed type="submit">Swap</ButtonConfirmed>
+        <ButtonConfirmed type="submit">{buttonText}</ButtonConfirmed>
       </form>
     </Styled>
   );

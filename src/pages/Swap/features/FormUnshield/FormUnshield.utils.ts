@@ -52,6 +52,8 @@ export interface IUnshieldData {
   inputAddress: string;
 
   fee: IFee;
+
+  isFetching: boolean;
 }
 
 const getUnshieldData = ({
@@ -200,6 +202,7 @@ const getUnshieldData = ({
 
     fee: combineFee,
     inputAddress,
+    isFetching: unshield.isFetchingFee,
   };
 };
 
