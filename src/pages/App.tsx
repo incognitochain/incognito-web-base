@@ -1,5 +1,6 @@
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Header from 'components/Core/Header';
+import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
 import Swap, { RedirectPathToSwapOnly, RedirectToSwap } from 'pages/Swap';
@@ -58,22 +59,24 @@ const App = () => {
   return (
     <ErrorBoundary>
       <Route component={DarkModeQueryParamReader} />
-      <AppWrapper>
-        <HeaderWrapper>
-          <Header />
-        </HeaderWrapper>
-        <BodyWrapper>
-          <Popups />
-          <Suspense fallback={<Loader />}>
-            <Switch>
-              <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
-              <Route exact strict path="/swap" component={Swap} />
-              <Route component={RedirectPathToSwapOnly} />
-            </Switch>
-          </Suspense>
-          <Marginer />
-        </BodyWrapper>
-      </AppWrapper>
+      <IncognitoWalletProvider>
+        <AppWrapper>
+          <HeaderWrapper>
+            <Header />
+          </HeaderWrapper>
+          <BodyWrapper>
+            <Popups />
+            <Suspense fallback={<Loader />}>
+              <Switch>
+                <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
+                <Route exact strict path="/swap" component={Swap} />
+                <Route component={RedirectPathToSwapOnly} />
+              </Switch>
+            </Suspense>
+            <Marginer />
+          </BodyWrapper>
+        </AppWrapper>
+      </IncognitoWalletProvider>
     </ErrorBoundary>
   );
 };

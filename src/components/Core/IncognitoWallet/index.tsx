@@ -4,12 +4,13 @@ import useTheme from 'hooks/useTheme';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
-import { AccountInfo, WalletState } from 'state/incognitoWallet/incognitoWallet.reducer';
+import { AccountInfo } from 'state/incognitoWallet/incognitoWallet.reducer';
 import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
 import { shortenIncognitoAddress } from 'utils';
 
 import AccountInfoList from './AccountInfoList';
+import { useIncognitoWallet } from './IncongitoWallet.useContext';
 
 declare global {
   interface Window {
@@ -38,20 +39,13 @@ const Wrapper = styled.div`
   max-height: 40px;
 `;
 
-function detectIncognitoProvider() {
-  if (typeof window.incognito !== 'undefined') {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 const IncognitoWallet = () => {
   const dispatch = useDispatch();
   const [darkMode] = useDarkModeManager();
   const { white, black } = useTheme();
   const [walletState, setWalletState] = useState('Loading...');
   const [showModal, setShowModal] = useState<any>(false);
+  const { isIncognitoInstalled, requestIncognitoAccount, getWalletState } = useIncognitoWallet();
 
   const listenerDataChange = () => {
     const incognito = window.incognito;
@@ -84,38 +78,27 @@ const IncognitoWallet = () => {
   };
 
   const buttonClickAction = async () => {
-    if (detectIncognitoProvider()) {
-      const incognito = window.incognito;
-      const { result } = await incognito.request({ method: 'wallet_requestAccounts', params: {} });
-      console.log('wallet_requestAccounts result ', result);
-      if (result && result.accounts) {
-        dispatch(incognitoWalletSetAccount(result.accounts));
+    if (isIncognitoInstalled()) {
+      requestIncognitoAccount().then((accounts) => {
+        if (!accounts) return;
         setShowModal(true);
-      }
+      });
     } else {
       alert('Please install Incognito Extension!');
     }
   };
 
   // const lisenerEvents = () => {};
-
   useEffect(() => {
     const getInfo = async () => {
-      if (detectIncognitoProvider()) {
+      if (isIncognitoInstalled()) {
         listenerDataChange();
         const incognito = window.incognito;
-        const { result }: { result: { state: WalletState } } = await incognito.request({
-          method: 'wallet_getState',
-          params: {},
-        });
-        if (result.state === 'unlocked') {
+        const state = await getWalletState();
+        if (state === 'unlocked') {
           const data = await incognito.request({ method: 'wallet_getPaymentAddress', params: {} });
           setWalletState(shortenIncognitoAddress(data.result));
-          const { result } = await incognito.request({ method: 'wallet_requestAccounts', params: {} });
-          console.log('wallet_requestAccounts result ', result);
-          if (result && result.accounts) {
-            dispatch(incognitoWalletSetAccount(result.accounts));
-          }
+          requestIncognitoAccount().then();
         } else {
           setWalletState(CONNECT_WALLET);
         }
@@ -128,18 +111,12 @@ const IncognitoWallet = () => {
 
   const bgColor = walletState === CONNECT_WALLET ? `#1A73E8` : `#303030`;
 
-  const accountListContent = () => {
-    return <></>;
-  };
-
   return (
     <>
       <Wrapper className="button-hover" onClick={buttonClickAction} style={{ backgroundColor: bgColor }}>
-        {/* <p>0xd6...C963</p> */}
         <Text>{walletState}</Text>
         <IncognitoIcon fill={darkMode ? white : black} />
       </Wrapper>
-      {/* <Text>{`Balance: ${balance}`}</Text> */}
       <Modal isOpen={showModal} onDismiss={() => setShowModal(false)}>
         <AccountInfoList />
       </Modal>
