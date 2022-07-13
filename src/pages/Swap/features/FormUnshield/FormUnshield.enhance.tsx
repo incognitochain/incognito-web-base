@@ -6,6 +6,7 @@ import { InjectedFormProps, reduxForm } from 'redux-form';
 
 import enhanceAddressValidation, { TInner as TInnerAddress } from './FormUnshield.enhanceAddressValidator';
 import enhanceAmountValidator, { TInner as TInnerAmount } from './FormUnshield.enhanceAmountValidator';
+import enhanceFee from './FormUnshield.enhanceFee';
 import enhanceInit from './FormUnshield.enhanceInit';
 import enhanceSelect, { TInter as TInnerSelect } from './FormUnshield.enhanceSelect';
 import enhanceSend, { TInner as TInnerSend } from './FormUnshield.enhanceSend';
@@ -36,6 +37,7 @@ export default compose(
   enhanceChangeField,
   enhanceAddressValidation,
   enhanceAmountValidator,
+  enhanceFee,
   enhanceSelect,
   enhanceSend,
   enhance
