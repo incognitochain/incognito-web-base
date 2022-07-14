@@ -25,6 +25,9 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     buyNetworkName,
     userAmountFormatedText,
     buttonText,
+    inputAmount,
+    networkFeeText,
+    burnFeeText,
 
     validateAddress,
     warningAddress,
@@ -86,7 +89,13 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           onClickMax={onClickMax}
         />
         <VerticalSpace />
-        <EstReceive />
+        <EstReceive
+          amountText={inputAmount}
+          symbol={buyToken.symbol || ''}
+          networkFee={networkFeeText}
+          burnFeeText={burnFeeText}
+        />
+        <VerticalSpace />
         <ButtonConfirmed type="submit">{buttonText}</ButtonConfirmed>
       </form>
     </Styled>

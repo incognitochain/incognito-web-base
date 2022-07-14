@@ -207,7 +207,7 @@ export const ThemedText = {
     return <TextWrapper fontWeight={600} fontSize={24} {...props} />;
   },
   Small(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={11} {...props} />;
+    return <TextWrapper fontWeight={500} fontSize={12} {...props} />;
   },
   SmallLabel(props: TextProps) {
     return <TextWrapper fontWeight={500} fontSize={14} lineHeight="20px" style={{ lineHeight: '20px' }} {...props} />;

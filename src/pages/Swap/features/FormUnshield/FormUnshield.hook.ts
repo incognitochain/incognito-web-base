@@ -38,6 +38,8 @@ export interface IUnshield {
   inputAddress: string;
 
   buttonText: string;
+  networkFeeText: string;
+  burnFeeText: string;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -65,6 +67,8 @@ export const useUnshield = (): IUnshield => {
     fee,
     inputAddress,
     isFetching,
+    networkFeeText,
+    burnFeeText,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
@@ -101,5 +105,7 @@ export const useUnshield = (): IUnshield => {
     inputAddress,
 
     buttonText,
+    networkFeeText,
+    burnFeeText,
   };
 };

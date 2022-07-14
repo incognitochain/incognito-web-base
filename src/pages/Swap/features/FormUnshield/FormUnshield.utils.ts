@@ -54,6 +54,8 @@ export interface IUnshieldData {
   fee: IFee;
 
   isFetching: boolean;
+  networkFeeText: string;
+  burnFeeText: string;
 }
 
 const getUnshieldData = ({
@@ -116,10 +118,11 @@ const getUnshieldData = ({
     estimatedExpectedAmount: 0,
   };
 
+  let burnFeeTokenIdentify = '';
   if (userFee) {
     const { fee, isUseTokenFee, id, feeAddress, estimatedBurnAmount, estimatedExpectedAmount, estimateFee } = userFee;
     let burnFee = isUseBurnFeeLevel1 ? fee.level1 : fee.level2;
-    const burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
+    burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
     const burnFeeToken = isUseTokenFee ? _sellToken.tokenID : PRV.id;
 
     if (_sellToken.identify === burnFeeTokenIdentify) {
@@ -176,6 +179,22 @@ const getUnshieldData = ({
     isFetchingFee ||
     !enoughNetworkFee;
 
+  const networkFeeText = `${
+    convert.toHumanAmountString({
+      decimals: nativeToken.pDecimals,
+      originalAmount: _networkFee,
+    }) || 0
+  } ${nativeToken.symbol}`;
+
+  const burnFeeToken = getDataByTokenID(burnFeeTokenIdentify);
+  let burnFeeText = '';
+  if (burnFeeToken.symbol) {
+    burnFeeText = `${convert.toHumanAmountString({
+      originalAmount: Number(combineFee.burnFee || 0),
+      decimals: burnFeeToken.pDecimals,
+    })} ${burnFeeToken.symbol}`;
+  }
+
   return {
     sellToken: _sellToken,
     sellTokenList: _sellTokenList,
@@ -203,6 +222,8 @@ const getUnshieldData = ({
     fee: combineFee,
     inputAddress,
     isFetching: unshield.isFetchingFee,
+    networkFeeText,
+    burnFeeText,
   };
 };
 
