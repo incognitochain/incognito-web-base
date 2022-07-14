@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
@@ -11,15 +12,21 @@ const TabBarStyled = styled.div`
   }
 `;
 
-const TabBar = (props: any) => {
+export type TabType = 'Profile' | 'Transactions';
+interface TabBarProps {
+  activeTab: TabType;
+  onTabClick: (activeTab: TabType) => void;
+}
+const TabBar = (props: TabBarProps) => {
+  const { activeTab = 'Profile', onTabClick = () => {} } = props;
   return (
     <TabBarStyled>
       <ThemedText.RegularLabel
         fontWeight={500}
-        color="primary5"
+        color={activeTab === 'Profile' ? 'primary5' : 'primary8'}
         className="button-hover"
         onClick={() => {
-          console.log('Profile CLICKED');
+          onTabClick('Profile');
         }}
       >
         {'Profile'}
@@ -29,10 +36,10 @@ const TabBar = (props: any) => {
 
       <ThemedText.RegularLabel
         fontWeight={500}
-        color="primary8"
+        color={activeTab === 'Profile' ? 'primary8' : 'primary5'}
         className="button-hover"
         onClick={() => {
-          console.log('Transactions CLICKED');
+          onTabClick('Transactions');
         }}
       >
         {'Transactions'}
