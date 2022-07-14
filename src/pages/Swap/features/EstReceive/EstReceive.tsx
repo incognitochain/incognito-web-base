@@ -29,7 +29,7 @@ interface IProps {
 }
 
 const EstReceive = React.memo(({ amountText, symbol, networkFee, burnFeeText }: IProps) => {
-  const [isOpen, setOpen] = React.useState(false);
+  const [isOpen, setOpen] = React.useState(true);
   return (
     <Styled>
       <RowBetween onClick={() => setOpen((isOpen) => !isOpen)}>
@@ -47,7 +47,7 @@ const EstReceive = React.memo(({ amountText, symbol, networkFee, burnFeeText }: 
           </RowBetween>
           {!!burnFeeText && (
             <RowBetween style={{ marginTop: 12 }}>
-              <ThemedText.Small fontWeight={400}>Outchain Fee (est.)</ThemedText.Small>
+              <ThemedText.Small fontWeight={400}>Outchain Fee (Est.)</ThemedText.Small>
               <ThemedText.Small fontWeight={400}>{burnFeeText}</ThemedText.Small>
             </RowBetween>
           )}

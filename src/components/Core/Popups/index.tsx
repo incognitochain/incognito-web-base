@@ -31,6 +31,7 @@ const MobilePopupInner = styled.div`
   -webkit-overflow-scrolling: touch;
   ::-webkit-scrollbar {
     display: none;
+    width: 0;
   }
 `;
 
