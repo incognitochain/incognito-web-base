@@ -48,6 +48,21 @@ export const getPrivacyByTokenIdentifySelectors = createSelector(
     }
 );
 
+export const getPrivacyDataByTokenIDSelector = createSelector(
+  tokenSelectors,
+  incognitoWalletAccountSelector,
+  (tokens, incAccount) =>
+    (tokenID: string): SelectedPrivacy => {
+      const pTokens = Object.values(tokens.pTokens) || [];
+      const token = pTokens.find(({ tokenID: _tokenID }) => _tokenID === tokenID);
+      let followTokens = [];
+      if (incAccount) {
+        followTokens = incAccount.balances || [];
+      }
+      return new SelectedPrivacyModel(token, followTokens);
+    }
+);
+
 export const getDepositTokenDataSelector = createSelector(
   depositableSelectors,
   incognitoWalletAccountSelector,
