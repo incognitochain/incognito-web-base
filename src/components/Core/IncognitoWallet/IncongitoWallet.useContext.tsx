@@ -90,6 +90,11 @@ const IncognitoWalletProvider = (props: any) => {
           incognitoAccounts = result.accounts;
           dispatch(incognitoWalletSetAccount(incognitoAccounts));
         }
+      } else {
+        incognito.request({
+          method: 'wallet_showPopup',
+          params: {},
+        });
       }
     } catch (e) {
       console.log('REQUEST INCOGNITO ACCOUNT', e);
