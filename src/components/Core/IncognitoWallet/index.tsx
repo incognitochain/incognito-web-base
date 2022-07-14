@@ -1,5 +1,7 @@
 import { ReactComponent as IncognitoIcon } from 'assets/svg/incognito-icon.svg';
 import Modal from 'components/Core/Modal';
+import { useModal } from 'components/Modal';
+import BalanceModal from 'components/Modal/Modal.balance';
 import useTheme from 'hooks/useTheme';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -45,6 +47,7 @@ const IncognitoWallet = () => {
   const { white, black } = useTheme();
   const [walletState, setWalletState] = useState('Loading...');
   const [showModal, setShowModal] = useState<any>(false);
+  const { setModal } = useModal();
   const { isIncognitoInstalled, requestIncognitoAccount, getWalletState } = useIncognitoWallet();
 
   const listenerDataChange = () => {
@@ -79,9 +82,17 @@ const IncognitoWallet = () => {
 
   const buttonClickAction = async () => {
     if (isIncognitoInstalled()) {
+      console.log('12345');
       requestIncognitoAccount().then((accounts) => {
         if (!accounts) return;
-        setShowModal(true);
+        setModal({
+          closable: true,
+          data: <BalanceModal />,
+          isTransparent: false,
+          rightHeader: undefined,
+          title: 'Account',
+          isSearchTokenModal: true,
+        });
       });
     } else {
       alert('Please install Incognito Extension!');
