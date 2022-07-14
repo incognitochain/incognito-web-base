@@ -1,11 +1,6 @@
 // account is optional
 import { AddressZero } from '@ethersproject/constants';
 import { isAddress } from 'ethers/lib/utils';
-import Web3 from 'web3';
-
-import { isMainnet } from '../config';
-import { SupportedChainId } from '../constants/chains';
-import { INFURA_NETWORK_URLS } from '../constants/infura';
 
 export const TOKEN_ABI = JSON.parse(
   '[\n' +
@@ -231,9 +226,6 @@ export const TOKEN_ABI = JSON.parse(
     '    }\n' +
     ']'
 );
-
-const web3 = new Web3(INFURA_NETWORK_URLS[isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN]);
-
 export function getContract(address: string, ABI: any): any {
   if (!isAddress(address) || address === AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`);

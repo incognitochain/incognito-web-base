@@ -31,6 +31,9 @@ export const CHAIN_IDS_TO_NAMES = {
 
   [SupportedChainId.BSC]: 'bsc',
   [SupportedChainId.BSC_TESTNET]: 'bsc_testnet',
+
+  [SupportedChainId.FTM]: 'ftm',
+  [SupportedChainId.FTM_TESTNET]: 'ftm_testnet',
 };
 
 /**
@@ -56,6 +59,8 @@ export const L1_CHAIN_IDS = [
   SupportedChainId.POLYGON_MUMBAI,
   SupportedChainId.BSC,
   SupportedChainId.BSC_TESTNET,
+  SupportedChainId.FTM,
+  SupportedChainId.FTM_TESTNET,
 ] as const;
 
 export type SupportedL1ChainId = typeof L1_CHAIN_IDS[number];

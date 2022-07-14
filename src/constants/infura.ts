@@ -24,7 +24,7 @@ export const INFURA_NETWORK_URLS: { [key in SupportedChainId]: string } = {
   // TODO:
   [SupportedChainId.BSC]: `https://bsc-dataseed1.ninicoin.io`,
   [SupportedChainId.BSC_TESTNET]: `https://data-seed-prebsc-1-s1.binance.org:8545`,
-  [SupportedChainId.FTM]: `https://bsc-dataseed1.ninicoin.io`,
+  [SupportedChainId.FTM]: `https://rpcapi.fantom.network`,
   [SupportedChainId.FTM_TESTNET]: `https://data-seed-prebsc-1-s1.binance.org:8545`,
 };
 
