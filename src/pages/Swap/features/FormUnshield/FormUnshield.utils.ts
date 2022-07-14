@@ -126,10 +126,11 @@ const getUnshieldData = ({
     const burnFeeToken = isUseTokenFee ? _sellToken.tokenID : PRV.id;
 
     if (_sellToken.identify === burnFeeTokenIdentify) {
-      burnFee += estimateFee;
+      burnFee = new BigNumber(burnFee || 0).plus(estimateFee || 0).toString();
     } else {
       _networkFee += estimateFee;
     }
+
     combineFee = {
       networkFee: _networkFee,
       networkFeeToken: PRV.id,
