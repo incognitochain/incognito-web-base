@@ -49,7 +49,7 @@ const NetworkModal = (props: IProps & any) => {
           onSelect({ network });
         }}
       >
-        <Image iconUrl={ROOT_NETWORK_IMG[network.currency]} />
+        <Image iconUrl={ROOT_NETWORK_IMG[network.currency]} size={32} />
         <ThemedText.RegularLabel color="primary5" style={{ marginLeft: 12 }}>
           {network.networkName}
         </ThemedText.RegularLabel>

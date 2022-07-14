@@ -210,7 +210,7 @@ export const ThemedText = {
     return <TextWrapper fontWeight={500} fontSize={11} {...props} />;
   },
   SmallLabel(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={14} style={{ lineHeight: '20px' }} {...props} />;
+    return <TextWrapper fontWeight={500} fontSize={14} lineHeight="20px" style={{ lineHeight: '20px' }} {...props} />;
   },
   RegularLabel(props: TextProps) {
     return <TextWrapper fontWeight={500} fontSize={16} {...props} />;

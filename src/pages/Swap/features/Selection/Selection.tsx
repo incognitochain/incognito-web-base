@@ -19,6 +19,7 @@ interface ISelection {
   tokens?: PToken[];
   networks?: ITokenNetwork[];
   onSelectToken?: ({ token }: { token: PToken }) => void;
+  showNetwork?: boolean;
   onSelectNetwork?: ({ network }: { network: ITokenNetwork }) => void;
 }
 
@@ -71,6 +72,7 @@ const Selection = React.memo((props: ISelection) => {
     networks,
     onSelectNetwork,
     currency,
+    showNetwork = false,
   } = props;
   const { setModal } = useModal();
   const isHideNetwork = !networks || networks.length === 0;
@@ -80,7 +82,7 @@ const Selection = React.memo((props: ISelection) => {
     if (isHideToken) return;
     setModal({
       closable: true,
-      data: <ModalTokens tokens={tokens} onSelect={onSelectToken} />,
+      data: <ModalTokens tokens={tokens} onSelect={onSelectToken} showNetwork={showNetwork} />,
       isTransparent: false,
       rightHeader: undefined,
       title: 'Select a Token',

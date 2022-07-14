@@ -36,10 +36,11 @@ const Item = styled(Row)`
 interface IProps {
   tokens: PToken[];
   onSelect: ({ token }: { token: PToken }) => void;
+  showNetwork: boolean;
 }
 
 const TokenModal = (props: IProps & any) => {
-  const { tokens, onSelect } = props;
+  const { tokens, onSelect, showNetwork } = props;
   const { closeModal } = useModal();
   const [tokensShow = [], onSearchTokens] = useFuse(tokens, {
     keys: ['displayName', 'name', 'symbol', 'pSymbol'],
@@ -70,13 +71,17 @@ const TokenModal = (props: IProps & any) => {
           onSelect({ token });
         }}
       >
-        <Image iconUrl={token.iconUrl} />
-        <ThemedText.RegularLabel color="primary5" style={{ marginLeft: 12 }}>
-          {token.symbol}
-        </ThemedText.RegularLabel>
-        <ThemedText.RegularLabel color="primary5" style={{ marginLeft: 12 }}>
-          {token.networkName}
-        </ThemedText.RegularLabel>
+        <Image iconUrl={token.iconUrl} size={showNetwork ? 40 : 32} />
+        <Column>
+          <ThemedText.RegularLabel color="primary5" style={{ marginLeft: 12 }}>
+            {token.symbol}
+          </ThemedText.RegularLabel>
+          {showNetwork && (
+            <ThemedText.SmallLabel color="primary8" style={{ marginLeft: 12 }}>
+              {token.networkName}
+            </ThemedText.SmallLabel>
+          )}
+        </Column>
       </Item>
     );
   }, []);

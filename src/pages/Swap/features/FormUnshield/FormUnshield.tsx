@@ -46,6 +46,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           leftValue={sellToken.symbol}
           iconUrl={sellToken.iconUrl}
           onSelectToken={onSelectToken}
+          showNetwork={true}
         />
         <VerticalSpace />
         <Selection
