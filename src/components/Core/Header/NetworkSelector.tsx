@@ -37,6 +37,7 @@ export default function NetworkSelector() {
   const dispatch = useAppDispatch();
   const { chainId, provider, connector } = useActiveWeb3React();
   const parsedQs = useParsedQueryString();
+  console.log('SANG TEST, ', parsedQs, chainId);
   const { urlChain, urlChainId } = getParsedChainId(parsedQs);
   const prevChainId = usePrevious(chainId);
   const node = useRef<HTMLDivElement>();
@@ -84,7 +85,6 @@ export default function NetworkSelector() {
 
   useEffect(() => {
     if (!chainId || !prevChainId) return;
-
     // when network change originates from wallet or dropdown selector, just update URL
     if (chainId !== prevChainId) {
       history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) });

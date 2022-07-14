@@ -1,4 +1,5 @@
 import ethereumLogoUrl from 'assets/images/ethereum-logo.png';
+import ftmLogoUrl from 'assets/images/ftm_logo.png';
 import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
 import optimismLogoUrl from 'assets/svg/optimistic_ethereum.svg';
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
@@ -127,9 +128,27 @@ export const CHAIN_INFO: ChainInfoMap = {
     networkType: NetworkType.L1,
     docs: 'https://incognito.org/',
     explorer: 'https://etherscan.io/',
-    infoLink: 'https://info.uniswap.org/#/',
+    infoLink: 'https://incognito.org/',
     label: 'BSC Chain Testnet',
     logoUrl: bnbChainLogo,
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  },
+  [SupportedChainId.FTM_TESTNET]: {
+    networkType: NetworkType.L1,
+    docs: 'https://incognito.org/',
+    explorer: 'https://testnet.ftmscan.com',
+    infoLink: 'https://incognito.org/',
+    label: 'FTM Chain Testnet',
+    logoUrl: bnbChainLogo,
+    nativeCurrency: { name: 'Fantom', symbol: 'FTM', decimals: 18 },
+  },
+  [SupportedChainId.FTM]: {
+    networkType: NetworkType.L1,
+    docs: 'https://incognito.org/',
+    explorer: 'https://rpc.ftm.tools',
+    infoLink: 'https://incognito.org/',
+    label: 'FTM Chain',
+    logoUrl: ftmLogoUrl,
+    nativeCurrency: { name: 'Fantom', symbol: 'FTM', decimals: 18 },
   },
 };

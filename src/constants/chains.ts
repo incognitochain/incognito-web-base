@@ -15,8 +15,8 @@ export enum SupportedChainId {
   BSC = 56,
   BSC_TESTNET = 97,
 
-  FTM = 56,
-  FTM_TESTNET = 97,
+  FTM = 250,
+  FTM_TESTNET = 4002,
 }
 
 export const CHAIN_IDS_TO_NAMES = {
