@@ -107,8 +107,9 @@ const IncognitoWalletProvider = (props: any) => {
           ...payload,
         },
       });
+      return Promise.resolve(result);
     } catch (e) {
-      console.log('REQUEST SIGN TRANSACTION WITH ERROR: ', e);
+      return Promise.reject(e);
     }
   };
 

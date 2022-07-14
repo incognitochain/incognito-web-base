@@ -52,9 +52,16 @@ const enhanceSend = (WrappedComponent: any) => {
           estimatedBurnAmount, // estimate fee unified
           estimatedExpectedAmount, // estimate fee unified
         };
-        const tx = await requestSignTransaction(payload);
+        return new Promise(async (resolve, reject) => {
+          try {
+            const tx = await requestSignTransaction(payload);
+            resolve(tx);
+          } catch (e) {
+            reject(e);
+          }
+        });
       } catch (e) {
-        console.log('HANDLE UNSHIELD WITH ERROR');
+        console.log('HANDLE UNSHIELD WITH ERROR ', e);
       }
     };
 
@@ -68,8 +75,16 @@ const enhanceSend = (WrappedComponent: any) => {
       if (!isIncognitoInstalled()) {
         return requestIncognitoAccount();
       }
-
-      await handleUnshieldToken();
+      handleUnshieldToken().then(
+        (resolve) => {
+          console.log('resolve ', resolve);
+          console.log('TO DO');
+        },
+        (reject) => {
+          console.log('reject ', reject);
+          console.log('TO DO');
+        }
+      );
     };
     return <WrappedComponent {...{ ...props, onSend }} />;
   };
