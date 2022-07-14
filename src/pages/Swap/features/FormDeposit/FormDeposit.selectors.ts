@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { swapSelector } from 'pages/Swap';
 import { AppState } from 'state';
-import { getDepositTokenDataSelector, getPrivacyByTokenIDSelectors } from 'state/token';
+import { getDepositTokenDataSelector, getPrivacyByTokenIdentifySelectors } from 'state/token';
 
 import { getDepositData, IDepositData } from './FormDeposit.utils';
 
@@ -11,7 +11,7 @@ export const isFetchingSelectors = createSelector(formDepositSelectors, (fromDep
 
 export const depositDataSelector = createSelector(
   formDepositSelectors,
-  getPrivacyByTokenIDSelectors,
+  getPrivacyByTokenIdentifySelectors,
   getDepositTokenDataSelector,
   (state: AppState) => state,
   (deposit, getDataByTokenID, getDepositTokenData, state): IDepositData =>

@@ -9,6 +9,7 @@ import React from 'react';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
+import { EstReceive } from '../EstReceive';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
 
 const Styled = styled.div``;
@@ -85,6 +86,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           onClickMax={onClickMax}
         />
         <VerticalSpace />
+        <EstReceive />
         <ButtonConfirmed type="submit">{buttonText}</ButtonConfirmed>
       </form>
     </Styled>

@@ -1,7 +1,7 @@
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { AppDispatch, AppState } from 'state';
-import { getDepositTokenDataSelector, getPrivacyByTokenIDSelectors } from 'state/token';
+import { getDepositTokenDataSelector, getPrivacyByTokenIdentifySelectors } from 'state/token';
 
 import { DepositSetTokenAction, DepositSetTokenPayLoad, FormDepositActionType } from './FormDeposit.types';
 
@@ -14,7 +14,7 @@ export const actionFilterSetToken =
   ({ token }: { token: PToken }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
-      const parentToken = getPrivacyByTokenIDSelectors(getState())(token.parentTokenID);
+      const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
       if (!token.chainID || !token.networkName) return;
       const sellToken: ITokenNetwork = {
         identify: token.identify,
@@ -44,7 +44,7 @@ export const actionFilterTokenByNetwork =
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
       const token = getDepositTokenDataSelector(getState())(network.identify);
-      const parentToken = getPrivacyByTokenIDSelectors(getState())(token.parentTokenID);
+      const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
       if (!network.currency || !network.chainID) return;
       const sellToken: ITokenNetwork = {
         identify: network.identify,

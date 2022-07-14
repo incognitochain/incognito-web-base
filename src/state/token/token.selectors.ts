@@ -33,7 +33,7 @@ export const unshieldableTokens = createSelector(pTokensSelector, (pTokens) => {
 
 export const groupNetworkSelectors = createSelector(tokenSelectors, (token) => token.groupByNetwork);
 
-export const getPrivacyByTokenIDSelectors = createSelector(
+export const getPrivacyByTokenIdentifySelectors = createSelector(
   tokenSelectors,
   incognitoWalletAccountSelector,
   (tokens, incAccount) =>

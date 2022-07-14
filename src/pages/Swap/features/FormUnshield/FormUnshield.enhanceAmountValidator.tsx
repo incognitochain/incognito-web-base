@@ -62,7 +62,7 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
 
     React.useEffect(() => {
       setFormValidator();
-    }, [selectedPrivacy.identify, maxAmountText]);
+    }, [selectedPrivacy.identify, maxAmountText, selectedPrivacy.amount]);
 
     const onClickMax = async () => {
       onChangeField(maxAmountText || userAmount || '0', FORM_CONFIGS.sellAmount).then();

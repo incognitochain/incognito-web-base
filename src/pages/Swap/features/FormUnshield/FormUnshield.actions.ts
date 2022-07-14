@@ -2,7 +2,7 @@ import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token'
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { rpcClient } from 'services';
 import { AppDispatch, AppState } from 'state';
-import { getPrivacyByTokenIDSelectors } from 'state/token';
+import { getPrivacyByTokenIdentifySelectors } from 'state/token';
 
 import convert from '../../../../utils/convert';
 import { unshieldDataSelector } from './FormUnshield.selectors';
@@ -40,7 +40,7 @@ export const actionChangeSellToken =
   ({ token }: { token: PToken }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
-      const parentToken = getPrivacyByTokenIDSelectors(getState())(token.parentTokenID);
+      const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
       if (!token.chainID || !token.networkName || !parentToken.currencyType) return;
       const sellToken: ITokenNetwork = {
         identify: token.identify,
