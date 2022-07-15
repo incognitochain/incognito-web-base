@@ -3,6 +3,8 @@ import Header from 'components/Core/Header';
 import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
+import InternetDisconnected from 'pages/InternetDisconnected/InternetDisconnected';
+import PageNotFound from 'pages/PageNotFound/PageNotFound';
 import Swap, { RedirectPathToSwapOnly, RedirectToSwap } from 'pages/Swap';
 import { Suspense } from 'react';
 import { useEffect } from 'react';
@@ -71,6 +73,8 @@ const App = () => {
                 <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
                 <Route exact strict path="/swap" component={Swap} />
                 <Route component={RedirectPathToSwapOnly} />
+                <Route exact strict path="/page-not-found" component={PageNotFound} />
+                <Route exact strict path="/internet-disconnected" component={InternetDisconnected} />
               </Switch>
             </Suspense>
             <Marginer />
