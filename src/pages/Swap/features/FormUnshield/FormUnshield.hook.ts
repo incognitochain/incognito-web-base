@@ -73,7 +73,7 @@ export const useUnshield = (): IUnshield => {
 
   const { account: web3Account } = useActiveWeb3React();
 
-  const buttonText = useMemo(() => (isFetching ? 'Estimate fee...' : 'Swap'), [isFetching]);
+  const buttonText = useMemo(() => (isFetching ? 'Estimating fee...' : 'Swap'), [isFetching]);
 
   return {
     sellToken,
