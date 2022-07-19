@@ -178,6 +178,9 @@ export const useDeposit = (): IDeposit => {
     let disabled = false;
     let switchNetwork = false;
     if (chainId !== sellToken.chainID) {
+      text = 'Connect Wallet';
+      disabled = true;
+    } else if (chainId !== sellToken.chainID) {
       text = 'Switch network';
       disabled = true;
       switchNetwork = true;

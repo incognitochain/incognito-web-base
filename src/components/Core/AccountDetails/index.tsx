@@ -4,7 +4,7 @@ import { ReactComponent as Close } from 'assets/images/x.svg';
 import CopyHelper from 'components/Core/AccountDetails/Copy';
 import { ButtonSecondary } from 'components/Core/Button';
 import StatusIcon from 'components/Core/Identicon/StatusIcon';
-import { coinbaseWallet, injected } from 'connectors';
+import { injected } from 'connectors';
 import { SUPPORTED_WALLETS } from 'constants/wallet';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import React from 'react';
@@ -14,8 +14,6 @@ import styled from 'styled-components/macro';
 import { ExternalLink, ThemedText } from 'theme';
 import { shortenAddress } from 'utils';
 import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
-
-import { updateSelectedWallet } from '../../../state/user/reducer';
 
 const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
@@ -246,19 +244,19 @@ export default function AccountDetails({ toggleWalletModal, ENSName, openOptions
                       </div>
                       <div>
                         {/* Coinbase Wallet reloads the page right now, which breaks the selectedWallet from being set properly on localStorage */}
-                        {connector !== coinbaseWallet && (
-                          <WalletAction
-                            style={{ fontSize: '.825rem', fontWeight: 500, marginRight: '8px' }}
-                            onClick={() => {
-                              connector.deactivate ? connector.deactivate() : connector.resetState();
-                              dispatch(updateSelectedWallet({ wallet: undefined }));
-                              openOptions();
-                            }}
-                            data-cy="wallet-disconnect"
-                          >
-                            Disconnect
-                          </WalletAction>
-                        )}
+                        {/*{connector !== coinbaseWallet && (*/}
+                        {/*  <WalletAction*/}
+                        {/*    style={{ fontSize: '.825rem', fontWeight: 500, marginRight: '8px' }}*/}
+                        {/*    onClick={() => {*/}
+                        {/*      connector.deactivate ? connector.deactivate() : connector.resetState();*/}
+                        {/*      dispatch(updateSelectedWallet({ wallet: undefined }));*/}
+                        {/*      openOptions();*/}
+                        {/*    }}*/}
+                        {/*    data-cy="wallet-disconnect"*/}
+                        {/*  >*/}
+                        {/*    Disconnect*/}
+                        {/*  </WalletAction>*/}
+                        {/*)}*/}
                         <WalletAction
                           style={{ fontSize: '.825rem', fontWeight: 500 }}
                           onClick={() => {
