@@ -31,6 +31,7 @@ export interface IDeposit {
   button: {
     text: string;
     disabled: boolean;
+    switchNetwork: boolean;
   };
 
   amount: {
@@ -175,7 +176,12 @@ export const useDeposit = (): IDeposit => {
   const button = React.useMemo(() => {
     let text = 'Deposit';
     let disabled = false;
-    if (disabledForm) {
+    let switchNetwork = false;
+    if (chainId !== sellToken.chainID) {
+      text = 'Switch network';
+      disabled = true;
+      switchNetwork = true;
+    } else if (disabledForm) {
       text = 'Deposit';
       disabled = true;
     } else if (isApproving) {
@@ -191,8 +197,9 @@ export const useDeposit = (): IDeposit => {
     return {
       text,
       disabled,
+      switchNetwork,
     };
-  }, [isApproving, isApproving, isCheckingApprove, isLoading, disabledForm]);
+  }, [isApproving, isApproving, isCheckingApprove, isLoading, disabledForm, sellToken.chainID]);
 
   const incAccount = React.useMemo(() => {
     if (!_incAccount) return undefined;

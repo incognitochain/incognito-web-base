@@ -70,8 +70,8 @@ const getUnshieldData = ({
   state: AppState;
 }): IUnshieldData => {
   const { sellToken, buyToken, userFee, networkFee, isFetchingFee, networkFeeToken, isUseBurnFeeLevel1 } = unshield;
-  let _networkFee = networkFee;
-  const { networkName: sellNetworkName, identify: sellIdentify, currency: sellCurrency } = sellToken;
+  const _networkFee = networkFee;
+  const { identify: sellIdentify } = sellToken;
   const { currency: buyCurrency, networkName: buyNetworkName, identify: buyIdentify } = buyToken;
 
   const formSelector = formValueSelector(FORM_CONFIGS.formName);
@@ -96,7 +96,7 @@ const getUnshieldData = ({
   const inputOriginalAmount =
     convert.toOriginalAmount({
       decimals: _sellToken.pDecimals,
-      humanAmount: inputAmount,
+      humanAmount: new BigNumber(inputAmount || 0).plus(userFee ? userFee.estimateFee || 0 : 0).toString(),
       round: false,
     }) || 0;
   const userAmountNoClip = _sellToken.formatAmountNoClip;
@@ -121,15 +121,15 @@ const getUnshieldData = ({
   let burnFeeTokenIdentify = '';
   if (userFee) {
     const { fee, isUseTokenFee, id, feeAddress, estimatedBurnAmount, estimatedExpectedAmount, estimateFee } = userFee;
-    let burnFee = isUseBurnFeeLevel1 ? fee.level1 : fee.level2;
+    const burnFee = isUseBurnFeeLevel1 ? fee.level1 : fee.level2;
     burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
     const burnFeeToken = isUseTokenFee ? _sellToken.tokenID : PRV.id;
 
-    if (_sellToken.identify === burnFeeTokenIdentify) {
-      burnFee = new BigNumber(burnFee || 0).plus(estimateFee || 0).toString();
-    } else {
-      _networkFee += estimateFee;
-    }
+    // if (_sellToken.identify === burnFeeTokenIdentify) {
+    //   burnFee = new BigNumber(burnFee || 0).plus(estimateFee || 0).toString();
+    // } else {
+    //   _networkFee += estimateFee;
+    // }
 
     combineFee = {
       networkFee: _networkFee,
@@ -150,6 +150,7 @@ const getUnshieldData = ({
     let maxAmount: number = new BigNumber(_sellToken.amount || 0)
       .minus(isUseTokenFee ? 0 : _networkFee)
       .minus(_sellToken.identify === burnFeeTokenIdentify ? burnFee : 0)
+      .minus(estimateFee)
       .toNumber();
 
     if (maxAmount <= 0) {
