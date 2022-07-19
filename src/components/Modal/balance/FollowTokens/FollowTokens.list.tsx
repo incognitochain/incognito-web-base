@@ -4,6 +4,7 @@ import { useAppSelector } from 'state/hooks';
 import { incognitoAccountFollowTokenIDs } from 'state/incognitoWallet';
 import styled from 'styled-components/macro';
 
+import PaymentAddressBar from '../PaymentAddressBar';
 import FollowTokenItem from './FollowTokens.token';
 
 const Styled = styled.div`
@@ -15,11 +16,14 @@ const Styled = styled.div`
 const FollowTokensList = React.memo(() => {
   const followTokenIDs = useAppSelector(incognitoAccountFollowTokenIDs);
   return (
-    <Styled>
-      {followTokenIDs && followTokenIDs.length > 0
-        ? followTokenIDs.map((tokenID: string) => <FollowTokenItem tokenID={tokenID} key={tokenID} />)
-        : null}
-    </Styled>
+    <>
+      <PaymentAddressBar />
+      <Styled>
+        {followTokenIDs && followTokenIDs.length > 0
+          ? followTokenIDs.map((tokenID: string) => <FollowTokenItem tokenID={tokenID} key={tokenID} />)
+          : null}
+      </Styled>
+    </>
   );
 });
 

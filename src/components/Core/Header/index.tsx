@@ -25,6 +25,7 @@ const HeaderFrame = styled.div<{ showBackground: boolean }>`
   padding-left: 40px;
   padding-right: 40px;
   border-bottom: 1px solid ${({ theme }) => theme.border1};
+  background-color: ${({ theme }) => theme.bg2}; ;
 `;
 
 const HeaderControls = styled.div`

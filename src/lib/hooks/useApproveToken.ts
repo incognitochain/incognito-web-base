@@ -62,7 +62,7 @@ const useApproveToken = ({ token, amount }: { token: SelectedPrivacy; amount: nu
   const handleApproveToken = async () => {
     let tx;
     try {
-      if (!account || !chainId || token.isMainEVMToken || web3ChainID === chainId) return;
+      if (!account || !chainId || token.isMainEVMToken || web3ChainID !== chainId) return;
       setState((value) => ({ ...value, isApproving: true }));
       const approveMax = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
       const INC_CONTRACT = getINCContractAddress({ chainId });

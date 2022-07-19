@@ -1,16 +1,19 @@
-import { useState } from 'react';
+import Column from 'components/Core/Column';
+import { TAB_LIST, Tabs } from 'components/Core/Tabs';
 import styled from 'styled-components/macro';
 
-import Column from '../Core/Column';
+import { SubmitTxDeposit } from '../../pages/Swap/features/SubmitTxDeposit';
+import { SubmitTxUnshield } from '../../pages/Swap/features/SubmitTxUnshield';
+import { useAppSelector } from '../../state/hooks';
+import { selectedTabIndexSelector } from '../Core/Tabs/Tabs.selectors';
 import FollowTokensList from './balance/FollowTokens/FollowTokens.list';
-import PaymentAddressBar from './balance/PaymentAddressBar';
-import TabBar, { TabType } from './balance/TabBar';
 
 const Styled = styled(Column)`
   padding-top: 10px;
   width: 100%;
   overflow-y: auto;
   max-height: 80vh;
+  height: 100vh;
 
   .tab-bar-container {
     display: flex;
@@ -24,16 +27,27 @@ const Styled = styled(Column)`
     height: 1px;
     background-color: ${({ theme }) => theme.border5};
   }
+  .tab-title {
+    font-size: 16px;
+  }
 `;
 
+const { INCOGNITO_ACCOUNT } = TAB_LIST;
 const BalanceModal = (props: any) => {
-  const [activeTab, setActiveTab] = useState<TabType>('Profile');
+  const selectedTabIndex = useAppSelector(selectedTabIndexSelector)(INCOGNITO_ACCOUNT.rootTab);
+  const renderUI = () => {
+    const tabs: any = [
+      <FollowTokensList key="follow-tokens" />,
+      <SubmitTxDeposit key="submit-tx-deposit" />,
+      <SubmitTxUnshield key="submit-tx-unshield" />,
+    ];
+    return tabs[selectedTabIndex];
+  };
   return (
     <Styled>
-      <TabBar activeTab={activeTab} onTabClick={(tabActive) => setActiveTab(tabActive)} />
-      <div className="lineBreak"></div>
-      <PaymentAddressBar />
-      {activeTab === 'Profile' ? <FollowTokensList /> : null}
+      <Tabs rootTab={INCOGNITO_ACCOUNT.rootTab} tabNames={INCOGNITO_ACCOUNT.tabNames} />
+      <div className="lineBreak" />
+      {renderUI()}
     </Styled>
   );
 };

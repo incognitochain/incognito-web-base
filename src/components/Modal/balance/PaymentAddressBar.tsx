@@ -36,7 +36,6 @@ const PaymentAddressBarStyled = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 10px 8px;
     gap: 10px;
     padding: 10px;
     background: ${({ theme }) => theme.primary14};
@@ -68,14 +67,14 @@ const PaymentAddressBar = (props: any) => {
         </div>
       </div>
 
-      <div
-        className="change-button button-hover"
-        onClick={() => {
-          console.log('Change TO DO');
-        }}
-      >
-        {'Change'}
-      </div>
+      {/*<div*/}
+      {/*  className="change-button button-hover"*/}
+      {/*  onClick={() => {*/}
+      {/*    console.log('Change TO DO');*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  {'Change'}*/}
+      {/*</div>*/}
     </PaymentAddressBarStyled>
   );
 };

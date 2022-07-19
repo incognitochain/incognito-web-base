@@ -8,6 +8,7 @@ import React from 'react';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
+import useSwitchNetwork from '../../../../lib/hooks/useSwitchNetwork';
 import { Selection } from '../Selection';
 import enhance, { IMergeProps } from './FormDeposit.enhance';
 
@@ -36,6 +37,12 @@ const FormDeposit = (props: IMergeProps) => {
     onClickMax,
     onSend,
   } = props;
+
+  const [onSwitchNetwork] = useSwitchNetwork({ targetChain: sellToken.chainID });
+
+  const _handleSwitchNetwork = () => {
+    return onSwitchNetwork(false);
+  };
 
   return (
     <Styled>
@@ -87,7 +94,11 @@ const FormDeposit = (props: IMergeProps) => {
           onClickMax={onClickMax}
         />
         <VerticalSpace />
-        <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
+        {button.switchNetwork ? (
+          <ButtonConfirmed onClick={_handleSwitchNetwork}>{button.text}</ButtonConfirmed>
+        ) : (
+          <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
+        )}
       </form>
     </Styled>
   );

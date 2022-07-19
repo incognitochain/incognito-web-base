@@ -1,4 +1,3 @@
-import { ReactComponent as IncognitoIcon } from 'assets/svg/incognito-icon.svg';
 import Modal from 'components/Core/Modal';
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
@@ -11,6 +10,8 @@ import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
 import { shortenIncognitoAddress } from 'utils';
 
+import { PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from '../../../constants';
+import { Image } from '../Image';
 import AccountInfoList from './AccountInfoList';
 import { useIncognitoWallet } from './IncongitoWallet.useContext';
 
@@ -33,7 +34,7 @@ const Wrapper = styled.div`
   position: relative;
   flex-direction: row;
   align-items: center;
-  padding: 8px 16px;
+  padding: 8px 8px;
   gap: 8px;
 
   background-color: ${({ theme }) => theme.primary2};
@@ -125,8 +126,8 @@ const IncognitoWallet = () => {
   return (
     <>
       <Wrapper className="button-hover" onClick={buttonClickAction} style={{ backgroundColor: bgColor }}>
+        <Image iconUrl={ROOT_NETWORK_IMG[PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]} />
         <Text>{walletState}</Text>
-        <IncognitoIcon fill={darkMode ? white : black} />
       </Wrapper>
       <Modal isOpen={showModal} onDismiss={() => setShowModal(false)}>
         <AccountInfoList />
