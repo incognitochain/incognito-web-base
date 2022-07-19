@@ -115,7 +115,7 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
       privacyTokenAddress: buyToken.tokenID,
       requestedAmount: inputAmount || '1',
       walletAddress: incAddress,
-      unifiedTokenID: sellToken.tokenID,
+      unifiedTokenID: sellToken.hasChild ? sellToken.tokenID : '',
     };
     const data = await rpcClient.estimateFee(payload);
     dispatch(actionSetUserFee({ fee: data }));
