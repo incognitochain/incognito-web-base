@@ -199,7 +199,7 @@ export const useDeposit = (): IDeposit => {
       disabled,
       switchNetwork,
     };
-  }, [isApproving, isApproving, isCheckingApprove, isLoading, disabledForm, sellToken.chainID]);
+  }, [isApproving, isApproving, isCheckingApprove, isLoading, disabledForm, sellToken.chainID, chainId]);
 
   const incAccount = React.useMemo(() => {
     if (!_incAccount) return undefined;

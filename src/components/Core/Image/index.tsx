@@ -24,6 +24,7 @@ const Image = React.memo((props: IProps) => {
       alt="logo-icon"
       style={{ width: size, height: size }}
       onError={onError}
+      {...props}
     />
   );
 });

@@ -4,6 +4,8 @@ import incognitoLogoUrl from 'assets/images/inc_logo.png';
 import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
 import { isMainnet } from 'config';
+
+import { SupportedChainId } from './chains';
 const { PRVIDSTR } = require('incognito-chain-web-js/build/web/wallet');
 
 const CRYPTO_ICON_URL = 'https://statics.incognito.org/cmc/symbols/128x128';
@@ -125,16 +127,24 @@ const GROUP_NETWORK: IGroupNetwork = {
 const ROOT_NETWORK_IMG: any = {
   [PRIVATE_TOKEN_CURRENCY_TYPE.ETH]: ethereumLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.ERC20]: ethereumLogoUrl,
+  [SupportedChainId.KOVAN]: ethereumLogoUrl,
+  [SupportedChainId.MAINNET]: ethereumLogoUrl,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB]: bnbChainLogo,
   [PRIVATE_TOKEN_CURRENCY_TYPE.BNB_BEP2]: bnbChainLogo,
   [PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20]: bnbChainLogo,
+  [SupportedChainId.BSC]: bnbChainLogo,
+  [SupportedChainId.BSC_TESTNET]: bnbChainLogo,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.MATIC]: polygonMaticLogo,
   [PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20]: polygonMaticLogo,
+  [SupportedChainId.POLYGON]: bnbChainLogo,
+  [SupportedChainId.POLYGON_MUMBAI]: bnbChainLogo,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.FTM]: ftmLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20]: ftmLogoUrl,
+  [SupportedChainId.FTM]: ftmLogoUrl,
+  [SupportedChainId.FTM_TESTNET]: ftmLogoUrl,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN]: incognitoLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]: incognitoLogoUrl,

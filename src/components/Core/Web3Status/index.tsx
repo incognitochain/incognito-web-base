@@ -4,10 +4,12 @@ import { useWeb3React } from '@web3-react/core';
 import { Connector } from '@web3-react/types';
 import { ButtonBasic } from 'components/Core/Button';
 import StatusIcon from 'components/Core/Identicon/StatusIcon';
+import { Image } from 'components/Core/Image';
 import Loader from 'components/Core/Loader';
 import { RowBetween } from 'components/Core/Row';
 import WalletModal from 'components/Core/WalletModal';
 import { getWalletForConnector } from 'connectors';
+import { ROOT_NETWORK_IMG } from 'constants/token';
 import { useHasSocks } from 'hooks/useSocksBalance';
 import { darken } from 'polished';
 import { useMemo } from 'react';
@@ -28,6 +30,10 @@ const IconWrapper = styled.div<{ size?: number }>`
     height: ${({ size }) => (size ? size + 'px' : '32px')};
     width: ${({ size }) => (size ? size + 'px' : '32px')};
   }
+`;
+
+const NetworkImg = styled(Image)`
+  margin-right: 4px;
 `;
 
 const Web3StatusGeneric = styled(ButtonBasic)`
@@ -180,10 +186,11 @@ function Web3StatusInner() {
         ) : (
           <>
             {hasSocks ? <Sock /> : null}
+            <NetworkImg iconUrl={ROOT_NETWORK_IMG[chainId]} />
             <Text>{ENSName || shortenAddress(account)}</Text>
           </>
         )}
-        {!hasPendingTransactions && connector && <WrappedStatusIcon connector={connector} />}
+        {/*{!hasPendingTransactions && connector && <WrappedStatusIcon connector={connector} />}*/}
       </Web3StatusConnected>
     );
   } else {

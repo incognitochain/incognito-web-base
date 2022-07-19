@@ -37,7 +37,6 @@ export default function NetworkSelector() {
   const dispatch = useAppDispatch();
   const { chainId, provider, connector } = useActiveWeb3React();
   const parsedQs = useParsedQueryString();
-  console.log('SANG TEST, ', parsedQs, chainId);
   const { urlChain, urlChainId } = getParsedChainId(parsedQs);
   const prevChainId = usePrevious(chainId);
   const node = useRef<HTMLDivElement>();
