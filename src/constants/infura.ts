@@ -19,13 +19,13 @@ export const INFURA_NETWORK_URLS: { [key in SupportedChainId]: string } = {
   [SupportedChainId.OPTIMISM]: `https://optimism-mainnet.infura.io/v3/${INFURA_KEY}`,
   [SupportedChainId.OPTIMISTIC_KOVAN]: `https://optimism-kovan.infura.io/v3/${INFURA_KEY}`,
   [SupportedChainId.POLYGON]: `https://polygon-mainnet.infura.io/v3/${INFURA_KEY}`,
-  [SupportedChainId.POLYGON_MUMBAI]: `https://polygon-mumbai.infura.io/v3/${INFURA_KEY}`,
+  [SupportedChainId.POLYGON_MUMBAI]: 'https://rpc-mumbai.maticvigil.com',
 
   // TODO:
   [SupportedChainId.BSC]: `https://bsc-dataseed1.ninicoin.io`,
   [SupportedChainId.BSC_TESTNET]: `https://data-seed-prebsc-1-s1.binance.org:8545`,
   [SupportedChainId.FTM]: `https://rpcapi.fantom.network`,
-  [SupportedChainId.FTM_TESTNET]: `https://data-seed-prebsc-1-s1.binance.org:8545`,
+  [SupportedChainId.FTM_TESTNET]: `https://rpc.testnet.fantom.network`,
 };
 
 /**
