@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { rpcClient } from 'services';
@@ -86,7 +87,7 @@ export const actionChangeBuyNetwork =
 
 export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {
-    const { inputAmount, burnOriginalAmount, buyToken, incAddress, unshieldAddress, sellToken } = unshieldDataSelector(
+    const { inputAmount, inputOriginalAmount, buyToken, incAddress, unshieldAddress, sellToken } = unshieldDataSelector(
       getState()
     );
     if (!incAddress || !unshieldAddress) return;
@@ -101,11 +102,15 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
     } else if (buyToken.isBep20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
       network = 'bsc';
     }
+
+    const incognitoAmount = new BigNumber(
+      inputOriginalAmount ||
+        convert.toOriginalAmount({ humanAmount: '1', round: false, decimals: buyToken.pDecimals }).toString()
+    ).toString();
+
     const payload = {
       network,
-      incognitoAmount:
-        burnOriginalAmount ||
-        convert.toOriginalAmount({ humanAmount: '1', round: false, decimals: buyToken.pDecimals }).toString(),
+      incognitoAmount,
       paymentAddress: unshieldAddress,
       privacyTokenAddress: buyToken.tokenID,
       requestedAmount: inputAmount || '1',

@@ -47,6 +47,8 @@ const enhanceSend = (WrappedComponent: any) => {
           burnFeeToken,
           burnFeeID: String(id),
 
+          extraFee: fee.extraFee,
+
           burnAmount: burnOriginalAmount,
           burnToken: sellToken.tokenID,
           burnAmountText: inputAmount,
@@ -58,6 +60,7 @@ const enhanceSend = (WrappedComponent: any) => {
           estimatedBurnAmount, // estimate fee unified
           estimatedExpectedAmount, // estimate fee unified
         };
+
         return new Promise(async (resolve, reject) => {
           try {
             const tx = await requestSignTransaction(payload);
@@ -102,7 +105,6 @@ const enhanceSend = (WrappedComponent: any) => {
         });
       } catch (e) {
         clearAllModal();
-        alert(JSON.stringify(e));
       } finally {
         setTimeout(() => {
           dispatch(actionEstimateFee());

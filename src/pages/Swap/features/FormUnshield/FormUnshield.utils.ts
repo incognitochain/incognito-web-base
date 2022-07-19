@@ -23,6 +23,7 @@ export interface IFee {
   id?: number;
   estimatedBurnAmount: number;
   estimatedExpectedAmount: number;
+  extraFee: number;
 }
 
 export interface IUnshieldData {
@@ -48,8 +49,10 @@ export interface IUnshieldData {
   maxAmountText: string;
 
   inputAmount: string;
+  inputOriginalAmount: number;
   burnOriginalAmount: string;
   inputAddress: string;
+  estReceiveAmount: string | number;
 
   fee: IFee;
 
@@ -77,7 +80,7 @@ const getUnshieldData = ({
   const valid = isValid(FORM_CONFIGS.formName)(state);
   const submitting = isSubmitting(FORM_CONFIGS.formName)(state);
 
-  const inputAmount = formSelector(state, FORM_CONFIGS.sellAmount);
+  const inputAmount: string = formSelector(state, FORM_CONFIGS.sellAmount);
   const inputAddress = formSelector(state, FORM_CONFIGS.toAddress);
 
   // sell token
@@ -92,12 +95,17 @@ const getUnshieldData = ({
   const isExternalAddress = isEtherAddress(inputAddress);
 
   // amount validator
-  const burnOriginalAmount =
+  const inputOriginalAmount =
     convert.toOriginalAmount({
       decimals: _sellToken.pDecimals,
-      humanAmount: new BigNumber(inputAmount || 0).plus(userFee ? userFee.estimateFee || 0 : 0).toString(),
+      humanAmount: inputAmount || '0',
       round: false,
     }) || 0;
+
+  const burnOriginalAmount =
+    userFee && userFee.estimatedBurnAmount
+      ? userFee.estimatedBurnAmount
+      : new BigNumber(inputOriginalAmount || 0).toString();
 
   const userBalanceNoClip = _sellToken.formatAmountNoClip;
   const userBalance = _sellToken.formatAmount;
@@ -123,6 +131,7 @@ const getUnshieldData = ({
     networkFeeToken: PRV.id,
     estimatedBurnAmount: 0,
     estimatedExpectedAmount: 0,
+    extraFee: 0,
   };
 
   let burnFeeTokenIdentify = '';
@@ -145,6 +154,8 @@ const getUnshieldData = ({
       isUseTokenFee,
 
       id,
+
+      extraFee: estimateFee || 0,
 
       estimatedBurnAmount,
       estimatedExpectedAmount,
@@ -182,7 +193,7 @@ const getUnshieldData = ({
     !valid ||
     submitting ||
     !isExternalAddress ||
-    new BigNumber(burnOriginalAmount).lte(0) ||
+    new BigNumber(inputOriginalAmount).lte(0) ||
     !incAccount ||
     !networkFee ||
     isFetchingFee ||
@@ -192,10 +203,12 @@ const getUnshieldData = ({
   let burnFeeText = '';
   if (burnFeeToken.symbol) {
     burnFeeText = `${convert.toHumanAmountString({
-      originalAmount: Number(combineFee.burnFee || 0),
+      originalAmount: new BigNumber(combineFee.burnFee || 0).plus(combineFee.extraFee).toNumber(),
       decimals: burnFeeToken.pDecimals,
     })} ${burnFeeToken.symbol}`;
   }
+
+  const estReceiveAmount = userFee?.estimatedExpectedAmount ? userFee.estimatedExpectedAmount : inputAmount;
 
   return {
     sellToken: _sellToken,
@@ -220,7 +233,9 @@ const getUnshieldData = ({
     disabledForm,
 
     inputAmount,
+    inputOriginalAmount,
     burnOriginalAmount: burnOriginalAmount.toString(),
+    estReceiveAmount,
 
     fee: combineFee,
     inputAddress,

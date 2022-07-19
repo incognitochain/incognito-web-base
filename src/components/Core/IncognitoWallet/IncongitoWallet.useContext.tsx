@@ -12,6 +12,7 @@ interface IncognitoWalletContextType {
     isUnshield,
     isUnified,
     burnFee,
+    extraFee,
     burnFeeToken,
     burnFeeID,
     burnAmount,
@@ -26,6 +27,7 @@ interface IncognitoWalletContextType {
     networkFee: number;
     networkFeeToken: string;
     burnFee: string;
+    extraFee: number;
     burnFeeToken: string;
     sendTokenID: string;
     feeAddress: string;

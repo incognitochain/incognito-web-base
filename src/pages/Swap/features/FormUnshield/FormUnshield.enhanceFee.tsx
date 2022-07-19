@@ -11,19 +11,19 @@ export interface TInner {
 const enhanceFee = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: any) => {
     const dispatch = useAppDispatch();
-    const { isExternalAddress, unshieldAddress, incAddress, inputAmount } = props;
+    const { isExternalAddress, unshieldAddress, incAddress, inputAmount, buyToken } = props;
 
     const onEstimateFee = () => {
       dispatch(actionEstimateFee());
     };
 
-    const debounceEstimateFee = debounce(onEstimateFee, 300);
+    const debounceEstimateFee = React.useMemo(() => debounce(onEstimateFee, 500), []);
 
     React.useEffect(() => {
       if (unshieldAddress && isExternalAddress && incAddress) {
         debounceEstimateFee();
       }
-    }, [unshieldAddress, isExternalAddress, incAddress, inputAmount]);
+    }, [unshieldAddress, isExternalAddress, incAddress, inputAmount, buyToken.tokenID]);
 
     return <WrappedComponent {...{ ...props }} />;
   };
