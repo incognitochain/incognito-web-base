@@ -3,8 +3,8 @@ import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { rpcClient } from 'services';
 import { AppDispatch, AppState } from 'state';
 import { getPrivacyByTokenIdentifySelectors } from 'state/token';
+import convert from 'utils/convert';
 
-import convert from '../../../../utils/convert';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import {
   FormUnshieldActionType,
@@ -86,7 +86,7 @@ export const actionChangeBuyNetwork =
 
 export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {
-    const { inputAmount, inputOriginalAmount, buyToken, incAddress, unshieldAddress, sellToken } = unshieldDataSelector(
+    const { inputAmount, burnOriginalAmount, buyToken, incAddress, unshieldAddress, sellToken } = unshieldDataSelector(
       getState()
     );
     if (!incAddress || !unshieldAddress) return;
@@ -104,7 +104,7 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
     const payload = {
       network,
       incognitoAmount:
-        inputOriginalAmount ||
+        burnOriginalAmount ||
         convert.toOriginalAmount({ humanAmount: '1', round: false, decimals: buyToken.pDecimals }).toString(),
       paymentAddress: unshieldAddress,
       privacyTokenAddress: buyToken.tokenID,

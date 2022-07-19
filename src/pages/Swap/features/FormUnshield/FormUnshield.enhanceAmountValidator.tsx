@@ -25,7 +25,7 @@ const initialState: IState = {
 
 const enhanceAmountValidator = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: IMergeProps) => {
-    const { maxAmountText, sellToken: selectedPrivacy, onChangeField, userAmount } = props;
+    const { maxAmountText, sellToken: selectedPrivacy, onChangeField, userBalance } = props;
     const [state, setState] = React.useState({ ...initialState });
     const { maxAmountValidator, minAmountValidator } = state;
 
@@ -65,7 +65,7 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
     }, [selectedPrivacy.identify, maxAmountText, selectedPrivacy.amount]);
 
     const onClickMax = async () => {
-      onChangeField(maxAmountText || userAmount || '0', FORM_CONFIGS.sellAmount).then();
+      onChangeField(maxAmountText || userBalance || '0', FORM_CONFIGS.sellAmount).then();
     };
 
     const validateAmount: any[] = getAmountValidator();

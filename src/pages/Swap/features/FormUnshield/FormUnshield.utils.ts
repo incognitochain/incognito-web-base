@@ -40,15 +40,15 @@ export interface IUnshieldData {
   isExternalAddress: boolean;
   disabledForm: boolean;
 
-  userAmountNoClip?: string;
-  userAmount?: string;
-  userAmountFormatedText: string;
+  userBalanceNoClip?: string;
+  userBalance?: string;
+  userBalanceFormatedText: string;
 
   minAmountText: string;
   maxAmountText: string;
 
   inputAmount: string;
-  inputOriginalAmount: string;
+  burnOriginalAmount: string;
   inputAddress: string;
 
   fee: IFee;
@@ -70,7 +70,6 @@ const getUnshieldData = ({
   state: AppState;
 }): IUnshieldData => {
   const { sellToken, buyToken, userFee, networkFee, isFetchingFee, networkFeeToken, isUseBurnFeeLevel1 } = unshield;
-  const _networkFee = networkFee;
   const { identify: sellIdentify } = sellToken;
   const { currency: buyCurrency, networkName: buyNetworkName, identify: buyIdentify } = buyToken;
 
@@ -93,26 +92,34 @@ const getUnshieldData = ({
   const isExternalAddress = isEtherAddress(inputAddress);
 
   // amount validator
-  const inputOriginalAmount =
+  const burnOriginalAmount =
     convert.toOriginalAmount({
       decimals: _sellToken.pDecimals,
       humanAmount: new BigNumber(inputAmount || 0).plus(userFee ? userFee.estimateFee || 0 : 0).toString(),
       round: false,
     }) || 0;
-  const userAmountNoClip = _sellToken.formatAmountNoClip;
-  const userAmount = _sellToken.formatAmount;
-  const userAmountFormatedText = `${_sellToken.formatAmount || 0} ${_sellToken.symbol}`;
+
+  const userBalanceNoClip = _sellToken.formatAmountNoClip;
+  const userBalance = _sellToken.formatAmount;
+  const userBalanceFormatedText = `${_sellToken.formatAmount || 0} ${_sellToken.symbol}`;
 
   const incAccount = incognitoWalletAccountSelector(state);
   const nativeToken = getDataByTokenID(PRV.identify);
   const incAddress = incAccount ? incAccount.paymentAddress : '';
 
-  const enoughNetworkFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(_networkFee);
+  // Handle network fee
+  const enoughNetworkFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(networkFee);
+  const networkFeeText = `${
+    convert.toHumanAmountString({
+      decimals: nativeToken.pDecimals,
+      originalAmount: networkFee,
+    }) || 0
+  } ${nativeToken.symbol}`;
+
   let maxAmountText = '';
   let minAmountText = '';
-
   let combineFee: IFee = {
-    networkFee: _networkFee,
+    networkFee,
     networkFeeToken: PRV.id,
     estimatedBurnAmount: 0,
     estimatedExpectedAmount: 0,
@@ -124,31 +131,31 @@ const getUnshieldData = ({
     const burnFee = isUseBurnFeeLevel1 ? fee.level1 : fee.level2;
     burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
     const burnFeeToken = isUseTokenFee ? _sellToken.tokenID : PRV.id;
-
     // if (_sellToken.identify === burnFeeTokenIdentify) {
     //   burnFee = new BigNumber(burnFee || 0).plus(estimateFee || 0).toString();
     // } else {
     //   _networkFee += estimateFee;
     // }
-
     combineFee = {
-      networkFee: _networkFee,
-      networkFeeToken: PRV.id,
+      ...combineFee,
       burnFee,
       burnFeeToken,
+
       feeAddress,
       isUseTokenFee,
+
       id,
+
       estimatedBurnAmount,
       estimatedExpectedAmount,
     };
 
-    const minAmount: number = new BigNumber(_sellToken.identify === networkFeeToken ? 1 + _networkFee : 1)
+    const minAmount: number = new BigNumber(_sellToken.identify === networkFeeToken ? 1 + networkFee : 1)
       .plus(_sellToken.identify === burnFeeTokenIdentify ? burnFee : 0)
       .toNumber();
 
     let maxAmount: number = new BigNumber(_sellToken.amount || 0)
-      .minus(isUseTokenFee ? 0 : _networkFee)
+      .minus(isUseTokenFee ? 0 : networkFee)
       .minus(_sellToken.identify === burnFeeTokenIdentify ? burnFee : 0)
       .minus(estimateFee)
       .toNumber();
@@ -175,18 +182,11 @@ const getUnshieldData = ({
     !valid ||
     submitting ||
     !isExternalAddress ||
-    new BigNumber(inputOriginalAmount).lte(0) ||
+    new BigNumber(burnOriginalAmount).lte(0) ||
     !incAccount ||
-    !_networkFee ||
+    !networkFee ||
     isFetchingFee ||
     !enoughNetworkFee;
-
-  const networkFeeText = `${
-    convert.toHumanAmountString({
-      decimals: nativeToken.pDecimals,
-      originalAmount: _networkFee,
-    }) || 0
-  } ${nativeToken.symbol}`;
 
   const burnFeeToken = getDataByTokenID(burnFeeTokenIdentify);
   let burnFeeText = '';
@@ -206,9 +206,10 @@ const getUnshieldData = ({
     buyCurrency,
     buyNetworkName,
 
-    userAmountNoClip,
-    userAmount,
-    userAmountFormatedText,
+    userBalanceNoClip,
+    userBalance,
+    userBalanceFormatedText,
+
     minAmountText,
     maxAmountText,
 
@@ -219,7 +220,7 @@ const getUnshieldData = ({
     disabledForm,
 
     inputAmount,
-    inputOriginalAmount: inputOriginalAmount.toString(),
+    burnOriginalAmount: burnOriginalAmount.toString(),
 
     fee: combineFee,
     inputAddress,

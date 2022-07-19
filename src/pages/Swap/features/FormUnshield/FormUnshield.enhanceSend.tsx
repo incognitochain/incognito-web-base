@@ -18,7 +18,7 @@ export interface TInner {
 
 const enhanceSend = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: IMergeProps) => {
-    const { disabledForm, buyToken, sellToken, fee, inputOriginalAmount, inputAddress, inputAmount } = props;
+    const { disabledForm, buyToken, sellToken, fee, burnOriginalAmount, inputAddress, inputAmount } = props;
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
     const { setModal, clearAllModal } = useModal();
@@ -47,7 +47,7 @@ const enhanceSend = (WrappedComponent: any) => {
           burnFeeToken,
           burnFeeID: String(id),
 
-          burnAmount: inputOriginalAmount,
+          burnAmount: burnOriginalAmount,
           burnToken: sellToken.tokenID,
           burnAmountText: inputAmount,
 

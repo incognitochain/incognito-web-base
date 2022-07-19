@@ -22,11 +22,11 @@ export interface IUnshield {
   web3Account?: string;
 
   inputAmount: string;
-  inputOriginalAmount: string;
+  burnOriginalAmount: string;
 
-  userAmountNoClip?: string;
-  userAmount?: string;
-  userAmountFormatedText: string;
+  userBalanceNoClip?: string;
+  userBalance?: string;
+  userBalanceFormatedText: string;
   maxAmountText: string;
   minAmountText: string;
 
@@ -54,11 +54,11 @@ export const useUnshield = (): IUnshield => {
     isExternalAddress,
 
     inputAmount,
-    inputOriginalAmount,
+    burnOriginalAmount,
 
-    userAmountNoClip,
-    userAmount,
-    userAmountFormatedText,
+    userBalanceNoClip,
+    userBalance,
+    userBalanceFormatedText,
     minAmountText,
     maxAmountText,
 
@@ -91,11 +91,11 @@ export const useUnshield = (): IUnshield => {
     incAddress,
 
     inputAmount,
-    inputOriginalAmount,
+    burnOriginalAmount,
 
-    userAmountNoClip,
-    userAmount,
-    userAmountFormatedText,
+    userBalanceNoClip,
+    userBalance,
+    userBalanceFormatedText,
     minAmountText,
     maxAmountText,
 

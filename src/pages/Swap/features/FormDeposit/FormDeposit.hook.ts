@@ -177,7 +177,7 @@ export const useDeposit = (): IDeposit => {
     let text = 'Deposit';
     let disabled = false;
     let switchNetwork = false;
-    if (chainId !== sellToken.chainID) {
+    if (!account) {
       text = 'Connect Wallet';
       disabled = true;
     } else if (chainId !== sellToken.chainID) {
@@ -202,7 +202,7 @@ export const useDeposit = (): IDeposit => {
       disabled,
       switchNetwork,
     };
-  }, [isApproving, isApproving, isCheckingApprove, isLoading, disabledForm, sellToken.chainID, chainId]);
+  }, [isApproving, isApproving, isCheckingApprove, isLoading, disabledForm, sellToken.chainID, chainId, account]);
 
   const incAccount = React.useMemo(() => {
     if (!_incAccount) return undefined;
