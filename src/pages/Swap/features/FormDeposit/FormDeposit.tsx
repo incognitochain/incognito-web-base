@@ -3,12 +3,14 @@ import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
 import { PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
+import useSwitchNetwork from 'lib/hooks/useSwitchNetwork';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { Field } from 'redux-form';
+import { useWalletModalToggle } from 'state/application/hooks';
 import styled from 'styled-components/macro';
 
-import useSwitchNetwork from '../../../../lib/hooks/useSwitchNetwork';
 import { Selection } from '../Selection';
 import enhance, { IMergeProps } from './FormDeposit.enhance';
 
@@ -39,8 +41,11 @@ const FormDeposit = (props: IMergeProps) => {
   } = props;
 
   const [onSwitchNetwork] = useSwitchNetwork({ targetChain: sellToken.chainID });
+  const { account } = useActiveWeb3React();
+  const toggleWalletModal = useWalletModalToggle();
 
-  const _handleSwitchNetwork = () => {
+  const _actionMetamask = () => {
+    if (!account) return toggleWalletModal();
     return onSwitchNetwork(false);
   };
 
@@ -94,8 +99,8 @@ const FormDeposit = (props: IMergeProps) => {
           onClickMax={onClickMax}
         />
         <VerticalSpace />
-        {button.switchNetwork ? (
-          <ButtonConfirmed onClick={_handleSwitchNetwork}>{button.text}</ButtonConfirmed>
+        {button.switchNetwork || !account ? (
+          <ButtonConfirmed onClick={_actionMetamask}>{button.text}</ButtonConfirmed>
         ) : (
           <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
         )}
