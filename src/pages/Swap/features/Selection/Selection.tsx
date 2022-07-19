@@ -51,11 +51,11 @@ const MainStyled = styled(Row)`
   .hover-item {
     :hover {
       background-color: ${({ theme }) => theme.bg4};
-      /* padding-left: 6px;
+      padding-left: 6px;
       padding-right: 4px;
       border-radius: 8px;
       transform: scale(1);
-      transition: 0.2s all ease; */
+      transition: 0.2s all ease;
     }
   }
 `;
@@ -101,6 +101,9 @@ const Selection = React.memo((props: ISelection) => {
     });
   };
 
+  const activeNetworkHover = networks && networks.length > 0 ? true : false;
+  const activeTokensHover = tokens && tokens.length > 0 ? true : false;
+
   return (
     <>
       <RowBetween>
@@ -118,7 +121,7 @@ const Selection = React.memo((props: ISelection) => {
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
             Token
           </ThemedText.SmallLabel>
-          <RowBetween className={`selection-item`} onClick={showTokensList}>
+          <RowBetween className={`selection-item ${activeTokensHover ? 'hover-item' : ''} `} onClick={showTokensList}>
             <Row>
               {!!iconUrl && <Image iconUrl={iconUrl} />}
               {!!leftValue && (
@@ -135,7 +138,7 @@ const Selection = React.memo((props: ISelection) => {
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
             Network
           </ThemedText.SmallLabel>
-          <RowBetween className="selection-item" onClick={showNetworkList}>
+          <RowBetween className={`selection-item ${activeNetworkHover ? 'hover-item' : ''}`} onClick={showNetworkList}>
             <Row>
               {!!currency && <Image iconUrl={ROOT_NETWORK_IMG[currency]} />}
               {!!rightValue && (
