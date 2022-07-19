@@ -12,8 +12,7 @@ const Styled = styled(Row)`
   .tab-title {
     cursor: pointer;
     :hover {
-      transform: scale(1.05); /* you need a scale here to allow it to transition in both directions */
-      transition: 0.1s all ease;
+      opacity: 0.8;
     }
   }
   .tab-title ~ .tab-title {
