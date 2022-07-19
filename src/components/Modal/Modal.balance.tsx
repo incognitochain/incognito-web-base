@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import Column from 'components/Core/Column';
+import { TAB_LIST, Tabs } from 'components/Core/Tabs';
 import styled from 'styled-components/macro';
 
-import Column from '../Core/Column';
+import { useAppSelector } from '../../state/hooks';
+import { selectedTabIndexSelector } from '../Core/Tabs/Tabs.selectors';
 import FollowTokensList from './balance/FollowTokens/FollowTokens.list';
 import PaymentAddressBar from './balance/PaymentAddressBar';
-import TabBar, { TabType } from './balance/TabBar';
 
 const Styled = styled(Column)`
   padding-top: 10px;
@@ -27,13 +28,17 @@ const Styled = styled(Column)`
 `;
 
 const BalanceModal = (props: any) => {
-  const [activeTab, setActiveTab] = useState<TabType>('Profile');
+  const selectedTabIndex = useAppSelector(selectedTabIndexSelector)(TAB_LIST.INCOGNITO_ACCOUNT.rootTab);
+  const renderUI = () => {
+    const tabs: any = [<FollowTokensList key="follow-tokens" />, null, null];
+    return tabs[selectedTabIndex];
+  };
   return (
     <Styled>
-      <TabBar activeTab={activeTab} onTabClick={(tabActive) => setActiveTab(tabActive)} />
-      <div className="lineBreak"></div>
+      <Tabs rootTab={TAB_LIST.INCOGNITO_ACCOUNT.rootTab} tabNames={TAB_LIST.INCOGNITO_ACCOUNT.tabNames} />
+      <div className="lineBreak" />
       <PaymentAddressBar />
-      {activeTab === 'Profile' ? <FollowTokensList /> : null}
+      {renderUI()}
     </Styled>
   );
 };

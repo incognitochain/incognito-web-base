@@ -37,7 +37,7 @@ const Tabs = React.memo((props: ITabsProps) => {
 
   const forceChangeTab = () => {
     if (selectedTab) return;
-    _onChangeTab({ tabName: tabNames[1] });
+    _onChangeTab({ tabName: tabNames[0] });
   };
 
   React.useEffect(() => forceChangeTab(), []);
