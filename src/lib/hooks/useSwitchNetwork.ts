@@ -28,9 +28,7 @@ const useSwitchNetwork = ({ targetChain }: { targetChain: SupportedChainId | und
       const wallet = getWalletForConnector(connector);
       try {
         dispatch(updateWalletError({ wallet, error: undefined }));
-        console.log('SANG TEST::: HAHA111 ', targetChain);
         await switchChain(connector, targetChain);
-        console.log('SANG TEST::: HAHA222 ', targetChain);
         // if (!skipToggle) {
         //   toggle();
         // }

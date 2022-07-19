@@ -5,6 +5,7 @@ import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { useMemo } from 'react';
 import { useAppSelector } from 'state/hooks';
 
+import { incognitoWalletAccountSelector } from '../../../../state/incognitoWallet';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import { IFee } from './FormUnshield.utils';
 
@@ -37,7 +38,10 @@ export interface IUnshield {
 
   inputAddress: string;
 
-  buttonText: string;
+  button: {
+    text: string;
+    isConnected: boolean;
+  };
   networkFeeText: string;
   burnFeeText: string;
 
@@ -75,8 +79,15 @@ export const useUnshield = (): IUnshield => {
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
+  const incAccount = useAppSelector(incognitoWalletAccountSelector);
 
-  const buttonText = useMemo(() => (isFetching ? 'Estimating fee...' : 'Swap'), [isFetching]);
+  const button = useMemo(
+    () => ({
+      text: !incAccount ? 'Connect Wallet' : isFetching ? 'Estimating fee...' : 'Swap',
+      isConnected: !incAccount,
+    }),
+    [isFetching, incAccount]
+  );
 
   return {
     sellToken,
@@ -107,7 +118,7 @@ export const useUnshield = (): IUnshield => {
 
     inputAddress,
 
-    buttonText,
+    button,
     networkFeeText,
     burnFeeText,
 

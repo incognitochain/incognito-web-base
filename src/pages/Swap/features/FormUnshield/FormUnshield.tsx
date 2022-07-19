@@ -9,6 +9,7 @@ import React from 'react';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
+import { useIncognitoWallet } from '../../../../components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { EstReceive } from '../EstReceive';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
 
@@ -24,7 +25,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     buyCurrency,
     buyNetworkName,
     userBalanceFormatedText,
-    buttonText,
+    button,
     inputAmount,
     networkFeeText,
     burnFeeText,
@@ -37,6 +38,10 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     onClickMax,
     onSend,
   } = props;
+
+  const { requestIncognitoAccount } = useIncognitoWallet();
+
+  const _buttonAction = () => requestIncognitoAccount();
 
   return (
     <Styled>
@@ -96,7 +101,11 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           burnFeeText={burnFeeText}
         />
         <VerticalSpace />
-        <ButtonConfirmed type="submit">{buttonText}</ButtonConfirmed>
+        {button.isConnected ? (
+          <ButtonConfirmed onClick={_buttonAction}>{button.text}</ButtonConfirmed>
+        ) : (
+          <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
+        )}
       </form>
     </Styled>
   );
