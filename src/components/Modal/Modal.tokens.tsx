@@ -26,10 +26,21 @@ const Item = styled(Row)`
     /* padding: 12px 0 12px 16px;
     transform: scale(1);
     transition: 0.1s all ease; */
+    .network {
+      background-color: ${({ theme }) => theme.bg1};
+    }
   }
   .logo {
     width: 24px;
     height: 24px;
+  }
+  .network {
+    color: ${({ theme }) => theme.bg4};
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-left: 6px;
+    background-color: ${({ theme }) => theme.bg4};
+    border-radius: 4px;
   }
 `;
 
@@ -77,9 +88,16 @@ const TokenModal = (props: IProps & any) => {
             {token.symbol}
           </ThemedText.RegularLabel>
           {showNetwork && (
-            <ThemedText.SmallLabel color="primary8" style={{ marginLeft: 12 }}>
-              {token.networkName}
-            </ThemedText.SmallLabel>
+            <Row style={{ marginTop: 2 }}>
+              <ThemedText.SmallLabel color="primary8" style={{ marginLeft: 12 }}>
+                {token.shortName}
+              </ThemedText.SmallLabel>
+              <div className="network">
+                <ThemedText.SmallLabel color="primary8" style={{ padding: 2 }}>
+                  {token.network}
+                </ThemedText.SmallLabel>
+              </div>
+            </Row>
           )}
         </Column>
       </Item>
