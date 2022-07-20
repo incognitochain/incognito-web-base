@@ -1,5 +1,5 @@
 import { Currency } from '@uniswap/sdk-core';
-import EthereumLogo from 'assets/images/ethereum-logo.png';
+import EthereumLogo from 'assets/images/ethereum-logo.svg';
 import MaticLogo from 'assets/svg/matic-token-icon.svg';
 import { SupportedChainId } from 'constants/chains';
 import useHttpLocations from 'hooks/useHttpLocations';

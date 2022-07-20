@@ -1,12 +1,10 @@
 import Modal from 'components/Core/Modal';
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
-import useTheme from 'hooks/useTheme';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
 import { AccountInfo } from 'state/incognitoWallet/incognitoWallet.reducer';
-import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
 import { shortenIncognitoAddress } from 'utils';
 
@@ -44,8 +42,6 @@ const Wrapper = styled.div`
 
 const IncognitoWallet = () => {
   const dispatch = useDispatch();
-  const [darkMode] = useDarkModeManager();
-  const { white, black } = useTheme();
   const [walletState, setWalletState] = useState('Loading...');
   const [showModal, setShowModal] = useState<any>(false);
   const { setModal } = useModal();

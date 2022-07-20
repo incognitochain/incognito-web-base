@@ -1,4 +1,4 @@
-import imgLogo from 'assets/images/inc_logo.png';
+import imgLogo from 'assets/images/inc-circle-logo.png';
 import React, { ImgHTMLAttributes } from 'react';
 import styled from 'styled-components/macro';
 

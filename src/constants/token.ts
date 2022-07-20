@@ -1,6 +1,6 @@
-import ethereumLogoUrl from 'assets/images/ethereum-logo.png';
-import ftmLogoUrl from 'assets/images/ftm_logo.png';
-import incognitoLogoUrl from 'assets/images/inc_logo.png';
+import ethereumLogoUrl from 'assets/images/ethereum-logo.svg';
+import ftmLogoUrl from 'assets/images/ftm_logo.svg';
+import incognitoLogoUrl from 'assets/images/inc_logo.svg';
 import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
 import { isMainnet } from 'config';
