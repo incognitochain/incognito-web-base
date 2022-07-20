@@ -1,4 +1,5 @@
 import { ButtonConfirmed } from 'components/Core/Button';
+import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
@@ -9,7 +10,6 @@ import React from 'react';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 
-import { useIncognitoWallet } from '../../../../components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { EstReceive } from '../EstReceive';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
 

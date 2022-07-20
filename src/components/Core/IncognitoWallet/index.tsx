@@ -56,10 +56,9 @@ const IncognitoWallet = () => {
     // Listener Events
     if (incognito) {
       incognito.on('stateChanged', async (result: any) => {
-        console.log('result: ', result);
         if (result) {
           if (result.state === 'unlocked') {
-            dispatch(incognitoWalletSetAccount(result.accounts));
+            requestIncognitoAccount().then();
           }
           if (result.state === 'locked') {
             setWalletState(CONNECT_WALLET);
@@ -83,7 +82,6 @@ const IncognitoWallet = () => {
 
   const buttonClickAction = async () => {
     if (isIncognitoInstalled()) {
-      console.log('12345');
       requestIncognitoAccount().then((accounts) => {
         if (!accounts) return;
         setModal({
@@ -100,7 +98,6 @@ const IncognitoWallet = () => {
     }
   };
 
-  // const lisenerEvents = () => {};
   useEffect(() => {
     const getInfo = async () => {
       if (isIncognitoInstalled()) {
