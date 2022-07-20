@@ -5,13 +5,14 @@ import debounce from 'lodash/debounce';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import React from 'react';
 
-const initValue = { balance: '0', decimals: 18, isLoading: false };
+const initValue = { balance: '0', decimals: 18, isLoading: false, gas: 0 };
 
 export interface IActiveBalance {
   balance: string;
   decimals: number;
   isLoading: boolean;
   loadBalance: () => void;
+  gas?: number;
 }
 
 const useActiveBalance = ({ token }: { token: SelectedPrivacy }): IActiveBalance => {
@@ -19,6 +20,7 @@ const useActiveBalance = ({ token }: { token: SelectedPrivacy }): IActiveBalance
     balance: string;
     decimals: number;
     isLoading: boolean;
+    gas?: number;
   }>(initValue);
   const { account, chainId: web3ChainID } = useActiveWeb3React();
   const chainId = token.chainID;
@@ -32,9 +34,11 @@ const useActiveBalance = ({ token }: { token: SelectedPrivacy }): IActiveBalance
       const isNativeToken = token.isMainEVMToken;
       let decimals = token.decimals || 18;
       let balance = '0';
+      let gas = 0;
       if (isNativeToken) {
         const web3 = getWeb3({ chainId });
-        balance = await web3.eth.getBalance(account);
+        [balance, gas] = await Promise.all([web3.eth.getBalance(account), web3.eth.estimateGas({})]);
+        gas = (gas || 0) * 3;
       } else {
         decimals = (await contract?.decimals()) || 18;
         const tokenBalance = await contract?.balanceOf(account);
@@ -42,7 +46,7 @@ const useActiveBalance = ({ token }: { token: SelectedPrivacy }): IActiveBalance
           balance = tokenBalance.toString();
         }
       }
-      setState({ isLoading: false, balance, decimals });
+      setState({ isLoading: false, balance, decimals, gas });
     } catch (e) {
       console.log('LOAD BALANCE ERROR: ', e);
       setState(initValue);
@@ -61,6 +65,7 @@ const useActiveBalance = ({ token }: { token: SelectedPrivacy }): IActiveBalance
     decimals: state.decimals,
     isLoading: state.isLoading,
     loadBalance: debounceLoadBalance,
+    gas: state.gas,
   };
 };
 

@@ -74,7 +74,7 @@ export const useDeposit = (): IDeposit => {
     token: sellToken,
     amount: inputOriginalAmount,
   });
-  const { balance, decimals, isLoading, loadBalance: onLoadBalance } = useActiveBalance({ token: sellToken });
+  const { balance, decimals, isLoading, loadBalance: onLoadBalance, gas } = useActiveBalance({ token: sellToken });
   const _incAccount = useSelector(incognitoWalletAccountSelector);
 
   const handleSubmitHash = async ({ hash }: { hash: string }) => {
@@ -158,20 +158,23 @@ export const useDeposit = (): IDeposit => {
 
     const maxAmount = convert.toHumanAmount({
       decimals: sellToken.pDecimals,
-      originalAmount: new BigNumber(Math.floor(maxAmountOriginal || 0)).toNumber(),
+      originalAmount: new BigNumber(
+        Math.floor(sellToken.isMainEVMToken ? new BigNumber(maxAmountOriginal || 0).minus(gas || 0).toNumber() : 0)
+      ).toNumber(),
     });
 
     const maxAmountFormatedText = format.amountVer2({
       decimals: sellToken.pDecimals,
       originalAmount: new BigNumber(Math.floor(maxAmountOriginal || 0)).toNumber(),
     });
+
     return {
       maxAmountText: maxAmount.toString(),
       maxAmount: balance,
       inputOriginalAmount,
       maxAmountFormatedText: `${maxAmountFormatedText} ${sellToken.symbol}`,
     };
-  }, [balance, decimals, inputOriginalAmount, sellToken.amount, sellToken.identify]);
+  }, [balance, decimals, inputOriginalAmount, sellToken.amount, sellToken.identify, gas]);
 
   const button = React.useMemo(() => {
     let text = 'Deposit';
