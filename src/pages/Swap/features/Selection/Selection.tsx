@@ -101,8 +101,8 @@ const Selection = React.memo((props: ISelection) => {
     });
   };
 
-  const activeNetworkHover = networks && networks.length > 0 ? true : false;
-  const activeTokensHover = tokens && tokens.length > 0 ? true : false;
+  const activeNetworkHover = !!(networks && networks.length > 0);
+  const activeTokensHover = !!(tokens && tokens.length > 0);
 
   return (
     <>

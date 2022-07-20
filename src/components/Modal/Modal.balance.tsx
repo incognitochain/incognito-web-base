@@ -1,11 +1,10 @@
 import Column from 'components/Core/Column';
 import { TAB_LIST, Tabs } from 'components/Core/Tabs';
+import { selectedTabIndexSelector } from 'components/Core/Tabs/Tabs.selectors';
+import { SubmitForm } from 'pages/Swap/features/SubmitForm';
+import { useAppSelector } from 'state/hooks';
 import styled from 'styled-components/macro';
 
-import { SubmitTxDeposit } from '../../pages/Swap/features/SubmitTxDeposit';
-import { SubmitTxUnshield } from '../../pages/Swap/features/SubmitTxUnshield';
-import { useAppSelector } from '../../state/hooks';
-import { selectedTabIndexSelector } from '../Core/Tabs/Tabs.selectors';
 import FollowTokensList from './balance/FollowTokens/FollowTokens.list';
 
 const Styled = styled(Column)`
@@ -36,11 +35,7 @@ const { INCOGNITO_ACCOUNT } = TAB_LIST;
 const BalanceModal = (props: any) => {
   const selectedTabIndex = useAppSelector(selectedTabIndexSelector)(INCOGNITO_ACCOUNT.rootTab);
   const renderUI = () => {
-    const tabs: any = [
-      <FollowTokensList key="follow-tokens" />,
-      <SubmitTxDeposit key="submit-tx-deposit" />,
-      <SubmitTxUnshield key="submit-tx-unshield" />,
-    ];
+    const tabs: any = [<FollowTokensList key="follow-tokens" />, <SubmitForm key="submit-form" />];
     return tabs[selectedTabIndex];
   };
   return (

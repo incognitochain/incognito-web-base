@@ -117,11 +117,11 @@ export function ModalProvider(props: any) {
 
   const appendModal = (modal: SetModalProps) => {
     if (!modal.data) return;
-    setModal((value) => {
-      if (value && !isArray(value)) {
-        return [value, modal];
+    setModal((prvModals) => {
+      if (prvModals && !isArray(prvModals)) {
+        return [prvModals, modal];
       }
-      return (value || []).concat([modal]);
+      return (prvModals || []).concat([modal]);
     });
   };
 
@@ -130,8 +130,9 @@ export function ModalProvider(props: any) {
   };
 
   const onCloseModal = () =>
-    setModal((value: any) => {
-      return value.pop() || [];
+    setModal((prvArr: any) => {
+      const newArr = (prvArr || []).slice(0, -1);
+      return newArr;
     });
 
   return (
