@@ -3,6 +3,7 @@ import { compose } from 'redux';
 import { reduxForm } from 'redux-form';
 
 import { FORM_CONFIGS } from './SubmitTxDeposit.constant';
+import enhanceHashValidation from './SubmitTxDeposit.enhanceHashValidator';
 
 const enhance = (WrappedComponent: any) => {
   const SubmitTxDeposit = (props: any) => {
@@ -17,5 +18,6 @@ export default compose(
     form: FORM_CONFIGS.formName,
     destroyOnUnmount: false,
   }),
+  enhanceHashValidation,
   enhance
 ) as any;

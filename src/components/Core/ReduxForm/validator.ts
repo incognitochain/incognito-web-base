@@ -89,6 +89,18 @@ const combinedAccountName = [
   regexp(/\w+$/i, 'Please use a valid account name (Ex: "Cat, Account-1,..").'),
 ];
 
+const etherHash = (message?: string) => (value: string) => {
+  if (value && value?.length < 15) {
+    return 'Invalid Hash';
+  }
+  if (!/^0x([A-Fa-f0-9]{64})$/.test(value)) {
+    return message || 'Please enter valid transaction hash';
+  }
+  return undefined;
+};
+
+const combinedOutchainHash = [required, etherHash()];
+
 const address = () => {
   return 'Invalid address';
 };
@@ -116,6 +128,7 @@ const validator = {
   combinedIncognitoAddress,
   combinedUnknownAddress,
   combinedEtherAddress,
+  combinedOutchainHash,
   email,
 };
 

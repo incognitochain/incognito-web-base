@@ -3,6 +3,9 @@ import { compose } from 'redux';
 import { reduxForm } from 'redux-form';
 
 import { FORM_CONFIGS } from './SubmitTxUnshield.constant';
+import enhanceAddressValidation from './SubmitTxUnshield.enhanceAddressValidator';
+import enhanceChangeField from './SubmitTxUnshield.enhanceChangeField';
+import enhanceHashValidation from './SubmitTxUnshield.enhanceHashValidator';
 
 const enhance = (WrappedComponent: any) => {
   const SubmitTxUnshield = (props: any) => {
@@ -17,5 +20,8 @@ export default compose(
     form: FORM_CONFIGS.formName,
     destroyOnUnmount: false,
   }),
+  enhanceChangeField,
+  enhanceAddressValidation,
+  enhanceHashValidation,
   enhance
 ) as any;

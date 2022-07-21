@@ -6,7 +6,7 @@ import createAxiosInstance from 'services/axios';
 interface ISummitEtherHash {
   hash: string;
   networkID: number;
-  tokenID: string;
+  tokenID?: string;
 }
 
 interface IUserFeePayload {
@@ -45,11 +45,17 @@ class RpcClient {
   }
 
   submitDepositTxHash({ hash, networkID, tokenID }: ISummitEtherHash) {
-    return this.http.post('submitshieldtx', {
+    let payload: any = {
       Txhash: hash,
       Network: networkID,
-      TokenID: tokenID,
-    });
+    };
+    if (!!tokenID) {
+      payload = {
+        ...payload,
+        TokenID: tokenID,
+      };
+    }
+    return this.http.post('submitshieldtx', payload);
   }
 
   async estimateFee({
@@ -92,6 +98,14 @@ class RpcClient {
       estimatedBurnAmount,
       estimatedExpectedAmount,
     };
+  }
+
+  submitUnshieldTx(payload: { network: string; txID: string; paymentAddr: string }) {
+    return this.http.post('submitunshieldtx', {
+      Network: payload.network,
+      IncognitoTx: payload.txID,
+      WalletAddress: payload.paymentAddr,
+    });
   }
 }
 

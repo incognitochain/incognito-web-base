@@ -12,6 +12,7 @@ import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
+import { submitDepositTx } from '../../../../services/rpcClient';
 import { ButtonSubmit } from '../SubmitTxUnshield/SubmitTxUnshield';
 import { FORM_CONFIGS } from './SubmitTxDeposit.constant';
 import enhance from './SubmitTxDeposit.enhance';
@@ -24,30 +25,35 @@ const NetworkSelector = styled(RowBetween)`
   cursor: pointer;
 `;
 
-const getNetworkByCurrency = ({ currency }: { currency: number }): string | undefined => {
+const getNetworkByCurrency = ({ currency }: { currency: number }): any => {
   let networkName = undefined;
+  let networkID = undefined;
   switch (currency) {
     case PRIVATE_TOKEN_CURRENCY_TYPE.ETH:
     case PRIVATE_TOKEN_CURRENCY_TYPE.ERC20:
       networkName = 'eth';
+      networkID = 1;
       break;
     case PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB:
     case PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20:
       networkName = 'bsc';
+      networkID = 2;
       break;
     case PRIVATE_TOKEN_CURRENCY_TYPE.MATIC:
     case PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20:
       networkName = 'plg';
+      networkID = 3;
       break;
     case PRIVATE_TOKEN_CURRENCY_TYPE.FTM:
     case PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20:
       networkName = 'ftm';
+      networkID = 4;
       break;
   }
-  return networkName;
+  return { networkName, networkID };
 };
 
-const DEFAULT_NETWORK: ITokenNetwork[] = [
+export const DEFAULT_NETWORK: ITokenNetwork[] = [
   {
     identify: MAIN_NETWORK_NAME.ETHEREUM,
     networkName: MAIN_NETWORK_NAME.ETHEREUM,
@@ -73,12 +79,13 @@ const DEFAULT_NETWORK: ITokenNetwork[] = [
 let dataObj = {
   currency: PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
   name: MAIN_NETWORK_NAME.ETHEREUM,
-  network: getNetworkByCurrency({ currency: PRIVATE_TOKEN_CURRENCY_TYPE.ETH }),
+  networkID: getNetworkByCurrency({ currency: PRIVATE_TOKEN_CURRENCY_TYPE.ETH }).networkID,
 };
 
 const SubmitTxDeposit = React.memo((props: any) => {
-  const { handleSubmit } = props;
+  const { handleSubmit, validateTxhash, inputTxHash } = props;
   const { setModal } = useModal();
+  const [{ isLoading, isSuccess }, setState] = React.useState({ isLoading: false, isSuccess: false });
   const [network] = React.useState(dataObj);
 
   const handleSelectNetwork = React.useCallback(
@@ -86,7 +93,7 @@ const SubmitTxDeposit = React.memo((props: any) => {
       dataObj = {
         currency: _network.currency,
         name: _network.networkName,
-        network: '',
+        networkID: getNetworkByCurrency({ currency: _network.currency }).networkID,
       };
     },
     [network]
@@ -102,17 +109,31 @@ const SubmitTxDeposit = React.memo((props: any) => {
     });
   };
 
+  const handleSubmitTxHash = async () => {
+    try {
+      setState({ isLoading: true, isSuccess: false });
+      await submitDepositTx({
+        hash: inputTxHash,
+        networkID: network.networkID,
+      });
+      setState({ isLoading: false, isSuccess: true });
+    } catch (error) {
+      setState({ isLoading: false, isSuccess: false });
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit(() => console.log('SNAG'))}>
+    <form onSubmit={handleSubmit(handleSubmitTxHash)}>
       <VerticalSpace />
       <Field
         component={InputField}
-        name={FORM_CONFIGS.formName}
+        name={FORM_CONFIGS.txHash}
         inputType={INPUT_FIELD.string}
         leftTitle="TxID"
         componentProps={{
           placeholder: 'Enter Your External TxID',
         }}
+        validate={validateTxhash}
       />
       <VerticalSpace />
       <ThemedText.SmallLabel fontWeight={400} marginBottom="4px" color="primary8">
@@ -128,7 +149,7 @@ const SubmitTxDeposit = React.memo((props: any) => {
         <ChevronDown size={24} />
       </NetworkSelector>
       <VerticalSpace />
-      <ButtonSubmit type="submit">Submit</ButtonSubmit>
+      <ButtonSubmit type="submit">{isSuccess ? 'Successfully' : isLoading ? 'Submitting...' : 'Submit'}</ButtonSubmit>
     </form>
   );
 });
