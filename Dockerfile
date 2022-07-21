@@ -6,7 +6,6 @@ WORKDIR /app
 COPY package.json ./
 COPY yarn.lock* ./
 COPY . ./
-COPY .env.${BUILD_ENV} .env
 RUN mkdir -p src/locales
 RUN yarn install
 RUN yarn i18n:compile
