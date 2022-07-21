@@ -1,5 +1,6 @@
 import useScrollPosition from '@react-hook/window-scroll';
 import { ReactComponent as Logo } from 'assets/svg/logo.svg';
+import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Web3Status from 'components/Core/Web3Status';
 import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
@@ -91,43 +92,40 @@ export default function Header() {
   const { account } = useActiveWeb3React();
   const [darkMode] = useDarkModeManager();
   const { white, black } = useTheme();
-
+  const isInternetAlready = useInternetConnnection();
   const scrollY = useScrollPosition();
 
-  if (isMobile)
+  const renderContent = () => {
+    const hrefLink = !isInternetAlready || !isMobile ? '.' : INCOGNITO_LANDING_PAGE;
     return (
-      <HeaderFrame showBackground={scrollY > 45}>
-        <Title href={INCOGNITO_LANDING_PAGE}>
+      <>
+        <Title href={hrefLink}>
           <IncognitoIcon>
             <Logo fill={darkMode ? white : black} width="142" height="100%" title="logo" />
           </IncognitoIcon>
         </Title>
-      </HeaderFrame>
-    );
-  return (
-    <HeaderFrame showBackground={scrollY > 45}>
-      <Title href=".">
-        <IncognitoIcon>
-          <Logo fill={darkMode ? white : black} width="142" height="100%" title="logo" />
-        </IncognitoIcon>
-      </Title>
-      <HeaderControls>
-        <HeaderElement>
-          <NetworkSelector />
-        </HeaderElement>
-        <HeaderElement>
-          <AccountElement active={!!account}>
-            <Web3Status />
-          </AccountElement>
-        </HeaderElement>
-        {/*<HeaderElement>*/}
-        {/*  <Menu />*/}
-        {/*</HeaderElement>*/}
+        {isMobile || !isInternetAlready ? null : (
+          <HeaderControls>
+            <HeaderElement>
+              <NetworkSelector />
+            </HeaderElement>
+            <HeaderElement>
+              <AccountElement active={!!account}>
+                <Web3Status />
+              </AccountElement>
+            </HeaderElement>
+            {/*<HeaderElement>*/}
+            {/*  <Menu />*/}
+            {/*</HeaderElement>*/}
 
-        <HeaderElement>
-          <IncognitoWallet />
-        </HeaderElement>
-      </HeaderControls>
-    </HeaderFrame>
-  );
+            <HeaderElement>
+              <IncognitoWallet />
+            </HeaderElement>
+          </HeaderControls>
+        )}
+      </>
+    );
+  };
+
+  return <HeaderFrame showBackground={scrollY > 45}>{renderContent()}</HeaderFrame>;
 }
