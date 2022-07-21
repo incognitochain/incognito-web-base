@@ -126,9 +126,12 @@ const IncognitoWallet = () => {
   }, []);
 
   useEffect(() => {
-    setInterval(() => {
+    setInterval(async () => {
       if (isIncognitoInstalled()) {
-        requestIncognitoAccount().then();
+        const state = await getWalletState();
+        if (state === 'unlocked') {
+          requestIncognitoAccount().then();
+        }
       }
     }, 5000);
   }, []);
