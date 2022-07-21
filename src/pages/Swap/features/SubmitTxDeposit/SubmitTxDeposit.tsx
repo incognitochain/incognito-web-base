@@ -1,3 +1,4 @@
+import { ButtonConfirmed } from 'components/Core/Button';
 import { Image } from 'components/Core/Image';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
@@ -9,13 +10,20 @@ import { ITokenNetwork } from 'models/model/pTokenModel';
 import React from 'react';
 import { ChevronDown } from 'react-feather';
 import { Field } from 'redux-form';
+import { submitDepositTx } from 'services/rpcClient';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
-import { submitDepositTx } from '../../../../services/rpcClient';
-import { ButtonSubmit } from '../SubmitTxUnshield/SubmitTxUnshield';
 import { FORM_CONFIGS } from './SubmitTxDeposit.constant';
 import enhance from './SubmitTxDeposit.enhance';
+
+export const ButtonSubmit = styled(ButtonConfirmed)`
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  left: 24px;
+  width: auto;
+`;
 
 const NetworkSelector = styled(RowBetween)`
   background: #252525;
