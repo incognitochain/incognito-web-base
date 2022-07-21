@@ -9,9 +9,14 @@ const Styled = styled(Column)`
   background-color: ${({ theme }) => theme.bg4};
   padding: 15px 16px;
   border-radius: 8px;
-  cursor: pointer;
   .header-right {
     align-items: center;
+  }
+  a {
+    color: ${({ theme }) => theme.primary8};
+    :hover {
+      opacity: 0.9;
+    }
   }
 `;
 
@@ -32,7 +37,7 @@ const EstReceive = React.memo(({ amountText, symbol, networkFee, burnFeeText }: 
   const [isOpen, setOpen] = React.useState(true);
   return (
     <Styled>
-      <RowBetween onClick={() => setOpen((isOpen) => !isOpen)}>
+      <RowBetween style={{ cursor: 'pointer' }} onClick={() => setOpen((isOpen) => !isOpen)}>
         <ThemedText.SmallLabel fontWeight={400}>You will receive</ThemedText.SmallLabel>
         <RowFlat className="header-right">
           <ThemedText.RegularLabel>{`${amountText || 0} ${symbol}`}</ThemedText.RegularLabel>
@@ -51,6 +56,14 @@ const EstReceive = React.memo(({ amountText, symbol, networkFee, burnFeeText }: 
               <ThemedText.Small fontWeight={400}>{burnFeeText}</ThemedText.Small>
             </RowBetween>
           )}
+          <ThemedText.Small color="primary8" fontWeight={400} marginTop="12px">
+            {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
+            some from the `}
+            <a href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
+              faucet
+            </a>
+            .
+          </ThemedText.Small>
         </Column>
       )}
     </Styled>
