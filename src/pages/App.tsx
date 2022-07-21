@@ -1,6 +1,7 @@
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Header from 'components/Core/Header';
 import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
 import InternetDisconnected from 'pages/InternetDisconnected/InternetDisconnected';
@@ -51,6 +52,8 @@ const Marginer = styled.div`
 
 const App = () => {
   const history = useHistory();
+  const isInternetAlready = useInternetConnnection();
+
   useEffect(() => {
     const unlisten = history.listen(() => {
       window.scrollTo(0, 0);
@@ -59,6 +62,31 @@ const App = () => {
       unlisten();
     };
   }, [history]);
+
+  useEffect(() => {
+    if (!isInternetAlready) {
+      history.replace('/internet-disconnected');
+    } else history.push('/swap');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInternetAlready]);
+
+  const renderContent = () => {
+    return (
+      <Switch>
+        {isMobile ? (
+          <Route component={MobileNotSuported} />
+        ) : (
+          <>
+            <Route exact path="/swap/:outputCurrency" component={RedirectToSwap} />
+            <Route exact path="/swap" component={Swap} />
+            <Route exact path="/page-not-found" component={PageNotFound} />
+            <Route exact path="/internet-disconnected" component={InternetDisconnected} />
+            <Route exact path="/" component={RedirectPathToSwapOnly} />
+          </>
+        )}
+      </Switch>
+    );
+  };
 
   return (
     <ErrorBoundary>
@@ -70,21 +98,7 @@ const App = () => {
           </HeaderWrapper>
           <BodyWrapper>
             <Popups />
-            <Suspense fallback={<Loader />}>
-              <Switch>
-                {isMobile ? (
-                  <Route component={MobileNotSuported} />
-                ) : (
-                  <>
-                    <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
-                    <Route exact strict path="/swap" component={Swap} />
-                    {isMobile ? <Route component={MobileNotSuported} /> : <Route component={RedirectPathToSwapOnly} />}
-                    <Route exact strict path="/page-not-found" component={PageNotFound} />
-                    <Route exact strict path="/internet-disconnected" component={InternetDisconnected} />
-                  </>
-                )}
-              </Switch>
-            </Suspense>
+            <Suspense fallback={<Loader />}>{renderContent()}</Suspense>
             <Marginer />
           </BodyWrapper>
         </AppWrapper>
