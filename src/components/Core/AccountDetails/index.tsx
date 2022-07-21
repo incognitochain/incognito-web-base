@@ -9,7 +9,6 @@ import { SUPPORTED_WALLETS } from 'constants/wallet';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import React from 'react';
 import { ExternalLink as LinkIcon } from 'react-feather';
-import { useAppDispatch } from 'state/hooks';
 import styled from 'styled-components/macro';
 import { ExternalLink, ThemedText } from 'theme';
 import { shortenAddress } from 'utils';
@@ -200,7 +199,6 @@ interface AccountDetailsProps {
 
 export default function AccountDetails({ toggleWalletModal, ENSName, openOptions }: AccountDetailsProps) {
   const { chainId, account, connector } = useActiveWeb3React();
-  const dispatch = useAppDispatch();
 
   function formatConnectorName() {
     const { ethereum } = window;

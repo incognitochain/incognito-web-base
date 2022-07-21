@@ -140,8 +140,8 @@ const ROOT_NETWORK_IMG: any = {
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.MATIC]: polygonMaticLogo,
   [PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20]: polygonMaticLogo,
-  [SupportedChainId.POLYGON]: bnbChainLogo,
-  [SupportedChainId.POLYGON_MUMBAI]: bnbChainLogo,
+  [SupportedChainId.POLYGON]: polygonMaticLogo,
+  [SupportedChainId.POLYGON_MUMBAI]: polygonMaticLogo,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.FTM]: ftmLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20]: ftmLogoUrl,
