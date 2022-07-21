@@ -18,11 +18,7 @@ import { FORM_CONFIGS } from './SubmitTxDeposit.constant';
 import enhance from './SubmitTxDeposit.enhance';
 
 export const ButtonSubmit = styled(ButtonConfirmed)`
-  position: absolute;
-  bottom: 20px;
-  right: 24px;
-  left: 24px;
-  width: auto;
+  margin-top: 60px;
 `;
 
 const NetworkSelector = styled(RowBetween)`

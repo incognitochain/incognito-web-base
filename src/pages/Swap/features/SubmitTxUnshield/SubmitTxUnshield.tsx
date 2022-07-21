@@ -6,17 +6,13 @@ import React from 'react';
 import { Field } from 'redux-form';
 import { rpcClient } from 'services';
 import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 
-import { ThemedText } from '../../../../theme';
 import { FORM_CONFIGS } from './SubmitTxUnshield.constant';
 import enhance from './SubmitTxUnshield.enhance';
 
 export const BottomView = styled.div`
-  position: absolute;
-  bottom: 20px;
-  right: 24px;
-  left: 24px;
-  width: auto;
+  margin-top: 60px;
 `;
 
 const SubmitTxUnshield = React.memo((props: any) => {

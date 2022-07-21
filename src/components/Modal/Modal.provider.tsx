@@ -1,98 +1,162 @@
-import { DialogOverlay } from '@reach/dialog';
-import useOutsideRef from 'hooks/useDetectClickOutside';
-import { isArray } from 'lodash';
-import isEmpty from 'lodash/isEmpty';
+import { DialogContent, DialogOverlay } from '@reach/dialog';
+import { RowBetween } from 'components/Core/Row';
+import isArray from 'lodash/isArray';
 import last from 'lodash/last';
-import AppBody from 'pages/AppBody';
+import { transparentize } from 'polished';
 import React, { useContext } from 'react';
-import { animated } from 'react-spring';
-import styled from 'styled-components/macro';
-import { CloseIcon, ThemedText } from 'theme';
-
-import { RowBetween } from '../Core/Row';
+import { animated, useSpring, useTransition } from 'react-spring';
+import { useGesture } from 'react-use-gesture';
+import styled, { css } from 'styled-components/macro';
+import { ThemedText } from 'theme';
+import { CloseIcon } from 'theme/components';
+import { isMobile } from 'utils/userAgent';
 
 const AnimatedDialogOverlay = animated(DialogOverlay);
-const StyledDialogOverlay = styled(AnimatedDialogOverlay)``;
-
-const Styled = styled(StyledDialogOverlay)<{ isTransparent: boolean }>`
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .break-line {
-  }
-  .modal-content-wrapper {
-    overflow: hidden;
-    position: absolute;
-  }
-  .close-icon {
+const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
+  &[data-reach-dialog-overlay] {
     z-index: 2;
-    margin-left: auto;
-    font-size: 14px;
-  }
-  .modal-loading-tx {
-    position: relative;
-    height: 100%;
-  }
-  .header {
-    margin-top: 0;
-  }
-  .modal-data {
-    flex: 1;
-  }
-  .wrap-content {
-    padding-top: 24px;
-  }
-  .label {
-    margin-bottom: 8px;
-    text-align: center;
-  }
-  .min-height {
-    min-height: 90vh;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: ${({ theme }) => theme.modalBG};
   }
 `;
 
-export interface IProps {
+const AnimatedDialogContent = animated(DialogContent);
+
+const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...rest }) => (
+  <AnimatedDialogContent {...rest} />
+)).attrs({
+  'aria-label': 'dialog',
+})`
+  overflow-y: auto;
+
+  &[data-reach-dialog-content] {
+    margin: 16px;
+    background-color: ${({ theme }) => theme.bg3};
+    border: 1px solid ${({ theme }) => theme.border1};
+    box-shadow: 0 4px 8px 0 ${({ theme }) => transparentize(0.95, theme.shadow1)};
+    width: 50vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 24px;
+
+    align-self: ${({ mobile }) => (mobile ? 'flex-end' : 'center')};
+
+    max-width: 420px;
+    ${({ maxHeight }) =>
+      maxHeight &&
+      css`
+        max-height: ${maxHeight}vh;
+      `}
+    ${({ minHeight }) =>
+      minHeight &&
+      css`
+        min-height: ${minHeight}vh;
+      `}
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    ${({ theme }) => theme.mediaWidth.upToMedium`
+      width: 65vw;
+      margin: 0;
+    `}
+    ${({ theme, mobile }) => theme.mediaWidth.upToSmall`
+      width:  85vw;
+      ${
+        mobile &&
+        css`
+          width: 100vw;
+          border-radius: 20px;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        `
+      }
+    `}
+  }
+`;
+
+interface ModalProps {
+  isOpen: boolean;
+  closeModal: () => void;
+  minHeight?: number | false;
+  maxHeight?: number;
+  initialFocusRef?: React.RefObject<any>;
+  children?: React.ReactNode;
   modalState: SetModalProps[];
-  closeModal: any;
 }
 
-const ModalContent = () => {
-  return null;
-};
+export function Modal({
+  isOpen,
+  minHeight = false,
+  maxHeight = 90,
+  initialFocusRef,
+  closeModal,
+  modalState,
+}: ModalProps) {
+  const fadeTransition = useTransition(isOpen, null, {
+    config: { duration: 200 },
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+  });
 
-const Modal = (props: IProps) => {
-  const { modalState, closeModal } = props;
   const lastModal = last(modalState);
-  const ref: any = React.useRef({});
   const { data: modalData, title, isTransparent, closable, isSearchTokenModal } = lastModal || {};
-  useOutsideRef(ref, closable ? closeModal : undefined);
-  if (isEmpty(lastModal)) {
-    return null;
-  }
-  const renderModalContent = () => {
-    return (
-      <AppBody className={`modal-content-wrapper ${isSearchTokenModal ? 'min-height' : ''}`} ref={ref}>
-        <RowBetween className="header">
-          <ThemedText.AvgMediumLabel color="primary5">{title}</ThemedText.AvgMediumLabel>
-          <CloseIcon onClick={() => closeModal && closeModal()} />
-        </RowBetween>
-        {modalData}
-      </AppBody>
-    );
-  };
+
+  const [{ y }, set] = useSpring(() => ({ y: 0, config: { mass: 1, tension: 210, friction: 20 } }));
+  const bind = useGesture({
+    onDrag: (state) => {
+      set({
+        y: state.down ? state.movement[1] : 0,
+      });
+      if (state.movement[1] > 300 || (state.velocity > 3 && state.direction[1] > 0)) {
+        // onDismiss();
+      }
+    },
+  });
 
   return (
-    <Styled isTransparent={!!isTransparent} className="modal-wrapper">
-      {renderModalContent()}
-    </Styled>
+    <>
+      {fadeTransition.map(
+        ({ item, key, props }) =>
+          item && (
+            <StyledDialogOverlay
+              key={key}
+              style={props}
+              onDismiss={() => closeModal && closeModal()}
+              initialFocusRef={initialFocusRef}
+              unstable_lockFocusAcrossFrames={false}
+            >
+              <StyledDialogContent
+                {...(isMobile
+                  ? {
+                      ...bind(),
+                      style: { transform: y.interpolate((y) => `translateY(${(y as number) > 0 ? y : 0}px)`) },
+                    }
+                  : {})}
+                aria-label="dialog content"
+                minHeight={minHeight}
+                maxHeight={maxHeight}
+                mobile={isMobile}
+              >
+                {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
+                {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
+                <RowBetween className="header">
+                  <ThemedText.AvgMediumLabel color="primary5">{title}</ThemedText.AvgMediumLabel>
+                  <CloseIcon onClick={() => closeModal && closeModal()} />
+                </RowBetween>
+                {modalData}
+              </StyledDialogContent>
+            </StyledDialogOverlay>
+          )
+      )}
+    </>
   );
-};
+}
 
 interface SetModalProps {
   data: React.ReactNode;
@@ -147,7 +211,7 @@ export function ModalProvider(props: any) {
       }}
     >
       <>{children}</>
-      {modalProps && <Modal modalState={modalProps} closeModal={onCloseModal} />}
+      {modalProps && <Modal isOpen={modalProps.length > 0} modalState={modalProps} closeModal={onCloseModal} />}
     </ModalContext.Provider>
   );
 }
