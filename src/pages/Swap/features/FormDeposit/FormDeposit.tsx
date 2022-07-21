@@ -63,6 +63,7 @@ const FormDeposit = (props: IMergeProps) => {
           onSelectToken={onSelectToken}
           onSelectNetwork={onSelectNetwork}
           currency={sellToken.currencyType}
+          showNetwork={true}
         />
         <VerticalSpace />
         <Selection
