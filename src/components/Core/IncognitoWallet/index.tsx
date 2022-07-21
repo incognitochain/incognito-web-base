@@ -19,15 +19,18 @@ declare global {
   }
 }
 
-const CONNECT_WALLET = 'Incognito Wallet';
+const CONNECT_WALLET = 'Connect Incognito';
 
 const Text = styled.p`
   flex: 1;
+  font-size: 14px;
   width: max-content;
   white-space: nowrap;
+  font-weight: 500;
+  line-height: 140%;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isConnected: boolean }>`
   display: flex;
   position: relative;
   flex-direction: row;
@@ -35,9 +38,17 @@ const Wrapper = styled.div`
   padding: 8px 8px;
   gap: 8px;
 
-  background-color: ${({ theme }) => theme.primary2};
+  /* background-color: ${({ theme }) => theme.primary2}; */
+  background-color: ${({ theme, isConnected }) => (isConnected ? theme.bg1 : theme.primary2)};
+  color: ${({ theme, isConnected }) => (isConnected ? theme.primary5 : theme.primary5)};
   border-radius: 8px;
   max-height: 40px;
+
+  :hover {
+    cursor: pointer;
+    opacity: 0.8;
+    background-color: ${({ theme, isConnected }) => (isConnected ? theme.bg1 : theme.primary1)};
+  }
 `;
 
 const IncognitoWallet = () => {
@@ -114,11 +125,10 @@ const IncognitoWallet = () => {
     setTimeout(() => getInfo(), 1000);
   }, []);
 
-  const bgColor = walletState === CONNECT_WALLET ? `#1A73E8` : `#303030`;
-
+  const isConnected = walletState === CONNECT_WALLET ? false : true;
   return (
     <>
-      <Wrapper className="button-hover" onClick={buttonClickAction} style={{ backgroundColor: bgColor }}>
+      <Wrapper isConnected={isConnected} onClick={buttonClickAction}>
         <Image iconUrl={ROOT_NETWORK_IMG[PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]} />
         <Text>{walletState}</Text>
       </Wrapper>

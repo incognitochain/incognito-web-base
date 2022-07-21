@@ -111,6 +111,7 @@ function colors(darkMode: boolean): Colors {
     bg4: '#404040',
     bg5: '#F2F4F5',
     bg6: darkMode ? '#1A2028' : '#6C7284',
+    bg7: '#EBF2FF',
 
     // content
     content1: '#000000',
