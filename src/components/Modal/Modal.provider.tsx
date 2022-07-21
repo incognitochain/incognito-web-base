@@ -62,11 +62,15 @@ export interface IProps {
   closeModal: any;
 }
 
+const ModalContent = () => {
+  return null;
+};
+
 const Modal = (props: IProps) => {
   const { modalState, closeModal } = props;
   const lastModal = last(modalState);
   const ref: any = React.useRef({});
-  const { data: modalData, title, rightHeader, isTransparent, closable, isSearchTokenModal } = lastModal || {};
+  const { data: modalData, title, isTransparent, closable, isSearchTokenModal } = lastModal || {};
   useOutsideRef(ref, closable ? closeModal : undefined);
   if (isEmpty(lastModal)) {
     return null;
@@ -131,8 +135,7 @@ export function ModalProvider(props: any) {
 
   const onCloseModal = () =>
     setModal((prvArr: any) => {
-      const newArr = (prvArr || []).slice(0, -1);
-      return newArr;
+      return (prvArr || []).slice(0, -1);
     });
 
   return (

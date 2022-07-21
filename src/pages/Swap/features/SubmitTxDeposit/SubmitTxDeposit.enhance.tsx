@@ -15,6 +15,7 @@ const enhance = (WrappedComponent: any) => {
 export default compose(
   reduxForm({
     form: FORM_CONFIGS.formName,
+    destroyOnUnmount: false,
   }),
   enhance
 ) as any;
