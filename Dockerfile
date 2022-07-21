@@ -1,6 +1,6 @@
 # build environment
 FROM node:16 as build
-ARG BUILD_ENV=staging
+ARG BUILD_ENV=production
 
 WORKDIR /app
 COPY package.json ./
