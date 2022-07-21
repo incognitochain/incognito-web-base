@@ -158,3 +158,5 @@ export const PINNED_PAIRS: { readonly [chainId: number]: [Token, Token][] } = {
     [DAI, USDT],
   ],
 };
+
+export const INCOGNITO_LANDING_PAGE = 'https://incognito.org/';

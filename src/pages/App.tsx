@@ -4,6 +4,7 @@ import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWa
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
 import InternetDisconnected from 'pages/InternetDisconnected/InternetDisconnected';
+import MobileNotSuported from 'pages/MobileNotSuported/MobileNotSuported';
 import PageNotFound from 'pages/PageNotFound/PageNotFound';
 import Swap, { RedirectPathToSwapOnly, RedirectToSwap } from 'pages/Swap';
 import { Suspense } from 'react';
@@ -11,6 +12,7 @@ import { useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { DarkModeQueryParamReader } from 'theme';
+import { isMobile } from 'utils/userAgent';
 
 import enhance from './App.enhance';
 
@@ -70,11 +72,17 @@ const App = () => {
             <Popups />
             <Suspense fallback={<Loader />}>
               <Switch>
-                <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
-                <Route exact strict path="/swap" component={Swap} />
-                <Route component={RedirectPathToSwapOnly} />
-                <Route exact strict path="/page-not-found" component={PageNotFound} />
-                <Route exact strict path="/internet-disconnected" component={InternetDisconnected} />
+                {isMobile ? (
+                  <Route component={MobileNotSuported} />
+                ) : (
+                  <>
+                    <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
+                    <Route exact strict path="/swap" component={Swap} />
+                    {isMobile ? <Route component={MobileNotSuported} /> : <Route component={RedirectPathToSwapOnly} />}
+                    <Route exact strict path="/page-not-found" component={PageNotFound} />
+                    <Route exact strict path="/internet-disconnected" component={InternetDisconnected} />
+                  </>
+                )}
               </Switch>
             </Suspense>
             <Marginer />
