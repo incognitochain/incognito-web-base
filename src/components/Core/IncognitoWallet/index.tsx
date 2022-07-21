@@ -125,7 +125,16 @@ const IncognitoWallet = () => {
     setTimeout(() => getInfo(), 1000);
   }, []);
 
-  const isConnected = walletState === CONNECT_WALLET ? false : true;
+  useEffect(() => {
+    setInterval(() => {
+      if (isIncognitoInstalled()) {
+        requestIncognitoAccount().then();
+      }
+    }, 5000);
+  }, []);
+
+  const isConnected = walletState !== CONNECT_WALLET;
+
   return (
     <>
       <Wrapper isConnected={isConnected} onClick={buttonClickAction}>
