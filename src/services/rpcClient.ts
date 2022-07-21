@@ -100,9 +100,8 @@ class RpcClient {
     };
   }
 
-  submitUnshieldTx(payload: { network: string; txID: string; paymentAddr: string }) {
+  submitUnshieldTx(payload: { txID: string; paymentAddr: string }) {
     return this.http.post('submitunshieldtx', {
-      Network: payload.network,
       IncognitoTx: payload.txID,
       WalletAddress: payload.paymentAddr,
     });

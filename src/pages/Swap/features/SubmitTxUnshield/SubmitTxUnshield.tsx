@@ -1,18 +1,15 @@
 import { ButtonConfirmed } from 'components/Core/Button';
-import { Image } from 'components/Core/Image';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
-import Row, { RowBetween } from 'components/Core/Row';
+import { RowBetween } from 'components/Core/Row';
 import { VerticalSpace } from 'components/Core/Space';
 import { NetworkModal, useModal } from 'components/Modal';
-import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from 'constants/token';
+import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import React from 'react';
-import { ChevronDown } from 'react-feather';
 import { Field } from 'redux-form';
 import { rpcClient } from 'services';
 import styled from 'styled-components/macro';
-import { ThemedText } from 'theme';
 
 import { DEFAULT_NETWORK } from '../SubmitTxDeposit/SubmitTxDeposit';
 import { FORM_CONFIGS } from './SubmitTxUnshield.constant';
@@ -106,7 +103,6 @@ const SubmitTxUnshield = React.memo((props: any) => {
       await rpcClient.submitUnshieldTx({
         paymentAddr: inputAddress,
         txID: inputHash,
-        network: network.network,
       });
       setState({ isLoading: false, isSuccess: true });
     } catch (error) {
@@ -138,19 +134,19 @@ const SubmitTxUnshield = React.memo((props: any) => {
         }}
         validate={validateAddress}
       />
-      <VerticalSpace />
-      <ThemedText.SmallLabel fontWeight={400} marginBottom="4px" color="primary8">
-        Network
-      </ThemedText.SmallLabel>
-      <NetworkSelector className="border-hover" onClick={showNetworkList}>
-        <Row>
-          {!!network.currency && <Image iconUrl={ROOT_NETWORK_IMG[network.currency]} />}
-          <ThemedText.RegularLabel color="primary5" style={{ marginLeft: '7px' }}>
-            {network.name}
-          </ThemedText.RegularLabel>
-        </Row>
-        <ChevronDown size={24} />
-      </NetworkSelector>
+      {/*<VerticalSpace />*/}
+      {/*<ThemedText.SmallLabel fontWeight={400} marginBottom="4px" color="primary8">*/}
+      {/*  Network*/}
+      {/*</ThemedText.SmallLabel>*/}
+      {/*<NetworkSelector className="border-hover" onClick={showNetworkList}>*/}
+      {/*  <Row>*/}
+      {/*    {!!network.currency && <Image iconUrl={ROOT_NETWORK_IMG[network.currency]} />}*/}
+      {/*    <ThemedText.RegularLabel color="primary5" style={{ marginLeft: '7px' }}>*/}
+      {/*      {network.name}*/}
+      {/*    </ThemedText.RegularLabel>*/}
+      {/*  </Row>*/}
+      {/*  <ChevronDown size={24} />*/}
+      {/*</NetworkSelector>*/}
       <VerticalSpace />
       <ButtonSubmit type="submit">{isSuccess ? 'Successfully' : isLoading ? 'Submitting...' : 'Submit'}</ButtonSubmit>
     </form>
