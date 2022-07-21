@@ -1,10 +1,12 @@
 import useScrollPosition from '@react-hook/window-scroll';
 import { ReactComponent as Logo } from 'assets/svg/logo.svg';
 import Web3Status from 'components/Core/Web3Status';
+import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useTheme from 'hooks/useTheme';
 import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
+import { isMobile } from 'utils/userAgent';
 
 import IncognitoWallet from '../IncognitoWallet';
 import NetworkSelector from './NetworkSelector';
@@ -92,6 +94,16 @@ export default function Header() {
 
   const scrollY = useScrollPosition();
 
+  if (isMobile)
+    return (
+      <HeaderFrame showBackground={scrollY > 45}>
+        <Title href={INCOGNITO_LANDING_PAGE}>
+          <IncognitoIcon>
+            <Logo fill={darkMode ? white : black} width="142" height="100%" title="logo" />
+          </IncognitoIcon>
+        </Title>
+      </HeaderFrame>
+    );
   return (
     <HeaderFrame showBackground={scrollY > 45}>
       <Title href=".">
