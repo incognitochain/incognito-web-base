@@ -72,8 +72,7 @@ class PToken {
   isCentralized: boolean;
 
   hasChild: boolean;
-
-  // chainID: number;
+  isUnified: boolean;
 
   getIconUrl({ url }: { url: string }) {
     if (this.tokenID === PRVIDSTR) {
@@ -179,6 +178,8 @@ class PToken {
     const listChild = isEmpty(this.listUnifiedToken) ? this.listChildToken : this.listUnifiedToken;
     this.supportedNetwork = [];
     this.hasChild = !isEmpty(listChild);
+    this.isUnified = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN;
+
     if (!isEmpty(listChild)) {
       const temp = listChild.map((token) => {
         const { currencyType, networkName, chainID, identify } = token;
