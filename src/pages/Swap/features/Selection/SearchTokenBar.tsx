@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { ReactComponent as SearchIcon } from 'assets/svg/search-icon.svg';
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 const TextInputStyled = styled.input`
@@ -38,19 +37,14 @@ const TextInputStyled = styled.input`
 `;
 
 const MainStyled = styled.div`
-  width: 100%;
   margin-top: 15px;
-  margin-bottom: 0px;
-
-  .text-input-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    .search-icon {
-      position: absolute;
-      right: 40px;
-    }
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .search-icon {
+    position: absolute;
+    right: 40px;
   }
 `;
 
@@ -66,16 +60,14 @@ const SearchTokenBar = (props: SearchTokenBarProps) => {
   };
   return (
     <MainStyled>
-      <div className="text-input-container">
-        <TextInputStyled
-          placeholder={'Search token'}
-          type={'text'}
-          onChange={onChange}
-          value={keySearch}
-          autoFocus={false}
-        />
-        <SearchIcon className="search-icon" />
-      </div>
+      <TextInputStyled
+        placeholder={'Search token'}
+        type={'text'}
+        onChange={onChange}
+        value={keySearch}
+        autoFocus={false}
+      />
+      {/*<SearchIcon className="search-icon" />*/}
     </MainStyled>
   );
 };
