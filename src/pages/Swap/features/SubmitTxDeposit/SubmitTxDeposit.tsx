@@ -1,3 +1,4 @@
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { Image } from 'components/Core/Image';
 import { InputField } from 'components/Core/ReduxForm';
@@ -5,6 +6,7 @@ import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import Row, { RowBetween } from 'components/Core/Row';
 import { VerticalSpace } from 'components/Core/Space';
 import { NetworkModal, useModal } from 'components/Modal';
+import { SITE_KEY } from 'config';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from 'constants/token';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import React from 'react';
@@ -17,7 +19,7 @@ import { ThemedText } from 'theme';
 import { FORM_CONFIGS } from './SubmitTxDeposit.constant';
 import enhance from './SubmitTxDeposit.enhance';
 
-export const ButtonSubmit = styled(ButtonConfirmed)`
+export const BottomView = styled.div`
   margin-top: 60px;
 `;
 
@@ -89,8 +91,10 @@ let dataObj = {
 const SubmitTxDeposit = React.memo((props: any) => {
   const { handleSubmit, validateTxhash, inputTxHash } = props;
   const { setModal } = useModal();
-  const [{ isLoading, isSuccess }, setState] = React.useState({ isLoading: false, isSuccess: false });
+  const [{ isLoading, isSuccess, error }, setState] = React.useState({ isLoading: false, isSuccess: false, error: '' });
+  const [{ captchaToken }, setCaptcha] = React.useState({ captchaToken: '' });
   const [network] = React.useState(dataObj);
+  const captchaRef = React.useRef<any>(null);
 
   const handleSelectNetwork = React.useCallback(
     ({ network: _network }: { network: ITokenNetwork }) => {
@@ -115,15 +119,29 @@ const SubmitTxDeposit = React.memo((props: any) => {
 
   const handleSubmitTxHash = async () => {
     try {
-      setState({ isLoading: true, isSuccess: false });
+      setState({ isLoading: true, isSuccess: false, error: '' });
       await submitDepositTx({
         hash: inputTxHash,
         networkID: network.networkID,
+        captcha: captchaToken,
       });
-      setState({ isLoading: false, isSuccess: true });
+      setState({ isLoading: false, isSuccess: true, error: '' });
     } catch (error) {
-      setState({ isLoading: false, isSuccess: false });
+      setState({ isLoading: false, isSuccess: false, error: error && error.message ? error.message : error });
+    } finally {
+      resetCaptcha();
+      setCaptcha({ captchaToken: '' });
     }
+  };
+
+  const verifyCallback = (token: string) => {
+    if (!token) return;
+    setCaptcha({ captchaToken: token });
+  };
+
+  const resetCaptcha = () => {
+    if (!captchaRef || !captchaRef.current || !captchaRef.current.execute()) return;
+    captchaRef.current.resetCaptcha();
   };
 
   return (
@@ -153,7 +171,24 @@ const SubmitTxDeposit = React.memo((props: any) => {
         <ChevronDown size={24} />
       </NetworkSelector>
       <VerticalSpace />
-      <ButtonSubmit type="submit">{isSuccess ? 'Successfully' : isLoading ? 'Submitting...' : 'Submit'}</ButtonSubmit>
+      <div
+        style={{
+          paddingTop: 30,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <HCaptcha sitekey={SITE_KEY} onVerify={verifyCallback} ref={captchaRef} />
+      </div>
+      <BottomView>
+        <ThemedText.Error marginBottom="4px" error className={`error`}>
+          {error}
+        </ThemedText.Error>
+        <ButtonConfirmed disabled={!captchaToken} type="submit">
+          {isSuccess ? 'Successfully' : isLoading ? 'Submitting...' : 'Submit'}
+        </ButtonConfirmed>
+      </BottomView>
     </form>
   );
 });

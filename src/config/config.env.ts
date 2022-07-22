@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 interface IENVS {
   REACT_APP_ENV: string;
   REACT_APP_API_SERVICE: string;
+  REACT_APP_SITE_KEY: string;
 }
 
 const defaultEnvs = {
@@ -36,5 +37,7 @@ export const getEnvs = () => {
 export const ENVS: IENVS = getEnvs();
 
 export const isMainnet: boolean = ENVS.REACT_APP_ENV === 'production';
+
+export const SITE_KEY: string = ENVS.REACT_APP_SITE_KEY;
 
 export const API_SERVICE: string = ENVS.REACT_APP_API_SERVICE;

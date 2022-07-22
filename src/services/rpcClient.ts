@@ -6,7 +6,7 @@ import createAxiosInstance from 'services/axios';
 interface ISummitEtherHash {
   hash: string;
   networkID: number;
-  tokenID?: string;
+  captcha: string;
 }
 
 interface IUserFeePayload {
@@ -44,18 +44,12 @@ class RpcClient {
     return this.http.get('tokenlist');
   }
 
-  submitDepositTxHash({ hash, networkID, tokenID }: ISummitEtherHash) {
-    let payload: any = {
+  submitDepositTxHash({ hash, networkID, captcha }: ISummitEtherHash) {
+    return this.http.post('submitshieldtx', {
       Txhash: hash,
       Network: networkID,
-    };
-    if (!!tokenID) {
-      payload = {
-        ...payload,
-        TokenID: tokenID,
-      };
-    }
-    return this.http.post('submitshieldtx', payload);
+      Captcha: captcha,
+    });
   }
 
   async estimateFee({
@@ -116,11 +110,11 @@ const getTokenListNoCache = async (): Promise<PTokenModel[]> => {
   return tokens.filter(({ tokenID }) => !!tokenID);
 };
 
-const submitDepositTx = async ({ hash, networkID, tokenID }: ISummitEtherHash): Promise<any> => {
+const submitDepositTx = async ({ hash, networkID, captcha }: ISummitEtherHash): Promise<any> => {
   return rpcClient.submitDepositTxHash({
     hash,
     networkID,
-    tokenID,
+    captcha,
   });
 };
 

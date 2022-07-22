@@ -13,7 +13,6 @@ import { useAppSelector } from 'state/hooks';
 import { AccountInfo, incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import convert from 'utils/convert';
 
-import { submitDepositTx } from '../../../../services/rpcClient';
 import format from '../../../../utils/format';
 import { depositDataSelector } from './FormDeposit.selectors';
 
@@ -79,11 +78,11 @@ export const useDeposit = (): IDeposit => {
 
   const handleSubmitHash = async ({ hash }: { hash: string }) => {
     try {
-      await submitDepositTx({
-        hash,
-        tokenID: sellTokenParent.tokenID,
-        networkID: sellToken.networkID,
-      });
+      // await submitDepositTx({
+      //   hash,
+      //   tokenID: sellTokenParent.tokenID,
+      //   networkID: sellToken.networkID,
+      // });
     } catch (error) {
       console.log('SUBMIT TRANSACTION ERROR: ', error);
     }
