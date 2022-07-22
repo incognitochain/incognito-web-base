@@ -34,14 +34,14 @@ const enhanceSend = (WrappedComponent: any) => {
         estimatedBurnAmount,
         estimatedExpectedAmount,
       } = fee;
-      if (sellToken.hasChild && (!estimatedBurnAmount || !estimatedExpectedAmount)) return;
+      if (sellToken.isUnified && (!estimatedBurnAmount || !estimatedExpectedAmount)) return;
       try {
         const payload: any = {
           networkFee,
           networkFeeToken,
 
           isUnshield: true,
-          isUnified: sellToken.hasChild,
+          isUnified: sellToken.isUnified,
 
           burnFee,
           burnFeeToken,

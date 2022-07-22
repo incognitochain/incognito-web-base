@@ -71,7 +71,7 @@ const getDepositData = ({
     if (!isExist) {
       const defaultToken =
         groupNetwork[networkName] && groupNetwork[networkName].find(({ networkName }) => !!networkName);
-      if (defaultToken) {
+      if (defaultToken && networkName !== MAIN_NETWORK_NAME.INCOGNITO) {
         _sellNetworkList.push({
           identify: defaultToken.identify,
           chainID: defaultToken.chainID,
