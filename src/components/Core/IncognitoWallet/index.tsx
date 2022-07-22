@@ -2,8 +2,8 @@ import Modal from 'components/Core/Modal';
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
 import { memo, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
+import { useDispatch, useSelector } from 'react-redux';
+import { incognitoWalletSelector, incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
 import { AccountInfo } from 'state/incognitoWallet/incognitoWallet.reducer';
 import styled from 'styled-components/macro';
 import { shortenIncognitoAddress } from 'utils';
@@ -11,7 +11,7 @@ import { shortenIncognitoAddress } from 'utils';
 import { PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from '../../../constants';
 import { Image } from '../Image';
 import AccountInfoList from './AccountInfoList';
-import { useIncognitoWallet } from './IncongitoWallet.useContext';
+import { getIncognitoInject, useIncognitoWallet } from './IncongitoWallet.useContext';
 
 declare global {
   interface Window {
@@ -57,9 +57,10 @@ const IncognitoWallet = () => {
   const [showModal, setShowModal] = useState<any>(false);
   const { setModal } = useModal();
   const { isIncognitoInstalled, requestIncognitoAccount, getWalletState } = useIncognitoWallet();
+  const incognitoWallet = useSelector(incognitoWalletSelector);
 
   const listenerDataChange = () => {
-    const incognito = window.incognito;
+    const incognito = getIncognitoInject();
     // Listener Events
     if (incognito) {
       incognito.on('stateChanged', async (result: any) => {
@@ -88,18 +89,26 @@ const IncognitoWallet = () => {
   };
 
   const buttonClickAction = async () => {
+    const incognito = getIncognitoInject();
     if (isIncognitoInstalled()) {
-      requestIncognitoAccount().then((accounts) => {
-        if (!accounts) return;
-        setModal({
-          closable: true,
-          data: <BalanceModal />,
-          isTransparent: false,
-          rightHeader: undefined,
-          title: 'Account',
-          isSearchTokenModal: true,
+      if (incognitoWallet.walletState === 'unlocked') {
+        requestIncognitoAccount().then((accounts) => {
+          if (!accounts) return;
+          setModal({
+            closable: true,
+            data: <BalanceModal />,
+            isTransparent: false,
+            rightHeader: undefined,
+            title: 'Account',
+            isSearchTokenModal: true,
+          });
         });
-      });
+      } else {
+        incognito.request({
+          method: 'wallet_showPopup',
+          params: {},
+        });
+      }
     } else {
       alert('Please install Incognito Extension!');
     }
@@ -109,7 +118,7 @@ const IncognitoWallet = () => {
     const getInfo = async () => {
       if (isIncognitoInstalled()) {
         listenerDataChange();
-        const incognito = window.incognito;
+        const incognito = getIncognitoInject();
         const state = await getWalletState();
         if (state === 'unlocked') {
           const data = await incognito.request({ method: 'wallet_getPaymentAddress', params: {} });

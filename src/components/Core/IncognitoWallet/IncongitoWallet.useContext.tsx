@@ -1,6 +1,13 @@
 import React, { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'state/hooks';
-import { AccountInfo, incognitoWalletSetAccount, WalletState } from 'state/incognitoWallet';
+import {
+  AccountInfo,
+  incognitoWalletSelector,
+  incognitoWalletSetAccount,
+  incognitoWalletSetState,
+  WalletState,
+} from 'state/incognitoWallet';
 
 interface IncognitoWalletContextType {
   isIncognitoInstalled: () => boolean;
@@ -43,7 +50,7 @@ interface IncognitoWalletContextType {
     estimatedExpectedAmount: number;
   }) => any;
 }
-
+export const getIncognitoInject = () => window.incognito;
 export const IncognitoWalletContext = React.createContext<IncognitoWalletContextType>({
   isIncognitoInstalled: () => false,
   getWalletState: async () => undefined,
@@ -54,8 +61,7 @@ export const IncognitoWalletContext = React.createContext<IncognitoWalletContext
 const IncognitoWalletProvider = (props: any) => {
   const dispatch = useAppDispatch();
   const children = React.useMemo(() => props.children, []);
-
-  const getIncognitoInject = () => window.incognito;
+  useSelector(incognitoWalletSelector);
 
   const isIncognitoInstalled = (): boolean => {
     return typeof window.incognito !== 'undefined';
@@ -70,6 +76,7 @@ const IncognitoWalletProvider = (props: any) => {
         method: 'wallet_getState',
         params: {},
       });
+      await dispatch(incognitoWalletSetState(result.state));
       state = result.state;
     } catch (e) {
       console.log('REQUEST GET WALLET STATE ERROR', e);
@@ -92,11 +99,6 @@ const IncognitoWalletProvider = (props: any) => {
           incognitoAccounts = result.accounts;
           dispatch(incognitoWalletSetAccount(incognitoAccounts));
         }
-      } else {
-        incognito.request({
-          method: 'wallet_showPopup',
-          params: {},
-        });
       }
     } catch (e) {
       console.log('REQUEST INCOGNITO ACCOUNT', e);
