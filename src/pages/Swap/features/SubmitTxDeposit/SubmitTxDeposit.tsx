@@ -140,7 +140,7 @@ const SubmitTxDeposit = React.memo((props: any) => {
   };
 
   const resetCaptcha = () => {
-    if (!captchaRef || !captchaRef.current || !captchaRef.current.execute()) return;
+    if (!captchaRef || !captchaRef.current || !captchaRef.current.resetCaptcha) return;
     captchaRef.current.resetCaptcha();
   };
 
