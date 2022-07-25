@@ -127,7 +127,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.BSC_TESTNET]: {
     networkType: NetworkType.L1,
     docs: 'https://incognito.org/',
-    explorer: 'https://etherscan.io/',
+    explorer: 'https://testnet.bscscan.com/',
     infoLink: 'https://incognito.org/',
     label: 'BSC Chain Testnet',
     logoUrl: bnbChainLogo,
