@@ -1,7 +1,8 @@
 import { useFuse } from 'hooks/useFuse';
 import PToken from 'models/model/pTokenModel';
 import SearchTokenBar from 'pages/Swap/features/Selection/SearchTokenBar';
-import React, { useCallback } from 'react';
+import React from 'react';
+import { FixedSizeList as List } from 'react-window';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
@@ -10,11 +11,14 @@ import { Image } from '../Core/Image';
 import Row from '../Core/Row';
 import { useModal } from './Modal.provider';
 
-const Styled = styled(Column)`
-  padding-top: 10px;
-  width: 100%;
-  overflow-y: auto;
-  max-height: 70vh;
+interface IProps {
+  tokens: PToken[];
+  onSelect: ({ token }: { token: PToken }) => void;
+  showNetwork: boolean;
+}
+
+const Styled = styled.div`
+  margin-top: 12px;
 `;
 
 const Item = styled(Row)`
@@ -23,17 +27,16 @@ const Item = styled(Row)`
   cursor: pointer;
   :hover {
     background-color: ${({ theme }) => theme.bg4};
-    /* padding: 12px 0 12px 16px;
-    transform: scale(1);
-    transition: 0.1s all ease; */
     .network {
       background-color: ${({ theme }) => theme.bg1};
     }
   }
+
   .logo {
     width: 24px;
     height: 24px;
   }
+
   .network {
     color: ${({ theme }) => theme.bg4};
     padding-left: 4px;
@@ -41,6 +44,11 @@ const Item = styled(Row)`
     margin-left: 6px;
     background-color: ${({ theme }) => theme.bg4};
     border-radius: 4px;
+  }
+  .extra-info {
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
   }
 `;
 
@@ -50,7 +58,7 @@ interface IProps {
   showNetwork: boolean;
 }
 
-const TokenModal = (props: IProps & any) => {
+const TokenModal = React.memo((props: IProps & any) => {
   const { tokens, onSelect, showNetwork } = props;
   const { closeModal } = useModal();
   const [tokensShow = [], onSearchTokens] = useFuse(tokens, {
@@ -73,10 +81,16 @@ const TokenModal = (props: IProps & any) => {
     }
   };
 
-  const renderItem = useCallback((token: PToken) => {
+  const Row = (props: any) => {
+    const { style, index } = props;
+    if (typeof index !== 'number') return null;
+    // @ts-ignore
+    const token = tokensShow[index];
+    if (!token) return null;
     return (
       <Item
         key={token.tokenID}
+        style={style}
         onClick={() => {
           closeModal();
           onSelect({ token });
@@ -88,7 +102,7 @@ const TokenModal = (props: IProps & any) => {
             {token.symbol}
           </ThemedText.RegularLabel>
           {showNetwork && (
-            <Row style={{ marginTop: 2 }}>
+            <div className="extra-info">
               <ThemedText.SmallLabel color="primary8" style={{ marginLeft: 12 }}>
                 {token.shortName}
               </ThemedText.SmallLabel>
@@ -97,20 +111,31 @@ const TokenModal = (props: IProps & any) => {
                   {token.network}
                 </ThemedText.SmallLabel>
               </div>
-            </Row>
+            </div>
           )}
         </Column>
       </Item>
     );
-  }, []);
+  };
 
   return (
     <>
       <SearchTokenBar keySearchChange={keySearchChange} />
-      {Array.isArray(tokensShow) && <Styled>{tokensShow.map(renderItem)}</Styled>}
+      <Styled>
+        <List
+          overscanCount={6}
+          height={500}
+          itemCount={tokensShow.length}
+          itemData={tokensShow}
+          itemSize={69}
+          width="100%"
+        >
+          {Row}
+        </List>
+      </Styled>
     </>
   );
-};
+});
 
 TokenModal.displayName = 'TokenModal';
 

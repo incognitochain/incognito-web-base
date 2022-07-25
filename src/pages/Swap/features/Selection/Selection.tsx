@@ -140,7 +140,7 @@ const Selection = React.memo((props: ISelection) => {
           </ThemedText.SmallLabel>
           <RowBetween className={`selection-item ${activeNetworkHover ? 'hover-item' : ''}`} onClick={showNetworkList}>
             <Row>
-              {!!currency && <Image iconUrl={ROOT_NETWORK_IMG[currency]} />}
+              {!!currency && <Image border={false} iconUrl={ROOT_NETWORK_IMG[currency]} />}
               {!!rightValue && (
                 <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="primary5">
                   {rightValue}

@@ -5,7 +5,7 @@ import { useOnClickOutside } from 'hooks/useOnClickOutside';
 import { useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useModalOpen, useToggleModal } from 'state/application/hooks';
-import { addPopup, ApplicationModal } from 'state/application/reducer';
+import { ApplicationModal } from 'state/application/reducer';
 import { useAppDispatch } from 'state/hooks';
 import { updateWalletError } from 'state/wallet/reducer';
 
@@ -48,8 +48,8 @@ const useSwitchNetwork = ({ targetChain }: { targetChain: SupportedChainId | und
           toggle();
         }
 
-        dispatch(updateWalletError({ wallet, error: error.message }));
-        dispatch(addPopup({ content: { failedSwitchNetwork: targetChain }, key: `failed-network-switch` }));
+        // dispatch(updateWalletError({ wallet, error: error.message }));
+        // dispatch(addPopup({ content: { failedSwitchNetwork: targetChain }, key: `failed-network-switch` }));
       }
     },
     [connector, toggle, dispatch, history, chainId, targetChain]
