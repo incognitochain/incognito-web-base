@@ -1,10 +1,13 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { GROUP_NETWORK, PRV } from 'constants/token';
+import orderBy from 'lodash/orderBy';
 import SelectedPrivacyModel from 'models/model/SelectedPrivacyModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { AppState } from 'state';
+import { incognitoAccountFollowTokenIDs } from 'state/incognitoWallet';
 
 import { incognitoWalletAccountSelector } from '../incognitoWallet';
+const { PRVIDSTR } = require('incognito-chain-web-js/build/web/wallet');
 
 export const tokenSelectors = createSelector(
   (state: AppState) => state.token,
@@ -76,4 +79,18 @@ export const getDepositTokenDataSelector = createSelector(
       }
       return new SelectedPrivacyModel(token, followTokens);
     }
+);
+
+export const followTokensFormatedSelector = createSelector(
+  getPrivacyDataByTokenIDSelector,
+  incognitoAccountFollowTokenIDs,
+  (getPrivacyDataByToken, tokens) => {
+    const _tokensConvert = tokens.map((tokenId: string) => getPrivacyDataByToken(tokenId));
+    const result = orderBy(
+      _tokensConvert,
+      [(c: SelectedPrivacyModel) => c.tokenID === PRVIDSTR, (c) => c.formatBalanceByUsd, (c) => c.amount || 0],
+      ['desc', 'desc', 'desc']
+    ).filter(({ symbol }) => !!symbol);
+    return result;
+  }
 );

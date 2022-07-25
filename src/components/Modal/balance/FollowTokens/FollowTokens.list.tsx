@@ -1,7 +1,8 @@
 /* eslint-disable react/display-name */
+import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import React from 'react';
 import { useAppSelector } from 'state/hooks';
-import { incognitoAccountFollowTokenIDs } from 'state/incognitoWallet';
+import { followTokensFormatedSelector } from 'state/token/token.selectors';
 import styled from 'styled-components/macro';
 
 import PaymentAddressBar from '../PaymentAddressBar';
@@ -14,13 +15,15 @@ const Styled = styled.div`
 `;
 
 const FollowTokensList = React.memo(() => {
-  const followTokenIDs = useAppSelector(incognitoAccountFollowTokenIDs);
+  const followTokensFormated = useAppSelector(followTokensFormatedSelector) || [];
   return (
     <>
       <PaymentAddressBar />
       <Styled>
-        {followTokenIDs && followTokenIDs.length > 0
-          ? followTokenIDs.map((tokenID: string) => <FollowTokenItem tokenID={tokenID} key={tokenID} />)
+        {followTokensFormated && followTokensFormated.length > 0
+          ? followTokensFormated.map((selectedToken: SelectedPrivacy) => (
+              <FollowTokenItem selectedToken={selectedToken} key={selectedToken.tokenID} />
+            ))
           : null}
       </Styled>
     </>

@@ -1,8 +1,6 @@
 /* eslint-disable react/display-name */
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import React from 'react';
-import { useAppSelector } from 'state/hooks';
-import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
@@ -61,8 +59,7 @@ const Styled = styled.div`
   }
 `;
 
-const Token = React.memo(({ tokenID }: { tokenID: string }) => {
-  const selectedToken: SelectedPrivacy = useAppSelector(getPrivacyDataByTokenIDSelector)(tokenID);
+const Token = React.memo(({ selectedToken }: { selectedToken: SelectedPrivacy }) => {
   if (!selectedToken.symbol) return null;
   const { symbol, shortName, network, formatAmount, formatBalanceByUsd, iconUrl } = selectedToken;
   return (
