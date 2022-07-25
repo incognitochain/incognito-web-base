@@ -6,6 +6,10 @@ WORKDIR /app
 COPY package.json ./
 COPY yarn.lock* ./
 COPY . ./
+
+# https://create-react-app.dev/docs/adding-custom-environment-variables#what-other-env-files-can-be-used
+COPY .env.${BUILD_ENV} .env.local
+
 RUN mkdir -p src/locales
 RUN yarn install
 RUN yarn i18n:compile
