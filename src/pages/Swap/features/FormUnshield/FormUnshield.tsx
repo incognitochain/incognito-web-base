@@ -37,6 +37,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     validateAmount,
     onClickMax,
     onSend,
+
+    fee,
   } = props;
 
   const { requestIncognitoAccount } = useIncognitoWallet();
@@ -99,6 +101,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           symbol={buyToken.symbol || ''}
           networkFee={networkFeeText}
           burnFeeText={burnFeeText}
+          time={fee.extraFee && sellToken.isUnified ? '12' : '2'}
         />
         <VerticalSpace />
         {button.isConnected ? (

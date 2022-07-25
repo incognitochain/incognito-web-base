@@ -31,9 +31,11 @@ interface IProps {
   symbol: string;
   networkFee: string;
   burnFeeText: string;
+  time: string;
 }
 
-const EstReceive = React.memo(({ amountText, symbol, networkFee, burnFeeText }: IProps) => {
+const EstReceive = React.memo(({ amountText, symbol, networkFee, burnFeeText, time }: IProps) => {
+  console.log(time);
   const [isOpen, setOpen] = React.useState(true);
   return (
     <Styled>
@@ -56,6 +58,10 @@ const EstReceive = React.memo(({ amountText, symbol, networkFee, burnFeeText }: 
               <ThemedText.Small fontWeight={400}>{burnFeeText}</ThemedText.Small>
             </RowBetween>
           )}
+          <RowBetween style={{ marginTop: 12 }}>
+            <ThemedText.Small fontWeight={400}>Estimate time</ThemedText.Small>
+            <ThemedText.Small fontWeight={400}>{`${time} mins`}</ThemedText.Small>
+          </RowBetween>
           <ThemedText.Small color="primary8" fontWeight={400} marginTop="12px">
             {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
             some from the `}
