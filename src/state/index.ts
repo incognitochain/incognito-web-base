@@ -40,6 +40,7 @@ const store = configureStore({
     getDefaultMiddleware({
       thunk: true,
       serializableCheck: false,
+      immutableCheck: false,
     })
       .concat(routingApi.middleware)
       .concat([logger])
