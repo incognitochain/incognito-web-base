@@ -158,7 +158,7 @@ export const useDeposit = (): IDeposit => {
     const maxAmount = convert.toHumanAmount({
       decimals: sellToken.pDecimals,
       originalAmount: new BigNumber(
-        Math.floor(sellToken.isMainEVMToken ? new BigNumber(maxAmountOriginal || 0).minus(gas || 0).toNumber() : 0)
+        Math.floor(new BigNumber(maxAmountOriginal || 0).minus(sellToken.isMainEVMToken ? gas || 0 : 0).toNumber())
       ).toNumber(),
     });
 
