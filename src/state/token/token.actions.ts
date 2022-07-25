@@ -1,5 +1,6 @@
 import { GROUP_NETWORK, PRV } from 'constants/token';
 import keyBy from 'lodash/keyBy';
+import orderBy from 'lodash/orderBy';
 import PTokenModel from 'models/model/pTokenModel';
 import { getTokenListNoCache } from 'services/rpcClient';
 
@@ -28,7 +29,7 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
   if (isFetching) return;
   try {
     dispatch(actionFetchingPTokens({ isFetching: true }));
-    const list = (await getTokenListNoCache()) || [];
+    const list = orderBy((await getTokenListNoCache()) || [], ['isUnified', 'isVerified'], ['desc', 'desc']);
     const pTokens = keyBy(list, 'identify');
     const depositableList = list.filter(({ movedUnifiedToken, tokenID }) => !movedUnifiedToken && tokenID !== PRV.id);
 

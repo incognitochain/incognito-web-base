@@ -14,6 +14,9 @@ import { ExternalLink, ThemedText } from 'theme';
 import { shortenAddress } from 'utils';
 import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
+import { useAppDispatch } from '../../../state/hooks';
+import { updateSelectedWallet } from '../../../state/user/reducer';
+
 const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
   padding: 1rem 1rem;
@@ -199,7 +202,7 @@ interface AccountDetailsProps {
 
 export default function AccountDetails({ toggleWalletModal, ENSName, openOptions }: AccountDetailsProps) {
   const { chainId, account, connector } = useActiveWeb3React();
-
+  const dispatch = useAppDispatch();
   function formatConnectorName() {
     const { ethereum } = window;
     const isMetaMask = !!(ethereum && ethereum.isMetaMask);
@@ -243,17 +246,17 @@ export default function AccountDetails({ toggleWalletModal, ENSName, openOptions
                       <div>
                         {/* Coinbase Wallet reloads the page right now, which breaks the selectedWallet from being set properly on localStorage */}
                         {/*{connector !== coinbaseWallet && (*/}
-                        {/*  <WalletAction*/}
-                        {/*    style={{ fontSize: '.825rem', fontWeight: 500, marginRight: '8px' }}*/}
-                        {/*    onClick={() => {*/}
-                        {/*      connector.deactivate ? connector.deactivate() : connector.resetState();*/}
-                        {/*      dispatch(updateSelectedWallet({ wallet: undefined }));*/}
-                        {/*      openOptions();*/}
-                        {/*    }}*/}
-                        {/*    data-cy="wallet-disconnect"*/}
-                        {/*  >*/}
-                        {/*    Disconnect*/}
-                        {/*  </WalletAction>*/}
+                        <WalletAction
+                          style={{ fontSize: '.825rem', fontWeight: 500, marginRight: '8px' }}
+                          onClick={() => {
+                            connector.deactivate ? connector.deactivate() : connector.resetState();
+                            dispatch(updateSelectedWallet({ wallet: undefined }));
+                            openOptions();
+                          }}
+                          data-cy="wallet-disconnect"
+                        >
+                          Disconnect
+                        </WalletAction>
                         {/*)}*/}
                         <WalletAction
                           style={{ fontSize: '.825rem', fontWeight: 500 }}
