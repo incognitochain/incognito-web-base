@@ -35,7 +35,18 @@ interface ITextAreaProps {
 
 export const InputComp = React.memo((props: IInputProps) => {
   const { input: inputProps, componentProps } = props;
-  return <Input type="text" autoComplete="off" {...inputProps} {...componentProps} />;
+  const quantityInputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const ignoreScroll = (e: any) => {
+      e.preventDefault();
+    };
+    if (!quantityInputRef.current) return;
+    // @ts-ignore
+    quantityInputRef.current && quantityInputRef.current.addEventListener('wheel', ignoreScroll);
+  }, [quantityInputRef]);
+
+  return <Input type="text" ref={quantityInputRef} autoComplete="off" {...inputProps} {...componentProps} />;
 });
 
 InputComp.displayName = 'Input';
