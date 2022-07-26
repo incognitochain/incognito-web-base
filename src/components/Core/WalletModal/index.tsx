@@ -14,11 +14,11 @@ import { ArrowLeft } from 'react-feather';
 import { useModalOpen, useWalletModalToggle } from 'state/application/hooks';
 import { ApplicationModal } from 'state/application/reducer';
 import { useAppDispatch, useAppSelector } from 'state/hooks';
-import { updateSelectedWallet } from 'state/user/reducer';
 import { updateWalletError } from 'state/wallet/reducer';
 import styled from 'styled-components/macro';
 import { isMobile } from 'utils/userAgent';
 
+import { updateSelectedWallet } from '../../../state/user/reducer';
 import Option from './Option';
 import PendingView from './PendingView';
 
@@ -153,9 +153,24 @@ export default function WalletModal({
         setWalletView(WALLET_VIEWS.PENDING);
         dispatch(updateWalletError({ wallet, error: undefined }));
 
-        await connector.activate();
-
-        dispatch(updateSelectedWallet({ wallet }));
+        if (!!window.ethereum) {
+          window.ethereum
+            .request({
+              method: 'wallet_requestPermissions',
+              params: [{ eth_accounts: {} }],
+            })
+            .then((permissions: any) => {
+              const accountsPermission = permissions.find(
+                (permission: any) => permission.parentCapability === 'eth_accounts'
+              );
+              if (accountsPermission) {
+                alert('SANG');
+                connector.activate();
+                dispatch(updateSelectedWallet({ wallet }));
+                console.log('eth_accounts permission successfully requested!');
+              }
+            });
+        }
       } catch (error) {
         console.debug(`web3-react connection error: ${error}`);
         dispatch(updateWalletError({ wallet, error: error.message }));
