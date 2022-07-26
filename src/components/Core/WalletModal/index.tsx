@@ -164,7 +164,6 @@ export default function WalletModal({
                 (permission: any) => permission.parentCapability === 'eth_accounts'
               );
               if (accountsPermission) {
-                alert('SANG');
                 connector.activate();
                 dispatch(updateSelectedWallet({ wallet }));
                 console.log('eth_accounts permission successfully requested!');
