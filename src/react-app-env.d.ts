@@ -15,6 +15,7 @@ interface Window {
     isMetaMask?: true;
     isTally?: false;
     autoRefreshOnNetworkChange?: boolean;
+    request: any;
   };
   web3?: Record<string, unknown>;
 }
