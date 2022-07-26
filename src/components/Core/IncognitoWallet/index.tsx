@@ -147,7 +147,7 @@ const IncognitoWallet = () => {
   return (
     <>
       <Wrapper isConnected={isConnected} onClick={buttonClickAction}>
-        <Image iconUrl={ROOT_NETWORK_IMG[PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]} />
+        {isConnected && <Image iconUrl={ROOT_NETWORK_IMG[PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]} />}
         <Text>{walletState}</Text>
       </Wrapper>
       <Modal isOpen={showModal} onDismiss={() => setShowModal(false)}>
