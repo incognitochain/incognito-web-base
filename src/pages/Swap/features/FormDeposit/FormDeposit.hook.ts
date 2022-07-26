@@ -155,7 +155,7 @@ export const useDeposit = (): IDeposit => {
       round: false,
     });
 
-    const maxAmount = convert.toHumanAmount({
+    const maxAmount = convert.toHumanAmountString({
       decimals: sellToken.pDecimals,
       originalAmount: new BigNumber(
         Math.floor(new BigNumber(maxAmountOriginal || 0).minus(sellToken.isMainEVMToken ? gas || 0 : 0).toNumber())
