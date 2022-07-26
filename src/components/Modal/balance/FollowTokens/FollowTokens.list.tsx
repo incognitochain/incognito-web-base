@@ -11,7 +11,7 @@ import FollowTokenItem from './FollowTokens.token';
 const Styled = styled.div`
   width: 100%;
   overflow-y: auto;
-  padding-top: 15px;
+  margin-top: 15px;
 `;
 
 const FollowTokensList = React.memo(() => {
