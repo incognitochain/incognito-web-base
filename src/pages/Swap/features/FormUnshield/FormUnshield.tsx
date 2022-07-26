@@ -41,9 +41,9 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     fee,
   } = props;
 
-  const { requestIncognitoAccount } = useIncognitoWallet();
+  const { showPopup } = useIncognitoWallet();
 
-  const _buttonAction = () => requestIncognitoAccount();
+  const _buttonAction = () => showPopup();
 
   return (
     <Styled>
@@ -105,9 +105,9 @@ const FormUnshield = React.memo((props: IMergeProps) => {
         />
         <VerticalSpace />
         {button.isConnected ? (
-          <ButtonConfirmed onClick={_buttonAction}>{button.text}</ButtonConfirmed>
-        ) : (
           <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
+        ) : (
+          <ButtonConfirmed onClick={_buttonAction}>{button.text}</ButtonConfirmed>
         )}
       </form>
     </Styled>

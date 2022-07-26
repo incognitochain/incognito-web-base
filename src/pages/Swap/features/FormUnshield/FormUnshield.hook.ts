@@ -84,7 +84,7 @@ export const useUnshield = (): IUnshield => {
   const button = useMemo(
     () => ({
       text: !incAccount ? 'Connect Wallet' : isFetching ? 'Estimating fee...' : 'Swap',
-      isConnected: !incAccount,
+      isConnected: !!incAccount,
     }),
     [isFetching, incAccount]
   );

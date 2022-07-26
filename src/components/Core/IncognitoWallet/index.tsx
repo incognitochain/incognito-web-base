@@ -56,7 +56,7 @@ const IncognitoWallet = () => {
   const [walletState, setWalletState] = useState('Loading...');
   const [showModal, setShowModal] = useState<any>(false);
   const { setModal } = useModal();
-  const { isIncognitoInstalled, requestIncognitoAccount, getWalletState } = useIncognitoWallet();
+  const { isIncognitoInstalled, requestIncognitoAccount, getWalletState, showPopup } = useIncognitoWallet();
   const incognitoWallet = useSelector(incognitoWalletSelector);
 
   const listenerDataChange = () => {
@@ -89,7 +89,6 @@ const IncognitoWallet = () => {
   };
 
   const buttonClickAction = async () => {
-    const incognito = getIncognitoInject();
     if (isIncognitoInstalled()) {
       if (incognitoWallet.walletState === 'unlocked') {
         requestIncognitoAccount().then((accounts) => {
@@ -104,13 +103,11 @@ const IncognitoWallet = () => {
           });
         });
       } else {
-        incognito.request({
-          method: 'wallet_showPopup',
-          params: {},
-        });
+        showPopup();
       }
     } else {
-      alert('Please install Incognito Extension!');
+      showPopup();
+      // alert('Please install Incognito Extension!');
     }
   };
 

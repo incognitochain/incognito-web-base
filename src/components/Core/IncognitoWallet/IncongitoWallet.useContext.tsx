@@ -49,6 +49,7 @@ interface IncognitoWalletContextType {
     estimatedBurnAmount: number;
     estimatedExpectedAmount: number;
   }) => any;
+  showPopup: () => void;
 }
 export const getIncognitoInject = () => window.incognito;
 export const IncognitoWalletContext = React.createContext<IncognitoWalletContextType>({
@@ -56,6 +57,7 @@ export const IncognitoWalletContext = React.createContext<IncognitoWalletContext
   getWalletState: async () => undefined,
   requestIncognitoAccount: async () => undefined,
   requestSignTransaction: () => null,
+  showPopup: () => null,
 });
 
 const IncognitoWalletProvider = (props: any) => {
@@ -122,6 +124,22 @@ const IncognitoWalletProvider = (props: any) => {
     }
   };
 
+  const showPopup = () => {
+    const incognito = getIncognitoInject();
+    try {
+      if (!!incognito) {
+        incognito.request({
+          method: 'wallet_showPopup',
+          params: {},
+        });
+      } else {
+        window.open('https://github.com/incognitochain/incognito-extension-2.0/releases/tag/0.2.0');
+      }
+    } catch (e) {
+      console.log('SHOW POPUP WITH ERROR: ', e);
+    }
+  };
+
   return (
     <IncognitoWalletContext.Provider
       value={{
@@ -129,6 +147,7 @@ const IncognitoWalletProvider = (props: any) => {
         getWalletState,
         requestIncognitoAccount,
         requestSignTransaction,
+        showPopup,
       }}
     >
       <>{children}</>
