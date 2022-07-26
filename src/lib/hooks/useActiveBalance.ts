@@ -56,7 +56,10 @@ const useActiveBalance = ({ token }: { token: SelectedPrivacy }): IActiveBalance
   const debounceLoadBalance = debounce(onLoadBalance, 300);
 
   React.useEffect((): any => {
-    if (!account || !chainId) return;
+    if (!account || !chainId) {
+      setState(initValue);
+      return;
+    }
     debounceLoadBalance();
   }, [account, chainId, token.tokenID, web3ChainID]);
 
