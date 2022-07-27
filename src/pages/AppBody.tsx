@@ -15,7 +15,7 @@ export const BodyWrapper = styled.main<{ margin?: string; maxWidth?: string }>`
   padding: 24px;
   min-height: 200px;
   .loader {
-    left: 50%;
+    left: 48%;
   }
 `;
 
