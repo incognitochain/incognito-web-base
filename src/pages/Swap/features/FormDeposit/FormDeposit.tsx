@@ -101,7 +101,9 @@ const FormDeposit = (props: IMergeProps) => {
         />
         <VerticalSpace />
         {button.switchNetwork || !account ? (
-          <ButtonConfirmed onClick={_actionMetamask}>{button.text}</ButtonConfirmed>
+          <ButtonConfirmed type="button" onClick={_actionMetamask}>
+            {button.text}
+          </ButtonConfirmed>
         ) : (
           <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
         )}
