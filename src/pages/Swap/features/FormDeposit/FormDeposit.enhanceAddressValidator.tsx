@@ -10,7 +10,8 @@ export interface TInner {
 
 const enhanceAddressValidation = (WrappedComponent: any) => {
   const FormDepositComp = (props: any) => {
-    const { isIncognitoAddress, onChangeField, incAccount } = props;
+    const { isIncognitoAddress, onChangeField, incAccount, inputAddress } = props;
+    const refObject = React.useRef(false);
     const getExternalAddressValidator = React.useCallback(() => {
       // default
       return validator.combinedUnknownAddress;
@@ -31,8 +32,10 @@ const enhanceAddressValidation = (WrappedComponent: any) => {
     const warningAddress = getWarningAddress();
 
     React.useEffect(() => {
+      if (refObject && refObject.current) return;
       if (incAccount && incAccount.paymentAddress && onChangeField) {
         onChangeField(incAccount.paymentAddress, FORM_CONFIGS.toAddress);
+        refObject.current = true;
       }
     }, [incAccount]);
 

@@ -12,8 +12,8 @@ import { useSelector } from 'react-redux';
 import { useAppSelector } from 'state/hooks';
 import { AccountInfo, incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import convert from 'utils/convert';
+import format from 'utils/format';
 
-import format from '../../../../utils/format';
 import { depositDataSelector } from './FormDeposit.selectors';
 
 export interface IDeposit {
@@ -49,6 +49,8 @@ export interface IDeposit {
   handleLoadBalance: () => any;
 
   incAccount: AccountInfo | undefined;
+
+  inputAddress: string;
 }
 export const useDeposit = (): IDeposit => {
   const { account, chainId, provider } = useActiveWeb3React();
@@ -234,5 +236,6 @@ export const useDeposit = (): IDeposit => {
     handleLoadBalance: onLoadBalance,
 
     incAccount,
+    inputAddress,
   };
 };
