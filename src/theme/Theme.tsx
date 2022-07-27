@@ -246,40 +246,11 @@ export const ThemedText = {
 };
 
 export const ThemedGlobalStyle = createGlobalStyle`
-  #root {
-    font-family: "Inter-Regular",serif;
-    font-style: normal;
-    font-display: swap;
-    font-weight: 400;
-  }
+
 
   html {
     color: ${({ theme }) => theme.text1};
     background-color: ${({ theme }) => theme.bg1} !important;
-  }
-
-  @font-face {
-    font-family: Inter-Regular;
-    src: url('./fonts/Inter-Regular.ttf');
-    font-style: normal;
-    font-display: swap;
-    font-weight: 400;
-  }
-
-  @font-face {
-    font-family: Inter-Medium;
-    src: url('./fonts/Inter-Medium.ttf');
-    font-style: normal;
-    font-display: swap;
-    font-weight: 500;
-  }
-
-  @font-face {
-    font-family: Inter-Bold;
-    src: url('./fonts/Inter-Bold.ttf');
-    font-style: normal;
-    font-display: swap;
-    font-weight: 700;
   }
 
   a {
