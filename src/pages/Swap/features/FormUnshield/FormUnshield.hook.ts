@@ -4,8 +4,8 @@ import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { useMemo } from 'react';
 import { useAppSelector } from 'state/hooks';
+import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 
-import { incognitoWalletAccountSelector } from '../../../../state/incognitoWallet';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import { IFee } from './FormUnshield.utils';
 
@@ -23,6 +23,7 @@ export interface IUnshield {
   web3Account?: string;
 
   inputAmount: string;
+  inputOriginalAmount: number;
   burnOriginalAmount: string;
 
   userBalanceNoClip?: string;
@@ -60,6 +61,7 @@ export const useUnshield = (): IUnshield => {
     isExternalAddress,
 
     inputAmount,
+    inputOriginalAmount,
     burnOriginalAmount,
 
     userBalanceNoClip,
@@ -123,5 +125,6 @@ export const useUnshield = (): IUnshield => {
     burnFeeText,
 
     estReceiveAmount,
+    inputOriginalAmount,
   };
 };

@@ -25,7 +25,7 @@ const initialState: IState = {
 
 const enhanceAmountValidator = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: IMergeProps) => {
-    const { maxAmountText, sellToken: selectedPrivacy, onChangeField, userBalance } = props;
+    const { maxAmountText, sellToken: selectedPrivacy, onChangeField, userBalance, inputOriginalAmount } = props;
     const [state, setState] = React.useState({ ...initialState });
     const { maxAmountValidator, minAmountValidator } = state;
 
@@ -47,6 +47,27 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
         };
         await setState(currentState);
       }
+      if (!inputOriginalAmount || inputOriginalAmount === 0) {
+        const minAmountText = `${
+          convert.toHumanAmountString({
+            decimals: selectedPrivacy.pDecimals,
+            originalAmount: 1,
+          }) || 0
+        }`;
+
+        const minAmountNum = convert.toNumber({
+          text: minAmountText,
+          autoCorrect: true,
+        });
+
+        await setState({
+          ...currentState,
+          minAmountValidator: validator.minValue(
+            minAmountNum,
+            `Amount must be larger than ${minAmountText} ${selectedPrivacy?.symbol}`
+          ),
+        });
+      }
     }, 200);
 
     const getAmountValidator = () => {
@@ -62,7 +83,7 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
 
     React.useEffect(() => {
       setFormValidator();
-    }, [selectedPrivacy.identify, maxAmountText, selectedPrivacy.amount]);
+    }, [selectedPrivacy.identify, maxAmountText, selectedPrivacy.amount, inputOriginalAmount]);
 
     const onClickMax = async () => {
       onChangeField(maxAmountText || userBalance || '0', FORM_CONFIGS.sellAmount).then();

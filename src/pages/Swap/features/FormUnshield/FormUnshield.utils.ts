@@ -99,7 +99,7 @@ const getUnshieldData = ({
     convert.toOriginalAmount({
       decimals: _sellToken.pDecimals,
       humanAmount: inputAmount || '0',
-      round: false,
+      round: true,
     }) || 0;
 
   const burnOriginalAmount =
