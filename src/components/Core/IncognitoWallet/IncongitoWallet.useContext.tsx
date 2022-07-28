@@ -133,7 +133,7 @@ const IncognitoWalletProvider = (props: any) => {
           params: {},
         });
       } else {
-        window.open('https://we.incognito.org/t/incognito-extension-alpha-version-is-now-released/16935');
+        window.open('https://we.incognito.org/t/incognito-extension-alpha-version-is-now-released');
       }
     } catch (e) {
       console.log('SHOW POPUP WITH ERROR: ', e);
