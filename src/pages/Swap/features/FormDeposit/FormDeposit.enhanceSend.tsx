@@ -1,8 +1,11 @@
 import { TransactionSubmittedContent } from 'components/Core/TransactionConfirmationModal';
 import { useModal } from 'components/Modal';
 import LoadingTransaction from 'components/Modal/Modal.transaction';
+import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
+import { change, untouch } from 'redux-form';
 import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
+import { useAppDispatch } from 'state/hooks';
 
 export interface TInter {
   onSend: () => void;
@@ -19,6 +22,7 @@ const enhanceSend = (WrappedComponent: any) => {
       sellToken,
       handleLoadBalance,
     } = props;
+    const dispatch = useAppDispatch();
     const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.CONFIRM_DEPOSIT });
     const { setModal, clearAllModal } = useModal();
     const _handleDepositERC20 = async () => {
@@ -60,6 +64,10 @@ const enhanceSend = (WrappedComponent: any) => {
           handleLoadBalance();
         }
         if (tx.hash) {
+          if (showMessage) {
+            dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.sellAmount, ''));
+            dispatch(untouch(FORM_CONFIGS.formName, FORM_CONFIGS.sellAmount));
+          }
           setModal({
             isTransparent: false,
             rightHeader: undefined,

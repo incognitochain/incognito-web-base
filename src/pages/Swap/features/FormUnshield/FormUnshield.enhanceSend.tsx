@@ -6,10 +6,10 @@ import { PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { batch } from 'react-redux';
-import { focus } from 'redux-form';
+import { change, focus, untouch } from 'redux-form';
+import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
 import { useAppDispatch } from 'state/hooks';
 
-import rpcMetric, { METRIC_TYPE } from '../../../../services/rpcMetric';
 import { actionEstimateFee } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
 
@@ -99,6 +99,8 @@ const enhanceSend = (WrappedComponent: any) => {
         const resolve: any = await handleUnshieldToken();
         if (!resolve || !resolve.data) return;
         clearAllModal();
+        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.sellAmount, ''));
+        dispatch(untouch(FORM_CONFIGS.formName, FORM_CONFIGS.sellAmount));
         setModal({
           isTransparent: false,
           rightHeader: undefined,
