@@ -31,7 +31,9 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
     dispatch(actionFetchingPTokens({ isFetching: true }));
     const list = orderBy((await getTokenListNoCache()) || [], ['isUnified', 'isVerified'], ['desc', 'desc']);
     const pTokens = keyBy(list, 'identify');
-    const depositableList = list.filter(({ movedUnifiedToken, tokenID }) => !movedUnifiedToken && tokenID !== PRV.id);
+    const depositableList = list.filter(
+      ({ movedUnifiedToken, tokenID, isVerified }) => !movedUnifiedToken && tokenID !== PRV.id && isVerified
+    );
 
     // flatten tokens
     const flattenTokens = depositableList.reduce((tokens: PTokenModel[], currToken) => {
