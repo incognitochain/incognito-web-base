@@ -22,14 +22,16 @@ export const depositableSelectors = createSelector(tokenSelectors, (token) => to
 
 export const unshieldableTokens = createSelector(pTokensSelector, (pTokens) => {
   const pTokensArr = Object.values(pTokens || {});
-  const unshieldable = pTokensArr.filter(({ tokenID, currencyType, hasChild, isUnified }) => {
+  const unshieldable = pTokensArr.filter(({ tokenID, currencyType, hasChild, isUnified, isVerified }) => {
     if (isUnified && !hasChild) return false;
     return (
       Boolean(
         Object.keys(GROUP_NETWORK).find((key) => {
           return GROUP_NETWORK[key].includes(currencyType);
         })
-      ) && tokenID !== PRV.id
+      ) &&
+      tokenID !== PRV.id &&
+      isVerified
     );
   });
   return unshieldable || [];
