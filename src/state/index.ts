@@ -6,6 +6,7 @@ import { reducer as form } from 'redux-form';
 import { load, save } from 'redux-localstorage-simple';
 import logger from 'redux-logger';
 
+import { isMainnet } from '../config';
 import application from './application/reducer';
 import { updateVersion } from './global/actions';
 import incognitoWallet from './incognitoWallet/incognitoWallet.reducer';
@@ -43,7 +44,7 @@ const store = configureStore({
       immutableCheck: false,
     })
       .concat(routingApi.middleware)
-      .concat([logger])
+      .concat(isMainnet ? [] : [logger])
       .concat(save({ states: PERSISTED_KEYS, debounce: 1000 })),
   preloadedState: load({ states: PERSISTED_KEYS, disableWarnings: process.env.NODE_ENV === 'test' }),
 });
