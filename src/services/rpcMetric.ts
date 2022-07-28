@@ -1,7 +1,6 @@
 import { AxiosInstance } from 'axios';
+import { isMainnet } from 'config';
 import createAxiosInstance from 'services/axios';
-
-import { isMainnet } from '../config';
 
 export enum METRIC_TYPE {
   OPEN = 81,
@@ -25,6 +24,7 @@ class RpcMetric {
       await this.http.post('churn', {
         created_at: now,
         type_id: type,
+        app: 'web-app',
       });
     } catch (e) {
       console.log('UPDATE METRIC WITH ERROR: ', e);

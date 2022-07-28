@@ -1,5 +1,6 @@
 import { Trans } from '@lingui/macro';
 import { Currency } from '@uniswap/sdk-core';
+import Circle from 'assets/images/blue-loader.svg';
 import Badge from 'components/Badge';
 import Modal from 'components/Core/Modal';
 import { CHAIN_INFO } from 'constants/chainInfo';
@@ -11,17 +12,14 @@ import { AlertCircle, AlertTriangle, ArrowUpCircle } from 'react-feather';
 import { Text } from 'rebass';
 import { useIsTransactionConfirmed, useTransaction } from 'state/transactions/hooks';
 import styled, { ThemeContext } from 'styled-components/macro';
+import { CloseIcon, CustomLightSpinner, ExternalLink, ThemedText } from 'theme';
+import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
-import Circle from '../../../assets/images/blue-loader.svg';
-import { ExternalLink } from '../../../theme';
-import { CloseIcon, CustomLightSpinner } from '../../../theme';
-import { ExplorerDataType, getExplorerLink } from '../../../utils/getExplorerLink';
 import { TransactionSummary } from '../AccountDetails/TransactionSummary';
 import { ButtonPrimary } from '../Button';
 import { AutoColumn, ColumnCenter } from '../Column';
 import { RowBetween, RowFixed } from '../Row';
 import AnimatedConfirmation from './AnimatedConfirmation';
-
 const Wrapper = styled.div`
   width: 100%;
   padding: 1rem;
@@ -87,12 +85,14 @@ export function TransactionSubmittedContent({
   hash,
   currencyToAdd,
   inline,
+  message,
 }: {
   onDismiss?: () => void;
   hash: string | undefined;
   chainId: number;
   currencyToAdd?: Currency | undefined;
   inline?: boolean; // not in modal
+  message?: string;
 }) {
   const theme = useContext(ThemeContext);
 
@@ -130,8 +130,13 @@ export function TransactionSubmittedContent({
         </ConfirmedIcon>
         <AutoColumn gap="12px" justify={'center'}>
           <Text fontWeight={500} fontSize={20} textAlign="center">
-            <Trans>Transaction Submitted</Trans>
+            Transaction Submitted
           </Text>
+          {!!message && (
+            <ThemedText.SmallLabel fontWeight={500} color="primary8" textAlign="center">
+              {message}
+            </ThemedText.SmallLabel>
+          )}
           {chainId && hash && (
             <ExternalLink href={getExplorerLink(chainId, hash, ExplorerDataType.TRANSACTION)}>
               <Text fontWeight={500} fontSize={14} color={theme.primary1}>
@@ -331,6 +336,7 @@ interface ConfirmationModalProps {
   attemptingTxn: boolean;
   pendingText: ReactNode;
   currencyToAdd?: Currency | undefined;
+  message?: string;
 }
 
 export default function TransactionConfirmationModal({
@@ -341,6 +347,7 @@ export default function TransactionConfirmationModal({
   pendingText,
   content,
   currencyToAdd,
+  message,
 }: ConfirmationModalProps) {
   const { chainId } = useActiveWeb3React();
 
@@ -361,6 +368,7 @@ export default function TransactionConfirmationModal({
           hash={hash}
           onDismiss={onDismiss}
           currencyToAdd={currencyToAdd}
+          message={message}
         />
       ) : (
         content()

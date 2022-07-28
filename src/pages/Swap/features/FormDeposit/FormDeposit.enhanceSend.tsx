@@ -64,7 +64,13 @@ const enhanceSend = (WrappedComponent: any) => {
             rightHeader: undefined,
             title: '',
             closable: true,
-            data: <TransactionSubmittedContent chainId={sellToken.chainID} hash={tx.hash} />,
+            data: (
+              <TransactionSubmittedContent
+                chainId={sellToken.chainID}
+                hash={tx.hash}
+                message="Please wait for a few minutes to receive the asset on Incognito Wallet. Check your updated balance on Incognito Extension or Incognito Account on web-based application"
+              />
+            ),
           });
         }
       } catch (error) {

@@ -51,6 +51,9 @@ export interface IDeposit {
   incAccount: AccountInfo | undefined;
 
   inputAddress: string;
+
+  account?: string;
+  chainID?: number;
 }
 export const useDeposit = (): IDeposit => {
   const { account, chainId, provider } = useActiveWeb3React();
@@ -237,5 +240,8 @@ export const useDeposit = (): IDeposit => {
 
     incAccount,
     inputAddress,
+
+    account,
+    chainID: chainId,
   };
 };
