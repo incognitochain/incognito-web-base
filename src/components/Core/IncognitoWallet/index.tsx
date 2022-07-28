@@ -20,6 +20,7 @@ declare global {
 }
 
 const CONNECT_WALLET = 'Connect Incognito';
+const INSTALL_WALLET = 'Install Wallet';
 
 const Text = styled.p`
   flex: 1;
@@ -125,7 +126,7 @@ const IncognitoWallet = () => {
           setWalletState(CONNECT_WALLET);
         }
       } else {
-        setWalletState(CONNECT_WALLET);
+        setWalletState(INSTALL_WALLET);
       }
     };
     setTimeout(() => getInfo(), 1000);
@@ -142,7 +143,7 @@ const IncognitoWallet = () => {
     }, 5000);
   }, []);
 
-  const isConnected = walletState !== CONNECT_WALLET;
+  const isConnected = walletState !== CONNECT_WALLET && walletState !== INSTALL_WALLET;
 
   return (
     <>

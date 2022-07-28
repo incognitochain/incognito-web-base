@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { useAppSelector } from 'state/hooks';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 
+import { useIncognitoWallet } from '../../../../components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import { IFee } from './FormUnshield.utils';
 
@@ -82,14 +83,20 @@ export const useUnshield = (): IUnshield => {
 
   const { account: web3Account } = useActiveWeb3React();
   const incAccount = useAppSelector(incognitoWalletAccountSelector);
+  const { isIncognitoInstalled } = useIncognitoWallet();
 
-  const button = useMemo(
-    () => ({
-      text: !incAccount ? 'Connect Wallet' : isFetching ? 'Estimating fee...' : 'Swap',
+  const button = useMemo(() => {
+    return {
+      text: isIncognitoInstalled()
+        ? !incAccount
+          ? 'Connect Wallet'
+          : isFetching
+          ? 'Estimating fee...'
+          : 'Swap'
+        : 'Install Wallet',
       isConnected: !!incAccount,
-    }),
-    [isFetching, incAccount]
-  );
+    };
+  }, [isFetching, incAccount, isIncognitoInstalled]);
 
   return {
     sellToken,
