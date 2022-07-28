@@ -66,7 +66,7 @@ const EstReceive = React.memo(({ amountText, symbol, networkFee, burnFeeText, ti
             <ThemedText.Small fontWeight={400}>Estimate time</ThemedText.Small>
             <ThemedText.Small fontWeight={400}>{`${time} mins`}</ThemedText.Small>
           </RowBetween>
-          {!!prvToken.amount && (
+          {!prvToken.amount && (
             <ThemedText.Small color="primary8" fontWeight={400} marginTop="12px">
               {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
             some from the `}
