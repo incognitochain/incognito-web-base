@@ -25,7 +25,14 @@ const initialState: IState = {
 
 const enhanceAmountValidator = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: IMergeProps) => {
-    const { maxAmountText, sellToken: selectedPrivacy, onChangeField, userBalance, inputOriginalAmount } = props;
+    const {
+      maxAmountText,
+      sellToken: selectedPrivacy,
+      onChangeField,
+      userBalance,
+      inputOriginalAmount,
+      enoughPRVFee,
+    } = props;
     const [state, setState] = React.useState({ ...initialState });
     const { maxAmountValidator, minAmountValidator } = state;
 
@@ -74,6 +81,9 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
       const val = [];
       if (minAmountValidator) val.push(minAmountValidator);
       if (maxAmountValidator) val.push(maxAmountValidator);
+      if (!enoughPRVFee) {
+        val.push(...[validator.notEnoughPRVFee]);
+      }
       if (selectedPrivacy?.isIncognitoToken) {
         val.push(...validator.combinedNanoAmount);
       }

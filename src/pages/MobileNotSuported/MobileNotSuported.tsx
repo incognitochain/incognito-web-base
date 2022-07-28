@@ -59,7 +59,7 @@ const MobileNotSuported = () => {
     <Styled>
       <div className="body-wrapper">
         <MobileNotSupportedSVG className="icon-wrapper" />
-        <ThemedText.LargeHeader color="primary5">{'No supported'}</ThemedText.LargeHeader>
+        <ThemedText.LargeHeader color="primary5">{'Not supported'}</ThemedText.LargeHeader>
 
         <ThemedText.RegularLabel fontWeight={400} color="primary8" className="description-wrapper">
           {'The function is not supported on mobile.'}

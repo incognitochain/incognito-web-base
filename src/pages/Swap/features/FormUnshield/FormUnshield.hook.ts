@@ -1,3 +1,4 @@
+import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { MAIN_NETWORK_NAME } from 'constants/token';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { ITokenNetwork } from 'models/model/pTokenModel';
@@ -6,7 +7,6 @@ import { useMemo } from 'react';
 import { useAppSelector } from 'state/hooks';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 
-import { useIncognitoWallet } from '../../../../components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import { IFee } from './FormUnshield.utils';
 
@@ -48,6 +48,8 @@ export interface IUnshield {
   burnFeeText: string;
 
   estReceiveAmount: string | number;
+
+  enoughPRVFee: boolean;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -79,6 +81,7 @@ export const useUnshield = (): IUnshield => {
     networkFeeText,
     burnFeeText,
     estReceiveAmount,
+    enoughPRVFee,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
@@ -133,5 +136,6 @@ export const useUnshield = (): IUnshield => {
 
     estReceiveAmount,
     inputOriginalAmount,
+    enoughPRVFee,
   };
 };

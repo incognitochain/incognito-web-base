@@ -59,6 +59,8 @@ export interface IUnshieldData {
   isFetching: boolean;
   networkFeeText: string;
   burnFeeText: string;
+
+  enoughPRVFee: boolean;
 }
 
 const getUnshieldData = ({
@@ -189,6 +191,13 @@ const getUnshieldData = ({
     });
   }
 
+  let enoughPRVFee = true;
+  if (!userFee?.isUseTokenFee) {
+    enoughPRVFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(
+      new BigNumber(combineFee.burnFee || 0).plus(networkFee)
+    );
+  }
+
   const disabledForm =
     !valid ||
     submitting ||
@@ -197,7 +206,8 @@ const getUnshieldData = ({
     !incAccount ||
     !networkFee ||
     isFetchingFee ||
-    !enoughNetworkFee;
+    !enoughNetworkFee ||
+    !enoughPRVFee;
 
   const burnFeeToken = getDataByTokenID(burnFeeTokenIdentify);
   let burnFeeText = '';
@@ -242,6 +252,8 @@ const getUnshieldData = ({
     isFetching: unshield.isFetchingFee,
     networkFeeText,
     burnFeeText,
+
+    enoughPRVFee,
   };
 };
 

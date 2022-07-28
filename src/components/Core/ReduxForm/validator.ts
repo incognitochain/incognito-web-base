@@ -105,6 +105,10 @@ const address = () => {
   return 'Invalid address';
 };
 
+const notEnoughPRVFee = () => {
+  return 'Please top up PRV to cover the transaction fee.';
+};
+
 const combineInvalidAddress = [required, address];
 
 const NAME_PATTERN = /^[A-Za-z0-9]*$/;
@@ -121,6 +125,7 @@ const validator = {
   maxValue,
   minValue,
   address,
+  notEnoughPRVFee,
   combinedAmount,
   combinedAccountName,
   combinedNanoAmount,
