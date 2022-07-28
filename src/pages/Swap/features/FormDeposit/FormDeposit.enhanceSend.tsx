@@ -3,6 +3,8 @@ import { useModal } from 'components/Modal';
 import LoadingTransaction from 'components/Modal/Modal.transaction';
 import React from 'react';
 
+import rpcMetric, { METRIC_TYPE } from '../../../../services/rpcMetric';
+
 export interface TInter {
   onSend: () => void;
 }
@@ -18,9 +20,8 @@ const enhanceSend = (WrappedComponent: any) => {
       sellToken,
       handleLoadBalance,
     } = props;
-
+    const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.CONFIRM_DEPOSIT });
     const { setModal, clearAllModal } = useModal();
-
     const _handleDepositERC20 = async () => {
       try {
         if (!isApproved) {
@@ -52,6 +53,7 @@ const enhanceSend = (WrappedComponent: any) => {
         } else {
           tx = await _handleDepositERC20();
         }
+        updateMetric().then();
         clearAllModal();
         if (handleLoadBalance) {
           handleLoadBalance();

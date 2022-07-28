@@ -8,13 +8,13 @@ import InternetDisconnected from 'pages/InternetDisconnected/InternetDisconnecte
 import MobileNotSuported from 'pages/MobileNotSuported/MobileNotSuported';
 import PageNotFound from 'pages/PageNotFound/PageNotFound';
 import Swap, { RedirectPathToSwapOnly, RedirectToSwap } from 'pages/Swap';
-import { Suspense } from 'react';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { DarkModeQueryParamReader } from 'theme';
 import { isMobile } from 'utils/userAgent';
 
+import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
 
 const AppWrapper = styled.div`
@@ -54,6 +54,8 @@ const App = () => {
   const history = useHistory();
   const isInternetAlready = useInternetConnnection();
 
+  const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.OPEN });
+
   useEffect(() => {
     const unlisten = history.listen(() => {
       window.scrollTo(0, 0);
@@ -69,6 +71,10 @@ const App = () => {
     } else history.push('/swap');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInternetAlready]);
+
+  useEffect(() => {
+    updateMetric().then();
+  }, []);
 
   const renderContent = () => {
     return (

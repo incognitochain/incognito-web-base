@@ -16,6 +16,7 @@ import { submitDepositTx } from 'services/rpcClient';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
+import rpcMetric, { METRIC_TYPE } from '../../../../services/rpcMetric';
 import { FORM_CONFIGS } from './SubmitTxDeposit.constant';
 import enhance from './SubmitTxDeposit.enhance';
 
@@ -95,7 +96,7 @@ const SubmitTxDeposit = React.memo((props: any) => {
   const [{ captchaToken }, setCaptcha] = React.useState({ captchaToken: '' });
   const [network] = React.useState(dataObj);
   const captchaRef = React.useRef<any>(null);
-
+  const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.RESUBMIT_DEPOSIT });
   const handleSelectNetwork = React.useCallback(
     ({ network: _network }: { network: ITokenNetwork }) => {
       dataObj = {
@@ -120,6 +121,7 @@ const SubmitTxDeposit = React.memo((props: any) => {
   const handleSubmitTxHash = async () => {
     try {
       setState({ isLoading: true, isSuccess: false, error: '' });
+      updateMetric().then();
       await submitDepositTx({
         hash: inputTxHash,
         networkID: network.networkID,

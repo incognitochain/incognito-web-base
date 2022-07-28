@@ -5,6 +5,7 @@ import { VerticalSpace } from 'components/Core/Space';
 import React from 'react';
 import { Field } from 'redux-form';
 import { rpcClient } from 'services';
+import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
@@ -19,10 +20,12 @@ const SubmitTxUnshield = React.memo((props: any) => {
   const { handleSubmit, validateAddress, validateTxhash, inputAddress, inputHash } = props;
   const [{ isLoading, isSuccess }, setState] = React.useState({ isLoading: false, isSuccess: false });
   const [error, setError] = React.useState('');
+  const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.RESUBMIT_SWAP });
 
   const handleSubmitTxHash = async () => {
     try {
       setState({ isLoading: true, isSuccess: false });
+      updateMetric().then();
       await rpcClient.submitUnshieldTx({
         paymentAddr: inputAddress,
         txID: inputHash,

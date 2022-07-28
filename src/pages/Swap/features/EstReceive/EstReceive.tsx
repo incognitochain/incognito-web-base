@@ -1,7 +1,10 @@
 import Column from 'components/Core/Column';
 import { RowBetween, RowFlat } from 'components/Core/Row';
+import { PRV } from 'constants/token';
 import React from 'react';
 import { ChevronDown } from 'react-feather';
+import { useAppSelector } from 'state/hooks';
+import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
@@ -35,8 +38,9 @@ interface IProps {
 }
 
 const EstReceive = React.memo(({ amountText, symbol, networkFee, burnFeeText, time }: IProps) => {
-  console.log(time);
-  const [isOpen, setOpen] = React.useState(true);
+  const [isOpen, setOpen] = React.useState(false);
+  const prvToken = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
+
   return (
     <Styled>
       <RowBetween style={{ cursor: 'pointer' }} onClick={() => setOpen((isOpen) => !isOpen)}>
@@ -62,14 +66,16 @@ const EstReceive = React.memo(({ amountText, symbol, networkFee, burnFeeText, ti
             <ThemedText.Small fontWeight={400}>Estimate time</ThemedText.Small>
             <ThemedText.Small fontWeight={400}>{`${time} mins`}</ThemedText.Small>
           </RowBetween>
-          <ThemedText.Small color="primary8" fontWeight={400} marginTop="12px">
-            {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
+          {!!prvToken.amount && (
+            <ThemedText.Small color="primary8" fontWeight={400} marginTop="12px">
+              {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
             some from the `}
-            <a href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
-              faucet
-            </a>
-            .
-          </ThemedText.Small>
+              <a href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
+                faucet
+              </a>
+              .
+            </ThemedText.Small>
+          )}
         </Column>
       )}
     </Styled>

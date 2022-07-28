@@ -9,6 +9,7 @@ import { batch } from 'react-redux';
 import { focus } from 'redux-form';
 import { useAppDispatch } from 'state/hooks';
 
+import rpcMetric, { METRIC_TYPE } from '../../../../services/rpcMetric';
 import { actionEstimateFee } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
 
@@ -22,6 +23,7 @@ const enhanceSend = (WrappedComponent: any) => {
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
     const { setModal, clearAllModal } = useModal();
+    const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.CONFIRM_SWAP });
 
     const handleUnshieldToken = async () => {
       const {
@@ -64,6 +66,7 @@ const enhanceSend = (WrappedComponent: any) => {
         return new Promise(async (resolve, reject) => {
           try {
             const tx = await requestSignTransaction(payload);
+            updateMetric().then();
             resolve(tx);
           } catch (e) {
             reject(e);
