@@ -191,9 +191,6 @@ export const useDeposit = (): IDeposit => {
       text = 'Switch network';
       disabled = true;
       switchNetwork = true;
-    } else if (disabledForm) {
-      text = 'Deposit';
-      disabled = true;
     } else if (isApproving) {
       text = 'Approving';
       disabled = true;
@@ -203,6 +200,9 @@ export const useDeposit = (): IDeposit => {
     } else if (!isApproved) {
       text = 'Approve';
       disabled = false;
+    } else if (disabledForm) {
+      text = 'Deposit';
+      disabled = true;
     }
     return {
       text,

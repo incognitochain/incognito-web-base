@@ -2,8 +2,7 @@ import { TransactionSubmittedContent } from 'components/Core/TransactionConfirma
 import { useModal } from 'components/Modal';
 import LoadingTransaction from 'components/Modal/Modal.transaction';
 import React from 'react';
-
-import rpcMetric, { METRIC_TYPE } from '../../../../services/rpcMetric';
+import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
 
 export interface TInter {
   onSend: () => void;
@@ -24,13 +23,6 @@ const enhanceSend = (WrappedComponent: any) => {
     const { setModal, clearAllModal } = useModal();
     const _handleDepositERC20 = async () => {
       try {
-        if (!isApproved) {
-          // Check Approve
-          const tx = await handleApproveToken();
-          await checkIsApproved();
-          return tx;
-        }
-        // Handle deposit ERC20
         return await handleDepositERC20();
       } catch (error) {
         throw error;
@@ -48,10 +40,19 @@ const enhanceSend = (WrappedComponent: any) => {
           closable: true,
           data: <LoadingTransaction pendingText="Waiting For Confirmation" />,
         });
+        let showMessage = true;
         if (sellToken.isMainEVMToken) {
           tx = await _handleDepositEVM();
         } else {
-          tx = await _handleDepositERC20();
+          if (!isApproved) {
+            // Check Approve
+            tx = await handleApproveToken();
+            await checkIsApproved();
+            showMessage = false;
+          } else {
+            // Handle deposit ERC20
+            tx = await _handleDepositERC20();
+          }
         }
         updateMetric().then();
         clearAllModal();
@@ -68,7 +69,11 @@ const enhanceSend = (WrappedComponent: any) => {
               <TransactionSubmittedContent
                 chainId={sellToken.chainID}
                 hash={tx.hash}
-                message="Please wait for a few minutes to receive the asset on Incognito Wallet. Check your updated balance on Incognito Extension or Incognito Account on web-based application"
+                message={
+                  showMessage
+                    ? 'Please wait for a few minutes to receive the asset on Incognito Wallet. Check your updated balance on Incognito Extension or Incognito Account on web-based application'
+                    : ''
+                }
               />
             ),
           });
