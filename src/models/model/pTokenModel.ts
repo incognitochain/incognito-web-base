@@ -128,7 +128,6 @@ class PToken {
     this.isMainBSC = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB;
     this.isMainBNB = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BNB;
     this.isMainMATIC = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC;
-    this.isMainMATIC = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC;
     this.isMainFTM = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM;
     this.isMainEVMToken = this.isMainETH || this.isMainBSC || this.isMainBNB || this.isMainMATIC || this.isMainFTM;
 
