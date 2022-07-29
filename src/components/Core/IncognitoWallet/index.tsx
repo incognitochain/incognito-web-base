@@ -29,6 +29,7 @@ const Text = styled.p`
   white-space: nowrap;
   font-weight: 500;
   line-height: 140%;
+  text-align: center;
 `;
 
 const Wrapper = styled.div<{ isConnected: boolean }>`
@@ -38,7 +39,8 @@ const Wrapper = styled.div<{ isConnected: boolean }>`
   align-items: center;
   padding: 8px 8px;
   gap: 8px;
-
+  min-width: 140px;
+  text-align: center;
   /* background-color: ${({ theme }) => theme.primary2}; */
   background-color: ${({ theme, isConnected }) => (isConnected ? theme.bg1 : theme.primary2)};
   color: ${({ theme, isConnected }) => (isConnected ? theme.primary5 : theme.primary5)};
