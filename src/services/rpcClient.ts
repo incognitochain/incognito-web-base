@@ -19,6 +19,13 @@ interface IUserFeePayload {
   unifiedTokenID: string;
 }
 
+interface ISwapFeePayload {
+  network: string;
+  amount: string;
+  fromToken: string;
+  toToken: string;
+}
+
 export interface IFee {
   level1: string;
   level2: string;
@@ -42,6 +49,14 @@ class RpcClient {
 
   getTokens() {
     return this.http.get('tokenlist');
+  }
+
+  getSwapTokens() {
+    return this.http.get('papps/getsupportedtokens');
+  }
+
+  getVaults() {
+    return this.http.get('papps/getvaultstate');
   }
 
   submitDepositTxHash({ hash, networkID, captcha }: ISummitEtherHash) {
@@ -94,6 +109,17 @@ class RpcClient {
     };
   }
 
+  async estimateSwapFee({ network, amount, fromToken, toToken }: ISwapFeePayload): Promise<any> {
+    const data: any = await this.http.post('papps/estimateswapfee', {
+      Network: network,
+      Amount: amount,
+      FromToken: fromToken,
+      ToToken: toToken,
+    });
+    const exchangeSupports = data?.Networks[network];
+    return exchangeSupports;
+  }
+
   submitUnshieldTx(payload: { txID: string; paymentAddr: string }) {
     return this.http.post('submitunshieldtx', {
       IncognitoTx: payload.txID,
@@ -110,6 +136,11 @@ const getTokenListNoCache = async (): Promise<PTokenModel[]> => {
   return tokens.filter(({ tokenID }) => !!tokenID);
 };
 
+const getVaults = async (): Promise<any> => {
+  const vaults = await rpcClient.getVaults();
+  return vaults;
+};
+
 const submitDepositTx = async ({ hash, networkID, captcha }: ISummitEtherHash): Promise<any> => {
   return rpcClient.submitDepositTxHash({
     hash,
@@ -118,5 +149,5 @@ const submitDepositTx = async ({ hash, networkID, captcha }: ISummitEtherHash): 
   });
 };
 
-export { getTokenListNoCache, submitDepositTx };
+export { getTokenListNoCache, getVaults, submitDepositTx };
 export default rpcClient;

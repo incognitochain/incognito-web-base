@@ -6,4 +6,10 @@ const FORM_CONFIGS = {
   toAddress: 'toAddress',
 };
 
-export { FORM_CONFIGS };
+const SWAP_EXCHANGES = {
+  uniswap: 'uniswap',
+  pancakeswap: 'pancakeswap',
+  curve: 'curve',
+};
+
+export { FORM_CONFIGS, SWAP_EXCHANGES };

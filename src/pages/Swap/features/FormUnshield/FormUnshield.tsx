@@ -7,11 +7,15 @@ import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token'
 import { Selection } from 'pages/Swap/features/Selection';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 
 import { EstReceive } from '../EstReceive';
+import { actionSetExchangeSelected } from './FormUnshield.actions';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
+import { FormTypes, SwapExchange } from './FormUnshield.types';
 
 const Styled = styled.div``;
 
@@ -20,7 +24,9 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     handleSubmit,
     sellToken,
     sellTokenList,
+    buyParentToken,
     buyToken,
+    buyTokenList,
     buyNetworkList,
     buyCurrency,
     buyNetworkName,
@@ -32,18 +38,32 @@ const FormUnshield = React.memo((props: IMergeProps) => {
 
     validateAddress,
     warningAddress,
-    onSelectToken,
-    onSelectNetwork,
+    onSelectSellToken,
+    onSelectBuyToken,
+    onSelectBuyNetwork,
     validateAmount,
     onClickMax,
     onSend,
 
     fee,
+    formType,
+    exchangeSelected,
+    estReceiveAmount,
+    exchangeSupports,
+    tradePaths,
+    estimateTradeErrorMsg,
+    swapFee,
   } = props;
 
   const { showPopup } = useIncognitoWallet();
 
   const _buttonAction = () => showPopup();
+
+  const dispatch = useDispatch();
+
+  const onSelectExchange = (exchange: SwapExchange) => {
+    dispatch(actionSetExchangeSelected(exchange));
+  };
 
   return (
     <Styled>
@@ -56,18 +76,23 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           tokens={sellTokenList}
           leftValue={sellToken.symbol}
           iconUrl={sellToken.iconUrl}
-          onSelectToken={onSelectToken}
+          onSelectToken={onSelectSellToken}
           showNetwork={true}
         />
         <VerticalSpace />
         <Selection
           title="To"
-          leftValue={buyToken.symbol}
-          iconUrl={buyToken.iconUrl}
+          leftPlaceholder="Select token"
+          rightPlaceholder="Select network"
+          leftValue={buyParentToken.symbol}
+          tokens={buyTokenList}
+          iconUrl={buyParentToken.iconUrl}
           networks={buyNetworkList}
           currency={buyCurrency}
           rightValue={buyNetworkName}
-          onSelectNetwork={onSelectNetwork}
+          onSelectToken={onSelectBuyToken}
+          onSelectNetwork={onSelectBuyNetwork}
+          showNetwork={true}
         />
         <VerticalSpace />
         <Field
@@ -97,13 +122,27 @@ const FormUnshield = React.memo((props: IMergeProps) => {
         />
         <VerticalSpace />
         <EstReceive
-          amountText={inputAmount}
+          amountText={formType === FormTypes.SWAP ? estReceiveAmount?.toString() : inputAmount}
           symbol={buyToken.symbol || ''}
           networkFee={networkFeeText}
           burnFeeText={burnFeeText}
           time={fee.extraFee && sellToken.isUnified ? '12' : '2'}
+          exchanges={exchangeSupports}
+          exchangeSelected={exchangeSelected}
+          onSelectExchange={onSelectExchange}
+          formType={formType}
+          tradePaths={tradePaths}
+          swapFee={swapFee}
         />
         <VerticalSpace />
+        {estimateTradeErrorMsg && (
+          <>
+            <ThemedText.Error marginTop="4px" error className={`error`}>
+              {estimateTradeErrorMsg}
+            </ThemedText.Error>
+            <VerticalSpace />
+          </>
+        )}
         {button.isConnected ? (
           <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
         ) : (
