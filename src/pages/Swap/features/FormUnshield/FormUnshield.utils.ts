@@ -196,11 +196,16 @@ const getUnshieldData = ({
       _buyNetworkList = _buyNetworkList?.filter(
         (_item: any) => tokenVault[_item?.identify?.split('-')[0]]['Amount'] > 0
       );
+    }
+    if (
+      formType === FormTypes.SWAP &&
+      !_buyNetworkList?.find((network: ITokenNetwork) => network?.networkName === MAIN_NETWORK_NAME.INCOGNITO)
+    ) {
       _buyNetworkList.unshift({
         parentIdentify: buyParentIdentify,
         identify: _buyParentToken.identify,
         networkName: MAIN_NETWORK_NAME.INCOGNITO,
-        currency: _buyParentToken.currencyType,
+        currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
       });
     }
   }

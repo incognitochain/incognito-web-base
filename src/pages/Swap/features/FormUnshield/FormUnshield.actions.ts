@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js';
-import { PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { rpcClient } from 'services';
 import { AppDispatch, AppState } from 'state';
@@ -93,7 +93,7 @@ export const actionChangeBuyToken =
         identify: parentToken?.isUnified ? null : parentToken.identify,
         chainID: parentToken.chainID,
         currency: parentToken.hasChild ? null : parentToken.currencyType,
-        networkName: parentToken.hasChild ? null : parentToken?.networkName,
+        networkName: parentToken.hasChild ? null : MAIN_NETWORK_NAME.INCOGNITO,
       };
 
       dispatch(
@@ -183,26 +183,35 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
 
 export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {
-    const { inputAmount, buyToken, incAddress, unshieldAddress, sellToken } = unshieldDataSelector(getState());
-    if (!inputAmount || !sellToken?.tokenID || !buyToken?.tokenID || !incAddress || !unshieldAddress) return;
+    const { inputAmount, buyParentToken, buyNetworkName, incAddress, unshieldAddress, sellToken } =
+      unshieldDataSelector(getState());
+    if (
+      !inputAmount ||
+      !sellToken?.tokenID ||
+      !buyParentToken?.tokenID ||
+      !incAddress ||
+      !unshieldAddress ||
+      !buyNetworkName
+    )
+      return;
     dispatch(actionSetSwapEstimateTradeErrorMsg(''));
     dispatch(actionSetFetchingFee({ isFetchingFee: true }));
-    let network = 'incognito';
-    if (buyToken.isErc20Token || buyToken.isMainETH) {
+    let network = 'inc';
+    if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
       network = 'eth';
-    } else if (buyToken.isPolygonErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC) {
-      network = 'plg';
-    } else if (buyToken.isFantomErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM) {
-      network = 'ftm';
-    } else if (buyToken.isBep20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
+    } else if (buyNetworkName === MAIN_NETWORK_NAME.BSC) {
       network = 'bsc';
+    } else if (buyNetworkName === MAIN_NETWORK_NAME.POLYGON) {
+      network = 'plg';
+    } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
+      network = 'ftm';
     }
 
     const payload = {
       network,
       amount: inputAmount,
       fromToken: sellToken.tokenID,
-      toToken: buyToken.tokenID,
+      toToken: buyParentToken.tokenID,
     };
     const data = await rpcClient.estimateSwapFee(payload);
 

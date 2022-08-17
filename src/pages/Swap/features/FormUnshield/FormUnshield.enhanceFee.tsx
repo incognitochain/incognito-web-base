@@ -12,7 +12,16 @@ export interface TInner {
 const enhanceFee = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: any) => {
     const dispatch = useAppDispatch();
-    const { isExternalAddress, unshieldAddress, incAddress, inputAmount, sellToken, buyToken, formType } = props;
+    const {
+      isExternalAddress,
+      unshieldAddress,
+      incAddress,
+      inputAmount,
+      sellToken,
+      buyToken,
+      formType,
+      buyNetworkName,
+    } = props;
 
     const onEstimateFee = () => {
       dispatch(actionEstimateFee());
@@ -36,7 +45,15 @@ const enhanceFee = (WrappedComponent: any) => {
       if (formType === FormTypes.SWAP && unshieldAddress && isExternalAddress) {
         debounceEstimateSwapFee();
       }
-    }, [unshieldAddress, isExternalAddress, incAddress, inputAmount, sellToken.tokenID, buyToken.tokenID]);
+    }, [
+      unshieldAddress,
+      isExternalAddress,
+      incAddress,
+      inputAmount,
+      sellToken.tokenID,
+      buyToken.tokenID,
+      buyNetworkName,
+    ]);
 
     return <WrappedComponent {...{ ...props }} />;
   };
