@@ -1,5 +1,5 @@
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useAppDispatch } from 'state/hooks';
 
 import {
