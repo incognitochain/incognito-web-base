@@ -2,6 +2,7 @@ import React from 'react';
 import { batch, useDispatch } from 'react-redux';
 import { reset } from 'redux-form';
 
+import { actionGetVaults } from './features/FormUnshield/FormUnshield.actions';
 import { FORM_CONFIGS } from './Swap.constant';
 
 export interface TInnerInit {
@@ -23,6 +24,7 @@ const enhanceInit = (WrappedComp: any) => {
       try {
         setInit(false);
         batch(() => {
+          dispatch(actionGetVaults());
           resetForm();
         });
       } catch (error) {

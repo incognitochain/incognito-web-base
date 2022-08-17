@@ -12,6 +12,7 @@ import { getChainIDByCurrency, getNetworkNameByCurrency } from 'utils/token';
 const PRVIDSTR = PRV.id;
 
 export interface ITokenNetwork {
+  parentIdentify?: string;
   identify: string;
   chainID?: SupportedChainId;
   networkName: MAIN_NETWORK_NAME;
@@ -187,6 +188,7 @@ class PToken {
           networkName,
           chainID,
           identify,
+          parentIdentify: this.parentTokenID,
         };
       });
       temp.forEach((data: any) => {
@@ -198,6 +200,7 @@ class PToken {
       if (!!this.currencyType && !!this.chainID && !!this.networkName) {
         this.supportedNetwork = [
           {
+            parentIdentify: this.parentTokenID,
             currency: this.currencyType,
             networkName: this.networkName,
             chainID: this.chainID,

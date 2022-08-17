@@ -7,8 +7,27 @@ export enum FormUnshieldActionType {
   FETCHING_FEE = 'FORM_UNSHIELD/FETCHING_FEE',
   SET_USER_FEE = 'FORM_UNSHIELD/SET_USER_FEE',
   RESET_FEE = 'FORM_UNSHIELD/RESET_FEE',
+  SET_VAULTS = 'FORM_UNSHIELD/SET_VAULTS',
+  SET_SWAP_EXCHANGE_SUPPORT = 'FORM_UNSHIELD/SET_SWAP_EXCHANGE_SUPPORT',
+  SET_SWAP_EXCHANGE_SELECTED = 'FORM_UNSHIELD/SET_SWAP_EXCHANGE_SELECTED',
+  SET_SWAP_ESTIMATE_TRADE_ERROR_MSG = 'FORM_UNSHIELD/SET_SWAP_ESTIMATE_TRADE_ERROR_MSG',
 }
 
+export enum FormTypes {
+  UNSHIELD = 'UNSHIELD',
+  SWAP = 'SWAP',
+}
+
+export enum SwapExchange {
+  PANCAKE_SWAP = 'pancakeswap',
+  UNISWAP = 'uniswap',
+  CURVE = 'curve',
+}
+
+export interface ISwapExchange {
+  exchangeId: SwapExchange;
+  exchangeName: string;
+}
 export interface IFormUnshieldState {
   isFetchingFee: boolean;
   sellToken: ITokenNetwork;
@@ -17,9 +36,14 @@ export interface IFormUnshieldState {
   // Native Token -> PRV
   networkFee: number;
   networkFeeToken: string;
-
   isUseBurnFeeLevel1: boolean;
   userFee: IUserFee | undefined;
+
+  // Swap data
+  vaults: any;
+  exchangeSupports: any[];
+  exchangeSelected: any;
+  estimateTradeErrorMsg: string;
 }
 
 export interface UnshieldSetTokenPayLoad {
@@ -54,8 +78,37 @@ export interface UnshieldResetUserFeeAction extends Action {
   type: FormUnshieldActionType.RESET_FEE;
 }
 
+/*
+  Swap actions
+*/
+export interface SwapSetVaultsAction extends Action {
+  type: FormUnshieldActionType.SET_VAULTS;
+  payload: any;
+}
+
+export interface SwapSetExchangeSupportsAction extends Action {
+  type: FormUnshieldActionType.SET_SWAP_EXCHANGE_SUPPORT;
+  payload: any;
+}
+
+export interface SwapSetExchangeSelectedAction extends Action {
+  type: FormUnshieldActionType.SET_SWAP_EXCHANGE_SELECTED;
+  payload: any;
+}
+
+export interface SwapSetEstimateTradeErrorMsg extends Action {
+  type: FormUnshieldActionType.SET_SWAP_ESTIMATE_TRADE_ERROR_MSG;
+  payload: any;
+}
+
 export type FormUnshieldActions =
+  // Umshield action
   | UnshieldSetTokenAction
   | UnshieldSetUserFeeAction
   | UnshieldSetFetchingUserFeeAction
-  | UnshieldResetUserFeeAction;
+  | UnshieldResetUserFeeAction
+  // Swap action
+  | SwapSetVaultsAction
+  | SwapSetExchangeSupportsAction
+  | SwapSetExchangeSelectedAction
+  | SwapSetEstimateTradeErrorMsg;

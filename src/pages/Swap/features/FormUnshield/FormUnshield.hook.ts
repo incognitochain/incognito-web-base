@@ -8,13 +8,17 @@ import { useAppSelector } from 'state/hooks';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 
 import { unshieldDataSelector } from './FormUnshield.selectors';
+import { FormTypes, SwapExchange } from './FormUnshield.types';
 import { IFee } from './FormUnshield.utils';
 
 export interface IUnshield {
   sellToken: SelectedPrivacy;
   sellTokenList: SelectedPrivacy[];
-
+  sellCurrency: number;
+  buyParentToken: any;
+  sellNetworkName: string;
   buyToken: SelectedPrivacy;
+  buyTokenList: SelectedPrivacy[];
   buyNetworkList: ITokenNetwork[] | undefined;
   buyCurrency: number;
   buyNetworkName: MAIN_NETWORK_NAME;
@@ -50,6 +54,15 @@ export interface IUnshield {
   estReceiveAmount: string | number;
 
   enoughPRVFee: boolean;
+  formType: FormTypes;
+
+  // Swap data
+  exchangeSelected: SwapExchange | null;
+  exchangeSelectedData: any;
+  exchangeSupports: any[];
+  swapFee: any;
+  tradePaths: string[];
+  estimateTradeErrorMsg: string;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -57,7 +70,11 @@ export const useUnshield = (): IUnshield => {
     unshieldAddress,
     sellToken,
     sellTokenList,
+    sellNetworkName,
+    sellCurrency,
+    buyParentToken,
     buyToken,
+    buyTokenList,
     buyNetworkList,
     buyCurrency,
     buyNetworkName,
@@ -82,6 +99,15 @@ export const useUnshield = (): IUnshield => {
     burnFeeText,
     estReceiveAmount,
     enoughPRVFee,
+    formType,
+
+    // Swap data
+    exchangeSelected,
+    exchangeSelectedData,
+    exchangeSupports,
+    swapFee,
+    tradePaths,
+    estimateTradeErrorMsg,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
@@ -104,8 +130,11 @@ export const useUnshield = (): IUnshield => {
   return {
     sellToken,
     sellTokenList,
-
+    sellCurrency,
+    sellNetworkName,
+    buyParentToken,
     buyToken,
+    buyTokenList,
     buyNetworkList,
     buyCurrency,
     buyNetworkName,
@@ -137,5 +166,14 @@ export const useUnshield = (): IUnshield => {
     estReceiveAmount,
     inputOriginalAmount,
     enoughPRVFee,
+    formType,
+
+    // Swap data
+    exchangeSelected,
+    exchangeSelectedData,
+    exchangeSupports,
+    swapFee,
+    tradePaths,
+    estimateTradeErrorMsg,
   };
 };
