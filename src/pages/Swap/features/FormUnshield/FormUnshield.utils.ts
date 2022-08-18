@@ -212,7 +212,10 @@ const getUnshieldData = ({
     if (_sellParentToken?.isUnified && vaults) {
       const tokenVault = vaults?.UnifiedTokenVaults[_sellParentToken?.tokenID] || {};
       _buyNetworkList = _buyNetworkList?.filter(
-        (_item: any) => tokenVault[_item?.identify?.split('-')[0]]['Amount'] > 0
+        (_item: any) =>
+          tokenVault[_item?.identify?.split('-')[0]]['Amount'] -
+            tokenVault[_item?.identify?.split('-')[0]]['LockedAmount'] >
+          0
       );
     }
     // add incognito network
