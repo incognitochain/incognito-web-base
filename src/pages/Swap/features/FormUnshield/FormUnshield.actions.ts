@@ -8,6 +8,7 @@ import convert from 'utils/convert';
 
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import {
+  FormTypes,
   FormUnshieldActionType,
   SwapExchange,
   UnshieldFetchingUserFeePayLoad,
@@ -58,10 +59,16 @@ export const actionSetSwapEstimateTradeErrorMsg = (payload: string) => ({
   payload,
 });
 
+export const actionSetSwapNetwork = (payload: MAIN_NETWORK_NAME) => ({
+  type: FormUnshieldActionType.SET_SWAP_NETWORK,
+  payload,
+});
+
 export const actionChangeSellToken =
   ({ token }: { token: PToken }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
+      const { buyToken } = unshieldDataSelector(getState());
       const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
       if (!token.chainID || !token.networkName || !parentToken.currencyType) return;
       const sellToken: ITokenNetwork = {
@@ -72,11 +79,32 @@ export const actionChangeSellToken =
         networkName: token.networkName,
       };
 
-      dispatch(
-        actionSetToken({
-          sellToken,
-        })
-      );
+      let _buyToken = parentToken;
+      if (parentToken.hasChild) {
+        _buyToken = parentToken.listUnifiedToken[0];
+      }
+      const buyTokenObj: ITokenNetwork = {
+        parentIdentify: token.parentTokenID,
+        identify: _buyToken.identify,
+        chainID: _buyToken.chainID,
+        currency: _buyToken.currencyType,
+        networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+      };
+
+      if (parentToken.parentTokenID === buyToken.parentTokenID) {
+        dispatch(
+          actionSetToken({
+            sellToken,
+            buyToken: buyTokenObj,
+          })
+        );
+      } else {
+        dispatch(
+          actionSetToken({
+            sellToken,
+          })
+        );
+      }
     } catch (error) {
       console.log('ACTION FILTER TOKEN ERROR: ', error);
     }
@@ -86,19 +114,37 @@ export const actionChangeBuyToken =
   ({ token }: { token: PToken }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
+      const { sellToken } = unshieldDataSelector(getState());
       const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
       if (!token.chainID || !token.networkName || !parentToken.currencyType) return;
-      const buyToken: any = {
-        parentIdentify: parentToken.identify,
-        identify: parentToken.identify,
-        chainID: parentToken.chainID,
-        currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
-        networkName: MAIN_NETWORK_NAME.INCOGNITO,
-      };
+
+      let buyTokenObj: ITokenNetwork;
+
+      if (sellToken.parentTokenID === parentToken.parentTokenID) {
+        let _buyToken = parentToken;
+        if (parentToken.hasChild) {
+          _buyToken = parentToken.listUnifiedToken[0];
+        }
+        buyTokenObj = {
+          parentIdentify: _buyToken.parentTokenID,
+          identify: _buyToken.identify,
+          chainID: _buyToken.chainID,
+          currency: _buyToken.currencyType,
+          networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+        };
+      } else {
+        buyTokenObj = {
+          parentIdentify: parentToken.identify,
+          identify: parentToken.identify,
+          chainID: parentToken.chainID,
+          currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
+          networkName: MAIN_NETWORK_NAME.INCOGNITO,
+        };
+      }
 
       dispatch(
         actionSetToken({
-          buyToken,
+          buyToken: buyTokenObj,
         })
       );
     } catch (error) {
@@ -125,14 +171,19 @@ export const actionChangeSellNetwork =
 export const actionChangeBuyNetwork =
   ({ network }: { network: ITokenNetwork }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
+    const { formType } = unshieldDataSelector(getState());
     try {
-      dispatch(
-        actionSetToken({
-          buyToken: {
-            ...network,
-          },
-        })
-      );
+      if (formType === FormTypes.UNSHIELD) {
+        dispatch(
+          actionSetToken({
+            buyToken: {
+              ...network,
+            },
+          })
+        );
+      } else {
+        dispatch(actionSetSwapNetwork(network?.networkName));
+      }
     } catch (error) {
       console.log('ACTION CHANGE BUY NETWORK ERROR: ', error);
     }

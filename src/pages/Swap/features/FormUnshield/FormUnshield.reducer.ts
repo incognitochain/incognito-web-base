@@ -32,6 +32,7 @@ const initialState: IFormUnshieldState = {
   exchangeSelected: null,
   exchangeSupports: [],
   estimateTradeErrorMsg: '',
+  swapNetwork: MAIN_NETWORK_NAME.INCOGNITO,
 };
 
 export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
@@ -87,6 +88,13 @@ export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
       return {
         ...state,
         estimateTradeErrorMsg,
+      };
+    }
+    case FormUnshieldActionType.SET_SWAP_NETWORK: {
+      const swapNetwork = action.payload;
+      return {
+        ...state,
+        swapNetwork,
       };
     }
     default:
