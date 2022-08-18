@@ -1,3 +1,4 @@
+import { MAIN_NETWORK_NAME } from 'constants/token';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import { Action } from 'redux';
 import { IUserFee } from 'services/rpcClient';
@@ -11,6 +12,7 @@ export enum FormUnshieldActionType {
   SET_SWAP_EXCHANGE_SUPPORT = 'FORM_UNSHIELD/SET_SWAP_EXCHANGE_SUPPORT',
   SET_SWAP_EXCHANGE_SELECTED = 'FORM_UNSHIELD/SET_SWAP_EXCHANGE_SELECTED',
   SET_SWAP_ESTIMATE_TRADE_ERROR_MSG = 'FORM_UNSHIELD/SET_SWAP_ESTIMATE_TRADE_ERROR_MSG',
+  SET_SWAP_NETWORK = 'FORM_UNSHIELD/SET_SWAP_NETWORK',
 }
 
 export enum FormTypes {
@@ -44,6 +46,7 @@ export interface IFormUnshieldState {
   exchangeSupports: any[];
   exchangeSelected: any;
   estimateTradeErrorMsg: string;
+  swapNetwork: MAIN_NETWORK_NAME;
 }
 
 export interface UnshieldSetTokenPayLoad {
@@ -101,6 +104,11 @@ export interface SwapSetEstimateTradeErrorMsg extends Action {
   payload: any;
 }
 
+export interface SwapSetNetwork extends Action {
+  type: FormUnshieldActionType.SET_SWAP_NETWORK;
+  payload: any;
+}
+
 export type FormUnshieldActions =
   // Umshield action
   | UnshieldSetTokenAction
@@ -111,4 +119,5 @@ export type FormUnshieldActions =
   | SwapSetVaultsAction
   | SwapSetExchangeSupportsAction
   | SwapSetExchangeSelectedAction
-  | SwapSetEstimateTradeErrorMsg;
+  | SwapSetEstimateTradeErrorMsg
+  | SwapSetNetwork;

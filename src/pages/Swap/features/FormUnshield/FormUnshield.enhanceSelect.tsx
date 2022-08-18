@@ -1,3 +1,4 @@
+import { MAIN_NETWORK_NAME } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import React from 'react';
 import { useAppDispatch } from 'state/hooks';
@@ -10,7 +11,9 @@ import {
   actionGetVaults,
   actionSetExchangeSelected,
   actionSetSwapExchangeSupports,
+  actionSetSwapNetwork,
 } from './FormUnshield.actions';
+import { FormTypes } from './FormUnshield.types';
 
 export interface TInter {
   // Sell token
@@ -24,13 +27,17 @@ export interface TInter {
 
 const enhanceSelect = (WrappedComponent: any) => {
   const FormDepositComp = (props: any) => {
-    const { sellToken, buyToken } = props;
+    const { sellToken, buyToken, formType } = props;
     const dispatch = useAppDispatch();
     const handleSelectSellToken = async ({ token }: { token: PToken }) => {
       dispatch(actionGetVaults());
       dispatch(actionChangeSellToken({ token }));
-      dispatch(actionSetExchangeSelected(null));
-      dispatch(actionSetSwapExchangeSupports([]));
+
+      if (formType === FormTypes.SWAP) {
+        dispatch(actionSetExchangeSelected(null));
+        dispatch(actionSetSwapExchangeSupports([]));
+        dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
+      }
     };
 
     const handleSelectSellNetwork = ({ network }: { network: ITokenNetwork }) => {

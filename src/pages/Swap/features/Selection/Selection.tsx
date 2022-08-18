@@ -2,7 +2,7 @@ import { Image } from 'components/Core/Image';
 import Row, { RowBetween } from 'components/Core/Row';
 import { NetworkModal, useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
-import { ROOT_NETWORK_IMG } from 'constants/token';
+import { MAIN_NETWORK_NAME_ICON } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import React from 'react';
 import { ChevronDown } from 'react-feather';
@@ -151,7 +151,7 @@ const Selection = React.memo((props: ISelection) => {
           <RowBetween className={`selection-item ${activeNetworkHover ? 'hover-item' : ''}`} onClick={showNetworkList}>
             {rightValue ? (
               <Row>
-                {!!currency && <Image border={false} iconUrl={ROOT_NETWORK_IMG[currency]} />}
+                {!!currency && <Image border={false} iconUrl={MAIN_NETWORK_NAME_ICON[rightValue]} />}
                 {!!rightValue && (
                   <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="primary5">
                     {rightValue}

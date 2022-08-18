@@ -74,6 +74,7 @@ export interface IUnshieldData {
   swapFee: any;
   tradePaths: any;
   estimateTradeErrorMsg: string;
+  swapNetwork: MAIN_NETWORK_NAME;
 }
 
 const getTradePaths = (routes: any[]) => {
@@ -115,6 +116,7 @@ const getUnshieldData = ({
     vaults,
     exchangeSelected,
     estimateTradeErrorMsg,
+    swapNetwork,
   } = unshield;
 
   const {
@@ -150,9 +152,9 @@ const getUnshieldData = ({
   const _buyToken = getDataByTokenID(buyIdentify);
   let _buyTokenList = unshieldableTokens(state);
 
-  if (formType === FormTypes.SWAP && buyToken?.currency && buyToken?.networkName !== MAIN_NETWORK_NAME.INCOGNITO) {
+  if (formType === FormTypes.SWAP && swapNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
     _buyTokenList = _buyTokenList.filter((token: any) => {
-      if (buyToken?.networkName === MAIN_NETWORK_NAME.POLYGON) {
+      if (swapNetwork === MAIN_NETWORK_NAME.POLYGON) {
         return (
           token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
           token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC ||
@@ -160,7 +162,7 @@ const getUnshieldData = ({
         );
       }
 
-      if (buyToken?.networkName === MAIN_NETWORK_NAME.ETHEREUM) {
+      if (swapNetwork === MAIN_NETWORK_NAME.ETHEREUM) {
         return (
           token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
           token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ERC20 ||
@@ -168,7 +170,7 @@ const getUnshieldData = ({
         );
       }
 
-      if (buyToken?.networkName === MAIN_NETWORK_NAME.BSC) {
+      if (swapNetwork === MAIN_NETWORK_NAME.BSC) {
         return (
           token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
           token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB ||
@@ -176,7 +178,7 @@ const getUnshieldData = ({
         );
       }
 
-      if (buyToken?.networkName === MAIN_NETWORK_NAME.FANTOM) {
+      if (swapNetwork === MAIN_NETWORK_NAME.FANTOM) {
         return (
           token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
           token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM ||
@@ -186,24 +188,38 @@ const getUnshieldData = ({
     });
   }
 
-  let _buyParentToken, _buyNetworkList: any;
+  let _sellParentToken, _buyParentToken, _buyNetworkList: any;
+  let _buyNetworkName: MAIN_NETWORK_NAME = MAIN_NETWORK_NAME.INCOGNITO;
+
+  if (sellParentIdentify) {
+    _sellParentToken = getDataByTokenID(sellParentIdentify);
+  }
 
   if (buyParentIdentify) {
     _buyParentToken = getDataByTokenID(buyParentIdentify);
-    _buyNetworkList = _buyParentToken.supportedNetwork;
-    if (_buyParentToken?.isUnified && vaults) {
-      const tokenVault = vaults?.UnifiedTokenVaults[_buyParentToken?.tokenID] || {};
+  }
+
+  // case unshield;
+  if (formType === FormTypes.UNSHIELD) {
+    _buyNetworkName = buyNetworkName;
+    _buyNetworkList = _buyParentToken?.supportedNetwork;
+  }
+
+  // case swap
+  if (formType === FormTypes.SWAP) {
+    _buyNetworkName = swapNetwork;
+    _buyNetworkList = _sellParentToken?.supportedNetwork;
+    if (_sellParentToken?.isUnified && vaults) {
+      const tokenVault = vaults?.UnifiedTokenVaults[_sellParentToken?.tokenID] || {};
       _buyNetworkList = _buyNetworkList?.filter(
         (_item: any) => tokenVault[_item?.identify?.split('-')[0]]['Amount'] > 0
       );
     }
-    if (
-      formType === FormTypes.SWAP &&
-      !_buyNetworkList?.find((network: ITokenNetwork) => network?.networkName === MAIN_NETWORK_NAME.INCOGNITO)
-    ) {
+    // add incognito network
+    if (!_buyNetworkList?.find((network: ITokenNetwork) => network?.networkName === MAIN_NETWORK_NAME.INCOGNITO)) {
       _buyNetworkList.unshift({
-        parentIdentify: buyParentIdentify,
-        identify: _buyParentToken.identify,
+        parentIdentify: sellParentIdentify,
+        identify: _sellParentToken?.identify,
         networkName: MAIN_NETWORK_NAME.INCOGNITO,
         currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
       });
@@ -336,9 +352,10 @@ const getUnshieldData = ({
     })} ${burnFeeToken.symbol}`;
   }
 
-  const exchangeSelectedData = exchangeSupports?.length
-    ? exchangeSupports?.find((exchange: any) => exchange?.AppName === exchangeSelected)
-    : {};
+  const exchangeSelectedData =
+    exchangeSupports?.length > 0
+      ? exchangeSupports?.find((exchange: any) => exchange?.AppName === exchangeSelected)
+      : {};
   const swapFeeObj = exchangeSelectedData && exchangeSelectedData?.Fee ? exchangeSelectedData?.Fee[0] : [];
 
   let tradeFeeText: string;
@@ -383,7 +400,7 @@ const getUnshieldData = ({
     buyNetworkList: _buyNetworkList,
     buyTokenList: _buyTokenList,
     buyCurrency,
-    buyNetworkName,
+    buyNetworkName: _buyNetworkName,
 
     userBalanceNoClip,
     userBalance,
@@ -419,6 +436,7 @@ const getUnshieldData = ({
     swapFee,
     tradePaths,
     estimateTradeErrorMsg,
+    swapNetwork,
   };
 };
 
