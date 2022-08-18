@@ -90,10 +90,10 @@ export const actionChangeBuyToken =
       if (!token.chainID || !token.networkName || !parentToken.currencyType) return;
       const buyToken: any = {
         parentIdentify: parentToken.identify,
-        identify: parentToken?.isUnified ? null : parentToken.identify,
+        identify: parentToken.identify,
         chainID: parentToken.chainID,
-        currency: parentToken.hasChild ? null : parentToken.currencyType,
-        networkName: parentToken.hasChild ? null : MAIN_NETWORK_NAME.INCOGNITO,
+        currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
+        networkName: MAIN_NETWORK_NAME.INCOGNITO,
       };
 
       dispatch(
