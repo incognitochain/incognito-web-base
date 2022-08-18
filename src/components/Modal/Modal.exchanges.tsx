@@ -39,14 +39,14 @@ const ExchangeModal = (props: IProps & any) => {
   const renderItem = (exchange: any) => {
     return (
       <Item
-        key={exchange.AppName}
+        key={exchange?.exchangeName}
         onClick={() => {
           closeModal();
-          onSelect({ exchange });
+          onSelect(exchange?.exchangeName);
         }}
       >
         <ThemedText.RegularLabel color="primary5" style={{ marginLeft: 12 }}>
-          {exchange?.AppName}
+          {exchange?.exchangeName}
         </ThemedText.RegularLabel>
       </Item>
     );

@@ -212,7 +212,10 @@ const getUnshieldData = ({
     if (_sellParentToken?.isUnified && vaults) {
       const tokenVault = vaults?.UnifiedTokenVaults[_sellParentToken?.tokenID] || {};
       _buyNetworkList = _buyNetworkList?.filter(
-        (_item: any) => tokenVault[_item?.identify?.split('-')[0]]['Amount'] > 0
+        (_item: any) =>
+          tokenVault[_item?.identify?.split('-')[0]]['Amount'] -
+            tokenVault[_item?.identify?.split('-')[0]]['LockedAmount'] >
+          0
       );
     }
     // add incognito network
@@ -354,7 +357,7 @@ const getUnshieldData = ({
 
   const exchangeSelectedData =
     exchangeSupports?.length > 0
-      ? exchangeSupports?.find((exchange: any) => exchange?.AppName === exchangeSelected)
+      ? exchangeSupports?.find((exchange: any) => exchange?.exchangeName === exchangeSelected)
       : {};
   const swapFeeObj = exchangeSelectedData && exchangeSelectedData?.Fee ? exchangeSelectedData?.Fee[0] : [];
 
@@ -380,7 +383,7 @@ const getUnshieldData = ({
     tradeFeeText,
   };
 
-  const tradePaths = getTradePaths(exchangeSelectedData?.Route || []);
+  const tradePaths: any[] = [];
 
   let estReceiveAmount;
   if (formType === FormTypes.UNSHIELD) {

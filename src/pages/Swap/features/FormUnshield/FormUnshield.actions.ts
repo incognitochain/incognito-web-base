@@ -267,9 +267,60 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     const data = await rpcClient.estimateSwapFee(payload);
 
     if (data) {
-      const defaultExchange: SwapExchange = data[0]?.AppName;
+      let ethExchanges = [];
+      let ftmExchanges = [];
+      let plgExchanges = [];
+      let bscExchanges = [];
+      if (data?.hasOwnProperty('bsc')) {
+        const exchanges = data['bsc'];
+        if (Array.isArray(exchanges)) {
+          bscExchanges = exchanges.map((exchange: any) => ({
+            ...exchange,
+            exchangeName: `${exchange?.AppName}(BSC)`,
+          }));
+        }
+      }
+
+      if (data?.hasOwnProperty('eth')) {
+        const exchanges = data['eth'];
+        if (Array.isArray(exchanges)) {
+          ethExchanges = exchanges.map((exchange: any) => ({
+            ...exchange,
+            exchangeName: `${exchange?.AppName}(ETH)`,
+          }));
+        }
+      }
+
+      if (data?.hasOwnProperty('plg')) {
+        const exchanges = data['plg'];
+        if (Array.isArray(exchanges)) {
+          plgExchanges = exchanges.map((exchange: any) => ({
+            ...exchange,
+            exchangeName: `${exchange?.AppName}(PLG)`,
+          }));
+        }
+      }
+
+      if (data?.hasOwnProperty('ftm')) {
+        const exchanges = data['ftm'];
+        if (Array.isArray(exchanges)) {
+          ftmExchanges = exchanges.map((exchange: any) => ({
+            ...exchange,
+            exchangeName: `${exchange?.AppName}(FTM)`,
+          }));
+        }
+      }
+
+      const exchangeSupports = [...ethExchanges, ...ftmExchanges, ...plgExchanges, ...bscExchanges];
+
+      const bestRate = exchangeSupports.reduce(
+        (prev, current) => (parseFloat(prev.AmountOut) > parseFloat(current.AmountOut) ? prev : current),
+        0
+      );
+
+      const defaultExchange: SwapExchange = bestRate?.exchangeName;
       dispatch(actionSetExchangeSelected(defaultExchange));
-      dispatch(actionSetSwapExchangeSupports(data));
+      dispatch(actionSetSwapExchangeSupports(exchangeSupports));
     }
   } catch (error) {
     dispatch(actionSetSwapEstimateTradeErrorMsg(typeof error === 'string' ? error : ''));

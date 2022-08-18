@@ -49,7 +49,6 @@ const enhanceSelect = (WrappedComponent: any) => {
         return;
       }
       dispatch(actionChangeBuyToken({ token }));
-      dispatch(actionGetVaults());
       dispatch(actionSetExchangeSelected(null));
       dispatch(actionSetSwapExchangeSupports([]));
     };
