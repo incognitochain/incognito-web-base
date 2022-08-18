@@ -354,7 +354,7 @@ const getUnshieldData = ({
 
   const exchangeSelectedData =
     exchangeSupports?.length > 0
-      ? exchangeSupports?.find((exchange: any) => exchange?.AppName === exchangeSelected)
+      ? exchangeSupports?.find((exchange: any) => exchange?.exchangeName === exchangeSelected)
       : {};
   const swapFeeObj = exchangeSelectedData && exchangeSelectedData?.Fee ? exchangeSelectedData?.Fee[0] : [];
 
@@ -380,7 +380,7 @@ const getUnshieldData = ({
     tradeFeeText,
   };
 
-  const tradePaths = getTradePaths(exchangeSelectedData?.Route || []);
+  const tradePaths: any[] = [];
 
   let estReceiveAmount;
   if (formType === FormTypes.UNSHIELD) {

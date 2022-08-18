@@ -116,7 +116,7 @@ class RpcClient {
       FromToken: fromToken,
       ToToken: toToken,
     });
-    const exchangeSupports = data?.Networks[network];
+    const exchangeSupports = data?.Networks;
     return exchangeSupports;
   }
 

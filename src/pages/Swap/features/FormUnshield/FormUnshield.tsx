@@ -15,7 +15,7 @@ import { ThemedText } from 'theme';
 import { EstReceive } from '../EstReceive';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
-import { FormTypes, SwapExchange } from './FormUnshield.types';
+import { FormTypes } from './FormUnshield.types';
 
 const Styled = styled.div``;
 
@@ -61,8 +61,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
 
   const dispatch = useDispatch();
 
-  const onSelectExchange = (exchange: SwapExchange) => {
-    dispatch(actionSetExchangeSelected(exchange));
+  const onSelectExchange = (exchangeName: any) => {
+    dispatch(actionSetExchangeSelected(exchangeName));
   };
 
   return (
