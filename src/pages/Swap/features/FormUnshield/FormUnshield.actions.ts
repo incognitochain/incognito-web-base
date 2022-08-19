@@ -195,7 +195,7 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
     const { inputAmount, inputOriginalAmount, buyToken, incAddress, unshieldAddress, sellToken } = unshieldDataSelector(
       getState()
     );
-    if (!incAddress || !unshieldAddress) return;
+    if (!incAddress || !unshieldAddress || !inputOriginalAmount) return;
     dispatch(actionSetFetchingFee({ isFetchingFee: true }));
     let network = '';
     if (buyToken.isErc20Token || buyToken.isMainETH) {
@@ -239,6 +239,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       unshieldDataSelector(getState());
     if (
       !inputAmount ||
+      !parseFloat(inputAmount) ||
       !sellToken?.tokenID ||
       !buyParentToken?.tokenID ||
       !incAddress ||
