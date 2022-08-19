@@ -1,6 +1,7 @@
 import { Trans } from '@lingui/macro';
 import { Currency } from '@uniswap/sdk-core';
 import Circle from 'assets/images/blue-loader.svg';
+import submittedSVG from 'assets/svg/submitted.svg';
 import Badge from 'components/Badge';
 import Modal from 'components/Core/Modal';
 import { CHAIN_INFO } from 'constants/chainInfo';
@@ -8,7 +9,7 @@ import { L2_CHAIN_IDS, SupportedL2ChainId } from 'constants/chains';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useCurrencyLogoURIs from 'lib/hooks/useCurrencyLogoURIs';
 import { ReactNode, useCallback, useContext, useState } from 'react';
-import { AlertCircle, AlertTriangle, ArrowUpCircle } from 'react-feather';
+import { AlertCircle, AlertTriangle } from 'react-feather';
 import { Text } from 'rebass';
 import { useIsTransactionConfirmed, useTransaction } from 'state/transactions/hooks';
 import styled, { ThemeContext } from 'styled-components/macro';
@@ -126,7 +127,8 @@ export function TransactionSubmittedContent({
         {/*  </RowBetween>*/}
         {/*)}*/}
         <ConfirmedIcon inline={inline}>
-          <ArrowUpCircle strokeWidth={0.5} size={inline ? '40px' : '90px'} color={theme.primary1} />
+          <img src={submittedSVG} alt="submitted-svg" />
+          {/*<ArrowUpCircle strokeWidth={0.5} size={inline ? '40px' : '90px'} color={theme.primary1} />*/}
         </ConfirmedIcon>
         <AutoColumn gap="12px" justify={'center'}>
           <Text fontWeight={500} fontSize={20} textAlign="center">

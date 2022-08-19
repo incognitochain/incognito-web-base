@@ -1,7 +1,8 @@
 import { ReactComponent as MobileNotSupportedSVG } from 'assets/svg/mobile-not-supported.svg';
-import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
+import { isIOS } from 'utils/userAgent';
 
 export const Styled = styled.div`
   display: flex;
@@ -69,10 +70,13 @@ const MobileNotSuported = () => {
       <button
         className="button button-hover"
         onClick={() => {
-          window.location.replace(INCOGNITO_LANDING_PAGE);
+          const URL = isIOS()
+            ? 'https://apps.apple.com/us/app/incognito-crypto-wallet/id1475631606?ls=1'
+            : 'https://play.google.com/store/apps/details?id=com.incognito.wallet';
+          window.open(URL);
         }}
       >
-        {'Go to home'}
+        {'Download app'}
       </button>
     </Styled>
   );
