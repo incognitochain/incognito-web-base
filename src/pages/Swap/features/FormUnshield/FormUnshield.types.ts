@@ -21,7 +21,7 @@ export enum FormTypes {
 }
 
 export enum SwapExchange {
-  PANCAKE_SWAP = 'pancakeswap',
+  PANCAKE_SWAP = 'pancake',
   UNISWAP = 'uniswap',
   CURVE = 'curve',
 }

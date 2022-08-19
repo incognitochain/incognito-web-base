@@ -19,6 +19,7 @@ import {
   UnshieldSetUserFeeAction,
   UnshieldSetUserFeePayLoad,
 } from './FormUnshield.types';
+import { getExchangeName } from './FormUnshield.utils';
 
 export const actionSetToken = (payload: UnshieldSetTokenPayLoad): UnshieldSetTokenAction => ({
   type: FormUnshieldActionType.SET_TOKEN,
@@ -243,8 +244,9 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       !incAddress ||
       !unshieldAddress ||
       !buyNetworkName
-    )
+    ) {
       return;
+    }
     dispatch(actionSetSwapEstimateTradeErrorMsg(''));
     dispatch(actionSetFetchingFee({ isFetchingFee: true }));
     let network = 'inc';
@@ -265,63 +267,65 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       toToken: buyParentToken.tokenID,
     };
     const data = await rpcClient.estimateSwapFee(payload);
+    if (!data) throw new Error('Can not estimate trade');
 
-    if (data) {
-      let ethExchanges = [];
-      let ftmExchanges = [];
-      let plgExchanges = [];
-      let bscExchanges = [];
-      if (data?.hasOwnProperty('bsc')) {
-        const exchanges = data['bsc'];
-        if (Array.isArray(exchanges)) {
-          bscExchanges = exchanges.map((exchange: any) => ({
-            ...exchange,
-            exchangeName: `${exchange?.AppName}(BSC)`,
-          }));
-        }
+    let ethExchanges = [];
+    let ftmExchanges = [];
+    let plgExchanges = [];
+    let bscExchanges = [];
+    if (data?.hasOwnProperty('bsc')) {
+      const exchanges = data['bsc'];
+      if (Array.isArray(exchanges)) {
+        bscExchanges = exchanges.map((exchange: any) => ({
+          ...exchange,
+          exchangeName: `${getExchangeName(exchange?.AppName)}(BSC)`,
+        }));
       }
-
-      if (data?.hasOwnProperty('eth')) {
-        const exchanges = data['eth'];
-        if (Array.isArray(exchanges)) {
-          ethExchanges = exchanges.map((exchange: any) => ({
-            ...exchange,
-            exchangeName: `${exchange?.AppName}(ETH)`,
-          }));
-        }
-      }
-
-      if (data?.hasOwnProperty('plg')) {
-        const exchanges = data['plg'];
-        if (Array.isArray(exchanges)) {
-          plgExchanges = exchanges.map((exchange: any) => ({
-            ...exchange,
-            exchangeName: `${exchange?.AppName}(PLG)`,
-          }));
-        }
-      }
-
-      if (data?.hasOwnProperty('ftm')) {
-        const exchanges = data['ftm'];
-        if (Array.isArray(exchanges)) {
-          ftmExchanges = exchanges.map((exchange: any) => ({
-            ...exchange,
-            exchangeName: `${exchange?.AppName}(FTM)`,
-          }));
-        }
-      }
-
-      const exchangeSupports = [...ethExchanges, ...ftmExchanges, ...plgExchanges, ...bscExchanges];
-
-      const bestRate = exchangeSupports.reduce(
-        (prev, current) => (parseFloat(prev.AmountOut) > parseFloat(current.AmountOut) ? prev : current),
-        0
-      );
-
-      const defaultExchange: SwapExchange = bestRate?.exchangeName;
-      dispatch(actionSetExchangeSelected(defaultExchange));
-      dispatch(actionSetSwapExchangeSupports(exchangeSupports));
     }
+
+    if (data?.hasOwnProperty('eth')) {
+      const exchanges = data['eth'];
+      if (Array.isArray(exchanges)) {
+        ethExchanges = exchanges.map((exchange: any) => ({
+          ...exchange,
+          exchangeName: `${getExchangeName(exchange?.AppName)}(ETH)`,
+        }));
+      }
+    }
+
+    if (data?.hasOwnProperty('plg')) {
+      const exchanges = data['plg'];
+      if (Array.isArray(exchanges)) {
+        plgExchanges = exchanges.map((exchange: any) => ({
+          ...exchange,
+          exchangeName: `${getExchangeName(exchange?.AppName)}(PLG)`,
+        }));
+      }
+    }
+
+    if (data?.hasOwnProperty('ftm')) {
+      const exchanges = data['ftm'];
+      if (Array.isArray(exchanges)) {
+        ftmExchanges = exchanges.map((exchange: any) => ({
+          ...exchange,
+          exchangeName: `${getExchangeName(exchange?.AppName)}(FTM)`,
+        }));
+      }
+    }
+
+    const exchangeSupports = [...ethExchanges, ...ftmExchanges, ...plgExchanges, ...bscExchanges];
+
+    // find best rate by list exchange
+    const bestRate = exchangeSupports.reduce(
+      (prev, current) => (parseFloat(prev.AmountOut) > parseFloat(current.AmountOut) ? prev : current),
+      0
+    );
+
+    // Set default exchange has best rate
+    const defaultExchange: SwapExchange = bestRate?.exchangeName;
+    dispatch(actionSetExchangeSelected(defaultExchange));
+
+    dispatch(actionSetSwapExchangeSupports(exchangeSupports));
   } catch (error) {
     dispatch(actionSetSwapEstimateTradeErrorMsg(typeof error === 'string' ? error : ''));
   } finally {

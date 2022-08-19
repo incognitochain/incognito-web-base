@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { isAddress as isEtherAddress } from 'ethers/lib/utils';
-import { ITokenNetwork } from 'models/model/pTokenModel';
+import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { formValueSelector, isSubmitting, isValid } from 'redux-form';
@@ -11,7 +11,7 @@ import { unshieldableTokens } from 'state/token';
 import convert from 'utils/convert';
 import format from 'utils/format';
 
-import { FormTypes, IFormUnshieldState } from './FormUnshield.types';
+import { FormTypes, IFormUnshieldState, SwapExchange } from './FormUnshield.types';
 
 export interface IFee {
   networkFee: number;
@@ -77,19 +77,34 @@ export interface IUnshieldData {
   swapNetwork: MAIN_NETWORK_NAME;
 }
 
-const getTradePaths = (routes: any[]) => {
-  const tradePathArrStr = routes?.map((childRoutes: any[]) => {
-    return childRoutes
-      ?.map((tokenRoute: any, index: number, arr) => {
-        if (index === arr.length - 1) {
-          return `${tokenRoute?.tokenIn?.symbol} > ${tokenRoute?.tokenOut?.symbol}`;
-        } else {
-          return `${tokenRoute?.tokenIn?.symbol} >`;
+const getTradePaths = (exchange: SwapExchange, routes: any[], tokenList: any) => {
+  let tradePathArrStr: any = [];
+
+  if (exchange === SwapExchange.UNISWAP) {
+    tradePathArrStr = routes?.map((childRoutes: any[]) => {
+      return childRoutes
+        ?.map((tokenRoute: any, index: number, arr) => {
+          if (index === arr.length - 1) {
+            return `${tokenRoute?.tokenIn?.symbol} > ${tokenRoute?.tokenOut?.symbol}`;
+          } else {
+            return `${tokenRoute?.tokenIn?.symbol} >`;
+          }
+        })
+        .filter((symbol) => !!symbol)
+        .join('');
+    });
+  }
+
+  if (exchange === SwapExchange.PANCAKE_SWAP) {
+    routes?.map((contractID: string) =>
+      tokenList?.map((token: PToken) => {
+        if (token?.contractID === contractID) {
+          tradePathArrStr.push(token?.symbol);
         }
       })
-      .filter((symbol) => !!symbol)
-      .join('');
-  });
+    );
+    tradePathArrStr = [tradePathArrStr?.join(' > ')];
+  }
   return tradePathArrStr;
 };
 
@@ -383,7 +398,7 @@ const getUnshieldData = ({
     tradeFeeText,
   };
 
-  const tradePaths: any[] = [];
+  const tradePaths: any[] = getTradePaths(exchangeSelectedData?.AppName, exchangeSelectedData?.Route, _sellTokenList);
 
   let estReceiveAmount;
   if (formType === FormTypes.UNSHIELD) {
@@ -443,4 +458,16 @@ const getUnshieldData = ({
   };
 };
 
-export { getUnshieldData };
+const getExchangeName = (exchange: SwapExchange) => {
+  if (exchange === SwapExchange.PANCAKE_SWAP) {
+    return 'PancakeSwap';
+  }
+  if (exchange === SwapExchange.UNISWAP) {
+    return 'Uniswap';
+  }
+  if (exchange === SwapExchange.CURVE) {
+    return 'Curve';
+  }
+};
+
+export { getExchangeName, getUnshieldData };
