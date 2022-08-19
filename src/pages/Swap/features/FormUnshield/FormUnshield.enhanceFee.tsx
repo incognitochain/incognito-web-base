@@ -42,7 +42,7 @@ const enhanceFee = (WrappedComponent: any) => {
       }
 
       // Case estimate fee for swapped transactions
-      if (formType === FormTypes.SWAP && unshieldAddress && isExternalAddress) {
+      if (formType === FormTypes.SWAP && unshieldAddress) {
         debounceEstimateSwapFee();
       }
     }, [
