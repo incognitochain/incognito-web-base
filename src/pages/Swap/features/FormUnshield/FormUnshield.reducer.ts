@@ -31,7 +31,7 @@ const initialState: IFormUnshieldState = {
   vaults: {},
   exchangeSelected: null,
   exchangeSupports: [],
-  estimateTradeErrorMsg: '',
+  estimateTradeErrorMsg: null,
   swapNetwork: MAIN_NETWORK_NAME.INCOGNITO,
 };
 
