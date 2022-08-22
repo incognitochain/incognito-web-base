@@ -10,7 +10,8 @@ import { unshieldDataSelector } from './FormUnshield.selectors';
 import {
   FormTypes,
   FormUnshieldActionType,
-  SwapExchange,
+  ISwapExchangeData,
+  NetworkTypePayload,
   UnshieldFetchingUserFeePayLoad,
   UnshieldResetUserFeeAction,
   UnshieldSetFetchingUserFeeAction,
@@ -19,7 +20,7 @@ import {
   UnshieldSetUserFeeAction,
   UnshieldSetUserFeePayLoad,
 } from './FormUnshield.types';
-import { getExchangeName } from './FormUnshield.utils';
+import { parseExchangeDataModelResponse } from './FormUnshield.utils';
 
 export const actionSetToken = (payload: UnshieldSetTokenPayLoad): UnshieldSetTokenAction => ({
   type: FormUnshieldActionType.SET_TOKEN,
@@ -50,7 +51,7 @@ export const actionSetVaults = (payload: any) => ({
   payload,
 });
 
-export const actionSetExchangeSelected = (payload: SwapExchange | null) => ({
+export const actionSetExchangeSelected = (payload: string | null) => ({
   type: FormUnshieldActionType.SET_SWAP_EXCHANGE_SELECTED,
   payload,
 });
@@ -250,15 +251,15 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     }
     dispatch(actionSetSwapEstimateTradeErrorMsg(''));
     dispatch(actionSetFetchingFee({ isFetchingFee: true }));
-    let network = 'inc';
+    let network: NetworkTypePayload = NetworkTypePayload.INCOGNITO;
     if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
-      network = 'eth';
+      network = NetworkTypePayload.ETHEREUM;
     } else if (buyNetworkName === MAIN_NETWORK_NAME.BSC) {
-      network = 'bsc';
+      network = NetworkTypePayload.BINANCE_SMART_CHAIN;
     } else if (buyNetworkName === MAIN_NETWORK_NAME.POLYGON) {
-      network = 'plg';
+      network = NetworkTypePayload.POLYGON;
     } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
-      network = 'ftm';
+      network = NetworkTypePayload.FANTOM;
     }
 
     const payload = {
@@ -267,63 +268,51 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       fromToken: sellToken.tokenID,
       toToken: buyParentToken.tokenID,
     };
+
     const data = await rpcClient.estimateSwapFee(payload);
     if (!data) throw new Error('Can not estimate trade');
 
-    let ethExchanges = [];
-    let ftmExchanges = [];
-    let plgExchanges = [];
-    let bscExchanges = [];
-    if (data?.hasOwnProperty('bsc')) {
-      const exchanges = data['bsc'];
+    let ethExchanges: ISwapExchangeData[] = [];
+    let ftmExchanges: ISwapExchangeData[] = [];
+    let plgExchanges: ISwapExchangeData[] = [];
+    let bscExchanges: ISwapExchangeData[] = [];
+    if (data?.hasOwnProperty(NetworkTypePayload.BINANCE_SMART_CHAIN)) {
+      const exchanges = data[NetworkTypePayload.BINANCE_SMART_CHAIN];
       if (Array.isArray(exchanges)) {
-        bscExchanges = exchanges.map((exchange: any) => ({
-          ...exchange,
-          exchangeName: `${getExchangeName(exchange?.AppName)}(BSC)`,
-        }));
+        bscExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'BSC'));
       }
     }
 
-    if (data?.hasOwnProperty('eth')) {
-      const exchanges = data['eth'];
+    if (data?.hasOwnProperty(NetworkTypePayload.ETHEREUM)) {
+      const exchanges = data[NetworkTypePayload.ETHEREUM];
       if (Array.isArray(exchanges)) {
-        ethExchanges = exchanges.map((exchange: any) => ({
-          ...exchange,
-          exchangeName: `${getExchangeName(exchange?.AppName)}(ETH)`,
-        }));
+        ethExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'ETH'));
       }
     }
 
-    if (data?.hasOwnProperty('plg')) {
-      const exchanges = data['plg'];
+    if (data?.hasOwnProperty(NetworkTypePayload.POLYGON)) {
+      const exchanges = data[NetworkTypePayload.POLYGON];
       if (Array.isArray(exchanges)) {
-        plgExchanges = exchanges.map((exchange: any) => ({
-          ...exchange,
-          exchangeName: `${getExchangeName(exchange?.AppName)}(PLG)`,
-        }));
+        plgExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'PLG'));
       }
     }
 
-    if (data?.hasOwnProperty('ftm')) {
-      const exchanges = data['ftm'];
+    if (data?.hasOwnProperty(NetworkTypePayload.FANTOM)) {
+      const exchanges = data[NetworkTypePayload.FANTOM];
       if (Array.isArray(exchanges)) {
-        ftmExchanges = exchanges.map((exchange: any) => ({
-          ...exchange,
-          exchangeName: `${getExchangeName(exchange?.AppName)}(FTM)`,
-        }));
+        ftmExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'FTM'));
       }
     }
 
     const exchangeSupports = [...ethExchanges, ...ftmExchanges, ...plgExchanges, ...bscExchanges];
 
-    // find best rate by list exchange
-    const bestRate = exchangeSupports.reduce(
-      (prev, current) => (parseFloat(prev.AmountOut) > parseFloat(current.AmountOut) ? prev : current),
-      0
+    // Find best rate by list exchange
+    const bestRate: ISwapExchangeData = exchangeSupports.reduce((prev, current) =>
+      prev.amountOut > current.amountOut ? prev : current
     );
 
     // Set default exchange has best rate
-    const defaultExchange: SwapExchange = bestRate?.exchangeName;
+    const defaultExchange: string = bestRate?.exchangeName;
     dispatch(actionSetExchangeSelected(defaultExchange));
 
     dispatch(actionSetSwapExchangeSupports(exchangeSupports));

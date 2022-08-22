@@ -62,7 +62,7 @@ export interface IUnshield {
   exchangeSupports: any[];
   swapFee: any;
   tradePaths: string[];
-  estimateTradeErrorMsg: string;
+  estimateTradeErrorMsg: string | null;
 }
 
 export const useUnshield = (): IUnshield => {

@@ -11,7 +11,7 @@ import { unshieldableTokens } from 'state/token';
 import convert from 'utils/convert';
 import format from 'utils/format';
 
-import { FormTypes, IFormUnshieldState, SwapExchange } from './FormUnshield.types';
+import { FormTypes, IFormUnshieldState, ISwapExchangeData, ISwapFee, SwapExchange } from './FormUnshield.types';
 
 export interface IFee {
   networkFee: number;
@@ -72,14 +72,14 @@ export interface IUnshieldData {
   exchangeSelected: any;
   exchangeSelectedData: any;
   swapFee: any;
-  tradePaths: any;
-  estimateTradeErrorMsg: string;
+  tradePaths: string[];
+  estimateTradeErrorMsg: string | null;
   swapNetwork: MAIN_NETWORK_NAME;
 }
 
-const getTradePaths = (exchange: SwapExchange, routes: any[], tokenList: any) => {
+const getTradePaths = (exchange?: SwapExchange, routes?: any[], tokenList?: any): string[] => {
+  if (!exchange || !routes) return [];
   let tradePathArrStr: any = [];
-
   if (exchange === SwapExchange.UNISWAP) {
     tradePathArrStr = routes?.map((childRoutes: any[]) => {
       return childRoutes
@@ -226,6 +226,7 @@ const getUnshieldData = ({
     _buyNetworkList = _sellParentToken?.supportedNetwork;
     if (_sellParentToken?.isUnified && vaults) {
       const tokenVault = vaults?.UnifiedTokenVaults[_sellParentToken?.tokenID] || {};
+      // Filter network enough vault
       _buyNetworkList = _buyNetworkList?.filter(
         (_item: any) =>
           tokenVault[_item?.identify?.split('-')[0]]['Amount'] -
@@ -370,25 +371,24 @@ const getUnshieldData = ({
     })} ${burnFeeToken.symbol}`;
   }
 
-  const exchangeSelectedData =
-    exchangeSupports?.length > 0
-      ? exchangeSupports?.find((exchange: any) => exchange?.exchangeName === exchangeSelected)
-      : {};
-  const swapFeeObj = exchangeSelectedData && exchangeSelectedData?.Fee ? exchangeSelectedData?.Fee[0] : [];
+  const exchangeSelectedData = exchangeSupports?.find(
+    (exchange: ISwapExchangeData) => exchange?.exchangeName === exchangeSelected
+  );
+  const swapFeeObj: ISwapFee | null = exchangeSelectedData?.fees[0] || null;
 
   let tradeFeeText: string;
   if (swapFeeObj?.feeAddress !== PRV.id) {
     tradeFeeText = `${
       convert.toHumanAmountString({
         decimals: _sellToken.pDecimals,
-        originalAmount: swapFeeObj.amount,
+        originalAmount: swapFeeObj?.amount,
       }) || 0
     } ${_sellToken.symbol}`;
   } else {
     tradeFeeText = `${
       convert.toHumanAmountString({
         decimals: PRV.pDecimals,
-        originalAmount: swapFeeObj.amount,
+        originalAmount: swapFeeObj?.amount,
       }) || 0
     } ${_sellToken.symbol}`;
   }
@@ -398,13 +398,17 @@ const getUnshieldData = ({
     tradeFeeText,
   };
 
-  const tradePaths: any[] = getTradePaths(exchangeSelectedData?.AppName, exchangeSelectedData?.Route, _sellTokenList);
+  const tradePaths: string[] = getTradePaths(
+    exchangeSelectedData?.appName,
+    exchangeSelectedData?.routes,
+    _sellTokenList
+  );
 
   let estReceiveAmount;
   if (formType === FormTypes.UNSHIELD) {
     estReceiveAmount = userFee?.estimatedExpectedAmount ? userFee.estimatedExpectedAmount : inputAmount;
   } else {
-    estReceiveAmount = exchangeSelectedData?.AmountOut;
+    estReceiveAmount = exchangeSelectedData?.amountOut || 0;
   }
 
   return {
@@ -470,4 +474,18 @@ const getExchangeName = (exchange: SwapExchange) => {
   }
 };
 
-export { getExchangeName, getUnshieldData };
+const parseExchangeDataModelResponse = (data: any, networkName: string) => {
+  const exchangeData: ISwapExchangeData = {
+    amountIn: parseFloat(data?.AmountIn || 0),
+    amountInRaw: parseFloat(data?.AmountInRaw || 0),
+    amountOut: parseFloat(data?.AmountOut || 0),
+    amountOutRaw: parseFloat(data?.AmountOutRaw || 0),
+    appName: data?.AppName,
+    exchangeName: `${getExchangeName(data?.AppName)}(${networkName})`,
+    fees: data?.Fee || [],
+    routes: data?.Route || [],
+  };
+  return exchangeData;
+};
+
+export { getExchangeName, getUnshieldData, parseExchangeDataModelResponse };

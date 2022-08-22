@@ -26,6 +26,14 @@ export enum SwapExchange {
   CURVE = 'curve',
 }
 
+export enum NetworkTypePayload {
+  INCOGNITO = 'inc',
+  ETHEREUM = 'eth',
+  POLYGON = 'plg',
+  FANTOM = 'ftm',
+  BINANCE_SMART_CHAIN = 'bsc',
+}
+
 export interface ISwapExchange {
   exchangeId: SwapExchange;
   exchangeName: string;
@@ -43,10 +51,25 @@ export interface IFormUnshieldState {
 
   // Swap data
   vaults: any;
-  exchangeSupports: any[];
-  exchangeSelected: any;
-  estimateTradeErrorMsg: string;
+  exchangeSupports: ISwapExchangeData[];
+  exchangeSelected: string | null;
+  estimateTradeErrorMsg: string | null;
   swapNetwork: MAIN_NETWORK_NAME;
+}
+
+export interface ISwapFee {
+  amount: number;
+  feeAddress: string;
+}
+export interface ISwapExchangeData {
+  amountIn: number;
+  amountInRaw: number;
+  amountOut: number;
+  amountOutRaw: number;
+  appName: SwapExchange;
+  exchangeName: string;
+  fees: ISwapFee[];
+  routes: any[];
 }
 
 export interface UnshieldSetTokenPayLoad {
