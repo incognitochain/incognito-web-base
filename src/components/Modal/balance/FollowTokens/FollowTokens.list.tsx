@@ -5,6 +5,7 @@ import { useAppSelector } from 'state/hooks';
 import { followTokensFormatedSelector } from 'state/token/token.selectors';
 import styled from 'styled-components/macro';
 
+import { LoadingOpacityContainer } from '../../../../components/Core/Loader/styled';
 import PaymentAddressBar from '../PaymentAddressBar';
 import FollowTokenItem from './FollowTokens.token';
 
@@ -20,11 +21,15 @@ const FollowTokensList = React.memo(() => {
     <>
       <PaymentAddressBar />
       <Styled>
-        {followTokensFormated && followTokensFormated.length > 0
-          ? followTokensFormated.map((selectedToken: SelectedPrivacy) => (
-              <FollowTokenItem selectedToken={selectedToken} key={selectedToken.tokenID} />
-            ))
-          : null}
+        {followTokensFormated && followTokensFormated.length > 0 ? (
+          followTokensFormated.map((selectedToken: SelectedPrivacy) => (
+            <FollowTokenItem selectedToken={selectedToken} key={selectedToken.tokenID} />
+          ))
+        ) : (
+          <>
+            <LoadingOpacityContainer $loading={true}></LoadingOpacityContainer>
+          </>
+        )}
       </Styled>
     </>
   );

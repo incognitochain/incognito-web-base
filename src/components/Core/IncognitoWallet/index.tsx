@@ -1,7 +1,8 @@
 import Modal from 'components/Core/Modal';
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
-import { memo, useEffect, useState } from 'react';
+import { throttle } from 'lodash';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { incognitoWalletSelector, incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
 import { AccountInfo } from 'state/incognitoWallet/incognitoWallet.reducer';
@@ -91,11 +92,22 @@ const IncognitoWallet = () => {
     }
   };
 
-  const buttonClickAction = async () => {
-    if (isIncognitoInstalled()) {
-      if (incognitoWallet.walletState === 'unlocked') {
-        requestIncognitoAccount().then((accounts) => {
-          if (!accounts) return;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const buttonClickAction = useCallback(
+    throttle(() => {
+      if (isIncognitoInstalled()) {
+        if (incognitoWallet.walletState === 'unlocked') {
+          requestIncognitoAccount().then((accounts) => {
+            // if (!accounts) return;
+            // setModal({
+            //   closable: true,
+            //   data: <BalanceModal />,
+            //   isTransparent: false,
+            //   rightHeader: undefined,
+            //   title: 'Account',
+            //   isSearchTokenModal: true,
+            // });
+          });
           setModal({
             closable: true,
             data: <BalanceModal />,
@@ -104,15 +116,16 @@ const IncognitoWallet = () => {
             title: 'Account',
             isSearchTokenModal: true,
           });
-        });
+        } else {
+          showPopup();
+        }
       } else {
         showPopup();
+        // alert('Please install Incognito Extension!');
       }
-    } else {
-      showPopup();
-      // alert('Please install Incognito Extension!');
-    }
-  };
+    }, 3000),
+    [incognitoWallet]
+  );
 
   useEffect(() => {
     const getInfo = async () => {
@@ -135,6 +148,7 @@ const IncognitoWallet = () => {
   }, []);
 
   useEffect(() => {
+    // INTERVAL HERE? => (TO DO)
     setInterval(async () => {
       if (isIncognitoInstalled()) {
         const state = await getWalletState();
