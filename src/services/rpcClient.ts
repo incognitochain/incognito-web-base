@@ -126,6 +126,13 @@ class RpcClient {
       WalletAddress: payload.paymentAddr,
     });
   }
+
+  submitSwapTx({ txHash, txRaw }: { txHash: string; txRaw: string }) {
+    return this.http.post('submitswaptx', {
+      TxHash: txHash,
+      TxRaw: txRaw,
+    });
+  }
 }
 
 const rpcClient = new RpcClient();

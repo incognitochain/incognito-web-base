@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js';
+import bn from 'bn.js';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { isAddress as isEtherAddress } from 'ethers/lib/utils';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
@@ -12,7 +13,16 @@ import convert from 'utils/convert';
 import format from 'utils/format';
 
 import { FormTypes, IFormUnshieldState, ISwapExchangeData, ISwapFee, SwapExchange } from './FormUnshield.types';
-
+const {
+  encryptMessageOutCoin,
+  BurningFantomRequestMeta,
+  BurningPBSCRequestMeta,
+  BurningPLGRequestMeta,
+  BurningRequestMeta,
+  BurningPBSCForDepositToSCRequestMeta,
+  BurningPLGForDepositToSCRequestMeta,
+  getBurningAddress,
+} = require('incognito-chain-web-js/build/wallet');
 export interface IFee {
   networkFee: number;
   networkFeeToken: string;
@@ -474,7 +484,7 @@ const getExchangeName = (exchange: SwapExchange) => {
   }
 };
 
-const parseExchangeDataModelResponse = (data: any, networkName: string) => {
+const parseExchangeDataModelResponse = (data: any, networkName: string, incTokenID?: string) => {
   const exchangeData: ISwapExchangeData = {
     amountIn: parseFloat(data?.AmountIn || 0),
     amountInRaw: parseFloat(data?.AmountInRaw || 0),
@@ -484,8 +494,76 @@ const parseExchangeDataModelResponse = (data: any, networkName: string) => {
     exchangeName: `${getExchangeName(data?.AppName)}(${networkName})`,
     fees: data?.Fee || [],
     routes: data?.Route || [],
+    incTokenID: incTokenID || '',
+    feeAddress: data?.FeeAddress || '',
   };
   return exchangeData;
 };
 
-export { getExchangeName, getUnshieldData, parseExchangeDataModelResponse };
+const getBurningMetaDataType = (
+  sellToken: SelectedPrivacy,
+  formType: FormTypes,
+  swapExchange?: SwapExchange | null
+) => {
+  if (sellToken?.isUnified) return 345;
+  if (formType === FormTypes.UNSHIELD) {
+    if (sellToken?.isBep20Token) return BurningPBSCRequestMeta;
+    if (sellToken?.isPolygonErc20Token) return BurningPLGRequestMeta;
+    if (sellToken?.isFantomErc20Token) return BurningFantomRequestMeta;
+  }
+
+  if (formType === FormTypes.SWAP) {
+    if (swapExchange === SwapExchange.PANCAKE_SWAP) {
+      return BurningPBSCForDepositToSCRequestMeta;
+    }
+    if (swapExchange === SwapExchange.UNISWAP) {
+      return BurningPLGForDepositToSCRequestMeta;
+    }
+    if (swapExchange === SwapExchange.CURVE) {
+      return BurningPLGForDepositToSCRequestMeta;
+    }
+  }
+
+  return BurningRequestMeta;
+};
+
+const getTokenPayments = async (data: any[], burnAmount: any, isEncryptMessageToken = true) => {
+  const burningAddress = await getBurningAddress();
+
+  let tokenPayments = data.map((payment) => ({
+    PaymentAddress: payment?.paymentAddress,
+    Amount: new bn(payment?.amount).toString(),
+    Message: '',
+  }));
+
+  tokenPayments.push({
+    PaymentAddress: burningAddress,
+    Amount: new bn(burnAmount).toString(),
+    Message: '',
+  });
+
+  const isEncodeOnly = !isEncryptMessageToken;
+  tokenPayments = await encryptMessageOutCoin(tokenPayments, isEncodeOnly);
+  return tokenPayments;
+};
+
+const getPrvPayments = async (data: any[], isEncryptMessage = true) => {
+  let prvPayments = data.map((payment) => ({
+    PaymentAddress: payment?.paymentAddress,
+    Amount: new bn(payment?.amount || 0).toString(),
+    Message: '',
+  }));
+
+  const isEncodeOnly = !isEncryptMessage;
+  prvPayments = await encryptMessageOutCoin(prvPayments, isEncodeOnly);
+  return prvPayments;
+};
+
+export {
+  getBurningMetaDataType,
+  getExchangeName,
+  getPrvPayments,
+  getTokenPayments,
+  getUnshieldData,
+  parseExchangeDataModelResponse,
+};

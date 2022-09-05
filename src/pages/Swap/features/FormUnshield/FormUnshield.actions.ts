@@ -269,6 +269,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       toToken: buyParentToken.tokenID,
     };
 
+    // Call api estimate swap fee
     const data = await rpcClient.estimateSwapFee(payload);
     if (!data) throw new Error('Can not estimate trade');
 
@@ -277,30 +278,42 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     let plgExchanges: ISwapExchangeData[] = [];
     let bscExchanges: ISwapExchangeData[] = [];
     if (data?.hasOwnProperty(NetworkTypePayload.BINANCE_SMART_CHAIN)) {
+      const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 2);
       const exchanges = data[NetworkTypePayload.BINANCE_SMART_CHAIN];
       if (Array.isArray(exchanges)) {
-        bscExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'BSC'));
+        bscExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'BSC', childToken?.tokenID)
+        );
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.ETHEREUM)) {
+      const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 1);
       const exchanges = data[NetworkTypePayload.ETHEREUM];
       if (Array.isArray(exchanges)) {
-        ethExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'ETH'));
+        ethExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'ETH', childToken?.tokenID)
+        );
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.POLYGON)) {
+      const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 3);
       const exchanges = data[NetworkTypePayload.POLYGON];
       if (Array.isArray(exchanges)) {
-        plgExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'PLG'));
+        plgExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'PLG', childToken?.tokenID)
+        );
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.FANTOM)) {
+      const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 4);
       const exchanges = data[NetworkTypePayload.FANTOM];
       if (Array.isArray(exchanges)) {
-        ftmExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'FTM'));
+        ftmExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'FTM', childToken?.tokenID)
+        );
       }
     }
 
