@@ -21,6 +21,11 @@ export const incognitoAccountFollowTokenIDs = createSelector(incognitoWalletAcco
   return incAccount.balances.map(({ id }) => id);
 });
 
+export const getCurrentPaymentAddressSelector = createSelector(incognitoWalletAccountSelector, (currentAccount) => {
+  if (!currentAccount) return '';
+  return currentAccount.paymentAddress;
+});
+
 export const incognitoWalletStateSelector = createSelector(
   (state: AppState) => state.incognitoWallet,
   (incognitoWallet) => incognitoWallet.walletState

@@ -1,8 +1,9 @@
 import { validator } from 'components/Core/ReduxForm';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { getCurrentPaymentAddressSelector } from 'state/incognitoWallet/incognitoWallet.selectors';
 
 import { FORM_CONFIGS } from '../../Swap.constant';
-
 export interface TInner {
   validateAddress: () => any;
   warningAddress: () => string;
@@ -10,6 +11,7 @@ export interface TInner {
 
 const enhanceAddressValidation = (WrappedComponent: any) => {
   const FormDepositComp = (props: any) => {
+    const currentPaymentAddress = useSelector(getCurrentPaymentAddressSelector);
     const { isIncognitoAddress, onChangeField, incAccount, inputAddress } = props;
     const refObject = React.useRef(false);
     const getExternalAddressValidator = React.useCallback(() => {
@@ -38,6 +40,13 @@ const enhanceAddressValidation = (WrappedComponent: any) => {
         refObject.current = true;
       }
     }, [incAccount]);
+
+    React.useEffect(() => {
+      if (!currentPaymentAddress) return;
+      if (currentPaymentAddress && onChangeField) {
+        onChangeField(currentPaymentAddress, FORM_CONFIGS.toAddress);
+      }
+    }, [currentPaymentAddress, onChangeField]);
 
     return <WrappedComponent {...{ ...props, validateAddress, warningAddress }} />;
   };

@@ -57,7 +57,8 @@ export function formattedFeeAmount(feeAmount: FeeAmount): number {
 
 export function shortenIncognitoAddress(address: string, chars = 6): string {
   if (!address || address.length < 1) {
-    throw Error(`Invalid address.`);
+    // throw Error(`Invalid address.`);
+    return '';
   }
   return `${address.substring(0, chars)}...${address.substring(address.length - chars)}`;
 }
