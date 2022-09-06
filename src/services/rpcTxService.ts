@@ -4,7 +4,7 @@ import createAxiosInstance from 'services/axios';
 class RpcTxService {
   http: AxiosInstance;
   constructor() {
-    const url = 'https://api-coinservice-staging.incognito.org/txservice/';
+    const url = 'https://testnet.incognito.org/fullnode';
     this.http = createAxiosInstance({ baseURL: url });
   }
 

@@ -128,7 +128,7 @@ class RpcClient {
   }
 
   submitSwapTx({ txHash, txRaw }: { txHash: string; txRaw: string }) {
-    return this.http.post('submitswaptx', {
+    return this.http.post('papps/submitswaptx', {
       TxHash: txHash,
       TxRaw: txRaw,
     });

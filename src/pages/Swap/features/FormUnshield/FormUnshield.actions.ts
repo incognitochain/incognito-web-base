@@ -282,7 +282,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       const exchanges = data[NetworkTypePayload.BINANCE_SMART_CHAIN];
       if (Array.isArray(exchanges)) {
         bscExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'BSC', childToken?.tokenID)
+          parseExchangeDataModelResponse(exchange, 'BSC', 2, childToken?.tokenID)
         );
       }
     }
@@ -292,7 +292,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       const exchanges = data[NetworkTypePayload.ETHEREUM];
       if (Array.isArray(exchanges)) {
         ethExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'ETH', childToken?.tokenID)
+          parseExchangeDataModelResponse(exchange, 'ETH', 1, childToken?.tokenID)
         );
       }
     }
@@ -302,7 +302,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       const exchanges = data[NetworkTypePayload.POLYGON];
       if (Array.isArray(exchanges)) {
         plgExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'PLG', childToken?.tokenID)
+          parseExchangeDataModelResponse(exchange, 'PLG', 3, childToken?.tokenID)
         );
       }
     }
@@ -312,7 +312,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       const exchanges = data[NetworkTypePayload.FANTOM];
       if (Array.isArray(exchanges)) {
         ftmExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'FTM', childToken?.tokenID)
+          parseExchangeDataModelResponse(exchange, 'FTM', 4, childToken?.tokenID)
         );
       }
     }
