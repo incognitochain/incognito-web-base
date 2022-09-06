@@ -132,7 +132,7 @@ const enhanceSend = (WrappedComponent: any) => {
           isSignAndSendTransaction: true,
         };
 
-        let externalCallData: string = exchangeSelectedData?.callContract;
+        let externalCallData: string = exchangeSelectedData?.callData;
         let externalCallAddress: string = exchangeSelectedData?.callContract;
         let buyTokenContract: string = buyToken?.contractIDSwap;
 
