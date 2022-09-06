@@ -39,6 +39,7 @@ class PToken {
   iconUrl: string;
 
   contractID: any;
+  contractIDSwap: any;
   type: number; // coin or token
 
   change: string;
@@ -112,6 +113,7 @@ class PToken {
     const isPrivateToken = this.type === PRIVATE_TOKEN_TYPE.TOKEN;
 
     this.contractID = data.ContractID;
+    this.contractIDSwap = data.ContractIDSwap;
     this.decimals = data.Decimals;
     this.pDecimals = data.PDecimals;
     this.isVerified = data.Verified;

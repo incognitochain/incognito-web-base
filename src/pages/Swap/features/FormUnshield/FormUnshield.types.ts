@@ -70,6 +70,11 @@ export interface ISwapExchangeData {
   exchangeName: string;
   fees: ISwapFee[];
   routes: any[];
+  incTokenID: string;
+  feeAddress: string;
+  callContract: string;
+  callData: string;
+  networkID: number;
 }
 
 export interface UnshieldSetTokenPayLoad {

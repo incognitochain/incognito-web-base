@@ -13,42 +13,7 @@ interface IncognitoWalletContextType {
   isIncognitoInstalled: () => boolean;
   getWalletState: () => Promise<WalletState | undefined>;
   requestIncognitoAccount: () => Promise<AccountInfo[] | undefined>;
-  requestSignTransaction: ({
-    networkFee,
-    networkFeeToken,
-    isUnshield,
-    isUnified,
-    burnFee,
-    extraFee,
-    burnFeeToken,
-    burnFeeID,
-    burnAmount,
-    burnAmountText,
-    burnToken,
-    receiverAddress,
-    feeAddress,
-    receiverTokenID,
-    estimatedBurnAmount,
-    estimatedExpectedAmount,
-  }: {
-    networkFee: number;
-    networkFeeToken: string;
-    burnFee: string;
-    extraFee: number;
-    burnFeeToken: string;
-    sendTokenID: string;
-    feeAddress: string;
-    isUnshield: boolean;
-    isUnified: boolean;
-    burnFeeID: number | undefined;
-    burnAmount: string;
-    burnAmountText: string;
-    burnToken: string;
-    receiverAddress: string;
-    receiverTokenID: string;
-    estimatedBurnAmount: number;
-    estimatedExpectedAmount: number;
-  }) => any;
+  requestSignTransaction: (payload: any) => any;
   showPopup: () => void;
 }
 export const getIncognitoInject = () => window.incognito;
