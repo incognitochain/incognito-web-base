@@ -60,7 +60,7 @@ const enhanceSend = (WrappedComponent: any) => {
       ) {
         return;
       }
-      if (formType === FormTypes.SWAP && estimateTradeErrorMsg) return;
+      // if (formType === FormTypes.SWAP && estimateTradeErrorMsg) return;
       try {
         let remoteAddress: any = web3Account;
 
@@ -88,6 +88,8 @@ const enhanceSend = (WrappedComponent: any) => {
 
         const incognito = getIncognitoInject();
 
+        console.log('-----------swapPayload1');
+
         // Get OTA Receiver
         const { result }: { result: any } = await incognito.request({
           method: 'wallet_requestAccounts',
@@ -95,6 +97,8 @@ const enhanceSend = (WrappedComponent: any) => {
         });
 
         const otaReceiver = result?.otaReceiver;
+
+        console.log('-----------swapPayload2');
 
         const tokenPayments = await getTokenPayments(
           [
@@ -105,6 +109,8 @@ const enhanceSend = (WrappedComponent: any) => {
           ],
           parseInt(burnOriginalAmount)
         );
+
+        console.log('-----------swapPayload3');
 
         // Payload data for unshield
         const unshieldPayload: any = {
@@ -175,6 +181,8 @@ const enhanceSend = (WrappedComponent: any) => {
             Type: 348,
           },
         };
+
+        console.log('-----------swapPayload', swapPayload);
 
         return new Promise(async (resolve, reject) => {
           try {
