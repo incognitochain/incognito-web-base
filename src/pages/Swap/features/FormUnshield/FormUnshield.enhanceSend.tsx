@@ -6,6 +6,7 @@ import { PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { batch } from 'react-redux';
 import { change, focus, untouch } from 'redux-form';
+import { rpcClient } from 'services';
 import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
 import { useAppDispatch } from 'state/hooks';
 
@@ -33,6 +34,8 @@ const enhanceSend = (WrappedComponent: any) => {
       exchangeSelected,
       swapFee,
       exchangeSelectedData,
+      estimateTradeErrorMsg,
+      web3Account,
     } = props;
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
@@ -57,33 +60,9 @@ const enhanceSend = (WrappedComponent: any) => {
       ) {
         return;
       }
+      if (formType === FormTypes.SWAP && estimateTradeErrorMsg) return;
       try {
-        // const payload: any = {
-        //   networkFee,
-        //   networkFeeToken,
-
-        //   isUnshield: true,
-        //   isUnified: sellToken.isUnified,
-
-        //   burnFee,
-        //   burnFeeToken,
-        //   burnFeeID: String(id),
-
-        //   extraFee: fee.extraFee,
-
-        //   burnAmount: burnOriginalAmount,
-        //   burnToken: sellToken.tokenID,
-        //   burnAmountText: inputAmount,
-
-        //   receiverAddress: inputAddress,
-        //   feeAddress,
-
-        //   receiverTokenID: buyToken.tokenID,
-        //   estimatedBurnAmount, // estimate fee unified
-        //   estimatedExpectedAmount, // estimate fee unified
-        // };
-
-        let remoteAddress = unshieldAddress;
+        let remoteAddress: any = web3Account;
 
         if (remoteAddress.startsWith('0x')) {
           remoteAddress = remoteAddress.slice(2);
@@ -109,6 +88,7 @@ const enhanceSend = (WrappedComponent: any) => {
 
         const incognito = getIncognitoInject();
 
+        // Get OTA Receiver
         const { result }: { result: any } = await incognito.request({
           method: 'wallet_requestAccounts',
           params: {},
@@ -126,7 +106,8 @@ const enhanceSend = (WrappedComponent: any) => {
           parseInt(burnOriginalAmount)
         );
 
-        const payload: any = {
+        // Payload data for unshield
+        const unshieldPayload: any = {
           networkFee,
           prvPayments: [],
           tokenPayments,
@@ -139,7 +120,7 @@ const enhanceSend = (WrappedComponent: any) => {
               {
                 IncTokenID: formType === FormTypes.SWAP ? exchangeSelectedData?.incTokenID : buyToken.tokenID,
                 BurningAmount: burnOriginalAmount,
-                RemoteAddress: remoteAddress,
+                RemoteAddress: unshieldAddress,
                 MinExpectedAmount: burnOriginalAmount,
               },
             ],
@@ -151,9 +132,61 @@ const enhanceSend = (WrappedComponent: any) => {
           isSignAndSendTransaction: true,
         };
 
+        let externalCallData: string = exchangeSelectedData?.callContract;
+        let externalCallAddress: string = exchangeSelectedData?.callContract;
+        let buyTokenContract: string = buyToken?.contractIDSwap;
+
+        if (externalCallData.startsWith('0x')) {
+          externalCallData = externalCallData.slice(2);
+        }
+
+        if (externalCallAddress.startsWith('0x')) {
+          externalCallAddress = externalCallAddress.slice(2);
+        }
+
+        if (buyTokenContract.startsWith('0x')) {
+          buyTokenContract = buyTokenContract.slice(2);
+        }
+
+        // Payload data for swap
+        const swapPayload = {
+          networkFee,
+          prvPayments: [],
+          tokenPayments,
+          info: formType === FormTypes.UNSHIELD ? String(id) : '',
+          tokenID: sellToken?.tokenID,
+          txType: 7,
+          receiverAddress: remoteAddress,
+          isSignAndSendTransaction: true,
+          metadata: {
+            Data: [
+              {
+                IncTokenID: exchangeSelectedData?.incTokenID,
+                RedepositReceiver: otaReceiver,
+                BurningAmount: burnOriginalAmount,
+                ExternalNetworkID: exchangeSelectedData?.networkID,
+                ExternalCalldata: externalCallData,
+                ExternalCallAddress: externalCallAddress,
+                ReceiveToken: buyTokenContract,
+                WithdrawAddress: remoteAddress,
+              },
+            ],
+            BurnTokenID: sellToken?.tokenID,
+            Type: 348,
+          },
+        };
+
         return new Promise(async (resolve, reject) => {
           try {
-            const tx = await requestSignTransaction(payload);
+            const tx = await requestSignTransaction(formType === FormTypes.UNSHIELD ? unshieldPayload : swapPayload);
+            // Submit tx swap to backend after burned;
+            if (formType === FormTypes.SWAP) {
+              const submitTxResult: any = await rpcClient.submitSwapTx({
+                txHash: tx.txHash,
+                txRaw: tx.rawData,
+              });
+              console.log({ submitTxResult });
+            }
             updateMetric().then();
             resolve(tx);
           } catch (e) {
@@ -186,12 +219,6 @@ const enhanceSend = (WrappedComponent: any) => {
       try {
         const resolve: any = await handleUnshieldToken();
         if (!resolve && !resolve?.txHash) return;
-        // if (formType === FormTypes.SWAP) {
-        //   const submitTxResult: any = await rpcClient.submitSwapTx({
-        //     txHash: resolve.txHash,
-        //     txRaw: resolve.rawTx,
-        //   });
-        // }
         clearAllModal();
         dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.sellAmount, ''));
         dispatch(untouch(FORM_CONFIGS.formName, FORM_CONFIGS.sellAmount));
