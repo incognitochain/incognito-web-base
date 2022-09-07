@@ -41,6 +41,12 @@ export interface IUserFee {
   estimatedExpectedAmount: number;
 }
 
+export interface IDepositAddress {
+  address: string;
+  estimateFee: number;
+  tokenFee?: number;
+}
+
 class RpcClient {
   http: AxiosInstance;
   constructor() {
@@ -133,6 +139,28 @@ class RpcClient {
       TxRaw: txRaw,
     });
   }
+
+  async genDepositAddress({
+    network,
+    incAddress,
+    tokenID,
+  }: {
+    network: string;
+    incAddress: string;
+    tokenID: string;
+  }): Promise<IDepositAddress> {
+    const resp: any = await this.http.post('genshieldaddress', {
+      Network: network,
+      AddressType: 1,
+      WalletAddress: incAddress,
+      PrivacyTokenAddress: tokenID,
+    });
+    return {
+      address: resp.Address,
+      estimateFee: resp.EstimateFee,
+      tokenFee: resp.TokenFee,
+    };
+  }
 }
 
 const rpcClient = new RpcClient();
@@ -156,5 +184,21 @@ const submitDepositTx = async ({ hash, networkID, captcha }: ISummitEtherHash): 
   });
 };
 
-export { getTokenListNoCache, getVaults, submitDepositTx };
+const genDepositAddress = async ({
+  network,
+  incAddress,
+  tokenID,
+}: {
+  network: string;
+  incAddress: string;
+  tokenID: string;
+}): Promise<IDepositAddress> => {
+  return rpcClient.genDepositAddress({
+    network,
+    incAddress,
+    tokenID,
+  });
+};
+
+export { genDepositAddress, getTokenListNoCache, getVaults, submitDepositTx };
 export default rpcClient;

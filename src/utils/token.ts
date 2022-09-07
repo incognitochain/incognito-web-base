@@ -1,6 +1,7 @@
 import { isMainnet } from '../config';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from '../constants';
 import { SupportedChainId } from '../constants/chains';
+import SelectedPrivacyModel from '../models/model/SelectedPrivacyModel';
 
 const getChainIDByCurrency = ({ currency }: { currency: number }): SupportedChainId | undefined => {
   let chainID = undefined;
@@ -54,4 +55,18 @@ const getNetworkNameByCurrency = ({ currency }: { currency: number }): MAIN_NETW
   return networkName;
 };
 
-export { getChainIDByCurrency, getNetworkNameByCurrency };
+const getAcronymNetwork = (token: SelectedPrivacyModel): string => {
+  let network = '';
+  if (token.isErc20Token || token.isMainETH) {
+    network = 'eth';
+  } else if (token.isPolygonErc20Token || token.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC) {
+    network = 'plg';
+  } else if (token.isFantomErc20Token || token.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM) {
+    network = 'ftm';
+  } else if (token.isBep20Token || token.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
+    network = 'bsc';
+  }
+  return network;
+};
+
+export { getAcronymNetwork, getChainIDByCurrency, getNetworkNameByCurrency };

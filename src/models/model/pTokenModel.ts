@@ -76,6 +76,8 @@ class PToken {
   hasChild: boolean;
   isUnified: boolean;
 
+  isDepositable: boolean;
+
   getIconUrl({ url }: { url: string }) {
     if (this.tokenID === PRVIDSTR) {
       return 'https://statics.incognito.org/wallet/cryptocurrency-icons/32@2x/color/prv@2x.png';
@@ -181,6 +183,7 @@ class PToken {
     this.supportedNetwork = [];
     this.hasChild = !isEmpty(listChild);
     this.isUnified = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN;
+    this.isDepositable = data.Status !== 0;
 
     if (!isEmpty(listChild)) {
       const temp = listChild.map((token) => {

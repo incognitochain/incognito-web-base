@@ -29,10 +29,11 @@ const Styled = styled.div`
   }
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface DescriptionBoxProps {}
+interface DescriptionBoxProps {
+  symbol: string;
+}
 
-const DescriptionBox = (props: DescriptionBoxProps) => {
+const DescriptionBox = ({ symbol }: DescriptionBoxProps) => {
   return (
     <Styled>
       <div className="row">
@@ -40,7 +41,7 @@ const DescriptionBox = (props: DescriptionBoxProps) => {
           <CircleIconSVG className="icon-wrapper" />
         </div>
         <ThemedText.SmallLabel fontWeight={400} color="primary5" style={{ flexWrap: 'wrap' }}>
-          Your ETH shielding transaction is estimated to complete in 10 mins.
+          Your {symbol} shielding transaction is estimated to complete in 10 mins.
         </ThemedText.SmallLabel>
       </div>
       <div className="row margin-top">
@@ -48,7 +49,7 @@ const DescriptionBox = (props: DescriptionBoxProps) => {
           <CircleIconSVG className="icon-wrapper" />
         </div>
         <ThemedText.SmallLabel fontWeight={400} color="primary5" style={{ flexWrap: 'wrap' }}>
-          {'Sending coins or tokens other than ETH to this address may result in the loss of your funds.'}
+          {`Sending coins or tokens other than ${symbol} to this address may result in the loss of your funds.`}
         </ThemedText.SmallLabel>
       </div>
     </Styled>

@@ -9,13 +9,15 @@ const Styled = styled.div`
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface DescriptionQrCodeProps {}
+interface DescriptionQrCodeProps {
+  symbol: string;
+}
 
-const DescriptionQrCode = (props: DescriptionQrCodeProps) => {
+const DescriptionQrCode = ({ symbol }: DescriptionQrCodeProps) => {
   return (
     <Styled>
       <ThemedText.SmallLabel fontWeight={400} color="primary8">
-        {'Send only ETH to this shielding address'}
+        {`Send only ${symbol} to this shielding address`}
       </ThemedText.SmallLabel>
     </Styled>
   );
