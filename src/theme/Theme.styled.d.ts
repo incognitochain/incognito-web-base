@@ -81,6 +81,7 @@ export interface Colors {
   primary12: Color;
   primary13: Color;
   primary14: Color;
+  primary15: Color;
 
   // Buttons
   btn1: Color;

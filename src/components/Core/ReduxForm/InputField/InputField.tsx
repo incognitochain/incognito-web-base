@@ -1,3 +1,4 @@
+import CopyIcon from 'components/Copy';
 import Row from 'components/Core/Row';
 import React from 'react';
 import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form';
@@ -106,9 +107,15 @@ const InputField = (props: IInputFieldProps) => {
           </InputContainer>
         );
       case INPUT_FIELD.address:
+        // return (
+        //   <InputContainer className="border-hover input-container input-address">
+        //     <InputComp {...{ input, componentProps }} />
+        //   </InputContainer>
+        // );
         return (
           <InputContainer className="border-hover input-container input-address">
             <InputComp {...{ input, componentProps }} />
+            <CopyIcon text={'Payment Address Here!!!'} />
           </InputContainer>
         );
       default:

@@ -1,17 +1,20 @@
-import { ButtonConfirmed } from 'components/Core/Button';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
-import { PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import QrCode from 'components/QrCode';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useSwitchNetwork from 'lib/hooks/useSwitchNetwork';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
-import React from 'react';
+import React, { useState } from 'react';
 import { Field } from 'redux-form';
 import { useWalletModalToggle } from 'state/application/hooks';
 import styled from 'styled-components/macro';
 
 import { Selection } from '../Selection';
+import DescriptionBox from './components/DescriptionBox';
+import DescriptionQrCode from './components/DescriptionQrCode';
+import MinimumShiledAmount from './components/MinimumShiledAmount';
+import ShieldFeeEstimate from './components/ShieldFeeEstimate';
 import enhance, { IMergeProps } from './FormDeposit.enhance';
 
 const Styled = styled.div``;
@@ -43,7 +46,7 @@ const FormDeposit = (props: IMergeProps) => {
   const [onSwitchNetwork] = useSwitchNetwork({ targetChain: sellToken.chainID });
   const { account } = useActiveWeb3React();
   const toggleWalletModal = useWalletModalToggle();
-
+  const [isShowQrCode, setShowQrCode] = useState(true);
   const _actionMetamask = () => {
     if (!account) return toggleWalletModal();
     return onSwitchNetwork(false);
@@ -66,14 +69,14 @@ const FormDeposit = (props: IMergeProps) => {
           showNetwork={true}
         />
         <VerticalSpace />
-        <Selection
+        {/* <Selection
           title="To"
           rightValue={buyNetworkName}
           currency={PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}
           leftValue={buyToken.symbol}
           iconUrl={buyToken.iconUrl}
         />
-        <VerticalSpace />
+        <VerticalSpace /> */}
         <Field
           component={InputField}
           name={FORM_CONFIGS.toAddress}
@@ -86,7 +89,7 @@ const FormDeposit = (props: IMergeProps) => {
           warning={warningAddress}
         />
         <VerticalSpace />
-        <Field
+        {/* <Field
           component={InputField}
           name={FORM_CONFIGS.sellAmount}
           inputType={INPUT_FIELD.amount}
@@ -98,15 +101,30 @@ const FormDeposit = (props: IMergeProps) => {
           }}
           validate={validateAmount}
           onClickMax={onClickMax}
-        />
+        /> */}
         <VerticalSpace />
-        {button.switchNetwork || !account ? (
+
+        {isShowQrCode && (
+          <div>
+            <QrCode
+              qrCodeProps={{
+                value: 'WTF GUYS',
+                size: 156,
+              }}
+            />
+            <DescriptionQrCode />
+            <MinimumShiledAmount />
+            <ShieldFeeEstimate />
+            <DescriptionBox />
+          </div>
+        )}
+        {/* {button.switchNetwork || !account ? (
           <ButtonConfirmed type="button" onClick={_actionMetamask}>
             {button.text}
           </ButtonConfirmed>
         ) : (
           <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
-        )}
+        )} */}
       </form>
     </Styled>
   );
