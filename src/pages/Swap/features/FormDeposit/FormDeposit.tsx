@@ -157,7 +157,7 @@ const FormDeposit = (props: IMergeProps) => {
             isBlur={!state.data?.address || !!state?.isFetching}
             isLoading={!!state?.isFetching}
           />
-          <DescriptionQrCode symbol={sellToken.symbol} />
+          <DescriptionQrCode symbol={sellToken.symbol} paymentAddress={state && state.data?.address} />
           {/*<MinimumShiledAmount />*/}
           <ShieldFeeEstimate value={`${state.data?.tokenFee || state.data?.estimateFee || 0} ${sellToken.symbol}`} />
           <DescriptionBox symbol={sellToken.symbol} />

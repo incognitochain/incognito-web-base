@@ -1,5 +1,6 @@
 import copy from 'copy-to-clipboard';
 import React from 'react';
+import { toast } from 'react-toastify';
 import styled from 'styled-components/macro';
 
 interface IProps {
@@ -12,6 +13,11 @@ const Styled = styled.button`
   justify-content: center;
   border: none;
   background-color: transparent;
+
+  :hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
 `;
 
 // eslint-disable-next-line react/display-name
@@ -34,6 +40,7 @@ const CopyIcon = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>)
   const { text } = props;
   const handleCopyText = () => {
     if (text) {
+      toast('Copied');
       copy(text);
     }
   };

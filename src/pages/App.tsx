@@ -1,3 +1,5 @@
+import 'react-toastify/scss/main.scss';
+
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Header from 'components/Core/Header';
 import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
@@ -10,6 +12,7 @@ import PageNotFound from 'pages/PageNotFound/PageNotFound';
 import Swap, { RedirectPathToSwapOnly, RedirectToSwap } from 'pages/Swap';
 import { Suspense, useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components/macro';
 import { DarkModeQueryParamReader } from 'theme';
 import { isMobile } from 'utils/userAgent';
@@ -109,6 +112,17 @@ const App = () => {
           </BodyWrapper>
         </AppWrapper>
       </IncognitoWalletProvider>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={500}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </ErrorBoundary>
   );
 };
