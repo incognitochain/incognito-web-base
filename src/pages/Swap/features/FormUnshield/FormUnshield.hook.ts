@@ -63,6 +63,7 @@ export interface IUnshield {
   swapFee: any;
   tradePaths: string[];
   estimateTradeErrorMsg: string | null;
+  swapNetwork: MAIN_NETWORK_NAME | null;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -108,6 +109,7 @@ export const useUnshield = (): IUnshield => {
     swapFee,
     tradePaths,
     estimateTradeErrorMsg,
+    swapNetwork,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
@@ -175,5 +177,6 @@ export const useUnshield = (): IUnshield => {
     swapFee,
     tradePaths,
     estimateTradeErrorMsg,
+    swapNetwork,
   };
 };

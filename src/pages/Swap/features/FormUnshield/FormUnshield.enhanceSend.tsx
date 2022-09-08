@@ -36,6 +36,9 @@ const enhanceSend = (WrappedComponent: any) => {
       exchangeSelectedData,
       estimateTradeErrorMsg,
       web3Account,
+      buyNetworkName,
+      swapNetwork,
+      buyParentToken,
     } = props;
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
@@ -88,8 +91,6 @@ const enhanceSend = (WrappedComponent: any) => {
 
         const incognito = getIncognitoInject();
 
-        console.log('-----------swapPayload1');
-
         // Get OTA Receiver
         const { result }: { result: any } = await incognito.request({
           method: 'wallet_requestAccounts',
@@ -97,8 +98,6 @@ const enhanceSend = (WrappedComponent: any) => {
         });
 
         const otaReceiver = result?.otaReceiver;
-
-        console.log('-----------swapPayload2');
 
         const tokenPayments = await getTokenPayments(
           [
@@ -109,8 +108,6 @@ const enhanceSend = (WrappedComponent: any) => {
           ],
           parseInt(burnOriginalAmount)
         );
-
-        console.log('-----------swapPayload3');
 
         // Payload data for unshield
         const unshieldPayload: any = {
@@ -140,7 +137,14 @@ const enhanceSend = (WrappedComponent: any) => {
 
         let externalCallData: string = exchangeSelectedData?.callData;
         let externalCallAddress: string = exchangeSelectedData?.callContract;
+
         let buyTokenContract: string = buyToken?.contractIDSwap;
+        if (buyParentToken?.isUnified && formType === FormTypes.SWAP) {
+          const childBuyToken = buyParentToken?.listUnifiedToken?.find(
+            (token: any) => token?.networkID === exchangeSelectedData?.networkID
+          );
+          buyTokenContract = childBuyToken?.contractIDSwap;
+        }
 
         if (externalCallData.startsWith('0x')) {
           externalCallData = externalCallData.slice(2);
@@ -174,15 +178,14 @@ const enhanceSend = (WrappedComponent: any) => {
                 ExternalCalldata: externalCallData,
                 ExternalCallAddress: externalCallAddress,
                 ReceiveToken: buyTokenContract,
-                WithdrawAddress: remoteAddress,
+                WithdrawAddress:
+                  buyNetworkName === 'Incognito' ? '0000000000000000000000000000000000000000' : remoteAddress,
               },
             ],
             BurnTokenID: sellToken?.tokenID,
             Type: 348,
           },
         };
-
-        console.log('-----------swapPayload', swapPayload);
 
         return new Promise(async (resolve, reject) => {
           try {
