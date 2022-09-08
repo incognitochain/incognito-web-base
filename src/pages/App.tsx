@@ -114,6 +114,8 @@ const App = () => {
       </IncognitoWalletProvider>
       <ToastContainer
         position="bottom-center"
+        toastClassName="white-color"
+        toastStyle={{ backgroundColor: '#121212', borderColor: '#363636', borderWidth: 1 }}
         autoClose={500}
         hideProgressBar={true}
         newestOnTop={false}

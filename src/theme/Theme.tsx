@@ -281,4 +281,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
       opacity: 0.8;
     }
   }
+
+  .white-color {
+    color: white;
+  }
 `;

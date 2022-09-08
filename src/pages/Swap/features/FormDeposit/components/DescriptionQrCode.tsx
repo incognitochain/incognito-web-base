@@ -31,7 +31,7 @@ const DescriptionQrCode = ({ symbol, paymentAddress }: DescriptionQrCodeProps) =
       </ThemedText.SmallLabel>
       {paymentAddress && (
         <div className="paymentAddress-area">
-          <ThemedText.SmallLabel fontWeight={400} color="primary8">
+          <ThemedText.SmallLabel fontWeight={500} color="primary5">
             {paymentAddress}
           </ThemedText.SmallLabel>
           <CopyIcon text={paymentAddress} />
