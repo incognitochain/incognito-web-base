@@ -266,42 +266,50 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     let plgExchanges: ISwapExchangeData[] = [];
     let bscExchanges: ISwapExchangeData[] = [];
     if (data?.hasOwnProperty(NetworkTypePayload.BINANCE_SMART_CHAIN)) {
-      const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 2);
+      let incTokenID = sellToken.tokenID;
+      if (sellToken?.isUnified) {
+        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 2);
+        incTokenID = childToken?.tokenID || '';
+      }
       const exchanges = data[NetworkTypePayload.BINANCE_SMART_CHAIN];
       if (Array.isArray(exchanges)) {
-        bscExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'BSC', 2, childToken?.tokenID)
-        );
+        bscExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'BSC', 2, incTokenID));
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.ETHEREUM)) {
-      const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 1);
+      let incTokenID = sellToken.tokenID;
+      if (sellToken?.isUnified) {
+        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 1);
+        incTokenID = childToken?.tokenID || '';
+      }
       const exchanges = data[NetworkTypePayload.ETHEREUM];
       if (Array.isArray(exchanges)) {
-        ethExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'ETH', 1, childToken?.tokenID)
-        );
+        ethExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'ETH', 1, incTokenID));
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.POLYGON)) {
-      const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 3);
+      let incTokenID = sellToken.tokenID;
+      if (sellToken?.isUnified) {
+        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 3);
+        incTokenID = childToken?.tokenID || '';
+      }
       const exchanges = data[NetworkTypePayload.POLYGON];
       if (Array.isArray(exchanges)) {
-        plgExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'PLG', 3, childToken?.tokenID)
-        );
+        plgExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'PLG', 3, incTokenID));
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.FANTOM)) {
-      const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 4);
+      let incTokenID = sellToken.tokenID;
+      if (sellToken?.isUnified) {
+        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 4);
+        incTokenID = childToken?.tokenID || '';
+      }
       const exchanges = data[NetworkTypePayload.FANTOM];
       if (Array.isArray(exchanges)) {
-        ftmExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'FTM', 4, childToken?.tokenID)
-        );
+        ftmExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'FTM', 4, incTokenID));
       }
     }
 
