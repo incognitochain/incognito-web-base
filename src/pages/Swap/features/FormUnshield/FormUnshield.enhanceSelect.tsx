@@ -52,6 +52,7 @@ const enhanceSelect = (WrappedComponent: any) => {
       dispatch(actionChangeBuyToken({ token }));
       dispatch(actionSetExchangeSelected(null));
       dispatch(actionSetSwapExchangeSupports([]));
+      dispatch(actionSetSwapNetwork(buyNetworkName));
     };
 
     const handleSelectBuyNetwork = ({ network }: { network: ITokenNetwork }) => {

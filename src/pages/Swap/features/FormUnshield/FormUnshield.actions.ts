@@ -120,29 +120,17 @@ export const actionChangeBuyToken =
       const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
       if (!token.chainID || !token.networkName || !parentToken.currencyType) return;
 
-      let buyTokenObj: ITokenNetwork;
-
-      if (sellToken.parentTokenID === parentToken.parentTokenID) {
-        let _buyToken = parentToken;
-        if (parentToken.hasChild) {
-          _buyToken = parentToken.listUnifiedToken[0];
-        }
-        buyTokenObj = {
-          parentIdentify: _buyToken.parentTokenID,
-          identify: _buyToken.identify,
-          chainID: _buyToken.chainID,
-          currency: _buyToken.currencyType,
-          networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
-        };
-      } else {
-        buyTokenObj = {
-          parentIdentify: parentToken.identify,
-          identify: parentToken.identify,
-          chainID: parentToken.chainID,
-          currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
-          networkName: MAIN_NETWORK_NAME.INCOGNITO,
-        };
+      let _buyToken = parentToken;
+      if (parentToken.hasChild) {
+        _buyToken = parentToken.listUnifiedToken[0];
       }
+      const buyTokenObj: ITokenNetwork = {
+        parentIdentify: _buyToken.parentTokenID,
+        identify: _buyToken.identify,
+        chainID: _buyToken.chainID,
+        currency: _buyToken.currencyType,
+        networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+      };
 
       dispatch(
         actionSetToken({
@@ -318,6 +306,9 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     }
 
     const exchangeSupports = [...ethExchanges, ...ftmExchanges, ...plgExchanges, ...bscExchanges];
+
+    if (!exchangeSupports?.length)
+      throw new Error('Can not find any trading platform that supports for this pair token');
 
     // Find best rate by list exchange
     const bestRate: ISwapExchangeData = exchangeSupports.reduce((prev, current) =>

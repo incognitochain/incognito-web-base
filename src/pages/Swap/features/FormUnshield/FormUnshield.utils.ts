@@ -177,6 +177,42 @@ const getUnshieldData = ({
   const _buyToken = getDataByTokenID(buyIdentify);
   let _buyTokenList = unshieldableTokens(state);
 
+  // if (formType === FormTypes.UNSHIELD && buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
+  //   _buyTokenList = _buyTokenList.filter((token: any) => {
+  //     if (buyNetworkName === MAIN_NETWORK_NAME.POLYGON) {
+  //       return (
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC ||
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20
+  //       );
+  //     }
+
+  //     if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
+  //       return (
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ERC20 ||
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ETH
+  //       );
+  //     }
+
+  //     if (buyNetworkName === MAIN_NETWORK_NAME.BSC) {
+  //       return (
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB ||
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20
+  //       );
+  //     }
+
+  //     if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
+  //       return (
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM ||
+  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20
+  //       );
+  //     }
+  //   });
+  // }
+
   if (formType === FormTypes.SWAP && swapNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
     _buyTokenList = _buyTokenList.filter((token: any) => {
       if (swapNetwork === MAIN_NETWORK_NAME.POLYGON) {
@@ -421,6 +457,13 @@ const getUnshieldData = ({
     estReceiveAmount = exchangeSelectedData?.amountOut || 0;
   }
 
+  _buyTokenList = getBuyTokenList(
+    formType === FormTypes.UNSHIELD ? buyNetworkName : swapNetwork,
+    _buyTokenList,
+    _sellToken,
+    _buyNetworkList
+  );
+
   return {
     sellToken: _sellToken,
     sellTokenList: _sellTokenList,
@@ -470,6 +513,99 @@ const getUnshieldData = ({
     estimateTradeErrorMsg,
     swapNetwork,
   };
+};
+
+const getBuyTokenList = (
+  // Selected swap network
+  selectedNetwork: MAIN_NETWORK_NAME,
+  tokens: any,
+  sellToken: any,
+  supportedNetwork: any
+) => {
+  const buyTokenList: any = [];
+  if (sellToken?.isUnified && selectedNetwork === MAIN_NETWORK_NAME.INCOGNITO) {
+    for (let i = 0; i < tokens?.length; i++) {
+      let tokenObj: any = null;
+      for (let j = 0; j < supportedNetwork?.length; j++) {
+        if (tokens[i].isUnified && tokens[i].supportedNetwork) {
+          for (let k = 0; k < tokens[i].supportedNetwork.length; k++) {
+            if (tokens[i].supportedNetwork[k].networkName === supportedNetwork[j].networkName) {
+              tokenObj = tokens[i];
+            }
+          }
+        } else {
+          if (tokens[i].networkName === supportedNetwork[j].networkName) {
+            tokenObj = tokens[i];
+          }
+        }
+      }
+      if (tokenObj != null) {
+        buyTokenList.push(tokenObj);
+      }
+    }
+  }
+
+  if (sellToken?.isUnified && selectedNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
+    for (let i = 0; i < tokens?.length; i++) {
+      let tokenObj: any = null;
+      if (tokens[i].isUnified) {
+        for (let j = 0; j < tokens[i].supportedNetwork.length; j++) {
+          if (tokens[i].supportedNetwork[j].networkName === selectedNetwork) {
+            tokenObj = tokens[i];
+          }
+        }
+      } else {
+        if (tokens[i].networkName === selectedNetwork) {
+          tokenObj = tokens[i];
+        }
+      }
+
+      if (tokenObj != null) {
+        buyTokenList.push(tokenObj);
+      }
+    }
+  }
+
+  if (!sellToken?.isUnified && selectedNetwork === MAIN_NETWORK_NAME.INCOGNITO) {
+    for (let i = 0; i < tokens?.length; i++) {
+      for (let j = 0; j < supportedNetwork?.length; j++) {
+        if (tokens[i].isUnified) {
+          for (let k = 0; k < tokens[i].supportedNetwork.length; k++) {
+            if (tokens[i].supportedNetwork[k].networkName === supportedNetwork[j].networkName) {
+              buyTokenList.push(tokens[i]);
+            }
+          }
+        } else {
+          for (let k = 0; k < tokens[i].supportedNetwork.length; k++) {
+            if (tokens[i].supportedNetwork[k].networkName === supportedNetwork[j].networkName) {
+              buyTokenList.push(tokens[i]);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  if (!sellToken?.isUnified && selectedNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
+    for (let i = 0; i < tokens?.length; i++) {
+      for (let j = 0; j < supportedNetwork?.length; j++) {
+        if (tokens[i].isUnified) {
+          for (let k = 0; k < tokens[i].supportedNetwork.length; k++) {
+            if (tokens[i].supportedNetwork[k].networkName === supportedNetwork[j].networkName) {
+              buyTokenList.push(tokens[i]);
+            }
+          }
+        } else {
+          for (let k = 0; k < tokens[i].supportedNetwork.length; k++) {
+            if (tokens[i].supportedNetwork[k].networkName === supportedNetwork[j].networkName) {
+              buyTokenList.push(tokens[i]);
+            }
+          }
+        }
+      }
+    }
+  }
+  return buyTokenList;
 };
 
 const getExchangeName = (exchange: SwapExchange) => {
