@@ -267,49 +267,77 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     let bscExchanges: ISwapExchangeData[] = [];
     if (data?.hasOwnProperty(NetworkTypePayload.BINANCE_SMART_CHAIN)) {
       let incTokenID = sellToken.tokenID;
+      let receiveTokenContractID = buyParentToken.contractIdSwap;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 2);
         incTokenID = childToken?.tokenID || '';
       }
+      if (buyParentToken?.isUnified) {
+        const childToken = buyParentToken?.listUnifiedToken?.find((token: any) => token?.networkID === 2);
+        receiveTokenContractID = childToken?.contractIDSwap || '';
+      }
       const exchanges = data[NetworkTypePayload.BINANCE_SMART_CHAIN];
       if (Array.isArray(exchanges)) {
-        bscExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'BSC', 2, incTokenID));
+        bscExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'BSC', 2, incTokenID, receiveTokenContractID)
+        );
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.ETHEREUM)) {
       let incTokenID = sellToken.tokenID;
+      let receiveTokenContractID = buyParentToken.contractIdSwap;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 1);
         incTokenID = childToken?.tokenID || '';
       }
+      if (buyParentToken?.isUnified) {
+        const childToken = buyParentToken?.listUnifiedToken?.find((token: any) => token?.networkID === 1);
+        receiveTokenContractID = childToken?.contractIDSwap || '';
+      }
       const exchanges = data[NetworkTypePayload.ETHEREUM];
       if (Array.isArray(exchanges)) {
-        ethExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'ETH', 1, incTokenID));
+        ethExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'ETH', 1, incTokenID, receiveTokenContractID)
+        );
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.POLYGON)) {
       let incTokenID = sellToken.tokenID;
+      let receiveTokenContractID = buyParentToken.contractIdSwap;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 3);
         incTokenID = childToken?.tokenID || '';
       }
+      if (buyParentToken?.isUnified) {
+        const childToken = buyParentToken?.listUnifiedToken?.find((token: any) => token?.networkID === 3);
+        receiveTokenContractID = childToken?.contractIDSwap || '';
+      }
       const exchanges = data[NetworkTypePayload.POLYGON];
       if (Array.isArray(exchanges)) {
-        plgExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'PLG', 3, incTokenID));
+        plgExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'PLG', 3, incTokenID, receiveTokenContractID)
+        );
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.FANTOM)) {
       let incTokenID = sellToken.tokenID;
+      let receiveTokenContractID = buyParentToken.contractIdSwap;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 4);
         incTokenID = childToken?.tokenID || '';
       }
+      if (buyParentToken?.isUnified) {
+        const childToken = buyParentToken?.listUnifiedToken?.find((token: any) => token?.networkID === 4);
+        receiveTokenContractID = childToken?.contractIDSwap || '';
+      }
       const exchanges = data[NetworkTypePayload.FANTOM];
       if (Array.isArray(exchanges)) {
-        ftmExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'FTM', 4, incTokenID));
+        ftmExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'FTM', 4, incTokenID, receiveTokenContractID)
+        );
       }
     }
 

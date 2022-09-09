@@ -139,7 +139,7 @@ const enhanceSend = (WrappedComponent: any) => {
         let externalCallData: string = exchangeSelectedData?.callData;
         let externalCallAddress: string = exchangeSelectedData?.callContract;
 
-        let buyTokenContract: string = buyToken?.contractIDSwap;
+        let buyTokenContract: string = exchangeSelectedData?.receiveTokenContractID;
         if (buyParentToken?.isUnified && formType === FormTypes.SWAP) {
           const childBuyToken = buyParentToken?.listUnifiedToken?.find(
             (token: any) => token?.networkID === exchangeSelectedData?.networkID

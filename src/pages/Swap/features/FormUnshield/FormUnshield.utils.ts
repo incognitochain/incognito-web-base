@@ -619,7 +619,13 @@ const getExchangeName = (exchange: SwapExchange) => {
   }
 };
 
-const parseExchangeDataModelResponse = (data: any, networkName: string, networkID: number, incTokenID?: string) => {
+const parseExchangeDataModelResponse = (
+  data: any,
+  networkName: string,
+  networkID: number,
+  incTokenID?: string,
+  receiveTokenContractID?: string
+) => {
   const exchangeData: ISwapExchangeData = {
     amountIn: parseFloat(data?.AmountIn || 0),
     amountInRaw: parseFloat(data?.AmountInRaw || 0),
@@ -634,6 +640,7 @@ const parseExchangeDataModelResponse = (data: any, networkName: string, networkI
     callContract: data?.CallContract,
     callData: data?.Calldata,
     networkID,
+    receiveTokenContractID: receiveTokenContractID || '',
   };
   return exchangeData;
 };
