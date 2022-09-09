@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import bn from 'bn.js';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { isAddress as isEtherAddress } from 'ethers/lib/utils';
-import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
+import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { formValueSelector, isSubmitting, isValid } from 'redux-form';
@@ -106,13 +106,12 @@ const getTradePaths = (exchange?: SwapExchange, routes?: any[], tokenList?: any)
   }
 
   if (exchange === SwapExchange.PANCAKE_SWAP) {
-    routes?.map((contractID: string) =>
-      tokenList?.map((token: PToken) => {
-        if (token?.contractID === contractID) {
-          tradePathArrStr.push(token?.symbol);
-        }
-      })
-    );
+    for (let i = 0; i < routes.length; i++) {
+      const tokenData = tokenList?.find((token: any) => token?.contractID?.toLowerCase() === routes[i]?.toLowerCase());
+      if (tokenData) {
+        tradePathArrStr.push(tokenData?.symbol);
+      }
+    }
     tradePathArrStr = [tradePathArrStr?.join(' > ')];
   }
   return tradePathArrStr;

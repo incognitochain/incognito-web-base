@@ -39,6 +39,7 @@ const enhanceSend = (WrappedComponent: any) => {
       buyNetworkName,
       swapNetwork,
       buyParentToken,
+      isFetching,
     } = props;
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
@@ -63,7 +64,7 @@ const enhanceSend = (WrappedComponent: any) => {
       ) {
         return;
       }
-      // if (formType === FormTypes.SWAP && estimateTradeErrorMsg) return;
+      if (formType === FormTypes.SWAP && (estimateTradeErrorMsg || isFetching)) return;
       try {
         let remoteAddress: any = web3Account;
 

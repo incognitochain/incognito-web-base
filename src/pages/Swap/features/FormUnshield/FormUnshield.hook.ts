@@ -39,6 +39,7 @@ export interface IUnshield {
 
   incAddress: string;
 
+  isFetching: boolean;
   disabledForm: boolean;
   fee: IFee;
 
@@ -178,5 +179,6 @@ export const useUnshield = (): IUnshield => {
     tradePaths,
     estimateTradeErrorMsg,
     swapNetwork,
+    isFetching,
   };
 };
