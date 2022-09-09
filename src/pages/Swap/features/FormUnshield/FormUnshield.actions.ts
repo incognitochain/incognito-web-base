@@ -267,7 +267,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     let bscExchanges: ISwapExchangeData[] = [];
     if (data?.hasOwnProperty(NetworkTypePayload.BINANCE_SMART_CHAIN)) {
       let incTokenID = sellToken.tokenID;
-      let receiveTokenContractID = buyParentToken.contractIdSwap;
+      let receiveTokenContractID = buyParentToken.contractID;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 2);
         incTokenID = childToken?.tokenID || '';
@@ -286,7 +286,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
 
     if (data?.hasOwnProperty(NetworkTypePayload.ETHEREUM)) {
       let incTokenID = sellToken.tokenID;
-      let receiveTokenContractID = buyParentToken.contractIdSwap;
+      let receiveTokenContractID = buyParentToken.contractID;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 1);
         incTokenID = childToken?.tokenID || '';
@@ -305,7 +305,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
 
     if (data?.hasOwnProperty(NetworkTypePayload.POLYGON)) {
       let incTokenID = sellToken.tokenID;
-      let receiveTokenContractID = buyParentToken.contractIdSwap;
+      let receiveTokenContractID = buyParentToken.contractID;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 3);
         incTokenID = childToken?.tokenID || '';
@@ -324,7 +324,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
 
     if (data?.hasOwnProperty(NetworkTypePayload.FANTOM)) {
       let incTokenID = sellToken.tokenID;
-      let receiveTokenContractID = buyParentToken.contractIdSwap;
+      let receiveTokenContractID = buyParentToken.contractID;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 4);
         incTokenID = childToken?.tokenID || '';
