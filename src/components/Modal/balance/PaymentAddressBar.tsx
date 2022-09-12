@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
-import { shortenIncognitoAddress } from 'utils';
+import { shortenString } from 'utils';
 const PaymentAddressBarStyled = styled.div`
   display: flex;
   flex-direction: row;
@@ -58,7 +58,7 @@ const PaymentAddressBar = (props: any) => {
         <IncognitoLogo className="logo" />
         <div className="content">
           <ThemedText.RegularLabel fontWeight={500} color="primary5">
-            {shortenIncognitoAddress(incAddress, 8)}
+            {shortenString(incAddress, 8)}
           </ThemedText.RegularLabel>
 
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
