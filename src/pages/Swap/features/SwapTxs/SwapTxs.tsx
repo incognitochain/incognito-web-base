@@ -18,8 +18,9 @@ const Styled = styled.div`
     left: 45%;
   }
   .item {
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-bottom: 15px;
+  }
+  .item:first-child {
   }
 `;
 
@@ -38,14 +39,19 @@ const SwapTxs = React.memo(() => {
 
   const renderItem = (tx: ISwapTxStatus) => {
     return (
-      <RowBetween key={tx.requestBurnTxInc} className="item button-hover">
-        <ThemedText.SmallLabel fontWeight={500} color="primary8">
-          {shortenString(`#${tx.requestBurnTxInc}`, 10)}
+      <div className="item button-hover">
+        <RowBetween key={tx.requestBurnTxInc}>
+          <ThemedText.SmallLabel fontWeight={500} color="primary8">
+            {shortenString(`#${tx.requestBurnTxInc}`, 10)}
+          </ThemedText.SmallLabel>
+          <ThemedText.SmallLabel fontWeight={500} style={{ color: tx.color }}>
+            {tx.status}
+          </ThemedText.SmallLabel>
+        </RowBetween>
+        <ThemedText.SmallLabel marginTop="4px" fontWeight={500}>
+          {tx.time}
         </ThemedText.SmallLabel>
-        <ThemedText.SmallLabel fontWeight={500} style={{ color: tx.color }}>
-          {tx.status}
-        </ThemedText.SmallLabel>
-      </RowBetween>
+      </div>
     );
   };
 
