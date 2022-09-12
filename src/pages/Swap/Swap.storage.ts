@@ -5,6 +5,7 @@ const KEY = 'INC-SWAP-EXCHANGE-TXS';
 export interface ISwapTxStorage {
   txHash: string;
   incAddress: string;
+  time: number;
 }
 
 const getSwapTxs = (): ISwapTxStorage[] => {
@@ -13,9 +14,9 @@ const getSwapTxs = (): ISwapTxStorage[] => {
   return swapTxs;
 };
 
-const setSwapTx = ({ txHash, incAddress }: ISwapTxStorage) => {
+const setSwapTx = ({ txHash, incAddress, time }: ISwapTxStorage) => {
   const swapTxs: ISwapTxStorage[] = Storage.getItem(KEY) || [];
-  swapTxs.push({ txHash, incAddress });
+  swapTxs.push({ txHash, incAddress, time });
   Storage.setItem(KEY, swapTxs);
 };
 

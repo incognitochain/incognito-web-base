@@ -202,6 +202,7 @@ const enhanceSend = (WrappedComponent: any) => {
               setSwapTx({
                 txHash: tx.txHash,
                 incAddress,
+                time: new Date().getTime(),
               });
               console.log({ submitTxResult });
             }

@@ -1,6 +1,8 @@
 import isEmpty from 'lodash/isEmpty';
 import { ISwapTxStorage } from 'pages/Swap/Swap.storage';
 
+import format from '../../../../utils/format';
+
 enum ExchangeStatus {
   reverted = 'reverted',
   success = 'success',
@@ -40,6 +42,7 @@ export interface ISwapTxStatus {
 
   status: Status;
   color: string;
+  time: string;
 }
 
 const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swapTxs: any }) => {
@@ -59,6 +62,7 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
       isRedeposit: apiResp.is_redeposit,
       redepositTxInc: apiResp.bsc_redeposit_inctx || apiResp.plg_redeposit_inctx,
       redepositStatus: apiResp.bsc_redeposit_status || apiResp.plg_redeposit_status,
+      time: format.formatDateTime({ dateTime: curr.time || new Date().getTime() }),
     };
 
     // inc_request_tx_status
