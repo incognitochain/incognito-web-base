@@ -4,6 +4,7 @@ import { useModal } from 'components/Modal';
 import LoadingTransaction from 'components/Modal/Modal.transaction';
 import { PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
+import { setSwapTx } from 'pages/Swap/Swap.storage';
 import { batch } from 'react-redux';
 import { change, focus, untouch } from 'redux-form';
 import { rpcClient } from 'services';
@@ -40,6 +41,7 @@ const enhanceSend = (WrappedComponent: any) => {
       swapNetwork,
       buyParentToken,
       isFetching,
+      incAddress,
     } = props;
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
@@ -197,6 +199,10 @@ const enhanceSend = (WrappedComponent: any) => {
                 txHash: tx.txHash,
                 txRaw: tx.rawData,
               });
+              setSwapTx({
+                txHash: tx.txHash,
+                incAddress,
+              });
               console.log({ submitTxResult });
             }
             updateMetric().then();
@@ -239,7 +245,7 @@ const enhanceSend = (WrappedComponent: any) => {
           rightHeader: undefined,
           title: '',
           closable: true,
-          data: <TransactionSubmittedContent chainId={PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO} hash={resolve.data} />,
+          data: <TransactionSubmittedContent chainId={PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO} hash={resolve.txHash} />,
         });
       } catch (e) {
         clearAllModal();

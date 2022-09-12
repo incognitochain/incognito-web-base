@@ -1,7 +1,10 @@
 import { AxiosInstance } from 'axios';
 import { API_SERVICE } from 'config';
 import PTokenModel from 'models/model/pTokenModel';
+import { getSwapTxs, ISwapTxStorage } from 'pages/Swap/Swap.storage';
 import createAxiosInstance from 'services/axios';
+
+import { combineSwapTxs } from '../pages/Swap/features/SwapTxs/SwapTxs.utils';
 
 interface ISummitEtherHash {
   hash: string;
@@ -138,6 +141,18 @@ class RpcClient {
       TxHash: txHash,
       TxRaw: txRaw,
     });
+  }
+
+  async apiGetSwapTxs() {
+    const swapTxs: ISwapTxStorage[] = getSwapTxs() || [];
+    let txIDs = [];
+    if (!swapTxs || swapTxs.length === 0) return [];
+    txIDs = swapTxs.map((tx) => tx.txHash);
+    const txs =
+      (await this.http.post('papps/swapstatus', {
+        TxList: txIDs,
+      })) || [];
+    return combineSwapTxs({ localTxs: swapTxs, swapTxs: txs });
   }
 
   async genDepositAddress({
