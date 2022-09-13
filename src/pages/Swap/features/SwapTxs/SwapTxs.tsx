@@ -11,6 +11,7 @@ import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
 import { getChainIDByAcronymNetwork } from '../../../../utils/token';
 import ItemDetail, { IItemDetail } from '../ItemDetail';
+import { capitalizeFirstLetter } from '../ItemDetail/ItemDetail';
 import { ISwapTxStatus } from './SwapTxs.utils';
 
 interface IState {
@@ -124,7 +125,7 @@ const SwapTxs = React.memo(() => {
             {shortenString(`#${tx.requestBurnTxInc}`, 10)}
           </ThemedText.SmallLabel>
           <ThemedText.SmallLabel fontWeight={500} style={{ color: tx.color }}>
-            {tx.status}
+            {capitalizeFirstLetter(tx.status)}
           </ThemedText.SmallLabel>
         </RowBetween>
         <ThemedText.SmallLabel marginTop="4px" fontWeight={500}>
