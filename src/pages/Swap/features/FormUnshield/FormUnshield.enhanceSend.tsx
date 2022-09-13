@@ -211,7 +211,7 @@ const enhanceSend = (WrappedComponent: any) => {
     };
 
     const onSend = async () => {
-      if (formType === FormTypes.UNSHIELD && disabledForm) {
+      if (disabledForm) {
         return batch(() => {
           dispatch(focus(FORM_CONFIGS.formName, FORM_CONFIGS.formAddress));
           dispatch(focus(FORM_CONFIGS.formName, FORM_CONFIGS.sellAmount));
@@ -244,9 +244,11 @@ const enhanceSend = (WrappedComponent: any) => {
       } catch (e) {
         clearAllModal();
       } finally {
-        setTimeout(() => {
-          dispatch(actionEstimateFee());
-        }, 300);
+        if (formType === FormTypes.UNSHIELD) {
+          setTimeout(() => {
+            dispatch(actionEstimateFee());
+          }, 300);
+        }
       }
     };
     return <WrappedComponent {...{ ...props, onSend }} />;

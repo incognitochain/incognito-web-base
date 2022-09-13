@@ -357,7 +357,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
 
     dispatch(actionSetSwapExchangeSupports(exchangeSupports));
   } catch (error) {
-    dispatch(actionSetSwapEstimateTradeErrorMsg(typeof error === 'string' ? error : ''));
+    dispatch(actionSetSwapEstimateTradeErrorMsg(typeof error === 'string' ? error : error?.message || ''));
   } finally {
     setTimeout(() => {
       dispatch(actionSetFetchingFee({ isFetchingFee: false }));
