@@ -69,4 +69,23 @@ const getAcronymNetwork = (token: SelectedPrivacyModel): string => {
   return network;
 };
 
-export { getAcronymNetwork, getChainIDByCurrency, getNetworkNameByCurrency };
+const getChainIDByAcronymNetwork = (network: string): number | any => {
+  let chainID = 0;
+  switch (network) {
+    case 'eth':
+      chainID = isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN;
+      break;
+    case 'bsc':
+      chainID = isMainnet ? SupportedChainId.BSC : SupportedChainId.BSC_TESTNET;
+      break;
+    case 'plg':
+      chainID = isMainnet ? SupportedChainId.POLYGON : SupportedChainId.POLYGON_MUMBAI;
+      break;
+    case 'ftm':
+      chainID = isMainnet ? SupportedChainId.FTM : SupportedChainId.FTM_TESTNET;
+      break;
+  }
+  return chainID;
+};
+
+export { getAcronymNetwork, getChainIDByAcronymNetwork, getChainIDByCurrency, getNetworkNameByCurrency };
