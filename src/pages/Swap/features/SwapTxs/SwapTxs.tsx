@@ -1,11 +1,16 @@
 import Loader from 'components/Core/Loader';
 import { RowBetween } from 'components/Core/Row';
+import { PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import React from 'react';
+import { ArrowLeft } from 'react-feather';
 import rpcClient from 'services/rpcClient';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 import { shortenString } from 'utils';
+import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
+import { getChainIDByAcronymNetwork } from '../../../../utils/token';
+import ItemDetail, { IItemDetail } from '../ItemDetail';
 import { ISwapTxStatus } from './SwapTxs.utils';
 
 interface IState {
@@ -29,6 +34,72 @@ const Styled = styled.div`
 
 const SwapTxs = React.memo(() => {
   const [state, setState] = React.useState<IState>({ loading: true, txs: [] });
+  const [txDetail, setTxDetail] = React.useState<ISwapTxStatus | undefined>(undefined);
+
+  const factories: IItemDetail[] = React.useMemo(() => {
+    if (!txDetail) return [];
+    const chainId = getChainIDByAcronymNetwork(txDetail.network);
+    return [
+      {
+        title: 'Status:',
+        desc: txDetail.status,
+        descColor: txDetail.color,
+      },
+      {
+        title: 'BurnTx:',
+        desc: shortenString(txDetail.requestBurnTxInc || '', 10),
+        copyData: txDetail.requestBurnTxInc,
+        link: `${getExplorerLink(
+          PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
+          txDetail.requestBurnTxInc,
+          ExplorerDataType.TRANSACTION
+        )}`,
+        disabled: !txDetail.requestBurnTxInc,
+      },
+      {
+        title: 'Burn status:',
+        desc: txDetail.burnTxStatus,
+        // descColor: txDetail.burnColor,
+        disabled: !txDetail.burnTxStatus,
+      },
+      {
+        title: 'OutChainTx:',
+        desc: shortenString(txDetail.outchainTx || '', 10),
+        copyData: txDetail.outchainTx,
+        link: `${getExplorerLink(chainId || 0, txDetail.outchainTx, ExplorerDataType.TRANSACTION)}`,
+        disabled: !txDetail.outchainTx,
+      },
+      {
+        title: 'OutChain status:',
+        desc: txDetail.outchainTxStatus,
+        // descColor: txDetail.outchainColor,
+        disabled: !txDetail.outchainTxStatus,
+      },
+      {
+        title: 'Swap status:',
+        desc: txDetail.swapExchangeStatus,
+        // descColor: txDetail.swapExchangeColor,
+        disabled: !txDetail.swapExchangeStatus,
+      },
+      {
+        title: 'RedepositTx:',
+        desc: shortenString(txDetail.redepositTxInc || '', 10),
+        copyData: txDetail.redepositTxInc,
+        link: `${getExplorerLink(
+          PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
+          txDetail.redepositTxInc,
+          ExplorerDataType.TRANSACTION
+        )}`,
+        disabled: !txDetail.redepositTxInc,
+      },
+      {
+        title: 'Redeposit status:',
+        desc: txDetail.redepositStatus,
+        // descColor: txDetail.redepositColor,
+        disabled: !txDetail.redepositStatus,
+      },
+    ];
+  }, [txDetail]);
 
   const getSwapTxs = async () => {
     try {
@@ -42,7 +113,12 @@ const SwapTxs = React.memo(() => {
 
   const renderItem = (tx: ISwapTxStatus) => {
     return (
-      <div className="item button-hover">
+      <div
+        className="item button-hover"
+        onClick={() => {
+          setTxDetail(tx);
+        }}
+      >
         <RowBetween key={tx.requestBurnTxInc}>
           <ThemedText.SmallLabel fontWeight={500} color="primary8">
             {shortenString(`#${tx.requestBurnTxInc}`, 10)}
@@ -58,6 +134,22 @@ const SwapTxs = React.memo(() => {
     );
   };
 
+  const renderHistoryList = () => state.txs.map(renderItem);
+
+  const renderUI = () => {
+    if (txDetail) {
+      return (
+        <>
+          <ArrowLeft style={{ marginBottom: '12px', cursor: 'pointer' }} onClick={() => setTxDetail(undefined)} />
+          {factories.map((item: IItemDetail) => (
+            <ItemDetail key={item.title} {...item} />
+          ))}
+        </>
+      );
+    }
+    return renderHistoryList();
+  };
+
   React.useEffect(() => {
     getSwapTxs().then();
   }, []);
@@ -65,7 +157,7 @@ const SwapTxs = React.memo(() => {
   return (
     <Styled>
       {state.loading && <Loader />}
-      {state.txs.map(renderItem)}
+      {renderUI()}
     </Styled>
   );
 });

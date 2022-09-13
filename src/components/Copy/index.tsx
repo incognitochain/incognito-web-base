@@ -5,6 +5,7 @@ import styled from 'styled-components/macro';
 
 interface IProps {
   text?: string;
+  size?: number;
 }
 
 const Styled = styled.button`
@@ -22,8 +23,9 @@ const Styled = styled.button`
 
 // eslint-disable-next-line react/display-name
 const CopyVector = React.memo((props: any) => {
+  const { size = 24 } = props;
   return (
-    <svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...props}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
       <path
         d="M17.8463 19.9486H6.56413C6.42812 19.9486 6.29768 19.8946 6.20151 19.7984C6.10533 19.7022 6.0513 19.5718 6.0513 19.4358V6.10231C6.0513 5.83029 5.94324 5.56941 5.7509 5.37707C5.55855 5.18472 5.29767 5.07666 5.02565 5.07666C4.75363 5.07666 4.49275 5.18472 4.30041 5.37707C4.10806 5.56941 4 5.83029 4 6.10231V19.9486C4 20.4927 4.21612 21.0144 4.60081 21.3991C4.98551 21.7838 5.50726 21.9999 6.0513 21.9999H17.8463C18.1183 21.9999 18.3792 21.8919 18.5715 21.6995C18.7639 21.5072 18.872 21.2463 18.872 20.9743C18.872 20.7022 18.7639 20.4414 18.5715 20.249C18.3792 20.0567 18.1183 19.9486 17.8463 19.9486Z"
         fill="white"
@@ -37,7 +39,7 @@ const CopyVector = React.memo((props: any) => {
 });
 
 const CopyIcon = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
-  const { text } = props;
+  const { text, size } = props;
   const handleCopyText = () => {
     if (text) {
       toast('Copied');
@@ -46,7 +48,7 @@ const CopyIcon = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>)
   };
   return (
     <Styled onClick={handleCopyText}>
-      <CopyVector />
+      <CopyVector size={size} />
     </Styled>
   );
 };

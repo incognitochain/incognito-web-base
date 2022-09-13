@@ -1,7 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import { ISwapTxStorage } from 'pages/Swap/Swap.storage';
-
-import format from '../../../../utils/format';
+import format from 'utils/format';
 
 enum ExchangeStatus {
   reverted = 'reverted',
@@ -30,20 +29,48 @@ enum Status {
 export interface ISwapTxStatus {
   requestBurnTxInc: string;
   burnTxStatus: TxStatus;
+  burnColor: string;
 
   outchainTx: string;
   outchainTxStatus: string;
+  outchainColor: string;
 
   swapExchangeStatus: ExchangeStatus;
+  swapExchangeColor: string;
 
   isRedeposit: boolean;
   redepositTxInc: string;
   redepositStatus: TxStatus;
+  redepositColor: string;
 
   status: Status;
   color: string;
   time: string;
+  network: string;
 }
+
+const getStatusColor = (status: string) => {
+  let color = '#FFC043';
+  switch (status) {
+    case Status.fail:
+    case TxStatus.submit_failed:
+    case TxStatus.rejected:
+      color = '#F6465D';
+      break;
+    case Status.processing:
+    case Status.reverted:
+    case TxStatus.pending:
+    case TxStatus.submitting:
+    case TxStatus.executing:
+      color = '#FFC043';
+      break;
+    case Status.success:
+    case TxStatus.accepted:
+      color = '#34C759';
+      break;
+  }
+  return color;
+};
 
 const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swapTxs: any }) => {
   // @ts-ignore
@@ -53,6 +80,7 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
     let tx: any = {
       requestBurnTxInc: curr.txHash,
       burnTxStatus: apiResp.inc_request_tx_status,
+      burnColor: getStatusColor(apiResp.inc_request_tx_status),
       time: format.formatDateTime({ dateTime: curr.time || new Date().getTime() }),
     };
 
@@ -62,12 +90,17 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
         ...tx,
         outchainTx: networkStatus.swap_tx,
         outchainTxStatus: networkStatus.swap_tx_status,
+        outchainColor: getStatusColor(networkStatus.swap_tx_status),
 
         swapExchangeStatus: networkStatus.swap_outcome,
+        swapExchangeColor: getStatusColor(networkStatus.swap_outcome),
 
         isRedeposit: networkStatus.is_redeposit,
         redepositTxInc: networkStatus.redeposit_inctx,
         redepositStatus: networkStatus.redeposit_status,
+        redepositColor: getStatusColor(networkStatus.redeposit_status),
+
+        network: networkStatus.network,
       };
     }
 
@@ -139,23 +172,10 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
         swapStatus = Status.processing;
         break;
     }
-    let color = '#FFC043';
-    switch (swapStatus) {
-      case Status.fail:
-        color = '#F6465D';
-        break;
-      case Status.processing:
-      case Status.reverted:
-        color = '#FFC043';
-        break;
-      case Status.success:
-        color = '#34C759';
-        break;
-    }
     const data: ISwapTxStatus = {
       ...tx,
       status: swapStatus,
-      color,
+      color: getStatusColor(swapStatus),
     };
     return [...prev, data];
   }, []);

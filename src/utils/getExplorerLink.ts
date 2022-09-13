@@ -37,7 +37,7 @@ export function getExplorerLink(chainId: number, data: string, type: ExplorerDat
   if (chainId === PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO) return `https://explorer.incognito.org/tx/${data}`;
   switch (type) {
     case ExplorerDataType.TRANSACTION:
-      return `${prefix}/tx/${data}`;
+      return `${prefix}tx/${data}`;
 
     case ExplorerDataType.TOKEN:
       return `${prefix}/token/${data}`;
