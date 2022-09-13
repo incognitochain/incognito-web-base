@@ -8,8 +8,8 @@ import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 import { shortenString } from 'utils';
 import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
+import { getChainIDByAcronymNetwork } from 'utils/token';
 
-import { getChainIDByAcronymNetwork } from '../../../../utils/token';
 import ItemDetail, { IItemDetail } from '../ItemDetail';
 import { capitalizeFirstLetter } from '../ItemDetail/ItemDetail';
 import { ISwapTxStatus } from './SwapTxs.utils';
@@ -48,7 +48,7 @@ const SwapTxs = React.memo(() => {
       },
       {
         title: 'BurnTx:',
-        desc: shortenString(txDetail.requestBurnTxInc || '', 10),
+        desc: !!txDetail.requestBurnTxInc ? shortenString(txDetail.requestBurnTxInc || '', 10) : '',
         copyData: txDetail.requestBurnTxInc,
         link: `${getExplorerLink(
           PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
@@ -65,9 +65,9 @@ const SwapTxs = React.memo(() => {
       },
       {
         title: 'OutChainTx:',
-        desc: shortenString(txDetail.outchainTx || '', 10),
+        desc: !!txDetail.outchainTx ? shortenString(txDetail.outchainTx || '', 10) : '',
         copyData: txDetail.outchainTx,
-        link: `${getExplorerLink(chainId || 0, txDetail.outchainTx, ExplorerDataType.TRANSACTION)}`,
+        link: `${getExplorerLink(chainId || 0, txDetail.outchainTx || '', ExplorerDataType.TRANSACTION)}`,
         disabled: !txDetail.outchainTx,
       },
       {
@@ -84,13 +84,15 @@ const SwapTxs = React.memo(() => {
       },
       {
         title: 'RedepositTx:',
-        desc: shortenString(txDetail.redepositTxInc || '', 10),
+        desc: !!txDetail.redepositTxInc ? shortenString(txDetail.redepositTxInc || '', 10) : '',
         copyData: txDetail.redepositTxInc,
-        link: `${getExplorerLink(
-          PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
-          txDetail.redepositTxInc,
-          ExplorerDataType.TRANSACTION
-        )}`,
+        link: !!txDetail.redepositTxInc
+          ? `${getExplorerLink(
+              PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
+              txDetail.redepositTxInc,
+              ExplorerDataType.TRANSACTION
+            )}`
+          : '',
         disabled: !txDetail.redepositTxInc,
       },
       {
