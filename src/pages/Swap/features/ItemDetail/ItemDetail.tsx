@@ -7,7 +7,7 @@ import { ThemedText } from 'theme';
 import { IItemDetail } from './ItemDetail.interface';
 import { Styled } from './ItemDetail.styled';
 
-function capitalizeFirstLetter(string: string) {
+export function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
