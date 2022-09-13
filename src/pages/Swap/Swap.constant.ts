@@ -4,6 +4,7 @@ const FORM_CONFIGS = {
   buyAmount: 'buyAmount',
   formAddress: 'formAddress',
   toAddress: 'toAddress',
+  slippage: 'slippage',
 };
 
 const SWAP_EXCHANGES = {

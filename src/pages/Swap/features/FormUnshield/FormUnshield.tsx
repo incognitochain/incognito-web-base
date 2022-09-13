@@ -113,12 +113,24 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           inputType={INPUT_FIELD.amount}
           leftTitle="Total amount"
           rightTitle={userBalanceFormatedText}
+          showIcon={true}
           componentProps={{
             placeholder: 'Amount',
             type: 'number',
           }}
           validate={validateAmount}
           onClickMax={onClickMax}
+        />
+        <VerticalSpace />
+        <Field
+          component={InputField}
+          name={FORM_CONFIGS.slippage}
+          inputType={INPUT_FIELD.amount}
+          leftTitle="Slippage tolerance (%)"
+          componentProps={{
+            placeholder: 'Percent',
+            type: 'number',
+          }}
         />
         <VerticalSpace />
         <EstReceive
