@@ -1,3 +1,4 @@
+import uniqueBy from 'lodash/uniqBy';
 import Storage from 'storage';
 
 const KEY = 'INC-SWAP-EXCHANGE-TXS';
@@ -15,8 +16,9 @@ const getSwapTxs = (): ISwapTxStorage[] => {
 };
 
 const setSwapTx = ({ txHash, incAddress, time }: ISwapTxStorage) => {
-  const swapTxs: ISwapTxStorage[] = Storage.getItem(KEY) || [];
+  let swapTxs: ISwapTxStorage[] = Storage.getItem(KEY) || [];
   swapTxs.push({ txHash, incAddress, time });
+  swapTxs = uniqueBy(swapTxs, 'txHash');
   Storage.setItem(KEY, swapTxs);
 };
 

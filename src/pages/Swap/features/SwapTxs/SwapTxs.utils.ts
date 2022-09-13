@@ -50,20 +50,26 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
   const txs: ISwapTxStatus[] = localTxs.reduce((prev, curr) => {
     const apiResp: any = swapTxs[curr.txHash];
     if (!apiResp || isEmpty(apiResp)) return prev;
-    const tx: any = {
+    let tx: any = {
       requestBurnTxInc: curr.txHash,
       burnTxStatus: apiResp.inc_request_tx_status,
-
-      outchainTx: apiResp.bsc_swap_tx || apiResp.plg_swap_tx,
-      outchainTxStatus: apiResp.bsc_swap_tx_status || apiResp.plg_swap_tx_status,
-
-      swapExchangeStatus: apiResp.bsc_swap_outcome || apiResp.plg_swap_outcome,
-
-      isRedeposit: apiResp.is_redeposit,
-      redepositTxInc: apiResp.bsc_redeposit_inctx || apiResp.plg_redeposit_inctx,
-      redepositStatus: apiResp.bsc_redeposit_status || apiResp.plg_redeposit_status,
       time: format.formatDateTime({ dateTime: curr.time || new Date().getTime() }),
     };
+
+    if (apiResp.network_result && !isEmpty(apiResp.network_result)) {
+      const networkStatus = apiResp.network_result[0];
+      tx = {
+        ...tx,
+        outchainTx: networkStatus.swap_tx,
+        outchainTxStatus: networkStatus.swap_tx_status,
+
+        swapExchangeStatus: networkStatus.swap_outcome,
+
+        isRedeposit: networkStatus.is_redeposit,
+        redepositTxInc: networkStatus.redeposit_inctx,
+        redepositStatus: networkStatus.redeposit_status,
+      };
+    }
 
     // inc_request_tx_status
     // -> bsc_swap_tx_status

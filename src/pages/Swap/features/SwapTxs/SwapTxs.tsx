@@ -14,13 +14,16 @@ interface IState {
 }
 
 const Styled = styled.div`
+  overflow-y: auto;
   .loader {
     left: 45%;
   }
   .item {
-    padding-bottom: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   .item:first-child {
+    padding-top: 0;
   }
 `;
 
