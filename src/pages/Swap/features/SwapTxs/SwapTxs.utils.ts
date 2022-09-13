@@ -95,7 +95,7 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
         swapExchangeStatus: networkStatus.swap_outcome,
         swapExchangeColor: getStatusColor(networkStatus.swap_outcome),
 
-        isRedeposit: networkStatus.is_redeposit && networkStatus.is_redeposit === 'true',
+        isRedeposit: !!networkStatus.is_redeposit,
         redepositTxInc: networkStatus.redeposit_inctx,
         redepositStatus: networkStatus.redeposit_status,
         redepositColor: getStatusColor(networkStatus.redeposit_status),
