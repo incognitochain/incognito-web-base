@@ -115,7 +115,7 @@ const InputField = (props: IInputFieldProps) => {
         return (
           <InputContainer className="border-hover input-container input-amount">
             <InputComp {...{ input, componentProps }} />
-            <ButtonMax onClick={onClickMax} />
+            {showIcon && <ButtonMax onClick={onClickMax} />}
           </InputContainer>
         );
       case INPUT_FIELD.address:

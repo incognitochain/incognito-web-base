@@ -21,6 +21,7 @@ const enhanceFee = (WrappedComponent: any) => {
       buyToken,
       formType,
       buyNetworkName,
+      slippage,
     } = props;
 
     const onEstimateFee = () => {
@@ -53,6 +54,7 @@ const enhanceFee = (WrappedComponent: any) => {
       sellToken.tokenID,
       buyToken.tokenID,
       buyNetworkName,
+      slippage,
     ]);
 
     return <WrappedComponent {...{ ...props }} />;

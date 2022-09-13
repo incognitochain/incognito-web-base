@@ -65,6 +65,7 @@ export interface IUnshield {
   tradePaths: string[];
   estimateTradeErrorMsg: string | null;
   swapNetwork: MAIN_NETWORK_NAME | null;
+  slippage: string;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -111,6 +112,7 @@ export const useUnshield = (): IUnshield => {
     tradePaths,
     estimateTradeErrorMsg,
     swapNetwork,
+    slippage,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
@@ -180,5 +182,7 @@ export const useUnshield = (): IUnshield => {
     estimateTradeErrorMsg,
     swapNetwork,
     isFetching,
+
+    slippage,
   };
 };

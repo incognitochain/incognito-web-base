@@ -27,6 +27,7 @@ interface ISwapFeePayload {
   amount: string;
   fromToken: string;
   toToken: string;
+  slippage: string;
 }
 
 export interface IFee {
@@ -118,12 +119,13 @@ class RpcClient {
     };
   }
 
-  async estimateSwapFee({ network, amount, fromToken, toToken }: ISwapFeePayload): Promise<any> {
+  async estimateSwapFee({ network, amount, fromToken, toToken, slippage }: ISwapFeePayload): Promise<any> {
     const data: any = await this.http.post('papps/estimateswapfee', {
       Network: network,
       Amount: amount,
       FromToken: fromToken,
       ToToken: toToken,
+      Slippage: slippage,
     });
     const exchangeSupports = data?.Networks;
     return exchangeSupports;

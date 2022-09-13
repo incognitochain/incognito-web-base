@@ -85,6 +85,8 @@ export interface IUnshieldData {
   tradePaths: string[];
   estimateTradeErrorMsg: string | null;
   swapNetwork: MAIN_NETWORK_NAME;
+
+  slippage: string;
 }
 
 const getTradePaths = (exchange?: SwapExchange, routes?: any[], tokenList?: any): string[] => {
@@ -167,6 +169,7 @@ const getUnshieldData = ({
 
   const inputAmount: string = formSelector(state, FORM_CONFIGS.sellAmount);
   const inputAddress = formSelector(state, FORM_CONFIGS.toAddress);
+  const inputSlippage: string = formSelector(state, FORM_CONFIGS.slippage) || '0';
 
   // sell token
   const _sellToken = getDataByTokenID(sellIdentify);
@@ -534,6 +537,8 @@ const getUnshieldData = ({
     tradePaths,
     estimateTradeErrorMsg,
     swapNetwork,
+
+    slippage: inputSlippage,
   };
 };
 
