@@ -12,11 +12,11 @@ const ETHERSCAN_PREFIXES: { [chainId: number]: string } = {
   [SupportedChainId.POLYGON_MUMBAI]: 'https://mumbai.polygonscan.com',
   [SupportedChainId.POLYGON]: 'https://polygonscan.com',
 
-  [SupportedChainId.BSC]: 'https://bscscan.com/',
-  [SupportedChainId.BSC_TESTNET]: 'https://testnet.bscscan.com/',
+  [SupportedChainId.BSC]: 'https://bscscan.com',
+  [SupportedChainId.BSC_TESTNET]: 'https://testnet.bscscan.com',
 
   [SupportedChainId.FTM]: 'https://ftmscan.com',
-  [SupportedChainId.FTM_TESTNET]: 'https://testnet.ftmscan.com/',
+  [SupportedChainId.FTM_TESTNET]: 'https://testnet.ftmscan.com',
 };
 
 export enum ExplorerDataType {
@@ -37,7 +37,7 @@ export function getExplorerLink(chainId: number, data: string, type: ExplorerDat
   if (chainId === PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO) return `https://explorer.incognito.org/tx/${data}`;
   switch (type) {
     case ExplorerDataType.TRANSACTION:
-      return `${prefix}tx/${data}`;
+      return `${prefix}/tx/${data}`;
 
     case ExplorerDataType.TOKEN:
       return `${prefix}/token/${data}`;
