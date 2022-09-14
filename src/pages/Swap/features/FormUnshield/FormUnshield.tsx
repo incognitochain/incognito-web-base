@@ -50,7 +50,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     exchangeSelected,
     estReceiveAmount,
     exchangeSupports,
-    tradePaths,
+    tradePath,
     estimateTradeErrorMsg,
     swapFee,
   } = props;
@@ -143,7 +143,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           exchangeSelected={exchangeSelected}
           onSelectExchange={onSelectExchange}
           formType={formType}
-          tradePaths={tradePaths}
+          tradePath={tradePath}
           swapFee={swapFee}
         />
         <VerticalSpace />

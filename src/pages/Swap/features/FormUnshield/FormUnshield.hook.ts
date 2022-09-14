@@ -62,7 +62,7 @@ export interface IUnshield {
   exchangeSelectedData: any;
   exchangeSupports: any[];
   swapFee: any;
-  tradePaths: string[];
+  tradePath: string;
   estimateTradeErrorMsg: string | null;
   swapNetwork: MAIN_NETWORK_NAME | null;
   slippage: string;
@@ -109,7 +109,7 @@ export const useUnshield = (): IUnshield => {
     exchangeSelectedData,
     exchangeSupports,
     swapFee,
-    tradePaths,
+    tradePath,
     estimateTradeErrorMsg,
     swapNetwork,
     slippage,
@@ -178,7 +178,7 @@ export const useUnshield = (): IUnshield => {
     exchangeSelectedData,
     exchangeSupports,
     swapFee,
-    tradePaths,
+    tradePath,
     estimateTradeErrorMsg,
     swapNetwork,
     isFetching,

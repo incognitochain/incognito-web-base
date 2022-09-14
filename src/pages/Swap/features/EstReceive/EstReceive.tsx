@@ -40,7 +40,7 @@ interface IProps extends ISelectSwapExchange {
   time: string;
 
   formType: FormTypes;
-  tradePaths: string[];
+  tradePath: string;
   swapFee: any;
 }
 
@@ -55,7 +55,7 @@ const EstReceive = React.memo(
     exchangeSelected,
     onSelectExchange,
     formType,
-    tradePaths,
+    tradePath,
     swapFee,
   }: IProps) => {
     const [isOpen, setOpen] = React.useState(false);
@@ -103,18 +103,10 @@ const EstReceive = React.memo(
               <ThemedText.Small fontWeight={400}>{`${time} mins`}</ThemedText.Small>
             </RowBetween>
 
-            {formType === FormTypes.SWAP && tradePaths?.length > 0 && (
+            {formType === FormTypes.SWAP && tradePath && (
               <RowBetween style={{ marginTop: 12 }}>
                 <ThemedText.Small fontWeight={400}>Trade path</ThemedText.Small>
-                <div>
-                  {tradePaths?.map((pathStr: string, i) => {
-                    return (
-                      <ThemedText.Small key={i} fontWeight={400}>
-                        {pathStr}
-                      </ThemedText.Small>
-                    );
-                  })}
-                </div>
+                <ThemedText.Small fontWeight={400}>{tradePath}</ThemedText.Small>
               </RowBetween>
             )}
 
