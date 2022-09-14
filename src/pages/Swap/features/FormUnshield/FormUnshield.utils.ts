@@ -82,39 +82,23 @@ export interface IUnshieldData {
   exchangeSelected: any;
   exchangeSelectedData: any;
   swapFee: any;
-  tradePaths: string[];
+  tradePath: string;
   estimateTradeErrorMsg: string | null;
   swapNetwork: MAIN_NETWORK_NAME;
 }
 
-const getTradePaths = (exchange?: SwapExchange, routes?: any[], tokenList?: any): string[] => {
-  if (!exchange || !routes) return [];
-  let tradePathArrStr: any = [];
-  if (exchange === SwapExchange.UNISWAP) {
-    tradePathArrStr = routes?.map((childRoutes: any[]) => {
-      return childRoutes
-        ?.map((tokenRoute: any, index: number, arr) => {
-          if (index === arr.length - 1) {
-            return `${tokenRoute?.tokenIn?.symbol} > ${tokenRoute?.tokenOut?.symbol}`;
-          } else {
-            return `${tokenRoute?.tokenIn?.symbol} >`;
-          }
-        })
-        .filter((symbol) => !!symbol)
-        .join('');
-    });
-  }
-
-  if (exchange === SwapExchange.PANCAKE_SWAP) {
-    for (let i = 0; i < routes.length; i++) {
-      const tokenData = tokenList?.find((token: any) => token?.contractID?.toLowerCase() === routes[i]?.toLowerCase());
-      if (tokenData) {
-        tradePathArrStr.push(tokenData?.symbol);
-      }
+const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any): string => {
+  if (!exchange || !routes) return '';
+  let tradePathStr = '';
+  const tradePathArrStr: any = [];
+  for (let i = 0; i < routes.length; i++) {
+    const tokenData = tokenList?.find((token: any) => token?.contractID?.toLowerCase() === routes[i]?.toLowerCase());
+    if (tokenData) {
+      tradePathArrStr.push(tokenData?.symbol);
     }
-    tradePathArrStr = [tradePathArrStr?.join(' > ')];
   }
-  return tradePathArrStr;
+  tradePathStr = tradePathArrStr?.join(' > ');
+  return tradePathStr;
 };
 
 const getUnshieldData = ({
@@ -463,11 +447,7 @@ const getUnshieldData = ({
     tradeFeeText,
   };
 
-  const tradePaths: string[] = getTradePaths(
-    exchangeSelectedData?.appName,
-    exchangeSelectedData?.routes,
-    _sellTokenList
-  );
+  const tradePath: any = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, _sellTokenList);
 
   let estReceiveAmount;
   if (formType === FormTypes.UNSHIELD) {
@@ -531,7 +511,7 @@ const getUnshieldData = ({
     exchangeSelected,
     exchangeSelectedData,
     swapFee,
-    tradePaths,
+    tradePath,
     estimateTradeErrorMsg,
     swapNetwork,
   };
@@ -669,7 +649,7 @@ const parseExchangeDataModelResponse = (
     appName: data?.AppName,
     exchangeName: `${getExchangeName(data?.AppName)}(${networkName})`,
     fees: parseFeeDataModelResponse(data?.Fee || []) || [],
-    routes: data?.Route || [],
+    routes: data?.Paths || [],
     incTokenID: incTokenID || '',
     feeAddress: data?.FeeAddress || '',
     callContract: data?.CallContract,
