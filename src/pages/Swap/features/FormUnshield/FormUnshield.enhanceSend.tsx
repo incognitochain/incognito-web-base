@@ -14,8 +14,7 @@ import { useAppDispatch } from 'state/hooks';
 import { actionEstimateFee } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
 import { FormTypes } from './FormUnshield.types';
-import { getBurningMetaDataType, getPrvPayments, getTokenPayments } from './FormUnshield.utils';
-
+import { getBurningMetaDataTypeForUnshield, getPrvPayments, getTokenPayments } from './FormUnshield.utils';
 export interface TInner {
   onSend: () => void;
 }
@@ -42,6 +41,7 @@ const enhanceSend = (WrappedComponent: any) => {
       buyParentToken,
       isFetching,
       incAddress,
+      isUseTokenFee,
     } = props;
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
@@ -68,29 +68,35 @@ const enhanceSend = (WrappedComponent: any) => {
       }
       if (formType === FormTypes.SWAP && (estimateTradeErrorMsg || isFetching)) return;
       try {
-        let remoteAddress: any = web3Account;
-
+        // Get remote address
+        let remoteAddress: string = web3Account || '';
         if (remoteAddress.startsWith('0x')) {
           remoteAddress = remoteAddress.slice(2);
         }
 
-        let prvPayments = [];
-        if (formType === FormTypes.UNSHIELD) {
+        // Get payment info
+        let prvPayments: any[] = [];
+        let tokenPayments: any[] = [];
+        if (isUseTokenFee) {
+          tokenPayments = await getTokenPayments(
+            [
+              {
+                paymentAddress: formType === FormTypes.SWAP ? exchangeSelectedData?.feeAddress : feeAddress,
+                amount: formType === FormTypes.SWAP ? swapFee?.amount : parseInt(burnFee || '0'),
+              },
+            ],
+            parseInt(burnOriginalAmount)
+          );
+        } else {
           prvPayments = await getPrvPayments([
             {
               paymentAddress: feeAddress,
               amount: burnFee,
             },
           ]);
-        } else {
-          prvPayments = await getPrvPayments([
-            {
-              paymentAddress: feeAddress,
-              amount: 100,
-            },
-          ]);
         }
-        const burningMetaDataType: number = getBurningMetaDataType(sellToken, formType, exchangeSelectedData?.appName);
+
+        const burningMetaDataType: number = getBurningMetaDataTypeForUnshield(sellToken);
 
         const incognito = getIncognitoInject();
 
@@ -99,100 +105,95 @@ const enhanceSend = (WrappedComponent: any) => {
           method: 'wallet_requestAccounts',
           params: {},
         });
-
         const otaReceiver = result?.otaReceiver;
 
-        const tokenPayments = await getTokenPayments(
-          [
-            {
-              paymentAddress: formType === FormTypes.SWAP ? exchangeSelectedData?.feeAddress : feeAddress,
-              amount: formType === FormTypes.SWAP ? swapFee?.amount : parseInt(burnFee || '0'),
+        let payload: any;
+        if (formType === FormTypes.UNSHIELD) {
+          // Payload data for unshield
+          payload = {
+            networkFee,
+            prvPayments,
+            tokenPayments,
+            info: String(id),
+            tokenID: sellToken?.tokenID,
+            metadata: {
+              Type: burningMetaDataType,
+              UnifiedTokenID: sellToken?.isUnified ? sellToken?.tokenID : null,
+              Data: [
+                {
+                  IncTokenID: buyToken.tokenID,
+                  BurningAmount: burnOriginalAmount,
+                  RemoteAddress: unshieldAddress,
+                  MinExpectedAmount: burnOriginalAmount,
+                },
+              ],
+              Receiver: otaReceiver,
+              IsDepositToSC: false,
             },
-          ],
-          parseInt(burnOriginalAmount)
-        );
+            txType: 7,
+            receiverAddress: remoteAddress,
+            isSignAndSendTransaction: true,
+          };
+        } else {
+          // Get swap payload data
+          let externalCallData: string = exchangeSelectedData?.callData;
+          let externalCallAddress: string = exchangeSelectedData?.callContract;
 
-        // Payload data for unshield
-        const unshieldPayload: any = {
-          networkFee,
-          prvPayments: [],
-          tokenPayments,
-          info: formType === FormTypes.UNSHIELD ? String(id) : '',
-          tokenID: sellToken?.tokenID,
-          metadata: {
-            Type: burningMetaDataType,
-            UnifiedTokenID: sellToken?.isUnified ? sellToken?.tokenID : null,
-            Data: [
-              {
-                IncTokenID: formType === FormTypes.SWAP ? exchangeSelectedData?.incTokenID : buyToken.tokenID,
-                BurningAmount: burnOriginalAmount,
-                RemoteAddress: unshieldAddress,
-                MinExpectedAmount: burnOriginalAmount,
-              },
-            ],
-            Receiver: otaReceiver,
-            IsDepositToSC: sellToken?.isUnified && formType === FormTypes.SWAP ? true : false,
-          },
-          txType: 7,
-          receiverAddress: remoteAddress,
-          isSignAndSendTransaction: true,
-        };
+          if (externalCallData.startsWith('0x')) {
+            externalCallData = externalCallData.slice(2);
+          }
 
-        let externalCallData: string = exchangeSelectedData?.callData;
-        let externalCallAddress: string = exchangeSelectedData?.callContract;
+          if (externalCallAddress.startsWith('0x')) {
+            externalCallAddress = externalCallAddress.slice(2);
+          }
 
-        let buyTokenContract: string = exchangeSelectedData?.receiveTokenContractID;
-        if (buyParentToken?.isUnified && formType === FormTypes.SWAP) {
-          const childBuyToken = buyParentToken?.listUnifiedToken?.find(
-            (token: any) => token?.networkID === exchangeSelectedData?.networkID
-          );
-          buyTokenContract = childBuyToken?.contractIDSwap;
+          let buyTokenContract: string = exchangeSelectedData?.receiveTokenContractID;
+          if (buyParentToken?.isUnified && formType === FormTypes.SWAP) {
+            const childBuyToken = buyParentToken?.listUnifiedToken?.find(
+              (token: any) => token?.networkID === exchangeSelectedData?.networkID
+            );
+            buyTokenContract = childBuyToken?.contractIDSwap;
+          }
+
+          if (buyTokenContract.startsWith('0x')) {
+            buyTokenContract = buyTokenContract.slice(2);
+          }
+
+          const withdrawAddress: string =
+            buyNetworkName === 'Incognito' ? '0000000000000000000000000000000000000000' : remoteAddress;
+
+          // Payload data for swap
+          payload = {
+            networkFee,
+            prvPayments,
+            tokenPayments,
+            info: '',
+            tokenID: sellToken?.tokenID,
+            txType: 7,
+            receiverAddress: remoteAddress,
+            isSignAndSendTransaction: true,
+            metadata: {
+              Data: [
+                {
+                  IncTokenID: exchangeSelectedData?.incTokenID,
+                  RedepositReceiver: otaReceiver,
+                  BurningAmount: burnOriginalAmount,
+                  ExternalNetworkID: exchangeSelectedData?.networkID,
+                  ExternalCalldata: externalCallData,
+                  ExternalCallAddress: externalCallAddress,
+                  ReceiveToken: buyTokenContract,
+                  WithdrawAddress: withdrawAddress,
+                },
+              ],
+              BurnTokenID: sellToken?.tokenID,
+              Type: 348,
+            },
+          };
         }
-
-        if (externalCallData.startsWith('0x')) {
-          externalCallData = externalCallData.slice(2);
-        }
-
-        if (externalCallAddress.startsWith('0x')) {
-          externalCallAddress = externalCallAddress.slice(2);
-        }
-
-        if (buyTokenContract.startsWith('0x')) {
-          buyTokenContract = buyTokenContract.slice(2);
-        }
-
-        // Payload data for swap
-        const swapPayload = {
-          networkFee,
-          prvPayments: [],
-          tokenPayments,
-          info: formType === FormTypes.UNSHIELD ? String(id) : '',
-          tokenID: sellToken?.tokenID,
-          txType: 7,
-          receiverAddress: remoteAddress,
-          isSignAndSendTransaction: true,
-          metadata: {
-            Data: [
-              {
-                IncTokenID: exchangeSelectedData?.incTokenID,
-                RedepositReceiver: otaReceiver,
-                BurningAmount: burnOriginalAmount,
-                ExternalNetworkID: exchangeSelectedData?.networkID,
-                ExternalCalldata: externalCallData,
-                ExternalCallAddress: externalCallAddress,
-                ReceiveToken: buyTokenContract,
-                WithdrawAddress:
-                  buyNetworkName === 'Incognito' ? '0000000000000000000000000000000000000000' : remoteAddress,
-              },
-            ],
-            BurnTokenID: sellToken?.tokenID,
-            Type: 348,
-          },
-        };
 
         return new Promise(async (resolve, reject) => {
           try {
-            const tx = await requestSignTransaction(formType === FormTypes.UNSHIELD ? unshieldPayload : swapPayload);
+            const tx = await requestSignTransaction(payload);
             // Submit tx swap to backend after burned;
             if (formType === FormTypes.SWAP) {
               const submitTxResult: any = await rpcClient.submitSwapTx({

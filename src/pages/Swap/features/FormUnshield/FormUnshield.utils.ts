@@ -83,6 +83,7 @@ export interface IUnshieldData {
   exchangeSelectedData: any;
   swapFee: any;
   tradePath: string;
+  isUseTokenFee?: boolean;
   estimateTradeErrorMsg: string | null;
   swapNetwork: MAIN_NETWORK_NAME;
 
@@ -428,8 +429,15 @@ const getUnshieldData = ({
   );
   const swapFeeObj: ISwapFee | null = exchangeSelectedData?.fees[0] || null;
 
+  let isUseTokenFee = false;
+  if (formType === FormTypes.UNSHIELD) {
+    isUseTokenFee = userFee?.isUseTokenFee || false;
+  } else {
+    isUseTokenFee = (swapFeeObj && swapFeeObj?.tokenId !== PRV.id) || false;
+  }
+
   let tradeFeeText: string;
-  if (swapFeeObj?.tokenId !== PRV.id) {
+  if (!isUseTokenFee) {
     tradeFeeText = `${
       convert.toHumanAmountString({
         decimals: _sellToken.pDecimals,
@@ -515,6 +523,7 @@ const getUnshieldData = ({
     exchangeSelectedData,
     swapFee,
     tradePath,
+    isUseTokenFee,
     estimateTradeErrorMsg,
     swapNetwork,
 
@@ -665,29 +674,11 @@ const parseExchangeDataModelResponse = (
   return exchangeData;
 };
 
-const getBurningMetaDataType = (
-  sellToken: SelectedPrivacy,
-  formType: FormTypes,
-  swapExchange?: SwapExchange | null
-) => {
+const getBurningMetaDataTypeForUnshield = (sellToken: SelectedPrivacy) => {
   if (sellToken?.isUnified) return 345;
-  if (formType === FormTypes.UNSHIELD) {
-    if (sellToken?.isBep20Token) return BurningPBSCRequestMeta;
-    if (sellToken?.isPolygonErc20Token) return BurningPLGRequestMeta;
-    if (sellToken?.isFantomErc20Token) return BurningFantomRequestMeta;
-  }
-
-  if (formType === FormTypes.SWAP) {
-    if (swapExchange === SwapExchange.PANCAKE_SWAP) {
-      return BurningPBSCForDepositToSCRequestMeta;
-    }
-    if (swapExchange === SwapExchange.UNISWAP) {
-      return BurningPLGForDepositToSCRequestMeta;
-    }
-    if (swapExchange === SwapExchange.CURVE) {
-      return BurningPLGForDepositToSCRequestMeta;
-    }
-  }
+  if (sellToken?.isBep20Token) return BurningPBSCRequestMeta;
+  if (sellToken?.isPolygonErc20Token) return BurningPLGRequestMeta;
+  if (sellToken?.isFantomErc20Token) return BurningFantomRequestMeta;
 
   return BurningRequestMeta;
 };
@@ -725,7 +716,7 @@ const getPrvPayments = async (data: any[], isEncryptMessage = true) => {
 };
 
 export {
-  getBurningMetaDataType,
+  getBurningMetaDataTypeForUnshield,
   getExchangeName,
   getPrvPayments,
   getTokenPayments,
