@@ -122,17 +122,21 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           onClickMax={onClickMax}
         />
         <VerticalSpace />
-        <Field
-          component={InputField}
-          name={FORM_CONFIGS.slippage}
-          inputType={INPUT_FIELD.amount}
-          leftTitle="Slippage tolerance (%)"
-          componentProps={{
-            placeholder: 'Percent',
-            type: 'number',
-          }}
-        />
-        <VerticalSpace />
+        {formType === FormTypes.SWAP && (
+          <>
+            <Field
+              component={InputField}
+              name={FORM_CONFIGS.slippage}
+              inputType={INPUT_FIELD.amount}
+              leftTitle="Slippage tolerance (%)"
+              componentProps={{
+                placeholder: 'Percent',
+                type: 'number',
+              }}
+            />
+            <VerticalSpace />
+          </>
+        )}
         <EstReceive
           amountText={formType === FormTypes.SWAP ? estReceiveAmount?.toString() : inputAmount}
           symbol={buyToken.symbol || ''}
