@@ -2,7 +2,7 @@ import { getIncognitoInject, useIncognitoWallet } from 'components/Core/Incognit
 import { TransactionSubmittedContent } from 'components/Core/TransactionConfirmationModal';
 import { useModal } from 'components/Modal';
 import LoadingTransaction from 'components/Modal/Modal.transaction';
-import { PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { setSwapTx } from 'pages/Swap/Swap.storage';
 import { batch } from 'react-redux';
@@ -13,7 +13,7 @@ import { useAppDispatch } from 'state/hooks';
 
 import { actionEstimateFee } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
-import { FormTypes } from './FormUnshield.types';
+import { FormTypes, NetworkTypePayload } from './FormUnshield.types';
 import { getBurningMetaDataTypeForUnshield, getPrvPayments, getTokenPayments } from './FormUnshield.utils';
 export interface TInner {
   onSend: () => void;
@@ -162,7 +162,7 @@ const enhanceSend = (WrappedComponent: any) => {
           }
 
           const withdrawAddress: string =
-            buyNetworkName === 'Incognito' ? '0000000000000000000000000000000000000000' : remoteAddress;
+            buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? '0000000000000000000000000000000000000000' : remoteAddress;
 
           // Payload data for swap
           payload = {
@@ -209,16 +209,17 @@ const enhanceSend = (WrappedComponent: any) => {
               });
               console.log({ submitTxResult });
             } else {
-              let networkName: any = '';
-              if (buyNetworkName === 'Ethereum') {
-                networkName = 'eth';
-              } else if (buyNetworkName === 'Polygon') {
-                networkName = 'plg';
-              } else if (buyNetworkName === 'BSC') {
-                networkName = 'bsc';
-              } else if (buyNetworkName === 'Fantom') {
-                networkName = 'ftm';
+              let networkName: NetworkTypePayload = NetworkTypePayload.ETHEREUM;
+              if (exchangeSelectedData?.networkID === 1) {
+                networkName = NetworkTypePayload.ETHEREUM;
+              } else if (exchangeSelectedData?.networkID === 2) {
+                networkName = NetworkTypePayload.BINANCE_SMART_CHAIN;
+              } else if (exchangeSelectedData?.networkID === 3) {
+                networkName = NetworkTypePayload.POLYGON;
+              } else if (exchangeSelectedData?.networkID === 4) {
+                networkName = NetworkTypePayload.FANTOM;
               }
+              // Submit tx unshield to backend after burn
               const submitTxUnshieldResponse = await rpcClient.submitUnshieldTx2({
                 network: networkName,
                 userFeeLevel: useFast2xFee ? 2 : 1,
