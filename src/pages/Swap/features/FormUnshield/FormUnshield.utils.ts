@@ -19,8 +19,6 @@ const {
   BurningPBSCRequestMeta,
   BurningPLGRequestMeta,
   BurningRequestMeta,
-  BurningPBSCForDepositToSCRequestMeta,
-  BurningPLGForDepositToSCRequestMeta,
   getBurningAddress,
 } = require('incognito-chain-web-js/build/wallet');
 export interface IFee {
@@ -165,42 +163,6 @@ const getUnshieldData = ({
   const _buyToken = getDataByTokenID(buyIdentify);
   let _buyTokenList = unshieldableTokens(state);
 
-  // if (formType === FormTypes.UNSHIELD && buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
-  //   _buyTokenList = _buyTokenList.filter((token: any) => {
-  //     if (buyNetworkName === MAIN_NETWORK_NAME.POLYGON) {
-  //       return (
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC ||
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20
-  //       );
-  //     }
-
-  //     if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
-  //       return (
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ERC20 ||
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ETH
-  //       );
-  //     }
-
-  //     if (buyNetworkName === MAIN_NETWORK_NAME.BSC) {
-  //       return (
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB ||
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20
-  //       );
-  //     }
-
-  //     if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
-  //       return (
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM ||
-  //         token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20
-  //       );
-  //     }
-  //   });
-  // }
-
   if (formType === FormTypes.SWAP && swapNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
     _buyTokenList = _buyTokenList.filter((token: any) => {
       if (swapNetwork === MAIN_NETWORK_NAME.POLYGON) {
@@ -289,10 +251,10 @@ const getUnshieldData = ({
       round: true,
     }) || 0;
 
-  const burnOriginalAmount =
-    userFee && userFee.estimatedBurnAmount
-      ? userFee.estimatedBurnAmount
-      : new BigNumber(inputOriginalAmount || 0).toString();
+  let burnOriginalAmount: string = new BigNumber(inputOriginalAmount || 0).toString();
+  if (formType === FormTypes.UNSHIELD && userFee && userFee?.estimatedBurnAmount) {
+    burnOriginalAmount = userFee?.estimatedBurnAmount?.toString();
+  }
 
   const userBalanceNoClip = _sellToken.formatAmountNoClip;
   const userBalance = _sellToken.formatAmount;
@@ -311,6 +273,19 @@ const getUnshieldData = ({
     }) || 0
   } ${nativeToken.symbol}`;
 
+  const exchangeSelectedData = exchangeSupports?.find(
+    (exchange: ISwapExchangeData) => exchange?.exchangeName === exchangeSelected
+  );
+
+  const swapFeeObj: ISwapFee | null = exchangeSelectedData?.fees[0] || null;
+
+  let isUseTokenFee = false;
+  if (formType === FormTypes.UNSHIELD) {
+    isUseTokenFee = userFee?.isUseTokenFee || false;
+  } else {
+    isUseTokenFee = (swapFeeObj && swapFeeObj?.tokenId !== PRV.id) || false;
+  }
+
   let maxAmountText = '';
   let minAmountText = '';
   let combineFee: IFee = {
@@ -323,7 +298,7 @@ const getUnshieldData = ({
 
   let burnFeeTokenIdentify = '';
   if (userFee) {
-    const { fee, isUseTokenFee, id, feeAddress, estimatedBurnAmount, estimatedExpectedAmount, estimateFee } = userFee;
+    const { fee, id, feeAddress, estimatedBurnAmount, estimatedExpectedAmount, estimateFee } = userFee;
     const burnFee = isUseBurnFeeLevel1 ? fee.level1 : fee.level2;
     burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
     const burnFeeToken = isUseTokenFee ? _sellToken.tokenID : PRV.id;
@@ -378,10 +353,46 @@ const getUnshieldData = ({
   }
 
   let enoughPRVFee = true;
-  if (!userFee?.isUseTokenFee) {
+  if (formType === FormTypes.UNSHIELD && !isUseTokenFee) {
     enoughPRVFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(
       new BigNumber(combineFee.burnFee || 0).plus(networkFee)
     );
+  }
+
+  if (formType === FormTypes.SWAP && !isUseTokenFee) {
+    enoughPRVFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(
+      new BigNumber(swapFeeObj?.amount || 0).plus(networkFee)
+    );
+  }
+
+  if (formType === FormTypes.SWAP) {
+    burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
+
+    const minAmount: number = new BigNumber(_sellToken.identify === networkFeeToken ? 1 + networkFee : 1)
+      .plus(_sellToken.identify === burnFeeTokenIdentify ? swapFeeObj?.amount || 0 : 0)
+      .toNumber();
+
+    let maxAmount: number = new BigNumber(_sellToken.amount || 0)
+      .minus(isUseTokenFee ? 0 : networkFee)
+      .minus(_sellToken.identify === burnFeeTokenIdentify ? swapFeeObj?.amount || 0 : 0)
+      .toNumber();
+
+    if (maxAmount <= 0) {
+      maxAmount = 0;
+    }
+
+    maxAmountText = convert
+      .toHumanAmount({
+        originalAmount: maxAmount,
+        decimals: _sellToken.pDecimals,
+      })
+      .toString();
+
+    minAmountText = format.formatAmount({
+      originalAmount: minAmount,
+      decimals: _sellToken.pDecimals,
+      clipAmount: false,
+    });
   }
 
   let disabledForm = false;
@@ -395,6 +406,9 @@ const getUnshieldData = ({
       !buyToken?.identify ||
       estimateTradeErrorMsg ||
       !exchangeSelected ||
+      !exchangeSelectedData?.amountOutRaw ||
+      !enoughPRVFee ||
+      !enoughNetworkFee ||
       isFetchingFee)
   ) {
     disabledForm = true;
@@ -424,18 +438,6 @@ const getUnshieldData = ({
       originalAmount: new BigNumber(combineFee.burnFee || 0).plus(combineFee.extraFee).toNumber(),
       decimals: burnFeeToken.pDecimals,
     })} ${burnFeeToken.symbol}`;
-  }
-
-  const exchangeSelectedData = exchangeSupports?.find(
-    (exchange: ISwapExchangeData) => exchange?.exchangeName === exchangeSelected
-  );
-  const swapFeeObj: ISwapFee | null = exchangeSelectedData?.fees[0] || null;
-
-  let isUseTokenFee = false;
-  if (formType === FormTypes.UNSHIELD) {
-    isUseTokenFee = userFee?.isUseTokenFee || false;
-  } else {
-    isUseTokenFee = (swapFeeObj && swapFeeObj?.tokenId !== PRV.id) || false;
   }
 
   let tradeFeeText: string;
@@ -507,7 +509,7 @@ const getUnshieldData = ({
 
     inputAmount,
     inputOriginalAmount,
-    burnOriginalAmount: burnOriginalAmount.toString(),
+    burnOriginalAmount,
     estReceiveAmount,
 
     fee: combineFee,
