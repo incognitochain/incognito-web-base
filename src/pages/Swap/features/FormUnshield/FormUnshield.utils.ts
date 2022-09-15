@@ -437,7 +437,7 @@ const getUnshieldData = ({
   }
 
   let tradeFeeText: string;
-  if (!isUseTokenFee) {
+  if (isUseTokenFee) {
     tradeFeeText = `${
       convert.toHumanAmountString({
         decimals: _sellToken.pDecimals,
