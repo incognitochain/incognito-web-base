@@ -58,6 +58,7 @@ const enhanceSend = (WrappedComponent: any) => {
         id,
         estimatedBurnAmount,
         estimatedExpectedAmount,
+        useFast2xFee,
       } = fee;
       if (
         formType === FormTypes.UNSHIELD &&
@@ -124,7 +125,7 @@ const enhanceSend = (WrappedComponent: any) => {
                 {
                   IncTokenID: buyToken.tokenID,
                   BurningAmount: burnOriginalAmount,
-                  RemoteAddress: unshieldAddress,
+                  RemoteAddress: remoteAddress,
                   MinExpectedAmount: burnOriginalAmount,
                 },
               ],
@@ -207,6 +208,29 @@ const enhanceSend = (WrappedComponent: any) => {
                 time: new Date().getTime(),
               });
               console.log({ submitTxResult });
+            } else {
+              let networkName: any = '';
+              if (buyNetworkName === 'Ethereum') {
+                networkName = 'eth';
+              } else if (buyNetworkName === 'Polygon') {
+                networkName = 'plg';
+              } else if (buyNetworkName === 'BSC') {
+                networkName = 'bsc';
+              } else if (buyNetworkName === 'Fantom') {
+                networkName = 'ftm';
+              }
+              const submitTxUnshieldResponse = await rpcClient.submitUnshieldTx2({
+                network: networkName,
+                userFeeLevel: useFast2xFee ? 2 : 1,
+                id: id || 0,
+                incognitoAmount: String(burnOriginalAmount),
+                incognitoTx: tx.txHash,
+                paymentAddress: inputAddress,
+                privacyTokenAddress: buyToken.tokenID,
+                userFeeSelection: isUseTokenFee ? 1 : 2,
+                walletAddress: incAddress,
+              });
+              console.log({ submitTxUnshieldResponse });
             }
             updateMetric().then();
             resolve(tx);

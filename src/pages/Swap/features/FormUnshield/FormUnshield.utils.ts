@@ -34,6 +34,7 @@ export interface IFee {
   estimatedBurnAmount: number;
   estimatedExpectedAmount: number;
   extraFee: number;
+  useFast2xFee?: boolean;
 }
 
 export interface IUnshieldData {
@@ -345,6 +346,7 @@ const getUnshieldData = ({
 
       estimatedBurnAmount,
       estimatedExpectedAmount,
+      useFast2xFee: !isUseBurnFeeLevel1,
     };
 
     const minAmount: number = new BigNumber(_sellToken.identify === networkFeeToken ? 1 + networkFee : 1)

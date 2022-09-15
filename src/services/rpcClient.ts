@@ -138,6 +138,30 @@ class RpcClient {
     });
   }
 
+  submitUnshieldTx2(payload: {
+    network: string;
+    userFeeLevel: number;
+    id: number;
+    incognitoAmount: string;
+    incognitoTx: string;
+    paymentAddress: string;
+    privacyTokenAddress: string;
+    userFeeSelection: number;
+    walletAddress: string;
+  }) {
+    return this.http.post('submitunshieldtx', {
+      Network: payload.network,
+      UserFeeLevel: payload.userFeeLevel,
+      ID: payload.id,
+      IncognitoAmount: payload.incognitoAmount,
+      IncognitoTx: payload.incognitoTx,
+      PaymentAddress: payload.paymentAddress,
+      PrivacyTokenAddress: payload.privacyTokenAddress,
+      UserFeeSelection: payload.userFeeSelection,
+      WalletAddress: payload.walletAddress,
+    });
+  }
+
   submitSwapTx({ txHash, txRaw }: { txHash: string; txRaw: string }) {
     return this.http.post('papps/submitswaptx', {
       TxHash: txHash,
