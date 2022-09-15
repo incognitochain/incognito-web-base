@@ -69,7 +69,7 @@ const enhanceSend = (WrappedComponent: any) => {
       if (formType === FormTypes.SWAP && (estimateTradeErrorMsg || isFetching)) return;
       try {
         // Get remote address
-        let remoteAddress: string = web3Account || '';
+        let remoteAddress: string = inputAddress || '';
         if (remoteAddress.startsWith('0x')) {
           remoteAddress = remoteAddress.slice(2);
         }
