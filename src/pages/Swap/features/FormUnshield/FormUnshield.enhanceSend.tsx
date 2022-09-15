@@ -90,8 +90,8 @@ const enhanceSend = (WrappedComponent: any) => {
         } else {
           prvPayments = await getPrvPayments([
             {
-              paymentAddress: feeAddress,
-              amount: burnFee,
+              paymentAddress: formType === FormTypes.SWAP ? exchangeSelectedData?.feeAddress : feeAddress,
+              amount: formType === FormTypes.SWAP ? swapFee?.amount : parseInt(burnFee || '0'),
             },
           ]);
         }
