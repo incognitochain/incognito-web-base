@@ -94,6 +94,7 @@ const enhanceSend = (WrappedComponent: any) => {
               amount: formType === FormTypes.SWAP ? swapFee?.amount : parseInt(burnFee || '0'),
             },
           ]);
+          tokenPayments = await getTokenPayments([], parseInt(burnOriginalAmount));
         }
 
         const burningMetaDataType: number = getBurningMetaDataTypeForUnshield(sellToken);
