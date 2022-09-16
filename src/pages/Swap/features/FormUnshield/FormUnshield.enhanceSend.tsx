@@ -126,7 +126,7 @@ const enhanceSend = (WrappedComponent: any) => {
                   IncTokenID: buyToken.tokenID,
                   BurningAmount: burnOriginalAmount,
                   RemoteAddress: remoteAddress,
-                  MinExpectedAmount: burnOriginalAmount,
+                  MinExpectedAmount: estimatedExpectedAmount,
                 },
               ],
               Receiver: otaReceiver,
