@@ -31,7 +31,7 @@ const initialState: IFormUnshieldState = {
   vaults: {},
   exchangeSelected: null,
   exchangeSupports: [],
-  estimateTradeErrorMsg: null,
+  errorMsg: null,
   swapNetwork: MAIN_NETWORK_NAME.INCOGNITO,
 };
 
@@ -60,6 +60,15 @@ export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
       return {
         ...state,
         isFetchingFee,
+
+        // Reset unshield data when estimate trade
+        isUseBurnFeeLevel1: isFetchingFee ? true : state.isUseBurnFeeLevel1,
+        userFee: isFetchingFee ? undefined : state.userFee,
+
+        // Reset swap data when estimate trade
+        exchangeSelected: isFetchingFee ? null : state?.exchangeSelected,
+        exchangeSupports: isFetchingFee ? [] : state?.exchangeSupports,
+        errorMsg: isFetchingFee ? null : state?.errorMsg,
       };
     }
     case FormUnshieldActionType.SET_VAULTS: {
@@ -83,11 +92,11 @@ export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
         exchangeSelected,
       };
     }
-    case FormUnshieldActionType.SET_SWAP_ESTIMATE_TRADE_ERROR_MSG: {
-      const estimateTradeErrorMsg = action.payload;
+    case FormUnshieldActionType.SET_ERROR_MSG: {
+      const errorMsg = action.payload;
       return {
         ...state,
-        estimateTradeErrorMsg,
+        errorMsg,
       };
     }
     case FormUnshieldActionType.SET_SWAP_NETWORK: {

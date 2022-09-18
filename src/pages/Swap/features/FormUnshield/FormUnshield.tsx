@@ -51,7 +51,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     estReceiveAmount,
     exchangeSupports,
     tradePath,
-    estimateTradeErrorMsg,
+    errorMsg,
     swapFee,
   } = props;
 
@@ -151,10 +151,10 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           swapFee={swapFee}
         />
         <VerticalSpace />
-        {estimateTradeErrorMsg && (
+        {errorMsg && (
           <>
             <ThemedText.Error marginTop="4px" error className={`error`}>
-              {estimateTradeErrorMsg}
+              {errorMsg}
             </ThemedText.Error>
             <VerticalSpace />
           </>

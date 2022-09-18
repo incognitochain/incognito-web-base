@@ -11,7 +11,7 @@ import { rpcClient } from 'services';
 import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
 import { useAppDispatch } from 'state/hooks';
 
-import { actionEstimateFee } from './FormUnshield.actions';
+import { actionEstimateFee, actionSetErrorMsg } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
 import { FormTypes, NetworkTypePayload } from './FormUnshield.types';
 import { getBurningMetaDataTypeForUnshield, getPrvPayments, getTokenPayments } from './FormUnshield.utils';
@@ -28,16 +28,11 @@ const enhanceSend = (WrappedComponent: any) => {
       fee,
       burnOriginalAmount,
       inputAddress,
-      inputAmount,
-      unshieldAddress,
       formType,
-      exchangeSelected,
       swapFee,
       exchangeSelectedData,
-      estimateTradeErrorMsg,
-      web3Account,
+      errorMsg,
       buyNetworkName,
-      swapNetwork,
       buyParentToken,
       isFetching,
       incAddress,
@@ -49,17 +44,7 @@ const enhanceSend = (WrappedComponent: any) => {
     const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.CONFIRM_SWAP });
 
     const handleUnshieldToken = async () => {
-      const {
-        feeAddress,
-        networkFee,
-        networkFeeToken,
-        burnFee,
-        burnFeeToken,
-        id,
-        estimatedBurnAmount,
-        estimatedExpectedAmount,
-        useFast2xFee,
-      } = fee;
+      const { feeAddress, networkFee, burnFee, id, estimatedBurnAmount, estimatedExpectedAmount, useFast2xFee } = fee;
       if (
         formType === FormTypes.UNSHIELD &&
         sellToken.isUnified &&
@@ -67,7 +52,7 @@ const enhanceSend = (WrappedComponent: any) => {
       ) {
         return;
       }
-      if (formType === FormTypes.SWAP && (estimateTradeErrorMsg || isFetching)) return;
+      if (formType === FormTypes.SWAP && (errorMsg || isFetching)) return;
       try {
         // Get remote address
         let remoteAddress: string = inputAddress || '';
@@ -149,8 +134,8 @@ const enhanceSend = (WrappedComponent: any) => {
             externalCallAddress = externalCallAddress.slice(2);
           }
 
-          let buyTokenContract: string = exchangeSelectedData?.receiveTokenContractID;
-          if (buyParentToken?.isUnified && formType === FormTypes.SWAP) {
+          let buyTokenContract: string = buyParentToken.contractID;
+          if (buyParentToken?.isUnified) {
             const childBuyToken = buyParentToken?.listUnifiedToken?.find(
               (token: any) => token?.networkID === exchangeSelectedData?.networkID
             );
@@ -276,6 +261,7 @@ const enhanceSend = (WrappedComponent: any) => {
           data: <TransactionSubmittedContent chainId={PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO} hash={resolve.txHash} />,
         });
       } catch (e) {
+        dispatch(actionSetErrorMsg(typeof e === 'string' ? e : ''));
         clearAllModal();
       } finally {
         if (formType === FormTypes.UNSHIELD) {

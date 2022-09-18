@@ -83,7 +83,7 @@ export interface IUnshieldData {
   swapFee: any;
   tradePath: string;
   isUseTokenFee?: boolean;
-  estimateTradeErrorMsg: string | null;
+  errorMsg: string | null;
   swapNetwork: MAIN_NETWORK_NAME;
 
   slippage: string;
@@ -125,7 +125,7 @@ const getUnshieldData = ({
     exchangeSupports,
     vaults,
     exchangeSelected,
-    estimateTradeErrorMsg,
+    errorMsg,
     swapNetwork,
   } = unshield;
 
@@ -199,6 +199,7 @@ const getUnshieldData = ({
     });
   }
 
+  let isUseTokenFee = false;
   let _sellParentToken, _buyParentToken, _buyNetworkList: any;
   let _buyNetworkName: MAIN_NETWORK_NAME = MAIN_NETWORK_NAME.INCOGNITO;
 
@@ -214,10 +215,7 @@ const getUnshieldData = ({
   if (formType === FormTypes.UNSHIELD) {
     _buyNetworkName = buyNetworkName;
     _buyNetworkList = _buyParentToken?.supportedNetwork;
-  }
-
-  // case swap
-  if (formType === FormTypes.SWAP) {
+  } else {
     _buyNetworkName = swapNetwork;
     _buyNetworkList = _sellParentToken?.supportedNetwork;
     if (_sellParentToken?.isUnified && vaults) {
@@ -240,6 +238,13 @@ const getUnshieldData = ({
       });
     }
   }
+
+  _buyTokenList = getBuyTokenList(
+    formType === FormTypes.UNSHIELD ? buyNetworkName : swapNetwork,
+    _buyTokenList,
+    _sellToken,
+    _buyNetworkList
+  );
 
   const isExternalAddress = isEtherAddress(inputAddress);
 
@@ -273,18 +278,7 @@ const getUnshieldData = ({
     }) || 0
   } ${nativeToken.symbol}`;
 
-  const exchangeSelectedData = exchangeSupports?.find(
-    (exchange: ISwapExchangeData) => exchange?.exchangeName === exchangeSelected
-  );
-
-  const swapFeeObj: ISwapFee | null = exchangeSelectedData?.fees[0] || null;
-
-  let isUseTokenFee = false;
-  if (formType === FormTypes.UNSHIELD) {
-    isUseTokenFee = userFee?.isUseTokenFee || false;
-  } else {
-    isUseTokenFee = (swapFeeObj && swapFeeObj?.tokenId !== PRV.id) || false;
-  }
+  let enoughPRVFee = true;
 
   let maxAmountText = '';
   let minAmountText = '';
@@ -295,9 +289,10 @@ const getUnshieldData = ({
     estimatedExpectedAmount: 0,
     extraFee: 0,
   };
-
   let burnFeeTokenIdentify = '';
+  let estReceiveAmount: any;
   if (userFee) {
+    isUseTokenFee = userFee?.isUseTokenFee || false;
     const { fee, id, feeAddress, estimatedBurnAmount, estimatedExpectedAmount, estimateFee } = userFee;
     const burnFee = isUseBurnFeeLevel1 ? fee.level1 : fee.level2;
     burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
@@ -350,22 +345,60 @@ const getUnshieldData = ({
       decimals: _sellToken.pDecimals,
       clipAmount: false,
     });
+    if (!isUseTokenFee) {
+      enoughPRVFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(
+        new BigNumber(combineFee.burnFee || 0).plus(networkFee)
+      );
+    }
+    estReceiveAmount = userFee?.estimatedExpectedAmount ? userFee.estimatedExpectedAmount : inputAmount;
   }
 
-  let enoughPRVFee = true;
-  if (formType === FormTypes.UNSHIELD && !isUseTokenFee) {
-    enoughPRVFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(
-      new BigNumber(combineFee.burnFee || 0).plus(networkFee)
+  //  Swap data
+  let exchangeSelectedData = null;
+  let tradePath = '';
+  let swapFee = null;
+  if (formType === FormTypes.SWAP && exchangeSupports) {
+    exchangeSelectedData = exchangeSupports?.find(
+      (exchange: ISwapExchangeData) => exchange?.exchangeName === exchangeSelected
     );
-  }
+    const swapFeeObj: ISwapFee | null = exchangeSelectedData?.fees[0] || null;
+    isUseTokenFee = (swapFeeObj && swapFeeObj?.tokenId !== PRV.id) || false;
 
-  if (formType === FormTypes.SWAP && !isUseTokenFee) {
-    enoughPRVFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(
-      new BigNumber(swapFeeObj?.amount || 0).plus(networkFee)
-    );
-  }
+    if (!isUseTokenFee) {
+      enoughPRVFee = new BigNumber(nativeToken.amount || 0).isGreaterThanOrEqualTo(
+        new BigNumber(swapFeeObj?.amount || 0).plus(networkFee)
+      );
+    }
 
-  if (formType === FormTypes.SWAP) {
+    estReceiveAmount = format.toFixed({
+      number: exchangeSelectedData?.amountOut || 0,
+      decimals: _sellToken.pDecimals,
+    });
+
+    tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, _sellTokenList);
+
+    let tradeFeeText = '';
+    if (isUseTokenFee) {
+      tradeFeeText = `${
+        convert.toHumanAmountString({
+          decimals: _sellToken.pDecimals,
+          originalAmount: swapFeeObj?.amount,
+        }) || 0
+      } ${_sellToken.symbol}`;
+    } else {
+      tradeFeeText = `${
+        convert.toHumanAmountString({
+          decimals: PRV.pDecimals,
+          originalAmount: swapFeeObj?.amount,
+        }) || 0
+      } PRV`;
+    }
+
+    swapFee = {
+      ...swapFeeObj,
+      tradeFeeText,
+    };
+
     burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
 
     const minAmount: number = new BigNumber(_sellToken.identify === networkFeeToken ? 1 + networkFee : 1)
@@ -404,7 +437,7 @@ const getUnshieldData = ({
       new BigNumber(inputOriginalAmount).lte(0) ||
       !buyToken?.parentIdentify ||
       !buyToken?.identify ||
-      estimateTradeErrorMsg ||
+      errorMsg ||
       !exchangeSelected ||
       !exchangeSelectedData?.amountOutRaw ||
       !enoughPRVFee ||
@@ -439,47 +472,6 @@ const getUnshieldData = ({
       decimals: burnFeeToken.pDecimals,
     })} ${burnFeeToken.symbol}`;
   }
-
-  let tradeFeeText: string;
-  if (isUseTokenFee) {
-    tradeFeeText = `${
-      convert.toHumanAmountString({
-        decimals: _sellToken.pDecimals,
-        originalAmount: swapFeeObj?.amount,
-      }) || 0
-    } ${_sellToken.symbol}`;
-  } else {
-    tradeFeeText = `${
-      convert.toHumanAmountString({
-        decimals: PRV.pDecimals,
-        originalAmount: swapFeeObj?.amount,
-      }) || 0
-    } PRV`;
-  }
-
-  const swapFee = {
-    ...swapFeeObj,
-    tradeFeeText,
-  };
-
-  const tradePath: any = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, _sellTokenList);
-
-  let estReceiveAmount;
-  if (formType === FormTypes.UNSHIELD) {
-    estReceiveAmount = userFee?.estimatedExpectedAmount ? userFee.estimatedExpectedAmount : inputAmount;
-  } else {
-    estReceiveAmount = format.toFixed({
-      number: exchangeSelectedData?.amountOut || 0,
-      decimals: _sellToken.pDecimals,
-    });
-  }
-
-  _buyTokenList = getBuyTokenList(
-    formType === FormTypes.UNSHIELD ? buyNetworkName : swapNetwork,
-    _buyTokenList,
-    _sellToken,
-    _buyNetworkList
-  );
 
   return {
     sellToken: _sellToken,
@@ -528,7 +520,7 @@ const getUnshieldData = ({
     swapFee,
     tradePath,
     isUseTokenFee,
-    estimateTradeErrorMsg,
+    errorMsg,
     swapNetwork,
 
     slippage: inputSlippage,
@@ -640,6 +632,7 @@ const getExchangeName = (exchange: SwapExchange) => {
   }
 };
 
+// Parse fee data from api estimate swap fee
 const parseFeeDataModelResponse = (fees: any[]) => {
   const data: ISwapFee[] = [];
   if (!fees?.length) return [];
@@ -652,12 +645,16 @@ const parseFeeDataModelResponse = (fees: any[]) => {
   return data;
 };
 
+// Parse data from api estimate swap fee
 const parseExchangeDataModelResponse = (
+  // Data response from api estimate swap fee
   data: any,
+  // Swap network name
   networkName: string,
+  // Swap networkID
   networkID: number,
-  incTokenID?: string,
-  receiveTokenContractID?: string
+  // Child buy tokenId
+  incTokenID?: string
 ) => {
   const exchangeData: ISwapExchangeData = {
     amountIn: parseFloat(data?.AmountIn || 0),
@@ -673,7 +670,6 @@ const parseExchangeDataModelResponse = (
     callContract: data?.CallContract,
     callData: data?.Calldata,
     networkID,
-    receiveTokenContractID: receiveTokenContractID || '',
   };
   return exchangeData;
 };

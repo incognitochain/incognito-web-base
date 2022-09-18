@@ -11,7 +11,7 @@ export enum FormUnshieldActionType {
   SET_VAULTS = 'FORM_UNSHIELD/SET_VAULTS',
   SET_SWAP_EXCHANGE_SUPPORT = 'FORM_UNSHIELD/SET_SWAP_EXCHANGE_SUPPORT',
   SET_SWAP_EXCHANGE_SELECTED = 'FORM_UNSHIELD/SET_SWAP_EXCHANGE_SELECTED',
-  SET_SWAP_ESTIMATE_TRADE_ERROR_MSG = 'FORM_UNSHIELD/SET_SWAP_ESTIMATE_TRADE_ERROR_MSG',
+  SET_ERROR_MSG = 'FORM_UNSHIELD/SET_ERROR_MSG',
   SET_SWAP_NETWORK = 'FORM_UNSHIELD/SET_SWAP_NETWORK',
 }
 
@@ -53,7 +53,7 @@ export interface IFormUnshieldState {
   vaults: any;
   exchangeSupports: ISwapExchangeData[];
   exchangeSelected: string | null;
-  estimateTradeErrorMsg: string | null;
+  errorMsg: string | null;
   swapNetwork: MAIN_NETWORK_NAME;
 }
 
@@ -75,7 +75,6 @@ export interface ISwapExchangeData {
   callContract: string;
   callData: string;
   networkID: number;
-  receiveTokenContractID: string;
 }
 
 export interface UnshieldSetTokenPayLoad {
@@ -129,7 +128,7 @@ export interface SwapSetExchangeSelectedAction extends Action {
 }
 
 export interface SwapSetEstimateTradeErrorMsg extends Action {
-  type: FormUnshieldActionType.SET_SWAP_ESTIMATE_TRADE_ERROR_MSG;
+  type: FormUnshieldActionType.SET_ERROR_MSG;
   payload: any;
 }
 

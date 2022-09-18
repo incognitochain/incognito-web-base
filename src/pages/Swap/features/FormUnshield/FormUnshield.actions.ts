@@ -56,8 +56,8 @@ export const actionSetExchangeSelected = (payload: string | null) => ({
   payload,
 });
 
-export const actionSetSwapEstimateTradeErrorMsg = (payload: string) => ({
-  type: FormUnshieldActionType.SET_SWAP_ESTIMATE_TRADE_ERROR_MSG,
+export const actionSetErrorMsg = (payload: string) => ({
+  type: FormUnshieldActionType.SET_ERROR_MSG,
   payload,
 });
 
@@ -237,7 +237,6 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     ) {
       return;
     }
-    dispatch(actionSetSwapEstimateTradeErrorMsg(''));
     dispatch(actionSetFetchingFee({ isFetchingFee: true }));
     let network: NetworkTypePayload = NetworkTypePayload.INCOGNITO;
     if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
@@ -268,77 +267,49 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     let bscExchanges: ISwapExchangeData[] = [];
     if (data?.hasOwnProperty(NetworkTypePayload.BINANCE_SMART_CHAIN)) {
       let incTokenID = sellToken.tokenID;
-      let receiveTokenContractID = buyParentToken.contractID;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 2);
         incTokenID = childToken?.tokenID || '';
       }
-      if (buyParentToken?.isUnified) {
-        const childToken = buyParentToken?.listUnifiedToken?.find((token: any) => token?.networkID === 2);
-        receiveTokenContractID = childToken?.contractIDSwap || '';
-      }
       const exchanges = data[NetworkTypePayload.BINANCE_SMART_CHAIN];
       if (Array.isArray(exchanges)) {
-        bscExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'BSC', 2, incTokenID, receiveTokenContractID)
-        );
+        bscExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'BSC', 2, incTokenID));
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.ETHEREUM)) {
       let incTokenID = sellToken.tokenID;
-      let receiveTokenContractID = buyParentToken.contractID;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 1);
         incTokenID = childToken?.tokenID || '';
       }
-      if (buyParentToken?.isUnified) {
-        const childToken = buyParentToken?.listUnifiedToken?.find((token: any) => token?.networkID === 1);
-        receiveTokenContractID = childToken?.contractIDSwap || '';
-      }
       const exchanges = data[NetworkTypePayload.ETHEREUM];
       if (Array.isArray(exchanges)) {
-        ethExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'ETH', 1, incTokenID, receiveTokenContractID)
-        );
+        ethExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'ETH', 1, incTokenID));
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.POLYGON)) {
       let incTokenID = sellToken.tokenID;
-      let receiveTokenContractID = buyParentToken.contractID;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 3);
         incTokenID = childToken?.tokenID || '';
       }
-      if (buyParentToken?.isUnified) {
-        const childToken = buyParentToken?.listUnifiedToken?.find((token: any) => token?.networkID === 3);
-        receiveTokenContractID = childToken?.contractIDSwap || '';
-      }
       const exchanges = data[NetworkTypePayload.POLYGON];
       if (Array.isArray(exchanges)) {
-        plgExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'PLG', 3, incTokenID, receiveTokenContractID)
-        );
+        plgExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'PLG', 3, incTokenID));
       }
     }
 
     if (data?.hasOwnProperty(NetworkTypePayload.FANTOM)) {
       let incTokenID = sellToken.tokenID;
-      let receiveTokenContractID = buyParentToken.contractID;
       if (sellToken?.isUnified) {
         const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 4);
         incTokenID = childToken?.tokenID || '';
       }
-      if (buyParentToken?.isUnified) {
-        const childToken = buyParentToken?.listUnifiedToken?.find((token: any) => token?.networkID === 4);
-        receiveTokenContractID = childToken?.contractIDSwap || '';
-      }
       const exchanges = data[NetworkTypePayload.FANTOM];
       if (Array.isArray(exchanges)) {
-        ftmExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'FTM', 4, incTokenID, receiveTokenContractID)
-        );
+        ftmExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'FTM', 4, incTokenID));
       }
     }
 
@@ -358,7 +329,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
 
     dispatch(actionSetSwapExchangeSupports(exchangeSupports));
   } catch (error) {
-    dispatch(actionSetSwapEstimateTradeErrorMsg(typeof error === 'string' ? error : error?.message || ''));
+    dispatch(actionSetErrorMsg(typeof error === 'string' ? error : error?.message || ''));
   } finally {
     setTimeout(() => {
       dispatch(actionSetFetchingFee({ isFetchingFee: false }));

@@ -63,7 +63,7 @@ export interface IUnshield {
   exchangeSupports: any[];
   swapFee: any;
   tradePath: string;
-  estimateTradeErrorMsg: string | null;
+  errorMsg: string | null;
   swapNetwork: MAIN_NETWORK_NAME | null;
   isUseTokenFee?: boolean;
   slippage: string;
@@ -112,7 +112,7 @@ export const useUnshield = (): IUnshield => {
     swapFee,
     isUseTokenFee,
     tradePath,
-    estimateTradeErrorMsg,
+    errorMsg,
     swapNetwork,
     slippage,
   } = useAppSelector(unshieldDataSelector);
@@ -182,7 +182,7 @@ export const useUnshield = (): IUnshield => {
     swapFee,
     tradePath,
     isUseTokenFee,
-    estimateTradeErrorMsg,
+    errorMsg,
     swapNetwork,
     isFetching,
 
