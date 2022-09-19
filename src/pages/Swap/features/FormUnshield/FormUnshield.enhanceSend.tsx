@@ -158,7 +158,7 @@ const enhanceSend = (WrappedComponent: any) => {
             tokenID: sellToken?.tokenID,
             txType: 7,
             receiverAddress: remoteAddress,
-            isSignAndSendTransaction: true,
+            isSignAndSendTransaction: false,
             metadata: {
               Data: [
                 {
@@ -192,7 +192,7 @@ const enhanceSend = (WrappedComponent: any) => {
             // Submit tx swap to backend after burned;
             if (formType === FormTypes.SWAP) {
               const submitTxResult: any = await rpcClient.submitSwapTx({
-                txHash: tx.txHash,
+                // txHash: tx.txHash,
                 txRaw: tx.rawData,
                 feeRefundOTA,
               });
