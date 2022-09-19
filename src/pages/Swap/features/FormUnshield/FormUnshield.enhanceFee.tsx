@@ -2,7 +2,7 @@ import debounce from 'lodash/debounce';
 import React from 'react';
 import { useAppDispatch } from 'state/hooks';
 
-import { actionEstimateFee, actionEstimateSwapFee } from './FormUnshield.actions';
+import { actionEstimateFee, actionEstimateSwapFee, actionResetFee } from './FormUnshield.actions';
 import { FormTypes } from './FormUnshield.types';
 
 export interface TInner {
@@ -37,11 +37,12 @@ const enhanceFee = (WrappedComponent: any) => {
     const debounceEstimateSwapFee = React.useMemo(() => debounce(onEstimateSwapFee, 500), []);
 
     React.useEffect(() => {
+      // Reset estimate fee data
+      dispatch(actionResetFee());
       // Case estimate fee for unshielded transactions
       if (formType === FormTypes.UNSHIELD && unshieldAddress && isExternalAddress && incAddress) {
         debounceEstimateFee();
       }
-
       // Case estimate fee for swapped transactions
       if (formType === FormTypes.SWAP && unshieldAddress) {
         debounceEstimateSwapFee();

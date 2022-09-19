@@ -1,4 +1,5 @@
 import Column from 'components/Core/Column';
+import Loader from 'components/Core/Loader';
 import { RowBetween, RowFlat } from 'components/Core/Row';
 import { PRV } from 'constants/token';
 import React from 'react';
@@ -42,6 +43,7 @@ interface IProps extends ISelectSwapExchange {
   formType: FormTypes;
   tradePath: string;
   swapFee: any;
+  isFetchingFee: boolean;
 }
 
 const EstReceive = React.memo(
@@ -57,6 +59,7 @@ const EstReceive = React.memo(
     formType,
     tradePath,
     swapFee,
+    isFetchingFee,
   }: IProps) => {
     const [isOpen, setOpen] = React.useState(false);
     const prvToken = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
@@ -65,7 +68,11 @@ const EstReceive = React.memo(
         <RowBetween style={{ cursor: 'pointer' }} onClick={() => setOpen((isOpen) => !isOpen)}>
           <ThemedText.SmallLabel fontWeight={400}>You will receive</ThemedText.SmallLabel>
           <RowFlat className="header-right">
-            <ThemedText.RegularLabel>{`${amountText || 0} ${symbol}`}</ThemedText.RegularLabel>
+            {formType === FormTypes.SWAP && isFetchingFee ? (
+              <Loader stroke="white" size="20px" style={{ marginRight: '40px' }} />
+            ) : (
+              <ThemedText.RegularLabel>{`${amountText || 0} ${symbol}`}</ThemedText.RegularLabel>
+            )}
             <RotatingArrow open={isOpen} />
           </RowFlat>
         </RowBetween>

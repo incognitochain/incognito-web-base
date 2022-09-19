@@ -46,9 +46,9 @@ const enhanceSelect = (WrappedComponent: any) => {
     };
 
     const handleSelectBuyToken = ({ token }: { token: PToken }) => {
-      if (sellToken.identify === buyToken.identify) {
-        return;
-      }
+      // if (sellToken.identify === buyToken.identify) {
+      //   return;
+      // }
       dispatch(actionChangeBuyToken({ token }));
       dispatch(actionSetExchangeSelected(null));
       dispatch(actionSetSwapExchangeSupports([]));

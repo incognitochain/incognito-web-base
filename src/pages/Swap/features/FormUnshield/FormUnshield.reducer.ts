@@ -71,6 +71,16 @@ export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
         errorMsg: isFetchingFee ? null : state?.errorMsg,
       };
     }
+    case FormUnshieldActionType.RESET_FEE: {
+      return {
+        ...state,
+        isUseBurnFeeLevel1: true,
+        userFee: undefined,
+        exchangeSelected: null,
+        exchangeSupports: [],
+        errorMsg: null,
+      };
+    }
     case FormUnshieldActionType.SET_VAULTS: {
       const vaults = action.payload;
       return {
