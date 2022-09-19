@@ -162,10 +162,11 @@ class RpcClient {
     });
   }
 
-  submitSwapTx({ txHash, txRaw }: { txHash: string; txRaw: string }) {
+  submitSwapTx({ txRaw, feeRefundOTA }: { txRaw: string; feeRefundOTA: string }) {
     return this.http.post('papps/submitswaptx', {
-      TxHash: txHash,
+      // TxHash: txHash,
       TxRaw: txRaw,
+      FeeRefundOTA: feeRefundOTA,
     });
   }
 
