@@ -13,7 +13,6 @@ import {
   ISwapExchangeData,
   NetworkTypePayload,
   UnshieldFetchingUserFeePayLoad,
-  UnshieldResetUserFeeAction,
   UnshieldSetFetchingUserFeeAction,
   UnshieldSetTokenAction,
   UnshieldSetTokenPayLoad,
@@ -37,7 +36,7 @@ const actionSetFetchingFee = (payload: UnshieldFetchingUserFeePayLoad): Unshield
   payload,
 });
 
-const actionResetFee = (): UnshieldResetUserFeeAction => ({
+export const actionResetFee = () => ({
   type: FormUnshieldActionType.RESET_FEE,
 });
 

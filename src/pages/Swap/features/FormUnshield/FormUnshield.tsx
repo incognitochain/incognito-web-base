@@ -53,6 +53,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     tradePath,
     errorMsg,
     swapFee,
+    isFetching,
   } = props;
 
   const { showPopup } = useIncognitoWallet();
@@ -149,6 +150,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           formType={formType}
           tradePath={tradePath}
           swapFee={swapFee}
+          isFetchingFee={isFetching}
         />
         <VerticalSpace />
         {errorMsg && (
