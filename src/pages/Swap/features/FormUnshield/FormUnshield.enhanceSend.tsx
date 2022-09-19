@@ -87,23 +87,19 @@ const enhanceSend = (WrappedComponent: any) => {
 
         const incognito = getIncognitoInject();
 
-        // Get OTA Receiver
+        // Get OTA Receiver and Burner address
         const { result }: { result: any } = await incognito.request({
           method: 'wallet_requestAccounts',
           params: {},
         });
         const otaReceiver = result?.otaReceiver;
+        const burnerAddress = result?.burnerAddress;
 
         let payload: any;
         if (formType === FormTypes.UNSHIELD) {
-          // Payload data for unshield
-          payload = {
-            networkFee,
-            prvPayments,
-            tokenPayments,
-            info: String(id),
-            tokenID: sellToken?.tokenID,
-            metadata: {
+          let metadata = {};
+          if (sellToken?.isUnified) {
+            metadata = {
               Type: burningMetaDataType,
               UnifiedTokenID: sellToken?.isUnified ? sellToken?.tokenID : null,
               Data: [
@@ -116,7 +112,23 @@ const enhanceSend = (WrappedComponent: any) => {
               ],
               Receiver: otaReceiver,
               IsDepositToSC: false,
-            },
+            };
+          } else {
+            metadata = {
+              BurnerAddress: burnerAddress,
+              BurningAmount: burnOriginalAmount,
+              TokenID: sellToken?.tokenID,
+              RemoteAddress: remoteAddress,
+              Type: burningMetaDataType,
+            };
+          }
+          payload = {
+            networkFee,
+            prvPayments,
+            tokenPayments,
+            info: String(id),
+            tokenID: sellToken?.tokenID,
+            metadata,
             txType: 7,
             receiverAddress: remoteAddress,
             isSignAndSendTransaction: true,
@@ -185,7 +197,7 @@ const enhanceSend = (WrappedComponent: any) => {
               method: 'wallet_requestAccounts',
               params: {},
             });
-            const feeRefundOTA = result?.otaReceiver;
+            const feeRefundOTA: string = result?.otaReceiver;
             if (!feeRefundOTA) reject('Cant get OTA receiver');
             const tx = await requestSignTransaction(payload);
 

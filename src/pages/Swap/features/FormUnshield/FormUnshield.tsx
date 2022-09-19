@@ -103,6 +103,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           leftTitle="Address"
           componentProps={{
             placeholder: 'Your External Address',
+            disabled: formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? true : false,
           }}
           validate={validateAddress}
           warning={warningAddress}

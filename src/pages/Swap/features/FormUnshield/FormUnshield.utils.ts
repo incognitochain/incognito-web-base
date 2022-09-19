@@ -215,6 +215,7 @@ const getUnshieldData = ({
   if (formType === FormTypes.UNSHIELD) {
     _buyNetworkName = buyNetworkName;
     _buyNetworkList = _buyParentToken?.supportedNetwork;
+    _buyTokenList = getBuyTokenList(buyNetworkName, _buyTokenList, _sellToken, _buyNetworkList);
   } else {
     _buyNetworkName = swapNetwork;
     _buyNetworkList = _sellParentToken?.supportedNetwork;
@@ -228,6 +229,8 @@ const getUnshieldData = ({
           0
       );
     }
+
+    _buyTokenList = getBuyTokenList(swapNetwork, _buyTokenList, _sellToken, _buyNetworkList);
     // add incognito network
     if (!_buyNetworkList?.find((network: ITokenNetwork) => network?.networkName === MAIN_NETWORK_NAME.INCOGNITO)) {
       _buyNetworkList.unshift({
@@ -238,13 +241,6 @@ const getUnshieldData = ({
       });
     }
   }
-
-  _buyTokenList = getBuyTokenList(
-    formType === FormTypes.UNSHIELD ? buyNetworkName : swapNetwork,
-    _buyTokenList,
-    _sellToken,
-    _buyNetworkList
-  );
 
   const isExternalAddress = isEtherAddress(inputAddress);
 
@@ -535,6 +531,9 @@ const getBuyTokenList = (
   supportedNetwork: any
 ) => {
   const buyTokenList: any = [];
+  supportedNetwork = supportedNetwork?.filter(
+    (network: ITokenNetwork) => network?.networkName !== MAIN_NETWORK_NAME.INCOGNITO
+  );
   if (sellToken?.isUnified && selectedNetwork === MAIN_NETWORK_NAME.INCOGNITO) {
     for (let i = 0; i < tokens?.length; i++) {
       let tokenObj: any = null;
@@ -600,19 +599,15 @@ const getBuyTokenList = (
 
   if (!sellToken?.isUnified && selectedNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
     for (let i = 0; i < tokens?.length; i++) {
-      for (let j = 0; j < supportedNetwork?.length; j++) {
-        if (tokens[i].isUnified) {
-          for (let k = 0; k < tokens[i].supportedNetwork.length; k++) {
-            if (tokens[i].supportedNetwork[k].networkName === supportedNetwork[j].networkName) {
-              buyTokenList.push(tokens[i]);
-            }
+      if (tokens[i].isUnified) {
+        for (let j = 0; j < tokens[i].supportedNetwork.length; j++) {
+          if (tokens[i].supportedNetwork[j].networkName === selectedNetwork) {
+            buyTokenList.push(tokens[i]);
           }
-        } else {
-          for (let k = 0; k < tokens[i].supportedNetwork.length; k++) {
-            if (tokens[i].supportedNetwork[k].networkName === supportedNetwork[j].networkName) {
-              buyTokenList.push(tokens[i]);
-            }
-          }
+        }
+      } else {
+        if (tokens[i].networkName === selectedNetwork) {
+          buyTokenList.push(tokens[i]);
         }
       }
     }

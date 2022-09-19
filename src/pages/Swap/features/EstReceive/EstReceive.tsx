@@ -68,14 +68,11 @@ const EstReceive = React.memo(
         <RowBetween style={{ cursor: 'pointer' }} onClick={() => setOpen((isOpen) => !isOpen)}>
           <ThemedText.SmallLabel fontWeight={400}>You will receive</ThemedText.SmallLabel>
           <RowFlat className="header-right">
-            <ThemedText.RegularLabel>
-              {formType === FormTypes.SWAP && isFetchingFee ? (
-                <Loader stroke="white" size="20px" style={{ marginRight: '40px' }} />
-              ) : (
-                amountText
-              )}
-              {symbol}
-            </ThemedText.RegularLabel>
+            {formType === FormTypes.SWAP && isFetchingFee ? (
+              <Loader stroke="white" size="20px" style={{ marginRight: '40px' }} />
+            ) : (
+              <ThemedText.RegularLabel>{`${amountText || 0} ${symbol}`}</ThemedText.RegularLabel>
+            )}
             <RotatingArrow open={isOpen} />
           </RowFlat>
         </RowBetween>
