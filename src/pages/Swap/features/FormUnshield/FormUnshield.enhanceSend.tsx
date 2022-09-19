@@ -204,13 +204,13 @@ const enhanceSend = (WrappedComponent: any) => {
               console.log({ submitTxResult });
             } else {
               let networkName: NetworkTypePayload = NetworkTypePayload.ETHEREUM;
-              if (exchangeSelectedData?.networkID === 1) {
+              if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
                 networkName = NetworkTypePayload.ETHEREUM;
-              } else if (exchangeSelectedData?.networkID === 2) {
+              } else if (buyNetworkName === MAIN_NETWORK_NAME.BSC) {
                 networkName = NetworkTypePayload.BINANCE_SMART_CHAIN;
-              } else if (exchangeSelectedData?.networkID === 3) {
+              } else if (buyNetworkName === MAIN_NETWORK_NAME.POLYGON) {
                 networkName = NetworkTypePayload.POLYGON;
-              } else if (exchangeSelectedData?.networkID === 4) {
+              } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
                 networkName = NetworkTypePayload.FANTOM;
               }
               // Submit tx unshield to backend after burn
