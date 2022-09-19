@@ -180,12 +180,21 @@ const enhanceSend = (WrappedComponent: any) => {
 
         return new Promise(async (resolve, reject) => {
           try {
+            // Get OTA Receiver
+            const { result }: { result: any } = await incognito.request({
+              method: 'wallet_requestAccounts',
+              params: {},
+            });
+            const feeRefundOTA = result?.otaReceiver;
+            if (!feeRefundOTA) reject('Cant get OTA receiver');
             const tx = await requestSignTransaction(payload);
+
             // Submit tx swap to backend after burned;
             if (formType === FormTypes.SWAP) {
               const submitTxResult: any = await rpcClient.submitSwapTx({
                 txHash: tx.txHash,
                 txRaw: tx.rawData,
+                feeRefundOTA,
               });
               setSwapTx({
                 txHash: tx.txHash,
