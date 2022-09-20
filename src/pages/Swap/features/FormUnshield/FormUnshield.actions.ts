@@ -223,15 +223,15 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
 
 export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {
-    const { inputAmount, buyParentToken, buyNetworkName, incAddress, unshieldAddress, sellToken, slippage } =
-      unshieldDataSelector(getState());
+    const { inputAmount, buyParentToken, buyNetworkName, incAddress, sellToken, slippage } = unshieldDataSelector(
+      getState()
+    );
     if (
       !inputAmount ||
       !parseFloat(inputAmount) ||
       !sellToken?.tokenID ||
       !buyParentToken?.tokenID ||
       !incAddress ||
-      !unshieldAddress ||
       !buyNetworkName
     ) {
       return;
