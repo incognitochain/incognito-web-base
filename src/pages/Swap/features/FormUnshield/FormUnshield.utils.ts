@@ -276,7 +276,8 @@ const getUnshieldData = ({
 
   let enoughPRVFee = true;
 
-  let maxAmountText = '';
+  // let maxAmountText = '';
+  let maxAmountText = _sellToken.formatAmountNoClip || '0';
   let minAmountText = '';
   let combineFee: IFee = {
     networkFee,
