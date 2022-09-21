@@ -404,7 +404,7 @@ const getUnshieldData = ({
       .toNumber();
 
     let maxAmount: number = new BigNumber(_sellToken.amount || 0)
-      .minus(isUseTokenFee ? 0 : networkFee)
+      // .minus(isUseTokenFee ? 0 : networkFee)
       .minus(_sellToken.identify === burnFeeTokenIdentify ? swapFeeObj?.amount || 0 : 0)
       .toNumber();
 
