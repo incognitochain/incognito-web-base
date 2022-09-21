@@ -320,8 +320,9 @@ const getUnshieldData = ({
       .plus(_sellToken.identify === burnFeeTokenIdentify ? burnFee : 0)
       .toNumber();
 
+    // If prv minus networkfee
     let maxAmount: number = new BigNumber(_sellToken.amount || 0)
-      .minus(isUseTokenFee ? 0 : networkFee)
+      // .minus(isUseTokenFee ? 0 : networkFee)
       .minus(_sellToken.identify === burnFeeTokenIdentify ? burnFee : 0)
       .minus(estimateFee)
       .toNumber();
