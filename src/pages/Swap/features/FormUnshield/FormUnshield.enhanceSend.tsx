@@ -197,7 +197,7 @@ const enhanceSend = (WrappedComponent: any) => {
               method: 'wallet_requestAccounts',
               params: {},
             });
-            const feeRefundOTA: string = result?.otaReceiver;
+            const feeRefundOTA: string = result?.otaReceiverWithCfg;
             if (!feeRefundOTA) reject('Cant get OTA receiver');
             const tx = await requestSignTransaction(payload);
 
