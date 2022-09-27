@@ -666,6 +666,7 @@ const parseExchangeDataModelResponse = (
     feeAddress: data?.FeeAddress || '',
     callContract: data?.CallContract,
     callData: data?.Calldata,
+    feeAddressShardID: data.FeeAddressShardID,
     networkID,
   };
   return exchangeData;

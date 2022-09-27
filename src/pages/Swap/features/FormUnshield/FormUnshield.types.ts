@@ -75,6 +75,7 @@ export interface ISwapExchangeData {
   callContract: string;
   callData: string;
   networkID: number;
+  feeAddressShardID: number;
 }
 
 export interface UnshieldSetTokenPayLoad {

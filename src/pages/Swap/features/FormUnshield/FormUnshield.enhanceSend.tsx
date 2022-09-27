@@ -15,6 +15,7 @@ import { actionEstimateFee, actionSetErrorMsg } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
 import { FormTypes, NetworkTypePayload } from './FormUnshield.types';
 import { getBurningMetaDataTypeForUnshield, getPrvPayments, getTokenPayments } from './FormUnshield.utils';
+
 export interface TInner {
   onSend: () => void;
 }
@@ -90,10 +91,15 @@ const enhanceSend = (WrappedComponent: any) => {
         // Get OTA Receiver and Burner address
         const { result }: { result: any } = await incognito.request({
           method: 'wallet_requestAccounts',
-          params: {},
+          params: { senderShardID: (exchangeSelectedData || {}).feeAddressShardID },
         });
         const otaReceiver = result?.otaReceiver;
         const burnerAddress = result?.burnerAddress;
+
+        let feeRefundOTA = '';
+        if (result?.otaReceiverWithCfg && formType === FormTypes.SWAP) {
+          feeRefundOTA = result?.otaReceiverWithCfg;
+        }
 
         let payload: any;
         if (formType === FormTypes.UNSHIELD) {
@@ -193,12 +199,9 @@ const enhanceSend = (WrappedComponent: any) => {
         return new Promise(async (resolve, reject) => {
           try {
             // Get OTA Receiver
-            const { result }: { result: any } = await incognito.request({
-              method: 'wallet_requestAccounts',
-              params: {},
-            });
-            const feeRefundOTA: string = result?.otaReceiverWithCfg;
-            if (!feeRefundOTA) reject('Cant get OTA receiver');
+            if (formType === FormTypes.SWAP && !feeRefundOTA) {
+              reject('Cant get OTA receiver');
+            }
             const tx = await requestSignTransaction(payload);
 
             // Submit tx swap to backend after burned;
