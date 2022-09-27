@@ -2,7 +2,7 @@ import { Image } from 'components/Core/Image';
 import Row, { RowBetween } from 'components/Core/Row';
 import { NetworkModal, useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
-import { ROOT_NETWORK_IMG } from 'constants/token';
+import { MAIN_NETWORK_NAME_ICON } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import React from 'react';
 import { ChevronDown } from 'react-feather';
@@ -11,6 +11,8 @@ import { ThemedText } from 'theme';
 
 interface ISelection {
   title: string;
+  leftPlaceholder?: string;
+  rightPlaceholder?: string;
   rightLabel?: string;
   rightValue?: string;
   leftValue?: string;
@@ -66,6 +68,8 @@ const Selection = React.memo((props: ISelection) => {
     iconUrl,
     rightLabel,
     rightValue,
+    leftPlaceholder,
+    rightPlaceholder,
     leftValue,
     tokens,
     onSelectToken,
@@ -122,14 +126,20 @@ const Selection = React.memo((props: ISelection) => {
             Token
           </ThemedText.SmallLabel>
           <RowBetween className={`selection-item ${activeTokensHover ? 'hover-item' : ''} `} onClick={showTokensList}>
-            <Row>
-              {!!iconUrl && <Image iconUrl={iconUrl} />}
-              {!!leftValue && (
-                <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="primary5">
-                  {leftValue}
-                </ThemedText.RegularLabel>
-              )}
-            </Row>
+            {leftValue ? (
+              <Row>
+                {!!iconUrl && <Image iconUrl={iconUrl} />}
+                {!!leftValue && (
+                  <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="primary5">
+                    {leftValue}
+                  </ThemedText.RegularLabel>
+                )}
+              </Row>
+            ) : (
+              <Row>
+                <ThemedText.RegularLabel color="primary8">{leftPlaceholder}</ThemedText.RegularLabel>
+              </Row>
+            )}
             {!isHideToken && <ChevronDown size={24} />}
           </RowBetween>
         </div>
@@ -139,14 +149,20 @@ const Selection = React.memo((props: ISelection) => {
             Network
           </ThemedText.SmallLabel>
           <RowBetween className={`selection-item ${activeNetworkHover ? 'hover-item' : ''}`} onClick={showNetworkList}>
-            <Row>
-              {!!currency && <Image border={false} iconUrl={ROOT_NETWORK_IMG[currency]} />}
-              {!!rightValue && (
-                <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="primary5">
-                  {rightValue}
-                </ThemedText.RegularLabel>
-              )}
-            </Row>
+            {rightValue ? (
+              <Row>
+                {!!currency && <Image border={false} iconUrl={MAIN_NETWORK_NAME_ICON[rightValue]} />}
+                {!!rightValue && (
+                  <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="primary5">
+                    {rightValue}
+                  </ThemedText.RegularLabel>
+                )}
+              </Row>
+            ) : (
+              <Row>
+                <ThemedText.RegularLabel color="primary8">{rightPlaceholder}</ThemedText.RegularLabel>
+              </Row>
+            )}
             {!isHideNetwork && <ChevronDown size={24} />}
           </RowBetween>
         </div>

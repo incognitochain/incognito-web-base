@@ -32,7 +32,8 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
     const list = orderBy((await getTokenListNoCache()) || [], ['isUnified', 'isVerified'], ['desc', 'desc']);
     const pTokens = keyBy(list, 'identify');
     const depositableList = list.filter(
-      ({ movedUnifiedToken, tokenID, isVerified }) => !movedUnifiedToken && tokenID !== PRV.id && isVerified
+      ({ movedUnifiedToken, tokenID, isVerified, isDepositable }) =>
+        !movedUnifiedToken && tokenID !== PRV.id && isVerified
     );
 
     // flatten tokens

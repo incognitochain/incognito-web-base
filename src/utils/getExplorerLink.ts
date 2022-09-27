@@ -12,11 +12,11 @@ const ETHERSCAN_PREFIXES: { [chainId: number]: string } = {
   [SupportedChainId.POLYGON_MUMBAI]: 'https://mumbai.polygonscan.com',
   [SupportedChainId.POLYGON]: 'https://polygonscan.com',
 
-  [SupportedChainId.BSC]: 'https://bscscan.com/',
-  [SupportedChainId.BSC_TESTNET]: 'https://testnet.bscscan.com/',
+  [SupportedChainId.BSC]: 'https://bscscan.com',
+  [SupportedChainId.BSC_TESTNET]: 'https://testnet.bscscan.com',
 
   [SupportedChainId.FTM]: 'https://ftmscan.com',
-  [SupportedChainId.FTM_TESTNET]: 'https://testnet.ftmscan.com/',
+  [SupportedChainId.FTM_TESTNET]: 'https://testnet.ftmscan.com',
 };
 
 export enum ExplorerDataType {

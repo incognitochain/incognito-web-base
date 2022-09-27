@@ -6,6 +6,7 @@ export type AccountInfo = {
   paymentAddress: string;
   keyDefine: string;
   balances: any[];
+  otaReceiver: string;
 };
 
 interface IncognitoWalletReducer {

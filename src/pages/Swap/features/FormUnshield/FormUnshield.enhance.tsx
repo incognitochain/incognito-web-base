@@ -10,6 +10,7 @@ import enhanceFee from './FormUnshield.enhanceFee';
 import enhanceInit from './FormUnshield.enhanceInit';
 import enhanceSelect, { TInter as TInnerSelect } from './FormUnshield.enhanceSelect';
 import enhanceSend, { TInner as TInnerSend } from './FormUnshield.enhanceSend';
+import enhanceSlippage from './FormUnshield.enhanceSlippage';
 import { IUnshield } from './FormUnshield.hook';
 
 export interface IMergeProps
@@ -35,6 +36,7 @@ export default compose(
   }),
   enhanceInit,
   enhanceChangeField,
+  enhanceSlippage,
   enhanceAddressValidation,
   enhanceAmountValidator,
   enhanceFee,

@@ -7,24 +7,32 @@ import { FormUnshieldActions, FormUnshieldActionType, IFormUnshieldState } from 
 
 const initialState: IFormUnshieldState = {
   sellToken: {
+    parentIdentify: `${BIG_COINS.ETH_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
     identify: `${BIG_COINS.ETH_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
     currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
     networkName: MAIN_NETWORK_NAME.INCOGNITO,
     chainID: isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN,
   },
   buyToken: {
+    parentIdentify: `${BIG_COINS.ETH_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
     identify: `${BIG_COINS.ETH.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.ETH}`,
     currency: PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
     chainID: isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN,
     networkName: MAIN_NETWORK_NAME.ETHEREUM,
   },
-
   networkFee: 100,
   networkFeeToken: PRV.identify,
 
   isFetchingFee: false,
   isUseBurnFeeLevel1: true,
   userFee: undefined,
+
+  // swap data
+  vaults: {},
+  exchangeSelected: null,
+  exchangeSupports: [],
+  errorMsg: null,
+  swapNetwork: MAIN_NETWORK_NAME.INCOGNITO,
 };
 
 export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
@@ -52,6 +60,60 @@ export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
       return {
         ...state,
         isFetchingFee,
+
+        // Reset unshield data when estimate trade
+        isUseBurnFeeLevel1: isFetchingFee ? true : state.isUseBurnFeeLevel1,
+        userFee: isFetchingFee ? undefined : state.userFee,
+
+        // Reset swap data when estimate trade
+        exchangeSelected: isFetchingFee ? null : state?.exchangeSelected,
+        exchangeSupports: isFetchingFee ? [] : state?.exchangeSupports,
+        errorMsg: isFetchingFee ? null : state?.errorMsg,
+      };
+    }
+    case FormUnshieldActionType.RESET_FEE: {
+      return {
+        ...state,
+        isUseBurnFeeLevel1: true,
+        userFee: undefined,
+        exchangeSelected: null,
+        exchangeSupports: [],
+        errorMsg: null,
+      };
+    }
+    case FormUnshieldActionType.SET_VAULTS: {
+      const vaults = action.payload;
+      return {
+        ...state,
+        vaults,
+      };
+    }
+    case FormUnshieldActionType.SET_SWAP_EXCHANGE_SUPPORT: {
+      const exchangeSupports = action.payload;
+      return {
+        ...state,
+        exchangeSupports,
+      };
+    }
+    case FormUnshieldActionType.SET_SWAP_EXCHANGE_SELECTED: {
+      const exchangeSelected = action.payload;
+      return {
+        ...state,
+        exchangeSelected,
+      };
+    }
+    case FormUnshieldActionType.SET_ERROR_MSG: {
+      const errorMsg = action.payload;
+      return {
+        ...state,
+        errorMsg,
+      };
+    }
+    case FormUnshieldActionType.SET_SWAP_NETWORK: {
+      const swapNetwork = action.payload;
+      return {
+        ...state,
+        swapNetwork,
       };
     }
     default:

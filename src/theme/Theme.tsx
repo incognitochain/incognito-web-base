@@ -134,6 +134,7 @@ function colors(darkMode: boolean): Colors {
     primary12: '#F9F9F9',
     primary13: '#FCFCFC',
     primary14: '#252525',
+    primary15: '#FFC043',
 
     // Buttons
     btn1: '#1A73E8',
@@ -279,5 +280,9 @@ export const ThemedGlobalStyle = createGlobalStyle`
       cursor: pointer;
       opacity: 0.8;
     }
+  }
+
+  .white-color {
+    color: white;
   }
 `;

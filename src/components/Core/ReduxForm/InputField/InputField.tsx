@@ -1,3 +1,4 @@
+import CopyIcon from 'components/Copy';
 import Row from 'components/Core/Row';
 import React from 'react';
 import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form';
@@ -21,6 +22,7 @@ export interface IInputFieldProps {
   errorCustom?: string;
   leftTitle: string;
   rightTitle?: string;
+  showIcon?: boolean;
 }
 
 interface IInputProps {
@@ -59,7 +61,18 @@ export const TextArea = React.memo((props: ITextAreaProps) => {
 TextArea.displayName = 'TextArea';
 
 const InputField = (props: IInputFieldProps) => {
-  const { meta, input, componentProps, inputType, onClickMax, warning, errorCustom, leftTitle, rightTitle } = props;
+  const {
+    meta,
+    input,
+    componentProps,
+    inputType,
+    onClickMax,
+    warning,
+    errorCustom,
+    leftTitle,
+    rightTitle,
+    showIcon = false,
+  } = props;
   const { error: errorMeta, touched, submitting } = meta;
   const error = errorMeta || errorCustom;
   const isError = touched && error;
@@ -102,13 +115,19 @@ const InputField = (props: IInputFieldProps) => {
         return (
           <InputContainer className="border-hover input-container input-amount">
             <InputComp {...{ input, componentProps }} />
-            <ButtonMax onClick={onClickMax} />
+            {showIcon && <ButtonMax onClick={onClickMax} />}
           </InputContainer>
         );
       case INPUT_FIELD.address:
+        // return (
+        //   <InputContainer className="border-hover input-container input-address">
+        //     <InputComp {...{ input, componentProps }} />
+        //   </InputContainer>
+        // );
         return (
           <InputContainer className="border-hover input-container input-address">
             <InputComp {...{ input, componentProps }} />
+            {showIcon && <CopyIcon text={'Payment Address Here!!!'} />}
           </InputContainer>
         );
       default:

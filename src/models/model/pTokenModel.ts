@@ -12,6 +12,7 @@ import { getChainIDByCurrency, getNetworkNameByCurrency } from 'utils/token';
 const PRVIDSTR = PRV.id;
 
 export interface ITokenNetwork {
+  parentIdentify?: string;
   identify: string;
   chainID?: SupportedChainId;
   networkName: MAIN_NETWORK_NAME;
@@ -38,6 +39,7 @@ class PToken {
   iconUrl: string;
 
   contractID: any;
+  contractIDSwap: any;
   type: number; // coin or token
 
   change: string;
@@ -73,6 +75,8 @@ class PToken {
 
   hasChild: boolean;
   isUnified: boolean;
+
+  isDepositable: boolean;
 
   getIconUrl({ url }: { url: string }) {
     if (this.tokenID === PRVIDSTR) {
@@ -111,6 +115,7 @@ class PToken {
     const isPrivateToken = this.type === PRIVATE_TOKEN_TYPE.TOKEN;
 
     this.contractID = data.ContractID;
+    this.contractIDSwap = data.ContractIDSwap;
     this.decimals = data.Decimals;
     this.pDecimals = data.PDecimals;
     this.isVerified = data.Verified;
@@ -178,6 +183,7 @@ class PToken {
     this.supportedNetwork = [];
     this.hasChild = !isEmpty(listChild);
     this.isUnified = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN;
+    this.isDepositable = data.Status !== 0;
 
     if (!isEmpty(listChild)) {
       const temp = listChild.map((token) => {
@@ -187,6 +193,7 @@ class PToken {
           networkName,
           chainID,
           identify,
+          parentIdentify: this.parentTokenID,
         };
       });
       temp.forEach((data: any) => {
@@ -198,6 +205,7 @@ class PToken {
       if (!!this.currencyType && !!this.chainID && !!this.networkName) {
         this.supportedNetwork = [
           {
+            parentIdentify: this.parentTokenID,
             currency: this.currencyType,
             networkName: this.networkName,
             chainID: this.chainID,

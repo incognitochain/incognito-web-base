@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { incognitoWalletSelector, incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
 import { AccountInfo } from 'state/incognitoWallet/incognitoWallet.reducer';
 import styled from 'styled-components/macro';
-import { shortenIncognitoAddress } from 'utils';
+import { shortenString } from 'utils';
 
 import { PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from '../../../constants';
 import { Image } from '../Image';
@@ -84,7 +84,7 @@ const IncognitoWallet = () => {
         const accountInfo: AccountInfo | undefined =
           updatedAccounts && updatedAccounts.length > 0 ? updatedAccounts[0] : undefined;
         if (accountInfo) {
-          setWalletState(shortenIncognitoAddress(accountInfo.paymentAddress));
+          setWalletState(shortenString(accountInfo.paymentAddress));
         }
         dispatch(incognitoWalletSetAccount(updatedAccounts));
       });
@@ -122,7 +122,7 @@ const IncognitoWallet = () => {
         const state = await getWalletState();
         if (state === 'unlocked') {
           const data = await incognito.request({ method: 'wallet_getPaymentAddress', params: {} });
-          setWalletState(shortenIncognitoAddress(data.result));
+          setWalletState(shortenString(data.result));
           requestIncognitoAccount().then();
         } else {
           setWalletState(CONNECT_WALLET);

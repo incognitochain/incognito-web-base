@@ -1,4 +1,5 @@
 import Column from 'components/Core/Column';
+import Loader from 'components/Core/Loader';
 import { RowBetween, RowFlat } from 'components/Core/Row';
 import { PRV } from 'constants/token';
 import React from 'react';
@@ -7,6 +8,9 @@ import { useAppSelector } from 'state/hooks';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
+
+import { FormTypes } from '../FormUnshield/FormUnshield.types';
+import SelectSwapExchange, { ISelectSwapExchange } from '../Selection/SelectSwapExchange';
 
 const Styled = styled(Column)`
   background-color: ${({ theme }) => theme.bg4};
@@ -29,58 +33,106 @@ const RotatingArrow = styled(ChevronDown)<{ open?: boolean }>`
   margin-left: 9px;
 `;
 
-interface IProps {
+interface IProps extends ISelectSwapExchange {
   amountText: string;
   symbol: string;
   networkFee: string;
   burnFeeText: string;
   time: string;
+
+  formType: FormTypes;
+  tradePath: string;
+  swapFee: any;
+  isFetchingFee: boolean;
 }
 
-const EstReceive = React.memo(({ amountText, symbol, networkFee, burnFeeText, time }: IProps) => {
-  const [isOpen, setOpen] = React.useState(false);
-  const prvToken = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
+const EstReceive = React.memo(
+  ({
+    amountText,
+    symbol,
+    networkFee,
+    burnFeeText,
+    time,
+    exchanges,
+    exchangeSelected,
+    onSelectExchange,
+    formType,
+    tradePath,
+    swapFee,
+    isFetchingFee,
+  }: IProps) => {
+    const [isOpen, setOpen] = React.useState(false);
+    const prvToken = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
+    return (
+      <Styled>
+        <RowBetween style={{ cursor: 'pointer' }} onClick={() => setOpen((isOpen) => !isOpen)}>
+          <ThemedText.SmallLabel fontWeight={400}>You will receive</ThemedText.SmallLabel>
+          <RowFlat className="header-right">
+            {formType === FormTypes.SWAP && isFetchingFee ? (
+              <Loader stroke="white" size="20px" style={{ marginRight: '40px' }} />
+            ) : (
+              <ThemedText.RegularLabel>{`${amountText || 0} ${symbol}`}</ThemedText.RegularLabel>
+            )}
+            <RotatingArrow open={isOpen} />
+          </RowFlat>
+        </RowBetween>
+        {isOpen && (
+          <Column style={{ marginTop: 14 }}>
+            {formType === FormTypes.SWAP && exchanges?.length > 0 && (
+              <SelectSwapExchange
+                exchanges={exchanges}
+                exchangeSelected={exchangeSelected}
+                onSelectExchange={onSelectExchange}
+              />
+            )}
+            {formType === FormTypes.UNSHIELD ? (
+              <>
+                <RowBetween>
+                  <ThemedText.Small fontWeight={400}>Network fee</ThemedText.Small>
+                  <ThemedText.Small fontWeight={400}>{networkFee}</ThemedText.Small>
+                </RowBetween>
+                {!!burnFeeText && (
+                  <RowBetween style={{ marginTop: 12 }}>
+                    <ThemedText.Small fontWeight={400}>Outchain Fee (Est.)</ThemedText.Small>
+                    <ThemedText.Small fontWeight={400}>{burnFeeText}</ThemedText.Small>
+                  </RowBetween>
+                )}
+              </>
+            ) : (
+              <RowBetween style={{ marginTop: 12 }}>
+                <ThemedText.Small fontWeight={400}>Fee (Est.)</ThemedText.Small>
+                <ThemedText.Small fontWeight={400}>{swapFee?.tradeFeeText}</ThemedText.Small>
+              </RowBetween>
+            )}
 
-  return (
-    <Styled>
-      <RowBetween style={{ cursor: 'pointer' }} onClick={() => setOpen((isOpen) => !isOpen)}>
-        <ThemedText.SmallLabel fontWeight={400}>You will receive</ThemedText.SmallLabel>
-        <RowFlat className="header-right">
-          <ThemedText.RegularLabel>{`${amountText || 0} ${symbol}`}</ThemedText.RegularLabel>
-          <RotatingArrow open={isOpen} />
-        </RowFlat>
-      </RowBetween>
-      {isOpen && (
-        <Column style={{ marginTop: 14 }}>
-          <RowBetween>
-            <ThemedText.Small fontWeight={400}>Network fee</ThemedText.Small>
-            <ThemedText.Small fontWeight={400}>{networkFee}</ThemedText.Small>
-          </RowBetween>
-          {!!burnFeeText && (
             <RowBetween style={{ marginTop: 12 }}>
-              <ThemedText.Small fontWeight={400}>Outchain Fee (Est.)</ThemedText.Small>
-              <ThemedText.Small fontWeight={400}>{burnFeeText}</ThemedText.Small>
+              <ThemedText.Small fontWeight={400}>Estimate time</ThemedText.Small>
+              <ThemedText.Small fontWeight={400}>{`${time} mins`}</ThemedText.Small>
             </RowBetween>
-          )}
-          <RowBetween style={{ marginTop: 12 }}>
-            <ThemedText.Small fontWeight={400}>Estimate time</ThemedText.Small>
-            <ThemedText.Small fontWeight={400}>{`${time} mins`}</ThemedText.Small>
-          </RowBetween>
-          {!prvToken.amount && (
-            <ThemedText.Small color="primary8" fontWeight={400} marginTop="12px">
-              {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
+
+            {formType === FormTypes.SWAP && tradePath && (
+              <RowBetween style={{ marginTop: 12 }}>
+                <ThemedText.Small fontWeight={400}>Trade path</ThemedText.Small>
+                <ThemedText.Small fontWeight={400}>{tradePath}</ThemedText.Small>
+              </RowBetween>
+            )}
+
+            {!prvToken.amount && (
+              <ThemedText.Small color="primary8" fontWeight={400} marginTop="12px">
+                {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
             some from the `}
-              <a href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
-                faucet
-              </a>
-              .
-            </ThemedText.Small>
-          )}
-        </Column>
-      )}
-    </Styled>
-  );
-});
+                <a href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
+                  faucet
+                </a>
+                .
+              </ThemedText.Small>
+            )}
+          </Column>
+        )}
+      </Styled>
+    );
+  }
+);
 
 EstReceive.displayName = 'EstReceive';
 
