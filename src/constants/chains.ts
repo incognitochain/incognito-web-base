@@ -17,11 +17,14 @@ export enum SupportedChainId {
 
   FTM = 250,
   FTM_TESTNET = 4002,
+
+  GOERLI_ETH = 5,
 }
 
 export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.MAINNET]: 'mainnet',
   [SupportedChainId.KOVAN]: 'kovan',
+  [SupportedChainId.GOERLI_ETH]: 'goerli_eth',
 
   [SupportedChainId.POLYGON]: 'polygon',
   [SupportedChainId.POLYGON_MUMBAI]: 'polygon_mumbai',

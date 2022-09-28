@@ -22,6 +22,9 @@ import styled, { css } from 'styled-components/macro';
 import { shortenAddress } from 'utils';
 import { isChainAllowed } from 'utils/switchChain';
 
+import ethereumLogoUrl from '../../../assets/images/ethereum-logo.svg';
+import { SupportedChainId } from '../../../constants/chains';
+
 const IconWrapper = styled.div<{ size?: number }>`
   ${({ theme }) => theme.flexColumnNoWrap};
   align-items: center;
@@ -189,7 +192,9 @@ function Web3StatusInner() {
         ) : (
           <>
             {hasSocks ? <Sock /> : null}
-            <NetworkImg iconUrl={ROOT_NETWORK_IMG[chainId]} />
+            <NetworkImg
+              iconUrl={chainId === SupportedChainId.GOERLI_ETH ? ethereumLogoUrl : ROOT_NETWORK_IMG[chainId]}
+            />
             <Text>{ENSName || shortenAddress(account)}</Text>
           </>
         )}

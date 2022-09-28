@@ -73,7 +73,7 @@ const getChainIDByAcronymNetwork = (network: string): number | any => {
   let chainID = 0;
   switch (network) {
     case 'eth':
-      chainID = isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN;
+      chainID = isMainnet ? SupportedChainId.MAINNET : SupportedChainId.GOERLI_ETH;
       break;
     case 'bsc':
       chainID = isMainnet ? SupportedChainId.BSC : SupportedChainId.BSC_TESTNET;

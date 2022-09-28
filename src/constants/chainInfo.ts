@@ -65,6 +65,15 @@ export const CHAIN_INFO: ChainInfoMap = {
     logoUrl: ethereumLogoUrl,
     nativeCurrency: { name: 'Kovan Ether', symbol: 'kovETH', decimals: 18 },
   },
+  [SupportedChainId.GOERLI_ETH]: {
+    networkType: NetworkType.L1,
+    docs: 'https://incognito.org/',
+    explorer: 'https://goerli.etherscan.io/',
+    infoLink: 'https://info.uniswap.org/#/',
+    label: 'Kovan',
+    logoUrl: ethereumLogoUrl,
+    nativeCurrency: { name: 'Goerli Ether', symbol: 'goerliETH', decimals: 18 },
+  },
   [SupportedChainId.OPTIMISM]: {
     networkType: NetworkType.L2,
     blockWaitMsBeforeWarning: ms`25m`,
