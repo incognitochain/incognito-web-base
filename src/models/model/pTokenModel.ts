@@ -72,6 +72,7 @@ class PToken {
 
   isDecentralized: boolean;
   isCentralized: boolean;
+  isBTC: boolean;
 
   hasChild: boolean;
   isUnified: boolean;
@@ -154,6 +155,7 @@ class PToken {
       this.isFantomErc20Token ||
       (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM);
     this.isCentralized = !this.isPRV && !this.isDecentralized;
+    this.isBTC = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BTC;
 
     this.networkName = getNetworkNameByCurrency({ currency: this.currencyType });
     this.chainID = getChainIDByCurrency({ currency: this.currencyType });

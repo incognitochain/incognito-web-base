@@ -73,6 +73,8 @@ const FormDeposit = (props: IMergeProps) => {
           network: getAcronymNetwork(sellToken),
           incAddress: inputAddress,
           tokenID: sellToken.tokenID,
+          currencyType: sellToken.currencyType,
+          isBTC: sellToken.isBTC,
         });
         setState({
           data,
@@ -157,7 +159,11 @@ const FormDeposit = (props: IMergeProps) => {
             isBlur={!state.data?.address || !!state?.isFetching}
             isLoading={!!state?.isFetching}
           />
-          <DescriptionQrCode symbol={sellToken.symbol} paymentAddress={state && state.data?.address} />
+          <DescriptionQrCode
+            symbol={sellToken.symbol}
+            paymentAddress={state && state.data?.address}
+            expiredAt={sellToken.isCentralized && state ? state.data?.expiredAt : undefined}
+          />
           {/*<MinimumShiledAmount />*/}
           <ShieldFeeEstimate value={`${state.data?.tokenFee || state.data?.estimateFee || 0} ${sellToken.symbol}`} />
           <DescriptionBox symbol={sellToken.symbol} />

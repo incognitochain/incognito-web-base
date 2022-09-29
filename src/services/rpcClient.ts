@@ -49,6 +49,7 @@ export interface IDepositAddress {
   address: string;
   estimateFee: number;
   tokenFee?: number;
+  expiredAt?: string;
 }
 
 class RpcClient {
@@ -186,21 +187,38 @@ class RpcClient {
     network,
     incAddress,
     tokenID,
+    currencyType,
+    isBTC,
   }: {
     network: string;
     incAddress: string;
     tokenID: string;
+    currencyType?: number;
+    isBTC: boolean;
   }): Promise<IDepositAddress> {
     const resp: any = await this.http.post('genshieldaddress', {
       Network: network,
       AddressType: 1,
       WalletAddress: incAddress,
+      PaymentAddress: incAddress,
+      BTCIncAddress: incAddress,
       PrivacyTokenAddress: tokenID,
+      CurrencyType: currencyType,
     });
+
+    // Case bitcoin
+    if (typeof resp === 'string' && isBTC) {
+      return {
+        address: resp,
+        estimateFee: 0,
+      };
+    }
+    // Case centralized & decentralized
     return {
       address: resp.Address,
       estimateFee: resp.EstimateFee,
       tokenFee: resp.TokenFee,
+      expiredAt: resp.ExpiredAt,
     };
   }
 }
@@ -230,15 +248,21 @@ const genDepositAddress = async ({
   network,
   incAddress,
   tokenID,
+  currencyType,
+  isBTC,
 }: {
   network: string;
   incAddress: string;
   tokenID: string;
+  currencyType?: number;
+  isBTC: boolean;
 }): Promise<IDepositAddress> => {
   return rpcClient.genDepositAddress({
     network,
     incAddress,
     tokenID,
+    currencyType,
+    isBTC,
   });
 };
 

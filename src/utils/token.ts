@@ -95,6 +95,10 @@ const getAcronymNetwork = (token: SelectedPrivacyModel): string => {
     network = 'ftm';
   } else if (token.isBep20Token || token.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
     network = 'bsc';
+  } else if (token.isBTC) {
+    network = 'btc';
+  } else if (token.isCentralized) {
+    network = 'centralized';
   }
   return network;
 };
