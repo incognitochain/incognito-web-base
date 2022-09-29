@@ -1,4 +1,4 @@
-import { GROUP_NETWORK, PRV } from 'constants/token';
+import { GROUP_NETWORK } from 'constants/token';
 import keyBy from 'lodash/keyBy';
 import orderBy from 'lodash/orderBy';
 import PTokenModel from 'models/model/pTokenModel';
@@ -31,10 +31,7 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
     dispatch(actionFetchingPTokens({ isFetching: true }));
     const list = orderBy((await getTokenListNoCache()) || [], ['isUnified', 'isVerified'], ['desc', 'desc']);
     const pTokens = keyBy(list, 'identify');
-    const depositableList = list.filter(
-      ({ movedUnifiedToken, tokenID, isVerified, isDepositable }) =>
-        !movedUnifiedToken && tokenID !== PRV.id && isVerified
-    );
+    const depositableList = list.filter(({ movedUnifiedToken, isVerified }) => !movedUnifiedToken && isVerified);
 
     // flatten tokens
     const flattenTokens = depositableList.reduce((tokens: PTokenModel[], currToken) => {

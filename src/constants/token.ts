@@ -2,7 +2,17 @@ import ethereumLogoUrl from 'assets/images/ethereum-logo.svg';
 import ftmLogoUrl from 'assets/images/ftm_logo.svg';
 import incognitoLogoUrl from 'assets/images/inc_logo.svg';
 import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
+import btcLogoUrl from 'assets/svg/btc-logo.svg';
+import dashLogoUrl from 'assets/svg/dash-logo.svg';
+import dogeLogoUrl from 'assets/svg/doge-logo.svg';
+import dotLogoUrl from 'assets/svg/dot-logo.svg';
+import ltcLogoUrl from 'assets/svg/ltc-logo.svg';
+import neoLogoUrl from 'assets/svg/neo-logo.svg';
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
+import tomoLogoUrl from 'assets/svg/tomo-logo.svg';
+import xmrLogoUrl from 'assets/svg/xmr-logo.svg';
+import zecLogoUrl from 'assets/svg/zec-logo.svg';
+import zilLogoUrl from 'assets/svg/zil-logo.svg';
 import { isMainnet } from 'config';
 
 import { SupportedChainId } from './chains';
@@ -112,6 +122,15 @@ enum MAIN_NETWORK_NAME {
   POLYGON = 'Polygon',
   FANTOM = 'Fantom',
   INCOGNITO = 'Incognito',
+  TOMO = 'TomoChain',
+  ZIL = 'Zilliqua',
+  XMR = 'Monero',
+  NEO = 'NEO',
+  DASH = 'DASH',
+  LTC = 'Litecoin',
+  DOGE = 'DOGE',
+  ZEC = 'Zcash',
+  BTC = 'Bitcoin',
 }
 
 const MAIN_NETWORK_NAME_ICON: any = {
@@ -132,36 +151,66 @@ const GROUP_NETWORK: IGroupNetwork = {
   [MAIN_NETWORK_NAME.POLYGON]: [PRIVATE_TOKEN_CURRENCY_TYPE.MATIC, PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20],
   [MAIN_NETWORK_NAME.FANTOM]: [PRIVATE_TOKEN_CURRENCY_TYPE.FTM, PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20],
   [MAIN_NETWORK_NAME.INCOGNITO]: [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN],
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.BTC]: [PRIVATE_TOKEN_CURRENCY_TYPE.BTC],
+  [PRIVATE_TOKEN_CURRENCY_TYPE.DASH]: [PRIVATE_TOKEN_CURRENCY_TYPE.DASH],
+  [PRIVATE_TOKEN_CURRENCY_TYPE.DOGE]: [PRIVATE_TOKEN_CURRENCY_TYPE.DOGE],
+  [PRIVATE_TOKEN_CURRENCY_TYPE.DOT]: [PRIVATE_TOKEN_CURRENCY_TYPE.DOT],
+  [PRIVATE_TOKEN_CURRENCY_TYPE.LTC]: [PRIVATE_TOKEN_CURRENCY_TYPE.LTC],
+  [PRIVATE_TOKEN_CURRENCY_TYPE.NEO]: [PRIVATE_TOKEN_CURRENCY_TYPE.NEO],
+  [PRIVATE_TOKEN_CURRENCY_TYPE.TOMO]: [PRIVATE_TOKEN_CURRENCY_TYPE.TOMO],
+  [PRIVATE_TOKEN_CURRENCY_TYPE.XMR]: [PRIVATE_TOKEN_CURRENCY_TYPE.XMR],
+  [PRIVATE_TOKEN_CURRENCY_TYPE.ZEC]: [PRIVATE_TOKEN_CURRENCY_TYPE.ZEC],
+  [PRIVATE_TOKEN_CURRENCY_TYPE.ZIL]: [PRIVATE_TOKEN_CURRENCY_TYPE.ZIL],
 };
 
 const ROOT_NETWORK_IMG: any = {
   [PRIVATE_TOKEN_CURRENCY_TYPE.ETH]: ethereumLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.ERC20]: ethereumLogoUrl,
-  [SupportedChainId.KOVAN]: ethereumLogoUrl,
-  [SupportedChainId.MAINNET]: ethereumLogoUrl,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB]: bnbChainLogo,
   [PRIVATE_TOKEN_CURRENCY_TYPE.BNB_BEP2]: bnbChainLogo,
   [PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20]: bnbChainLogo,
-  [SupportedChainId.BSC]: bnbChainLogo,
-  [SupportedChainId.BSC_TESTNET]: bnbChainLogo,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.MATIC]: polygonMaticLogo,
   [PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20]: polygonMaticLogo,
-  [SupportedChainId.POLYGON]: polygonMaticLogo,
-  [SupportedChainId.POLYGON_MUMBAI]: polygonMaticLogo,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.FTM]: ftmLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20]: ftmLogoUrl,
-  [SupportedChainId.FTM]: ftmLogoUrl,
-  [SupportedChainId.FTM_TESTNET]: ftmLogoUrl,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN]: incognitoLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]: incognitoLogoUrl,
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.BTC]: btcLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.DASH]: dashLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.DOGE]: dogeLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.DOT]: dotLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.LTC]: ltcLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.NEO]: neoLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.TOMO]: tomoLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.XMR]: xmrLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.ZEC]: zecLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.ZIL]: zilLogoUrl,
+};
+
+const CONNECT_NETWORK_IMG: any = {
+  [SupportedChainId.KOVAN]: ethereumLogoUrl,
+  [SupportedChainId.MAINNET]: ethereumLogoUrl,
+  [SupportedChainId.GOERLI_ETH]: ethereumLogoUrl,
+
+  [SupportedChainId.BSC]: bnbChainLogo,
+  [SupportedChainId.BSC_TESTNET]: bnbChainLogo,
+
+  [SupportedChainId.POLYGON]: polygonMaticLogo,
+  [SupportedChainId.POLYGON_MUMBAI]: polygonMaticLogo,
+
+  [SupportedChainId.FTM]: ftmLogoUrl,
+  [SupportedChainId.FTM_TESTNET]: ftmLogoUrl,
 };
 
 export {
   BIG_COINS,
+  CONNECT_NETWORK_IMG,
   CRYPTO_ICON_URL,
   DECIMALS,
   GROUP_NETWORK,
