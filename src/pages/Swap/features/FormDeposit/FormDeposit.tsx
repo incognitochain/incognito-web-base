@@ -166,7 +166,7 @@ const FormDeposit = (props: IMergeProps) => {
           />
           {/*<MinimumShiledAmount />*/}
           <ShieldFeeEstimate value={`${state.data?.tokenFee || state.data?.estimateFee || 0} ${sellToken.symbol}`} />
-          <DescriptionBox symbol={sellToken.symbol} />
+          <DescriptionBox symbol={sellToken.symbol} token={sellToken} />
         </div>
       )}
       {/* {button.switchNetwork || !account ? (
