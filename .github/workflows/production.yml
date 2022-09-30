@@ -57,6 +57,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
+          file: landing-page.dockerfile
           build-args: BUILD_ENV=production
           push: true
           tags: ${{ env.IMAGE_TAG }}
