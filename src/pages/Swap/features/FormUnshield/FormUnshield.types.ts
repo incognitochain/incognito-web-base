@@ -24,6 +24,7 @@ export enum SwapExchange {
   PANCAKE_SWAP = 'pancake',
   UNISWAP = 'uniswap',
   CURVE = 'curve',
+  PDEX = 'pdex',
 }
 
 export enum NetworkTypePayload {

@@ -2,13 +2,14 @@ import { BigNumber } from 'bignumber.js';
 import bn from 'bn.js';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { isAddress as isEtherAddress } from 'ethers/lib/utils';
+import uniqueBy from 'lodash/uniqBy';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { formValueSelector, isSubmitting, isValid } from 'redux-form';
 import { AppState } from 'state';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
-import { unshieldableTokens } from 'state/token';
+import { groupNetworkSelectors, ITokenGroupByNetwork, unshieldableTokens } from 'state/token';
 import convert from 'utils/convert';
 import format from 'utils/format';
 
@@ -211,11 +212,13 @@ const getUnshieldData = ({
     _buyParentToken = getDataByTokenID(buyParentIdentify);
   }
 
+  const groupNetworks = groupNetworkSelectors(state);
+
   // case unshield;
   if (formType === FormTypes.UNSHIELD) {
     _buyNetworkName = buyNetworkName;
     _buyNetworkList = _buyParentToken?.supportedNetwork;
-    _buyTokenList = getBuyTokenList(buyNetworkName, _buyTokenList, _sellToken, _buyNetworkList);
+    _buyTokenList = getBuyTokenList(buyNetworkName, _buyTokenList, _sellToken, _buyNetworkList, groupNetworks);
   } else {
     _buyNetworkName = swapNetwork;
     _buyNetworkList = _sellParentToken?.supportedNetwork;
@@ -230,7 +233,7 @@ const getUnshieldData = ({
       );
     }
 
-    _buyTokenList = getBuyTokenList(swapNetwork, _buyTokenList, _sellToken, _buyNetworkList);
+    _buyTokenList = getBuyTokenList(swapNetwork, _buyTokenList, _sellToken, _buyNetworkList, groupNetworks);
     // add incognito network
     if (!_buyNetworkList?.find((network: ITokenNetwork) => network?.networkName === MAIN_NETWORK_NAME.INCOGNITO)) {
       _buyNetworkList.unshift({
@@ -529,10 +532,11 @@ const getBuyTokenList = (
   // Selected swap network
   selectedNetwork: MAIN_NETWORK_NAME,
   tokens: any,
-  sellToken: any,
-  supportedNetwork: any
+  sellToken: SelectedPrivacy,
+  supportedNetwork: any,
+  groupNetworks: ITokenGroupByNetwork
 ) => {
-  const buyTokenList: any = [];
+  let buyTokenList: any = [];
   supportedNetwork = supportedNetwork?.filter(
     (network: ITokenNetwork) => network?.networkName !== MAIN_NETWORK_NAME.INCOGNITO
   );
@@ -614,10 +618,19 @@ const getBuyTokenList = (
       }
     }
   }
+
+  if (selectedNetwork === MAIN_NETWORK_NAME.INCOGNITO) {
+    const swapableTokens = Object.values(groupNetworks);
+    (swapableTokens || []).forEach((tokens: any) => {
+      buyTokenList = buyTokenList.concat(tokens);
+    });
+  }
+  buyTokenList = uniqueBy(buyTokenList, 'identify');
   return buyTokenList;
 };
 
 const getExchangeName = (exchange: SwapExchange) => {
+  console.log('SANG TEST: ', exchange);
   if (exchange === SwapExchange.PANCAKE_SWAP) {
     return 'PancakeSwap';
   }
@@ -626,6 +639,9 @@ const getExchangeName = (exchange: SwapExchange) => {
   }
   if (exchange === SwapExchange.CURVE) {
     return 'Curve';
+  }
+  if (exchange === SwapExchange.PDEX) {
+    return 'Incognito';
   }
 };
 
@@ -659,7 +675,7 @@ const parseExchangeDataModelResponse = (
     amountOut: parseFloat(data?.AmountOut || 0),
     amountOutRaw: parseFloat(data?.AmountOutRaw || 0),
     appName: data?.AppName,
-    exchangeName: `${getExchangeName(data?.AppName)}(${networkName})`,
+    exchangeName: `${getExchangeName(data?.AppName)} (${networkName})`,
     fees: parseFeeDataModelResponse(data?.Fee || []) || [],
     routes: data?.Paths || [],
     incTokenID: incTokenID || '',

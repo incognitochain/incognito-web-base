@@ -71,7 +71,7 @@ export const actionChangeSellToken =
     try {
       const { buyToken } = unshieldDataSelector(getState());
       const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
-      if (!token.chainID || !token.networkName || !parentToken.currencyType) return;
+      if (!token.networkName || parentToken.currencyType === undefined) return;
       const sellToken: ITokenNetwork = {
         parentIdentify: token.parentTokenID,
         identify: token.identify,
@@ -81,7 +81,7 @@ export const actionChangeSellToken =
       };
 
       let _buyToken = parentToken;
-      if (parentToken.hasChild) {
+      if (parentToken.hasChild && !parentToken.isPRV) {
         _buyToken = parentToken.listUnifiedToken[0];
       }
       const buyTokenObj: ITokenNetwork = {
@@ -264,6 +264,18 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     let ftmExchanges: ISwapExchangeData[] = [];
     let plgExchanges: ISwapExchangeData[] = [];
     let bscExchanges: ISwapExchangeData[] = [];
+    let pdexExchanges: ISwapExchangeData[] = [];
+
+    if (data?.hasOwnProperty(NetworkTypePayload.INCOGNITO)) {
+      const incTokenID = sellToken.tokenID;
+      const exchanges = data[NetworkTypePayload.INCOGNITO];
+      if (Array.isArray(exchanges)) {
+        pdexExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'PDex', 0, incTokenID)
+        );
+      }
+    }
+
     if (data?.hasOwnProperty(NetworkTypePayload.BINANCE_SMART_CHAIN)) {
       let incTokenID = sellToken.tokenID;
       if (sellToken?.isUnified) {
@@ -312,7 +324,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       }
     }
 
-    const exchangeSupports = [...ethExchanges, ...ftmExchanges, ...plgExchanges, ...bscExchanges];
+    const exchangeSupports = [...ethExchanges, ...ftmExchanges, ...plgExchanges, ...bscExchanges, ...pdexExchanges];
 
     if (!exchangeSupports?.length)
       throw new Error('Can not find any trading platform that supports for this pair token');

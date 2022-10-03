@@ -81,6 +81,9 @@ const getNetworkNameByCurrency = ({ currency }: { currency: number }): MAIN_NETW
     case PRIVATE_TOKEN_CURRENCY_TYPE.ZIL:
       networkName = MAIN_NETWORK_NAME.ZIL;
       break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.PRV:
+      networkName = MAIN_NETWORK_NAME.PRV;
+      break;
   }
   return networkName;
 };

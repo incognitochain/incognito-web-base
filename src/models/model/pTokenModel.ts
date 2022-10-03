@@ -161,6 +161,7 @@ class PToken {
     this.chainID = getChainIDByCurrency({ currency: this.currencyType });
     this.identify = `${this.tokenID}-${this.currencyType}`;
     this.parentTokenID = this.identify;
+    this.iconUrl = this.getIconUrl({ url: data.Image });
     if (data && data.ListChildToken instanceof Array) {
       this.listChildToken = data.ListChildToken.map((item: any) => {
         const newItem = new PToken(item);
@@ -179,9 +180,9 @@ class PToken {
     } else {
       this.listUnifiedToken = [];
     }
-
-    this.iconUrl = this.getIconUrl({ url: data.Image });
     const listChild = isEmpty(this.listUnifiedToken) ? this.listChildToken : this.listUnifiedToken;
+    // Update ListChildToken to listUnifiedToken
+    this.listUnifiedToken = listChild;
     this.supportedNetwork = [];
     this.hasChild = !isEmpty(listChild);
     this.isUnified = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN;
@@ -204,7 +205,7 @@ class PToken {
         this.supportedNetwork?.push(data);
       });
     } else {
-      if (!!this.currencyType && !!this.chainID && !!this.networkName) {
+      if (this.currencyType !== undefined && !!this.chainID && !!this.networkName) {
         this.supportedNetwork = [
           {
             parentIdentify: this.parentTokenID,
