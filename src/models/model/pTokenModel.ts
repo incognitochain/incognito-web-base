@@ -205,7 +205,7 @@ class PToken {
         this.supportedNetwork?.push(data);
       });
     } else {
-      if (this.currencyType !== undefined && !!this.chainID && !!this.networkName) {
+      if (this.currencyType !== undefined && !!this.networkName) {
         this.supportedNetwork = [
           {
             parentIdentify: this.parentTokenID,
@@ -217,6 +217,16 @@ class PToken {
         ];
       }
     }
+
+    // if ((this.isBTC || this.isCentralized) && this.networkName) {
+    //   this.supportedNetwork.push({
+    //     parentIdentify: this.parentTokenID,
+    //     currency: this.currencyType,
+    //     networkName: this.networkName || '',
+    //     chainID: this.chainID,
+    //     identify: this.identify,
+    //   });
+    // }
   }
 }
 

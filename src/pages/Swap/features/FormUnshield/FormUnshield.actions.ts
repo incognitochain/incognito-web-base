@@ -117,7 +117,7 @@ export const actionChangeBuyToken =
     try {
       const { sellToken } = unshieldDataSelector(getState());
       const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
-      if (!token.chainID || !token.networkName || !parentToken.currencyType) return;
+      if (!token.networkName || parentToken.currencyType === undefined) return;
 
       let _buyToken = parentToken;
       if (parentToken.hasChild) {

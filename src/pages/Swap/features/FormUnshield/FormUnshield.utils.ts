@@ -14,6 +14,7 @@ import convert from 'utils/convert';
 import format from 'utils/format';
 
 import { FormTypes, IFormUnshieldState, ISwapExchangeData, ISwapFee, SwapExchange } from './FormUnshield.types';
+
 const {
   encryptMessageOutCoin,
   BurningFantomRequestMeta,
@@ -233,6 +234,18 @@ const getUnshieldData = ({
       );
     }
 
+    // if (
+    //   (_sellToken.isBTC || _sellToken.isCentralized) &&
+    //   swapNetwork !== MAIN_NETWORK_NAME.ETHEREUM &&
+    //   swapNetwork !== MAIN_NETWORK_NAME.BSC &&
+    //   swapNetwork !== MAIN_NETWORK_NAME.POLYGON &&
+    //   swapNetwork !== MAIN_NETWORK_NAME.FANTOM &&
+    //   swapNetwork !== MAIN_NETWORK_NAME.INCOGNITO
+    // ) {
+    //   _buyTokenList = [_sellToken];
+    // } else {
+    //   _buyTokenList = getBuyTokenList(swapNetwork, _buyTokenList, _sellToken, _buyNetworkList, groupNetworks);
+    // }
     _buyTokenList = getBuyTokenList(swapNetwork, _buyTokenList, _sellToken, _buyNetworkList, groupNetworks);
     // add incognito network
     if (!_buyNetworkList?.find((network: ITokenNetwork) => network?.networkName === MAIN_NETWORK_NAME.INCOGNITO)) {
@@ -630,7 +643,6 @@ const getBuyTokenList = (
 };
 
 const getExchangeName = (exchange: SwapExchange) => {
-  console.log('SANG TEST: ', exchange);
   if (exchange === SwapExchange.PANCAKE_SWAP) {
     return 'PancakeSwap';
   }
