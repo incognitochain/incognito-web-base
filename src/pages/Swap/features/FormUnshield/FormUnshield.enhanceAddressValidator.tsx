@@ -26,6 +26,7 @@ const enhanceAddressValidation = (WrappedComponent: any) => {
     } = props;
     const getAddressValidator = React.useCallback(() => {
       if (formType === FormTypes.UNSHIELD) {
+        if (buyToken.isBTC || buyToken.isCentralized) return [validator.required];
         return validator.combinedEtherAddress;
       } else {
         if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {

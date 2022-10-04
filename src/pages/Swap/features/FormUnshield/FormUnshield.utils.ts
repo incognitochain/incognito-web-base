@@ -1,5 +1,4 @@
 import { BigNumber } from 'bignumber.js';
-import bn from 'bn.js';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { isAddress as isEtherAddress } from 'ethers/lib/utils';
 import uniqueBy from 'lodash/uniqBy';
@@ -35,6 +34,7 @@ export interface IFee {
   estimatedExpectedAmount: number;
   extraFee: number;
   useFast2xFee?: boolean;
+  centralizedAddress?: string;
 }
 
 export interface IUnshieldData {
@@ -258,7 +258,7 @@ const getUnshieldData = ({
     }
   }
 
-  const isExternalAddress = isEtherAddress(inputAddress);
+  const isExternalAddress = _buyToken.isCentralized || _buyToken.isBTC ? true : isEtherAddress(inputAddress);
 
   // amount validator
   const inputOriginalAmount =
@@ -319,6 +319,7 @@ const getUnshieldData = ({
       ...combineFee,
       burnFee,
       burnFeeToken,
+      centralizedAddress: userFee.centralizedAddress,
 
       feeAddress,
       isUseTokenFee,
@@ -709,20 +710,30 @@ const getBurningMetaDataTypeForUnshield = (sellToken: SelectedPrivacy) => {
   return BurningRequestMeta;
 };
 
-const getTokenPayments = async (data: any[], burnAmount: any, isEncryptMessageToken = true) => {
+const getTokenPayments = async ({
+  data,
+  burnAmount,
+  isEncryptMessageToken = true,
+}: {
+  data: any[];
+  burnAmount?: number;
+  isEncryptMessageToken?: boolean;
+}) => {
   const burningAddress = await getBurningAddress();
 
   let tokenPayments = data.map((payment) => ({
     PaymentAddress: payment?.paymentAddress,
-    Amount: new bn(payment?.amount).toString(),
+    Amount: new BigNumber(payment?.amount).toString(),
     Message: '',
   }));
 
-  tokenPayments.push({
-    PaymentAddress: burningAddress,
-    Amount: new bn(burnAmount).toString(),
-    Message: '',
-  });
+  if (burnAmount) {
+    tokenPayments.push({
+      PaymentAddress: burningAddress,
+      Amount: new BigNumber(burnAmount).toString(),
+      Message: '',
+    });
+  }
 
   const isEncodeOnly = !isEncryptMessageToken;
   tokenPayments = await encryptMessageOutCoin(tokenPayments, isEncodeOnly);
@@ -732,7 +743,7 @@ const getTokenPayments = async (data: any[], burnAmount: any, isEncryptMessageTo
 const getPrvPayments = async (data: any[], isEncryptMessage = true) => {
   let prvPayments = data.map((payment) => ({
     PaymentAddress: payment?.paymentAddress,
-    Amount: new bn(payment?.amount || 0).toString(),
+    Amount: new BigNumber(payment?.amount || 0).toString(),
     Message: '',
   }));
 

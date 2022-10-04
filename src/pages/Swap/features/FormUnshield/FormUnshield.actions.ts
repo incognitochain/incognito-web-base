@@ -1,11 +1,12 @@
 import { BigNumber } from 'bignumber.js';
-import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import { MAIN_NETWORK_NAME } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { rpcClient } from 'services';
 import { AppDispatch, AppState } from 'state';
 import { getPrivacyByTokenIdentifySelectors } from 'state/token';
 import convert from 'utils/convert';
 
+import { getAcronymNetwork } from '../../../../utils/token';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import {
   FormTypes,
@@ -160,7 +161,7 @@ export const actionChangeSellNetwork =
 export const actionChangeBuyNetwork =
   ({ network }: { network: ITokenNetwork }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
-    const { formType } = unshieldDataSelector(getState());
+    const { formType, sellToken, buyToken } = unshieldDataSelector(getState());
     try {
       if (formType === FormTypes.UNSHIELD) {
         dispatch(
@@ -172,6 +173,13 @@ export const actionChangeBuyNetwork =
         );
       } else {
         dispatch(actionSetSwapNetwork(network?.networkName));
+      }
+
+      if (sellToken.isBTC || sellToken.isCentralized) {
+        // case force select token match with unshield network
+        if (sellToken.networkName === network.networkName) {
+          dispatch(actionChangeBuyToken({ token: sellToken }));
+        }
       }
     } catch (error) {
       console.log('ACTION CHANGE BUY NETWORK ERROR: ', error);
@@ -185,16 +193,7 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
     );
     if (!incAddress || !unshieldAddress || !inputOriginalAmount) return;
     dispatch(actionSetFetchingFee({ isFetchingFee: true }));
-    let network = '';
-    if (buyToken.isErc20Token || buyToken.isMainETH) {
-      network = 'eth';
-    } else if (buyToken.isPolygonErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC) {
-      network = 'plg';
-    } else if (buyToken.isFantomErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM) {
-      network = 'ftm';
-    } else if (buyToken.isBep20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
-      network = 'bsc';
-    }
+    const network: any = getAcronymNetwork(buyToken);
 
     const incognitoAmount = new BigNumber(
       inputOriginalAmount ||
@@ -209,6 +208,7 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
       requestedAmount: inputAmount || '1',
       walletAddress: incAddress,
       unifiedTokenID: sellToken.isUnified ? sellToken.tokenID : '',
+      currencyType: buyToken.currencyType,
     };
     const data = await rpcClient.estimateFee(payload);
     dispatch(actionSetUserFee({ fee: data }));
