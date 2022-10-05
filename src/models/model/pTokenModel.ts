@@ -19,6 +19,9 @@ export interface ITokenNetwork {
   currency: number;
 }
 
+export const getTokenIdentify = ({ tokenID, currencyType }: { tokenID: string; currencyType: number }) =>
+  `${tokenID}-${currencyType}`;
+
 class PToken {
   identify: string;
   tokenID: string;
@@ -159,7 +162,7 @@ class PToken {
 
     this.networkName = getNetworkNameByCurrency({ currency: this.currencyType });
     this.chainID = getChainIDByCurrency({ currency: this.currencyType });
-    this.identify = `${this.tokenID}-${this.currencyType}`;
+    this.identify = getTokenIdentify({ tokenID: this.tokenID, currencyType: this.currencyType });
     this.parentTokenID = this.identify;
     this.iconUrl = this.getIconUrl({ url: data.Image });
     if (data && data.ListChildToken instanceof Array) {
