@@ -178,7 +178,19 @@ export const actionChangeBuyNetwork =
       if (sellToken.isBTC || sellToken.isCentralized) {
         // case force select token match with unshield network
         if (sellToken.networkName === network.networkName) {
-          dispatch(actionChangeBuyToken({ token: sellToken }));
+          return dispatch(actionChangeBuyToken({ token: sellToken }));
+        }
+
+        if (sellToken.networkName !== network.networkName && buyToken.identify === sellToken.identify) {
+          const emptyBuyToken = {
+            parentIdentify: '1',
+            identify: '1',
+            chainID: 0,
+            currency: 0,
+            networkName: network.networkName,
+          };
+          dispatch(actionSetToken({ buyToken: emptyBuyToken }));
+          dispatch(actionSetSwapNetwork(emptyBuyToken.networkName));
         }
       }
     } catch (error) {

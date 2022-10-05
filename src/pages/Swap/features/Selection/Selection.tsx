@@ -151,7 +151,9 @@ const Selection = React.memo((props: ISelection) => {
           <RowBetween className={`selection-item ${activeNetworkHover ? 'hover-item' : ''}`} onClick={showNetworkList}>
             {rightValue ? (
               <Row>
-                {!!currency && <Image border={false} iconUrl={MAIN_NETWORK_NAME_ICON[rightValue]} />}
+                {currency !== undefined && currency !== null && (
+                  <Image border={false} iconUrl={MAIN_NETWORK_NAME_ICON[rightValue]} />
+                )}
                 {!!rightValue && (
                   <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="primary5">
                     {rightValue}
