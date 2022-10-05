@@ -96,7 +96,11 @@ const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any):
   let tradePathStr = '';
   const tradePathArrStr: any = [];
   for (let i = 0; i < routes.length; i++) {
-    const tokenData = tokenList?.find((token: any) => token?.contractID?.toLowerCase() === routes[i]?.toLowerCase());
+    const tokenData = tokenList?.find(
+      (token: any) =>
+        token?.contractID?.toLowerCase() === routes[i]?.toLowerCase() ||
+        token?.tokenID?.toLowerCase() === routes[i]?.toLowerCase()
+    );
     if (tokenData) {
       tradePathArrStr.push(tokenData?.symbol);
     }
