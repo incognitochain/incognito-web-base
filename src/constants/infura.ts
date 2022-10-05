@@ -16,6 +16,7 @@ export const MAINNET_PROVIDER = new JsonRpcProvider(`https://mainnet.infura.io/v
 export const INFURA_NETWORK_URLS: { [key in SupportedChainId]: string } = {
   [SupportedChainId.MAINNET]: `https://eth-fullnode.incognito.org`,
   [SupportedChainId.KOVAN]: `https://kovan.infura.io/v3/8c1ae0e623704f288eab73928a9243f5`,
+  [SupportedChainId.GOERLI_ETH]: 'https://goerli.infura.io/v3/',
 
   [SupportedChainId.OPTIMISM]: `https://optimism-mainnet.infura.io/v3/${INFURA_KEY}`,
   [SupportedChainId.OPTIMISTIC_KOVAN]: `https://optimism-kovan.infura.io/v3/${INFURA_KEY}`,
@@ -36,6 +37,7 @@ export const INFURA_NETWORK_URLS: { [key in SupportedChainId]: string } = {
 export const INC_CONTRACT_ADDRESS: { [key in SupportedChainId]: string } = {
   [SupportedChainId.MAINNET]: '0x43D037A562099A4C2c95b1E2120cc43054450629',
   [SupportedChainId.KOVAN]: '0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7',
+  [SupportedChainId.GOERLI_ETH]: '0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7',
 
   [SupportedChainId.OPTIMISM]: '0x43D037A562099A4C2c95b1E2120cc43054450629',
   [SupportedChainId.OPTIMISTIC_KOVAN]: '0x43D037A562099A4C2c95b1E2120cc43054450629',

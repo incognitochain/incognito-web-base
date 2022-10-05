@@ -5,6 +5,7 @@ import { SupportedChainId } from '../constants/chains';
 const ETHERSCAN_PREFIXES: { [chainId: number]: string } = {
   [SupportedChainId.MAINNET]: 'https://etherscan.io',
   [SupportedChainId.KOVAN]: 'https://kovan.etherscan.io',
+  [SupportedChainId.GOERLI_ETH]: 'https://goerli.etherscan.io',
 
   [SupportedChainId.OPTIMISM]: 'https://optimistic.etherscan.io',
   [SupportedChainId.OPTIMISTIC_KOVAN]: 'https://kovan-optimistic.etherscan.io',

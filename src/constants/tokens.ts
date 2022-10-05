@@ -81,6 +81,7 @@ export const USDC: { [chainId in SupportedChainId]: Token } = {
   [SupportedChainId.BSC_TESTNET]: USDC_KOVAN,
   [SupportedChainId.FTM]: USDC_POLYGON_MUMBAI,
   [SupportedChainId.FTM_TESTNET]: USDC_KOVAN,
+  [SupportedChainId.GOERLI_ETH]: USDC_KOVAN,
 };
 export const DAI_POLYGON = new Token(
   SupportedChainId.POLYGON,
