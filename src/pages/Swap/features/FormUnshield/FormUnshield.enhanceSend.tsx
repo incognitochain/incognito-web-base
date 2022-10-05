@@ -167,7 +167,6 @@ const enhanceSend = (WrappedComponent: any) => {
         tokenPayments = _tokenPayments;
       }
 
-      console.log('SANG TEST: ', { prvPayments, tokenPayments });
       return {
         prvPayments,
         tokenPayments,
