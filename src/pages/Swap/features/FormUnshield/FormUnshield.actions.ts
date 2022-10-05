@@ -183,8 +183,8 @@ export const actionChangeBuyNetwork =
 
         if (sellToken.networkName !== network.networkName && buyToken.identify === sellToken.identify) {
           const emptyBuyToken = {
-            parentIdentify: '1',
-            identify: '1',
+            parentIdentify: 'undefined',
+            identify: 'undefined',
             chainID: 0,
             currency: 0,
             networkName: network.networkName,
