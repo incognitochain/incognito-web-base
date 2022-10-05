@@ -166,6 +166,7 @@ class PToken {
       this.listChildToken = data.ListChildToken.map((item: any) => {
         const newItem = new PToken(item);
         newItem.parentTokenID = `${data.TokenID}-${data.CurrencyType}`;
+        newItem.movedUnifiedToken = true;
         return newItem;
       });
     } else {

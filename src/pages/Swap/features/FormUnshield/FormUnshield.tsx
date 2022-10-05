@@ -3,7 +3,7 @@ import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWal
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
-import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { Selection } from 'pages/Swap/features/Selection';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
@@ -14,6 +14,7 @@ import { ThemedText } from 'theme';
 
 import { EstReceive } from '../EstReceive';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
+import { BLACKLIST_PRV, BLACKLIST_SELL_TOKEN_ID } from './FormUnshield.constants';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
 import { FormTypes } from './FormUnshield.types';
 
@@ -78,6 +79,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           leftValue={sellToken.symbol}
           iconUrl={sellToken.iconUrl}
           onSelectToken={onSelectSellToken}
+          blacklist={BLACKLIST_SELL_TOKEN_ID}
           showNetwork={true}
         />
         <VerticalSpace />
@@ -93,6 +95,9 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           rightValue={buyNetworkName}
           onSelectToken={onSelectBuyToken}
           onSelectNetwork={onSelectBuyNetwork}
+          blacklist={
+            sellToken.tokenID === PRV.id && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? BLACKLIST_PRV : []
+          }
           showNetwork={true}
         />
         <VerticalSpace />

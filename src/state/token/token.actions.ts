@@ -1,4 +1,4 @@
-import { GROUP_NETWORK } from 'constants/token';
+import { GROUP_NETWORK, PRV } from 'constants/token';
 import keyBy from 'lodash/keyBy';
 import orderBy from 'lodash/orderBy';
 import PTokenModel from 'models/model/pTokenModel';
@@ -29,16 +29,20 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
   if (isFetching) return;
   try {
     dispatch(actionFetchingPTokens({ isFetching: true }));
-    const list = orderBy((await getTokenListNoCache()) || [], ['isUnified', 'isVerified'], ['desc', 'desc']);
+    let list = orderBy((await getTokenListNoCache()) || [], ['isUnified', 'isVerified'], ['desc', 'desc']);
+    const PRVToken = list.find((token) => token.tokenID === PRV.id);
+    if (PRVToken) {
+      list = [...list, ...PRVToken.listChildToken];
+    }
     const pTokens = keyBy(list, 'identify');
     const depositableList = list.filter(({ movedUnifiedToken, isVerified }) => !movedUnifiedToken && isVerified);
 
     // flatten tokens
     const flattenTokens = depositableList.reduce((tokens: PTokenModel[], currToken) => {
       let _tokens: PTokenModel[] = [currToken];
-      if (currToken.listChildToken && currToken.listChildToken.length > 0) {
-        _tokens = currToken.listChildToken;
-      }
+      // if (currToken.listChildToken && currToken.listChildToken.length > 0) {
+      //   _tokens = currToken.listChildToken;
+      // }
       if (currToken.listUnifiedToken && currToken.listUnifiedToken.length > 0) {
         _tokens = currToken.listUnifiedToken;
       }

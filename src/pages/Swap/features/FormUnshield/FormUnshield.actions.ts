@@ -116,7 +116,6 @@ export const actionChangeBuyToken =
   ({ token }: { token: PToken }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
-      const { sellToken } = unshieldDataSelector(getState());
       const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
       if (!token.networkName || parentToken.currencyType === undefined) return;
 
@@ -204,6 +203,7 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
       getState()
     );
     if (!incAddress || !unshieldAddress || !inputOriginalAmount) return;
+    dispatch(actionSetErrorMsg(''));
     dispatch(actionSetFetchingFee({ isFetchingFee: true }));
     const network: any = getAcronymNetwork(buyToken);
 
@@ -225,7 +225,8 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
     const data = await rpcClient.estimateFee(payload);
     dispatch(actionSetUserFee({ fee: data }));
   } catch (error) {
-    console.log('ACTION FILTER TOKEN ERROR: ', error);
+    dispatch(actionSetErrorMsg(typeof error === 'string' ? error : error?.message || ''));
+    console.log('ACTION ESTIMATE UNSHIELD FEE ERROR: ', error);
   } finally {
     setTimeout(() => {
       dispatch(actionSetFetchingFee({ isFetchingFee: false }));

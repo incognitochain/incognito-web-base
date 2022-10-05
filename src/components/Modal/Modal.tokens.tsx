@@ -56,10 +56,11 @@ interface IProps {
   tokens: PToken[];
   onSelect: ({ token }: { token: PToken }) => void;
   showNetwork: boolean;
+  blacklist: string[];
 }
 
 const TokenModal = React.memo((props: IProps & any) => {
-  const { tokens, onSelect, showNetwork } = props;
+  const { tokens, onSelect, showNetwork, blacklist = [] } = props;
   const { closeModal } = useModal();
   const [tokensShow = [], onSearchTokens] = useFuse(tokens, {
     keys: ['displayName', 'name', 'symbol', 'pSymbol'],
@@ -86,10 +87,11 @@ const TokenModal = React.memo((props: IProps & any) => {
     if (typeof index !== 'number') return null;
     // @ts-ignore
     const token = tokensShow[index];
-    if (!token) return null;
+    const isIgnored = blacklist.find((id: string) => id === token.identify);
+    if (!token || isIgnored) return null;
     return (
       <Item
-        key={token.tokenID}
+        key={token.identify}
         style={style}
         onClick={() => {
           closeModal();
