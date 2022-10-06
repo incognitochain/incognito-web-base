@@ -1,7 +1,7 @@
 import { PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { getTokenIdentify } from 'models/model/pTokenModel';
 
-export const BLACKLIST_SELL_TOKEN_ID = [
+export const BLACKLIST_PRV_EVM = [
   getTokenIdentify({ tokenID: PRV.id, currencyType: PRIVATE_TOKEN_CURRENCY_TYPE.ERC20 }),
   getTokenIdentify({ tokenID: PRV.id, currencyType: PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20 }),
 ];

@@ -62,7 +62,10 @@ interface IProps {
 const TokenModal = React.memo((props: IProps & any) => {
   const { tokens, onSelect, showNetwork, blacklist = [] } = props;
   const { closeModal } = useModal();
-  const [tokensShow = [], onSearchTokens] = useFuse(tokens, {
+  const _tokens = React.useMemo(() => {
+    return tokens.filter((token: PToken) => !blacklist.some((id: string) => id === token.identify));
+  }, [tokens, blacklist]);
+  const [tokensShow = [], onSearchTokens] = useFuse(_tokens, {
     keys: ['displayName', 'name', 'symbol', 'pSymbol'],
     matchAllOnEmptyQuery: true,
     isCaseSensitive: false,

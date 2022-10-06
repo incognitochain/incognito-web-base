@@ -4,6 +4,7 @@ import PTokenModel from 'models/model/pTokenModel';
 import { getSwapTxs, ISwapTxStorage } from 'pages/Swap/Swap.storage';
 import createAxiosInstance from 'services/axios';
 
+import { PRIVATE_TOKEN_CURRENCY_TYPE } from '../constants';
 import { combineSwapTxs } from '../pages/Swap/features/SwapTxs/SwapTxs.utils';
 
 interface ISummitEtherHash {
@@ -91,17 +92,45 @@ class RpcClient {
     currencyType,
   }: IUserFeePayload): Promise<IUserFee | undefined> {
     const addressType = 2;
-    const data: any = await this.http.post('genunshieldaddress', {
-      Network: network,
-      RequestedAmount: requestedAmount,
-      AddressType: addressType,
-      IncognitoAmount: incognitoAmount,
-      PaymentAddress: paymentAddress,
-      PrivacyTokenAddress: privacyTokenAddress,
-      WalletAddress: walletAddress,
-      UnifiedTokenID: unifiedTokenID,
-      CurrencyType: currencyType,
-    });
+
+    let payload = {};
+    let endpoint = '';
+    if (currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BTC) {
+      payload = {
+        Network: network,
+      };
+      endpoint = 'estimateunshieldfee';
+    } else {
+      endpoint = 'genunshieldaddress';
+      payload = {
+        Network: network,
+        RequestedAmount: requestedAmount,
+        AddressType: addressType,
+        IncognitoAmount: incognitoAmount,
+        PaymentAddress: paymentAddress,
+        PrivacyTokenAddress: privacyTokenAddress,
+        WalletAddress: walletAddress,
+        UnifiedTokenID: unifiedTokenID,
+        CurrencyType: currencyType,
+      };
+    }
+
+    let data: any = await this.http.post(endpoint, payload);
+
+    if (currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BTC) {
+      data = {
+        Address: paymentAddress,
+        Decentralized: 0,
+        EstimateFee: 0,
+        ExpiredAt: '',
+        FeeAddress: '',
+        ID: 0,
+        TokenFee: 0,
+        TokenFees: {
+          Level1: data,
+        },
+      };
+    }
     const feeType = data?.TokenFees ? data.TokenFees : data.PrivacyFees;
     const fee: IFee = {
       level1: feeType.Level1,

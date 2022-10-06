@@ -157,8 +157,12 @@ class PToken {
       (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC) ||
       this.isFantomErc20Token ||
       (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM);
-    this.isCentralized = !this.isPRV && !this.isDecentralized;
     this.isBTC = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BTC;
+    this.isCentralized =
+      !this.isPRV &&
+      !this.isDecentralized &&
+      this.currencyType !== PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN &&
+      !this.isBTC;
 
     this.networkName = getNetworkNameByCurrency({ currency: this.currencyType });
     this.chainID = getChainIDByCurrency({ currency: this.currencyType });

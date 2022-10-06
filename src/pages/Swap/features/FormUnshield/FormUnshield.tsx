@@ -14,7 +14,7 @@ import { ThemedText } from 'theme';
 
 import { EstReceive } from '../EstReceive';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
-import { BLACKLIST_PRV, BLACKLIST_SELL_TOKEN_ID } from './FormUnshield.constants';
+import { BLACKLIST_PRV, BLACKLIST_PRV_EVM } from './FormUnshield.constants';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
 import { FormTypes } from './FormUnshield.types';
 
@@ -67,6 +67,13 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     dispatch(actionSetExchangeSelected(exchangeName));
   };
 
+  const getBlackListBuyTokens = () => {
+    if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
+      return sellToken.tokenID === PRV.id ? BLACKLIST_PRV : BLACKLIST_PRV_EVM;
+    }
+    return [];
+  };
+
   return (
     <Styled>
       <form onSubmit={handleSubmit(onSend)}>
@@ -79,7 +86,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           leftValue={sellToken.symbol}
           iconUrl={sellToken.iconUrl}
           onSelectToken={onSelectSellToken}
-          blacklist={BLACKLIST_SELL_TOKEN_ID}
+          blacklist={BLACKLIST_PRV_EVM}
           showNetwork={true}
         />
         <VerticalSpace />
@@ -95,9 +102,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           rightValue={buyNetworkName}
           onSelectToken={onSelectBuyToken}
           onSelectNetwork={onSelectBuyNetwork}
-          blacklist={
-            sellToken.tokenID === PRV.id && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? BLACKLIST_PRV : []
-          }
+          blacklist={getBlackListBuyTokens()}
           showNetwork={true}
         />
         <VerticalSpace />
@@ -145,7 +150,11 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           </>
         )}
         <EstReceive
-          amountText={formType === FormTypes.SWAP ? estReceiveAmount?.toString() : inputAmount}
+          amountText={
+            formType === FormTypes.SWAP || (formType === FormTypes.UNSHIELD && sellToken.isBTC)
+              ? estReceiveAmount?.toString()
+              : inputAmount
+          }
           symbol={buyToken.symbol || ''}
           networkFee={networkFeeText}
           burnFeeText={burnFeeText}
