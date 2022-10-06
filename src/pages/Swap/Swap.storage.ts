@@ -7,6 +7,7 @@ export interface ISwapTxStorage {
   txHash: string;
   incAddress: string;
   time: number;
+  appName: string;
 }
 
 const getSwapTxs = (): ISwapTxStorage[] => {
@@ -15,9 +16,9 @@ const getSwapTxs = (): ISwapTxStorage[] => {
   return swapTxs;
 };
 
-const setSwapTx = ({ txHash, incAddress, time }: ISwapTxStorage) => {
+const setSwapTx = ({ txHash, incAddress, time, appName }: ISwapTxStorage) => {
   let swapTxs: ISwapTxStorage[] = Storage.getItem(KEY) || [];
-  swapTxs.push({ txHash, incAddress, time });
+  swapTxs.push({ txHash, incAddress, time, appName });
   swapTxs = uniqueBy(swapTxs, 'txHash');
   Storage.setItem(KEY, swapTxs);
 };

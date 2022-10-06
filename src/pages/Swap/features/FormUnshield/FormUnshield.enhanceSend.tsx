@@ -3,7 +3,7 @@ import { getIncognitoInject, useIncognitoWallet } from 'components/Core/Incognit
 import { TransactionSubmittedContent } from 'components/Core/TransactionConfirmationModal';
 import { useModal } from 'components/Modal';
 import LoadingTransaction from 'components/Modal/Modal.transaction';
-import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { setSwapTx } from 'pages/Swap/Swap.storage';
 import React from 'react';
@@ -15,9 +15,9 @@ import { useAppDispatch } from 'state/hooks';
 
 import { actionEstimateFee, actionSetErrorMsg } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
-import { FormTypes, NetworkTypePayload } from './FormUnshield.types';
+import { FormTypes, NetworkTypePayload, SwapExchange } from './FormUnshield.types';
 import { getBurningMetaDataTypeForUnshield, getPrvPayments, getTokenPayments } from './FormUnshield.utils';
-
+const { getBurningAddress } = require('incognito-chain-web-js/build/wallet');
 export interface TInner {
   onSend: () => void;
 }
@@ -152,15 +152,67 @@ const enhanceSend = (WrappedComponent: any) => {
         tokenPayments,
       };
     };
+    const getPaymentsSwapPDEX = async () => {
+      const incBurningAddress = await getBurningAddress();
+      let prvPayments: any[] = [];
+      let tokenPayments: any[] = [];
+      if (sellToken.tokenID === PRV.id) {
+        prvPayments = await getTokenPayments({
+          data: [
+            {
+              paymentAddress: incBurningAddress,
+              amount: new BigNumber(feeBurnCombine.amount).plus(parseInt(burnOriginalAmount)).toString(),
+            },
+          ],
+        });
+      } else {
+        if (isUseTokenFee) {
+          const tokenBurnAmount = new BigNumber(feeBurnCombine.amount).plus(parseInt(burnOriginalAmount)).toString();
+          tokenPayments = await getTokenPayments({
+            data: [
+              {
+                paymentAddress: incBurningAddress,
+                amount: tokenBurnAmount,
+              },
+            ],
+          });
+        } else {
+          prvPayments = await getTokenPayments({
+            data: [
+              {
+                paymentAddress: incBurningAddress,
+                amount: feeBurnCombine.amount,
+              },
+            ],
+          });
+          tokenPayments = await getTokenPayments({
+            data: [
+              {
+                paymentAddress: incBurningAddress,
+                amount: new BigNumber(parseInt(burnOriginalAmount)).toString(),
+              },
+            ],
+          });
+        }
+      }
+      return { prvPayments, tokenPayments };
+    };
     const getTokenAndPrivacyPayments = async () => {
       let prvPayments: any[] = [];
       let tokenPayments: any[] = [];
 
       if (formType === FormTypes.UNSHIELD && sellToken.isCentralized) {
+        // Unshield Centralized
         const { prvPayments: _prvPayments, tokenPayments: _tokenPayments } = await getPaymentsCentralized();
         prvPayments = _prvPayments;
         tokenPayments = _tokenPayments;
+      } else if (formType === FormTypes.SWAP && exchangeSelectedData.appName === SwapExchange.PDEX) {
+        // Swap PDEX
+        const { prvPayments: _prvPayments, tokenPayments: _tokenPayments } = await getPaymentsSwapPDEX();
+        prvPayments = _prvPayments;
+        tokenPayments = _tokenPayments;
       } else {
+        // Unshield Decentralized + Swap PApps
         const { prvPayments: _prvPayments, tokenPayments: _tokenPayments } =
           await getPaymentsUnshieldDecentralizedAndPApps();
         prvPayments = _prvPayments;
@@ -172,6 +224,7 @@ const enhanceSend = (WrappedComponent: any) => {
         tokenPayments,
       };
     };
+
     const getUnshieldMetadata = ({ otaReceiver, burnerAddress }: { otaReceiver: string; burnerAddress: string }) => {
       const { estimatedExpectedAmount } = fee;
       const burningMetaDataType: number = getBurningMetaDataTypeForUnshield(sellToken);
@@ -202,7 +255,7 @@ const enhanceSend = (WrappedComponent: any) => {
       }
       return metadata;
     };
-    const getSwapMetadata = ({ otaReceiver }: { otaReceiver: string }) => {
+    const getSwapPAppMetadata = ({ otaReceiver }: { otaReceiver: string }) => {
       // Get swap payload data
       let externalCallData: string = exchangeSelectedData?.callData;
       let externalCallAddress: string = exchangeSelectedData?.callContract;
@@ -248,6 +301,23 @@ const enhanceSend = (WrappedComponent: any) => {
       };
       return metadata;
     };
+    const getSwapPDexMetadata = ({ otaReceivers }: { otaReceivers: string[] }) => {
+      const metadata = {
+        TradePath: exchangeSelectedData.poolPairs,
+        TokenToSell: sellToken.tokenID,
+        SellAmount: burnOriginalAmount,
+        TradingFee: feeBurnCombine.amount,
+        Receiver: {
+          [sellToken.tokenID]: otaReceivers[0],
+          [buyToken.tokenID]: otaReceivers[1],
+        },
+        Type: 285,
+        MinAcceptableAmount: `${exchangeSelectedData.amountOutRaw}`,
+        FeeToken: isUseTokenFee ? sellToken.tokenID : PRV.id,
+        TokenToBuy: buyToken.tokenID,
+      };
+      return metadata;
+    };
 
     const handleUnshieldToken = async () => {
       const { networkFee, id, estimatedBurnAmount, estimatedExpectedAmount, useFast2xFee } = fee;
@@ -264,61 +334,76 @@ const enhanceSend = (WrappedComponent: any) => {
         const { otaReceiver, burnerAddress, feeRefundOTA } = await getKeySetINC();
 
         let payload: any;
+        let isSignAndSendTransaction = true;
         if (formType === FormTypes.UNSHIELD) {
-          // Case Decentralized
+          /** Case Unshield Decentralized */
           if (sellToken.isDecentralized) {
             const metadata = getUnshieldMetadata({ otaReceiver, burnerAddress });
+            isSignAndSendTransaction = true;
             payload = {
               info: String(id),
-              isSignAndSendTransaction: true,
               metadata,
             };
           } else if (sellToken.isCentralized) {
+            /** Case Unshield Centralized */
+            isSignAndSendTransaction = true;
+          }
+        } else if (formType === FormTypes.SWAP) {
+          /** Swap PDEX */
+          if (exchangeSelectedData.appName === SwapExchange.PDEX) {
+            const { otaReceiver: otaReceiver2 } = await getKeySetINC();
+            const metadata = getSwapPDexMetadata({ otaReceivers: [otaReceiver, otaReceiver2] });
+            isSignAndSendTransaction = true;
             payload = {
-              info: String(id),
-              isSignAndSendTransaction: true,
+              metadata,
+            };
+          } else {
+            /** Swap PApps */
+            // Get OTA Receiver
+            if (!feeRefundOTA) {
+              throw new Error('Cant get OTA receiver');
+            }
+            const metadata = getSwapPAppMetadata({ otaReceiver });
+            isSignAndSendTransaction = false;
+            payload = {
+              metadata,
             };
           }
-        } else {
-          const metadata = getSwapMetadata({ otaReceiver });
-          payload = {
-            info: '',
-            isSignAndSendTransaction: false,
-            metadata,
-          };
         }
 
         payload = {
           ...payload,
+          info: payload?.info || '',
           networkFee,
           prvPayments,
           tokenPayments,
           tokenID: sellToken?.tokenID,
           txType: 7,
           receiverAddress: remoteAddress,
+          isSignAndSendTransaction,
         };
 
         return new Promise(async (resolve, reject) => {
           try {
-            // Get OTA Receiver
-            if (formType === FormTypes.SWAP && !feeRefundOTA) {
-              reject('Cant get OTA receiver');
-            }
             const tx = await requestSignTransaction(payload);
 
-            // Submit tx swap to backend after burned;
             if (formType === FormTypes.SWAP) {
-              const submitTxResult: any = await rpcClient.submitSwapTx({
-                // txHash: tx.txHash,
-                txRaw: tx.rawData,
-                feeRefundOTA,
-              });
-              setSwapTx({
-                txHash: tx.txHash,
-                incAddress,
-                time: new Date().getTime(),
-              });
-              console.log({ submitTxResult });
+              if (exchangeSelectedData.appName !== SwapExchange.PDEX) {
+                /** Submit tx swap PApps to backend after burned */
+                await rpcClient.submitSwapTx({
+                  // txHash: tx.txHash,
+                  txRaw: tx.rawData,
+                  feeRefundOTA,
+                });
+              }
+              if (tx.txHash) {
+                setSwapTx({
+                  txHash: tx.txHash,
+                  incAddress,
+                  time: new Date().getTime(),
+                  appName: exchangeSelectedData.appName,
+                });
+              }
             } else {
               let networkName: NetworkTypePayload = NetworkTypePayload.ETHEREUM;
               if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
@@ -347,6 +432,7 @@ const enhanceSend = (WrappedComponent: any) => {
             updateMetric().then();
             resolve(tx);
           } catch (e) {
+            console.log('SANG TEST ERROR: ', e);
             reject(e);
           }
         });

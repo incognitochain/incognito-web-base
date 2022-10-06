@@ -2,6 +2,8 @@ import isEmpty from 'lodash/isEmpty';
 import { ISwapTxStorage } from 'pages/Swap/Swap.storage';
 import format from 'utils/format';
 
+import { SwapExchange } from '../FormUnshield/FormUnshield.types';
+
 enum ExchangeStatus {
   reverted = 'reverted',
   success = 'success',
@@ -82,6 +84,7 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
       burnTxStatus: apiResp.inc_request_tx_status,
       burnColor: getStatusColor(apiResp.inc_request_tx_status),
       time: format.formatDateTime({ dateTime: curr.time || new Date().getTime() }),
+      appName: curr.appName,
     };
 
     if (apiResp.network_result && !isEmpty(apiResp.network_result)) {
@@ -110,7 +113,7 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
     // -> is_redeposit === true bsc_redeposit_status
     /** to many cases, please blame @lam */
     let swapStatus = Status.processing;
-    const { burnTxStatus, outchainTxStatus, swapExchangeStatus, isRedeposit, redepositStatus } = tx;
+    const { burnTxStatus, outchainTxStatus, swapExchangeStatus, isRedeposit, redepositStatus, appName } = tx;
     switch (burnTxStatus) {
       case TxStatus.pending:
       case TxStatus.submitting:
@@ -122,6 +125,10 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
         swapStatus = Status.fail;
         break;
       case TxStatus.accepted: // <---
+        if (appName === SwapExchange.PDEX) {
+          swapStatus = Status.success;
+          break;
+        }
         switch (outchainTxStatus) {
           case TxStatus.pending:
           case TxStatus.submitting:
