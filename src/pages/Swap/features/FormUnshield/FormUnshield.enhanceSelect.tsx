@@ -1,8 +1,6 @@
 import { MAIN_NETWORK_NAME } from 'constants/token';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
-import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
-import { change } from 'redux-form';
 import { useAppDispatch } from 'state/hooks';
 
 import {
@@ -58,14 +56,6 @@ const enhanceSelect = (WrappedComponent: any) => {
     const handleSelectBuyNetwork = ({ network }: { network: ITokenNetwork }) => {
       dispatch(actionChangeBuyNetwork({ network }));
     };
-
-    React.useEffect(() => {
-      if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
-        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, incAddress));
-      } else {
-        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, web3Account));
-      }
-    }, [buyNetworkName]);
 
     return (
       <WrappedComponent

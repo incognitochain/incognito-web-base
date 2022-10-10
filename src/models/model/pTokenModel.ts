@@ -5,6 +5,7 @@ import {
   PRIVATE_TOKEN_CURRENCY_TYPE,
   PRIVATE_TOKEN_TYPE,
   PRV,
+  UN_SUPPORTED_NETWORK,
 } from 'constants/token';
 import isEmpty from 'lodash/isEmpty';
 import { getChainIDByCurrency, getNetworkNameByCurrency } from 'utils/token';
@@ -209,21 +210,22 @@ class PToken {
       });
       temp.forEach((data: any) => {
         const { currency, chainID, networkName } = data;
-        if (!currency && !chainID && networkName) return;
+        const isUnSupported = UN_SUPPORTED_NETWORK.includes(currency);
+        if ((!currency && !chainID && networkName) || isUnSupported) return;
         this.supportedNetwork?.push(data);
       });
     } else {
-      if (this.currencyType !== undefined && !!this.networkName) {
-        this.supportedNetwork = [
-          {
-            parentIdentify: this.parentTokenID,
-            currency: this.currencyType,
-            networkName: this.networkName,
-            chainID: this.chainID,
-            identify: this.identify,
-          },
-        ];
-      }
+      const isUnSupported = UN_SUPPORTED_NETWORK.includes(this.currencyType);
+      if (isUnSupported || !this.networkName || this.currencyType === undefined) return;
+      this.supportedNetwork = [
+        {
+          parentIdentify: this.parentTokenID,
+          currency: this.currencyType,
+          networkName: this.networkName,
+          chainID: this.chainID,
+          identify: this.identify,
+        },
+      ];
     }
 
     // if ((this.isBTC || this.isCentralized) && this.networkName) {

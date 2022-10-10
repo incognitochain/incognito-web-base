@@ -377,10 +377,13 @@ const getUnshieldData = ({
     estReceiveAmount = userFee?.estimatedExpectedAmount ? userFee.estimatedExpectedAmount : inputAmount;
     if (_sellToken.isBTC && formType === FormTypes.UNSHIELD) {
       estReceiveAmount = format.formatAmount({
-        originalAmount: new BigNumber(_sellToken.amount || 0).minus(fee.level1 || 0).toNumber(),
+        originalAmount: new BigNumber(inputOriginalAmount || 0).minus(fee.level1 || 0).toNumber(),
         decimals: _sellToken.pDecimals,
         clipAmount: false,
       });
+      if (new BigNumber(estReceiveAmount).lte(0)) {
+        estReceiveAmount = 0;
+      }
     }
   }
 
