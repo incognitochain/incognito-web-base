@@ -44,6 +44,7 @@ interface IProps extends ISelectSwapExchange {
   tradePath: string;
   swapFee: any;
   isFetchingFee: boolean;
+  desc?: string;
 }
 
 const EstReceive = React.memo(
@@ -60,6 +61,7 @@ const EstReceive = React.memo(
     tradePath,
     swapFee,
     isFetchingFee,
+    desc,
   }: IProps) => {
     const [isOpen, setOpen] = React.useState(false);
     const prvToken = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
@@ -107,9 +109,9 @@ const EstReceive = React.memo(
 
             <RowBetween style={{ marginTop: 12 }}>
               <ThemedText.Small fontWeight={400}>Estimate time</ThemedText.Small>
-              <ThemedText.Small fontWeight={400}>{`${time} mins`}</ThemedText.Small>
+              <ThemedText.Small fontWeight={400}>{`${time}`}</ThemedText.Small>
             </RowBetween>
-
+            {!!desc && <ThemedText.Small fontWeight={400}>{`${desc}`}</ThemedText.Small>}
             {formType === FormTypes.SWAP && tradePath && (
               <RowBetween style={{ marginTop: 12 }}>
                 <ThemedText.Small fontWeight={400}>Trade path</ThemedText.Small>
