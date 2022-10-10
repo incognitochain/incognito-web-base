@@ -139,16 +139,24 @@ const enhanceSend = (WrappedComponent: any) => {
           burnAmount: parseInt(burnOriginalAmount),
         });
       } else {
-        prvPayments = await getPrvPayments([
+        const payment = [
           {
             paymentAddress: feeBurnCombine.address,
             amount: feeBurnCombine.amount,
           },
-        ]);
-        tokenPayments = await getTokenPayments({
-          data: [],
-          burnAmount: parseInt(burnOriginalAmount),
-        });
+        ];
+        if (sellToken.isPRV) {
+          prvPayments = await getTokenPayments({
+            data: [...payment],
+            burnAmount: parseInt(burnOriginalAmount),
+          });
+        } else {
+          prvPayments = await getPrvPayments([...payment]);
+          tokenPayments = await getTokenPayments({
+            data: [],
+            burnAmount: parseInt(burnOriginalAmount),
+          });
+        }
       }
       return {
         prvPayments,
@@ -455,6 +463,8 @@ const enhanceSend = (WrappedComponent: any) => {
           receiverAddress: inputAddress,
           isSignAndSendTransaction,
         };
+
+        console.log('SANG TEST: ', payload);
 
         return new Promise(async (resolve, reject) => {
           try {
