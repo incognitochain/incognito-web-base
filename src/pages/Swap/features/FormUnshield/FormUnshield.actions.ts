@@ -120,7 +120,7 @@ export const actionChangeBuyToken =
       if (!token.networkName || parentToken.currencyType === undefined) return;
 
       let _buyToken = parentToken;
-      if (parentToken.hasChild) {
+      if (parentToken.hasChild && !parentToken.isPRV) {
         _buyToken = parentToken.listUnifiedToken[0];
       }
       const buyTokenObj: ITokenNetwork = {

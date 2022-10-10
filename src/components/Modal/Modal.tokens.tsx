@@ -90,8 +90,7 @@ const TokenModal = React.memo((props: IProps & any) => {
     if (typeof index !== 'number') return null;
     // @ts-ignore
     const token = tokensShow[index];
-    const isIgnored = blacklist.find((id: string) => id === token.identify);
-    if (!token || isIgnored) return null;
+    if (!token) return null;
     return (
       <Item
         key={token.identify}
