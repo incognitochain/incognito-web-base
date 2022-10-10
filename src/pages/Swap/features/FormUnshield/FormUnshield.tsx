@@ -15,7 +15,7 @@ import { ThemedText } from 'theme';
 import { EstReceive } from '../EstReceive';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
-import { FormTypes } from './FormUnshield.types';
+import { FormTypes, SwapExchange } from './FormUnshield.types';
 
 const Styled = styled.div``;
 
@@ -54,6 +54,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     errorMsg,
     swapFee,
     isFetching,
+    exchangeSelectedData,
   } = props;
 
   const { showPopup } = useIncognitoWallet();
@@ -65,6 +66,38 @@ const FormUnshield = React.memo((props: IMergeProps) => {
   const onSelectExchange = (exchangeName: any) => {
     dispatch(actionSetExchangeSelected(exchangeName));
   };
+
+  const getEstimateTime = () => {
+    let time = '';
+    let desc = '';
+    if (formType === FormTypes.UNSHIELD) {
+      time = fee.extraFee ? '6' : '1';
+      if (fee.extraFee) {
+        desc = "Due to unified tokens' nature, the unshielding could take up to 6 hours.";
+      }
+    } else if (exchangeSelectedData?.appName) {
+      const isReShield = buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO;
+      const appName = exchangeSelectedData.appName;
+      if (appName === SwapExchange.PANCAKE_SWAP) {
+        time = isReShield ? '2' : '1';
+      } else if (
+        appName === SwapExchange.CURVE ||
+        (appName === SwapExchange.UNISWAP && buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM)
+      ) {
+        time = isReShield ? '6' : '1';
+      } else {
+        time = isReShield ? '5' : '1';
+      }
+    }
+    if (desc) {
+      time += ' hours';
+    } else {
+      time += 'mins';
+    }
+    return { time, desc };
+  };
+
+  const { time, desc } = getEstimateTime();
 
   return (
     <Styled>
@@ -144,7 +177,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           symbol={buyToken.symbol || ''}
           networkFee={networkFeeText}
           burnFeeText={burnFeeText}
-          time={fee.extraFee && sellToken.isUnified ? '12' : '2'}
+          time={time}
+          desc={desc}
           exchanges={exchangeSupports}
           exchangeSelected={exchangeSelected}
           onSelectExchange={onSelectExchange}
