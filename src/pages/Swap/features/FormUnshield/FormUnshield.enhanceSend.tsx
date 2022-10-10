@@ -17,6 +17,7 @@ import { actionEstimateFee, actionSetErrorMsg } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
 import { FormTypes, NetworkTypePayload, SwapExchange } from './FormUnshield.types';
 import { getBurningMetaDataTypeForUnshield, getPrvPayments, getTokenPayments } from './FormUnshield.utils';
+
 const { getBurningAddress } = require('incognito-chain-web-js/build/wallet');
 export interface TInner {
   onSend: () => void;
@@ -212,6 +213,20 @@ const enhanceSend = (WrappedComponent: any) => {
       });
       return { prvPayments, tokenPayments };
     };
+    const getPaymentsUnshieldPRV = async () => {
+      const prvPayments = await getTokenPayments({
+        data: [
+          {
+            paymentAddress: feeBurnCombine.address,
+            amount: feeBurnCombine.amount,
+          },
+        ],
+        burnAmount: parseInt(burnOriginalAmount),
+      });
+      return {
+        prvPayments,
+      };
+    };
     const getTokenAndPrivacyPayments = async () => {
       let prvPayments: any[] = [];
       let tokenPayments: any[] = [];
@@ -220,6 +235,9 @@ const enhanceSend = (WrappedComponent: any) => {
         const { prvPayments: _prvPayments, tokenPayments: _tokenPayments } = await getPaymentsCentralized();
         prvPayments = _prvPayments;
         tokenPayments = _tokenPayments;
+      } else if (formType === FormTypes.UNSHIELD && sellToken.isPRV) {
+        const { prvPayments: _prvPayments } = await getPaymentsUnshieldPRV();
+        prvPayments = _prvPayments;
       } else if (formType === FormTypes.UNSHIELD && sellToken.isBTC) {
         /** Unshield BITCOIN */
         const { tokenPayments: _tokenPayments } = await getPaymentsUnshieldBTC();
@@ -353,6 +371,16 @@ const enhanceSend = (WrappedComponent: any) => {
       };
       return metadata;
     };
+    const getUnshieldPRVMetadata = async ({ burnerAddress }: { burnerAddress: string }) => {
+      const metadata = {
+        BurnerAddress: burnerAddress,
+        BurningAmount: parseInt(burnOriginalAmount),
+        TokenID: sellToken.tokenID,
+        RemoteAddress: remoteAddress,
+        Type: buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM ? 274 : 275,
+      };
+      return metadata;
+    };
 
     const handleUnshieldToken = async () => {
       const { networkFee, id, estimatedBurnAmount, estimatedExpectedAmount, useFast2xFee } = fee;
@@ -388,6 +416,9 @@ const enhanceSend = (WrappedComponent: any) => {
             isSignAndSendTransaction = true;
             payload = { metadata };
           } else if (sellToken.isPRV) {
+            const metadata = await getUnshieldPRVMetadata({ burnerAddress });
+            payload = { metadata };
+            isSignAndSendTransaction = true;
             /** Case Unshield PEGGING */
           }
         } else if (formType === FormTypes.SWAP) {
@@ -421,11 +452,9 @@ const enhanceSend = (WrappedComponent: any) => {
           tokenPayments,
           tokenID: sellToken?.tokenID,
           txType: 7,
-          receiverAddress: remoteAddress,
+          receiverAddress: inputAddress,
           isSignAndSendTransaction,
         };
-
-        console.log('SANG TEST: ', payload);
 
         return new Promise(async (resolve, reject) => {
           try {
@@ -448,7 +477,7 @@ const enhanceSend = (WrappedComponent: any) => {
                   appName: exchangeSelectedData.appName,
                 });
               }
-            } else {
+            } else if (!sellToken.isBTC) {
               let networkName: NetworkTypePayload = NetworkTypePayload.ETHEREUM;
               if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
                 networkName = NetworkTypePayload.ETHEREUM;
