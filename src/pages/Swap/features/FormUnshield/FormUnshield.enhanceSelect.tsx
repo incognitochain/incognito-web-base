@@ -61,9 +61,13 @@ const enhanceSelect = (WrappedComponent: any) => {
 
     React.useEffect(() => {
       if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
-        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, incAddress));
+        setTimeout(() => {
+          dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, incAddress));
+        });
       } else {
-        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, web3Account));
+        setTimeout(() => {
+          dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, web3Account));
+        });
       }
     }, [buyNetworkName]);
 

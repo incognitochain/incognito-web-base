@@ -39,13 +39,13 @@ const Wrapper = styled.div<{ isConnected: boolean }>`
   align-items: center;
   padding: 8px 8px;
   gap: 8px;
-  min-width: 140px;
+  min-width: 150px;
   text-align: center;
   /* background-color: ${({ theme }) => theme.primary2}; */
   background-color: ${({ theme, isConnected }) => (isConnected ? theme.bg1 : theme.primary2)};
   color: ${({ theme, isConnected }) => (isConnected ? theme.primary5 : theme.primary5)};
   border-radius: 8px;
-  max-height: 40px;
+  height: 40px;
 
   :hover {
     cursor: pointer;

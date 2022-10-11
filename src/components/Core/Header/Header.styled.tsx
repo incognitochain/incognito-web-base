@@ -11,6 +11,8 @@ export const Styled = styled(Row)`
   z-index: 2;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-self: flex-end;
   justify-content: space-between;
   .app-logo {
     width: 162px;

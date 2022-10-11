@@ -224,22 +224,31 @@ export const ThemedText = {
     return <TextWrapper fontWeight={400} fontSize={16} color={'text1'} {...props} />;
   },
   LargeHeader(props: TextProps) {
-    return <TextWrapper fontWeight={600} fontSize={24} {...props} />;
+    return <TextWrapper fontWeight={600} color={'white'} fontSize={24} {...props} />;
   },
   Small(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={12} lineHeight="17px" {...props} />;
+    return <TextWrapper fontWeight={500} color={'white'} fontSize={12} lineHeight="17px" {...props} />;
   },
   SmallLabel(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={14} lineHeight="20px" style={{ lineHeight: '20px' }} {...props} />;
+    return (
+      <TextWrapper
+        fontWeight={500}
+        color={'white'}
+        fontSize={14}
+        lineHeight="20px"
+        style={{ lineHeight: '20px' }}
+        {...props}
+      />
+    );
   },
   RegularLabel(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={16} {...props} />;
+    return <TextWrapper fontWeight={500} color={'white'} fontSize={16} {...props} />;
   },
   MediumLabel(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={18} style={{ lineHeight: '28px' }} {...props} />;
+    return <TextWrapper fontWeight={500} color={'white'} fontSize={18} style={{ lineHeight: '28px' }} {...props} />;
   },
   AvgMediumLabel(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={20} style={{ lineHeight: '28px' }} {...props} />;
+    return <TextWrapper fontWeight={500} color={'white'} fontSize={20} style={{ lineHeight: '28px' }} {...props} />;
   },
   Blue(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'blue1'} {...props} />;

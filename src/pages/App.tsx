@@ -1,4 +1,3 @@
-// import 'react-toastify/scss/main.scss';
 // eslint-disable-next-line no-restricted-imports
 import 'antd/dist/antd.css';
 import './reset.scss';
@@ -26,7 +25,6 @@ import PageNotFound from './PageNotFound/PageNotFound';
 import PeggingApp from './PeggingApp';
 import Policy from './Policy';
 import Structure from './Structure';
-import Swap, { RedirectToSwap } from './Swap';
 import TermOfService from './TermOfService';
 
 const AppWrapper = styled.div`
@@ -95,8 +93,7 @@ const App = () => {
           <Route component={MobileNotSuported} />
         ) : (
           <>
-            <Route exact path="/swap/:outputCurrency" component={RedirectToSwap} />
-            <Route exact path="/swap" component={Swap} />
+            {/* <Route exact path="/swap/:outputCurrency" component={RedirectToSwap} /> */}
             <Route exact path="/page-not-found" component={PageNotFound} />
             <Route exact path="/internet-disconnected" component={InternetDisconnected} />
             <Route exact path="/" component={Market} />

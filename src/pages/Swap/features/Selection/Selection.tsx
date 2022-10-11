@@ -62,6 +62,10 @@ const MainStyled = styled(Row)`
   }
 `;
 
+const ArrowDown = styled(ChevronDown)<{ open?: boolean }>`
+  color: ${({ theme }) => theme.primary8};
+`;
+
 const Selection = React.memo((props: ISelection) => {
   const {
     title,
@@ -140,7 +144,7 @@ const Selection = React.memo((props: ISelection) => {
                 <ThemedText.RegularLabel color="primary8">{leftPlaceholder}</ThemedText.RegularLabel>
               </Row>
             )}
-            {!isHideToken && <ChevronDown size={24} />}
+            {!isHideToken && <ArrowDown size={24} />}
           </RowBetween>
         </div>
         <div className="line" />
@@ -163,7 +167,7 @@ const Selection = React.memo((props: ISelection) => {
                 <ThemedText.RegularLabel color="primary8">{rightPlaceholder}</ThemedText.RegularLabel>
               </Row>
             )}
-            {!isHideNetwork && <ChevronDown size={24} />}
+            {!isHideNetwork && <ArrowDown size={24} />}
           </RowBetween>
         </div>
       </MainStyled>

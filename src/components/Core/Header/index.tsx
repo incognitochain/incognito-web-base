@@ -2,6 +2,9 @@ import useScrollPosition from '@react-hook/window-scroll';
 import { Col, Dropdown, Menu, Row } from 'antd';
 import closeIcon from 'assets/images/close.png';
 import downImg from 'assets/images/down-icon.png';
+import apk from 'assets/images/install/apk.png';
+import appstore from 'assets/images/install/appstore.png';
+import ggplay from 'assets/images/install/play.png';
 // import { ReactComponent as Logo } from 'assets/svg/logo.svg';
 import logo from 'assets/images/logo.png';
 import menuBarIcon from 'assets/images/menu-bar.png';
@@ -79,6 +82,24 @@ const moreItem = [
     name: 'Community',
     path: 'https://we.incognito.org/t/about-the-incognito-community/373',
     sub: 'The Community',
+  },
+];
+
+const appStoreIcons = [
+  {
+    name: 'AppStore',
+    image: appstore,
+    path: 'https://apps.apple.com/us/app/incognito-crypto-wallet/id1475631606?ls=1',
+  },
+  {
+    name: 'CHPlay',
+    image: ggplay,
+    path: 'https://play.google.com/store/apps/details?id=com.incognito.wallet',
+  },
+  {
+    name: 'APK',
+    image: apk,
+    path: 'https://github.com/incognitochain/incognito-wallet/releases',
   },
 ];
 
@@ -196,7 +217,7 @@ export default function Header() {
 
   const MoreMenu = () => (
     <MenuDropdown className="sub-menu-header" style={{ width: 200, paddingTop: 16, paddingLeft: 24, paddingRight: 10 }}>
-      {moreItem.map((item) => {
+      {appStoreIcons.map((item) => {
         return (
           <Menu.Item
             className="dropdown-menu-item"
@@ -204,11 +225,7 @@ export default function Header() {
             style={{ marginBottom: 16 }}
             onClick={() => window.open(item.path, '_blank')}
           >
-            <Row align="middle">
-              <p className="fs-medium">{item.name}</p>
-              <div className="logo" />
-            </Row>
-            <p className="text2 fs-small">{item.sub}</p>
+            <img src={item?.image} alt={item?.name} style={{ width: 140, height: 40, alignItems: 'center' }} />
           </Menu.Item>
         );
       })}
@@ -219,187 +236,176 @@ export default function Header() {
     const hrefLink = !isInternetAlready || !isMobile ? '.' : INCOGNITO_LANDING_PAGE;
     return (
       <>
-        {isMobile || !isInternetAlready ? null : (
-          <HeaderControls>
-            <Title href={hrefLink}>
-              <IncognitoIcon>
-                <Logo fill={darkMode ? white : black} width="142" height="100%" title="logo" />
-              </IncognitoIcon>
-            </Title>
-            <HeaderElement>
-              <NetworkSelector />
-            </HeaderElement>
-            <HeaderElement>
-              {/* <Menu /> */}
-              <Styled align="middle" className="default-padding-horizontal">
-                <div className="wrap-menu-desktop center">
-                  {menuItem.map((item) => {
-                    const isActive = item.name === pathName ? true : false;
-                    return (
-                      <div className="menuItem" onClick={() => setPathName(item.name)} key={item.name}>
-                        {item?.isLink ? (
-                          <Link href={item.path} target="_blank" rel="noopener noreferrer">
-                            {item.name}
-                          </Link>
-                        ) : (
-                          <NavLink
-                            target={item.target}
-                            to={item.path}
-                            className={`${isActive ? 'color-blue' : 'color-white'}`}
-                          >
-                            {item.name}
-                          </NavLink>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-                <Dropdown
-                  overlayStyle={{ width: 120 }}
-                  overlay={MoreMenu}
-                  placement="bottomRight"
-                  className="more-dropdown"
-                >
-                  <Row align="middle" style={{ paddingTop: 7 }}>
-                    <p className="sub-menu-text">Dive in</p>
-                    <img className="logo" alt="" src={downImg} style={{ width: 14, height: 14, marginLeft: 10 }} />
-                  </Row>
-                </Dropdown>
-              </Styled>
-            </HeaderElement>
-
-            {!isMobile && (
-              <>
-                <HeaderElement>
-                  <AccountElement active={!!account}>
-                    <Web3Status />
-                  </AccountElement>
-                </HeaderElement>
-
-                <HeaderElement>
-                  <IncognitoWallet />
-                </HeaderElement>
-              </>
-            )}
-            <div className="menu-mobile btn-round" onClick={openMenu}>
-              <img src={menuBarIcon} style={{ width: 32, height: 32 }} alt="close-icon" />
-            </div>
-            <DrawerStyled
-              placement="right"
-              width="100%"
-              closable
-              visible={visible}
-              key="right"
-              onClose={onClose}
-              drawerStyle={{ backgroundColor: '#1A1A1A', paddingTop: 0 }}
-              headerStyle={{
-                backgroundColor: '#1A1A1A',
-                display: 'flex',
-                justifyContent: 'flex-end',
-                flexDirection: 'row',
-                height: 0,
-                padding: 0,
-              }}
-            >
-              <Row
-                align="middle"
-                justify="space-between"
-                className="border-bottom"
-                style={{ height: 76, marginBottom: 32 }}
-              >
-                <Row className="padding-horizontal" justify="space-between">
-                  <NavLink className="logo-mobile" to="/" onClick={onClose} style={{ width: 162 }}>
-                    <img className="app-logo" src={logo} alt="app-logo" style={{ width: 162 }} />
-                  </NavLink>
-                  <div onClick={onClose}>
-                    <img src={closeIcon} style={{ width: 32, height: 32 }} alt="close-icon" />
-                  </div>
-                </Row>
-              </Row>
-              <Col>
-                {menuItem.map((item) => {
-                  if (item.isLink) {
-                    return (
-                      <Link
-                        className="padding-horizontal"
-                        style={{
-                          color: 'white',
-                          marginTop: 16,
-                          fontWeight: 500,
-                          fontSize: 34,
-                        }}
-                        href={item.path}
-                        target="_blank"
-                        key={item.name}
-                        rel="noopener noreferrer"
-                      >
+        <Title href={hrefLink}>
+          <IncognitoIcon>
+            <Logo fill={darkMode ? white : black} width="142" height="100%" title="logo" />
+          </IncognitoIcon>
+        </Title>
+        <HeaderElement>
+          <NetworkSelector />
+        </HeaderElement>
+        <HeaderElement>
+          {/* <Menu /> */}
+          <div style={{ alignItems: 'center', display: 'flex' }} className="default-padding-horizontal">
+            <div className="wrap-menu-desktop center">
+              {menuItem.map((item) => {
+                const isActive = item.name === pathName ? true : false;
+                return (
+                  <div className="menuItem" onClick={() => setPathName(item.name)} key={item.name}>
+                    {item?.isLink ? (
+                      <Link href={item.path} target="_blank" rel="noopener noreferrer">
                         {item.name}
                       </Link>
-                    );
-                  }
-                  return (
-                    <NavLink
-                      className="padding-horizontal"
-                      key={item.name}
-                      style={{
-                        color: 'white',
-                        marginTop: 16,
-                        fontSize: 34,
-                      }}
-                      to={item.path}
-                      onClick={onClose}
-                    >
-                      {item.name}
-                    </NavLink>
-                  );
-                })}
-              </Col>
-              <Row
-                align="middle"
-                className="padding-horizontal"
-                style={{ paddingTop: 16 }}
-                onClick={() => setExpand((expand) => !expand)}
+                    ) : (
+                      <NavLink
+                        target={item.target}
+                        to={item.path}
+                        className={`${isActive ? 'color-blue' : 'color-white'}`}
+                      >
+                        {item.name}
+                      </NavLink>
+                    )}
+                  </div>
+                );
+              })}
+              <Dropdown
+                overlayStyle={{ width: 120 }}
+                overlay={MoreMenu}
+                placement="bottomRight"
+                className="more-dropdown"
               >
-                <p
-                  className="sub-menu-text"
+                <Row align="middle">
+                  <p className="sub-menu-text">Download</p>
+                  <img className="logo" alt="" src={downImg} style={{ width: 14, height: 14, marginLeft: 10 }} />
+                </Row>
+              </Dropdown>
+            </div>
+          </div>
+        </HeaderElement>
+
+        {!isMobile && (
+          <>
+            <HeaderElement>
+              <AccountElement active={!!account}>
+                <Web3Status />
+              </AccountElement>
+              <IncognitoWallet />
+            </HeaderElement>
+          </>
+        )}
+        <div className="menu-mobile btn-round" onClick={openMenu}>
+          <img src={menuBarIcon} style={{ width: 32, height: 32 }} alt="close-icon" />
+        </div>
+        <DrawerStyled
+          placement="right"
+          width="100%"
+          closable
+          visible={visible}
+          key="right"
+          onClose={onClose}
+          drawerStyle={{ backgroundColor: '#1A1A1A', paddingTop: 0 }}
+          headerStyle={{
+            backgroundColor: '#1A1A1A',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            flexDirection: 'row',
+            height: 0,
+            padding: 0,
+          }}
+        >
+          <Row
+            align="middle"
+            justify="space-between"
+            className="border-bottom"
+            style={{ height: 76, marginBottom: 32 }}
+          >
+            <Row className="padding-horizontal" justify="space-between">
+              <NavLink className="logo-mobile" to="/" onClick={onClose} style={{ width: 162 }}>
+                <img className="app-logo" src={logo} alt="app-logo" style={{ width: 162 }} />
+              </NavLink>
+              <div onClick={onClose}>
+                <img src={closeIcon} style={{ width: 32, height: 32 }} alt="close-icon" />
+              </div>
+            </Row>
+          </Row>
+          <Col>
+            {menuItem.map((item) => {
+              if (item.isLink) {
+                return (
+                  <Link
+                    className="padding-horizontal"
+                    style={{
+                      color: 'white',
+                      marginTop: 16,
+                      fontWeight: 500,
+                      fontSize: 34,
+                    }}
+                    href={item.path}
+                    target="_blank"
+                    key={item.name}
+                    rel="noopener noreferrer"
+                  >
+                    {item.name}
+                  </Link>
+                );
+              }
+              return (
+                <NavLink
+                  className="padding-horizontal"
+                  key={item.name}
                   style={{
                     color: 'white',
-                    fontWeight: 500,
+                    marginTop: 16,
                     fontSize: 34,
                   }}
+                  to={item.path}
+                  onClick={onClose}
                 >
-                  Dive in
-                </p>
-                <img
-                  className="dropdown-icon"
-                  alt=""
-                  src={downImg}
-                  style={{
-                    marginLeft: 10,
-                    marginTop: 3,
-                    transform: expand ? '' : 'rotate(180deg)',
-                    transition: 'transform 150ms ease',
-                  }}
-                />
-              </Row>
-              {expand && (
-                <Col style={{ marginTop: 24 }}>
-                  {moreItem.map((item) => (
-                    <div className="wrap-drawer-sub-item" key={item.name}>
-                      <Link href={item.path} target="_blank" rel="noopener noreferrer" className="padding-horizontal">
-                        <Row align="middle">
-                          <p className="drawer-sub-item-label">{item.name}</p>
-                          <div className="logo" />
-                        </Row>
-                        <p className="drawer-sub-item-desc-label">{item.sub}</p>
-                      </Link>
-                    </div>
-                  ))}
-                </Col>
-              )}
-            </DrawerStyled>
-          </HeaderControls>
-        )}
+                  {item.name}
+                </NavLink>
+              );
+            })}
+          </Col>
+          <Row
+            align="middle"
+            className="padding-horizontal"
+            style={{ paddingTop: 16 }}
+            onClick={() => setExpand((expand) => !expand)}
+          >
+            <p
+              className="sub-menu-text"
+              style={{
+                color: 'white',
+                fontWeight: 500,
+                fontSize: 34,
+              }}
+            >
+              Download
+            </p>
+            <img
+              className="dropdown-icon"
+              alt=""
+              src={downImg}
+              style={{
+                marginLeft: 10,
+                marginTop: 3,
+                transform: expand ? '' : 'rotate(180deg)',
+                transition: 'transform 150ms ease',
+              }}
+            />
+          </Row>
+          {expand && (
+            <Col style={{ marginTop: 24 }}>
+              {appStoreIcons.map((item) => (
+                <div className="wrap-drawer-sub-item" key={item.name}>
+                  <Link href={item.path} target="_blank" rel="noopener noreferrer" className="padding-horizontal">
+                    <img className="app-link" src={item.image} alt={item?.name} style={{ width: 200, height: 60 }} />
+                  </Link>
+                </div>
+              ))}
+            </Col>
+          )}
+        </DrawerStyled>
       </>
     );
   };
