@@ -1,4 +1,6 @@
-import 'react-toastify/scss/main.scss';
+// eslint-disable-next-line no-restricted-imports
+import 'antd/dist/antd.css';
+import './reset.scss';
 
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Header from 'components/Core/Header';
@@ -6,10 +8,7 @@ import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWa
 import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
-import InternetDisconnected from 'pages/InternetDisconnected/InternetDisconnected';
 import MobileNotSuported from 'pages/MobileNotSuported/MobileNotSuported';
-import PageNotFound from 'pages/PageNotFound/PageNotFound';
-import Swap, { RedirectPathToSwapOnly, RedirectToSwap } from 'pages/Swap';
 import { Suspense, useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -19,6 +18,14 @@ import { isMobile } from 'utils/userAgent';
 
 import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
+import Earnings from './Earnings';
+import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
+import Market from './Market';
+import PageNotFound from './PageNotFound/PageNotFound';
+import PeggingApp from './PeggingApp';
+import Policy from './Policy';
+import Structure from './Structure';
+import TermOfService from './TermOfService';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -71,7 +78,7 @@ const App = () => {
   useEffect(() => {
     if (!isInternetAlready) {
       history.replace('/internet-disconnected');
-    } else history.push('/swap');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInternetAlready]);
 
@@ -86,11 +93,16 @@ const App = () => {
           <Route component={MobileNotSuported} />
         ) : (
           <>
-            <Route exact path="/swap/:outputCurrency" component={RedirectToSwap} />
-            <Route exact path="/swap" component={Swap} />
+            {/* <Route exact path="/swap/:outputCurrency" component={RedirectToSwap} /> */}
             <Route exact path="/page-not-found" component={PageNotFound} />
             <Route exact path="/internet-disconnected" component={InternetDisconnected} />
-            <Route exact path="/" component={RedirectPathToSwapOnly} />
+            <Route exact path="/" component={Market} />
+            <Route exact path="/market" component={Market} />
+            <Route exact path="/apps" component={PeggingApp} />
+            <Route exact path="/infrastructure" component={Structure} />
+            <Route exact path="/earnings" component={Earnings} />
+            <Route exact path="/privacy-policy" component={Policy} />
+            <Route exact path="/term-of-service" component={TermOfService} />
           </>
         )}
       </Switch>

@@ -4,6 +4,25 @@ export type Color = string;
 export interface Colors {
   darkMode: boolean;
 
+  // background
+  background1: Color;
+  background2: Color;
+  background3: Color;
+  background4: Color;
+
+  btnBG1: Color;
+
+  color_white: Color;
+  color_dark: Color;
+  color_grey: Color;
+  color_grey1: Color;
+  color_grey2: Color;
+  color_grey3: Color;
+  color_grey4: Color;
+  color_blue: Color;
+  color_black1: Color;
+  color_black2: Color;
+
   // text
   text1: Color;
   text2: Color;
@@ -102,6 +121,7 @@ declare module 'styled-components/macro' {
       upToSmall: ThemedCssFunction<DefaultTheme>;
       upToMedium: ThemedCssFunction<DefaultTheme>;
       upToLarge: ThemedCssFunction<DefaultTheme>;
+      upToSupperLarge: ThemedCssFunction<ITheme>;
     };
 
     // css snippets

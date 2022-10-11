@@ -31,6 +31,7 @@ const RotatingArrow = styled(ChevronDown)<{ open?: boolean }>`
   transform: ${({ open }) => (open ? 'rotate(180deg)' : 'none')};
   transition: transform 0.1s linear;
   margin-left: 9px;
+  color: ${({ theme }) => theme.text1};
 `;
 
 interface IProps extends ISelectSwapExchange {
@@ -126,7 +127,6 @@ const EstReceive = React.memo(
                 <a href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
                   faucet
                 </a>
-                .
               </ThemedText.Small>
             )}
           </Column>

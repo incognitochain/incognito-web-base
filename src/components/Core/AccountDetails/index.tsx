@@ -103,6 +103,7 @@ const LowerSection = styled.div`
 const AccountControl = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   min-width: 0;
   width: 100%;
 
