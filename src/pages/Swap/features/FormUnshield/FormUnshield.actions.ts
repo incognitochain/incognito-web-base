@@ -93,6 +93,7 @@ export const actionChangeSellToken =
         networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
       };
 
+      console.log('SANG TEST: ', { parentToken, buyToken });
       if (parentToken.parentTokenID === buyToken.parentTokenID) {
         dispatch(
           actionSetToken({

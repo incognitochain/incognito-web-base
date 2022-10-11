@@ -464,8 +464,6 @@ const enhanceSend = (WrappedComponent: any) => {
           isSignAndSendTransaction,
         };
 
-        console.log('SANG TEST: ', payload);
-
         return new Promise(async (resolve, reject) => {
           try {
             const tx = await requestSignTransaction(payload);
