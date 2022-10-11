@@ -8,13 +8,11 @@ import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWa
 import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
-import MobileNotSuported from 'pages/MobileNotSuported/MobileNotSuported';
 import { Suspense, useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components/macro';
 import { DarkModeQueryParamReader } from 'theme';
-import { isMobile } from 'utils/userAgent';
 
 import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
@@ -89,22 +87,18 @@ const App = () => {
   const renderContent = () => {
     return (
       <Switch>
-        {isMobile ? (
-          <Route component={MobileNotSuported} />
-        ) : (
-          <>
-            {/* <Route exact path="/swap/:outputCurrency" component={RedirectToSwap} /> */}
-            <Route exact path="/page-not-found" component={PageNotFound} />
-            <Route exact path="/internet-disconnected" component={InternetDisconnected} />
-            <Route exact path="/" component={Market} />
-            <Route exact path="/market" component={Market} />
-            <Route exact path="/apps" component={PeggingApp} />
-            <Route exact path="/infrastructure" component={Structure} />
-            <Route exact path="/earnings" component={Earnings} />
-            <Route exact path="/privacy-policy" component={Policy} />
-            <Route exact path="/term-of-service" component={TermOfService} />
-          </>
-        )}
+        <>
+          {/* <Route exact path="/swap/:outputCurrency" component={RedirectToSwap} /> */}
+          <Route exact path="/page-not-found" component={PageNotFound} />
+          <Route exact path="/internet-disconnected" component={InternetDisconnected} />
+          <Route exact path="/" component={Market} />
+          <Route exact path="/market" component={Market} />
+          <Route exact path="/apps" component={PeggingApp} />
+          <Route exact path="/infrastructure" component={Structure} />
+          <Route exact path="/earnings" component={Earnings} />
+          <Route exact path="/privacy-policy" component={Policy} />
+          <Route exact path="/term-of-service" component={TermOfService} />
+        </>
       </Switch>
     );
   };
