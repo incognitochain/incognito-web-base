@@ -96,14 +96,14 @@ const EstReceive = React.memo(
                 </RowBetween>
                 {!!burnFeeText && (
                   <RowBetween style={{ marginTop: 12 }}>
-                    <ThemedText.Small fontWeight={400}>Outchain Fee (Est.)</ThemedText.Small>
+                    <ThemedText.Small fontWeight={400}>Outchain Fee (est.)</ThemedText.Small>
                     <ThemedText.Small fontWeight={400}>{burnFeeText}</ThemedText.Small>
                   </RowBetween>
                 )}
               </>
             ) : (
               <RowBetween style={{ marginTop: 12 }}>
-                <ThemedText.Small fontWeight={400}>Fee (Est.)</ThemedText.Small>
+                <ThemedText.Small fontWeight={400}>Fee (est.)</ThemedText.Small>
                 <ThemedText.Small fontWeight={400}>{swapFee?.tradeFeeText}</ThemedText.Small>
               </RowBetween>
             )}
