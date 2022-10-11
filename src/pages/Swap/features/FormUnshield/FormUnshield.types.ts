@@ -33,6 +33,7 @@ export enum NetworkTypePayload {
   POLYGON = 'plg',
   FANTOM = 'ftm',
   BINANCE_SMART_CHAIN = 'bsc',
+  CENTRALIZED = 'centralized',
 }
 
 export interface ISwapExchange {

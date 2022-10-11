@@ -183,18 +183,37 @@ class RpcClient {
     privacyTokenAddress: string;
     userFeeSelection: number;
     walletAddress: string;
+    isUseTokenFee?: boolean;
+    fee?: string;
+    isDecentralized: boolean;
+    centralizedAddress?: string;
   }) {
-    return this.http.post('submitunshieldtx', {
-      Network: payload.network,
-      UserFeeLevel: payload.userFeeLevel,
-      ID: payload.id,
-      IncognitoAmount: payload.incognitoAmount,
-      IncognitoTx: payload.incognitoTx,
-      PaymentAddress: payload.paymentAddress,
-      PrivacyTokenAddress: payload.privacyTokenAddress,
-      UserFeeSelection: payload.userFeeSelection,
-      WalletAddress: payload.walletAddress,
-    });
+    let _payload = {};
+    if (payload.isDecentralized) {
+      _payload = {
+        Network: payload.network,
+        UserFeeLevel: payload.userFeeLevel,
+        ID: payload.id,
+        IncognitoAmount: payload.incognitoAmount,
+        IncognitoTx: payload.incognitoTx,
+        PaymentAddress: payload.paymentAddress,
+        PrivacyTokenAddress: payload.privacyTokenAddress,
+        UserFeeSelection: payload.userFeeSelection,
+        WalletAddress: payload.walletAddress,
+      };
+    } else {
+      _payload = {
+        Network: payload.network,
+        ID: payload.id,
+        UserFeeLevel: payload.userFeeLevel,
+        IncognitoTxToPayOutsideChainFee: payload.incognitoTx,
+        Address: payload.centralizedAddress,
+        PrivacyFee: payload.isUseTokenFee ? '0' : `${payload.fee || 0}`,
+        TokenFee: payload.isUseTokenFee ? `${payload.fee || 0}` : '0',
+        UserFeeSelection: payload.userFeeSelection,
+      };
+    }
+    return this.http.post('submitunshieldtx', { ..._payload });
   }
 
   submitSwapTx({ txRaw, feeRefundOTA }: { txRaw: string; feeRefundOTA: string }) {

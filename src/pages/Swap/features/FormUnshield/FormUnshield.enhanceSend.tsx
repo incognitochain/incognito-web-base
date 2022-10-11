@@ -495,6 +495,8 @@ const enhanceSend = (WrappedComponent: any) => {
                 networkName = NetworkTypePayload.POLYGON;
               } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
                 networkName = NetworkTypePayload.FANTOM;
+              } else {
+                networkName = NetworkTypePayload.CENTRALIZED;
               }
               // Submit tx unshield to backend after burn
               const submitTxUnshieldResponse = await rpcClient.submitUnshieldTx2({
@@ -507,6 +509,10 @@ const enhanceSend = (WrappedComponent: any) => {
                 privacyTokenAddress: buyToken.tokenID,
                 userFeeSelection: isUseTokenFee ? 1 : 2,
                 walletAddress: incAddress,
+                fee: feeBurnCombine.amount,
+                isDecentralized: sellToken.isDecentralized,
+                isUseTokenFee,
+                centralizedAddress: fee.centralizedAddress,
               });
               console.log({ submitTxUnshieldResponse });
             }
