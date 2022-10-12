@@ -4,11 +4,13 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useSwitchNetwork from 'lib/hooks/useSwitchNetwork';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
+import { genDepositAddress, IDepositAddress } from 'services/rpcClient';
 import { useWalletModalToggle } from 'state/application/hooks';
 import styled from 'styled-components/macro';
+import { getAcronymNetwork } from 'utils/token';
 
-import { genDepositAddress, IDepositAddress } from '../../../../services/rpcClient';
-import { getAcronymNetwork } from '../../../../utils/token';
+import { ButtonConfirmed } from '../../../../components/Core/Button';
+import { useIncognitoWallet } from '../../../../components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { Selection } from '../Selection';
 import DescriptionQrCode from './components/DescriptionQrCode';
 import ShieldFeeEstimate from './components/ShieldFeeEstimate';
@@ -56,6 +58,8 @@ const FormDeposit = (props: IMergeProps) => {
     if (!account) return toggleWalletModal();
     return onSwitchNetwork(false);
   };
+
+  const { isIncognitoInstalled, showPopup } = useIncognitoWallet();
 
   const debounceGenDepositAddress = debounce(
     React.useCallback(async () => {
@@ -130,6 +134,14 @@ const FormDeposit = (props: IMergeProps) => {
           <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
         )} */}
       {/*</form>*/}
+      {!incAccount && (
+        <>
+          <VerticalSpace />
+          <ButtonConfirmed onClick={showPopup}>
+            {isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet'}
+          </ButtonConfirmed>
+        </>
+      )}
     </Styled>
   );
 };
