@@ -141,6 +141,7 @@ export const Styled = styled(Row)`
     justify-content: space-between;
       .wrap-menu-desktop {
         display: none;
+        flex: 1;
       }
       .menu-mobile {
          display: initial;

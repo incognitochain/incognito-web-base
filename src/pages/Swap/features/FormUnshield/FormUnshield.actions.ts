@@ -340,7 +340,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       const prevValue = new BigNumber(prev.amountOut).minus(prevFee);
       const currValue = new BigNumber(current.amountOut).minus(curFee);
 
-      return new BigNumber(prevValue).lt(currValue) ? prev : current;
+      return new BigNumber(prevValue).gt(currValue) ? prev : current;
     });
 
     // Set default exchange has best rate
