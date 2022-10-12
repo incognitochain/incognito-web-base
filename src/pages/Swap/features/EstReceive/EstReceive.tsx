@@ -1,9 +1,13 @@
 import Column from 'components/Core/Column';
 import Loader from 'components/Core/Loader';
+import { InputField } from 'components/Core/ReduxForm';
+import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { RowBetween, RowFlat } from 'components/Core/Row';
 import { PRV } from 'constants/token';
+import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { ChevronDown } from 'react-feather';
+import { Field } from 'redux-form';
 import { useAppSelector } from 'state/hooks';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
@@ -88,6 +92,20 @@ const EstReceive = React.memo(
                 exchangeSelected={exchangeSelected}
                 onSelectExchange={onSelectExchange}
               />
+            )}
+            {formType === FormTypes.SWAP && (
+              <>
+                <Field
+                  component={InputField}
+                  name={FORM_CONFIGS.slippage}
+                  inputType={INPUT_FIELD.amount}
+                  leftTitle="Slippage tolerance (%)"
+                  componentProps={{
+                    placeholder: 'Percent',
+                    type: 'number',
+                  }}
+                />
+              </>
             )}
             {formType === FormTypes.UNSHIELD ? (
               <>
