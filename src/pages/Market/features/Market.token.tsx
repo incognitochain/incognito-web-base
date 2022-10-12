@@ -3,6 +3,7 @@ import ImageCached from 'components/Core/ImageCached';
 import Tooltip2 from 'components/Core/Tooltip2';
 import { marketTranslateSelector } from 'config/Configs.selector';
 import { MAIN_TOKENS } from 'constants/token';
+import { replace } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { mainPTokenSelector } from 'state/token';
@@ -16,7 +17,7 @@ export const Styled = styled(Col)`
   overflow: hidden;
   .wrap-token {
     box-sizing: border-box;
-    min-height: 520px;
+    min-height: 300px;
   }
   .token-main-title {
     background-color: ${({ theme }) => theme.background2};
@@ -176,10 +177,24 @@ export const Styled = styled(Col)`
 
 const Item = React.memo(({ item }: { item: any }) => {
   // const colors = useSelector(colorsSelector);
-  // const changeColor = React.useMemo(
-  //   () => (item.isTokenDecrease === undefined ? colors.text1 : item.isTokenDecrease ? colors.red1 : colors.green1),
-  //   [colors, item.isTokenDecrease]
-  // );
+
+  let isTokenDecrease = item?.change && item?.change[0] === '-';
+
+  const changeToNumber: any = Number(replace(item?.change, '-', ''));
+  const changeStr =
+    changeToNumber === 0
+      ? '0%'
+      : `${isTokenDecrease ? '-' : '+'}${format.amountVer2({
+          originalAmount: changeToNumber || 0,
+          decimals: 0,
+        })}%`;
+
+  isTokenDecrease = changeToNumber !== 0 ? isTokenDecrease : undefined;
+
+  const changeColor = React.useMemo(
+    () => (isTokenDecrease === undefined ? '#FFFFFF' : isTokenDecrease ? '#FF4343' : '#27AE60'),
+    [isTokenDecrease]
+  );
 
   const priceUSD = format.formatAmount({
     humanAmount: item?.priceUSD,
@@ -211,7 +226,7 @@ const Item = React.memo(({ item }: { item: any }) => {
         <p className="medium-text text-align-right">{`$${priceUSD}`}</p>
       </Col>
       <Col span={6}>
-        <p className="medium-text text-align-right">{`${item.change}`}</p>
+        <p className="medium-text text-align-right" style={{ color: changeColor }}>{`${changeStr}`}</p>
       </Col>
     </Row>
   );
