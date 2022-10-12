@@ -53,7 +53,7 @@ const ShieldFeeEstimate = (props: ShieldFeeEstimateProps) => {
       <div style={{ height: 10 }}></div>
       <Row className="topView">
         <ThemedText.SmallLabel fontWeight={400} color="primary8">
-          {'Estimation time:'}
+          {'Estimate time'}
         </ThemedText.SmallLabel>
         <ThemedText.SmallLabel fontWeight={400} color="primary5">
           10 mins

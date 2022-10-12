@@ -54,6 +54,7 @@ export const BaseButton = styled(RebassButton)<
 export const ButtonPrimary = styled(BaseButton)`
   background-color: ${({ theme }) => theme.btn1};
   color: white;
+  font-size: 16px;
   &:focus {
     box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.btn1)};
     background-color: ${({ theme }) => darken(0.05, theme.btn1)};
@@ -205,6 +206,7 @@ export const ButtonText = styled(BaseButton)`
 const ButtonConfirmedStyle = styled(BaseButton)`
   background-color: ${({ theme }) => theme.bg3};
   color: ${({ theme }) => theme.text1};
+  font-size: 16px;
   &:disabled {
     opacity: 50%;
     background-color: ${({ theme }) => theme.bg2};
