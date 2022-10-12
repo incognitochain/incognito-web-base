@@ -425,6 +425,17 @@ export default function Header() {
               }}
             />
           </Row>
+          {expand && !isMobile && (
+            <Col style={{ marginTop: 24 }}>
+              {appStoreIcons.map((item) => (
+                <div className="wrap-drawer-sub-item" key={item.name}>
+                  <Link href={item.path} target="_blank" rel="noopener noreferrer" className="padding-horizontal">
+                    <img className="app-link" src={item.image} alt={item?.name} style={{ width: 200, height: 60 }} />
+                  </Link>
+                </div>
+              ))}
+            </Col>
+          )}
           {expand && isMobile && (
             <Col style={{ marginTop: 24 }}>
               {moreItem.map((item) => (
