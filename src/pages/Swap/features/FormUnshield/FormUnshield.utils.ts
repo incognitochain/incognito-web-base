@@ -157,7 +157,8 @@ const getUnshieldData = ({
 
   // sell token
   const _sellToken = getDataByTokenID(sellIdentify);
-  const _sellTokenList = (unshieldableTokens(state) || []).filter((token) => !token.movedUnifiedToken);
+  const unshieldAbleTokens = unshieldableTokens(state) || [];
+  const _sellTokenList = unshieldAbleTokens.filter((token) => !token.movedUnifiedToken);
 
   // buy token
   const _buyToken = getDataByTokenID(buyIdentify);
@@ -383,7 +384,7 @@ const getUnshieldData = ({
       decimals: _sellToken.pDecimals,
     });
 
-    tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, _sellTokenList);
+    tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
 
     let tradeFeeText = '';
     if (isUseTokenFee) {
