@@ -143,7 +143,10 @@ const SwapTxs = React.memo(() => {
     if (txDetail) {
       return (
         <>
-          <ArrowLeft style={{ marginBottom: '12px', cursor: 'pointer' }} onClick={() => setTxDetail(undefined)} />
+          <ArrowLeft
+            style={{ marginBottom: '12px', cursor: 'pointer', color: 'white' }}
+            onClick={() => setTxDetail(undefined)}
+          />
           {factories.map((item: IItemDetail) => (
             <ItemDetail key={item.title} {...item} />
           ))}
