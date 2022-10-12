@@ -215,22 +215,53 @@ export default function Header() {
   //   }
   // }, [location]);
 
-  const MoreMenu = () => (
-    <MenuDropdown className="sub-menu-header" style={{ width: 200, paddingTop: 16, paddingLeft: 24, paddingRight: 10 }}>
-      {appStoreIcons.map((item) => {
-        return (
-          <Menu.Item
-            className="dropdown-menu-item"
-            key={item.name}
-            style={{ marginBottom: 16 }}
-            onClick={() => window.open(item.path, '_blank')}
-          >
-            <img src={item?.image} alt={item?.name} style={{ width: 140, height: 40, alignItems: 'center' }} />
-          </Menu.Item>
-        );
-      })}
-    </MenuDropdown>
-  );
+  const MoreMenu = () => {
+    if (!isMobile) {
+      return (
+        <MenuDropdown
+          className="sub-menu-header"
+          style={{ width: 200, paddingTop: 16, alignItems: 'center', textAlign: 'center' }}
+        >
+          {appStoreIcons.map((item) => {
+            return (
+              <Menu.Item
+                className="dropdown-menu-item"
+                key={item.name}
+                style={{ marginBottom: 16 }}
+                onClick={() => window.open(item.path, '_blank')}
+              >
+                <img src={item?.image} alt={item?.name} style={{ width: 140, height: 40, alignItems: 'center' }} />
+              </Menu.Item>
+            );
+          })}
+        </MenuDropdown>
+      );
+    }
+
+    return (
+      <MenuDropdown
+        className="sub-menu-header"
+        style={{ width: 200, paddingTop: 16, alignItems: 'center', textAlign: 'center' }}
+      >
+        {moreItem.map((item) => {
+          return (
+            <Menu.Item
+              className="dropdown-menu-item"
+              key={item.name}
+              style={{ marginBottom: 16 }}
+              onClick={() => window.open(item.path, '_blank')}
+            >
+              <Row align="middle">
+                <p className="fs-medium">{item.name}</p>
+                <div className="logo" />
+              </Row>
+              <p className="text2 fs-small">{item.sub}</p>
+            </Menu.Item>
+          );
+        })}
+      </MenuDropdown>
+    );
+  };
 
   const renderContent = () => {
     const hrefLink = !isInternetAlready || !isMobile ? '.' : INCOGNITO_LANDING_PAGE;
@@ -275,7 +306,7 @@ export default function Header() {
                 className="more-dropdown"
               >
                 <Row align="middle">
-                  <p className="sub-menu-text">Download</p>
+                  <p className="sub-menu-text">{isMobile ? 'Dive in' : 'Download'}</p>
                   <img className="logo" alt="" src={downImg} style={{ width: 14, height: 14, marginLeft: 10 }} />
                 </Row>
               </Dropdown>

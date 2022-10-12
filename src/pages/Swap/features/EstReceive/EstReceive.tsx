@@ -20,7 +20,7 @@ const Styled = styled(Column)`
     align-items: center;
   }
   a {
-    color: ${({ theme }) => theme.primary8};
+    color: ${({ theme }) => theme.blue1};
     :hover {
       opacity: 0.9;
     }
@@ -121,12 +121,11 @@ const EstReceive = React.memo(
                 <ThemedText.Small fontWeight={400}>{tradePath}</ThemedText.Small>
               </RowBetween>
             )}
-
             {!prvToken.amount && (
               <ThemedText.Small color="primary8" fontWeight={400} marginTop="12px">
                 {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
             some from the `}
-                <a href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
+                <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
                   faucet
                 </a>
               </ThemedText.Small>

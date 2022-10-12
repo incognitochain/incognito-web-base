@@ -1,11 +1,11 @@
-// import { formatPrice } from '@utils/convert';
 import moment from 'moment';
-import React, { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import apiExplorerService from 'services/apiExplorerService';
 import styled, { DefaultTheme } from 'styled-components/macro';
 import { convertISOtoMMYYYY } from 'utils/timeUtils';
+
+import { formatPrice } from './Validators.utils';
 
 const MAX_ACTIVE_VALIDATOR = 5000;
 const MAX_APR = 180;
@@ -160,10 +160,20 @@ const ValidatorRewardEstimation = () => {
   const [drawDataChart, setDrawDataChart] = useState<any[]>([]);
 
   const getData = async () => {
-    const dataChart: ChartData = await apiExplorerService.getLandingValidatorData();
-    // console.log('DATA ', dataChart);
-    setDataChart(dataChart);
-    convertData(dataChart.activeValidatorChartData || []);
+    try {
+      fetch('https://api-explorer.incognito.org/api/v1/explorer/landing-validator-data')
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setDataChart(data?.data);
+          convertData(data?.data?.activeValidatorChartData || []);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const convertData = (listData: ChartDataItem[]) => {
@@ -272,23 +282,25 @@ const ValidatorRewardEstimation = () => {
           <div className="tableContent">
             <p className="description2">Circulating supply:</p>
             <div className="rowTableView">
-              {/* <h5>{formatPrice({ price: dataChart.circulatingSupply })}</h5> */}
+              <h5>{formatPrice({ price: dataChart.circulatingSupply })}</h5>
               <h5>PRV</h5>
             </div>
             <p className="description2">Total PRV staked:</p>
             <div className="rowTableView">
-              {/* <h5>{formatPrice({ price: dataChart.totalPRVStaked })}</h5> */}
+              <h5>{formatPrice({ price: dataChart.totalPRVStaked })}</h5>
               <h5>PRV</h5>
             </div>
 
             <p className="description2">Estimated APR:</p>
             <div className="rowTableView">
-              {/* <h5>{formatPrice({ price: dataChart.estimatedAPR })}</h5> */}
+              <h5>{formatPrice({ price: dataChart.estimatedAPR })}</h5>
               <h5>%</h5>
             </div>
 
             <p className="description2">Total validators:</p>
-            <div className="rowTableView">{/* <h5>{formatPrice({ price: dataChart.totalValidator })}</h5> */}</div>
+            <div className="rowTableView">
+              <h5>{formatPrice({ price: dataChart.totalValidator })}</h5>
+            </div>
 
             <p className="description2">Statistics on</p>
             <div className="rowTableView">

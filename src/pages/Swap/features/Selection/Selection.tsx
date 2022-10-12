@@ -23,6 +23,8 @@ interface ISelection {
   onSelectToken?: ({ token }: { token: PToken }) => void;
   showNetwork?: boolean;
   onSelectNetwork?: ({ network }: { network: ITokenNetwork }) => void;
+  onClickRightLabel?: () => void;
+  rightLabelStyle?: any;
 }
 
 const MainStyled = styled(Row)`
@@ -81,6 +83,8 @@ const Selection = React.memo((props: ISelection) => {
     onSelectNetwork,
     currency,
     showNetwork = false,
+    onClickRightLabel,
+    rightLabelStyle,
   } = props;
   const { setModal } = useModal();
   const isHideNetwork = !networks || networks.length === 0;
@@ -119,7 +123,13 @@ const Selection = React.memo((props: ISelection) => {
           {title}
         </ThemedText.SmallLabel>
         {!!rightLabel && (
-          <ThemedText.SmallLabel fontWeight={400} color="primary8">
+          <ThemedText.SmallLabel
+            className="button-hover"
+            onClick={onClickRightLabel}
+            fontWeight={400}
+            color="primary8"
+            style={rightLabelStyle}
+          >
             {rightLabel}
           </ThemedText.SmallLabel>
         )}

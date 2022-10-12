@@ -1,4 +1,3 @@
-// import { route as ValidatorRoute } from '@modules/Earnings/features/Validators/Validators.route';
 import { Button, Col, Row } from 'antd';
 import logoStrokeImg from 'assets/images/logo-stroke.png';
 import SectionHead from 'components/Core/SectionHead';
@@ -7,6 +6,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components/macro';
+
+import { route as ValidatorRoute } from '../../Earnings/features/Validators/Validators.route';
 
 const Styled = styled(Row)`
   .main-title {
@@ -94,7 +95,7 @@ const Section1 = () => {
           size="large"
           className="button1 btn-become-validator"
           onClick={() => {
-            // history.push(ValidatorRoute);
+            history.push(ValidatorRoute);
           }}
         >
           {structureTrs.becomeValidator}

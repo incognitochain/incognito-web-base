@@ -12,6 +12,7 @@ const Styled = styled.div`
   .link-text {
     cursor: pointer;
     font-weight: 500;
+    color: ${({ theme }) => theme.blue1};
   }
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
     .label {

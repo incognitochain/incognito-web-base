@@ -29,7 +29,7 @@ const Styled = styled(Row)`
     margin-top: 16px;
   }
   .link-text {
-    color: ${({ theme }) => theme.text3};
+    color: ${({ theme }) => theme.blue1};
     cursor: pointer;
     margin-top: 24px;
     text-align: left;
