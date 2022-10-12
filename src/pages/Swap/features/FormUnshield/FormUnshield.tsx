@@ -86,7 +86,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     let time = '';
     let desc = '';
     if (formType === FormTypes.UNSHIELD) {
-      time = fee.extraFee ? '6' : '1';
+      time = fee.extraFee ? '6 hours' : '1 min';
       if (fee.extraFee) {
         desc = "Due to unified tokens' nature, the unshielding could take up to 6 hours.";
       }
@@ -94,20 +94,15 @@ const FormUnshield = React.memo((props: IMergeProps) => {
       const isReShield = buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO;
       const appName = exchangeSelectedData.appName;
       if (appName === SwapExchange.PANCAKE_SWAP) {
-        time = isReShield ? '2' : '1';
+        time = isReShield ? '2 mins' : '1 min';
       } else if (
         appName === SwapExchange.CURVE ||
         (appName === SwapExchange.UNISWAP && buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM)
       ) {
-        time = isReShield ? '6' : '1';
+        time = isReShield ? '6 mins' : '1 min';
       } else {
-        time = isReShield ? '5' : '1';
+        time = isReShield ? '5 mins' : '1 min';
       }
-    }
-    if (desc) {
-      time += ' hours';
-    } else {
-      time += 'mins';
     }
     return { time, desc };
   };

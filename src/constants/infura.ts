@@ -8,7 +8,7 @@ if (typeof INFURA_KEY === 'undefined') {
   throw new Error(`REACT_APP_INFURA_KEY must be a defined environment variable`);
 }
 
-export const MAINNET_PROVIDER = new JsonRpcProvider(`https://mainnet.infura.io/v3/${INFURA_KEY}`);
+export const MAINNET_PROVIDER = new JsonRpcProvider('https://eth-fullnode.incognito.org');
 
 /**
  * These are the network URLs used by the interface when there is not another available source of chain data

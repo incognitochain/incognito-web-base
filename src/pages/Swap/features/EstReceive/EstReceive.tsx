@@ -96,14 +96,14 @@ const EstReceive = React.memo(
                 </RowBetween>
                 {!!burnFeeText && (
                   <RowBetween style={{ marginTop: 12 }}>
-                    <ThemedText.Small fontWeight={400}>Outchain Fee (Est.)</ThemedText.Small>
+                    <ThemedText.Small fontWeight={400}>Outchain Fee (est.)</ThemedText.Small>
                     <ThemedText.Small fontWeight={400}>{burnFeeText}</ThemedText.Small>
                   </RowBetween>
                 )}
               </>
             ) : (
               <RowBetween style={{ marginTop: 12 }}>
-                <ThemedText.Small fontWeight={400}>Fee (Est.)</ThemedText.Small>
+                <ThemedText.Small fontWeight={400}>Fee (est.)</ThemedText.Small>
                 <ThemedText.Small fontWeight={400}>{swapFee?.tradeFeeText}</ThemedText.Small>
               </RowBetween>
             )}
@@ -112,7 +112,9 @@ const EstReceive = React.memo(
               <ThemedText.Small fontWeight={400}>Estimate time</ThemedText.Small>
               <ThemedText.Small fontWeight={400}>{`${time}`}</ThemedText.Small>
             </RowBetween>
-            {!!desc && <ThemedText.Small fontWeight={400}>{`${desc}`}</ThemedText.Small>}
+            {!!desc && (
+              <ThemedText.Small color="primary8" fontWeight={400} marginTop="8px">{`${desc}`}</ThemedText.Small>
+            )}
             {formType === FormTypes.SWAP && tradePath && (
               <RowBetween style={{ marginTop: 12 }}>
                 <ThemedText.Small fontWeight={400}>Trade path</ThemedText.Small>
