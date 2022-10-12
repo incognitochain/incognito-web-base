@@ -66,7 +66,7 @@ function ConfirmationPendingContent({
           <CustomLightSpinner src={Circle} alt="loader" size={inline ? '40px' : '90px'} />
         </ConfirmedIcon>
         <AutoColumn gap="12px" justify={'center'}>
-          <Text fontWeight={500} fontSize={20} textAlign="center">
+          <Text className="text1" fontWeight={500} fontSize={20} textAlign="center">
             <Trans>Waiting For Confirmation</Trans>
           </Text>
           <Text fontWeight={400} fontSize={16} textAlign="center">
@@ -131,7 +131,7 @@ export function TransactionSubmittedContent({
           {/*<ArrowUpCircle strokeWidth={0.5} size={inline ? '40px' : '90px'} color={theme.primary1} />*/}
         </ConfirmedIcon>
         <AutoColumn gap="12px" justify={'center'}>
-          <Text fontWeight={500} fontSize={20} textAlign="center">
+          <Text className="text1" fontWeight={500} fontSize={20} textAlign="center">
             Transaction Submitted
           </Text>
           {!!message && (
@@ -284,7 +284,7 @@ function L2Content({
           )}
         </ConfirmedIcon>
         <AutoColumn gap="12px" justify={'center'}>
-          <Text fontWeight={500} fontSize={20} textAlign="center">
+          <Text className="text1" fontWeight={500} fontSize={20} textAlign="center">
             {!hash ? (
               <Trans>Confirm transaction in wallet</Trans>
             ) : !confirmed ? (

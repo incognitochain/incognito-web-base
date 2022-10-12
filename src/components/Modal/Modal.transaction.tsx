@@ -30,7 +30,7 @@ export default function LoadingTransaction({
           <CustomLightSpinner src={Circle} alt="loader" size={inline ? '40px' : '90px'} />
         </ConfirmedIcon>
         <AutoColumn gap="12px" justify={'center'}>
-          <Text fontWeight={400} fontSize={16} textAlign="center">
+          <Text className="text1" fontWeight={400} fontSize={16} textAlign="center">
             {pendingText}
           </Text>
           <Text fontWeight={500} fontSize={14} color="#565A69" textAlign="center" marginBottom="12px">
