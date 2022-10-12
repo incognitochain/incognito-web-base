@@ -12,10 +12,12 @@ import enhance from './Swap.enhance';
 
 export const Styled = styled(Col)`
   border: 1px solid ${({ theme }) => theme.border1};
-  border-radius: 16px;
+  border-radius: 18px;
   background: ${({ theme }) => theme.bg3};
   padding: 24px;
-  border-radius: 18px;
+  box-shadow: rgb(116 116 116 / 40%) 5px 5px, rgb(116 116 116 / 30%) 10px 10px, rgb(116 116 116 / 20%) 15px 15px,
+    rgb(116 116 116 / 10%) 20px 20px, rgb(116 116 116 / 5%) 25px 25px;
+
   min-height: 500px;
   .loader {
     left: 48%;

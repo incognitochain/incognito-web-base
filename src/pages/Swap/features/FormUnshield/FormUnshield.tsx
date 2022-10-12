@@ -97,7 +97,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
         time = isReShield ? '2 mins' : '1 min';
       } else if (
         appName === SwapExchange.CURVE ||
-        (appName === SwapExchange.UNISWAP && buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM)
+        (appName === SwapExchange.UNISWAP && buyNetworkName === MAIN_NETWORK_NAME.POLYGON)
       ) {
         time = isReShield ? '6 mins' : '1 min';
       } else {

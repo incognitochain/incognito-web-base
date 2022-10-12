@@ -647,6 +647,7 @@ const parseFeeDataModelResponse = (fees: any[]) => {
     data.push({
       amount: fees[i]?.amount || 0,
       tokenId: fees[i]?.tokenid || '',
+      amountInBuyToken: fees[i]?.amountInBuyToken || '0',
     });
   }
   return data;

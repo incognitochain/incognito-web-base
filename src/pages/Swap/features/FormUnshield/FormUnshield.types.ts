@@ -60,6 +60,7 @@ export interface IFormUnshieldState {
 export interface ISwapFee {
   amount: number;
   tokenId: string;
+  amountInBuyToken: string;
 }
 export interface ISwapExchangeData {
   amountIn: number;

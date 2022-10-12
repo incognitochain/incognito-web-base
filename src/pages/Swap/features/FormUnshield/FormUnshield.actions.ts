@@ -326,11 +326,22 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       throw new Error('Can not find any trading platform that supports for this pair token');
 
     // Find best rate by list exchange
-    // const bestRate: ISwapExchangeData = exchangeSupports.reduce((prev, current) =>
-    //   prev.amountOut > current.amountOut ? prev : current
-    // );
+    // const bestRate: ISwapExchangeData = exchangeSupports[0];
+    const bestRate: ISwapExchangeData = exchangeSupports.reduce((prev, current) => {
+      let prevFee = '0';
+      let curFee = '0';
+      if (prev.fees) {
+        prevFee = prev.fees[0].amountInBuyToken;
+      }
+      if (current.fees) {
+        curFee = current.fees[0].amountInBuyToken;
+      }
 
-    const bestRate: ISwapExchangeData = exchangeSupports[0];
+      const prevValue = new BigNumber(prev.amountOut).minus(prevFee);
+      const currValue = new BigNumber(current.amountOut).minus(curFee);
+
+      return new BigNumber(prevValue).lt(currValue) ? prev : current;
+    });
 
     // Set default exchange has best rate
     const defaultExchange: string = bestRate?.exchangeName;
