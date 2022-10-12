@@ -25,7 +25,6 @@ import { isMobile } from 'utils/userAgent';
 import IncognitoWallet from '../IncognitoWallet';
 // import IncognitoWallet from '../IncognitoWallet';
 import { DrawerStyled, MenuDropdown, Styled } from './Header.styled';
-import NetworkSelector from './NetworkSelector';
 // import NetworkSelector from './NetworkSelector';
 
 interface MenuItemProps {
@@ -271,9 +270,9 @@ export default function Header() {
             <Logo fill={darkMode ? white : black} width="142" height="100%" title="logo" />
           </IncognitoIcon>
         </Title>
-        <HeaderElement>
-          <NetworkSelector />
-        </HeaderElement>
+        {/*<HeaderElement>*/}
+        {/*  <NetworkSelector />*/}
+        {/*</HeaderElement>*/}
         <HeaderElement>
           {/* <Menu /> */}
           <div style={{ alignItems: 'center', display: 'flex' }} className="default-padding-horizontal">
