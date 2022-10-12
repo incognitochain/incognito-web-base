@@ -118,7 +118,7 @@ const MarketBanner = () => {
               placement="bottomRight"
               className="more-dropdown"
             >
-              <span className="text1 sub-menu-text">
+              <span className="text1 sub-menu-text button-hover">
                 Dive in
                 <img className="logo" alt="" src={downImg} style={{ width: 14, height: 14, marginLeft: 10 }} />
               </span>

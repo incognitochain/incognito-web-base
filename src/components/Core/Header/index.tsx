@@ -228,7 +228,12 @@ export default function Header() {
                 style={{ marginBottom: 16 }}
                 onClick={() => window.open(item.path, '_blank')}
               >
-                <img src={item?.image} alt={item?.name} style={{ width: 140, height: 40, alignItems: 'center' }} />
+                <img
+                  src={item?.image}
+                  alt={item?.name}
+                  style={{ width: 140, height: 40, alignItems: 'center' }}
+                  className="button-hover"
+                />
               </Menu.Item>
             );
           })}
@@ -303,7 +308,7 @@ export default function Header() {
                 placement="bottomRight"
                 className="more-dropdown"
               >
-                <Row align="middle">
+                <Row align="middle" className="button-hover">
                   <p className="sub-menu-text">{isMobile ? 'Dive in' : 'Download'}</p>
                   <img className="logo" alt="" src={downImg} style={{ width: 14, height: 14, marginLeft: 10 }} />
                 </Row>
