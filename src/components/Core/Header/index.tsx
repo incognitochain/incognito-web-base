@@ -411,7 +411,7 @@ export default function Header() {
                 fontSize: 34,
               }}
             >
-              Download
+              {isMobile ? 'Dive in' : 'Download'}
             </p>
             <img
               className="dropdown-icon"
