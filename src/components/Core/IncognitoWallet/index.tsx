@@ -19,7 +19,7 @@ declare global {
   }
 }
 
-const CONNECT_WALLET = 'Connect Incognito';
+const CONNECT_WALLET = 'Connect Wallet';
 const INSTALL_WALLET = 'Install Wallet';
 
 const Text = styled.p`
