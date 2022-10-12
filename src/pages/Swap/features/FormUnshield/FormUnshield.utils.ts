@@ -223,7 +223,7 @@ const getUnshieldData = ({
   } else {
     _buyNetworkName = swapNetwork;
     _buyNetworkList = _sellParentToken?.supportedNetwork;
-    if (_sellParentToken?.isUnified && vaults) {
+    if (_sellParentToken?.isUnified && vaults?.UnifiedTokenVaults) {
       const tokenVault = vaults?.UnifiedTokenVaults[_sellParentToken?.tokenID] || {};
       // Filter network enough vault
       _buyNetworkList = _buyNetworkList?.filter((_item: any) => {

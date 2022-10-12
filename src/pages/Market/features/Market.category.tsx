@@ -24,8 +24,8 @@ const MarketCategory = () => {
       },
       {
         icon: <MarketMoneyIcon />,
-        title: marketTrs.commissionFree,
-        subTitle: marketTrs.commissionFreeDetail,
+        title: marketTrs.crossChain,
+        subTitle: marketTrs.crossChainDetail,
         className: 'category-item-right',
       },
     ];
