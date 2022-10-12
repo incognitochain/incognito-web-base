@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 import './reset.scss';
 
 import ErrorBoundary from 'components/Core/ErrorBoundary';
+import Footer from 'components/Core/Footer';
 import Header from 'components/Core/Header';
 import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { useInternetConnnection } from 'components/Core/InternetConnection';
@@ -17,6 +18,7 @@ import { DarkModeQueryParamReader } from 'theme';
 import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
 import Earnings from './Earnings';
+import Validators from './Earnings/features/Validators/Validators';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
 import PageNotFound from './PageNotFound/PageNotFound';
@@ -98,6 +100,7 @@ const App = () => {
           <Route exact path="/earnings" component={Earnings} />
           <Route exact path="/privacy-policy" component={Policy} />
           <Route exact path="/term-of-service" component={TermOfService} />
+          <Route exact path="/earnings/validator" component={Validators} />
         </>
       </Switch>
     );
@@ -115,6 +118,7 @@ const App = () => {
             <Popups />
             <Suspense fallback={<Loader />}>{renderContent()}</Suspense>
             <Marginer />
+            <Footer />
           </BodyWrapper>
         </AppWrapper>
       </IncognitoWalletProvider>

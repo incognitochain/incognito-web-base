@@ -59,10 +59,10 @@ export function colors(darkMode: boolean): any {
 
     // text
     text1: darkMode ? '#FFFFFF' : '#000000',
-    text2: darkMode ? '#C3C5CB' : '#565A69',
+    text2: darkMode ? '#9C9C9C' : '#565A69',
     text3: darkMode ? '#8F96AC' : '#6E727D',
     text4: darkMode ? '#B2B9D2' : '#C3C5CB',
-    text5: darkMode ? '#2C2F36' : '#EDEEF2',
+    text5: darkMode ? '#757575' : '#EDEEF2',
 
     //specialty colors
     modalBG: darkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.3)',
@@ -281,10 +281,6 @@ export const ThemedGlobalStyle = createGlobalStyle`
     background-color: ${({ theme }) => theme.bg1} !important;
   }
 
-  a {
-    color: ${({ theme }) => theme.blue1};
-  }
-
   .border-hover {
     border: 1px solid ${({ theme }) => theme.border1};
 
@@ -300,6 +296,16 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
   .error {
     color: ${({ theme }) => theme.content4};
+  }
+
+  .dropdown-menu-item {
+    :hover {
+      background-color: transparent
+    }
+  }
+
+  .sub-menu-header {
+    background-color:${({ theme }) => theme.bg1};
   }
 
   .button-hover {
@@ -320,7 +326,6 @@ export const ThemedGlobalStyle = createGlobalStyle`
     body {
       min-height: 100vh;
       box-sizing: border-box;
-      background: ${({ theme }: { theme: DefaultTheme }) => theme.background1};
     }
     @font-face {
       font-family: Inter-Regular;
@@ -455,6 +460,10 @@ export const ThemedGlobalStyle = createGlobalStyle`
       color: ${({ theme }) => theme.text1}
     }
 
+    a {
+      color: ${({ theme }) => theme.blue1};
+    }
+
     div {
       color: ${({ theme }) => theme.background1}
     }
@@ -555,14 +564,14 @@ export const ThemedGlobalStyle = createGlobalStyle`
       font-weight: 500;
     }
     .default-padding-vertical {
-      padding-top: 120px;
-      padding-bottom: 120px;
+      padding-top: 100px;
+      padding-bottom: 100px;
     }
     .default-margin-top {
-      margin-top: 120px;
+      margin-top: 100px;
     }
     .default-margin-bottom {
-      margin-bottom: 120px;
+      margin-bottom: 100px;
     }
     .ant-btn-round.ant-btn-lg {
       height: 60px;
@@ -788,14 +797,14 @@ export const ThemedGlobalStyle = createGlobalStyle`
           letter-spacing: 0.01em;
         }
         .default-padding-vertical {
-          padding-top: 100px;
-          padding-bottom: 100px;
+          padding-top: 80px;
+          padding-bottom: 80px;
         }
         .default-margin-top {
-          margin-top: 100px;
+          margin-top: 80px;
         }
         .default-margin-bottom {
-          margin-bottom: 100px;
+          margin-bottom: 80px;
         }
         .ant-btn-round.ant-btn-lg {
           height: 50px;

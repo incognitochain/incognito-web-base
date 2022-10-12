@@ -1,5 +1,6 @@
-import { Col, Row, Tooltip } from 'antd';
+import { Col, Row } from 'antd';
 import ImageCached from 'components/Core/ImageCached';
+import Tooltip2 from 'components/Core/Tooltip2';
 import { marketTranslateSelector } from 'config/Configs.selector';
 import { MAIN_TOKENS } from 'constants/token';
 import React from 'react';
@@ -11,7 +12,6 @@ import format from 'utils/format';
 
 export const Styled = styled(Col)`
   border: 1px solid ${({ theme }) => theme.border1};
-  border-radius: 16px;
   background-color: ${({ theme }) => theme.bg1}
   overflow: hidden;
   .wrap-token {
@@ -242,10 +242,10 @@ const MarketTokens = () => {
     <Styled xs={24} xl={11} xxl={11.5} className="token-extra">
       <Row justify="space-between" align="middle" className="token-main-title token-padding">
         <p className="header2">{marketTrs.privacyMarket}</p>
-        <Tooltip
+        <Tooltip2
           key="Tooltip"
           title={marketTrs.whatPCoins}
-          className="fs-medium fw-regular text3 tab-header-title-right"
+          className="fs-medium fw-regular color_blue tab-header-title-right"
         />
       </Row>
       {Header}

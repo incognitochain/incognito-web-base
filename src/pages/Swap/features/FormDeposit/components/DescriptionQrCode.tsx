@@ -28,7 +28,7 @@ const Styled = styled.div`
     background-color: ${({ theme }) => theme.primary14};
 
     .paymentAddressText {
-      width: 85%;
+      flex: 1;
       margin-right: 20px;
     }
   }

@@ -110,7 +110,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .link-text {
-    color: ${({ theme }) => theme.text3};
+    color: ${({ theme }) => theme.blue1};
     cursor: pointer;
   }
 

@@ -108,9 +108,9 @@ const MarketBanner = () => {
     <Styled xs={24} xl={11} xxl={9} className={`${isMobile ? '' : ''}`}>
       <SectionHead title="Privacy Markets" className="section-head" />
       <h1 className="text1 special-main-title-text banner-title">{marketTrs.mainTitle}</h1>
-      <Col xs={24} lg={22}>
-        <p className="text2 sub-title-text banner-sub-title">
-          {`Here, your coins are privacy coins. Trade them cross-chain, commission-free. `}
+      <p className="text2 sub-title-text banner-sub-title">
+        {`Here, your coins are privacy coins. Trade them cross-chain, commission-free. `}
+        {!isMobile && (
           <span className="text3 link-text">
             <Dropdown
               overlayStyle={{ width: 120 }}
@@ -124,8 +124,8 @@ const MarketBanner = () => {
               </span>
             </Dropdown>
           </span>
-        </p>
-      </Col>
+        )}
+      </p>
       {isMobile && (
         <>
           <Col xs={24} xl={22} xxl={23} className="wrap-app-link">

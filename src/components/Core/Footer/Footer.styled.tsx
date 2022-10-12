@@ -2,6 +2,7 @@ import { Row } from 'antd';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled(Row)`
+  width: 100%;
   padding-bottom: 25px;
   padding-top: 25px;
   justify-content: space-between;

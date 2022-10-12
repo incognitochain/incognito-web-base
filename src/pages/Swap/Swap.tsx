@@ -188,8 +188,8 @@ const Swap = (props: any) => {
 
   const renderForm = () => {
     // Deposit
-    if (selectedTab === HEADER_TAB.tabNames[0]) return <FormDeposit {...props} />;
-    return <FormUnshield {...props} />;
+    if (selectedTab === HEADER_TAB.tabNames[0]) return <FormUnshield {...props} />;
+    return <FormDeposit {...props} />;
   };
 
   const renderContent = () => (

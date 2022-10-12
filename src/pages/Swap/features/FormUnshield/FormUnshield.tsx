@@ -6,7 +6,7 @@ import { VerticalSpace } from 'components/Core/Space';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { Selection } from 'pages/Swap/features/Selection';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
@@ -55,6 +55,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     swapFee,
     isFetching,
     exchangeSelectedData,
+    inputAddress,
   } = props;
 
   const { showPopup } = useIncognitoWallet();
@@ -66,6 +67,20 @@ const FormUnshield = React.memo((props: IMergeProps) => {
   const onSelectExchange = (exchangeName: any) => {
     dispatch(actionSetExchangeSelected(exchangeName));
   };
+
+  const [visibleAddress, setVisibleAddress] = useState<boolean>(
+    buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress ? true : false
+  );
+
+  useEffect(() => {
+    if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress) {
+      setVisibleAddress(true);
+    } else {
+      setVisibleAddress(false);
+    }
+  }, [sellToken.tokenID, buyToken.tokenID, buyNetworkName]);
+
+  const rightLabelAddress = visibleAddress ? '- Send to' : '+ Send to';
 
   const getEstimateTime = () => {
     let time = '';
@@ -116,6 +131,9 @@ const FormUnshield = React.memo((props: IMergeProps) => {
         <VerticalSpace />
         <Selection
           title="To"
+          rightLabel={rightLabelAddress}
+          rightLabelStyle={{ fontSize: 14, fontWeight: '500', color: 'white' }}
+          onClickRightLabel={() => setVisibleAddress(!visibleAddress)}
           leftPlaceholder="Select token"
           rightPlaceholder="Select network"
           leftValue={buyParentToken.symbol}
@@ -129,19 +147,23 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           showNetwork={true}
         />
         <VerticalSpace />
-        <Field
-          component={InputField}
-          name={FORM_CONFIGS.toAddress}
-          inputType={INPUT_FIELD.address}
-          leftTitle="Address"
-          componentProps={{
-            placeholder: 'Your External Address',
-            disabled: formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? true : false,
-          }}
-          validate={validateAddress}
-          warning={warningAddress}
-        />
-        <VerticalSpace />
+        {visibleAddress && (
+          <>
+            <Field
+              component={InputField}
+              name={FORM_CONFIGS.toAddress}
+              inputType={INPUT_FIELD.address}
+              leftTitle="Address"
+              componentProps={{
+                placeholder: 'Your External Address',
+                disabled: formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? true : false,
+              }}
+              validate={validateAddress}
+              warning={warningAddress}
+            />
+            <VerticalSpace />
+          </>
+        )}
         <Field
           component={InputField}
           name={FORM_CONFIGS.sellAmount}
