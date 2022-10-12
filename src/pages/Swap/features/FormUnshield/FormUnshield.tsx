@@ -109,6 +109,12 @@ const FormUnshield = React.memo((props: IMergeProps) => {
 
   const { time, desc } = getEstimateTime();
 
+  React.useEffect(() => {
+    if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
+      setVisibleAddress(true);
+    }
+  }, [buyNetworkName]);
+
   return (
     <Styled>
       <form onSubmit={handleSubmit(onSend)}>

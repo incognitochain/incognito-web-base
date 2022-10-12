@@ -23,7 +23,6 @@ import styled from 'styled-components/macro';
 import { isMobile } from 'utils/userAgent';
 
 import IncognitoWallet from '../IncognitoWallet';
-import Web3Status from '../Web3Status';
 // import IncognitoWallet from '../IncognitoWallet';
 import { DrawerStyled, MenuDropdown, Styled } from './Header.styled';
 import NetworkSelector from './NetworkSelector';
@@ -317,9 +316,9 @@ export default function Header() {
         {!isMobile && (
           <>
             <HeaderElement>
-              <AccountElement active={!!account}>
-                <Web3Status />
-              </AccountElement>
+              {/*<AccountElement active={!!account}>*/}
+              {/*  <Web3Status />*/}
+              {/*</AccountElement>*/}
               <IncognitoWallet />
             </HeaderElement>
           </>

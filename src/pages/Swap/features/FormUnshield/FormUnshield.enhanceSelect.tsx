@@ -69,7 +69,7 @@ const enhanceSelect = (WrappedComponent: any) => {
           dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, web3Account));
         });
       }
-    }, [buyNetworkName]);
+    }, [buyNetworkName, incAddress]);
 
     return (
       <WrappedComponent
