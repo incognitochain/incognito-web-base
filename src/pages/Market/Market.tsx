@@ -7,7 +7,6 @@ import { isMobile } from 'react-device-detect';
 import MarketAchieve from './features/Market.achieve';
 import MarketBanner from './features/Market.banner';
 import MarketCategory from './features/Market.category';
-import Footer from './features/Market.footer';
 import MarketTokens from './features/Market.token';
 import { Styled } from './Market.styled';
 
@@ -30,7 +29,6 @@ const Home = () => {
         <MarketCategory />
       </div>
       <MarketAchieve />
-      <Footer />
     </Styled>
   );
 };

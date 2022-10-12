@@ -273,8 +273,8 @@ const PeggingListApps = () => {
           name: 'pPancake',
           nameDesc: 'Private Pancake',
           status: 'SHIPPED',
-          chain: ['Binance Smart Chain', 'DEX'],
-          desc: "Trade anonymously on Binance Smart Chain's leading DEX. Deep liquidity and super low fees – now with privacy.",
+          chain: ['BNB Chain', 'DEX'],
+          desc: "Trade anonymously on BNB Chain's leading DEX. Deep liquidity and super low fees – now with privacy.",
         }}
         className="app-margin-right"
       />
@@ -284,7 +284,7 @@ const PeggingListApps = () => {
           name: 'pUniswap',
           nameDesc: 'Private Uniswap',
           status: 'SHIPPED',
-          chain: ['Polygon', 'DEX'],
+          chain: ['Polygon', 'Ethereum', 'DEX'],
           desc: 'Trade confidentially on everyone’s favorite DEX. Faster and cheaper thanks to Polygon, and private like all Incognito apps.',
         }}
         className="app-margin-top-small app-margin-left full-height"

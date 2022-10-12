@@ -37,7 +37,7 @@ const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 120px 16px 0px 16px;
+  padding: 120px 0px 0px 0px;
   align-items: center;
   flex: 1;
   z-index: 1;
@@ -117,7 +117,6 @@ const App = () => {
           <BodyWrapper>
             <Popups />
             <Suspense fallback={<Loader />}>{renderContent()}</Suspense>
-            <Marginer />
             <Footer />
           </BodyWrapper>
         </AppWrapper>
