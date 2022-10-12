@@ -163,40 +163,44 @@ const getUnshieldData = ({
   const _buyToken = getDataByTokenID(buyIdentify);
   let _buyTokenList = unshieldableTokens(state);
 
-  if (formType === FormTypes.SWAP && swapNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
-    _buyTokenList = _buyTokenList.filter((token: any) => {
-      if (swapNetwork === MAIN_NETWORK_NAME.POLYGON) {
-        return (
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20
-        );
-      }
+  if (formType === FormTypes.SWAP) {
+    if (swapNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
+      _buyTokenList = _buyTokenList.filter((token: any) => {
+        if (swapNetwork === MAIN_NETWORK_NAME.POLYGON) {
+          return (
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20
+          );
+        }
 
-      if (swapNetwork === MAIN_NETWORK_NAME.ETHEREUM) {
-        return (
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ERC20 ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ETH
-        );
-      }
+        if (swapNetwork === MAIN_NETWORK_NAME.ETHEREUM) {
+          return (
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ERC20 ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ETH
+          );
+        }
 
-      if (swapNetwork === MAIN_NETWORK_NAME.BSC) {
-        return (
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20
-        );
-      }
+        if (swapNetwork === MAIN_NETWORK_NAME.BSC) {
+          return (
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20
+          );
+        }
 
-      if (swapNetwork === MAIN_NETWORK_NAME.FANTOM) {
-        return (
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20
-        );
-      }
-    });
+        if (swapNetwork === MAIN_NETWORK_NAME.FANTOM) {
+          return (
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20
+          );
+        }
+      });
+    } else {
+      _buyTokenList = _buyTokenList.filter((token: any) => !token.movedUnifiedToken);
+    }
   }
 
   let isUseTokenFee = false;
