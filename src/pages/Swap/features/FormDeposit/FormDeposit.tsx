@@ -10,9 +10,7 @@ import styled from 'styled-components/macro';
 import { genDepositAddress, IDepositAddress } from '../../../../services/rpcClient';
 import { getAcronymNetwork } from '../../../../utils/token';
 import { Selection } from '../Selection';
-import DescriptionBox from './components/DescriptionBox';
 import DescriptionQrCode from './components/DescriptionQrCode';
-import IncognitoAddress from './components/IncognitoAddress';
 import ShieldFeeEstimate from './components/ShieldFeeEstimate';
 import enhance, { IMergeProps } from './FormDeposit.enhance';
 
@@ -109,43 +107,6 @@ const FormDeposit = (props: IMergeProps) => {
         showNetwork={true}
       />
       <VerticalSpace />
-      {/* <Selection
-          title="To"
-          rightValue={buyNetworkName}
-          currency={PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}
-          leftValue={buyToken.symbol}
-          iconUrl={buyToken.iconUrl}
-        />
-        <VerticalSpace /> */}
-      {/* <Field
-        component={InputField}
-        name={FORM_CONFIGS.toAddress}
-        inputType={INPUT_FIELD.address}
-        leftTitle="Incognito Address"
-        componentProps={{
-          placeholder: 'Incognito Address',
-        }}
-        showIcon={false}
-        validate={validateAddress}
-        warning={warningAddress}
-      /> */}
-      {incAccount && incAccount?.paymentAddress && <IncognitoAddress paymentAddress={incAccount?.paymentAddress} />}
-      <VerticalSpace />
-      {/* <Field
-          component={InputField}
-          name={FORM_CONFIGS.sellAmount}
-          inputType={INPUT_FIELD.amount}
-          leftTitle="Total amount"
-          rightTitle={amount.maxAmountFormatedText}
-          componentProps={{
-            placeholder: 'Amount',
-            type: 'number',
-          }}
-          validate={validateAmount}
-          onClickMax={onClickMax}
-        /> */}
-      <VerticalSpace />
-
       {isShowQrCode && (
         <div style={{ marginTop: '30px' }}>
           <QrCode
@@ -159,7 +120,6 @@ const FormDeposit = (props: IMergeProps) => {
           <DescriptionQrCode symbol={sellToken.symbol} paymentAddress={state && state.data?.address} />
           {/*<MinimumShiledAmount />*/}
           <ShieldFeeEstimate value={`${state.data?.tokenFee || state.data?.estimateFee || 0} ${sellToken.symbol}`} />
-          <DescriptionBox symbol={sellToken.symbol} />
         </div>
       )}
       {/* {button.switchNetwork || !account ? (

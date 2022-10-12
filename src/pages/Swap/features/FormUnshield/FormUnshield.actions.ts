@@ -272,7 +272,9 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       }
       const exchanges = data[NetworkTypePayload.BINANCE_SMART_CHAIN];
       if (Array.isArray(exchanges)) {
-        bscExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'BSC', 2, incTokenID));
+        bscExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'BNB Chain', 2, incTokenID)
+        );
       }
     }
 
@@ -284,7 +286,9 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       }
       const exchanges = data[NetworkTypePayload.ETHEREUM];
       if (Array.isArray(exchanges)) {
-        ethExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'ETH', 1, incTokenID));
+        ethExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'Ethereum', 1, incTokenID)
+        );
       }
     }
 
@@ -296,7 +300,9 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       }
       const exchanges = data[NetworkTypePayload.POLYGON];
       if (Array.isArray(exchanges)) {
-        plgExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'PLG', 3, incTokenID));
+        plgExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'Polygon', 3, incTokenID)
+        );
       }
     }
 
@@ -308,7 +314,9 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       }
       const exchanges = data[NetworkTypePayload.FANTOM];
       if (Array.isArray(exchanges)) {
-        ftmExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'FTM', 4, incTokenID));
+        ftmExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'Fantom', 4, incTokenID)
+        );
       }
     }
 

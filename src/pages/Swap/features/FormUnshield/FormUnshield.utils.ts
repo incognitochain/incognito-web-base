@@ -659,7 +659,7 @@ const parseExchangeDataModelResponse = (
     amountOut: parseFloat(data?.AmountOut || 0),
     amountOutRaw: parseFloat(data?.AmountOutRaw || 0),
     appName: data?.AppName,
-    exchangeName: `${getExchangeName(data?.AppName)}(${networkName})`,
+    exchangeName: `${getExchangeName(data?.AppName)} (${networkName})`,
     fees: parseFeeDataModelResponse(data?.Fee || []) || [],
     routes: data?.Paths || [],
     incTokenID: incTokenID || '',

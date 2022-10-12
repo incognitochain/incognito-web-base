@@ -98,7 +98,7 @@ const IncognitoWalletProvider = (props: any) => {
           params: {},
         });
       } else {
-        window.open('https://we.incognito.org/t/incognito-extension-alpha-version-is-now-released');
+        window.open('https://chrome.google.com/webstore/detail/incognito-wallet/chngojfpcfnjfnaeddcmngfbbdpcdjaj');
       }
     } catch (e) {
       console.log('SHOW POPUP WITH ERROR: ', e);

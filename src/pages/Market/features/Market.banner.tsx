@@ -109,7 +109,7 @@ const MarketBanner = () => {
       <SectionHead title="Privacy Markets" className="section-head" />
       <h1 className="text1 special-main-title-text banner-title">{marketTrs.mainTitle}</h1>
       <p className="text2 sub-title-text banner-sub-title">
-        {`Here, your coins are privacy coins. Trade them cross-chain, commission-free. `}
+        {`Here, your coins are privacy coins. Trade them cross-chain. `}
         {!isMobile && (
           <span className="text3 link-text">
             <Dropdown
