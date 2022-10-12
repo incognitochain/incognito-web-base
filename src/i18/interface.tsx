@@ -6,13 +6,13 @@ export interface ILanguage {
 }
 
 export interface IMarket {
+  crossChainDetail: string;
+  crossChain: string;
   mainTitle: any;
   untraceable: string;
   untraceableDetail: string;
   unlinkable: string;
   unlinkableDetail: string;
-  commissionFree: string;
-  commissionFreeDetail: string;
   privacyMarket: string;
   whatPCoins: string;
   name: string;

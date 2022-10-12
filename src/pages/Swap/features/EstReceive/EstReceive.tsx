@@ -25,6 +25,7 @@ const Styled = styled(Column)`
   }
   a {
     color: ${({ theme }) => theme.blue1};
+    display: unset;
     :hover {
       opacity: 0.9;
     }

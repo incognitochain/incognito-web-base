@@ -150,7 +150,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
               inputType={INPUT_FIELD.address}
               leftTitle="Address"
               componentProps={{
-                placeholder: 'Your External Address',
+                placeholder:
+                  buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? 'Your Incognito Address' : 'Your External Address',
                 disabled: formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? true : false,
               }}
               validate={validateAddress}

@@ -222,13 +222,18 @@ const getUnshieldData = ({
     if (_sellParentToken?.isUnified && vaults?.UnifiedTokenVaults) {
       const tokenVault = vaults?.UnifiedTokenVaults[_sellParentToken?.tokenID] || {};
       // Filter network enough vault
-      _buyNetworkList = _buyNetworkList?.filter(
-        (_item: any) =>
-          _item?.networkName !== MAIN_NETWORK_NAME.INCOGNITO &&
-          tokenVault[_item?.identify?.split('-')[0]]['Amount'] -
-            tokenVault[_item?.identify?.split('-')[0]]['LockedAmount'] >
-            0
-      );
+      _buyNetworkList = _buyNetworkList?.filter((_item: any) => {
+        let isAccept = false;
+        try {
+          isAccept =
+            tokenVault[_item?.identify?.split('-')[0]]['Amount'] -
+              tokenVault[_item?.identify?.split('-')[0]]['LockedAmount'] >
+            0;
+        } catch (e) {
+          console.log('CANT FILTER NETWORK LIST');
+        }
+        return isAccept;
+      });
     }
 
     _buyTokenList = getBuyTokenList(swapNetwork, _buyTokenList, _sellToken, _buyNetworkList);
