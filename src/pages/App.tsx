@@ -78,6 +78,8 @@ const App = () => {
   useEffect(() => {
     if (!isInternetAlready) {
       history.replace('/internet-disconnected');
+    } else {
+      history.replace('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInternetAlready]);
