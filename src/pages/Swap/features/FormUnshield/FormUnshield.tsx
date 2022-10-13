@@ -92,12 +92,12 @@ const FormUnshield = React.memo((props: IMergeProps) => {
       }
     } else if (exchangeSelectedData?.appName) {
       const isReShield = buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO;
-      const appName = exchangeSelectedData.appName;
+      const { appName, exchangeName } = exchangeSelectedData;
       if (appName === SwapExchange.PANCAKE_SWAP) {
         time = isReShield ? '2 mins' : '1 min';
       } else if (
         appName === SwapExchange.CURVE ||
-        (appName === SwapExchange.UNISWAP && buyNetworkName === MAIN_NETWORK_NAME.POLYGON)
+        (appName === SwapExchange.UNISWAP && exchangeName.includes(MAIN_NETWORK_NAME.POLYGON))
       ) {
         time = isReShield ? '6 mins' : '1 min';
       } else {
