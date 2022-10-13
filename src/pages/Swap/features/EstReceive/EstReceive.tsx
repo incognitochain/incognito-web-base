@@ -30,6 +30,12 @@ const Styled = styled(Column)`
       opacity: 0.9;
     }
   }
+  .expand-view {
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+    transition: height 2s ease;
+  }
 `;
 
 const RotatingArrow = styled(ChevronDown)<{ open?: boolean }>`
@@ -37,6 +43,12 @@ const RotatingArrow = styled(ChevronDown)<{ open?: boolean }>`
   transition: transform 0.1s linear;
   margin-left: 9px;
   color: ${({ theme }) => theme.text1};
+`;
+
+const ExpandView = styled.div<{ isOpen: boolean }>`
+  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+  max-height: ${({ isOpen }) => (isOpen ? '500px' : '0')};
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
 `;
 
 interface IProps extends ISelectSwapExchange {
@@ -84,7 +96,7 @@ const EstReceive = React.memo(
             <RotatingArrow open={isOpen} />
           </RowFlat>
         </RowBetween>
-        {isOpen && (
+        <ExpandView isOpen={isOpen}>
           <Column style={{ marginTop: 14 }}>
             {formType === FormTypes.SWAP && exchanges?.length > 0 && (
               <SelectSwapExchange
@@ -150,7 +162,7 @@ const EstReceive = React.memo(
               </ThemedText.Small>
             )}
           </Column>
-        )}
+        </ExpandView>
       </Styled>
     );
   }

@@ -14,8 +14,6 @@ const Styled = styled(Column)`
   overflow-y: auto;
   max-height: 80vh;
   height: 600px;
-  //height: 100vh;
-
   .tab-bar-container {
     display: flex;
     position: relative;
