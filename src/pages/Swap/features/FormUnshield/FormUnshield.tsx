@@ -25,7 +25,7 @@ const WrapSwapIcon = styled.div`
   height: 56px;
   @keyframes spin {
     from {
-      transform: rotate(360deg);
+      transform: rotate(180deg);
     }
     to {
       transform: rotate(0deg);
@@ -171,7 +171,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
             if (formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
               onRotateSwapToken();
               setChanging(true);
-              setTimeout(() => setChanging(false), 1000);
+              setTimeout(() => setChanging(false), 800);
             }
           }}
         >
@@ -179,7 +179,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
             className={`${
               formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? 'swap-icon' : 'disable'
             } icon`}
-            style={{ animation: changing ? `spin ${0.8}s linear` : '' }}
+            style={{ animation: changing ? `spin ${0.6}s linear` : '' }}
             src={SwapIcon}
             alt="swap-svg"
           />
