@@ -1,3 +1,4 @@
+import SwapIcon from 'assets/svg/swap.svg';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { InputField } from 'components/Core/ReduxForm';
@@ -18,6 +19,34 @@ import enhance, { IMergeProps } from './FormUnshield.enhance';
 import { FormTypes, SwapExchange } from './FormUnshield.types';
 
 const Styled = styled.div``;
+
+const WrapSwapIcon = styled.div`
+  width: fit-content;
+  margin: 16px auto auto auto;
+  @keyframes spin {
+    from {
+      transform: rotate(360deg);
+    }
+    to {
+      transform: rotate(0deg);
+    }
+  }
+  .disable {
+    opacity: 0.5;
+    cursor: unset;
+  }
+  .swap-icon {
+    cursor: pointer;
+    :hover {
+      transform: scale(1.2);
+      transition-duration: 0.3s;
+      opacity: 0.8;
+    }
+    :active {
+      opacity: 0.5;
+    }
+  }
+`;
 
 const FormUnshield = React.memo((props: IMergeProps) => {
   const {
@@ -41,6 +70,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     onSelectSellToken,
     onSelectBuyToken,
     onSelectBuyNetwork,
+    onRotateSwapToken,
     validateAmount,
     onClickMax,
     onSend,
@@ -59,6 +89,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
   } = props;
 
   const { showPopup } = useIncognitoWallet();
+  const [changing, setChanging] = React.useState(false);
 
   const _buttonAction = () => showPopup();
 
@@ -129,7 +160,25 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           onSelectToken={onSelectSellToken}
           showNetwork={true}
         />
-        <VerticalSpace />
+        {/*<VerticalSpace />*/}
+        <WrapSwapIcon
+          onClick={() => {
+            if (formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
+              onRotateSwapToken();
+              setChanging(true);
+              setTimeout(() => setChanging(false), 1000);
+            }
+          }}
+        >
+          <img
+            className={
+              formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? 'swap-icon' : 'disable'
+            }
+            style={{ animation: changing ? `spin ${0.8}s linear` : '' }}
+            src={SwapIcon}
+            alt="swap-svg"
+          />
+        </WrapSwapIcon>
         <Selection
           title="To"
           rightLabel={rightLabelAddress}
@@ -197,7 +246,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           isFetchingFee={isFetching}
         />
         <VerticalSpace />
-        {errorMsg && (
+        {!!errorMsg && (
           <>
             <ThemedText.Error marginTop="4px" error className={`error`}>
               {errorMsg}

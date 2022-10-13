@@ -41,6 +41,7 @@ export interface IUnshieldData {
   incAddress: string;
 
   sellToken: SelectedPrivacy;
+  sellParentToken: any;
   sellTokenList: SelectedPrivacy[];
   sellCurrency: number;
   sellNetworkName: string;
@@ -484,6 +485,7 @@ const getUnshieldData = ({
 
   return {
     sellToken: _sellToken,
+    sellParentToken: _sellParentToken,
     sellTokenList: _sellTokenList,
     sellCurrency,
     sellNetworkName,

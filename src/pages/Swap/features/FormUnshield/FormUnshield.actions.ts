@@ -6,6 +6,7 @@ import { AppDispatch, AppState } from 'state';
 import { getPrivacyByTokenIdentifySelectors } from 'state/token';
 import convert from 'utils/convert';
 
+import SelectedPrivacy from '../../../../models/model/SelectedPrivacyModel';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import {
   FormTypes,
@@ -354,6 +355,30 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     setTimeout(() => {
       dispatch(actionSetFetchingFee({ isFetchingFee: false }));
     }, 200);
+  }
+};
+
+export const actionRotateSwapTokens = () => async (dispatch: AppDispatch, getState: AppState & any) => {
+  try {
+    const { buyParentToken, sellParentToken } = unshieldDataSelector(getState());
+
+    const getTokenObject = (token: SelectedPrivacy): ITokenNetwork => ({
+      parentIdentify: token.parentTokenID,
+      identify: token.identify,
+      chainID: token.chainID,
+      currency: token.currencyType,
+      networkName: token.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+    });
+
+    dispatch(
+      actionSetToken({
+        sellToken: getTokenObject(buyParentToken),
+        buyToken: getTokenObject(sellParentToken),
+      })
+    );
+    dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
+  } catch (error) {
+    console.log('ACTION FILTER TOKEN ERROR: ', error);
   }
 };
 
