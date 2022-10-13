@@ -168,7 +168,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
         {/*<VerticalSpace />*/}
         <WrapSwapIcon
           onClick={() => {
-            if (formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
+            if (formType === FormTypes.SWAP) {
               onRotateSwapToken();
               setChanging(true);
               setTimeout(() => setChanging(false), 800);
@@ -176,9 +176,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           }}
         >
           <img
-            className={`${
-              formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? 'swap-icon' : 'disable'
-            } icon`}
+            className={`${formType === FormTypes.SWAP ? 'swap-icon' : 'disable'} icon`}
             style={{ animation: changing ? `spin ${0.6}s linear` : '' }}
             src={SwapIcon}
             alt="swap-svg"
