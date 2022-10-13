@@ -21,8 +21,8 @@ import { FormTypes, SwapExchange } from './FormUnshield.types';
 const Styled = styled.div``;
 
 const WrapSwapIcon = styled.div`
-  width: fit-content;
-  margin: 16px auto auto auto;
+  width: 100%;
+  height: 56px;
   @keyframes spin {
     from {
       transform: rotate(360deg);
@@ -30,6 +30,11 @@ const WrapSwapIcon = styled.div`
     to {
       transform: rotate(0deg);
     }
+  }
+  .icon {
+    margin-top: 16px;
+    position: absolute;
+    left: 46.5%;
   }
   .disable {
     opacity: 0.5;
@@ -171,9 +176,9 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           }}
         >
           <img
-            className={
+            className={`${
               formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? 'swap-icon' : 'disable'
-            }
+            } icon`}
             style={{ animation: changing ? `spin ${0.8}s linear` : '' }}
             src={SwapIcon}
             alt="swap-svg"
