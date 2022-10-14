@@ -227,7 +227,7 @@ const FormUnshield = React.memo((props: any) => {
           amount={userBuyBalanceFormatedText}
           onSelectToken={onSelectBuyToken}
           onSelectNetwork={onSelectBuyNetwork}
-          receiveValue={formType === FormTypes.SWAP ? estReceiveAmount?.toString() : inputAmount}
+          receiveValue={formType === FormTypes.SWAP ? estReceiveAmount || '0' : inputAmount}
           footerRightText={rightLabelAddress}
           isUseInput={false}
           footerRightClass="send-to-text"

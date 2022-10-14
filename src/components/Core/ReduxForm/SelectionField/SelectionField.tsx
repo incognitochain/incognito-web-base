@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js';
 import { Image } from 'components/Core/Image';
 import Row, { RowBetween } from 'components/Core/Row';
 import { NetworkModal, useModal } from 'components/Modal';
@@ -156,7 +157,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
             <InputField {...props} isError={isError} />
           ) : (
             <ThemedText.AvgMediumLabel fontSize={22} fontWeight={600}>
-              {parseFloat(receiveValue) || '0.00'}
+              {new BigNumber(receiveValue || 0).gt(0) ? receiveValue : '0.00'}
             </ThemedText.AvgMediumLabel>
           )}
         </RowBetween>
