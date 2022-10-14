@@ -3,11 +3,11 @@ import styled from 'styled-components/macro';
 
 export const Container = styled.div``;
 
-export const Content = styled.div`
+export const Content = styled.div<{ isActive: boolean }>`
   border-radius: 12px;
   margin-top: 6px;
   padding: 8px;
-  border: 1px solid ${({ theme }) => theme.border1};
+  border: 1px solid ${({ theme, isActive }) => (isActive ? theme.blue1 : theme.border1)};
   background-color: ${({ theme }) => theme.primary14};
   .default-padding {
     padding: 8px;
@@ -75,9 +75,7 @@ export const Input = styled.input<{ active: boolean; isError: boolean }>`
   max-width: 500px;
   margin-left: 40px;
   border-radius: 8px;
-  border: 3px solid ${({ active, theme }) => (active ? theme.border1 : 'transparent')};
   :hover {
-    border: 3px solid ${({ theme }) => theme.border1};
   }
 
   ::placeholder {

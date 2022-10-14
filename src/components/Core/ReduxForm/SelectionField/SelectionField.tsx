@@ -39,7 +39,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
     footerRightClass,
   } = props;
 
-  const { error: errorMeta, touched, submitting } = meta;
+  const { error: errorMeta, touched, submitting, active } = meta;
   const error = errorMeta;
   const isError = React.useMemo(() => {
     return touched && error;
@@ -147,7 +147,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
         {renderHeaderTitle()}
         {renderNetworkSelection()}
       </RowBetween>
-      <Content>
+      <Content isActive={!!active}>
         <RowBetween>
           <WrapToken className={`default-padding ${activeTokensHover ? 'hover-item' : ''}`} onClick={showTokensList}>
             {renderTokenSelection()}
