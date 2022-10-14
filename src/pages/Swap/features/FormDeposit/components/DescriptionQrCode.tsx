@@ -1,7 +1,6 @@
 import CopyIcon from 'components/Copy/index';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
-import { ellipsisCenter } from 'utils';
 
 const Styled = styled.div`
   margin-top: 16px;
@@ -52,12 +51,9 @@ const DescriptionQrCode = ({ symbol, paymentAddress }: DescriptionQrCodeProps) =
       {paymentAddress && (
         <div className="paymentAddress-area">
           <div className="paymentAddressText">
-            <ThemedText.SmallLabel fontWeight={500} color="primary5">
-              {ellipsisCenter({
-                str: paymentAddress || '',
-                limit: 18,
-              })}
-            </ThemedText.SmallLabel>
+            <ThemedText.RegularLabel fontWeight={500} color="primary5">
+              {paymentAddress}
+            </ThemedText.RegularLabel>
           </div>
 
           <CopyIcon text={paymentAddress} />
