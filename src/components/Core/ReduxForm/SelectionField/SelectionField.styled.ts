@@ -61,3 +61,37 @@ export const WrapNetwork = styled.div<{ isActive: boolean }>`
     }
   }
 `;
+
+export const Input = styled.input<{ active: boolean; isError: boolean }>`
+  font-size: 22px;
+  font-weight: 600;
+  outline: none;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 56px;
+  color: ${({ theme }) => theme.primary5};
+  text-align: right;
+  max-width: 500px;
+  margin-left: 40px;
+  border-radius: 8px;
+  border: 3px solid ${({ active, theme }) => (active ? theme.border1 : 'transparent')};
+  :hover {
+    border: 3px solid ${({ theme }) => theme.border1};
+  }
+
+  ::placeholder {
+    color: ${({ theme }) => theme.primary7};
+  }
+  padding: 0;
+  -webkit-appearance: textfield;
+
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+`;

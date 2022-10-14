@@ -1,8 +1,11 @@
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import React from 'react';
-import { WrappedFieldInputProps } from 'redux-form';
+import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form';
 
 export interface ISelectionFieldProps {
+  meta: WrappedFieldMetaProps;
+  input: WrappedFieldInputProps;
+  componentProps: React.InputHTMLAttributes<HTMLInputElement> | any;
   headerTitle?: string;
   tokens?: PToken[];
   networks?: ITokenNetwork[];
@@ -18,6 +21,16 @@ export interface ISelectionFieldProps {
 
   onSelectToken?: ({ token }: { token: PToken }) => void;
   onSelectNetwork?: ({ network }: { network: ITokenNetwork }) => void;
+
+  className?: string;
+  warning?: string;
+
+  receiveValue?: string;
+  isUseInput?: boolean;
+
+  footerRightText?: string;
+  footerRightClass?: string;
+  onClickFooterRight?: () => void;
 }
 
 interface IInputProps {

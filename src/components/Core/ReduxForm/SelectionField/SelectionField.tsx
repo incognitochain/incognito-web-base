@@ -2,10 +2,11 @@ import { Image } from 'components/Core/Image';
 import Row, { RowBetween } from 'components/Core/Row';
 import { NetworkModal, useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
+import { MAIN_NETWORK_NAME_ICON } from 'constants/token';
 import React from 'react';
 import { ThemedText } from 'theme';
 
-import { MAIN_NETWORK_NAME_ICON } from '../../../../constants';
+import InputField from './SectionField.input';
 import { ISelectionFieldProps } from './SelectionField.interface';
 import { ArrowDown, Container, Content, WrapNetwork, WrapToken } from './SelectionField.styled';
 
@@ -26,7 +27,47 @@ const SelectionField = (props: ISelectionFieldProps) => {
 
     onSelectToken,
     onSelectNetwork,
+
+    className,
+
+    warning,
+    meta,
+    isUseInput = true,
+    receiveValue = '0',
+    footerRightText,
+    onClickFooterRight,
+    footerRightClass,
   } = props;
+
+  const { error: errorMeta, touched, submitting } = meta;
+  const error = errorMeta;
+  const isError = React.useMemo(() => {
+    return touched && error;
+  }, [touched, error]);
+
+  const isWarning = React.useMemo(() => {
+    return touched && warning;
+  }, [touched, warning]);
+
+  const renderError = () => {
+    if (submitting) {
+      return null;
+    }
+    return (
+      <>
+        {(isError && (
+          <ThemedText.Error marginTop="4px" error className={`error`}>
+            {error}
+          </ThemedText.Error>
+        )) ||
+          (isWarning && (
+            <ThemedText.Warning marginTop="4px" warning className={`warning`}>
+              {warning}
+            </ThemedText.Warning>
+          ))}
+      </>
+    );
+  };
 
   const { setModal } = useModal();
 
@@ -54,6 +95,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
       title: 'Select network',
     });
   };
+
   const renderTokenSelection = () => (
     <Row>
       {tokenSymbol ? (
@@ -100,7 +142,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
     ) : undefined;
 
   return (
-    <Container>
+    <Container className={`${className ? className : ''}`}>
       <RowBetween>
         {renderHeaderTitle()}
         {renderNetworkSelection()}
@@ -110,13 +152,31 @@ const SelectionField = (props: ISelectionFieldProps) => {
           <WrapToken className={`default-padding ${activeTokensHover ? 'hover-item' : ''}`} onClick={showTokensList}>
             {renderTokenSelection()}
           </WrapToken>
+          {isUseInput ? (
+            <InputField {...props} isError={isError} />
+          ) : (
+            <ThemedText.AvgMediumLabel fontSize={22} fontWeight={600}>
+              {parseFloat(receiveValue) || '0.00'}
+            </ThemedText.AvgMediumLabel>
+          )}
         </RowBetween>
         <RowBetween className="default-padding">
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
             Balance: {amount}
           </ThemedText.SmallLabel>
+          {!!footerRightText && (
+            <ThemedText.RegularLabel
+              className={`${footerRightClass ? footerRightClass : ''}`}
+              style={{ cursor: 'pointer' }}
+              fontWeight={500}
+              onClick={onClickFooterRight}
+            >
+              {footerRightText}
+            </ThemedText.RegularLabel>
+          )}
         </RowBetween>
       </Content>
+      {renderError()}
     </Container>
   );
 };
