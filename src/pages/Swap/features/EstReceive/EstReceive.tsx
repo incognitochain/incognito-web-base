@@ -120,25 +120,33 @@ const EstReceive = React.memo(
             {formType === FormTypes.UNSHIELD ? (
               <>
                 <RowBetween>
-                  <ThemedText.Small fontWeight={400}>Network fee</ThemedText.Small>
+                  <ThemedText.Small fontWeight={400} color="primary8">
+                    Network fee
+                  </ThemedText.Small>
                   <ThemedText.Small fontWeight={400}>{networkFee}</ThemedText.Small>
                 </RowBetween>
                 {!!burnFeeText && (
                   <RowBetween style={{ marginTop: 12 }}>
-                    <ThemedText.Small fontWeight={400}>Outchain Fee (est.)</ThemedText.Small>
+                    <ThemedText.Small fontWeight={400} color="primary8">
+                      Outchain Fee (est.)
+                    </ThemedText.Small>
                     <ThemedText.Small fontWeight={400}>{burnFeeText}</ThemedText.Small>
                   </RowBetween>
                 )}
               </>
             ) : (
               <RowBetween style={{ marginTop: 12 }}>
-                <ThemedText.Small fontWeight={400}>Fee (est.)</ThemedText.Small>
+                <ThemedText.Small fontWeight={400} color="primary8">
+                  Fee (est.)
+                </ThemedText.Small>
                 <ThemedText.Small fontWeight={400}>{swapFee?.tradeFeeText}</ThemedText.Small>
               </RowBetween>
             )}
 
             <RowBetween style={{ marginTop: 12 }}>
-              <ThemedText.Small fontWeight={400}>Estimate time</ThemedText.Small>
+              <ThemedText.Small fontWeight={400} color="primary8">
+                Estimate time
+              </ThemedText.Small>
               <ThemedText.Small fontWeight={400}>{`${time}`}</ThemedText.Small>
             </RowBetween>
             {!!desc && (
@@ -146,7 +154,9 @@ const EstReceive = React.memo(
             )}
             {formType === FormTypes.SWAP && tradePath && (
               <RowBetween style={{ marginTop: 12 }}>
-                <ThemedText.Small fontWeight={400}>Trade path</ThemedText.Small>
+                <ThemedText.Small fontWeight={400} color="primary8">
+                  Trade path
+                </ThemedText.Small>
                 <ThemedText.Small fontWeight={400}>{tradePath}</ThemedText.Small>
               </RowBetween>
             )}

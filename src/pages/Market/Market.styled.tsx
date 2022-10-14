@@ -1,7 +1,7 @@
 import styled, { DefaultTheme } from 'styled-components/macro';
 export const Styled = styled.div<{ isMobile: boolean }>`
   .market-header {
-    padding-top: 40px;
+    padding-top: 30px;
     padding-bottom: 80px;
     padding-left: ${({ isMobile }) => isMobile && 200};
     padding-right: ${({ isMobile }) => isMobile && 200};

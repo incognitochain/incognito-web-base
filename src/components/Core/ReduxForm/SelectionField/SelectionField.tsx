@@ -54,7 +54,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
       return null;
     }
     return (
-      <>
+      <div style={{ position: 'absolute' }}>
         {(isError && (
           <ThemedText.Error marginTop="4px" error className={`error`}>
             {error}
@@ -65,7 +65,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
               {warning}
             </ThemedText.Warning>
           ))}
-      </>
+      </div>
     );
   };
 
@@ -142,7 +142,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
     ) : undefined;
 
   return (
-    <Container className={`${className ? className : ''}`}>
+    <Container className={`${className ? className : ''}`} style={{ marginBottom: isError ? 10 : 0 }}>
       <RowBetween>
         {renderHeaderTitle()}
         {renderNetworkSelection()}
