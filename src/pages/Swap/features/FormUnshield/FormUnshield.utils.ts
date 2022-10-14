@@ -643,6 +643,9 @@ const getExchangeName = (exchange: SwapExchange) => {
   if (exchange === SwapExchange.CURVE) {
     return 'Curve';
   }
+  if (exchange === SwapExchange.SPOOKY) {
+    return 'Spooky';
+  }
 };
 
 // Parse fee data from api estimate swap fee
