@@ -34,6 +34,7 @@ export interface IUnshield {
   userBalanceNoClip?: string;
   userBalance?: string;
   userBalanceFormatedText: string;
+  userBuyBalanceFormatedText: string;
   maxAmountText: string;
   minAmountText: string;
 
@@ -91,6 +92,8 @@ export const useUnshield = (): IUnshield => {
     userBalanceNoClip,
     userBalance,
     userBalanceFormatedText,
+    userBuyBalanceFormatedText,
+
     minAmountText,
     maxAmountText,
 
@@ -158,6 +161,7 @@ export const useUnshield = (): IUnshield => {
     userBalanceNoClip,
     userBalance,
     userBalanceFormatedText,
+    userBuyBalanceFormatedText,
     minAmountText,
     maxAmountText,
 

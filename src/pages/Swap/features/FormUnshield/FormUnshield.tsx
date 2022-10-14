@@ -3,9 +3,9 @@ import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
+import SelectionField from 'components/Core/ReduxForm/SelectionField';
 import { VerticalSpace } from 'components/Core/Space';
-import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
-import { Selection } from 'pages/Swap/features/Selection';
+import { MAIN_NETWORK_NAME } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -15,26 +15,48 @@ import { ThemedText } from 'theme';
 
 import { EstReceive } from '../EstReceive';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
-import enhance, { IMergeProps } from './FormUnshield.enhance';
+import enhance from './FormUnshield.enhance';
 import { FormTypes, SwapExchange } from './FormUnshield.types';
 
-const Styled = styled.div``;
+const Styled = styled.div`
+  .buy-section-style {
+    margin-top: -15px;
+  }
+  .max-text {
+    padding-left: 15px;
+    font-size: 18px;
+    :hover {
+      opacity: 0.8;
+    }
+    color: ${({ theme }) => theme.btn1};
+  }
+
+  .send-to-text {
+    padding-left: 15px;
+    :hover {
+      opacity: 0.8;
+    }
+  }
+`;
 
 const WrapSwapIcon = styled.div`
   width: 100%;
   height: 56px;
   @keyframes spin {
     from {
-      transform: rotate(180deg);
+      transform: rotate(0deg);
     }
     to {
-      transform: rotate(0deg);
+      transform: rotate(180deg);
     }
   }
   .icon {
     margin-top: 16px;
     position: absolute;
     left: 46.5%;
+    :hover {
+      transform: scale(1.2);
+    }
   }
   .disable {
     opacity: 0.5;
@@ -53,7 +75,7 @@ const WrapSwapIcon = styled.div`
   }
 `;
 
-const FormUnshield = React.memo((props: IMergeProps) => {
+const FormUnshield = React.memo((props: any) => {
   const {
     handleSubmit,
     sellToken,
@@ -91,6 +113,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     isFetching,
     exchangeSelectedData,
     inputAddress,
+
+    userBuyBalanceFormatedText,
   } = props;
 
   const { showPopup } = useIncognitoWallet();
@@ -105,7 +129,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
   };
 
   const [visibleAddress, setVisibleAddress] = useState<boolean>(
-    buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress ? true : false
+    buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress
   );
 
   useEffect(() => {
@@ -155,49 +179,63 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     <Styled>
       <form onSubmit={handleSubmit(onSend)}>
         <VerticalSpace />
-        <Selection
-          title="From"
-          currency={PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}
-          rightValue={MAIN_NETWORK_NAME.INCOGNITO}
+        <Field
+          component={SelectionField}
+          name={FORM_CONFIGS.sellAmount}
+          inputType={INPUT_FIELD.amount}
+          headerTitle="From"
           tokens={sellTokenList}
-          leftValue={sellToken.symbol}
-          iconUrl={sellToken.iconUrl}
+          tokenSymbol={sellToken.symbol}
+          tokenImgUrl={sellToken.iconUrl}
           onSelectToken={onSelectSellToken}
-          showNetwork={true}
-        />
-        {/*<VerticalSpace />*/}
-        <WrapSwapIcon
-          onClick={() => {
-            if (formType === FormTypes.SWAP) {
-              onRotateSwapToken();
-              setChanging(true);
-              setTimeout(() => setChanging(false), 800);
-            }
+          networkName={MAIN_NETWORK_NAME.INCOGNITO}
+          amount={userBalanceFormatedText}
+          onClickFooterRight={onClickMax}
+          footerRightClass="max-text"
+          componentProps={{
+            type: 'number',
           }}
-        >
+          validate={validateAmount}
+          footerRightText="Max"
+        />
+        <WrapSwapIcon>
           <img
             className={`${formType === FormTypes.SWAP ? 'swap-icon' : 'disable'} icon`}
-            style={{ animation: changing ? `spin ${0.6}s linear` : '' }}
+            style={{ animation: changing ? `spin ${0.6}s linear` : '', width: 48, height: 48 }}
+            onClick={() => {
+              if (formType === FormTypes.SWAP) {
+                onRotateSwapToken();
+                setChanging(true);
+                setTimeout(() => setChanging(false), 800);
+              }
+            }}
             src={SwapIcon}
             alt="swap-svg"
           />
         </WrapSwapIcon>
-        <Selection
-          title="To"
-          rightLabel={rightLabelAddress}
-          rightLabelStyle={{ fontSize: 14, fontWeight: '500', color: 'white' }}
-          onClickRightLabel={() => setVisibleAddress(!visibleAddress)}
-          leftPlaceholder="Select token"
-          rightPlaceholder="Select network"
-          leftValue={buyParentToken.symbol}
+        <Field
+          component={SelectionField}
+          name={FORM_CONFIGS.buyAmount}
+          inputType={INPUT_FIELD.amount}
+          className="buy-section-style"
+          headerTitle="To"
           tokens={buyTokenList}
-          iconUrl={buyParentToken.iconUrl}
+          tokenSymbol={buyParentToken.symbol}
+          tokenImgUrl={buyParentToken.iconUrl}
           networks={buyNetworkList}
-          currency={buyCurrency}
-          rightValue={buyNetworkName}
+          networkName={buyNetworkName}
+          amount={userBuyBalanceFormatedText}
           onSelectToken={onSelectBuyToken}
           onSelectNetwork={onSelectBuyNetwork}
-          showNetwork={true}
+          receiveValue={formType === FormTypes.SWAP ? estReceiveAmount?.toString() : inputAmount}
+          footerRightText={rightLabelAddress}
+          isUseInput={false}
+          footerRightClass="send-to-text"
+          onClickFooterRight={() => setVisibleAddress((value) => !value)}
+          componentProps={{
+            type: 'number',
+            disabled: true,
+          }}
         />
         <VerticalSpace />
         {visibleAddress && (
@@ -210,7 +248,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
               componentProps={{
                 placeholder:
                   buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? 'Your Incognito Address' : 'Your External Address',
-                disabled: formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? true : false,
+                disabled: formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO,
               }}
               validate={validateAddress}
               warning={warningAddress}
@@ -218,20 +256,6 @@ const FormUnshield = React.memo((props: IMergeProps) => {
             <VerticalSpace />
           </>
         )}
-        <Field
-          component={InputField}
-          name={FORM_CONFIGS.sellAmount}
-          inputType={INPUT_FIELD.amount}
-          leftTitle="Total amount"
-          rightTitle={userBalanceFormatedText}
-          showIcon={true}
-          componentProps={{
-            placeholder: 'Amount',
-            type: 'number',
-          }}
-          validate={validateAmount}
-          onClickMax={onClickMax}
-        />
         <VerticalSpace />
         <EstReceive
           amountText={formType === FormTypes.SWAP ? estReceiveAmount?.toString() : inputAmount}
@@ -251,7 +275,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
         <VerticalSpace />
         {!!errorMsg && (
           <>
-            <ThemedText.Error marginTop="4px" error className={`error`}>
+            <ThemedText.Error error className={`error`}>
               {errorMsg}
             </ThemedText.Error>
             <VerticalSpace />
