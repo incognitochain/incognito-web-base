@@ -25,16 +25,19 @@ const WrapSwapIcon = styled.div`
   height: 56px;
   @keyframes spin {
     from {
-      transform: rotate(180deg);
+      transform: rotate(0deg);
     }
     to {
-      transform: rotate(0deg);
+      transform: rotate(180deg);
     }
   }
   .icon {
     margin-top: 16px;
     position: absolute;
     left: 46.5%;
+    :hover {
+      transform: scale(1.2);
+    }
   }
   .disable {
     opacity: 0.5;
@@ -105,7 +108,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
   };
 
   const [visibleAddress, setVisibleAddress] = useState<boolean>(
-    buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress ? true : false
+    buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress
   );
 
   useEffect(() => {
@@ -166,18 +169,17 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           showNetwork={true}
         />
         {/*<VerticalSpace />*/}
-        <WrapSwapIcon
-          onClick={() => {
-            if (formType === FormTypes.SWAP) {
-              onRotateSwapToken();
-              setChanging(true);
-              setTimeout(() => setChanging(false), 800);
-            }
-          }}
-        >
+        <WrapSwapIcon>
           <img
             className={`${formType === FormTypes.SWAP ? 'swap-icon' : 'disable'} icon`}
             style={{ animation: changing ? `spin ${0.6}s linear` : '' }}
+            onClick={() => {
+              if (formType === FormTypes.SWAP) {
+                onRotateSwapToken();
+                setChanging(true);
+                setTimeout(() => setChanging(false), 800);
+              }
+            }}
             src={SwapIcon}
             alt="swap-svg"
           />
