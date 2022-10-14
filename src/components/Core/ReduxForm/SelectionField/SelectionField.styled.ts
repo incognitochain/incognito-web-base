@@ -5,7 +5,7 @@ export const Container = styled.div``;
 
 export const Content = styled.div<{ isActive: boolean }>`
   border-radius: 12px;
-  margin-top: 6px;
+  margin-top: 2px;
   padding: 8px;
   border: 1px solid ${({ theme, isActive }) => (isActive ? theme.blue1 : theme.border1)};
   background-color: ${({ theme }) => theme.primary14};
@@ -42,8 +42,8 @@ export const WrapNetwork = styled.div<{ isActive: boolean }>`
   display: flex;
   align-items: center;
   cursor: ${({ isActive }) => (isActive ? 'pointer' : 'unset')};
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   svg {
     color: ${({ theme }) => theme.primary8};
   }

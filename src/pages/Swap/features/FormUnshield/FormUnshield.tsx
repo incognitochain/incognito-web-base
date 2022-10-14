@@ -20,7 +20,7 @@ import { FormTypes, SwapExchange } from './FormUnshield.types';
 
 const Styled = styled.div`
   .buy-section-style {
-    margin-top: -15px;
+    margin-top: -13px;
   }
   .max-text {
     padding-left: 15px;
@@ -275,7 +275,7 @@ const FormUnshield = React.memo((props: any) => {
         <VerticalSpace />
         {!!errorMsg && (
           <>
-            <ThemedText.Error error className={`error`}>
+            <ThemedText.Error marginTop="-12px" error className={`error`}>
               {errorMsg}
             </ThemedText.Error>
             <VerticalSpace />
