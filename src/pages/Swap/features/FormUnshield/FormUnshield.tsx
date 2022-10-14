@@ -4,8 +4,7 @@ import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWal
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
-import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
-import { Selection } from 'pages/Swap/features/Selection';
+import { MAIN_NETWORK_NAME } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -13,6 +12,7 @@ import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
+import SelectionField from '../../../../components/Core/ReduxForm/SelectionField';
 import { EstReceive } from '../EstReceive';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
@@ -94,6 +94,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     isFetching,
     exchangeSelectedData,
     inputAddress,
+
+    userBuyBalanceFormatedText,
   } = props;
 
   const { showPopup } = useIncognitoWallet();
@@ -158,21 +160,19 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     <Styled>
       <form onSubmit={handleSubmit(onSend)}>
         <VerticalSpace />
-        <Selection
-          title="From"
-          currency={PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}
-          rightValue={MAIN_NETWORK_NAME.INCOGNITO}
+        <SelectionField
+          headerTitle="From"
           tokens={sellTokenList}
-          leftValue={sellToken.symbol}
-          iconUrl={sellToken.iconUrl}
+          tokenSymbol={sellToken.symbol}
+          tokenImgUrl={sellToken.iconUrl}
           onSelectToken={onSelectSellToken}
-          showNetwork={true}
+          networkName={MAIN_NETWORK_NAME.INCOGNITO}
+          amount={userBalanceFormatedText}
         />
-        {/*<VerticalSpace />*/}
         <WrapSwapIcon>
           <img
             className={`${formType === FormTypes.SWAP ? 'swap-icon' : 'disable'} icon`}
-            style={{ animation: changing ? `spin ${0.6}s linear` : '' }}
+            style={{ animation: changing ? `spin ${0.6}s linear` : '', width: 48, height: 48 }}
             onClick={() => {
               if (formType === FormTypes.SWAP) {
                 onRotateSwapToken();
@@ -184,22 +184,33 @@ const FormUnshield = React.memo((props: IMergeProps) => {
             alt="swap-svg"
           />
         </WrapSwapIcon>
-        <Selection
-          title="To"
-          rightLabel={rightLabelAddress}
-          rightLabelStyle={{ fontSize: 14, fontWeight: '500', color: 'white' }}
-          onClickRightLabel={() => setVisibleAddress(!visibleAddress)}
-          leftPlaceholder="Select token"
-          rightPlaceholder="Select network"
-          leftValue={buyParentToken.symbol}
+        {/*<Selection*/}
+        {/*  title="To"*/}
+        {/*  rightLabel={rightLabelAddress}*/}
+        {/*  rightLabelStyle={{ fontSize: 14, fontWeight: '500', color: 'white' }}*/}
+        {/*  onClickRightLabel={() => setVisibleAddress(!visibleAddress)}*/}
+        {/*  leftPlaceholder="Select token"*/}
+        {/*  rightPlaceholder="Select network"*/}
+        {/*  leftValue={buyParentToken.symbol}*/}
+        {/*  tokens={buyTokenList}*/}
+        {/*  iconUrl={buyParentToken.iconUrl}*/}
+        {/*  networks={buyNetworkList}*/}
+        {/*  currency={buyCurrency}*/}
+        {/*  rightValue={buyNetworkName}*/}
+        {/*  onSelectToken={onSelectBuyToken}*/}
+        {/*  onSelectNetwork={onSelectBuyNetwork}*/}
+        {/*  showNetwork={true}*/}
+        {/*/>*/}
+        <SelectionField
+          headerTitle="To"
           tokens={buyTokenList}
-          iconUrl={buyParentToken.iconUrl}
+          tokenSymbol={buyParentToken.symbol}
+          tokenImgUrl={buyParentToken.iconUrl}
           networks={buyNetworkList}
-          currency={buyCurrency}
-          rightValue={buyNetworkName}
+          networkName={buyNetworkName}
+          amount={userBuyBalanceFormatedText}
           onSelectToken={onSelectBuyToken}
           onSelectNetwork={onSelectBuyNetwork}
-          showNetwork={true}
         />
         <VerticalSpace />
         {visibleAddress && (

@@ -59,6 +59,7 @@ export interface IUnshieldData {
   userBalanceNoClip?: string;
   userBalance?: string;
   userBalanceFormatedText: string;
+  userBuyBalanceFormatedText: string;
 
   minAmountText: string;
   maxAmountText: string;
@@ -273,6 +274,7 @@ const getUnshieldData = ({
   const userBalance = _sellToken.formatAmount;
   const userBalanceFormatedText = `${_sellToken.formatAmount || 0} ${_sellToken.symbol}`;
 
+  const userBuyBalanceFormatedText = `${_buyToken.formatAmount || 0} ${_buyToken.symbol}`;
   const incAccount = incognitoWalletAccountSelector(state);
   const nativeToken = getDataByTokenID(PRV.identify);
   const incAddress = incAccount ? incAccount.paymentAddress : '';
@@ -500,6 +502,7 @@ const getUnshieldData = ({
     userBalanceNoClip,
     userBalance,
     userBalanceFormatedText,
+    userBuyBalanceFormatedText,
 
     minAmountText,
     maxAmountText,
