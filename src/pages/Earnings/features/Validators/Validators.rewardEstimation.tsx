@@ -43,10 +43,13 @@ const Styled = styled.div<{ isMobile: boolean }>`
     flex-direction: row;
     .leftView {
       flex: 0.75;
+      display: flex;
       border: 2px solid ${({ theme }: { theme: DefaultTheme }) => theme.color_grey3};
       border-radius: 24px;
       max-height: 576px;
       overflow: hidden;
+      align-items: center;
+      justify-content: center;
     }
     .rightView {
       display: flex;
@@ -78,10 +81,10 @@ const Styled = styled.div<{ isMobile: boolean }>`
       .leftView {
         display: flex;
         flex: 0.82;
+        justify-content: center;
         overflow-x: auto;
         overflow-y: hidden;
         .chart-container {
-          min-width: 1200px;
           min-height: 570px;
         }
       }
@@ -99,6 +102,7 @@ const Styled = styled.div<{ isMobile: boolean }>`
         overflow-x: auto;
         overflow-y: hidden;
         display: flex;
+        justify-content: center;
         .chart-container {
           min-height: 460px;
         }
@@ -195,14 +199,14 @@ const ValidatorRewardEstimation = () => {
       <h1 className="text-center">Rewards Estimation</h1>
       <div className="contentView">
         <div className="leftView">
-          <ResponsiveContainer className="chart-container">
+          <ResponsiveContainer className="chart-container" width="96%">
             <ComposedChart
               data={drawDataChart}
               margin={{
-                top: 20,
-                right: 30,
-                left: 20,
-                bottom: 5,
+                top: 50,
+                right: 10,
+                left: 10,
+                bottom: 10,
               }}
             >
               <CartesianGrid stroke="#363636" vertical={false} strokeDasharray="3 3" horizontal={{ width: '100%' }} />
