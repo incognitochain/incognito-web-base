@@ -1,6 +1,8 @@
 import ethereumLogoUrl from 'assets/images/ethereum-logo.svg';
 import ftmLogoUrl from 'assets/images/ftm_logo.svg';
 import incognitoLogoUrl from 'assets/images/inc_logo.svg';
+import auroraLogo from 'assets/svg/aurora-logo.svg';
+import avalancheLogo from 'assets/svg/avalanche-logo.svg';
 import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
 import { isMainnet } from 'config';
@@ -58,6 +60,14 @@ const PRIVATE_TOKEN_CURRENCY_TYPE = {
   FTM: 21,
   FANTOM_ERC20: 22,
   UNIFIED_TOKEN: 25,
+
+  // Avalanche
+  AVAX: 28,
+  AVAX_ERC20: 29,
+
+  // Aurora
+  AURORA_ETH: 30,
+  AURORA_ERC20: 31,
 };
 
 const PRIVATE_TOKEN_CURRENCY_NAME = {
@@ -73,6 +83,12 @@ const PRIVATE_TOKEN_CURRENCY_NAME = {
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20]: 'Fantom',
   [PRIVATE_TOKEN_CURRENCY_TYPE.FTM]: 'Fantom',
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX]: 'Avalanche',
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20]: 'Avalanche',
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX]: 'Aurora',
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20]: 'Aurora',
 };
 
 const DECIMALS = {
@@ -119,6 +135,8 @@ enum MAIN_NETWORK_NAME {
   POLYGON = 'Polygon',
   FANTOM = 'Fantom',
   INCOGNITO = 'Incognito',
+  AVALANCHE = 'Avalanche',
+  AURORA = 'Aurora',
 }
 
 const MAIN_NETWORK_NAME_ICON: any = {
@@ -126,6 +144,8 @@ const MAIN_NETWORK_NAME_ICON: any = {
   [MAIN_NETWORK_NAME.BSC]: bnbChainLogo,
   [MAIN_NETWORK_NAME.POLYGON]: polygonMaticLogo,
   [MAIN_NETWORK_NAME.FANTOM]: ftmLogoUrl,
+  [MAIN_NETWORK_NAME.AVALANCHE]: avalancheLogo,
+  [MAIN_NETWORK_NAME.AURORA]: auroraLogo,
   [MAIN_NETWORK_NAME.INCOGNITO]: incognitoLogoUrl,
 };
 
@@ -138,6 +158,8 @@ const GROUP_NETWORK: IGroupNetwork = {
   ],
   [MAIN_NETWORK_NAME.POLYGON]: [PRIVATE_TOKEN_CURRENCY_TYPE.MATIC, PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20],
   [MAIN_NETWORK_NAME.FANTOM]: [PRIVATE_TOKEN_CURRENCY_TYPE.FTM, PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20],
+  [MAIN_NETWORK_NAME.AVALANCHE]: [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX, PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20],
+  [MAIN_NETWORK_NAME.AURORA]: [PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH, PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20],
   [MAIN_NETWORK_NAME.INCOGNITO]: [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN],
 };
 
@@ -162,6 +184,16 @@ const ROOT_NETWORK_IMG: any = {
   [PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20]: ftmLogoUrl,
   [SupportedChainId.FTM]: ftmLogoUrl,
   [SupportedChainId.FTM_TESTNET]: ftmLogoUrl,
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX]: avalancheLogo,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20]: avalancheLogo,
+  [SupportedChainId.AVAX]: avalancheLogo,
+  [SupportedChainId.AVAX_TESTNET]: avalancheLogo,
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH]: auroraLogo,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20]: auroraLogo,
+  [SupportedChainId.AURORA]: auroraLogo,
+  [SupportedChainId.AURORA_TESTNET]: auroraLogo,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN]: incognitoLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]: incognitoLogoUrl,

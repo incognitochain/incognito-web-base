@@ -70,6 +70,8 @@ class PToken {
   isPolygonErc20Token: boolean;
   isFantomErc20Token: boolean;
   isBep20Token: boolean;
+  isAvaxErc20Token: boolean;
+  isAuroraErc20Token: boolean;
 
   isDecentralized: boolean;
   isCentralized: boolean;
@@ -145,6 +147,8 @@ class PToken {
     this.isPolygonErc20Token = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20;
     this.isFantomErc20Token = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20;
     this.isBep20Token = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20;
+    this.isAvaxErc20Token = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20;
+    this.isAuroraErc20Token = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20;
 
     this.isDecentralized =
       this.isErc20Token ||
@@ -154,7 +158,11 @@ class PToken {
       this.isPolygonErc20Token ||
       (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC) ||
       this.isFantomErc20Token ||
-      (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM);
+      (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM) ||
+      this.isAvaxErc20Token ||
+      (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX) ||
+      this.isAuroraErc20Token ||
+      (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH);
     this.isCentralized = !this.isPRV && !this.isDecentralized;
 
     this.networkName = getNetworkNameByCurrency({ currency: this.currencyType });

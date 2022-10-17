@@ -19,6 +19,12 @@ export enum SupportedChainId {
   FTM_TESTNET = 4002,
 
   GOERLI_ETH = 5,
+
+  AVAX = 43114,
+  AVAX_TESTNET = 43113,
+
+  AURORA = 1313161554,
+  AURORA_TESTNET = 1313161555,
 }
 
 export const CHAIN_IDS_TO_NAMES = {
@@ -37,6 +43,12 @@ export const CHAIN_IDS_TO_NAMES = {
 
   [SupportedChainId.FTM]: 'ftm',
   [SupportedChainId.FTM_TESTNET]: 'ftm_testnet',
+
+  [SupportedChainId.AVAX]: 'avax',
+  [SupportedChainId.AVAX_TESTNET]: 'avax_testnet',
+
+  [SupportedChainId.AURORA]: 'aurora',
+  [SupportedChainId.AURORA_TESTNET]: 'aurora_testnet',
 };
 
 /**
@@ -64,6 +76,10 @@ export const L1_CHAIN_IDS = [
   SupportedChainId.BSC_TESTNET,
   SupportedChainId.FTM,
   SupportedChainId.FTM_TESTNET,
+  SupportedChainId.AVAX,
+  SupportedChainId.AVAX_TESTNET,
+  SupportedChainId.AURORA,
+  SupportedChainId.AURORA_TESTNET,
 ] as const;
 
 export type SupportedL1ChainId = typeof L1_CHAIN_IDS[number];

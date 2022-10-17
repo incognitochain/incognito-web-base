@@ -18,6 +18,8 @@ const {
   BurningFantomRequestMeta,
   BurningPBSCRequestMeta,
   BurningPLGRequestMeta,
+  BurningAvaxRequestMeta,
+  BurningAuroraRequestMeta,
   BurningRequestMeta,
   getBurningAddress,
 } = require('incognito-chain-web-js/build/wallet');
@@ -198,6 +200,22 @@ const getUnshieldData = ({
             token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
             token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM ||
             token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20
+          );
+        }
+
+        if (swapNetwork === MAIN_NETWORK_NAME.AVALANCHE) {
+          return (
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20
+          );
+        }
+
+        if (swapNetwork === MAIN_NETWORK_NAME.AURORA) {
+          return (
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20
           );
         }
       });
@@ -697,7 +715,12 @@ const getBurningMetaDataTypeForUnshield = (sellToken: SelectedPrivacy) => {
   if (sellToken?.isBep20Token) return BurningPBSCRequestMeta;
   if (sellToken?.isPolygonErc20Token) return BurningPLGRequestMeta;
   if (sellToken?.isFantomErc20Token) return BurningFantomRequestMeta;
-
+  if (sellToken?.isAvaxErc20Token || sellToken?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX) {
+    return BurningAvaxRequestMeta;
+  }
+  if (sellToken?.isAuroraErc20Token || sellToken?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH) {
+    return BurningAuroraRequestMeta;
+  }
   return BurningRequestMeta;
 };
 

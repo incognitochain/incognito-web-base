@@ -227,6 +227,10 @@ const enhanceSend = (WrappedComponent: any) => {
                 networkName = NetworkTypePayload.POLYGON;
               } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
                 networkName = NetworkTypePayload.FANTOM;
+              } else if (buyNetworkName === MAIN_NETWORK_NAME.AVALANCHE) {
+                networkName = NetworkTypePayload.AVALANCHE;
+              } else if (buyNetworkName === MAIN_NETWORK_NAME.AURORA) {
+                networkName = NetworkTypePayload.AURORA;
               }
               // Submit tx unshield to backend after burn
               const submitTxUnshieldResponse = await rpcClient.submitUnshieldTx2({

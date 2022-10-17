@@ -33,6 +33,8 @@ export enum NetworkTypePayload {
   POLYGON = 'plg',
   FANTOM = 'ftm',
   BINANCE_SMART_CHAIN = 'bsc',
+  AVALANCHE = 'avax',
+  AURORA = 'aurora',
 }
 
 export interface ISwapExchange {
