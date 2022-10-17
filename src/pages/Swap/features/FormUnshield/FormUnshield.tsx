@@ -262,8 +262,8 @@ const FormUnshield = React.memo((props: any) => {
         )}
         <VerticalSpace />
         <EstReceive
-          buyToken={buyParentToken}
-          sellToken={sellParentToken}
+          buyToken={buyToken}
+          sellToken={sellToken}
           rate={rate}
           minReceiveAmount={formType === FormTypes.SWAP ? estReceiveAmount || '0' : inputAmount}
           networkFee={networkFeeText}
