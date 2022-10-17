@@ -9,8 +9,6 @@ export const Styled = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border-radius: 16px;
-  margin-bottom: 24px;
 
   .achieve-title {
     text-align: center;

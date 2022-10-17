@@ -691,9 +691,15 @@ const parseExchangeDataModelResponse = (
 
 const getBurningMetaDataTypeForUnshield = (sellToken: SelectedPrivacy) => {
   if (sellToken?.isUnified) return 345;
-  if (sellToken?.isBep20Token) return BurningPBSCRequestMeta;
-  if (sellToken?.isPolygonErc20Token) return BurningPLGRequestMeta;
-  if (sellToken?.isFantomErc20Token) return BurningFantomRequestMeta;
+  if (sellToken?.isBep20Token || sellToken?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
+    return BurningPBSCRequestMeta;
+  }
+  if (sellToken?.isPolygonErc20Token || sellToken?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC) {
+    return BurningPLGRequestMeta;
+  }
+  if (sellToken?.isFantomErc20Token || sellToken?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM) {
+    return BurningFantomRequestMeta;
+  }
 
   return BurningRequestMeta;
 };
