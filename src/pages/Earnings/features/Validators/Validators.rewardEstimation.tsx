@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import styled, { DefaultTheme } from 'styled-components/macro';
@@ -180,7 +180,7 @@ const ValidatorRewardEstimation = () => {
     const activeValidatorChartData: ChartDataItem[] = listData;
     const result = activeValidatorChartData.map((item, index) => ({
       time: convertISOtoMMYYYY(item.startOfMonth),
-      APR: null,
+      APR: formatPrice({ price: item.averageAPR }),
       'Active Validator': item.activeValidator,
     }));
     setDrawDataChart(result);
