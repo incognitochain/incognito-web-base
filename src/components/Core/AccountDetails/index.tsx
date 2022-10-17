@@ -101,8 +101,10 @@ const LowerSection = styled.div`
 `;
 
 const AccountControl = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   min-width: 0;
   width: 100%;
 
@@ -128,6 +130,7 @@ const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
   margin-left: 1rem;
   font-size: 0.825rem;
   display: flex;
+  align-items: center;
   :hover {
     color: ${({ theme }) => theme.text2};
   }
@@ -137,6 +140,7 @@ const CloseIcon = styled.div`
   position: absolute;
   right: 1rem;
   top: 14px;
+  color: ${({ theme }) => theme.text1};
   &:hover {
     cursor: pointer;
     opacity: 0.6;
@@ -145,7 +149,7 @@ const CloseIcon = styled.div`
 
 const CloseColor = styled(Close)`
   path {
-    stroke: ${({ theme }) => theme.text4};
+    color: ${({ theme }) => theme.text4};
   }
 `;
 
@@ -279,7 +283,7 @@ export default function AccountDetails({ toggleWalletModal, ENSName, openOptions
                       <div>
                         {account && (
                           <CopyHelper toCopy={account} iconPosition="left">
-                            <span style={{ marginLeft: '4px' }}>
+                            <span style={{ marginLeft: '4px', fontSize: 16 }}>
                               <Trans>Copy Address</Trans>
                             </span>
                           </CopyHelper>
@@ -291,7 +295,7 @@ export default function AccountDetails({ toggleWalletModal, ENSName, openOptions
                             href={getExplorerLink(chainId, ENSName, ExplorerDataType.ADDRESS)}
                           >
                             <LinkIcon size={16} />
-                            <span style={{ marginLeft: '4px' }}>
+                            <span style={{ marginLeft: '4px', fontSize: 16 }}>
                               <Trans>View on Explorer</Trans>
                             </span>
                           </AddressLink>
@@ -305,7 +309,7 @@ export default function AccountDetails({ toggleWalletModal, ENSName, openOptions
                       <div>
                         {account && (
                           <CopyHelper toCopy={account} iconPosition="left">
-                            <span style={{ marginLeft: '4px' }}>
+                            <span style={{ marginLeft: '4px', fontSize: 16 }}>
                               <Trans>Copy Address</Trans>
                             </span>
                           </CopyHelper>
@@ -317,7 +321,7 @@ export default function AccountDetails({ toggleWalletModal, ENSName, openOptions
                             href={getExplorerLink(chainId, account, ExplorerDataType.ADDRESS)}
                           >
                             <LinkIcon size={16} />
-                            <span style={{ marginLeft: '4px' }}>View on Explorer</span>
+                            <span style={{ marginLeft: '4px', fontSize: 16 }}>View on Explorer</span>
                           </AddressLink>
                         )}
                       </div>

@@ -1,8 +1,6 @@
 import { validator } from 'components/Core/ReduxForm';
 import React from 'react';
 
-import { FORM_CONFIGS } from '../../Swap.constant';
-
 export interface TInner {
   validateAddress: () => any;
   warningAddress: () => string;
@@ -31,13 +29,13 @@ const enhanceAddressValidation = (WrappedComponent: any) => {
     const validateAddress = getAddressValidator();
     const warningAddress = getWarningAddress();
 
-    React.useEffect(() => {
-      if (refObject && refObject.current) return;
-      if (incAccount && incAccount.paymentAddress && onChangeField) {
-        onChangeField(incAccount.paymentAddress, FORM_CONFIGS.toAddress);
-        refObject.current = true;
-      }
-    }, [incAccount]);
+    // React.useEffect(() => {
+    //   if (refObject && refObject.current) return;
+    //   if (incAccount && incAccount.paymentAddress && onChangeField) {
+    //     onChangeField(incAccount.paymentAddress, FORM_CONFIGS.toAddress);
+    //     refObject.current = true;
+    //   }
+    // }, [incAccount]);
 
     return <WrappedComponent {...{ ...props, validateAddress, warningAddress }} />;
   };

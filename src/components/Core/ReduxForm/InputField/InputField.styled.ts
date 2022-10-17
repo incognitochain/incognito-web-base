@@ -20,6 +20,7 @@ export const InputContainer = styled(RowBetween)`
   border-radius: 8px;
   padding-left: 16px;
   padding-right: 16px;
+  height: 56px;
 `;
 
 export const Input = styled.input`

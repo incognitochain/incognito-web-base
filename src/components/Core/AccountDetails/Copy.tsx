@@ -9,6 +9,7 @@ const CopyIcon = styled(LinkStyledButton)`
   color: ${({ color, theme }) => color || theme.text3};
   flex-shrink: 0;
   display: flex;
+  align-items: center;
   text-decoration: none;
   :hover,
   :active,
@@ -19,8 +20,7 @@ const CopyIcon = styled(LinkStyledButton)`
 `;
 const StyledText = styled.span`
   margin-left: 0.25rem;
-  ${({ theme }) => theme.flexRowNoWrap};
-  align-items: center;
+  font-size: 16px;
 `;
 
 const Copied = ({ iconSize }: { iconSize?: number }) => (

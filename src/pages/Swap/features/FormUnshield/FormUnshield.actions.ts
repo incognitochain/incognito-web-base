@@ -6,6 +6,7 @@ import { AppDispatch, AppState } from 'state';
 import { getPrivacyByTokenIdentifySelectors } from 'state/token';
 import convert from 'utils/convert';
 
+import SelectedPrivacy from '../../../../models/model/SelectedPrivacyModel';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import {
   FormTypes,
@@ -272,7 +273,9 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       }
       const exchanges = data[NetworkTypePayload.BINANCE_SMART_CHAIN];
       if (Array.isArray(exchanges)) {
-        bscExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'BSC', 2, incTokenID));
+        bscExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'BNB Chain', 2, incTokenID)
+        );
       }
     }
 
@@ -284,7 +287,9 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       }
       const exchanges = data[NetworkTypePayload.ETHEREUM];
       if (Array.isArray(exchanges)) {
-        ethExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'ETH', 1, incTokenID));
+        ethExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'Ethereum', 1, incTokenID)
+        );
       }
     }
 
@@ -296,7 +301,9 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       }
       const exchanges = data[NetworkTypePayload.POLYGON];
       if (Array.isArray(exchanges)) {
-        plgExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'PLG', 3, incTokenID));
+        plgExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'Polygon', 3, incTokenID)
+        );
       }
     }
 
@@ -308,7 +315,9 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       }
       const exchanges = data[NetworkTypePayload.FANTOM];
       if (Array.isArray(exchanges)) {
-        ftmExchanges = exchanges.map((exchange: any) => parseExchangeDataModelResponse(exchange, 'FTM', 4, incTokenID));
+        ftmExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'Fantom', 4, incTokenID)
+        );
       }
     }
 
@@ -318,9 +327,22 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       throw new Error('Can not find any trading platform that supports for this pair token');
 
     // Find best rate by list exchange
-    const bestRate: ISwapExchangeData = exchangeSupports.reduce((prev, current) =>
-      prev.amountOut > current.amountOut ? prev : current
-    );
+    // const bestRate: ISwapExchangeData = exchangeSupports[0];
+    const bestRate: ISwapExchangeData = exchangeSupports.reduce((prev, current) => {
+      let prevFee = '0';
+      let curFee = '0';
+      if (prev.fees) {
+        prevFee = prev.fees[0].amountInBuyToken;
+      }
+      if (current.fees) {
+        curFee = current.fees[0].amountInBuyToken;
+      }
+
+      const prevValue = new BigNumber(prev.amountOut).minus(prevFee);
+      const currValue = new BigNumber(current.amountOut).minus(curFee);
+
+      return new BigNumber(prevValue).gt(currValue) ? prev : current;
+    });
 
     // Set default exchange has best rate
     const defaultExchange: string = bestRate?.exchangeName;
@@ -333,6 +355,30 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     setTimeout(() => {
       dispatch(actionSetFetchingFee({ isFetchingFee: false }));
     }, 200);
+  }
+};
+
+export const actionRotateSwapTokens = () => async (dispatch: AppDispatch, getState: AppState & any) => {
+  try {
+    const { buyParentToken, sellParentToken } = unshieldDataSelector(getState());
+
+    const getTokenObject = (token: SelectedPrivacy): ITokenNetwork => ({
+      parentIdentify: token.parentTokenID,
+      identify: token.identify,
+      chainID: token.chainID,
+      currency: token.currencyType,
+      networkName: token.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+    });
+
+    dispatch(
+      actionSetToken({
+        sellToken: getTokenObject(buyParentToken),
+        buyToken: getTokenObject(sellParentToken),
+      })
+    );
+    dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
+  } catch (error) {
+    console.log('ACTION FILTER TOKEN ERROR: ', error);
   }
 };
 

@@ -12,7 +12,6 @@ import { useModalOpen, useToggleModal } from 'state/application/hooks';
 import { addPopup, ApplicationModal } from 'state/application/reducer';
 import { useAppDispatch } from 'state/hooks';
 import { updateWalletError } from 'state/wallet/reducer';
-import { replaceURLParam } from 'utils/routes';
 import { switchChain } from 'utils/switchChain';
 
 const getParsedChainId = (parsedQs?: ParsedQs) => {
@@ -60,7 +59,7 @@ export default function NetworkSelector() {
           toggle();
         }
         history.replace({
-          search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(targetChain)),
+          // search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(targetChain)),
         });
       } catch (error) {
         console.error('Failed to switch networks', error);
@@ -68,7 +67,7 @@ export default function NetworkSelector() {
         // we want app network <-> chainId param to be in sync, so if user changes the network by changing the URL
         // but the request fails, revert the URL back to current chainId
         if (chainId) {
-          history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) });
+          // history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) });
         }
 
         if (!skipToggle) {
@@ -86,7 +85,7 @@ export default function NetworkSelector() {
     if (!chainId || !prevChainId) return;
     // when network change originates from wallet or dropdown selector, just update URL
     if (chainId !== prevChainId) {
-      history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) });
+      // history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) });
       // otherwise assume network change originates from URL
     } else if (urlChainId && urlChainId !== chainId) {
       onSelectChain(urlChainId, true);
@@ -96,7 +95,7 @@ export default function NetworkSelector() {
   // set chain parameter on initial load if not there
   useEffect(() => {
     if (chainId && !urlChainId) {
-      history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) });
+      // history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) });
     }
   }, [chainId, history, urlChainId, urlChain]);
 

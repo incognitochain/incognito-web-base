@@ -50,23 +50,23 @@ export function BlockNumberProvider({ children }: { children: ReactNode }) {
 
   const windowVisible = useIsWindowVisible();
   useEffect(() => {
-    if (provider && activeChainId && windowVisible) {
-      // If chainId hasn't changed, don't clear the block. This prevents re-fetching still valid data.
-      setChainBlock((chainBlock) => (chainBlock.chainId === activeChainId ? chainBlock : { chainId: activeChainId }));
-
-      provider
-        .getBlockNumber()
-        .then(onBlock)
-        .catch((error) => {
-          console.error(`Failed to get block number for chainId ${activeChainId}`, error);
-        });
-
-      provider.on('block', onBlock);
-      return () => {
-        provider.removeListener('block', onBlock);
-      };
-    }
-    return undefined;
+    // if (provider && activeChainId && windowVisible) {
+    //   // If chainId hasn't changed, don't clear the block. This prevents re-fetching still valid data.
+    //   setChainBlock((chainBlock) => (chainBlock.chainId === activeChainId ? chainBlock : { chainId: activeChainId }));
+    //
+    //   provider
+    //     .getBlockNumber()
+    //     .then(onBlock)
+    //     .catch((error) => {
+    //       console.error(`Failed to get block number for chainId ${activeChainId}`, error);
+    //     });
+    //
+    //   provider.on('block', onBlock);
+    //   return () => {
+    //     provider.removeListener('block', onBlock);
+    //   };
+    // }
+    // return undefined;
   }, [activeChainId, provider, onBlock, setChainBlock, windowVisible]);
 
   const value = useMemo(

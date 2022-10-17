@@ -19,7 +19,7 @@ declare global {
   }
 }
 
-const CONNECT_WALLET = 'Connect Incognito';
+const CONNECT_WALLET = 'Connect Wallet';
 const INSTALL_WALLET = 'Install Wallet';
 
 const Text = styled.p`
@@ -37,15 +37,16 @@ const Wrapper = styled.div<{ isConnected: boolean }>`
   position: relative;
   flex-direction: row;
   align-items: center;
-  padding: 8px 8px;
+  justify-content: center;
+  padding-left: 16px;
+  padding-right: 16px;
   gap: 8px;
-  min-width: 140px;
   text-align: center;
   /* background-color: ${({ theme }) => theme.primary2}; */
   background-color: ${({ theme, isConnected }) => (isConnected ? theme.bg1 : theme.primary2)};
   color: ${({ theme, isConnected }) => (isConnected ? theme.primary5 : theme.primary5)};
   border-radius: 8px;
-  max-height: 40px;
+  height: 40px;
 
   :hover {
     cursor: pointer;

@@ -11,6 +11,7 @@ import {
   actionChangeSellNetwork,
   actionChangeSellToken,
   actionGetVaults,
+  actionRotateSwapTokens,
   actionSetExchangeSelected,
   actionSetSwapExchangeSupports,
   actionSetSwapNetwork,
@@ -24,6 +25,7 @@ export interface TInter {
   // Buy token
   onSelectBuyToken: ({ token }: { token: PToken }) => void;
   onSelectBuyNetwork: ({ network }: { network: ITokenNetwork }) => void;
+  onRotateSwapToken: () => void;
 }
 
 const enhanceSelect = (WrappedComponent: any) => {
@@ -59,13 +61,19 @@ const enhanceSelect = (WrappedComponent: any) => {
       dispatch(actionChangeBuyNetwork({ network }));
     };
 
+    const handleRotateSwapToken = () => dispatch(actionRotateSwapTokens());
+
     React.useEffect(() => {
       if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
-        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, incAddress));
+        setTimeout(() => {
+          dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, incAddress));
+        });
       } else {
-        dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, web3Account));
+        setTimeout(() => {
+          dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, web3Account));
+        });
       }
-    }, [buyNetworkName]);
+    }, [buyNetworkName, incAddress]);
 
     return (
       <WrappedComponent
@@ -75,6 +83,7 @@ const enhanceSelect = (WrappedComponent: any) => {
           onSelectSellNetwork: handleSelectSellNetwork,
           onSelectBuyToken: handleSelectBuyToken,
           onSelectBuyNetwork: handleSelectBuyNetwork,
+          onRotateSwapToken: handleRotateSwapToken,
         }}
       />
     );

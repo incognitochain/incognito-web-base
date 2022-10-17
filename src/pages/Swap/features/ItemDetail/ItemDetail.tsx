@@ -1,4 +1,4 @@
-// import { CopyIcon, OpenLinkIcon } from '@components/Icons';
+// import { CopyIcon, OpenLinkIcon } from 'components/Icons';
 import CopyIcon from 'components/Copy';
 import OpenLink from 'components/OpenLink';
 import React from 'react';

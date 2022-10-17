@@ -41,6 +41,7 @@ export interface IUnshieldData {
   incAddress: string;
 
   sellToken: SelectedPrivacy;
+  sellParentToken: any;
   sellTokenList: SelectedPrivacy[];
   sellCurrency: number;
   sellNetworkName: string;
@@ -58,6 +59,7 @@ export interface IUnshieldData {
   userBalanceNoClip?: string;
   userBalance?: string;
   userBalanceFormatedText: string;
+  userBuyBalanceFormatedText: string;
 
   minAmountText: string;
   maxAmountText: string;
@@ -157,46 +159,51 @@ const getUnshieldData = ({
 
   // sell token
   const _sellToken = getDataByTokenID(sellIdentify);
-  const _sellTokenList = unshieldableTokens(state);
+  const unshieldAbleTokens = unshieldableTokens(state) || [];
+  const _sellTokenList = unshieldAbleTokens.filter((token) => !token.movedUnifiedToken);
 
   // buy token
   const _buyToken = getDataByTokenID(buyIdentify);
   let _buyTokenList = unshieldableTokens(state);
 
-  if (formType === FormTypes.SWAP && swapNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
-    _buyTokenList = _buyTokenList.filter((token: any) => {
-      if (swapNetwork === MAIN_NETWORK_NAME.POLYGON) {
-        return (
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20
-        );
-      }
+  if (formType === FormTypes.SWAP) {
+    if (swapNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
+      _buyTokenList = _buyTokenList.filter((token: any) => {
+        if (swapNetwork === MAIN_NETWORK_NAME.POLYGON) {
+          return (
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20
+          );
+        }
 
-      if (swapNetwork === MAIN_NETWORK_NAME.ETHEREUM) {
-        return (
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ERC20 ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ETH
-        );
-      }
+        if (swapNetwork === MAIN_NETWORK_NAME.ETHEREUM) {
+          return (
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ERC20 ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ETH
+          );
+        }
 
-      if (swapNetwork === MAIN_NETWORK_NAME.BSC) {
-        return (
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20
-        );
-      }
+        if (swapNetwork === MAIN_NETWORK_NAME.BSC) {
+          return (
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20
+          );
+        }
 
-      if (swapNetwork === MAIN_NETWORK_NAME.FANTOM) {
-        return (
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM ||
-          token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20
-        );
-      }
-    });
+        if (swapNetwork === MAIN_NETWORK_NAME.FANTOM) {
+          return (
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM ||
+            token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20
+          );
+        }
+      });
+    } else {
+      _buyTokenList = _buyTokenList.filter((token: any) => !token.movedUnifiedToken);
+    }
   }
 
   let isUseTokenFee = false;
@@ -219,15 +226,21 @@ const getUnshieldData = ({
   } else {
     _buyNetworkName = swapNetwork;
     _buyNetworkList = _sellParentToken?.supportedNetwork;
-    if (_sellParentToken?.isUnified && vaults) {
+    if (_sellParentToken?.isUnified && vaults?.UnifiedTokenVaults) {
       const tokenVault = vaults?.UnifiedTokenVaults[_sellParentToken?.tokenID] || {};
       // Filter network enough vault
-      _buyNetworkList = _buyNetworkList?.filter(
-        (_item: any) =>
-          tokenVault[_item?.identify?.split('-')[0]]['Amount'] -
-            tokenVault[_item?.identify?.split('-')[0]]['LockedAmount'] >
-          0
-      );
+      _buyNetworkList = _buyNetworkList?.filter((_item: any) => {
+        let isAccept = false;
+        try {
+          isAccept =
+            tokenVault[_item?.identify?.split('-')[0]]['Amount'] -
+              tokenVault[_item?.identify?.split('-')[0]]['LockedAmount'] >
+            0;
+        } catch (e) {
+          console.log('CANT FILTER NETWORK LIST');
+        }
+        return isAccept;
+      });
     }
 
     _buyTokenList = getBuyTokenList(swapNetwork, _buyTokenList, _sellToken, _buyNetworkList);
@@ -261,6 +274,7 @@ const getUnshieldData = ({
   const userBalance = _sellToken.formatAmount;
   const userBalanceFormatedText = `${_sellToken.formatAmount || 0} ${_sellToken.symbol}`;
 
+  const userBuyBalanceFormatedText = `${_buyToken.formatAmount || 0} ${_buyToken.symbol}`;
   const incAccount = incognitoWalletAccountSelector(state);
   const nativeToken = getDataByTokenID(PRV.identify);
   const incAddress = incAccount ? incAccount.paymentAddress : '';
@@ -373,7 +387,7 @@ const getUnshieldData = ({
       decimals: _sellToken.pDecimals,
     });
 
-    tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, _sellTokenList);
+    tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
 
     let tradeFeeText = '';
     if (isUseTokenFee) {
@@ -473,6 +487,7 @@ const getUnshieldData = ({
 
   return {
     sellToken: _sellToken,
+    sellParentToken: _sellParentToken,
     sellTokenList: _sellTokenList,
     sellCurrency,
     sellNetworkName,
@@ -487,6 +502,7 @@ const getUnshieldData = ({
     userBalanceNoClip,
     userBalance,
     userBalanceFormatedText,
+    userBuyBalanceFormatedText,
 
     minAmountText,
     maxAmountText,
@@ -637,6 +653,7 @@ const parseFeeDataModelResponse = (fees: any[]) => {
     data.push({
       amount: fees[i]?.amount || 0,
       tokenId: fees[i]?.tokenid || '',
+      amountInBuyToken: fees[i]?.amountInBuyToken || '0',
     });
   }
   return data;
@@ -659,7 +676,7 @@ const parseExchangeDataModelResponse = (
     amountOut: parseFloat(data?.AmountOut || 0),
     amountOutRaw: parseFloat(data?.AmountOutRaw || 0),
     appName: data?.AppName,
-    exchangeName: `${getExchangeName(data?.AppName)}(${networkName})`,
+    exchangeName: `${getExchangeName(data?.AppName)} (${networkName})`,
     fees: parseFeeDataModelResponse(data?.Fee || []) || [],
     routes: data?.Paths || [],
     incTokenID: incTokenID || '',

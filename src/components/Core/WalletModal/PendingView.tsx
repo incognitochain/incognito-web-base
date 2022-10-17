@@ -87,7 +87,7 @@ export default function PendingView({
             <>
               <ThemedText.Black fontSize={20} marginY={16}>
                 <LoaderContainer>
-                  <Loader stroke="currentColor" size="32px" />
+                  <Loader stroke="currentColor" size="32px" color="white" />
                 </LoaderContainer>
                 Connecting...
               </ThemedText.Black>
