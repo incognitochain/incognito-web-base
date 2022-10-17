@@ -106,6 +106,7 @@ const FormUnshield = React.memo((props: any) => {
     formType,
     exchangeSelected,
     estReceiveAmount,
+    expectedReceiveAmount,
     exchangeSupports,
     tradePath,
     errorMsg,
@@ -115,6 +116,9 @@ const FormUnshield = React.memo((props: any) => {
     inputAddress,
 
     userBuyBalanceFormatedText,
+    rate,
+
+    sellParentToken,
   } = props;
 
   const { showPopup } = useIncognitoWallet();
@@ -227,7 +231,7 @@ const FormUnshield = React.memo((props: any) => {
           amount={userBuyBalanceFormatedText}
           onSelectToken={onSelectBuyToken}
           onSelectNetwork={onSelectBuyNetwork}
-          receiveValue={formType === FormTypes.SWAP ? estReceiveAmount || '0' : inputAmount}
+          receiveValue={formType === FormTypes.SWAP ? expectedReceiveAmount || '0' : inputAmount}
           footerRightText={rightLabelAddress}
           isUseInput={false}
           footerRightClass="send-to-text"
@@ -258,8 +262,10 @@ const FormUnshield = React.memo((props: any) => {
         )}
         <VerticalSpace />
         <EstReceive
-          amountText={formType === FormTypes.SWAP ? estReceiveAmount?.toString() : inputAmount}
-          symbol={buyToken.symbol || ''}
+          buyToken={buyToken}
+          sellToken={sellToken}
+          rate={rate}
+          minReceiveAmount={formType === FormTypes.SWAP ? estReceiveAmount || '0' : inputAmount}
           networkFee={networkFeeText}
           burnFeeText={burnFeeText}
           time={time}

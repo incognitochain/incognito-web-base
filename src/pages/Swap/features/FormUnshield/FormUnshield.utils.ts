@@ -69,6 +69,7 @@ export interface IUnshieldData {
   burnOriginalAmount: string;
   inputAddress: string;
   estReceiveAmount: string | number;
+  expectedReceiveAmount: string | number;
 
   fee: IFee;
 
@@ -89,6 +90,8 @@ export interface IUnshieldData {
   swapNetwork: MAIN_NETWORK_NAME;
 
   slippage: string;
+
+  rate: string;
 }
 
 const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any): string => {
@@ -302,6 +305,7 @@ const getUnshieldData = ({
   };
   let burnFeeTokenIdentify = '';
   let estReceiveAmount: any;
+  let expectedReceiveAmount: any = '0';
   if (userFee) {
     isUseTokenFee = userFee?.isUseTokenFee || false;
     const { fee, id, feeAddress, estimatedBurnAmount, estimatedExpectedAmount, estimateFee } = userFee;
@@ -363,6 +367,7 @@ const getUnshieldData = ({
       );
     }
     estReceiveAmount = userFee?.estimatedExpectedAmount ? userFee.estimatedExpectedAmount : inputAmount;
+    expectedReceiveAmount = userFee?.estimatedExpectedAmount ? userFee.estimatedExpectedAmount : inputAmount;
   }
 
   //  Swap data
@@ -384,6 +389,11 @@ const getUnshieldData = ({
 
     estReceiveAmount = format.toFixed({
       number: exchangeSelectedData?.amountOut || 0,
+      decimals: _sellToken.pDecimals,
+    });
+
+    expectedReceiveAmount = format.toFixed({
+      number: new BigNumber(exchangeSelectedData?.expectedAmount || 0).toNumber(),
       decimals: _sellToken.pDecimals,
     });
 
@@ -517,6 +527,7 @@ const getUnshieldData = ({
     inputOriginalAmount,
     burnOriginalAmount,
     estReceiveAmount,
+    expectedReceiveAmount,
 
     fee: combineFee,
     inputAddress,
@@ -538,6 +549,7 @@ const getUnshieldData = ({
     swapNetwork,
 
     slippage: inputSlippage,
+    rate: exchangeSelectedData?.rate || '',
   };
 };
 
@@ -688,6 +700,8 @@ const parseExchangeDataModelResponse = (
     callData: data?.Calldata,
     feeAddressShardID: data.FeeAddressShardID,
     networkID,
+    expectedAmount: data?.AmountOutPreSlippage || '0',
+    rate: data?.Rate || '1',
   };
   return exchangeData;
 };

@@ -54,6 +54,7 @@ export interface IUnshield {
   burnFeeText: string;
 
   estReceiveAmount: string | number;
+  expectedReceiveAmount: string | number;
 
   enoughPRVFee: boolean;
   formType: FormTypes;
@@ -68,6 +69,7 @@ export interface IUnshield {
   swapNetwork: MAIN_NETWORK_NAME | null;
   isUseTokenFee?: boolean;
   slippage: string;
+  rate: string;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -105,6 +107,7 @@ export const useUnshield = (): IUnshield => {
     networkFeeText,
     burnFeeText,
     estReceiveAmount,
+    expectedReceiveAmount,
     enoughPRVFee,
     formType,
 
@@ -118,6 +121,7 @@ export const useUnshield = (): IUnshield => {
     errorMsg,
     swapNetwork,
     slippage,
+    rate,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
@@ -175,6 +179,8 @@ export const useUnshield = (): IUnshield => {
     burnFeeText,
 
     estReceiveAmount,
+    expectedReceiveAmount,
+
     inputOriginalAmount,
     enoughPRVFee,
     formType,
@@ -191,5 +197,6 @@ export const useUnshield = (): IUnshield => {
     isFetching,
 
     slippage,
+    rate,
   };
 };
