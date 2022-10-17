@@ -117,6 +117,8 @@ const FormUnshield = React.memo((props: any) => {
 
     userBuyBalanceFormatedText,
     rate,
+
+    sellParentToken,
   } = props;
 
   const { showPopup } = useIncognitoWallet();
@@ -260,8 +262,8 @@ const FormUnshield = React.memo((props: any) => {
         )}
         <VerticalSpace />
         <EstReceive
-          buyToken={buyToken}
-          sellToken={sellToken}
+          buyToken={buyParentToken}
+          sellToken={sellParentToken}
           rate={rate}
           minReceiveAmount={formType === FormTypes.SWAP ? estReceiveAmount || '0' : inputAmount}
           networkFee={networkFeeText}
