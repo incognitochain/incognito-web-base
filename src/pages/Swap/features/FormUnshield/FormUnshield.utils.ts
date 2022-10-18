@@ -402,16 +402,16 @@ const getUnshieldData = ({
     let tradeFeeText = '';
     if (isUseTokenFee) {
       tradeFeeText = `${
-        convert.toHumanAmountString({
+        format.amountVer2({
           decimals: _sellToken.pDecimals,
-          originalAmount: swapFeeObj?.amount,
+          originalAmount: new BigNumber(swapFeeObj?.amount || 0).toNumber(),
         }) || 0
       } ${_sellToken.symbol}`;
     } else {
       tradeFeeText = `${
-        convert.toHumanAmountString({
+        format.amountVer2({
           decimals: PRV.pDecimals,
-          originalAmount: swapFeeObj?.amount,
+          originalAmount: new BigNumber(swapFeeObj?.amount || 0).toNumber(),
         }) || 0
       } PRV`;
     }
