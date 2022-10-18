@@ -16,10 +16,16 @@ import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 import format from 'utils/format';
 
+import { VerticalSpace } from '../../../../components/Core/Space';
 import { FormTypes } from '../FormUnshield/FormUnshield.types';
 import SelectSwapExchange, { ISelectSwapExchange } from '../Selection/SelectSwapExchange';
 
-const Styled = styled(Column)`
+const Styled = styled(Column)<{ isHidden: boolean; isFetching: boolean }>`
+  max-height: ${({ isHidden }) => (isHidden ? '0' : '500px')};
+  opacity: ${({ isHidden }) => (isHidden ? 0 : 1)};
+  visibility: ${({ isHidden }) => (isHidden ? 0 : 1)};
+  transition: max-height 0.4s ease-in-out, opacity 0.2s ease-in-out;
+
   background-color: ${({ theme }) => theme.bg4};
   padding: 0 16px 15px 16px;
   border-radius: 8px;
@@ -28,7 +34,7 @@ const Styled = styled(Column)`
   }
   .header-rate {
     :hover {
-      opacity: 0.8;
+      opacity: ${({ isFetching }) => (isFetching ? 1 : 0.8)};
     }
   }
   .header-right {
@@ -115,132 +121,144 @@ const EstReceive = React.memo(
     };
 
     const renderHeaderTitle = () =>
-      formType === FormTypes.SWAP && rate ? (
+      formType === FormTypes.SWAP ? (
         <Row
           className="header-rate"
           onClick={(e) => {
             e.stopPropagation();
+            if (isFetchingFee) return;
             setIsRateSellToBuy((value) => !value);
           }}
         >
-          <ThemedText.SmallLabel fontWeight={500} color="primary8">
-            Rate:
-          </ThemedText.SmallLabel>
-          <ThemedText.SmallLabel fontWeight={500} marginLeft="4px">
-            {getRateText()}
-          </ThemedText.SmallLabel>
+          {rate && (
+            <ThemedText.SmallLabel fontWeight={500} color="primary8">
+              Rate:
+            </ThemedText.SmallLabel>
+          )}
+          {rate && (
+            <ThemedText.SmallLabel fontWeight={500} marginLeft="4px">
+              {getRateText()}
+            </ThemedText.SmallLabel>
+          )}
+          {!rate && <ThemedText.SmallLabel fontWeight={500}>Fetching best price...</ThemedText.SmallLabel>}
         </Row>
       ) : (
         <ThemedText.RegularLabel fontWeight={500}>Advanced</ThemedText.RegularLabel>
       );
+
+    const isHidden = !rate && formType === FormTypes.SWAP && !isFetchingFee;
     return (
-      <Styled>
-        <RowBetween style={{ cursor: 'pointer' }} onClick={() => setOpen((isOpen) => !isOpen)}>
-          <div className="wrap-header">{renderHeaderTitle()}</div>
-          <RowFlat className="wrap-header header-right">
-            {!isFetchingFee && formType === FormTypes.SWAP && rate && (
-              <Row>
-                <ThemedText.SmallLabel fontWeight={500} color="primary8">
-                  Fee:
-                </ThemedText.SmallLabel>
-                <ThemedText.SmallLabel fontWeight={500} marginLeft="4px">
-                  <ThemedText.SmallLabel fontWeight={500}>{swapFee?.tradeFeeText}</ThemedText.SmallLabel>
-                </ThemedText.SmallLabel>
-              </Row>
-            )}
-            {isFetchingFee ? (
-              <Loader stroke="white" size="20px" style={{ marginRight: '40px' }} />
-            ) : (
-              <RotatingArrow open={isOpen} />
-            )}
-          </RowFlat>
-        </RowBetween>
-        <ExpandView isOpen={isOpen}>
-          <Column style={{ marginTop: 14 }}>
-            {formType === FormTypes.SWAP && exchanges?.length > 0 && (
-              <SelectSwapExchange
-                exchanges={exchanges}
-                exchangeSelected={exchangeSelected}
-                onSelectExchange={onSelectExchange}
-              />
-            )}
-            {formType === FormTypes.SWAP && (
-              <>
-                <Field
-                  component={InputField}
-                  name={FORM_CONFIGS.slippage}
-                  inputType={INPUT_FIELD.amount}
-                  leftTitle="Slippage tolerance (%)"
-                  componentProps={{
-                    placeholder: 'Percent',
-                    type: 'number',
-                  }}
-                />
-              </>
-            )}
-            {formType === FormTypes.UNSHIELD ? (
-              <>
-                <RowBetween>
-                  <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                    Network fee
+      <>
+        {!isHidden && <VerticalSpace />}
+        <Styled isHidden={isHidden} isFetching={isFetchingFee}>
+          <RowBetween style={{ cursor: 'pointer' }} onClick={() => setOpen((isOpen) => !isOpen)}>
+            <div className="wrap-header">{renderHeaderTitle()}</div>
+            <RowFlat className="wrap-header header-right">
+              {!isFetchingFee && formType === FormTypes.SWAP && rate && (
+                <Row>
+                  <ThemedText.SmallLabel fontWeight={500} color="primary8">
+                    Fee:
                   </ThemedText.SmallLabel>
-                  <ThemedText.SmallLabel fontWeight={400}>{networkFee}</ThemedText.SmallLabel>
-                </RowBetween>
-                {!!burnFeeText && (
-                  <RowBetween style={{ marginTop: 12 }}>
+                  <ThemedText.SmallLabel fontWeight={500} marginLeft="4px">
+                    <ThemedText.SmallLabel fontWeight={500}>{swapFee?.tradeFeeText}</ThemedText.SmallLabel>
+                  </ThemedText.SmallLabel>
+                </Row>
+              )}
+              {isFetchingFee ? (
+                <Loader stroke="white" size="20px" style={{ marginRight: '40px' }} />
+              ) : (
+                <RotatingArrow open={isOpen} />
+              )}
+            </RowFlat>
+          </RowBetween>
+          <ExpandView isOpen={isOpen}>
+            <Column style={{ marginTop: 14 }}>
+              {formType === FormTypes.SWAP && exchanges?.length > 0 && (
+                <SelectSwapExchange
+                  exchanges={exchanges}
+                  exchangeSelected={exchangeSelected}
+                  onSelectExchange={onSelectExchange}
+                />
+              )}
+              {formType === FormTypes.SWAP && (
+                <>
+                  <Field
+                    component={InputField}
+                    name={FORM_CONFIGS.slippage}
+                    inputType={INPUT_FIELD.amount}
+                    leftTitle="Slippage tolerance (%)"
+                    componentProps={{
+                      placeholder: 'Percent',
+                      type: 'number',
+                    }}
+                  />
+                </>
+              )}
+              {formType === FormTypes.UNSHIELD ? (
+                <>
+                  <RowBetween>
                     <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                      Outchain Fee (est.)
+                      Network fee
                     </ThemedText.SmallLabel>
-                    <ThemedText.SmallLabel fontWeight={400}>{burnFeeText}</ThemedText.SmallLabel>
+                    <ThemedText.SmallLabel fontWeight={400}>{networkFee}</ThemedText.SmallLabel>
                   </RowBetween>
-                )}
-              </>
-            ) : null}
+                  {!!burnFeeText && (
+                    <RowBetween style={{ marginTop: 12 }}>
+                      <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                        Outchain Fee (est.)
+                      </ThemedText.SmallLabel>
+                      <ThemedText.SmallLabel fontWeight={400}>{burnFeeText}</ThemedText.SmallLabel>
+                    </RowBetween>
+                  )}
+                </>
+              ) : null}
 
-            {formType === FormTypes.SWAP && (
+              {formType === FormTypes.SWAP && (
+                <RowBetween style={{ marginTop: 12 }}>
+                  <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                    Minimum received
+                  </ThemedText.SmallLabel>
+                  <ThemedText.SmallLabel fontWeight={400}>{`${minReceiveAmount || 0} ${
+                    buyToken.symbol
+                  }`}</ThemedText.SmallLabel>
+                </RowBetween>
+              )}
+
               <RowBetween style={{ marginTop: 12 }}>
                 <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                  Minimum received
+                  Estimate time
                 </ThemedText.SmallLabel>
-                <ThemedText.SmallLabel fontWeight={400}>{`${minReceiveAmount || 0} ${
-                  buyToken.symbol
-                }`}</ThemedText.SmallLabel>
+                <ThemedText.SmallLabel fontWeight={400}>{`${time}`}</ThemedText.SmallLabel>
               </RowBetween>
-            )}
-
-            <RowBetween style={{ marginTop: 12 }}>
-              <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                Estimate time
-              </ThemedText.SmallLabel>
-              <ThemedText.SmallLabel fontWeight={400}>{`${time}`}</ThemedText.SmallLabel>
-            </RowBetween>
-            {!!desc && (
-              <ThemedText.SmallLabel
-                color="primary8"
-                fontWeight={400}
-                marginTop="8px"
-              >{`${desc}`}</ThemedText.SmallLabel>
-            )}
-            {formType === FormTypes.SWAP && tradePath && (
-              <RowBetween style={{ marginTop: 12 }}>
-                <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                  Trade path
-                </ThemedText.SmallLabel>
-                <ThemedText.SmallLabel fontWeight={400}>{tradePath}</ThemedText.SmallLabel>
-              </RowBetween>
-            )}
-            {!prvToken.amount && (
-              <ThemedText.SmallLabel color="primary8" fontWeight={400} marginTop="12px">
-                {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
+              {!!desc && (
+                <ThemedText.SmallLabel
+                  color="primary8"
+                  fontWeight={400}
+                  marginTop="8px"
+                >{`${desc}`}</ThemedText.SmallLabel>
+              )}
+              {formType === FormTypes.SWAP && tradePath && (
+                <RowBetween style={{ marginTop: 12 }}>
+                  <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                    Trade path
+                  </ThemedText.SmallLabel>
+                  <ThemedText.SmallLabel fontWeight={400}>{tradePath}</ThemedText.SmallLabel>
+                </RowBetween>
+              )}
+              {!prvToken.amount && (
+                <ThemedText.SmallLabel color="primary8" fontWeight={400} marginTop="12px">
+                  {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
             some from the `}
-                <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
-                  faucet
-                </a>
-              </ThemedText.SmallLabel>
-            )}
-          </Column>
-        </ExpandView>
-      </Styled>
+                  <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
+                    faucet
+                  </a>
+                </ThemedText.SmallLabel>
+              )}
+            </Column>
+          </ExpandView>
+        </Styled>
+        {!isHidden && <VerticalSpace />}
+      </>
     );
   }
 );
