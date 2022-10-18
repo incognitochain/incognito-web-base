@@ -102,20 +102,20 @@ const EstReceive = React.memo(
 
     const getRateText = () => {
       if (isRateSellToBuy) {
-        return ` 1 ${sellToken.symbol} = ${format.toFixed({
-          number: new BigNumber(rate || 0).toNumber(),
-          decimals: buyToken.pDecimals,
+        return ` 1 ${sellToken.symbol} = ${format.amountVer2({
+          originalAmount: new BigNumber(rate || 0).toNumber(),
+          decimals: 0,
         })} ${buyToken.symbol}`;
       } else {
-        return `1 ${buyToken.symbol} = ${format.toFixed({
-          number: rate ? new BigNumber(1).div(rate || 1).toNumber() : 0,
-          decimals: sellToken.pDecimals,
+        return `1 ${buyToken.symbol} = ${format.amountVer2({
+          originalAmount: rate ? new BigNumber(1).div(rate || 1).toNumber() : 0,
+          decimals: 0,
         })} ${sellToken.symbol}`;
       }
     };
 
     const renderHeaderTitle = () =>
-      formType === FormTypes.SWAP ? (
+      formType === FormTypes.SWAP && rate ? (
         <Row
           className="header-rate"
           onClick={(e) => {
@@ -138,7 +138,7 @@ const EstReceive = React.memo(
         <RowBetween style={{ cursor: 'pointer' }} onClick={() => setOpen((isOpen) => !isOpen)}>
           <div className="wrap-header">{renderHeaderTitle()}</div>
           <RowFlat className="wrap-header header-right">
-            {!isFetchingFee && formType === FormTypes.SWAP && (
+            {!isFetchingFee && formType === FormTypes.SWAP && rate && (
               <Row>
                 <ThemedText.SmallLabel fontWeight={500} color="primary8">
                   Fee:
