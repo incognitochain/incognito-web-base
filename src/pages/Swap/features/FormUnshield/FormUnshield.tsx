@@ -284,6 +284,7 @@ const FormUnshield = React.memo((props: any) => {
           tradePath={tradePath}
           swapFee={swapFee}
           isFetchingFee={isFetching}
+          inputAmount={inputAmount}
         />
         {/*<VerticalSpace />*/}
         {button.isConnected ? (

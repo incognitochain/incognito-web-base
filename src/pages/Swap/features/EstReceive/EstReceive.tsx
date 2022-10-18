@@ -82,6 +82,7 @@ interface IProps extends ISelectSwapExchange {
   swapFee: any;
   isFetchingFee: boolean;
   desc?: string;
+  inputAmount: string;
 }
 
 const EstReceive = React.memo(
@@ -101,6 +102,7 @@ const EstReceive = React.memo(
     swapFee,
     isFetchingFee,
     desc,
+    inputAmount,
   }: IProps) => {
     const [isOpen, setOpen] = React.useState(false);
     const [isRateSellToBuy, setIsRateSellToBuy] = React.useState(true);
@@ -143,10 +145,12 @@ const EstReceive = React.memo(
           {!rate && <ThemedText.SmallLabel fontWeight={500}>Fetching best price...</ThemedText.SmallLabel>}
         </Row>
       ) : (
-        <ThemedText.RegularLabel fontWeight={500}>Advanced</ThemedText.RegularLabel>
+        <ThemedText.RegularLabel fontWeight={500}>
+          {isFetchingFee ? 'Estimating fee ...' : 'Advanced'}
+        </ThemedText.RegularLabel>
       );
 
-    const isHidden = !rate && formType === FormTypes.SWAP && !isFetchingFee;
+    const isHidden = !isFetchingFee && (!inputAmount || (formType === FormTypes.SWAP && !rate));
     return (
       <>
         {!isHidden && <VerticalSpace />}
