@@ -165,7 +165,7 @@ const getUnshieldData = ({
   // sell token
   const _sellToken = getDataByTokenID(sellIdentify);
   const unshieldAbleTokens = unshieldableTokens(state) || [];
-  const _sellTokenList = unshieldAbleTokens.filter((token) => !token.movedUnifiedToken);
+  const _sellTokenList = unshieldAbleTokens;
 
   // buy token
   const _buyToken = getDataByTokenID(buyIdentify);
@@ -675,6 +675,9 @@ const getExchangeName = (exchange: SwapExchange) => {
   }
   if (exchange === SwapExchange.SPOOKY) {
     return 'Spooky';
+  }
+  if (exchange === SwapExchange.JOE) {
+    return 'Trader JOE';
   }
 };
 

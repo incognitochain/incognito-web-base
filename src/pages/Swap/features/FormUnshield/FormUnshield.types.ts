@@ -25,6 +25,7 @@ export enum SwapExchange {
   UNISWAP = 'uniswap',
   CURVE = 'curve',
   SPOOKY = 'spooky',
+  JOE = 'joe',
 }
 
 export enum NetworkTypePayload {

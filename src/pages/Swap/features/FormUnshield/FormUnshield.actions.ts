@@ -247,6 +247,10 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       network = NetworkTypePayload.POLYGON;
     } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
       network = NetworkTypePayload.FANTOM;
+    } else if (buyNetworkName === MAIN_NETWORK_NAME.AVALANCHE) {
+      network = NetworkTypePayload.AVALANCHE;
+    } else if (buyNetworkName === MAIN_NETWORK_NAME.AURORA) {
+      network = NetworkTypePayload.AURORA;
     }
 
     const payload = {
@@ -265,6 +269,8 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
     let ftmExchanges: ISwapExchangeData[] = [];
     let plgExchanges: ISwapExchangeData[] = [];
     let bscExchanges: ISwapExchangeData[] = [];
+    let avaxExchanges: ISwapExchangeData[] = [];
+    let auroraExchanges: ISwapExchangeData[] = [];
     if (data?.hasOwnProperty(NetworkTypePayload.BINANCE_SMART_CHAIN)) {
       let incTokenID = sellToken.tokenID;
       if (sellToken?.isUnified) {
@@ -321,7 +327,42 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       }
     }
 
-    const exchangeSupports = [...ethExchanges, ...ftmExchanges, ...plgExchanges, ...bscExchanges];
+    if (data?.hasOwnProperty(NetworkTypePayload.AVALANCHE)) {
+      let incTokenID = sellToken.tokenID;
+      if (sellToken?.isUnified) {
+        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 6);
+        incTokenID = childToken?.tokenID || '';
+      }
+      const exchanges = data[NetworkTypePayload.AVALANCHE];
+      if (Array.isArray(exchanges)) {
+        avaxExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'Avalanche', 6, incTokenID)
+        );
+      }
+    }
+
+    if (data?.hasOwnProperty(NetworkTypePayload.AURORA)) {
+      let incTokenID = sellToken.tokenID;
+      if (sellToken?.isUnified) {
+        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 5);
+        incTokenID = childToken?.tokenID || '';
+      }
+      const exchanges = data[NetworkTypePayload.AURORA];
+      if (Array.isArray(exchanges)) {
+        auroraExchanges = exchanges.map((exchange: any) =>
+          parseExchangeDataModelResponse(exchange, 'Aurora', 5, incTokenID)
+        );
+      }
+    }
+
+    const exchangeSupports = [
+      ...ethExchanges,
+      ...ftmExchanges,
+      ...plgExchanges,
+      ...bscExchanges,
+      ...avaxExchanges,
+      ...auroraExchanges,
+    ];
 
     if (!exchangeSupports?.length)
       throw new Error('Can not find any trading platform that supports for this pair token');
