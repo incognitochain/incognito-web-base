@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { camelCaseKeys } from 'utils/camelcase';
 
 const TIMEOUT = 20000;
@@ -35,13 +35,14 @@ const createAxiosInstance = ({ baseURL = '' }: { baseURL: string }) => {
       }
       return Promise.resolve(result);
     },
-    (axiosError: AxiosError) => {
-      if (axiosError?.isAxiosError && !axiosError?.response) {
-        throw new Error('Send request API failed');
+    (error: any) => {
+      if (!error.response) {
+        return Promise.reject(error);
+      } else {
+        const response = error.response?.data;
+        const errorMessage = response.Error;
+        return Promise.reject(errorMessage);
       }
-      const { response: { data } = {} } = axiosError;
-      const { error } = data || {};
-      return Promise.reject(camelCaseKeys(error || axiosError));
     }
   );
 
