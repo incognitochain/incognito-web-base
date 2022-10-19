@@ -165,7 +165,7 @@ const getUnshieldData = ({
   // sell token
   const _sellToken = getDataByTokenID(sellIdentify);
   const unshieldAbleTokens = unshieldableTokens(state) || [];
-  const _sellTokenList = unshieldAbleTokens;
+  const _sellTokenList = unshieldAbleTokens.filter((token) => !token.movedUnifiedToken);
 
   // buy token
   const _buyToken = getDataByTokenID(buyIdentify);
