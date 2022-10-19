@@ -80,6 +80,8 @@ export interface ISwapExchangeData {
   callData: string;
   networkID: number;
   feeAddressShardID: number;
+  expectedAmount: string;
+  rate: string;
 }
 
 export interface UnshieldSetTokenPayLoad {

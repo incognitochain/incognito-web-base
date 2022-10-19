@@ -11,8 +11,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
-import { ThemedText } from 'theme';
 
+import { ThemedText } from '../../../../theme';
 import { EstReceive } from '../EstReceive';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
 import enhance from './FormUnshield.enhance';
@@ -106,6 +106,7 @@ const FormUnshield = React.memo((props: any) => {
     formType,
     exchangeSelected,
     estReceiveAmount,
+    expectedReceiveAmount,
     exchangeSupports,
     tradePath,
     errorMsg,
@@ -115,6 +116,9 @@ const FormUnshield = React.memo((props: any) => {
     inputAddress,
 
     userBuyBalanceFormatedText,
+    rate,
+
+    sellParentToken,
   } = props;
 
   const { showPopup } = useIncognitoWallet();
@@ -227,7 +231,7 @@ const FormUnshield = React.memo((props: any) => {
           amount={userBuyBalanceFormatedText}
           onSelectToken={onSelectBuyToken}
           onSelectNetwork={onSelectBuyNetwork}
-          receiveValue={formType === FormTypes.SWAP ? estReceiveAmount || '0' : inputAmount}
+          receiveValue={formType === FormTypes.SWAP ? expectedReceiveAmount || '0' : inputAmount}
           footerRightText={rightLabelAddress}
           isUseInput={false}
           footerRightClass="send-to-text"
@@ -237,6 +241,14 @@ const FormUnshield = React.memo((props: any) => {
             disabled: true,
           }}
         />
+        {!!errorMsg && (
+          <>
+            <ThemedText.Error error className={`error`}>
+              {errorMsg}
+            </ThemedText.Error>
+            <VerticalSpace />
+          </>
+        )}
         <VerticalSpace />
         {visibleAddress && (
           <>
@@ -256,10 +268,11 @@ const FormUnshield = React.memo((props: any) => {
             <VerticalSpace />
           </>
         )}
-        <VerticalSpace />
         <EstReceive
-          amountText={formType === FormTypes.SWAP ? estReceiveAmount?.toString() : inputAmount}
-          symbol={buyToken.symbol || ''}
+          buyToken={buyToken}
+          sellToken={sellToken}
+          rate={rate}
+          minReceiveAmount={formType === FormTypes.SWAP ? estReceiveAmount || '0' : inputAmount}
           networkFee={networkFeeText}
           burnFeeText={burnFeeText}
           time={time}
@@ -271,16 +284,9 @@ const FormUnshield = React.memo((props: any) => {
           tradePath={tradePath}
           swapFee={swapFee}
           isFetchingFee={isFetching}
+          inputAmount={inputAmount}
         />
-        <VerticalSpace />
-        {!!errorMsg && (
-          <>
-            <ThemedText.Error marginTop="-12px" error className={`error`}>
-              {errorMsg}
-            </ThemedText.Error>
-            <VerticalSpace />
-          </>
-        )}
+        {/*<VerticalSpace />*/}
         {button.isConnected ? (
           <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
         ) : (

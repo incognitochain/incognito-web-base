@@ -71,6 +71,7 @@ export interface IUnshieldData {
   burnOriginalAmount: string;
   inputAddress: string;
   estReceiveAmount: string | number;
+  expectedReceiveAmount: string | number;
 
   fee: IFee;
 
@@ -91,6 +92,8 @@ export interface IUnshieldData {
   swapNetwork: MAIN_NETWORK_NAME;
 
   slippage: string;
+
+  rate: string;
 }
 
 const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any): string => {
@@ -320,6 +323,7 @@ const getUnshieldData = ({
   };
   let burnFeeTokenIdentify = '';
   let estReceiveAmount: any;
+  let expectedReceiveAmount: any = '0';
   if (userFee) {
     isUseTokenFee = userFee?.isUseTokenFee || false;
     const { fee, id, feeAddress, estimatedBurnAmount, estimatedExpectedAmount, estimateFee } = userFee;
@@ -381,6 +385,7 @@ const getUnshieldData = ({
       );
     }
     estReceiveAmount = userFee?.estimatedExpectedAmount ? userFee.estimatedExpectedAmount : inputAmount;
+    expectedReceiveAmount = userFee?.estimatedExpectedAmount ? userFee.estimatedExpectedAmount : inputAmount;
   }
 
   //  Swap data
@@ -405,21 +410,26 @@ const getUnshieldData = ({
       decimals: _sellToken.pDecimals,
     });
 
+    expectedReceiveAmount = format.toFixed({
+      number: new BigNumber(exchangeSelectedData?.expectedAmount || 0).toNumber(),
+      decimals: _sellToken.pDecimals,
+    });
+
     tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
 
     let tradeFeeText = '';
     if (isUseTokenFee) {
       tradeFeeText = `${
-        convert.toHumanAmountString({
+        format.amountVer2({
           decimals: _sellToken.pDecimals,
-          originalAmount: swapFeeObj?.amount,
+          originalAmount: new BigNumber(swapFeeObj?.amount || 0).toNumber(),
         }) || 0
       } ${_sellToken.symbol}`;
     } else {
       tradeFeeText = `${
-        convert.toHumanAmountString({
+        format.amountVer2({
           decimals: PRV.pDecimals,
-          originalAmount: swapFeeObj?.amount,
+          originalAmount: new BigNumber(swapFeeObj?.amount || 0).toNumber(),
         }) || 0
       } PRV`;
     }
@@ -535,6 +545,7 @@ const getUnshieldData = ({
     inputOriginalAmount,
     burnOriginalAmount,
     estReceiveAmount,
+    expectedReceiveAmount,
 
     fee: combineFee,
     inputAddress,
@@ -556,6 +567,7 @@ const getUnshieldData = ({
     swapNetwork,
 
     slippage: inputSlippage,
+    rate: exchangeSelectedData?.rate || '',
   };
 };
 
@@ -706,15 +718,17 @@ const parseExchangeDataModelResponse = (
     callData: data?.Calldata,
     feeAddressShardID: data.FeeAddressShardID,
     networkID,
+    expectedAmount: data?.AmountOutPreSlippage || '0',
+    rate: data?.Rate || '1',
   };
   return exchangeData;
 };
 
 const getBurningMetaDataTypeForUnshield = (sellToken: SelectedPrivacy) => {
   if (sellToken?.isUnified) return 345;
-  if (sellToken?.isBep20Token) return BurningPBSCRequestMeta;
-  if (sellToken?.isPolygonErc20Token) return BurningPLGRequestMeta;
-  if (sellToken?.isFantomErc20Token) return BurningFantomRequestMeta;
+  if (sellToken?.isBep20Token || sellToken.isMainBSC) return BurningPBSCRequestMeta;
+  if (sellToken?.isPolygonErc20Token || sellToken.isMainMATIC) return BurningPLGRequestMeta;
+  if (sellToken?.isFantomErc20Token || sellToken.isMainFTM) return BurningFantomRequestMeta;
   if (sellToken?.isAvaxErc20Token || sellToken?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX) {
     return BurningAvaxRequestMeta;
   }
