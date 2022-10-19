@@ -11,8 +11,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Field } from 'redux-form';
 import styled from 'styled-components/macro';
-import { ThemedText } from 'theme';
 
+import { ThemedText } from '../../../../theme';
 import { EstReceive } from '../EstReceive';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
 import enhance from './FormUnshield.enhance';
@@ -241,6 +241,14 @@ const FormUnshield = React.memo((props: any) => {
             disabled: true,
           }}
         />
+        {!!errorMsg && (
+          <>
+            <ThemedText.Error error className={`error`}>
+              {errorMsg}
+            </ThemedText.Error>
+            <VerticalSpace />
+          </>
+        )}
         <VerticalSpace />
         {visibleAddress && (
           <>
@@ -260,7 +268,6 @@ const FormUnshield = React.memo((props: any) => {
             <VerticalSpace />
           </>
         )}
-        <VerticalSpace />
         <EstReceive
           buyToken={buyToken}
           sellToken={sellToken}
@@ -277,16 +284,9 @@ const FormUnshield = React.memo((props: any) => {
           tradePath={tradePath}
           swapFee={swapFee}
           isFetchingFee={isFetching}
+          inputAmount={inputAmount}
         />
-        <VerticalSpace />
-        {!!errorMsg && (
-          <>
-            <ThemedText.Error marginTop="-12px" error className={`error`}>
-              {errorMsg}
-            </ThemedText.Error>
-            <VerticalSpace />
-          </>
-        )}
+        {/*<VerticalSpace />*/}
         {button.isConnected ? (
           <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
         ) : (

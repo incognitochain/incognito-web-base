@@ -130,13 +130,7 @@ export const useUnshield = (): IUnshield => {
 
   const button = useMemo(() => {
     return {
-      text: isIncognitoInstalled()
-        ? !incAccount
-          ? 'Connect Wallet'
-          : isFetching
-          ? 'Estimating fee...'
-          : 'Swap'
-        : 'Install Wallet',
+      text: isIncognitoInstalled() ? (!incAccount ? 'Connect Wallet' : 'Swap') : 'Install Wallet',
       isConnected: !!incAccount,
     };
   }, [isFetching, incAccount, isIncognitoInstalled]);

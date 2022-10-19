@@ -19,16 +19,23 @@ import format from 'utils/format';
 import { FormTypes } from '../FormUnshield/FormUnshield.types';
 import SelectSwapExchange, { ISelectSwapExchange } from '../Selection/SelectSwapExchange';
 
-const Styled = styled(Column)`
+const Styled = styled(Column)<{ isHidden: boolean; isFetching: boolean }>`
+  max-height: ${({ isHidden }) => (isHidden ? '0' : '500px')};
+  opacity: ${({ isHidden }) => (isHidden ? 0 : 1)};
+  visibility: ${({ isHidden }) => (isHidden ? 0 : 1)};
+  padding: 0 16px ${({ isHidden }) => (isHidden ? '0' : '15')}px 16px;
+  margin-bottom: ${({ isHidden }) => (isHidden ? '0' : '16')}px;
+  transition: max-height 0.4s ease-in-out, opacity 0.2s ease-in-out, 0.15s padding ease-out,
+    0.15s margin-bottom ease-out;
+  margin-top: 16px;
   background-color: ${({ theme }) => theme.bg4};
-  padding: 0 16px 15px 16px;
   border-radius: 8px;
   .wrap-header {
     padding-top: 15px;
   }
   .header-rate {
     :hover {
-      opacity: 0.8;
+      opacity: ${({ isFetching }) => (isFetching ? 1 : 0.8)};
     }
   }
   .header-right {
@@ -76,6 +83,7 @@ interface IProps extends ISelectSwapExchange {
   swapFee: any;
   isFetchingFee: boolean;
   desc?: string;
+  inputAmount: string;
 }
 
 const EstReceive = React.memo(
@@ -95,6 +103,7 @@ const EstReceive = React.memo(
     swapFee,
     isFetchingFee,
     desc,
+    inputAmount,
   }: IProps) => {
     const [isOpen, setOpen] = React.useState(false);
     const [isRateSellToBuy, setIsRateSellToBuy] = React.useState(true);
@@ -102,14 +111,14 @@ const EstReceive = React.memo(
 
     const getRateText = () => {
       if (isRateSellToBuy) {
-        return ` 1 ${sellToken.symbol} = ${format.toFixed({
-          number: new BigNumber(rate || 0).toNumber(),
-          decimals: buyToken.pDecimals,
+        return ` 1 ${sellToken.symbol} = ${format.amountVer2({
+          originalAmount: new BigNumber(rate || 0).toNumber(),
+          decimals: 0,
         })} ${buyToken.symbol}`;
       } else {
-        return `1 ${buyToken.symbol} = ${format.toFixed({
-          number: rate ? new BigNumber(1).div(rate || 1).toNumber() : 0,
-          decimals: sellToken.pDecimals,
+        return `1 ${buyToken.symbol} = ${format.amountVer2({
+          originalAmount: rate ? new BigNumber(1).div(rate || 1).toNumber() : 0,
+          decimals: 0,
         })} ${sellToken.symbol}`;
       }
     };
@@ -120,25 +129,35 @@ const EstReceive = React.memo(
           className="header-rate"
           onClick={(e) => {
             e.stopPropagation();
+            if (isFetchingFee) return;
             setIsRateSellToBuy((value) => !value);
           }}
         >
-          <ThemedText.SmallLabel fontWeight={500} color="primary8">
-            Rate:
-          </ThemedText.SmallLabel>
-          <ThemedText.SmallLabel fontWeight={500} marginLeft="4px">
-            {getRateText()}
-          </ThemedText.SmallLabel>
+          {rate && (
+            <ThemedText.SmallLabel fontWeight={500} color="primary8">
+              Rate:
+            </ThemedText.SmallLabel>
+          )}
+          {rate && (
+            <ThemedText.SmallLabel fontWeight={500} marginLeft="4px">
+              {getRateText()}
+            </ThemedText.SmallLabel>
+          )}
+          {!rate && <ThemedText.SmallLabel fontWeight={500}>Fetching best price...</ThemedText.SmallLabel>}
         </Row>
       ) : (
-        <ThemedText.RegularLabel fontWeight={500}>Advanced</ThemedText.RegularLabel>
+        <ThemedText.RegularLabel fontWeight={500}>
+          {isFetchingFee ? 'Estimating fee ...' : 'Advanced'}
+        </ThemedText.RegularLabel>
       );
+
+    const isHidden = !isFetchingFee && (!inputAmount || (formType === FormTypes.SWAP && !rate));
     return (
-      <Styled>
+      <Styled isHidden={isHidden} isFetching={isFetchingFee}>
         <RowBetween style={{ cursor: 'pointer' }} onClick={() => setOpen((isOpen) => !isOpen)}>
           <div className="wrap-header">{renderHeaderTitle()}</div>
           <RowFlat className="wrap-header header-right">
-            {!isFetchingFee && formType === FormTypes.SWAP && (
+            {!isFetchingFee && formType === FormTypes.SWAP && rate && (
               <Row>
                 <ThemedText.SmallLabel fontWeight={500} color="primary8">
                   Fee:
