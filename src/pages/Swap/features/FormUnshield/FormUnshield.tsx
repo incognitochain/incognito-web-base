@@ -243,7 +243,7 @@ const FormUnshield = React.memo((props: any) => {
         />
         {!!errorMsg && (
           <>
-            <ThemedText.Error error className={`error`}>
+            <ThemedText.Error style={{ marginTop: '4px' }} error className={`error`}>
               {errorMsg}
             </ThemedText.Error>
             <VerticalSpace />
