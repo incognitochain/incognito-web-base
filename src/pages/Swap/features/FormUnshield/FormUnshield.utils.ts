@@ -708,9 +708,9 @@ const parseExchangeDataModelResponse = (
 
 const getBurningMetaDataTypeForUnshield = (sellToken: SelectedPrivacy) => {
   if (sellToken?.isUnified) return 345;
-  if (sellToken?.isBep20Token) return BurningPBSCRequestMeta;
-  if (sellToken?.isPolygonErc20Token) return BurningPLGRequestMeta;
-  if (sellToken?.isFantomErc20Token) return BurningFantomRequestMeta;
+  if (sellToken?.isBep20Token || sellToken.isMainBSC) return BurningPBSCRequestMeta;
+  if (sellToken?.isPolygonErc20Token || sellToken.isMainMATIC) return BurningPLGRequestMeta;
+  if (sellToken?.isFantomErc20Token || sellToken.isMainFTM) return BurningFantomRequestMeta;
 
   return BurningRequestMeta;
 };
