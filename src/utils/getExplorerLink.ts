@@ -18,6 +18,12 @@ const ETHERSCAN_PREFIXES: { [chainId: number]: string } = {
 
   [SupportedChainId.FTM]: 'https://ftmscan.com',
   [SupportedChainId.FTM_TESTNET]: 'https://testnet.ftmscan.com',
+
+  [SupportedChainId.AVAX]: 'https://snowtrace.io',
+  [SupportedChainId.AVAX_TESTNET]: 'https://testnet.snowtrace.io',
+
+  [SupportedChainId.AURORA]: 'https://explorer.mainnet.aurora.dev',
+  [SupportedChainId.AURORA_TESTNET]: 'https://explorer.testnet.aurora.dev',
 };
 
 export enum ExplorerDataType {
