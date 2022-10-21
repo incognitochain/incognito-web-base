@@ -6,11 +6,6 @@ import AskQuestionItem from './AskQuestionItem';
 
 const questions: any = [
   {
-    title: 'What is Incognito exchange?',
-    answer:
-      'Incognito exchange is a one-stop-shop that facilitates anonymous swap for all coins across many popular blockchains such as Bitcoin, Monero, Ethereum, BNB Chain, Avalanche, etc. While every existing DEX has its own drawback: sufficient liquidity but no privacy or privacy supported but shortage liquidity, Incognito exchange takes a novel approach to achieve both by implementing privacy via zero-knowledge proofs, inter-blockchain trading with huge liquidity via interoperable dApps (a.k.a DEXs such as Uniswap, Curve, PancakeSwap and SpookySwap).',
-  },
-  {
     title: 'What is Incognito wallet extension?',
     answer:
       'Incognito wallet extension is a crypto wallet compatible with Incognito blockchain. It allows users to manage their keychains in a variety of ways while isolating them from the site context. With Incognito wallet extension, you can easily store, send and receive funds on the Incognito blockchain. Additionally, you can also use the wallet extension for signing a transaction requesting from privacy app websites.',
@@ -107,12 +102,16 @@ const ValidatorAskedQuestion = () => {
     <Styled>
       <div className="leftView">
         <div className="title-container center">
-          <h1 className="title-custom">What is Lorem Ipsum?</h1>
+          <h1 className="title-custom">What is Incognito exchange?</h1>
         </div>
         <div className="title-container center">
           <h6 className="description-custom">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the standard
-            dummy text ever since the 1500s.
+            Incognito exchange is a one-stop-shop that facilitates anonymous swap for all coins across many popular
+            blockchains such as Bitcoin, Monero, Ethereum, BNB Chain, Avalanche, etc. While every existing DEX has its
+            own drawback: sufficient liquidity but no privacy or privacy supported but shortage liquidity, Incognito
+            exchange takes a novel approach to achieve both by implementing privacy via zero-knowledge proofs,
+            inter-blockchain trading with huge liquidity via interoperable dApps (a.k.a DEXs such as Uniswap, Curve,
+            PancakeSwap and SpookySwap).
           </h6>
         </div>
       </div>
