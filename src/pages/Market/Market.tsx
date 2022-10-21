@@ -28,7 +28,7 @@ const Home = () => {
       </Row>
       <div className="default-padding-horizontal">
         <MarketCategory />
-        <MarketQuestions />
+        {!isMobile && <MarketQuestions />}
       </div>
       <MarketAchieve />
     </Styled>
