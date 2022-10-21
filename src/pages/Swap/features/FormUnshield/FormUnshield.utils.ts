@@ -679,6 +679,12 @@ const getExchangeName = (exchange: SwapExchange) => {
   if (exchange === SwapExchange.JOE) {
     return 'Trader JOE';
   }
+
+  if (exchange === SwapExchange.TRISOLARIS) {
+    return 'Trisolaris';
+  }
+
+  return exchange;
 };
 
 // Parse fee data from api estimate swap fee
