@@ -132,8 +132,8 @@ const App = () => {
               <div
                 style={{
                   position: 'fixed',
-                  bottom: 50,
-                  right: 20,
+                  bottom: 24,
+                  right: 24,
                   display: 'flex',
                   flexDirection: 'column',
                   zIndex: 3,
