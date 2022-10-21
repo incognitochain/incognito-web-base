@@ -132,7 +132,7 @@ const App = () => {
               <div
                 style={{
                   position: 'fixed',
-                  top: '40%',
+                  bottom: 50,
                   right: 20,
                   display: 'flex',
                   flexDirection: 'column',
@@ -141,7 +141,7 @@ const App = () => {
               >
                 <SupportIcon
                   onClick={() => {
-                    window.open('https://we.incognito.org', '_blank');
+                    window.open('https://we.incognito.org/g/Support', '_blank');
                   }}
                   src={messageIcon}
                 />
