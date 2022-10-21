@@ -24,6 +24,7 @@ export enum SwapExchange {
   PANCAKE_SWAP = 'pancake',
   UNISWAP = 'uniswap',
   CURVE = 'curve',
+  SPOOKY = 'spooky',
 }
 
 export enum NetworkTypePayload {
@@ -77,6 +78,8 @@ export interface ISwapExchangeData {
   callData: string;
   networkID: number;
   feeAddressShardID: number;
+  expectedAmount: string;
+  rate: string;
 }
 
 export interface UnshieldSetTokenPayLoad {
