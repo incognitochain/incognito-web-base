@@ -35,6 +35,9 @@ export const INFURA_NETWORK_URLS: { [key in SupportedChainId]: string } = {
 
   [SupportedChainId.AURORA]: `https://mainnet.aurora.dev`,
   [SupportedChainId.AURORA_TESTNET]: `https://testnet.aurora.dev`,
+
+  [SupportedChainId.NEAR]: `https://rpc.mainnet.near.org`,
+  [SupportedChainId.NEAR_TESTNET]: `https://rpc.testnet.near.org`,
 };
 
 /**

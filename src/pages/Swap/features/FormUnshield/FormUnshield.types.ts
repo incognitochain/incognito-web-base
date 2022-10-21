@@ -37,6 +37,7 @@ export enum NetworkTypePayload {
   BINANCE_SMART_CHAIN = 'bsc',
   AVALANCHE = 'avax',
   AURORA = 'aurora',
+  NEAR = 'near',
 }
 
 export interface ISwapExchange {

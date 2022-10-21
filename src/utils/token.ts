@@ -85,6 +85,8 @@ const getAcronymNetwork = (token: SelectedPrivacyModel): string => {
     network = 'avax';
   } else if (token.isAuroraErc20Token || token.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH) {
     network = 'aurora';
+  } else if (token.isNearToken || token.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.NEAR) {
+    network = 'near';
   }
   return network;
 };
@@ -109,6 +111,9 @@ const getChainIDByAcronymNetwork = (network: string): number | any => {
       break;
     case 'aurora':
       chainID = isMainnet ? SupportedChainId.AURORA : SupportedChainId.AURORA_TESTNET;
+      break;
+    case 'near':
+      chainID = isMainnet ? SupportedChainId.NEAR : SupportedChainId.NEAR_TESTNET;
       break;
   }
   return chainID;

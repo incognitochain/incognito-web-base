@@ -62,6 +62,9 @@ class PToken {
   isMainBNB: boolean;
   isMainMATIC: boolean;
   isMainFTM: boolean;
+  isMainAVAX: boolean;
+  isMainAURORA: boolean;
+  isMainNEAR: boolean;
   isMainEVMToken: boolean;
 
   isIncognitoToken: boolean;
@@ -72,6 +75,7 @@ class PToken {
   isBep20Token: boolean;
   isAvaxErc20Token: boolean;
   isAuroraErc20Token: boolean;
+  isNearToken: boolean;
 
   isDecentralized: boolean;
   isCentralized: boolean;
@@ -138,7 +142,18 @@ class PToken {
     this.isMainBNB = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BNB;
     this.isMainMATIC = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC;
     this.isMainFTM = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM;
-    this.isMainEVMToken = this.isMainETH || this.isMainBSC || this.isMainBNB || this.isMainMATIC || this.isMainFTM;
+    this.isMainAVAX = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX;
+    this.isMainAURORA = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH;
+    this.isMainNEAR = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.NEAR;
+    this.isMainEVMToken =
+      this.isMainETH ||
+      this.isMainBSC ||
+      this.isMainBNB ||
+      this.isMainMATIC ||
+      this.isMainFTM ||
+      this.isMainAVAX ||
+      this.isMainAURORA ||
+      this.isMainNEAR;
 
     // pToken is private token (pETH <=> ETH, pBTC <=> BTC, ...)
     this.isIncognitoToken = !this.isPToken && !this.isMainCrypto;
@@ -149,6 +164,7 @@ class PToken {
     this.isBep20Token = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20;
     this.isAvaxErc20Token = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20;
     this.isAuroraErc20Token = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20;
+    this.isNearToken = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN;
 
     this.isDecentralized =
       this.isErc20Token ||
@@ -162,7 +178,9 @@ class PToken {
       this.isAvaxErc20Token ||
       (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX) ||
       this.isAuroraErc20Token ||
-      (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH);
+      (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH) ||
+      this.isNearToken ||
+      (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.NEAR);
     this.isCentralized = !this.isPRV && !this.isDecentralized;
 
     this.networkName = getNetworkNameByCurrency({ currency: this.currencyType });

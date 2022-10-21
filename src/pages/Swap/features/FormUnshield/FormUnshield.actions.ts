@@ -251,6 +251,8 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       network = NetworkTypePayload.AVALANCHE;
     } else if (buyNetworkName === MAIN_NETWORK_NAME.AURORA) {
       network = NetworkTypePayload.AURORA;
+    } else if (buyNetworkName === MAIN_NETWORK_NAME.NEAR) {
+      network = NetworkTypePayload.NEAR;
     }
 
     const payload = {

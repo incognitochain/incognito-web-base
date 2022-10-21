@@ -25,6 +25,9 @@ export enum SupportedChainId {
 
   AURORA = 1313161554,
   AURORA_TESTNET = 1313161555,
+
+  NEAR = 1313161554,
+  NEAR_TESTNET = 1313161555,
 }
 
 export const CHAIN_IDS_TO_NAMES = {
@@ -49,6 +52,9 @@ export const CHAIN_IDS_TO_NAMES = {
 
   [SupportedChainId.AURORA]: 'aurora',
   [SupportedChainId.AURORA_TESTNET]: 'aurora_testnet',
+
+  [SupportedChainId.NEAR]: 'near',
+  [SupportedChainId.NEAR_TESTNET]: 'near_testnet',
 };
 
 /**
@@ -80,6 +86,8 @@ export const L1_CHAIN_IDS = [
   SupportedChainId.AVAX_TESTNET,
   SupportedChainId.AURORA,
   SupportedChainId.AURORA_TESTNET,
+  SupportedChainId.NEAR,
+  SupportedChainId.NEAR_TESTNET,
 ] as const;
 
 export type SupportedL1ChainId = typeof L1_CHAIN_IDS[number];
