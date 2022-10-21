@@ -1,4 +1,5 @@
 import { memo, useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import { useHistory } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
@@ -34,7 +35,6 @@ const Styled = styled.div`
   .leftView {
     display: flex;
     flex: 1;
-    margin-right: 80px;
     flex-direction: column;
     .title-container {
       text-align: left;
@@ -52,6 +52,11 @@ const Styled = styled.div`
     display: flex;
     flex: 1;
     flex-direction: column;
+  }
+
+  .br {
+    display: block;
+    margin-bottom: 16px;
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
@@ -78,7 +83,7 @@ const Styled = styled.div`
 `;
 
 const AnswerItem = ({ answer }: any) => {
-  const text = answer.replace(/\n/g, '<br />');
+  const text = answer.replace(/\n/g, '<span class="br"></span>');
   return <h6 dangerouslySetInnerHTML={{ __html: text }} style={{ color: '#9C9C9C' }}></h6>;
 };
 
@@ -96,9 +101,9 @@ const ValidatorAskedQuestion = () => {
 
   return (
     <Styled>
-      <div className="leftView">
+      <div className="leftView" style={{ marginRight: isMobile ? 0 : 80 }}>
         <div className="title-container center">
-          <h1 className="title-custom">What is Incognito exchange?</h1>
+          <h1 className="title-custom">Frequently asked questions</h1>
         </div>
         <div className="title-container center">
           <h6 className="description-custom" style={{ color: '#9C9C9C' }}>

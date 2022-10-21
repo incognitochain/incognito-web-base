@@ -4,7 +4,6 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 const MenuItemStyled = styled.div`
   display: flex;
   flex-direction: column;
-
   .topView {
     flex: 1;
     padding: 20px 0px;
@@ -38,6 +37,13 @@ const MenuItemStyled = styled.div`
         transform: rotate(45deg);
         -webkit-transform: rotate(45deg);
       }
+    }
+  }
+
+  .title {
+    :hover {
+      cursor: pointer;
+      color: #1a73e8;
     }
   }
 
@@ -116,13 +122,13 @@ const AskQuestionItem = (props: AskQuestionItemProps) => {
   return (
     <MenuItemStyled>
       <div
-        className="topView hover-opacity"
+        className="topView"
         onClick={() => {
           itemOnClick(title);
         }}
       >
         <div className="title-container">
-          <h5 className={isActive ? 'color_blue' : undefined} style={{ fontWeight: 500 }}>
+          <h5 className={`title ${isActive ? 'color_blue' : undefined}`} style={{ fontWeight: 500 }}>
             {title}
           </h5>
         </div>
