@@ -18,11 +18,12 @@ const questions: any = [
   {
     title: 'Where does liquidity come from?',
     answer:
-      'Incognito exchange’s liquidity comes from two sources:\n1. Native privacy DEX (pDEX) for pools containing coins from non smart contract blockchains such as PRV, BTC, XMR, ZEC, LTC and DASH.\n2. Integrated external DEXes such as Uniswap, Curve, PancakeSwap and SpookSwap.',
+      'Incognito exchange’s liquidity comes from two sources:\n\n1. Native privacy DEX (pDEX) for pools containing coins from non smart contract blockchains such as PRV, BTC, XMR, ZEC, LTC and DASH.\n\n2. Integrated external DEXes such as Uniswap, Curve, PancakeSwap and SpookSwap.',
   },
   {
     title: 'What are swap fees?',
-    answer: 'The swap fee will depend on what liquidity pool a swap is executed with.',
+    answer:
+      'The swap fee will depend on what liquidity pool a swap is executed with.\n\n- If you are swapping with an AMM DEX on an external blockchain then the fees will be the total of:\n\n1. Transaction fee: Incognito collects a small network fee of 0.0000001 PRV to pay the validators who help power the network.\n\n2. External blockchain’s gas fee: A swap request needs to be sent and executed against a DEX (say Uniswap) on an external blockchain (say Ethereum) and users need to pay for the gas cost.\n\n3. AMM swap fee: the fee varies per asset per route per exchange that the swap is executed on (e.g., 0.3% for Uniswap, 0.25% for PancakeSwap, …). Liquidity providers of the AMM pools take the fee.\n\n4. Privacy fee: Incognito takes a fee (0.1%) for operating the privacy exchange.\n\n- If you are swapping with Incognito pDEX then the fees will be the total of:\n\n1. Transaction fee: Incognito collects a small network fee of 0.0000001 PRV to pay the validators who help power the network.\n\n2. AMM swap fee: the fee varies per asset per route that the swap is executed on. If a route has multiple pools, it would charge 0.25% per pool. Liquidity providers of the pDEX pools take the fee.',
   },
 ];
 
@@ -76,14 +77,9 @@ const Styled = styled.div`
   `}
 `;
 
-// eslint-disable-next-line react/prop-types
 const AnswerItem = ({ answer }: any) => {
-  const newText = answer.split('\n').map((str: any, i: number) => (
-    <h6 style={{ color: '#DDDDDD' }} key={i}>
-      {str}
-    </h6>
-  ));
-  return newText;
+  const text = answer.replace(/\n/g, '<br />');
+  return <h6 dangerouslySetInnerHTML={{ __html: text }} style={{ color: '#9C9C9C' }}></h6>;
 };
 
 const ValidatorAskedQuestion = () => {
@@ -105,8 +101,8 @@ const ValidatorAskedQuestion = () => {
           <h1 className="title-custom">What is Incognito exchange?</h1>
         </div>
         <div className="title-container center">
-          <h6 className="description-custom">
-            Incognito exchange is a one-stop-shop that facilitates anonymous swap for all coins across many popular
+          <h6 className="description-custom" style={{ color: '#9C9C9C' }}>
+            Incognito exchange is a one-stop shop that facilitates anonymous swap for all coins across many popular
             blockchains such as Bitcoin, Monero, Ethereum, BNB Chain, Avalanche, etc. While every existing DEX has its
             own drawback: sufficient liquidity but no privacy or privacy supported but shortage liquidity, Incognito
             exchange takes a novel approach to achieve both by implementing privacy via zero-knowledge proofs,

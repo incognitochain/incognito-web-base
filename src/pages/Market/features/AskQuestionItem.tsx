@@ -122,7 +122,9 @@ const AskQuestionItem = (props: AskQuestionItemProps) => {
         }}
       >
         <div className="title-container">
-          <h5 className={isActive ? 'color_blue' : undefined}>{title}</h5>
+          <h5 className={isActive ? 'color_blue' : undefined} style={{ fontWeight: 500 }}>
+            {title}
+          </h5>
         </div>
         <div className="icon">
           <i className={`arrow ${isActive ? 'up' : 'down'}`} />
