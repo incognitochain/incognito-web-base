@@ -195,6 +195,12 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
       network = 'ftm';
     } else if (buyToken.isBep20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
       network = 'bsc';
+    } else if (buyToken.isAvaxErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX) {
+      network = 'avax';
+    } else if (buyToken.isAuroraErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH) {
+      network = 'aurora';
+    } else if (buyToken.isNearToken || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.NEAR) {
+      network = 'near';
     }
 
     const incognitoAmount = new BigNumber(

@@ -4,6 +4,7 @@ import incognitoLogoUrl from 'assets/images/inc_logo.svg';
 import auroraLogo from 'assets/svg/aurora-logo.svg';
 import avalancheLogo from 'assets/svg/avalanche-logo.svg';
 import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
+import nearLogo from 'assets/svg/near-logo.svg';
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
 import { isMainnet } from 'config';
 
@@ -94,8 +95,8 @@ const PRIVATE_TOKEN_CURRENCY_NAME = {
   [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX]: 'Avalanche',
   [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20]: 'Avalanche',
 
-  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX]: 'Aurora',
-  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20]: 'Aurora',
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH]: 'Aurora',
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20]: 'Aurora',
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR]: 'Near',
   [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN]: 'Near',
@@ -157,6 +158,7 @@ const MAIN_NETWORK_NAME_ICON: any = {
   [MAIN_NETWORK_NAME.FANTOM]: ftmLogoUrl,
   [MAIN_NETWORK_NAME.AVALANCHE]: avalancheLogo,
   [MAIN_NETWORK_NAME.AURORA]: auroraLogo,
+  [MAIN_NETWORK_NAME.NEAR]: nearLogo,
   [MAIN_NETWORK_NAME.INCOGNITO]: incognitoLogoUrl,
 };
 
@@ -207,10 +209,10 @@ const ROOT_NETWORK_IMG: any = {
   [SupportedChainId.AURORA]: auroraLogo,
   [SupportedChainId.AURORA_TESTNET]: auroraLogo,
 
-  [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR]: auroraLogo,
-  [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN]: auroraLogo,
-  [SupportedChainId.NEAR]: auroraLogo,
-  [SupportedChainId.NEAR_TESTNET]: auroraLogo,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR]: nearLogo,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN]: nearLogo,
+  [SupportedChainId.NEAR]: nearLogo,
+  [SupportedChainId.NEAR_TESTNET]: nearLogo,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN]: incognitoLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]: incognitoLogoUrl,

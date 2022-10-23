@@ -5290,6 +5290,11 @@
     "@uniswap/v3-core" "1.0.0"
     "@uniswap/v3-periphery" "^1.0.1"
 
+"@vespaiach/axios-fetch-adapter@^0.3.0":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@vespaiach/axios-fetch-adapter/-/axios-fetch-adapter-0.3.1.tgz#b0c08167bec9cc558f578a1b9ccff52ead1cf1cb"
+  integrity sha512-+1F52VWXmQHSRFSv4/H0wtnxfvjRMPK5531e880MIjypPdUSX6QZuoDgEVeCE1vjhzDdxCVX7rOqkub7StEUwQ==
+
 "@vibrant/color@^3.2.1-alpha.1":
   version "3.2.1-alpha.1"
   resolved "https://registry.yarnpkg.com/@vibrant/color/-/color-3.2.1-alpha.1.tgz#1bcee4545d2276d36f9a1acb42ab3485a9b489ec"
@@ -12403,11 +12408,12 @@ imurmurhash@^0.1.4:
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha1-khi5srkoojixPcT7a21XbyMUU+o=
 
-"incognito-chain-web-js@https://github.com/incognitochain/incognito-chain-web-js#4.4.1.70":
+"incognito-chain-web-js@https://github.com/incognitochain/incognito-chain-web-js#4.4.2.1":
   version "1.0.0"
-  resolved "https://github.com/incognitochain/incognito-chain-web-js#b297cc812430e9127fcdc62c4ebacb43772d458c"
+  resolved "https://github.com/incognitochain/incognito-chain-web-js#b8320367090d77951faf97888611722f0ef726f5"
   dependencies:
     "@babel/runtime" "^7.14.0"
+    "@vespaiach/axios-fetch-adapter" "^0.3.0"
     axios "^0.19.0"
     binary-sorted-array "^1.0.4"
     bip39 "^3.0.3"

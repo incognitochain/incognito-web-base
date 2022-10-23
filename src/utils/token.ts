@@ -30,6 +30,10 @@ const getChainIDByCurrency = ({ currency }: { currency: number }): SupportedChai
     case PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20:
       chainID = isMainnet ? SupportedChainId.AURORA : SupportedChainId.AURORA_TESTNET;
       break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.NEAR:
+    case PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN:
+      chainID = isMainnet ? SupportedChainId.NEAR : SupportedChainId.NEAR_TESTNET;
+      break;
     case PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN:
       chainID = 25;
       break;
@@ -63,6 +67,10 @@ const getNetworkNameByCurrency = ({ currency }: { currency: number }): MAIN_NETW
     case PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH:
     case PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20:
       networkName = MAIN_NETWORK_NAME.AURORA;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.NEAR:
+    case PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN:
+      networkName = MAIN_NETWORK_NAME.NEAR;
       break;
     case PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN:
       networkName = MAIN_NETWORK_NAME.INCOGNITO;

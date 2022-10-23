@@ -86,6 +86,8 @@ export const USDC: { [chainId in SupportedChainId]: Token } = {
   [SupportedChainId.AVAX_TESTNET]: USDC_KOVAN,
   [SupportedChainId.AURORA]: USDC_POLYGON_MUMBAI,
   [SupportedChainId.AURORA_TESTNET]: USDC_KOVAN,
+  [SupportedChainId.NEAR]: USDC_POLYGON_MUMBAI,
+  [SupportedChainId.NEAR_TESTNET]: USDC_KOVAN,
 };
 export const DAI_POLYGON = new Token(
   SupportedChainId.POLYGON,
