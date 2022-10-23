@@ -20,9 +20,10 @@ const {
   BurningPLGRequestMeta,
   BurningAvaxRequestMeta,
   BurningAuroraRequestMeta,
+  BurningNearRequestMeta,
   BurningRequestMeta,
   getBurningAddress,
-} = require('incognito-chain-web-js/build/wallet');
+} = require('incognito-chain-web-js/build/web/wallet');
 export interface IFee {
   networkFee: number;
   networkFeeToken: string;
@@ -738,12 +739,9 @@ const getBurningMetaDataTypeForUnshield = (sellToken: SelectedPrivacy) => {
   if (sellToken?.isBep20Token || sellToken.isMainBSC) return BurningPBSCRequestMeta;
   if (sellToken?.isPolygonErc20Token || sellToken.isMainMATIC) return BurningPLGRequestMeta;
   if (sellToken?.isFantomErc20Token || sellToken.isMainFTM) return BurningFantomRequestMeta;
-  if (sellToken?.isAvaxErc20Token || sellToken?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX) {
-    return BurningAvaxRequestMeta;
-  }
-  if (sellToken?.isAuroraErc20Token || sellToken?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH) {
-    return BurningAuroraRequestMeta;
-  }
+  if (sellToken?.isAvaxErc20Token || sellToken.isMainAVAX) return BurningAvaxRequestMeta;
+  if (sellToken?.isAuroraErc20Token || sellToken.isMainAURORA) return BurningAuroraRequestMeta;
+  if (sellToken?.isNearToken || sellToken.isMainNEAR) return BurningNearRequestMeta;
   return BurningRequestMeta;
 };
 
