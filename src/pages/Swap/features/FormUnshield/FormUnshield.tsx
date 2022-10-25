@@ -477,8 +477,6 @@ const FormUnshield = React.memo((props: any) => {
 
     userBuyBalanceFormatedText,
     rate,
-
-    sellParentToken,
   } = props;
 
   const { showPopup } = useIncognitoWallet();

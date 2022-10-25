@@ -4,7 +4,7 @@ import PTokenModel from 'models/model/pTokenModel';
 import { getSwapTxs, ISwapTxStorage } from 'pages/Swap/Swap.storage';
 import createAxiosInstance from 'services/axios';
 
-import { PRIVATE_TOKEN_CURRENCY_TYPE } from '../constants';
+import { PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from '../constants';
 import { combineSwapTxs } from '../pages/Swap/features/SwapTxs/SwapTxs.utils';
 
 interface ISummitEtherHash {
@@ -187,9 +187,27 @@ class RpcClient {
     fee?: string;
     isDecentralized: boolean;
     centralizedAddress?: string;
+    tokenID: string;
+    erc20TokenAddress?: string; // unshield PRV
+    currencyType: number; // unshield PRV
   }) {
     let _payload = {};
-    if (payload.isDecentralized) {
+    if (payload.tokenID === PRV.id) {
+      _payload = {
+        Network: payload.network,
+        CurrencyType: payload.currencyType,
+        AddressType: 2,
+        IncognitoAmount: payload.incognitoAmount,
+        PaymentAddress: payload.paymentAddress,
+        Erc20TokenAddress: payload.erc20TokenAddress,
+        PrivacyTokenAddress: payload.privacyTokenAddress,
+        IncognitoTx: payload.incognitoTx,
+        WalletAddress: payload.walletAddress,
+        ID: payload.id,
+        UserFeeSelection: payload.userFeeSelection,
+        UserFeeLevel: payload.userFeeLevel,
+      };
+    } else if (payload.isDecentralized) {
       _payload = {
         Network: payload.network,
         UserFeeLevel: payload.userFeeLevel,

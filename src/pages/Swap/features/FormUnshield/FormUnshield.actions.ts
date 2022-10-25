@@ -83,23 +83,22 @@ export const actionChangeSellToken =
       };
 
       let _buyToken = parentToken;
-      if (parentToken.hasChild && !parentToken.isPRV) {
+      if (parentToken.hasChild) {
         _buyToken = parentToken.listUnifiedToken[0];
       }
-      const buyTokenObj: ITokenNetwork = {
-        parentIdentify: token.parentTokenID,
-        identify: _buyToken.identify,
-        chainID: _buyToken.chainID,
-        currency: _buyToken.currencyType,
-        networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
-      };
 
-      console.log('SANG TEST: ', { parentToken, buyToken });
       if (parentToken.parentTokenID === buyToken.parentTokenID) {
+        const defaultBuyToken: ITokenNetwork = {
+          parentIdentify: token.parentTokenID,
+          identify: _buyToken.identify,
+          chainID: _buyToken.chainID,
+          currency: _buyToken.currencyType,
+          networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+        };
         dispatch(
           actionSetToken({
             sellToken,
-            buyToken: buyTokenObj,
+            buyToken: defaultBuyToken,
           })
         );
       } else {
@@ -122,7 +121,7 @@ export const actionChangeBuyToken =
       if (!token.networkName || parentToken.currencyType === undefined) return;
 
       let _buyToken = parentToken;
-      if (parentToken.hasChild && !parentToken.isPRV) {
+      if (parentToken.hasChild) {
         _buyToken = parentToken.listUnifiedToken[0];
       }
       const buyTokenObj: ITokenNetwork = {

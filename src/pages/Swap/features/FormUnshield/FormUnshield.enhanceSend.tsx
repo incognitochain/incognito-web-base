@@ -499,6 +499,12 @@ const enhanceSend = (WrappedComponent: any) => {
                 networkName = NetworkTypePayload.CENTRALIZED;
               }
               // Submit tx unshield to backend after burn
+              // @ts-ignore
+              const unshieldCurrencyType = (
+                buyToken.hasChild
+                  ? buyToken.listUnifiedToken.find((token: any) => token.networkName === networkName)
+                  : buyToken
+              ).currencyType;
               const submitTxUnshieldResponse = await rpcClient.submitUnshieldTx2({
                 network: networkName,
                 userFeeLevel: useFast2xFee ? 2 : 1,
@@ -513,6 +519,9 @@ const enhanceSend = (WrappedComponent: any) => {
                 isDecentralized: sellToken.isDecentralized,
                 isUseTokenFee,
                 centralizedAddress: fee.centralizedAddress,
+                tokenID: sellToken.tokenID,
+                erc20TokenAddress: buyToken.contractID,
+                currencyType: unshieldCurrencyType,
               });
               console.log({ submitTxUnshieldResponse });
             }
