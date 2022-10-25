@@ -2,9 +2,11 @@ import { Col, Row } from 'antd';
 import avveImg from 'assets/images/avve-logo.png';
 import cakeImg from 'assets/images/cake-icon.png';
 import curveImg from 'assets/images/curve-icon.png';
+import joeImg from 'assets/images/joe-icon.png';
 import linkImg from 'assets/images/link-icon.png';
 import raydiumImg from 'assets/images/raydium-logo.png';
 import solendImg from 'assets/images/solend-logo.png';
+import spookyImg from 'assets/images/spooky-icon.png';
 import uniImg from 'assets/images/uni-icon.png';
 import unknowImg from 'assets/images/unknow-icon.png';
 import React from 'react';
@@ -297,6 +299,28 @@ const PeggingListApps = () => {
           status: 'SHIPPED',
           chain: ['Polygon', 'DEX'],
           desc: 'Swap stablecoins with complete confidentiality using Privacy Curve. Low fees on Polygon meets full privacy on Incognito.',
+        }}
+        className="app-margin-top app-margin-top-small app-margin-right"
+      />
+      <Item
+        data={{
+          img: spookyImg,
+          name: 'pSpooky',
+          status: 'SHIPPED',
+          nameDesc: 'Private SpookySwap',
+          chain: ['Fantom', 'DEX'],
+          desc: 'Explore DeFi on Fantom with full privacy for your activity and assets. Swap Fantom coins anonymously with Private SpookySwap.',
+        }}
+        className="app-margin-top app-margin-top-small app-margin-left"
+      />
+      <Item
+        data={{
+          img: joeImg,
+          name: 'pTraderJoe',
+          status: 'COMING SOON',
+          nameDesc: 'Private Trader Joe',
+          chain: ['Avalanche', 'DEX'],
+          desc: 'Trade confidentially on Trader Joe. Faster privacy swap is enabled by fast transaction finality on Avalanche.',
         }}
         className="app-margin-top app-margin-top-small app-margin-right"
       />
