@@ -185,7 +185,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.AURORA]: {
     networkType: NetworkType.L1,
     docs: 'https://incognito.org/',
-    explorer: 'https://explorer.mainnet.aurora.dev',
+    explorer: 'https://aurorascan.dev',
     infoLink: 'https://incognito.org/',
     label: 'Aurora Chain',
     logoUrl: auroraLogo,
@@ -194,7 +194,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.AURORA_TESTNET]: {
     networkType: NetworkType.L1,
     docs: 'https://incognito.org/',
-    explorer: 'https://explorer.testnet.aurora.dev',
+    explorer: 'https://testnet.aurorascan.dev',
     infoLink: 'https://incognito.org/',
     label: 'Aurora Chain Testnet',
     logoUrl: auroraLogo,

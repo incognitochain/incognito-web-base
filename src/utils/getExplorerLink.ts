@@ -22,8 +22,8 @@ const ETHERSCAN_PREFIXES: { [chainId: number]: string } = {
   [SupportedChainId.AVAX]: 'https://snowtrace.io',
   [SupportedChainId.AVAX_TESTNET]: 'https://testnet.snowtrace.io',
 
-  [SupportedChainId.AURORA]: 'https://explorer.mainnet.aurora.dev',
-  [SupportedChainId.AURORA_TESTNET]: 'https://explorer.testnet.aurora.dev',
+  [SupportedChainId.AURORA]: 'https://testnet.aurorascan.dev',
+  [SupportedChainId.AURORA_TESTNET]: 'https://aurorascan.dev',
 };
 
 export enum ExplorerDataType {
