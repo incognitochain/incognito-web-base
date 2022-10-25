@@ -115,9 +115,10 @@ interface AskQuestionItemProps {
   title?: string;
   subItem?: React.ReactNode;
   itemOnClick: (key: string) => void;
+  subsAnswers: any;
 }
 const AskQuestionItem = (props: AskQuestionItemProps) => {
-  const { title = '', subItem = true, isActive = false, itemOnClick = () => {} } = props;
+  const { title = '', subItem = true, isActive = false, itemOnClick = () => {}, subsAnswers } = props;
 
   return (
     <MenuItemStyled>
@@ -137,8 +138,23 @@ const AskQuestionItem = (props: AskQuestionItemProps) => {
         </div>
       </div>
 
-      {isActive && <div className="childrenView">{subItem}</div>}
-      <div className="lineBreak"></div>
+      {isActive && (
+        <>
+          <div className="childrenView">{subItem}</div>
+          {subsAnswers &&
+            subsAnswers.map(({ title, subs }: { title: string; subs: string[] }) => (
+              <div key={title}>
+                <h6 className="childrenView">{title}</h6>
+                {subs.map((sub) => (
+                  <h6 style={{ marginLeft: '16px' }} className="childrenView" key={sub}>
+                    {sub}
+                  </h6>
+                ))}
+              </div>
+            ))}
+        </>
+      )}
+      <div className="lineBreak" />
     </MenuItemStyled>
   );
 };

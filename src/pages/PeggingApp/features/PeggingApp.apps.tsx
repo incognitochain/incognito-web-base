@@ -2,9 +2,12 @@ import { Col, Row } from 'antd';
 import avveImg from 'assets/images/avve-logo.png';
 import cakeImg from 'assets/images/cake-icon.png';
 import curveImg from 'assets/images/curve-icon.png';
+import joeImg from 'assets/images/joe-icon.png';
 import linkImg from 'assets/images/link-icon.png';
 import raydiumImg from 'assets/images/raydium-logo.png';
 import solendImg from 'assets/images/solend-logo.png';
+import spookyImg from 'assets/images/spooky-icon.png';
+import trisolarisImg from 'assets/images/trisolaris-icon.png';
 import uniImg from 'assets/images/uni-icon.png';
 import unknowImg from 'assets/images/unknow-icon.png';
 import React from 'react';
@@ -302,6 +305,39 @@ const PeggingListApps = () => {
       />
       <Item
         data={{
+          img: spookyImg,
+          name: 'pSpooky',
+          status: 'SHIPPED',
+          nameDesc: 'Private SpookySwap',
+          chain: ['Fantom', 'DEX'],
+          desc: 'Explore DeFi on Fantom with full privacy for your activity and assets. Swap Fantom coins anonymously with Private SpookySwap.',
+        }}
+        className="app-margin-top app-margin-top-small app-margin-left"
+      />
+      <Item
+        data={{
+          img: joeImg,
+          name: 'pTraderJoe',
+          status: 'COMING SOON',
+          nameDesc: 'Private Trader Joe',
+          chain: ['Avalanche', 'DEX'],
+          desc: 'Trade confidentially on Trader Joe. Faster privacy swap is enabled by fast transaction finality on Avalanche.',
+        }}
+        className="app-margin-top app-margin-top-small app-margin-right"
+      />
+      <Item
+        data={{
+          img: trisolarisImg,
+          name: 'pTrisolaris',
+          status: 'COMING SOON',
+          nameDesc: 'Private Trisolaris',
+          chain: ['Aurora', 'DEX'],
+          desc: 'Privacy Swap comes to Aurora ecosystem for the first time. Multiple AMMs for best-in-class execution, now with privacy.',
+        }}
+        className="app-margin-top app-margin-top-small app-margin-left"
+      />
+      <Item
+        data={{
           img: raydiumImg,
           name: 'pRaydium',
           status: 'COMING SOON',
@@ -309,7 +345,7 @@ const PeggingListApps = () => {
           chain: ['Solana', 'DEX', 'Farming'],
           desc: 'Explore DeFi on Solana with full privacy for your activity and assets. Swap, provide liquidity, farm, and stake.',
         }}
-        className="app-margin-top app-margin-top-small app-margin-left"
+        className="app-margin-top app-margin-top-small app-margin-right"
       />
       <Item
         data={{
@@ -320,7 +356,7 @@ const PeggingListApps = () => {
           chain: ['Polygon', 'Lending'],
           desc: 'Earn interest on deposits and borrow assets on everyone’s favorite lending protocol – confidentially.',
         }}
-        className="app-margin-top app-margin-top-small app-margin-right"
+        className="app-margin-top app-margin-top-small app-margin-left"
       />
       <Item
         data={{
@@ -331,7 +367,7 @@ const PeggingListApps = () => {
           chain: ['Solana', 'Lending'],
           desc: 'Get privacy for what you lend, borrow, and earn on Solana. Protect your activity from prying eyes.',
         }}
-        className="app-margin-top app-margin-top-small app-margin-left"
+        className="app-margin-top app-margin-top-small app-margin-right"
       />
       <Item
         data={{
@@ -343,7 +379,7 @@ const PeggingListApps = () => {
           link: 'Join the conversation',
           linkPath: 'https://we.incognito.org/t/incognito-2022-technical-roadmap/15002',
         }}
-        className="app-margin-top app-margin-top-small app-margin-right"
+        className="app-margin-top app-margin-top-small app-margin-left"
       />
     </Styled>
   );
