@@ -49,20 +49,20 @@ export const Styled = styled.div`
         }
     `}
   }
-  .cake-img {
+  .group-img {
     width: 45%;
     object-fit: contain;
-    max-width: 420px;
+    max-width: 560px;
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-    .cake-img {
+    .group-img {
         max-width: 370px;
         object-fit: contain;
     }
   `}
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-    .cake-img {
+    .group-img {
         width: 85%;
         object-fit: contain;
         margin-top: 0px;

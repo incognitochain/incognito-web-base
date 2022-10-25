@@ -1,5 +1,5 @@
 import { Button, Col } from 'antd';
-import cakeImg from 'assets/images/cake-logo.png';
+import groupLogosImg from 'assets/images/group-logo.png';
 import SectionHead from 'components/Core/SectionHead';
 import SectionLink from 'components/Core/SectionLink';
 import { peggingAppTranslateSelector } from 'config/Configs.selector';
@@ -56,7 +56,7 @@ const Home = () => {
             link="https://we.incognito.org/t/how-to-trade-with-ppancake/15567"
           />
         </Col>
-        <img src={cakeImg} alt="cake-logo" className="cake-img" />
+        <img src={groupLogosImg} alt="cake-logo" className="group-img" />
       </div>
       {renderSectionBottom()}
     </Styled>
