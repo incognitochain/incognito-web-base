@@ -11,6 +11,7 @@ import {
   actionChangeSellNetwork,
   actionChangeSellToken,
   actionGetVaults,
+  actionRotateSwapTokens,
   actionSetExchangeSelected,
   actionSetSwapExchangeSupports,
   actionSetSwapNetwork,
@@ -26,6 +27,7 @@ export interface TInter {
   // Buy token
   onSelectBuyToken: ({ token }: { token: PToken }) => void;
   onSelectBuyNetwork: ({ network }: { network: ITokenNetwork }) => void;
+  onRotateSwapToken: () => void;
 }
 
 const enhanceSelect = (WrappedComponent: any) => {
@@ -60,6 +62,8 @@ const enhanceSelect = (WrappedComponent: any) => {
       dispatch(actionChangeBuyNetwork({ network }));
     };
 
+    const handleRotateSwapToken = () => dispatch(actionRotateSwapTokens());
+
     React.useEffect(() => {
       if (!refCountChangeField.current) {
         refCountChangeField.current = true;
@@ -86,6 +90,7 @@ const enhanceSelect = (WrappedComponent: any) => {
           onSelectSellNetwork: handleSelectSellNetwork,
           onSelectBuyToken: handleSelectBuyToken,
           onSelectBuyNetwork: handleSelectBuyNetwork,
+          onRotateSwapToken: handleRotateSwapToken,
         }}
       />
     );

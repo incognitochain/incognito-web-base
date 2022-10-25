@@ -1,46 +1,46 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-  "ecmaVersion": 2020,
+    "ecmaVersion": 2020,
     "sourceType": "module",
     "ecmaFeatures": {
-    // Allows for the parsing of JSX
-    "jsx": true
-  }
-},
+      // Allows for the parsing of JSX
+      "jsx": true
+    }
+  },
   "settings": {
-  "react": {
-    "version": "detect"
-  }
-},
+    "react": {
+      "version": "detect"
+    }
+  },
   "ignorePatterns": [
-  "src/types/v3",
-  "src/abis/types",
-  "src/locales/**/*.js",
-  "src/locales/**/en-US.po",
-  "src/state/data/generated.ts",
-  "node_modules",
-  "coverage",
-  "build",
-  "dist",
-  ".DS_Store",
-  ".env.local",
-  ".env.development.local",
-  ".env.test.local",
-  ".env.production.local",
-  ".idea/",
-  ".vscode/",
-  "package-lock.json",
-  "yarn.lock"
-],
+    "src/types/v3",
+    "src/abis/types",
+    "src/locales/**/*.js",
+    "src/locales/**/en-US.po",
+    "src/state/data/generated.ts",
+    "node_modules",
+    "coverage",
+    "build",
+    "dist",
+    ".DS_Store",
+    ".env.local",
+    ".env.development.local",
+    ".env.test.local",
+    ".env.production.local",
+    ".idea/",
+    ".vscode/",
+    "package-lock.json",
+    "yarn.lock"
+  ],
   "extends": [
-  "react-app",
-  "plugin:react/recommended",
-  "plugin:@typescript-eslint/recommended",
-  "plugin:react-hooks/recommended",
-  "prettier/@typescript-eslint",
-  "plugin:prettier/recommended"
-],
+    "react-app",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
   "plugins": ["simple-import-sort", "unused-imports"],
   "rules": {
     "unused-imports/no-unused-imports": "error",
@@ -56,34 +56,75 @@
     "object-shorthand": ["error", "always"],
     "semi": 0,
     "@typescript-eslint/no-var-requires": 0,
+    "react/display-name": 0,
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace|debug)$/]",
+        "message": "Unexpected property on console object was called"
+      }
+    ],
+
+    "no-unused-vars": 0,
+    "react/no-unused-state": 1,
+
+    "@typescript-eslint/no-empty-interface": 0,
+    "@typescript-eslint/triple-slash-reference": 0,
+
+    "prefer-const": 0,
+
+    "@typescript-eslint/no-empty-function": 0,
+
+    "import/no-unresolved": "off",
+    "import/no-mutable-exports": "off",
+    "import/prefer-default-export": "off",
+    "import/no-dynamic-require": "off",
+    "global-require": "off",
+    "import/no-extraneous-dependencies": "off",
+
+    "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
+    "react-hooks/exhaustive-deps": "off",
+
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/media-has-caption": "off",
+
+    "no-useless-catch": "off",
+    "no-continue": "off",
+    "no-nested-ternary": "off",
+    "no-unused-expressions": "off",
+    "consistent-return": "off",
+    "react/no-danger": "off",
+    "no-console": "off",
+    "no-underscore-dangle": "off",
+    "@typescript-eslint/no-namespace": "off",
     "no-restricted-imports": [
-    "error",
-    {
-      "paths": [
-        {
-          "name": "ethers",
-          "message": "Please import from '@ethersproject/module' directly to support tree-shaking."
-        },
-        {
-          "name": "styled-components",
-          "message": "Please import from styled-components/macro."
-        },
-        {
-          "name": "@lingui/macro",
-          "importNames": ["t"],
-          "message": "Please use <Trans> instead of t."
-        }
-      ],
-      "patterns": [
-        {
-          "group": ["**/dist"],
-          "message": "Do not import from dist/ - this is an implementation detail, and breaks tree-shaking."
-        },
-        {
-          "group": ["!styled-components/macro"]
-        }
-      ]
-    }
-  ]
-}
+      "error",
+      {
+        "paths": [{
+            "name": "ethers",
+            "message": "Please import from '@ethersproject/module' directly to support tree-shaking."
+          },
+          {
+            "name": "styled-components",
+            "message": "Please import from styled-components/macro."
+          },
+          {
+            "name": "@lingui/macro",
+            "importNames": ["t"],
+            "message": "Please use <Trans> instead of t."
+          }
+        ],
+        "patterns": [{
+            "group": ["**/dist"],
+            "message": "Do not import from dist/ - this is an implementation detail, and breaks tree-shaking."
+          },
+          {
+            "group": ["!styled-components/macro"]
+          }
+        ]
+      }
+    ]
+  }
 }

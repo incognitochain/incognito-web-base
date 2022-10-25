@@ -36,7 +36,7 @@ const Styled = styled.div`
   .loader {
     position: absolute;
     top: 40%;
-    left: 46% !important;
+    left: 48% !important;
   }
 `;
 

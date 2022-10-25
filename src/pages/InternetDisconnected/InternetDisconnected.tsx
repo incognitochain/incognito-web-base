@@ -1,6 +1,10 @@
 import { ReactComponent as InternetDisconnectedImage } from 'assets/svg/disconnect-image.svg';
+import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
+
+import { useInternetConnnection } from '../../components/Core/InternetConnection';
 
 export const Styled = styled.div`
   margin-top: 20px;
@@ -45,6 +49,17 @@ export const Styled = styled.div`
 `;
 
 const InternetDisconnected = () => {
+  const isInternetAlready = useInternetConnnection();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!isInternetAlready) {
+      // history.replace('/internet-disconnected');
+    } else {
+      history.replace('/');
+    }
+  }, [isInternetAlready]);
+
   return (
     <Styled>
       <InternetDisconnectedImage className="icon-wrapper" />

@@ -50,6 +50,15 @@ const ShieldFeeEstimate = (props: ShieldFeeEstimateProps) => {
           {'This fee will be deducted from the shielded funds.'}
         </ThemedText.Small>
       </Row>
+      <div style={{ height: 10 }}></div>
+      <Row className="topView">
+        <ThemedText.SmallLabel fontWeight={400} color="primary8">
+          {'Estimate time'}
+        </ThemedText.SmallLabel>
+        <ThemedText.SmallLabel fontWeight={400} color="primary5">
+          10 mins
+        </ThemedText.SmallLabel>
+      </Row>
     </Styled>
   );
 };

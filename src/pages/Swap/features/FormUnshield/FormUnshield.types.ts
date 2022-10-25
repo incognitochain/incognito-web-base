@@ -25,6 +25,7 @@ export enum SwapExchange {
   UNISWAP = 'uniswap',
   CURVE = 'curve',
   PDEX = 'pdex',
+  SPOOKY = 'spooky',
 }
 
 export enum NetworkTypePayload {
@@ -62,6 +63,7 @@ export interface IFormUnshieldState {
 export interface ISwapFee {
   amount: number;
   tokenId: string;
+  amountInBuyToken: string;
 }
 export interface ISwapExchangeData {
   amountIn: number;
@@ -79,6 +81,8 @@ export interface ISwapExchangeData {
   networkID: number;
   feeAddressShardID: number;
   poolPairs: string[];
+  expectedAmount: string;
+  rate: string;
 }
 
 export interface UnshieldSetTokenPayLoad {

@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { GROUP_NETWORK } from 'constants/token';
+import { GROUP_NETWORK, PRIORITY_TOKEN_ID } from 'constants/token';
 import orderBy from 'lodash/orderBy';
 import SelectedPrivacyModel from 'models/model/SelectedPrivacyModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
@@ -68,6 +68,25 @@ export const getPrivacyDataByTokenIDSelector = createSelector(
       return new SelectedPrivacyModel(token, followTokens);
     }
 );
+
+export const mainPTokenSelector = createSelector(unshieldableTokens, (pTokens: any) => {
+  // prv, btc, eth, bnb, dai, ltc, xmr, zec, usdc, dash, usdt, doge, busd, bat, link, neo, zil
+  if (!pTokens?.length) return [];
+  const PRIORITY_LIST: string[] = PRIORITY_TOKEN_ID;
+  const sortPriority = pTokens
+    ?.filter((token: any) => PRIORITY_LIST.includes(token?.tokenID))
+    .map((token: any) => {
+      let priority = PRIORITY_LIST.indexOf(token?.tokenID);
+      priority = priority > -1 ? priority : PRIORITY_LIST.length;
+      return {
+        ...token,
+        priority,
+        verified: token.verified,
+      };
+    });
+  const res = orderBy(sortPriority, ['priority'], ['asc']);
+  return res;
+});
 
 export const getDepositTokenDataSelector = createSelector(
   depositableSelectors,

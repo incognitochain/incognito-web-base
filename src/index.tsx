@@ -10,7 +10,7 @@ import App from 'pages/App';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import store from 'state';
 import ApplicationUpdater from 'state/application/updater';
 import ListsUpdater from 'state/lists/updater';
@@ -42,7 +42,7 @@ function Updaters() {
 ReactDOM.render(
   <StrictMode>
     <Provider store={store}>
-      <HashRouter>
+      <BrowserRouter>
         <LanguageProvider>
           <Web3Provider>
             <BlockNumberProvider>
@@ -56,7 +56,7 @@ ReactDOM.render(
             </BlockNumberProvider>
           </Web3Provider>
         </LanguageProvider>
-      </HashRouter>
+      </BrowserRouter>
     </Provider>
   </StrictMode>,
   document.getElementById('root')

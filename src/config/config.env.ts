@@ -4,11 +4,13 @@ interface IENVS {
   REACT_APP_ENV: string;
   REACT_APP_API_SERVICE: string;
   REACT_APP_SITE_KEY: string;
+  REACT_APP_EXPLORER_SERVICE_URL: string;
 }
 
 const defaultEnvs = {
   REACT_APP_ENV: 'production',
   REACT_APP_API_SERVICE: '',
+  REACT_APP_EXPLORER_SERVICE_URL: '',
 };
 
 export const getEnvs = () => {

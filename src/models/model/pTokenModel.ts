@@ -34,6 +34,7 @@ class PToken {
   isPToken: boolean;
 
   symbol: string;
+  pSymbol: string;
   name: string;
   shortName: string;
   network: string;
@@ -106,6 +107,7 @@ class PToken {
     this.isPRV = this.tokenID === PRVIDSTR;
 
     this.symbol = data.Symbol;
+    this.pSymbol = data.PSymbol;
     this.name = data.Name;
     this.shortName = this.name;
     if (this.shortName) {

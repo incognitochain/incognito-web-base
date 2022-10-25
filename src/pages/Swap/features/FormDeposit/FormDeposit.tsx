@@ -1,20 +1,17 @@
-import { InputField } from 'components/Core/ReduxForm';
-import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { VerticalSpace } from 'components/Core/Space';
 import QrCode from 'components/QrCode';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useSwitchNetwork from 'lib/hooks/useSwitchNetwork';
 import debounce from 'lodash/debounce';
-import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React, { useEffect, useState } from 'react';
-import { Field } from 'redux-form';
+import { genDepositAddress, IDepositAddress } from 'services/rpcClient';
 import { useWalletModalToggle } from 'state/application/hooks';
 import styled from 'styled-components/macro';
+import { getAcronymNetwork } from 'utils/token';
 
-import { genDepositAddress, IDepositAddress } from '../../../../services/rpcClient';
-import { getAcronymNetwork } from '../../../../utils/token';
+import { ButtonConfirmed } from '../../../../components/Core/Button';
+import { useIncognitoWallet } from '../../../../components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { Selection } from '../Selection';
-import DescriptionBox from './components/DescriptionBox';
 import DescriptionQrCode from './components/DescriptionQrCode';
 import ShieldFeeEstimate from './components/ShieldFeeEstimate';
 import enhance, { IMergeProps } from './FormDeposit.enhance';
@@ -45,6 +42,7 @@ const FormDeposit = (props: IMergeProps) => {
     onSend,
     inputAddress,
     isIncognitoAddress,
+    incAccount,
   } = props;
 
   const [state, setState] = React.useState<{ isFetching: boolean; data: IDepositAddress | undefined }>({
@@ -61,9 +59,11 @@ const FormDeposit = (props: IMergeProps) => {
     return onSwitchNetwork(false);
   };
 
+  const { isIncognitoInstalled, showPopup } = useIncognitoWallet();
+
   const debounceGenDepositAddress = debounce(
     React.useCallback(async () => {
-      if (!inputAddress || !isIncognitoAddress) return;
+      if (!incAccount?.paymentAddress) return;
       setState({
         data: undefined,
         isFetching: true,
@@ -71,7 +71,7 @@ const FormDeposit = (props: IMergeProps) => {
       try {
         const data: IDepositAddress = await genDepositAddress({
           network: getAcronymNetwork(sellToken),
-          incAddress: inputAddress,
+          incAddress: incAccount?.paymentAddress,
           tokenID: sellToken.tokenID,
           currencyType: sellToken.currencyType,
           isBTC: sellToken.isBTC,
@@ -87,14 +87,14 @@ const FormDeposit = (props: IMergeProps) => {
         });
         console.log('GEN ADDRESS ERROR: ', e);
       }
-    }, [inputAddress, isIncognitoAddress, sellToken.tokenID, sellToken.currencyType]),
+    }, [incAccount?.paymentAddress, sellToken.tokenID, sellToken.currencyType]),
     300
   );
 
   useEffect(() => {
-    if (!inputAddress || !isIncognitoAddress) return;
+    if (!incAccount?.paymentAddress) return;
     debounceGenDepositAddress();
-  }, [inputAddress, isIncognitoAddress, sellToken.tokenID, sellToken.currencyType]);
+  }, [incAccount?.paymentAddress, sellToken.tokenID, sellToken.currencyType]);
 
   return (
     <Styled>
@@ -113,44 +113,8 @@ const FormDeposit = (props: IMergeProps) => {
         showNetwork={true}
       />
       <VerticalSpace />
-      {/* <Selection
-          title="To"
-          rightValue={buyNetworkName}
-          currency={PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}
-          leftValue={buyToken.symbol}
-          iconUrl={buyToken.iconUrl}
-        />
-        <VerticalSpace /> */}
-      <Field
-        component={InputField}
-        name={FORM_CONFIGS.toAddress}
-        inputType={INPUT_FIELD.address}
-        leftTitle="Incognito Address"
-        componentProps={{
-          placeholder: 'Incognito Address',
-        }}
-        showIcon={false}
-        validate={validateAddress}
-        warning={warningAddress}
-      />
-      <VerticalSpace />
-      {/* <Field
-          component={InputField}
-          name={FORM_CONFIGS.sellAmount}
-          inputType={INPUT_FIELD.amount}
-          leftTitle="Total amount"
-          rightTitle={amount.maxAmountFormatedText}
-          componentProps={{
-            placeholder: 'Amount',
-            type: 'number',
-          }}
-          validate={validateAmount}
-          onClickMax={onClickMax}
-        /> */}
-      <VerticalSpace />
-
       {isShowQrCode && (
-        <div>
+        <div style={{ marginTop: '30px' }}>
           <QrCode
             qrCodeProps={{
               value: state.data?.address || 'NON VALUE',
@@ -166,7 +130,7 @@ const FormDeposit = (props: IMergeProps) => {
           />
           {/*<MinimumShiledAmount />*/}
           <ShieldFeeEstimate value={`${state.data?.tokenFee || state.data?.estimateFee || 0} ${sellToken.symbol}`} />
-          <DescriptionBox symbol={sellToken.symbol} token={sellToken} />
+          {/*<DescriptionBox symbol={sellToken.symbol} token={sellToken} />*/}
         </div>
       )}
       {/* {button.switchNetwork || !account ? (
@@ -177,6 +141,14 @@ const FormDeposit = (props: IMergeProps) => {
           <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
         )} */}
       {/*</form>*/}
+      {!incAccount && (
+        <>
+          <VerticalSpace />
+          <ButtonConfirmed onClick={showPopup}>
+            {isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet'}
+          </ButtonConfirmed>
+        </>
+      )}
     </Styled>
   );
 };

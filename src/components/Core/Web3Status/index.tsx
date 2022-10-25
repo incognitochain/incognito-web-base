@@ -106,6 +106,7 @@ const Text = styled.p`
   line-height: 140%;
   width: fit-content;
   font-weight: 500;
+  color: ${({ theme }) => theme.primaryText1};
 `;
 
 const NetworkIcon = styled(Activity)`
