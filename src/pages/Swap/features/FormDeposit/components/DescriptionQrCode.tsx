@@ -58,7 +58,7 @@ const DescriptionQrCode = ({ symbol, paymentAddress, expiredAt }: DescriptionQrC
       {paymentAddress && (
         <div className="paymentAddress-area">
           <div className="paymentAddressText">
-            <ThemedText.RegularLabel fontWeight={500} color="primary5">
+            <ThemedText.RegularLabel fontWeight={500} color="primary5" style={{ lineBreak: 'anywhere' }}>
               {paymentAddress}
             </ThemedText.RegularLabel>
           </div>

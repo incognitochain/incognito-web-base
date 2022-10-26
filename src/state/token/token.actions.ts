@@ -29,12 +29,31 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
   if (isFetching) return;
   try {
     dispatch(actionFetchingPTokens({ isFetching: true }));
-    let list = orderBy((await getTokenListNoCache()) || [], ['isUnified', 'isVerified'], ['desc', 'desc']);
+    let list = orderBy(
+      (await getTokenListNoCache()) || [],
+      ['isPRV', 'isUnified', 'isVerified'],
+      ['desc', 'desc', 'desc']
+    );
     const PRVToken = list.find((token) => token.tokenID === PRV.id);
     if (PRVToken) {
       list = [...list, ...PRVToken.listChildToken];
     }
-    const pTokens = keyBy(list, 'identify');
+
+    const pTokens = keyBy(
+      list.reduce((tokens: PTokenModel[], currToken) => {
+        let _currTokens: PTokenModel[] = [currToken];
+        let _tokens: PTokenModel[] = [];
+        if (currToken.listUnifiedToken && currToken.listUnifiedToken.length > 0) {
+          _tokens = currToken.listUnifiedToken;
+        }
+        if (currToken.movedUnifiedToken) {
+          _currTokens = [];
+        }
+        return [...tokens, ..._currTokens, ..._tokens];
+      }, []),
+      'identify'
+    );
+
     const depositableList = list.filter(({ movedUnifiedToken, isVerified }) => !movedUnifiedToken && isVerified);
 
     // flatten tokens

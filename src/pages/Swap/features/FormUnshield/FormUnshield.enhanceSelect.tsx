@@ -32,7 +32,7 @@ export interface TInter {
 
 const enhanceSelect = (WrappedComponent: any) => {
   const FormDepositComp = (props: any) => {
-    const { sellToken, buyToken, formType, buyNetworkName, incAddress, web3Account, onChangeField, unshieldAddress } =
+    const { sellToken, buyToken, formType, buyNetworkName, incAddress, onChangeField, unshieldAddress, inputAddress } =
       props;
     const dispatch = useAppDispatch();
     const refCountChangeField = React.useRef<any>(null);
@@ -76,8 +76,6 @@ const enhanceSelect = (WrappedComponent: any) => {
           if (unshieldAddress && (isEtherAddress(unshieldAddress) || isPaymentAddress(unshieldAddress))) {
             onChangeField('', FORM_CONFIGS.toAddress);
           }
-        } else if (!!web3Account) {
-          onChangeField(web3Account, FORM_CONFIGS.toAddress);
         }
       }
     }, [buyNetworkName, sellToken.identify, refCountChangeField.current]);

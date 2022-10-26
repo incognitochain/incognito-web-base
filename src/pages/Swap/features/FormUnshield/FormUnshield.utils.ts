@@ -176,46 +176,17 @@ const getUnshieldData = ({
   let _buyTokenList = unshieldableTokens(state);
 
   if (formType === FormTypes.SWAP) {
-    if (swapNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
+    if (swapNetwork === MAIN_NETWORK_NAME.INCOGNITO) {
+      _buyTokenList = _buyTokenList.filter((token: any) => !token.movedUnifiedToken);
+    } else {
       _buyTokenList = _buyTokenList.filter((token: SelectedPrivacy) => {
         const _swapNetwork = token.networkName;
-        if (!_swapNetwork || (token.isPRV && token.hasChild)) return false;
-        // case unified tokens
-        if (token.hasChild) return token.listUnifiedToken.filter(({ networkName }) => networkName === _swapNetwork);
+        // remove al unified tokens
+        if (!_swapNetwork || token.hasChild) return false;
 
         // case un-unified tokens
         return token.networkName === swapNetwork;
-        // if (swapNetwork === MAIN_NETWORK_NAME.POLYGON) {
-        //   return (
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC ||
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20
-        //   );
-        // }
-        // if (swapNetwork === MAIN_NETWORK_NAME.ETHEREUM) {
-        //   return (
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ERC20 ||
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ETH
-        //   );
-        // }
-        // if (swapNetwork === MAIN_NETWORK_NAME.BSC) {
-        //   return (
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB ||
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20
-        //   );
-        // }
-        // if (swapNetwork === MAIN_NETWORK_NAME.FANTOM) {
-        //   return (
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN ||
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM ||
-        //     token?.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20
-        //   );
-        // }
       });
-    } else {
-      _buyTokenList = _buyTokenList.filter((token: any) => !token.movedUnifiedToken);
     }
   }
 
@@ -232,15 +203,13 @@ const getUnshieldData = ({
   }
 
   const pTokens = pTokensSelector(state);
-
+  _buyNetworkList = _sellParentToken?.supportedNetwork;
   // case unshield;
   if (formType === FormTypes.UNSHIELD) {
     _buyNetworkName = buyNetworkName;
-    _buyNetworkList = _buyParentToken?.supportedNetwork;
-    _buyTokenList = getBuyTokenList(buyNetworkName, _buyTokenList, _sellToken, _buyNetworkList, pTokens);
+    // _buyTokenList = getBuyTokenList(buyNetworkName, _buyTokenList, _sellToken, _buyNetworkList, pTokens);
   } else {
     _buyNetworkName = swapNetwork;
-    _buyNetworkList = _sellParentToken?.supportedNetwork;
     if (_sellParentToken?.isUnified && vaults?.UnifiedTokenVaults) {
       const tokenVault = vaults?.UnifiedTokenVaults[_sellParentToken?.tokenID] || {};
       // Filter network enough vault
@@ -257,29 +226,16 @@ const getUnshieldData = ({
         return isAccept;
       });
     }
+  }
 
-    // if (
-    //   (_sellToken.isBTC || _sellToken.isCentralized) &&
-    //   swapNetwork !== MAIN_NETWORK_NAME.ETHEREUM &&
-    //   swapNetwork !== MAIN_NETWORK_NAME.BSC &&
-    //   swapNetwork !== MAIN_NETWORK_NAME.POLYGON &&
-    //   swapNetwork !== MAIN_NETWORK_NAME.FANTOM &&
-    //   swapNetwork !== MAIN_NETWORK_NAME.INCOGNITO
-    // ) {
-    //   _buyTokenList = [_sellToken];
-    // } else {
-    //   _buyTokenList = getBuyTokenList(swapNetwork, _buyTokenList, _sellToken, _buyNetworkList, groupNetworks);
-    // }
-    _buyTokenList = getBuyTokenList(swapNetwork, _buyTokenList, _sellToken, _buyNetworkList, pTokens);
-    // add incognito network
-    if (!_buyNetworkList?.find((network: ITokenNetwork) => network?.networkName === MAIN_NETWORK_NAME.INCOGNITO)) {
-      _buyNetworkList.unshift({
-        parentIdentify: sellParentIdentify,
-        identify: _sellParentToken?.identify,
-        networkName: MAIN_NETWORK_NAME.INCOGNITO,
-        currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
-      });
-    }
+  // add incognito network
+  if (!_buyNetworkList?.find((network: ITokenNetwork) => network?.networkName === MAIN_NETWORK_NAME.INCOGNITO)) {
+    _buyNetworkList.unshift({
+      parentIdentify: sellParentIdentify,
+      identify: _sellParentToken?.identify,
+      networkName: MAIN_NETWORK_NAME.INCOGNITO,
+      currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
+    });
   }
 
   const isExternalAddress = _buyToken.isCentralized || _buyToken.isBTC ? true : isEtherAddress(inputAddress);

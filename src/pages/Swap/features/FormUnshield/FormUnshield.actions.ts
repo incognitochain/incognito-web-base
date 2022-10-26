@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
-import { MAIN_NETWORK_NAME } from 'constants/token';
-import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
+import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import PToken, { getTokenIdentify, ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { rpcClient } from 'services';
 import { AppDispatch, AppState } from 'state';
@@ -162,33 +162,40 @@ export const actionChangeBuyNetwork =
   ({ network }: { network: ITokenNetwork }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     const { formType, sellToken, buyToken } = unshieldDataSelector(getState());
+
+    const parentID = getTokenIdentify({
+      tokenID:
+        sellToken.parentTokenID !== BIG_COINS.USDC_UNIFIED.tokenID
+          ? BIG_COINS.USDC_UNIFIED.tokenID
+          : BIG_COINS.PRV.tokenID,
+      currencyType: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
+    });
+    const emptyBuyToken = {
+      parentIdentify: parentID,
+      identify: parentID,
+      chainID: 0,
+      currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
+      networkName: network.networkName,
+    };
+
     try {
       if (formType === FormTypes.UNSHIELD) {
-        dispatch(
-          actionSetToken({
-            buyToken: {
-              ...network,
-            },
-          })
-        );
+        if (sellToken.parentTokenID === buyToken.parentTokenID) {
+          dispatch(actionSetToken({ buyToken: { ...emptyBuyToken } }));
+        } else {
+          dispatch(actionSetToken({ buyToken: { ...network } }));
+        }
       } else {
         dispatch(actionSetSwapNetwork(network?.networkName));
       }
 
+      // handle case centralized
       if (sellToken.isBTC || sellToken.isCentralized) {
         // case force select token match with unshield network
         if (sellToken.networkName === network.networkName) {
           return dispatch(actionChangeBuyToken({ token: sellToken }));
         }
-
         if (sellToken.networkName !== network.networkName && buyToken.identify === sellToken.identify) {
-          const emptyBuyToken = {
-            parentIdentify: 'undefined',
-            identify: 'undefined',
-            chainID: 0,
-            currency: 0,
-            networkName: network.networkName,
-          };
           dispatch(actionSetToken({ buyToken: emptyBuyToken }));
           dispatch(actionSetSwapNetwork(emptyBuyToken.networkName));
         }
