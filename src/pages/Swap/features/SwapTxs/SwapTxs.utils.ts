@@ -104,12 +104,12 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
     if (!apiResp || isEmpty(apiResp)) return prev;
 
     const defaultStatus = new Date().getTime() - curr.time > 60000 ? TxStatus.rejected : TxStatus.pending;
-    let _appName = 'Incognito';
+    let _appName = '';
     switch (curr.appName) {
       case SwapExchange.PDEX:
         _appName = 'Incognito';
         break;
-      case SwapExchange.UNISWAP:
+      default:
         _appName = curr.appName.charAt(0).toUpperCase() + curr.appName.slice(1);
         break;
     }
