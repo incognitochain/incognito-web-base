@@ -125,11 +125,11 @@ const SwapTxs = React.memo(() => {
       }
       const txs = await rpcClient.apiGetSwapTxs();
       if (showLoading) {
-        setState({ loading: false, txs });
+        setState((value) => ({ ...value, loading: false, txs }));
       }
     } catch (e) {
       if (showLoading) {
-        setState({ loading: false, txs: [] });
+        setState((value) => ({ ...value, loading: false, txs: [] }));
       }
     }
   };
