@@ -41,6 +41,8 @@ const enhanceSend = (WrappedComponent: any) => {
       isFetching,
       incAddress,
       isUseTokenFee,
+      expectedReceiveAmount,
+      inputAmount,
     } = props;
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
@@ -464,6 +466,8 @@ const enhanceSend = (WrappedComponent: any) => {
           isSignAndSendTransaction,
         };
 
+        console.log('LOGS PAYLOAD: ', payload);
+
         return new Promise(async (resolve, reject) => {
           try {
             const tx = await requestSignTransaction(payload);
@@ -483,6 +487,10 @@ const enhanceSend = (WrappedComponent: any) => {
                   incAddress,
                   time: new Date().getTime(),
                   appName: exchangeSelectedData.appName,
+                  sellTokenID: sellToken.tokenID,
+                  buyTokenID: buyToken.tokenID,
+                  sellAmountText: inputAmount,
+                  buyAmountText: `${expectedReceiveAmount || 0}`,
                 });
               }
             } else if (!sellToken.isBTC) {

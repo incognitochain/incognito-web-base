@@ -1,8 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { isAddress as isEtherAddress } from 'ethers/lib/utils';
-import uniqueBy from 'lodash/uniqBy';
-import PTokenModel, { ITokenNetwork } from 'models/model/pTokenModel';
+import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { formValueSelector, isSubmitting, isValid } from 'redux-form';
@@ -547,103 +546,6 @@ const getUnshieldData = ({
     slippage: inputSlippage,
     rate: exchangeSelectedData?.rate || '',
   };
-};
-
-const getBuyTokenList = (
-  // Selected swap network
-  selectedNetwork: MAIN_NETWORK_NAME,
-  tokens: any,
-  sellToken: SelectedPrivacy,
-  supportedNetwork: any,
-  pTokens: any
-) => {
-  let buyTokenList: any = [];
-
-  if (selectedNetwork === MAIN_NETWORK_NAME.INCOGNITO) {
-    buyTokenList = Object.values(pTokens);
-    buyTokenList = buyTokenList.filter((token: PTokenModel) => token.isVerified && !token.movedUnifiedToken);
-    return buyTokenList;
-  } else {
-    // supportedNetwork = supportedNetwork?.filter(
-    //   (network: ITokenNetwork) => network?.networkName !== MAIN_NETWORK_NAME.INCOGNITO
-    // );
-    // if (sellToken?.isUnified && selectedNetwork === MAIN_NETWORK_NAME.INCOGNITO) {
-    //   for (let i = 0; i < tokens?.length; i++) {
-    //     let tokenObj: any = null;
-    //     for (let j = 0; j < supportedNetwork?.length; j++) {
-    //       if (tokens[i].isUnified && tokens[i].supportedNetwork) {
-    //         for (let k = 0; k < tokens[i].supportedNetwork.length; k++) {
-    //           if (tokens[i].supportedNetwork[k].networkName === supportedNetwork[j].networkName) {
-    //             tokenObj = tokens[i];
-    //           }
-    //         }
-    //       } else {
-    //         if (tokens[i].networkName === supportedNetwork[j].networkName) {
-    //           tokenObj = tokens[i];
-    //         }
-    //       }
-    //     }
-    //     if (tokenObj != null) {
-    //       buyTokenList.push(tokenObj);
-    //     }
-    //   }
-    // }
-    // if (!sellToken?.isUnified && selectedNetwork === MAIN_NETWORK_NAME.INCOGNITO) {
-    //   for (let i = 0; i < tokens?.length; i++) {
-    //     for (let j = 0; j < supportedNetwork?.length; j++) {
-    //       if (tokens[i].isUnified) {
-    //         for (let k = 0; k < tokens[i].supportedNetwork.length; k++) {
-    //           if (tokens[i].supportedNetwork[k].networkName === supportedNetwork[j].networkName) {
-    //             buyTokenList.push(tokens[i]);
-    //           }
-    //         }
-    //       } else {
-    //         for (let k = 0; k < tokens[i].supportedNetwork.length; k++) {
-    //           if (tokens[i].supportedNetwork[k].networkName === supportedNetwork[j].networkName) {
-    //             buyTokenList.push(tokens[i]);
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-    if (sellToken?.isUnified) {
-      for (let i = 0; i < tokens?.length; i++) {
-        let tokenObj: any = null;
-        if (tokens[i].isUnified) {
-          for (let j = 0; j < tokens[i].supportedNetwork.length; j++) {
-            if (tokens[i].supportedNetwork[j].networkName === selectedNetwork) {
-              tokenObj = tokens[i];
-            }
-          }
-        } else {
-          if (tokens[i].networkName === selectedNetwork) {
-            tokenObj = tokens[i];
-          }
-        }
-
-        if (tokenObj != null) {
-          buyTokenList.push(tokenObj);
-        }
-      }
-    } else {
-      for (let i = 0; i < tokens?.length; i++) {
-        if (tokens[i].isUnified) {
-          for (let j = 0; j < tokens[i].supportedNetwork.length; j++) {
-            if (tokens[i].supportedNetwork[j].networkName === selectedNetwork) {
-              buyTokenList.push(tokens[i]);
-            }
-          }
-        } else {
-          if (tokens[i].networkName === selectedNetwork) {
-            buyTokenList.push(tokens[i]);
-          }
-        }
-      }
-    }
-  }
-  buyTokenList = uniqueBy(buyTokenList, 'identify');
-  return buyTokenList;
 };
 
 const getExchangeName = (exchange: SwapExchange) => {

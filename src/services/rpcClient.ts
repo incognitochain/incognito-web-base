@@ -243,7 +243,7 @@ class RpcClient {
   }
 
   async apiGetSwapTxs() {
-    const swapTxs: ISwapTxStorage[] = (getSwapTxs() || []).reverse();
+    const swapTxs: ISwapTxStorage[] = (getSwapTxs() || []).reverse().slice(0, 20);
     let txIDs = [];
     if (!swapTxs || swapTxs.length === 0) return [];
     txIDs = swapTxs.map((tx) => tx.txHash);

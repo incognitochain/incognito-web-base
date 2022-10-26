@@ -121,7 +121,8 @@ export const actionChangeBuyToken =
       if (!token.networkName || parentToken.currencyType === undefined) return;
 
       let _buyToken = parentToken;
-      if (parentToken.hasChild) {
+      const { swapNetwork } = unshieldDataSelector(getState());
+      if (parentToken.hasChild && swapNetwork !== MAIN_NETWORK_NAME.INCOGNITO) {
         _buyToken = parentToken.listUnifiedToken[0];
       }
       const buyTokenObj: ITokenNetwork = {
