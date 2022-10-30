@@ -29,9 +29,7 @@ export const unshieldableTokens = createSelector(pTokensSelector, (pTokens) => {
         Object.keys(GROUP_NETWORK).find((key) => {
           return GROUP_NETWORK[key].includes(currencyType);
         })
-      ) &&
-      // tokenID !== PRV.id &&
-      isVerified
+      ) && isVerified
     );
   });
   return unshieldable || [];

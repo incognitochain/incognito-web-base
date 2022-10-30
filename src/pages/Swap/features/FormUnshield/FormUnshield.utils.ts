@@ -165,14 +165,16 @@ const getUnshieldData = ({
   const inputAddress = formSelector(state, FORM_CONFIGS.toAddress);
   const inputSlippage: string = formSelector(state, FORM_CONFIGS.slippage) || '0';
 
+  // get all tokens
+  const unshieldAbleTokens = unshieldableTokens(state) || [];
+
   // sell token
   const _sellToken = getDataByTokenID(sellIdentify);
-  const unshieldAbleTokens = unshieldableTokens(state) || [];
   const _sellTokenList = unshieldAbleTokens.filter((token) => !token.movedUnifiedToken);
 
   // buy token
   const _buyToken = getDataByTokenID(buyIdentify);
-  let _buyTokenList = unshieldableTokens(state);
+  let _buyTokenList = [...unshieldAbleTokens];
 
   if (formType === FormTypes.SWAP) {
     if (swapNetwork === MAIN_NETWORK_NAME.INCOGNITO) {
@@ -187,7 +189,24 @@ const getUnshieldData = ({
         return token.networkName === swapNetwork;
       });
     }
+  } else {
+    // case unshield Centralized + BTC just have 1 buyToken
+    if (_sellToken.isBTC || _sellToken.isCentralized) {
+      _buyTokenList = [Object.assign({}, _sellToken)];
+    } else {
+      _buyTokenList = _buyTokenList.filter((token: SelectedPrivacy) => {
+        return token.networkName === buyNetworkName;
+      });
+    }
   }
+
+  console.log('SANG TEST: 111', {
+    sellParentID: sellParentIdentify,
+    sellID: sellIdentify,
+    buyParentID: buyParentIdentify,
+    buyID: buyIdentify,
+    swapNetwork,
+  });
 
   let isUseTokenFee = false;
   let _sellParentToken, _buyParentToken, _buyNetworkList: any;

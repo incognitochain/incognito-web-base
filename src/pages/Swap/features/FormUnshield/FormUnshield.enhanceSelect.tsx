@@ -16,7 +16,6 @@ import {
   actionSetSwapExchangeSupports,
   actionSetSwapNetwork,
 } from './FormUnshield.actions';
-import { FormTypes } from './FormUnshield.types';
 const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
 
 export interface TInter {
@@ -39,12 +38,6 @@ const enhanceSelect = (WrappedComponent: any) => {
     const handleSelectSellToken = async ({ token }: { token: PToken }) => {
       dispatch(actionGetVaults());
       dispatch(actionChangeSellToken({ token }));
-
-      if (formType === FormTypes.SWAP) {
-        dispatch(actionSetExchangeSelected(null));
-        dispatch(actionSetSwapExchangeSupports([]));
-        dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
-      }
     };
 
     const handleSelectSellNetwork = ({ network }: { network: ITokenNetwork }) => {
