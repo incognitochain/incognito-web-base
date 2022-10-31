@@ -71,6 +71,7 @@ const enhanceSelect = (WrappedComponent: any) => {
             onChangeField('', FORM_CONFIGS.toAddress);
           }
         } else {
+          if (isEtherAddress(unshieldAddress)) return;
           onChangeField('', FORM_CONFIGS.toAddress);
         }
       }

@@ -11,21 +11,13 @@ export interface TInner {
 
 const enhanceAddressValidation = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: any) => {
-    const refCountChangeField = React.useRef<any>(null);
-    const {
-      isExternalAddress,
-      onChangeField,
-      unshieldAddress,
-      web3Account,
-      incAddress,
-      inputAmount,
-      buyToken,
-      formType,
-      buyNetworkName,
-    } = props;
+    const { isExternalAddress, buyToken, formType, buyNetworkName } = props;
+
     const getAddressValidator = React.useCallback(() => {
       if (formType === FormTypes.UNSHIELD) {
-        if (buyToken.isBTC || buyToken.isCentralized) return [validator.required];
+        if (buyToken.isBTC || buyToken.isCentralized) {
+          return validator.combinedCentralizedAddress;
+        }
         return validator.combinedEtherAddress;
       } else {
         if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {

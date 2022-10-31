@@ -142,10 +142,11 @@ const FormUnshield = React.memo((props: any) => {
   const onTopUpCoins = () => {
     let _sellToken = sellToken;
     if (_sellToken.isUnified) {
-      _sellToken = (_sellToken.listUnifiedToken || []).find(
-        (token: any) => token.networkName !== MAIN_NETWORK_NAME.ETHEREUM
-      );
-      if (!_sellToken) _sellToken = _sellToken[0];
+      // _sellToken = (_sellToken.listUnifiedToken || []).find(
+      //   (token: any) => token.networkName !== MAIN_NETWORK_NAME.ETHEREUM
+      // );
+      // if (!_sellToken) _sellToken = _sellToken[0];
+      _sellToken = _sellToken.listUnifiedToken[0];
     }
     setTimeout(() => {
       dispatch(
@@ -229,7 +230,7 @@ const FormUnshield = React.memo((props: any) => {
             type: 'number',
           }}
           validate={validateAmount}
-          footerRightText="Max"
+          // footerRightText="Max"
           showShowTopUp={true}
           onTopUp={onTopUpCoins}
         />
