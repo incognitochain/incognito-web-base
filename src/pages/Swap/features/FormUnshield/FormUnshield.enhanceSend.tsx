@@ -466,8 +466,8 @@ const enhanceSend = (WrappedComponent: any) => {
           isSignAndSendTransaction,
         };
 
-        console.log('LOGS PAYLOAD: ', payload);
-
+        console.log('LOGS PAYLOAD 111: ', payload);
+        console.log('LOGS PAYLOAD 222: ', { sellToken, buyToken, buyNetworkName });
         return new Promise(async (resolve, reject) => {
           try {
             const tx = await requestSignTransaction(payload);
@@ -510,9 +510,19 @@ const enhanceSend = (WrappedComponent: any) => {
               // @ts-ignore
               const unshieldCurrencyType = (
                 buyToken.hasChild
-                  ? buyToken.listUnifiedToken.find((token: any) => token.networkName === networkName)
+                  ? buyToken.listUnifiedToken.find((token: any) => token.networkName === buyNetworkName)
                   : buyToken
               ).currencyType;
+
+              let isDecentralized = true;
+              if (!sellToken.isPRV) {
+                isDecentralized = (
+                  (sellToken.hasChild
+                    ? sellToken.listUnifiedToken.find((token: any) => token.networkName === buyNetworkName)
+                    : sellToken) || sellToken
+                ).isDecentralized;
+              }
+
               const submitTxUnshieldResponse = await rpcClient.submitUnshieldTx2({
                 network: networkName,
                 userFeeLevel: useFast2xFee ? 2 : 1,
@@ -524,7 +534,7 @@ const enhanceSend = (WrappedComponent: any) => {
                 userFeeSelection: isUseTokenFee ? 1 : 2,
                 walletAddress: incAddress,
                 fee: feeBurnCombine.amount,
-                isDecentralized: sellToken.isDecentralized,
+                isDecentralized,
                 isUseTokenFee,
                 centralizedAddress: fee.centralizedAddress,
                 tokenID: sellToken.tokenID,
