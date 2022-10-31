@@ -63,15 +63,18 @@ const enhanceSelect = (WrappedComponent: any) => {
         return;
       }
       if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
+        if (!incAddress) return;
         onChangeField(incAddress, FORM_CONFIGS.toAddress);
       } else {
         if (sellToken.isBTC || sellToken.isCentralized) {
           if (unshieldAddress && (isEtherAddress(unshieldAddress) || isPaymentAddress(unshieldAddress))) {
             onChangeField('', FORM_CONFIGS.toAddress);
           }
+        } else {
+          onChangeField('', FORM_CONFIGS.toAddress);
         }
       }
-    }, [buyNetworkName, sellToken.identify, refCountChangeField.current]);
+    }, [buyNetworkName, sellToken.identify, refCountChangeField.current, incAddress]);
 
     return (
       <WrappedComponent
