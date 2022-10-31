@@ -227,15 +227,15 @@ const getUnshieldData = ({
     _buyParentToken = getDataByTokenID(buyParentIdentify);
   }
 
-  _buyNetworkList = _sellParentToken?.supportedNetwork;
+  _buyNetworkList = _sellToken?.supportedNetwork;
   // case unshield;
   if (formType === FormTypes.UNSHIELD) {
     _buyNetworkName = buyNetworkName;
     // _buyTokenList = getBuyTokenList(buyNetworkName, _buyTokenList, _sellToken, _buyNetworkList, pTokens);
   } else {
     _buyNetworkName = swapNetwork;
-    if (_sellParentToken?.isUnified && vaults?.UnifiedTokenVaults) {
-      const tokenVault = vaults?.UnifiedTokenVaults[_sellParentToken?.tokenID] || {};
+    if (_sellToken?.isUnified && vaults?.UnifiedTokenVaults) {
+      const tokenVault = vaults?.UnifiedTokenVaults[_sellToken?.tokenID] || {};
       // Filter network enough vault
       _buyNetworkList = _buyNetworkList?.filter((_item: any) => {
         let isAccept = false;
