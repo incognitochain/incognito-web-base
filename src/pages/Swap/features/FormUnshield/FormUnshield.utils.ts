@@ -501,7 +501,8 @@ const getUnshieldData = ({
       !networkFee ||
       isFetchingFee ||
       !enoughNetworkFee ||
-      !enoughPRVFee)
+      !enoughPRVFee ||
+      errorMsg)
   ) {
     disabledForm = true;
   }

@@ -139,6 +139,31 @@ const FormUnshield = React.memo((props: any) => {
     buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress
   );
 
+  const onTopUpCoins = () => {
+    let _sellToken = sellToken;
+    if (_sellToken.isUnified) {
+      _sellToken = (_sellToken.listUnifiedToken || []).find(
+        (token: any) => token.networkName !== MAIN_NETWORK_NAME.ETHEREUM
+      );
+      if (!_sellToken) _sellToken = _sellToken[0];
+    }
+    setTimeout(() => {
+      dispatch(
+        actionFilterTokenByNetwork({
+          network: {
+            parentIdentify: _sellToken.parentTokenID,
+            identify: _sellToken.identify,
+            chainID: _sellToken.chainID,
+            networkName: _sellToken.networkName,
+            currency: _sellToken.currencyType,
+          },
+        })
+      );
+      dispatch(actionFilterSetToken({ token: _sellToken }));
+      dispatch(changeTab({ tab: TAB_LIST.SWAP.tabNames[1], rootTab: TAB_LIST.SWAP.rootTab }));
+    }, 100);
+  };
+
   useEffect(() => {
     if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress) {
       setVisibleAddress(true);
@@ -206,30 +231,7 @@ const FormUnshield = React.memo((props: any) => {
           validate={validateAmount}
           footerRightText="Max"
           showShowTopUp={true}
-          onTopUp={() => {
-            let _sellToken = sellToken;
-            if (_sellToken.isUnified) {
-              _sellToken = (_sellToken.listUnifiedToken || []).find(
-                (token: any) => token.networkName !== MAIN_NETWORK_NAME.ETHEREUM
-              );
-              if (!_sellToken) _sellToken = _sellToken[0];
-            }
-            setTimeout(() => {
-              dispatch(
-                actionFilterTokenByNetwork({
-                  network: {
-                    parentIdentify: _sellToken.parentTokenID,
-                    identify: _sellToken.identify,
-                    chainID: _sellToken.chainID,
-                    networkName: _sellToken.networkName,
-                    currency: _sellToken.currencyType,
-                  },
-                })
-              );
-              dispatch(actionFilterSetToken({ token: _sellToken }));
-              dispatch(changeTab({ tab: TAB_LIST.SWAP.tabNames[1], rootTab: TAB_LIST.SWAP.rootTab }));
-            }, 100);
-          }}
+          onTopUp={onTopUpCoins}
         />
         <WrapSwapIcon>
           <img
