@@ -8,7 +8,7 @@ import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { formValueSelector, isSubmitting, isValid } from 'redux-form';
 import { AppState } from 'state';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
-import { pTokensSelector, unshieldableTokens } from 'state/token';
+import { unshieldableTokens } from 'state/token';
 import convert from 'utils/convert';
 import format from 'utils/format';
 
@@ -227,7 +227,6 @@ const getUnshieldData = ({
     _buyParentToken = getDataByTokenID(buyParentIdentify);
   }
 
-  const pTokens = pTokensSelector(state);
   _buyNetworkList = _sellParentToken?.supportedNetwork;
   // case unshield;
   if (formType === FormTypes.UNSHIELD) {
