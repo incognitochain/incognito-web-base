@@ -5,6 +5,8 @@ import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import SelectionField from 'components/Core/ReduxForm/SelectionField';
 import { VerticalSpace } from 'components/Core/Space';
+import { TAB_LIST } from 'components/Core/Tabs';
+import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
 import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React, { useEffect, useState } from 'react';
@@ -16,6 +18,7 @@ import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
 import { EstReceive } from '../EstReceive';
+import { actionFilterSetToken, actionFilterTokenByNetwork } from '../FormDeposit/FormDeposit.actions';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
 import enhance from './FormUnshield.enhance';
 import { FormTypes, SwapExchange } from './FormUnshield.types';
@@ -201,6 +204,28 @@ const FormUnshield = React.memo((props: any) => {
           }}
           validate={validateAmount}
           footerRightText="Max"
+          showShowTopUp={true}
+          onTopUp={() => {
+            let _sellToken = sellToken;
+            if (_sellToken.isUnified) {
+              _sellToken = _sellToken.listUnifiedToken[0];
+            }
+            setTimeout(() => {
+              dispatch(
+                actionFilterTokenByNetwork({
+                  network: {
+                    parentIdentify: _sellToken.parentTokenID,
+                    identify: _sellToken.identify,
+                    chainID: _sellToken.chainID,
+                    networkName: _sellToken.networkName,
+                    currency: _sellToken.currencyType,
+                  },
+                })
+              );
+              dispatch(actionFilterSetToken({ token: _sellToken }));
+              dispatch(changeTab({ tab: TAB_LIST.SWAP.tabNames[1], rootTab: TAB_LIST.SWAP.rootTab }));
+            }, 100);
+          }}
         />
         <WrapSwapIcon>
           <img
@@ -245,9 +270,7 @@ const FormUnshield = React.memo((props: any) => {
           <ThemedText.Error color="primary8" error fontWeight={400} marginTop="12px">
             {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network. Get
             some from the `}
-            <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
-              faucet
-            </a>
+            <a className="link">faucet</a>
           </ThemedText.Error>
         ) : !!errorMsg ? (
           <>

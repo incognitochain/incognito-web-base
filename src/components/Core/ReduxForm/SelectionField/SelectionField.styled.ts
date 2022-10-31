@@ -1,7 +1,15 @@
 import { ChevronDown } from 'react-feather';
 import styled from 'styled-components/macro';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  .selectable-error {
+    display: flex;
+    margin-left: 4px;
+    text-decoration: underline;
+    color: ${({ theme }) => theme.content4};
+    cursor: pointer;
+  }
+`;
 
 export const Content = styled.div<{ isActive: boolean }>`
   border-radius: 12px;
