@@ -33,6 +33,16 @@ export const Content = styled.div<{ isActive: boolean }>`
       transition-duration: 0.1s;
     }
   }
+  .wrap-network {
+    background-color: ${({ theme }) => theme.bg4};
+    height: 20px;
+    margin-left: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: ${({ theme }) => theme.primary8};
+    font-size: 14px;
+    border-radius: 4px;
+  }
 `;
 
 export const ArrowDown = styled(ChevronDown)<{ open?: boolean }>`

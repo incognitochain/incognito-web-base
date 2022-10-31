@@ -33,6 +33,7 @@ export interface ISelectionFieldProps {
   onClickFooterRight?: () => void;
   showShowTopUp?: boolean;
   onTopUp?: () => void;
+  tokenNetwork?: string;
 }
 
 interface IInputProps {

@@ -40,6 +40,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
     footerRightClass,
     showShowTopUp = false,
     onTopUp,
+    tokenNetwork,
   } = props;
 
   const { error: errorMeta, touched, submitting, active } = meta;
@@ -179,9 +180,16 @@ const SelectionField = (props: ISelectionFieldProps) => {
           )}
         </RowBetween>
         <RowBetween className="default-padding">
-          <ThemedText.SmallLabel fontWeight={400} color="primary8">
-            Balance: {amount}
-          </ThemedText.SmallLabel>
+          <Row style={{ width: 'fit-content' }}>
+            <ThemedText.SmallLabel fontWeight={400} color="primary8">
+              Balance: {amount}
+            </ThemedText.SmallLabel>
+            {!!tokenNetwork && (
+              <ThemedText.SmallLabel fontWeight={500} className="wrap-network">
+                {tokenNetwork}
+              </ThemedText.SmallLabel>
+            )}
+          </Row>
           {!!footerRightText && (
             <ThemedText.RegularLabel
               className={`${footerRightClass ? footerRightClass : ''}`}

@@ -194,6 +194,7 @@ const FormUnshield = React.memo((props: any) => {
           tokens={sellTokenList}
           tokenSymbol={sellToken.symbol}
           tokenImgUrl={sellToken.iconUrl}
+          tokenNetwork={sellToken.network}
           onSelectToken={onSelectSellToken}
           networkName={MAIN_NETWORK_NAME.INCOGNITO}
           amount={userBalanceFormatedText}
@@ -208,7 +209,10 @@ const FormUnshield = React.memo((props: any) => {
           onTopUp={() => {
             let _sellToken = sellToken;
             if (_sellToken.isUnified) {
-              _sellToken = _sellToken.listUnifiedToken[0];
+              _sellToken = (_sellToken.listUnifiedToken || []).find(
+                (token: any) => token.networkName !== MAIN_NETWORK_NAME.ETHEREUM
+              );
+              if (!_sellToken) _sellToken = _sellToken[0];
             }
             setTimeout(() => {
               dispatch(
