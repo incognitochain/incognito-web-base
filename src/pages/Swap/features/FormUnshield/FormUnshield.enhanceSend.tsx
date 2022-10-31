@@ -66,6 +66,19 @@ const enhanceSend = (WrappedComponent: any) => {
       };
     }, [fee.burnFee, fee.feeAddress, formType, swapFee?.amount, exchangeSelectedData?.feeAddress]);
 
+    // Case PRV force isDecentralized = true
+    const isDecentralized = React.useMemo(() => {
+      let isDecentralized = true;
+      if (!sellToken.isPRV) {
+        isDecentralized = (
+          (sellToken.hasChild
+            ? sellToken.listUnifiedToken.find((token: any) => token.networkName === buyNetworkName)
+            : sellToken) || sellToken
+        ).isDecentralized;
+      }
+      return isDecentralized;
+    }, [sellToken.identify, buyNetworkName]);
+
     const getKeySetINC = async () => {
       const incognito = getIncognitoInject();
 
@@ -410,16 +423,13 @@ const enhanceSend = (WrappedComponent: any) => {
         let isSignAndSendTransaction = true;
         if (formType === FormTypes.UNSHIELD) {
           /** Case Unshield Decentralized */
-          if (sellToken.isDecentralized) {
+          if (isDecentralized) {
             const metadata = getUnshieldDecentralizedMetadata({ otaReceiver, burnerAddress });
             isSignAndSendTransaction = true;
             payload = {
               info: String(id),
               metadata,
             };
-          } else if (sellToken.isCentralized) {
-            /** Case Unshield Centralized */
-            isSignAndSendTransaction = true;
           } else if (sellToken.isBTC) {
             /** Case Unshield BTC */
             const metadata = await getUnshieldBTCMetadata(newCoins);
@@ -430,6 +440,9 @@ const enhanceSend = (WrappedComponent: any) => {
             payload = { metadata };
             isSignAndSendTransaction = true;
             /** Case Unshield PEGGING */
+          } else {
+            /** Case Unshield Centralized */
+            isSignAndSendTransaction = true;
           }
         } else if (formType === FormTypes.SWAP) {
           /** Swap PDEX */
@@ -514,14 +527,7 @@ const enhanceSend = (WrappedComponent: any) => {
                   : buyToken
               ).currencyType;
 
-              let isDecentralized = true;
-              if (!sellToken.isPRV) {
-                isDecentralized = (
-                  (sellToken.hasChild
-                    ? sellToken.listUnifiedToken.find((token: any) => token.networkName === buyNetworkName)
-                    : sellToken) || sellToken
-                ).isDecentralized;
-              }
+              console.log('LOGS PAYLOAD 333: ', { unshieldCurrencyType, isDecentralized, buyNetworkName });
 
               const submitTxUnshieldResponse = await rpcClient.submitUnshieldTx2({
                 network: networkName,

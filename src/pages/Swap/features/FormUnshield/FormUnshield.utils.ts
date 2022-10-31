@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { isAddress as isEtherAddress } from 'ethers/lib/utils';
+import orderBy from 'lodash/orderBy';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
@@ -170,7 +171,13 @@ const getUnshieldData = ({
 
   // sell token
   const _sellToken = getDataByTokenID(sellIdentify);
-  const _sellTokenList = unshieldAbleTokens.filter((token) => !token.movedUnifiedToken);
+  const _sellTokenList = orderBy(
+    unshieldAbleTokens.filter((token) => {
+      return !(token.isPRV && token.movedUnifiedToken);
+    }),
+    ['isPRV', 'isUnified'],
+    ['desc', 'desc']
+  );
 
   // buy token
   const _buyToken = getDataByTokenID(buyIdentify);
@@ -200,7 +207,7 @@ const getUnshieldData = ({
     }
   }
 
-  console.log('SANG TEST: 111', {
+  console.log('LOGS UTILS', {
     sellParentID: sellParentIdentify,
     sellID: sellIdentify,
     buyParentID: buyParentIdentify,

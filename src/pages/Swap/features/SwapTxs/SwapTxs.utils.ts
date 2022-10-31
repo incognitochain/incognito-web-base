@@ -161,22 +161,26 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
       const buyToken: SelectedPrivacy = getPrivacyDataByTokenIDSelector(state.getState())(tx.buyTokenID);
       const sellStr = `${format.amountVer2({ originalAmount: tx.sellAmountText, decimals: 0 })} ${sellToken.symbol}`;
       const buyStr = `${format.amountVer2({ originalAmount: tx.buyAmountText, decimals: 0 })} ${buyToken.symbol}`;
-      const swapStr = `${sellStr} = ${buyStr}`;
-      const rateStr = `1 ${sellToken.symbol} = ${format.amountVer2({
-        originalAmount: new BigNumber(tx.buyAmountText).div(tx.sellAmountText).toNumber(),
-        decimals: 0,
-      })} ${buyToken.symbol}`;
-      const buyNetwork = buyToken.network;
-      const sellNetwork = sellToken.network;
-      tx = {
-        ...tx,
-        sellStr,
-        buyStr,
-        swapStr,
-        rateStr,
-        sellNetwork,
-        buyNetwork,
-      };
+      if (sellToken.symbol && buyToken.symbol) {
+        const swapStr = `${sellStr} = ${buyStr}`;
+        const rateStr = `1 ${sellToken.symbol} = ${format.amountVer2({
+          originalAmount: new BigNumber(tx.buyAmountText).div(tx.sellAmountText).toNumber(),
+          decimals: 0,
+        })} ${buyToken.symbol}`;
+        const buyNetwork = buyToken.network;
+        const sellNetwork = sellToken.network;
+        tx = {
+          ...tx,
+          sellStr,
+          buyStr,
+          swapStr,
+          rateStr,
+          sellNetwork,
+          buyNetwork,
+        };
+      } else {
+        return [...prev];
+      }
     }
 
     // inc_request_tx_status
@@ -261,7 +265,7 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
     };
     return [...prev, data];
   }, []);
-  return txs;
+  return txs.filter((tx) => !!tx);
 };
 
 export { combineSwapTxs };

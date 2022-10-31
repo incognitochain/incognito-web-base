@@ -71,7 +71,7 @@ export const actionChangeSellToken =
   ({ token }: { token: PToken }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
-      const { buyToken, formType, sellToken } = unshieldDataSelector(getState());
+      const { buyToken, formType, sellToken: currentSellToken, buyNetworkName } = unshieldDataSelector(getState());
       const sellParentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
       if (!token.networkName || sellParentToken.currencyType === undefined) return;
 
@@ -83,31 +83,53 @@ export const actionChangeSellToken =
         networkName: token.networkName,
       };
 
-      let _buyToken = sellParentToken;
-      if (_buyToken.hasChild) {
-        _buyToken = _buyToken.listUnifiedToken[0];
-      }
-      if (sellParentToken.parentTokenID === buyToken.parentTokenID) {
-        const defaultBuyToken: ITokenNetwork = {
-          parentIdentify: token.parentTokenID,
-          identify: _buyToken.identify,
-          chainID: _buyToken.chainID,
-          currency: _buyToken.currencyType,
-          networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+      if (
+        currentSellToken.networkName === buyNetworkName &&
+        (currentSellToken.isBTC || currentSellToken.isCentralized) &&
+        currentSellToken.parentTokenID === buyToken.parentTokenID
+      ) {
+        const _buyToken: ITokenNetwork = {
+          parentIdentify: buyToken.parentTokenID,
+          identify: buyToken.identify,
+          chainID: buyToken.chainID,
+          currency: buyToken.currencyType,
+          networkName: MAIN_NETWORK_NAME.INCOGNITO,
         };
+        dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
         dispatch(
           actionSetToken({
             sellToken: _sellToken,
-            buyToken: defaultBuyToken,
+            buyToken: _buyToken,
           })
         );
-        dispatch(actionSetSwapNetwork(_buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO));
       } else {
-        dispatch(
-          actionSetToken({
-            sellToken: _sellToken,
-          })
-        );
+        let _buyToken = sellParentToken;
+        if (_buyToken.hasChild) {
+          _buyToken = _buyToken.listUnifiedToken[0];
+        }
+        // Case unshield
+        if (sellParentToken.parentTokenID === buyToken.parentTokenID) {
+          const defaultBuyToken: ITokenNetwork = {
+            parentIdentify: token.parentTokenID,
+            identify: _buyToken.identify,
+            chainID: _buyToken.chainID,
+            currency: _buyToken.currencyType,
+            networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+          };
+          dispatch(
+            actionSetToken({
+              sellToken: _sellToken,
+              buyToken: defaultBuyToken,
+            })
+          );
+          dispatch(actionSetSwapNetwork(_buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO));
+        } else {
+          dispatch(
+            actionSetToken({
+              sellToken: _sellToken,
+            })
+          );
+        }
       }
       if (formType === FormTypes.SWAP) {
         dispatch(actionSetExchangeSelected(null));
@@ -175,8 +197,6 @@ export const actionChangeBuyNetwork =
         : BIG_COINS.ETH_UNIFIED.tokenID,
       currencyType: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
     });
-
-    console.log('SANG TEST:: 555 111', sellToken.parentTokenID, BIG_COINS.USDC_UNIFIED.tokenID);
 
     const defBuyToken = {
       parentIdentify: parentID,
