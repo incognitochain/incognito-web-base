@@ -438,7 +438,6 @@ const enhanceSend = (WrappedComponent: any) => {
             /** Case Unshield Centralized */
             isSignAndSendTransaction = true;
           } else {
-            console.log('SANG TEST: ');
             const metadata = getUnshieldDecentralizedMetadata({ otaReceiver, burnerAddress });
             isSignAndSendTransaction = true;
             payload = {

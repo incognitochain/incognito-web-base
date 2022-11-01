@@ -125,6 +125,7 @@ const FormUnshield = React.memo((props: any) => {
 
     userBuyBalanceFormatedText,
     rate,
+    isIncognitoInstalled,
   } = props;
 
   const { showPopup } = useIncognitoWallet();
@@ -145,12 +146,15 @@ const FormUnshield = React.memo((props: any) => {
 
   const onTopUpCoins = () => {
     let _sellToken = sellToken;
-    if (_sellToken.isUnified) {
-      // _sellToken = (_sellToken.listUnifiedToken || []).find(
-      //   (token: any) => token.networkName !== MAIN_NETWORK_NAME.ETHEREUM
-      // );
-      // if (!_sellToken) _sellToken = _sellToken[0];
-      _sellToken = _sellToken.listUnifiedToken[0];
+    if (_sellToken.isUnified || _sellToken.isPRV) {
+      if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
+        _sellToken = (_sellToken.listUnifiedToken || []).find((token: any) => token.networkName === buyNetworkName);
+        if (!_sellToken) {
+          _sellToken = _sellToken.listUnifiedToken[0];
+        }
+      } else {
+        _sellToken = _sellToken.listUnifiedToken[0];
+      }
     }
     setTimeout(() => {
       dispatch(
@@ -278,11 +282,13 @@ const FormUnshield = React.memo((props: any) => {
             disabled: true,
           }}
         />
-        {!prvToken.amount ? (
+        {!prvToken.amount && !!inputAmount && isIncognitoInstalled ? (
           <ThemedText.Error color="primary8" error fontWeight={400} marginTop="12px">
             {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network. Get
             some from the `}
-            <a className="link">faucet</a>
+            <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
+              faucet
+            </a>
           </ThemedText.Error>
         ) : !!errorMsg ? (
           <>

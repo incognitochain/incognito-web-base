@@ -70,6 +70,8 @@ export interface IUnshield {
   isUseTokenFee?: boolean;
   slippage: string;
   rate: string;
+
+  isIncognitoInstalled: boolean;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -192,5 +194,7 @@ export const useUnshield = (): IUnshield => {
 
     slippage,
     rate,
+
+    isIncognitoInstalled: isIncognitoInstalled(),
   };
 };

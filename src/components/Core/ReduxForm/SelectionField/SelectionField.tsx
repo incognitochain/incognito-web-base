@@ -60,7 +60,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
     let _error = error;
     const isTopUp = _error !== 'Required' && showShowTopUp && onTopUp;
     if (isTopUp) {
-      _error += ' Please';
+      _error += '';
     }
     return (
       <div style={{ position: 'absolute' }}>
@@ -69,12 +69,12 @@ const SelectionField = (props: ISelectionFieldProps) => {
             {_error}
             {isTopUp && (
               <div className="selectable-error" onClick={onTopUp}>
-                top up
+                Deposit now
               </div>
             )}
             {isTopUp && (
-              <ThemedText.Error style={{ display: 'flex', marginLeft: '4px' }} error>
-                your crypto.
+              <ThemedText.Error style={{ display: 'flex' }} error>
+                .
               </ThemedText.Error>
             )}
           </ThemedText.Error>
