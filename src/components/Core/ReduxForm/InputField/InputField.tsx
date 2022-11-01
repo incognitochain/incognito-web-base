@@ -37,6 +37,7 @@ interface ITextAreaProps {
 
 export const InputComp = React.memo((props: IInputProps) => {
   const { input: inputProps, componentProps } = props;
+  const { disabled } = componentProps || {};
   const quantityInputRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -48,7 +49,16 @@ export const InputComp = React.memo((props: IInputProps) => {
     quantityInputRef.current && quantityInputRef.current.addEventListener('wheel', ignoreScroll);
   }, [quantityInputRef]);
 
-  return <Input type="text" ref={quantityInputRef} autoComplete="off" {...inputProps} {...componentProps} />;
+  return (
+    <Input
+      type="text"
+      ref={quantityInputRef}
+      autoComplete="off"
+      {...inputProps}
+      {...componentProps}
+      style={{ pointerEvents: disabled ? 'none' : 'auto' }}
+    />
+  );
 });
 
 InputComp.displayName = 'Input';
