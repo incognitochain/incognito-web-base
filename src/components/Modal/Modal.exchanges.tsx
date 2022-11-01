@@ -1,5 +1,7 @@
 import Column from 'components/Core/Column';
 import Row from 'components/Core/Row';
+import { getExchangeLogo } from 'pages/Swap/features/Selection/SelectSwapExchange';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
@@ -45,9 +47,13 @@ const ExchangeModal = (props: IProps & any) => {
           onSelect(exchange?.exchangeName);
         }}
       >
-        <ThemedText.RegularLabel color="primary5" style={{ marginLeft: 12 }}>
-          {exchange?.exchangeName}
-        </ThemedText.RegularLabel>
+        <img
+          className="logo"
+          alt=""
+          src={getExchangeLogo(exchange?.exchangeName)}
+          style={{ width: 32, height: 32, marginRight: 12 }}
+        />
+        <ThemedText.RegularLabel color="primary5">{exchange?.exchangeName}</ThemedText.RegularLabel>
       </Item>
     );
   };
