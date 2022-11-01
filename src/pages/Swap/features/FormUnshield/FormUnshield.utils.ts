@@ -517,6 +517,16 @@ const getUnshieldData = ({
     disabledForm,
   });
 
+  let _errorMsg = errorMsg;
+  if (
+    !_errorMsg &&
+    !!exchangeSelectedData &&
+    (!exchangeSelectedData?.amountOutRaw || !new BigNumber(exchangeSelectedData?.amountOutRaw || 0).toNumber()) &&
+    !isFetchingFee
+  ) {
+    _errorMsg = 'Input amount is too small';
+  }
+
   return {
     sellToken: _sellToken,
     sellParentToken: _sellParentToken,
@@ -567,7 +577,7 @@ const getUnshieldData = ({
     swapFee,
     tradePath,
     isUseTokenFee,
-    errorMsg,
+    errorMsg: _errorMsg,
     swapNetwork,
 
     slippage: inputSlippage,
