@@ -353,10 +353,11 @@ const getUnshieldData = ({
       maxAmount = new BigNumber(_sellToken.amount || 0).toNumber();
     }
 
-    maxAmountText = convert
-      .toHumanAmount({
+    maxAmountText = format
+      .formatAmount({
         originalAmount: maxAmount,
         decimals: _sellToken.pDecimals,
+        clipAmount: false,
       })
       .toString();
 
@@ -451,10 +452,11 @@ const getUnshieldData = ({
       maxAmount = 0;
     }
 
-    maxAmountText = convert
-      .toHumanAmount({
+    maxAmountText = format
+      .formatAmount({
         originalAmount: maxAmount,
         decimals: _sellToken.pDecimals,
+        clipAmount: false,
       })
       .toString();
 

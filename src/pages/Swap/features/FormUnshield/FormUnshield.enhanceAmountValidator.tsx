@@ -49,16 +49,6 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
 
       let currentState = { ...state };
 
-      if (Number.isFinite(minUnshieldNum) && minUnshieldNum) {
-        currentState = {
-          ...currentState,
-          minAmountValidator: validator.minValue(
-            10,
-            `Amount must be larger than ${minUnshieldText} ${selectedPrivacy?.symbol}.`
-          ),
-        };
-      }
-
       if (Number.isFinite(maxAmountNum)) {
         currentState = {
           ...state,
@@ -70,34 +60,43 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
           ),
         };
       }
-      if ((!inputOriginalAmount || inputOriginalAmount === 0) && !minUnshieldNum) {
-        const minAmountText = `${
-          convert.toHumanAmountString({
-            decimals: selectedPrivacy.pDecimals,
-            originalAmount: 1,
-          }) || 0
-        }`;
 
-        const minAmountNum = convert.toNumber({
-          text: minAmountText,
-          autoCorrect: true,
-        });
-
-        currentState = {
-          ...currentState,
-          minAmountValidator: validator.minValue(
-            minAmountNum,
-            `Amount must be larger than ${minAmountText} ${selectedPrivacy?.symbol}.`
-          ),
-        };
+      if (!inputOriginalAmount || inputOriginalAmount === 0 || minUnshieldNum) {
+        if (Number.isFinite(minUnshieldNum) && minUnshieldNum) {
+          currentState = {
+            ...currentState,
+            minAmountValidator: validator.minValue(
+              minUnshieldNum,
+              `Amount must be larger than ${minUnshieldText} ${selectedPrivacy?.symbol}.`
+            ),
+          };
+        } else {
+          const minAmountText = `${
+            convert.toHumanAmountString({
+              decimals: selectedPrivacy.pDecimals,
+              originalAmount: 1,
+            }) || 0
+          }`;
+          const minAmountNum = convert.toNumber({
+            text: minAmountText,
+            autoCorrect: true,
+          });
+          currentState = {
+            ...currentState,
+            minAmountValidator: validator.minValue(
+              minAmountNum,
+              `Amount must be larger than ${minAmountText} ${selectedPrivacy?.symbol}.`
+            ),
+          };
+        }
       }
       await setState((state) => ({ ...state, ...currentState }));
     }, 200);
 
     const getAmountValidator = () => {
       const val = [];
-      if (minAmountValidator) val.push(minAmountValidator);
       if (maxAmountValidator) val.push(maxAmountValidator);
+      if (minAmountValidator) val.push(minAmountValidator);
       if (!enoughPRVFee) {
         val.push(...[validator.notEnoughPRVFee]);
       }
