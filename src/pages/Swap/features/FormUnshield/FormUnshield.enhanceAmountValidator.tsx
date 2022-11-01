@@ -48,7 +48,7 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
           maxAmountValidator: validator.maxValue(
             maxAmountNum,
             new BigNumber(maxAmountNum).toNumber() > 0
-              ? `Max amount you can swap is ${maxAmountText} ${selectedPrivacy?.symbol}`
+              ? `Max amount you can swap is ${maxAmountText} ${selectedPrivacy?.symbol}.`
               : 'Your balance is insufficient.'
           ),
         };
