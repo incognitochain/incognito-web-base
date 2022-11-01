@@ -4,14 +4,11 @@ import Loader from 'components/Core/Loader';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import Row, { RowBetween, RowFlat } from 'components/Core/Row';
-import { PRV } from 'constants/token';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { ChevronDown } from 'react-feather';
 import { Field } from 'redux-form';
-import { useAppSelector } from 'state/hooks';
-import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 import format from 'utils/format';
@@ -107,7 +104,6 @@ const EstReceive = React.memo(
   }: IProps) => {
     const [isOpen, setOpen] = React.useState(false);
     const [isRateSellToBuy, setIsRateSellToBuy] = React.useState(true);
-    const prvToken = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
 
     const getRateText = () => {
       if (isRateSellToBuy) {
@@ -247,15 +243,6 @@ const EstReceive = React.memo(
                 </ThemedText.SmallLabel>
                 <ThemedText.SmallLabel fontWeight={400}>{tradePath}</ThemedText.SmallLabel>
               </RowBetween>
-            )}
-            {!prvToken.amount && (
-              <ThemedText.SmallLabel color="primary8" fontWeight={400} marginTop="12px">
-                {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
-            some from the `}
-                <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
-                  faucet
-                </a>
-              </ThemedText.SmallLabel>
             )}
           </Column>
         </ExpandView>

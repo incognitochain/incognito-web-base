@@ -7,10 +7,4 @@ const FORM_CONFIGS = {
   slippage: 'slippage',
 };
 
-const SWAP_EXCHANGES = {
-  uniswap: 'uniswap',
-  pancakeswap: 'pancakeswap',
-  curve: 'curve',
-};
-
-export { FORM_CONFIGS, SWAP_EXCHANGES };
+export { FORM_CONFIGS };

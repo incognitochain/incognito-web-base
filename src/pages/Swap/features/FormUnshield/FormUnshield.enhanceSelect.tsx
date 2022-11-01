@@ -1,8 +1,8 @@
 import { MAIN_NETWORK_NAME } from 'constants/token';
+import { isAddress as isEtherAddress } from 'ethers/lib/utils';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
-import { change } from 'redux-form';
 import { useAppDispatch } from 'state/hooks';
 
 import {
@@ -16,7 +16,8 @@ import {
   actionSetSwapExchangeSupports,
   actionSetSwapNetwork,
 } from './FormUnshield.actions';
-import { FormTypes } from './FormUnshield.types';
+const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
+
 export interface TInter {
   // Sell token
   onSelectSellToken: ({ token }: { token: PToken }) => void;
@@ -30,17 +31,13 @@ export interface TInter {
 
 const enhanceSelect = (WrappedComponent: any) => {
   const FormDepositComp = (props: any) => {
-    const { sellToken, buyToken, formType, buyNetworkName, incAddress, web3Account } = props;
+    const { sellToken, buyNetworkName, incAddress, onChangeField, unshieldAddress } = props;
     const dispatch = useAppDispatch();
+    const refCountChangeField = React.useRef<any>(null);
     const handleSelectSellToken = async ({ token }: { token: PToken }) => {
+      if (token.tokenID === sellToken.tokenID) return;
       dispatch(actionGetVaults());
       dispatch(actionChangeSellToken({ token }));
-
-      if (formType === FormTypes.SWAP) {
-        dispatch(actionSetExchangeSelected(null));
-        dispatch(actionSetSwapExchangeSupports([]));
-        dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
-      }
     };
 
     const handleSelectSellNetwork = ({ network }: { network: ITokenNetwork }) => {
@@ -48,9 +45,6 @@ const enhanceSelect = (WrappedComponent: any) => {
     };
 
     const handleSelectBuyToken = ({ token }: { token: PToken }) => {
-      // if (sellToken.identify === buyToken.identify) {
-      //   return;
-      // }
       dispatch(actionChangeBuyToken({ token }));
       dispatch(actionSetExchangeSelected(null));
       dispatch(actionSetSwapExchangeSupports([]));
@@ -64,16 +58,24 @@ const enhanceSelect = (WrappedComponent: any) => {
     const handleRotateSwapToken = () => dispatch(actionRotateSwapTokens());
 
     React.useEffect(() => {
-      if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
-        setTimeout(() => {
-          dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, incAddress));
-        });
-      } else {
-        setTimeout(() => {
-          dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, web3Account));
-        });
+      if (!refCountChangeField.current) {
+        refCountChangeField.current = true;
+        return;
       }
-    }, [buyNetworkName, incAddress]);
+      if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
+        if (!incAddress) return;
+        onChangeField(incAddress, FORM_CONFIGS.toAddress);
+      } else {
+        if (sellToken.isBTC || sellToken.isCentralized) {
+          if (unshieldAddress && (isEtherAddress(unshieldAddress) || isPaymentAddress(unshieldAddress))) {
+            onChangeField('', FORM_CONFIGS.toAddress);
+          }
+        } else {
+          if (isEtherAddress(unshieldAddress)) return;
+          onChangeField('', FORM_CONFIGS.toAddress);
+        }
+      }
+    }, [buyNetworkName, sellToken.identify, refCountChangeField.current, incAddress]);
 
     return (
       <WrappedComponent

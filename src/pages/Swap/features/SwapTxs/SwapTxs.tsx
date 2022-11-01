@@ -35,82 +35,102 @@ const Styled = styled.div`
 
 const SwapTxs = React.memo(() => {
   const [state, setState] = React.useState<IState>({ loading: true, txs: [] });
-  const [txDetail, setTxDetail] = React.useState<ISwapTxStatus | undefined>(undefined);
+  const [txBurnID, setTxBurnID] = React.useState<string | undefined>(undefined);
 
   const factories: IItemDetail[] = React.useMemo(() => {
-    if (!txDetail) return [];
-    const chainId = getChainIDByAcronymNetwork(txDetail.network);
+    const _txDetail = state.txs.find((tx) => tx.requestBurnTxInc === txBurnID);
+    if (!_txDetail) return [];
+    const chainId = getChainIDByAcronymNetwork(_txDetail.network);
     return [
       {
-        title: 'Status:',
-        desc: txDetail.status,
-        descColor: txDetail.color,
-      },
-      {
-        title: 'BurnTx:',
-        desc: !!txDetail.requestBurnTxInc ? shortenString(txDetail.requestBurnTxInc || '', 10) : '',
-        copyData: txDetail.requestBurnTxInc,
+        title: 'RequestTx:',
+        desc: !!_txDetail.requestBurnTxInc ? shortenString(_txDetail.requestBurnTxInc || '', 10) : '',
+        copyData: _txDetail.requestBurnTxInc,
         link: `${getExplorerLink(
           PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
-          txDetail.requestBurnTxInc,
+          _txDetail.requestBurnTxInc,
           ExplorerDataType.TRANSACTION
         )}`,
-        disabled: !txDetail.requestBurnTxInc,
+        disabled: !_txDetail.requestBurnTxInc,
       },
       {
-        title: 'Burn status:',
-        desc: txDetail.burnTxStatus,
-        // descColor: txDetail.burnColor,
-        disabled: !txDetail.burnTxStatus,
+        title: 'Request status:',
+        desc: _txDetail.burnTxStatus,
+        disabled: !_txDetail.burnTxStatus,
       },
       {
-        title: 'OutChainTx:',
-        desc: !!txDetail.outchainTx ? shortenString(txDetail.outchainTx || '', 10) : '',
-        copyData: txDetail.outchainTx,
-        link: `${getExplorerLink(chainId || 0, txDetail.outchainTx || '', ExplorerDataType.TRANSACTION)}`,
-        disabled: !txDetail.outchainTx,
+        title: 'Rate:',
+        desc: _txDetail.rateStr,
+        disabled: !_txDetail.rateStr,
       },
       {
-        title: 'OutChain status:',
-        desc: txDetail.outchainTxStatus,
-        // descColor: txDetail.outchainColor,
-        disabled: !txDetail.outchainTxStatus,
+        title: 'Status:',
+        desc: _txDetail.status,
+        descColor: _txDetail.color,
       },
+      {
+        title: 'Sell:',
+        desc: `${_txDetail.sellStr} (${_txDetail.sellNetwork})`,
+        disabled: !_txDetail.sellStr,
+      },
+      {
+        title: 'Buy:',
+        desc: `${_txDetail.buyStr} (${_txDetail.buyNetwork})`,
+        disabled: !_txDetail.buyStr,
+      },
+      {
+        title: 'OutChain Tx:',
+        desc: !!_txDetail.outchainTx ? shortenString(_txDetail.outchainTx || '', 10) : '',
+        copyData: _txDetail.outchainTx,
+        link: `${getExplorerLink(chainId || 0, _txDetail.outchainTx || '', ExplorerDataType.TRANSACTION)}`,
+        disabled: !_txDetail.outchainTx,
+      },
+      // {
+      //   title: 'OutChain status:',
+      //   desc: txDetail.outchainTxStatus,
+      //   // descColor: txDetail.outchainColor,
+      //   disabled: !txDetail.outchainTxStatus,
+      // },
       {
         title: 'Swap status:',
-        desc: txDetail.swapExchangeStatus,
-        // descColor: txDetail.swapExchangeColor,
-        disabled: !txDetail.swapExchangeStatus,
+        desc: _txDetail.swapExchangeStatus,
+        disabled: !_txDetail.swapExchangeStatus,
       },
       {
         title: 'RedepositTx:',
-        desc: !!txDetail.redepositTxInc ? shortenString(txDetail.redepositTxInc || '', 10) : '',
-        copyData: txDetail.redepositTxInc,
-        link: !!txDetail.redepositTxInc
+        desc: !!_txDetail.redepositTxInc ? shortenString(_txDetail.redepositTxInc || '', 10) : '',
+        copyData: _txDetail.redepositTxInc,
+        link: !!_txDetail.redepositTxInc
           ? `${getExplorerLink(
               PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
-              txDetail.redepositTxInc,
+              _txDetail.redepositTxInc,
               ExplorerDataType.TRANSACTION
             )}`
           : '',
-        disabled: !txDetail.redepositTxInc,
+        disabled: !_txDetail.redepositTxInc,
       },
       {
         title: 'Redeposit status:',
-        desc: txDetail.redepositStatus,
+        desc: _txDetail.redepositStatus,
         // descColor: txDetail.redepositColor,
-        disabled: !txDetail.redepositStatus,
+        disabled: !_txDetail.redepositStatus,
       },
     ];
-  }, [txDetail]);
+  }, [txBurnID]);
 
-  const getSwapTxs = async () => {
+  const getSwapTxs = async ({ showLoading = false }: { showLoading: boolean }) => {
     try {
-      setState((value) => ({ ...value, loading: true }));
+      if (showLoading) {
+        setState((value) => ({ ...value, loading: true }));
+      }
       const txs = await rpcClient.apiGetSwapTxs();
-      setState({ loading: false, txs });
+      if (showLoading) {
+        setState((value) => ({ ...value, loading: false, txs }));
+      }
     } catch (e) {
-      setState({ loading: false, txs: [] });
+      if (showLoading) {
+        setState((value) => ({ ...value, loading: false, txs: [] }));
+      }
     }
   };
 
@@ -118,21 +138,27 @@ const SwapTxs = React.memo(() => {
     return (
       <div
         className="item button-hover"
+        key={tx.requestBurnTxInc}
         onClick={() => {
-          setTxDetail(tx);
+          setTxBurnID(tx.requestBurnTxInc);
         }}
       >
-        <RowBetween key={tx.requestBurnTxInc}>
-          <ThemedText.SmallLabel fontWeight={500} color="primary8">
-            {shortenString(`#${tx.requestBurnTxInc}`, 10)}
+        <RowBetween>
+          <ThemedText.SmallLabel marginTop="4px" fontWeight={500}>
+            {tx.swapStr}
           </ThemedText.SmallLabel>
           <ThemedText.SmallLabel fontWeight={500} style={{ color: tx.color }}>
             {capitalizeFirstLetter(tx.status)}
           </ThemedText.SmallLabel>
         </RowBetween>
-        <ThemedText.SmallLabel marginTop="4px" fontWeight={500}>
-          {tx.time}
-        </ThemedText.SmallLabel>
+        <RowBetween style={{ marginTop: '6px' }}>
+          <ThemedText.SmallLabel fontWeight={500} color="primary8">
+            {shortenString(`#${tx.requestBurnTxInc}`, 10)}
+          </ThemedText.SmallLabel>
+          <ThemedText.SmallLabel fontWeight={500} color="primary8">
+            {`${tx.appName}`}
+          </ThemedText.SmallLabel>
+        </RowBetween>
       </div>
     );
   };
@@ -140,12 +166,12 @@ const SwapTxs = React.memo(() => {
   const renderHistoryList = () => state.txs.map(renderItem);
 
   const renderUI = () => {
-    if (txDetail) {
+    if (txBurnID) {
       return (
         <>
           <ArrowLeft
             style={{ marginBottom: '12px', cursor: 'pointer', color: 'white' }}
-            onClick={() => setTxDetail(undefined)}
+            onClick={() => setTxBurnID(undefined)}
           />
           {factories.map((item: IItemDetail) => (
             <ItemDetail key={item.title} {...item} />
@@ -156,8 +182,15 @@ const SwapTxs = React.memo(() => {
     return renderHistoryList();
   };
 
+  const jobLoadHistory = async () => {
+    await getSwapTxs({ showLoading: true });
+    // setInterval(async () => {
+    //   await getSwapTxs({ showLoading: false });
+    // }, 30000);
+  };
+
   React.useEffect(() => {
-    getSwapTxs().then();
+    jobLoadHistory().then();
   }, []);
 
   return (

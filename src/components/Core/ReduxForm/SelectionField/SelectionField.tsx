@@ -38,6 +38,9 @@ const SelectionField = (props: ISelectionFieldProps) => {
     footerRightText,
     onClickFooterRight,
     footerRightClass,
+    showShowTopUp = false,
+    onTopUp,
+    tokenNetwork,
   } = props;
 
   const { error: errorMeta, touched, submitting, active } = meta;
@@ -54,11 +57,26 @@ const SelectionField = (props: ISelectionFieldProps) => {
     if (submitting) {
       return null;
     }
+    let _error = error;
+    const isTopUp = _error !== 'Required' && showShowTopUp && onTopUp;
+    if (isTopUp) {
+      _error += ', please';
+    }
     return (
       <div style={{ position: 'absolute' }}>
         {(isError && (
-          <ThemedText.Error marginTop="4px" error className={`error`}>
-            {error}
+          <ThemedText.Error marginTop="4px" error className={`error`} display="flex">
+            {_error}
+            {isTopUp && (
+              <div className="selectable-error" onClick={onTopUp}>
+                top up
+              </div>
+            )}
+            {isTopUp && (
+              <ThemedText.Error style={{ display: 'flex', marginLeft: '4px' }} error>
+                your crypto.
+              </ThemedText.Error>
+            )}
           </ThemedText.Error>
         )) ||
           (isWarning && (
@@ -162,9 +180,16 @@ const SelectionField = (props: ISelectionFieldProps) => {
           )}
         </RowBetween>
         <RowBetween className="default-padding">
-          <ThemedText.SmallLabel fontWeight={400} color="primary8">
-            Balance: {amount}
-          </ThemedText.SmallLabel>
+          <Row style={{ width: 'fit-content' }}>
+            <ThemedText.SmallLabel fontWeight={400} color="primary8">
+              Balance: {amount}
+            </ThemedText.SmallLabel>
+            {!!tokenNetwork && (
+              <ThemedText.SmallLabel fontWeight={500} className="wrap-network">
+                {tokenNetwork}
+              </ThemedText.SmallLabel>
+            )}
+          </Row>
           {!!footerRightText && (
             <ThemedText.RegularLabel
               className={`${footerRightClass ? footerRightClass : ''}`}

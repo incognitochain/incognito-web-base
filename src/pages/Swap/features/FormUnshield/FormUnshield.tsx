@@ -5,15 +5,21 @@ import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import SelectionField from 'components/Core/ReduxForm/SelectionField';
 import { VerticalSpace } from 'components/Core/Space';
-import { MAIN_NETWORK_NAME } from 'constants/token';
+import { TAB_LIST } from 'components/Core/Tabs';
+import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
+import { isMainnet } from 'config';
+import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Field } from 'redux-form';
+import { useAppSelector } from 'state/hooks';
+import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 
-import { ThemedText } from '../../../../theme';
 import { EstReceive } from '../EstReceive';
+import { actionFilterSetToken, actionFilterTokenByNetwork } from '../FormDeposit/FormDeposit.actions';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
 import enhance from './FormUnshield.enhance';
 import { FormTypes, SwapExchange } from './FormUnshield.types';
@@ -30,7 +36,6 @@ const Styled = styled.div`
     }
     color: ${({ theme }) => theme.btn1};
   }
-
   .send-to-text {
     padding-left: 15px;
     :hover {
@@ -117,12 +122,11 @@ const FormUnshield = React.memo((props: any) => {
 
     userBuyBalanceFormatedText,
     rate,
-
-    sellParentToken,
   } = props;
 
   const { showPopup } = useIncognitoWallet();
   const [changing, setChanging] = React.useState(false);
+  const prvToken = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
 
   const _buttonAction = () => showPopup();
 
@@ -135,6 +139,32 @@ const FormUnshield = React.memo((props: any) => {
   const [visibleAddress, setVisibleAddress] = useState<boolean>(
     buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress
   );
+
+  const onTopUpCoins = () => {
+    let _sellToken = sellToken;
+    if (_sellToken.isUnified) {
+      // _sellToken = (_sellToken.listUnifiedToken || []).find(
+      //   (token: any) => token.networkName !== MAIN_NETWORK_NAME.ETHEREUM
+      // );
+      // if (!_sellToken) _sellToken = _sellToken[0];
+      _sellToken = _sellToken.listUnifiedToken[0];
+    }
+    setTimeout(() => {
+      dispatch(
+        actionFilterTokenByNetwork({
+          network: {
+            parentIdentify: _sellToken.parentTokenID,
+            identify: _sellToken.identify,
+            chainID: _sellToken.chainID,
+            networkName: _sellToken.networkName,
+            currency: _sellToken.currencyType,
+          },
+        })
+      );
+      dispatch(actionFilterSetToken({ token: _sellToken }));
+      dispatch(changeTab({ tab: TAB_LIST.SWAP.tabNames[1], rootTab: TAB_LIST.SWAP.rootTab }));
+    }, 100);
+  };
 
   useEffect(() => {
     if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress) {
@@ -191,6 +221,7 @@ const FormUnshield = React.memo((props: any) => {
           tokens={sellTokenList}
           tokenSymbol={sellToken.symbol}
           tokenImgUrl={sellToken.iconUrl}
+          tokenNetwork={sellToken.network}
           onSelectToken={onSelectSellToken}
           networkName={MAIN_NETWORK_NAME.INCOGNITO}
           amount={userBalanceFormatedText}
@@ -200,17 +231,19 @@ const FormUnshield = React.memo((props: any) => {
             type: 'number',
           }}
           validate={validateAmount}
-          footerRightText="Max"
+          // footerRightText="Max"
+          showShowTopUp={true}
+          onTopUp={onTopUpCoins}
         />
         <WrapSwapIcon>
           <img
             className={`${formType === FormTypes.SWAP ? 'swap-icon' : 'disable'} icon`}
             style={{ animation: changing ? `spin ${0.6}s linear` : '', width: 48, height: 48 }}
             onClick={() => {
-              if (formType === FormTypes.SWAP) {
+              if (formType === FormTypes.SWAP && !changing) {
                 onRotateSwapToken();
                 setChanging(true);
-                setTimeout(() => setChanging(false), 800);
+                setTimeout(() => setChanging(false), 1000);
               }
             }}
             src={SwapIcon}
@@ -224,8 +257,8 @@ const FormUnshield = React.memo((props: any) => {
           className="buy-section-style"
           headerTitle="To"
           tokens={buyTokenList}
-          tokenSymbol={buyParentToken.symbol}
-          tokenImgUrl={buyParentToken.iconUrl}
+          tokenSymbol={!!buyParentToken ? buyParentToken?.symbol : ''}
+          tokenImgUrl={!!buyParentToken ? buyParentToken?.iconUrl : ''}
           networks={buyNetworkList}
           networkName={buyNetworkName}
           amount={userBuyBalanceFormatedText}
@@ -235,20 +268,27 @@ const FormUnshield = React.memo((props: any) => {
           footerRightText={rightLabelAddress}
           isUseInput={false}
           footerRightClass="send-to-text"
+          tokenNetwork={isMainnet ? '' : buyToken.network}
           onClickFooterRight={() => setVisibleAddress((value) => !value)}
           componentProps={{
             type: 'number',
             disabled: true,
           }}
         />
-        {!!errorMsg && (
+        {!prvToken.amount ? (
+          <ThemedText.Error color="primary8" error fontWeight={400} marginTop="12px">
+            {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network. Get
+            some from the `}
+            <a className="link">faucet</a>
+          </ThemedText.Error>
+        ) : !!errorMsg ? (
           <>
             <ThemedText.Error style={{ marginTop: '4px' }} error className={`error`}>
               {errorMsg}
             </ThemedText.Error>
             <VerticalSpace />
           </>
-        )}
+        ) : null}
         <VerticalSpace />
         {visibleAddress && (
           <>

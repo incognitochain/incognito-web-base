@@ -4,6 +4,7 @@ import PTokenModel from 'models/model/pTokenModel';
 import { getSwapTxs, ISwapTxStorage } from 'pages/Swap/Swap.storage';
 import createAxiosInstance from 'services/axios';
 
+import { PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from '../constants';
 import { combineSwapTxs } from '../pages/Swap/features/SwapTxs/SwapTxs.utils';
 
 interface ISummitEtherHash {
@@ -20,6 +21,7 @@ interface IUserFeePayload {
   privacyTokenAddress: string;
   walletAddress: string; // for history.
   unifiedTokenID: string;
+  currencyType?: number;
 }
 
 interface ISwapFeePayload {
@@ -43,12 +45,14 @@ export interface IUserFee {
   estimateFee: number;
   estimatedBurnAmount: number;
   estimatedExpectedAmount: number;
+  centralizedAddress?: string;
 }
 
 export interface IDepositAddress {
   address: string;
   estimateFee: number;
   tokenFee?: number;
+  expiredAt?: string;
 }
 
 class RpcClient {
@@ -85,18 +89,48 @@ class RpcClient {
     privacyTokenAddress,
     walletAddress,
     unifiedTokenID,
+    currencyType,
   }: IUserFeePayload): Promise<IUserFee | undefined> {
     const addressType = 2;
-    const data: any = await this.http.post('genunshieldaddress', {
-      Network: network,
-      RequestedAmount: requestedAmount,
-      AddressType: addressType,
-      IncognitoAmount: incognitoAmount,
-      PaymentAddress: paymentAddress,
-      PrivacyTokenAddress: privacyTokenAddress,
-      WalletAddress: walletAddress,
-      UnifiedTokenID: unifiedTokenID,
-    });
+
+    let payload = {};
+    let endpoint = '';
+    if (currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BTC) {
+      payload = {
+        Network: network,
+      };
+      endpoint = 'estimateunshieldfee';
+    } else {
+      endpoint = 'genunshieldaddress';
+      payload = {
+        Network: network,
+        RequestedAmount: requestedAmount,
+        AddressType: addressType,
+        IncognitoAmount: incognitoAmount,
+        PaymentAddress: paymentAddress,
+        PrivacyTokenAddress: privacyTokenAddress,
+        WalletAddress: walletAddress,
+        UnifiedTokenID: unifiedTokenID,
+        CurrencyType: currencyType,
+      };
+    }
+
+    let data: any = await this.http.post(endpoint, payload);
+
+    if (currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BTC) {
+      data = {
+        Address: paymentAddress,
+        Decentralized: 0,
+        EstimateFee: 0,
+        ExpiredAt: '',
+        FeeAddress: '',
+        ID: 0,
+        TokenFee: 0,
+        TokenFees: {
+          Level1: data,
+        },
+      };
+    }
     const feeType = data?.TokenFees ? data.TokenFees : data.PrivacyFees;
     const fee: IFee = {
       level1: feeType.Level1,
@@ -111,6 +145,7 @@ class RpcClient {
     return {
       fee,
       feeAddress: data.FeeAddress,
+      centralizedAddress: data.Address,
       id: data.ID,
       isUseTokenFee: !!data?.TokenFees,
       estimateFee,
@@ -148,18 +183,55 @@ class RpcClient {
     privacyTokenAddress: string;
     userFeeSelection: number;
     walletAddress: string;
+    isUseTokenFee?: boolean;
+    fee?: string;
+    isDecentralized: boolean;
+    centralizedAddress?: string;
+    tokenID: string;
+    erc20TokenAddress?: string; // unshield PRV
+    currencyType: number; // unshield PRV
   }) {
-    return this.http.post('submitunshieldtx', {
-      Network: payload.network,
-      UserFeeLevel: payload.userFeeLevel,
-      ID: payload.id,
-      IncognitoAmount: payload.incognitoAmount,
-      IncognitoTx: payload.incognitoTx,
-      PaymentAddress: payload.paymentAddress,
-      PrivacyTokenAddress: payload.privacyTokenAddress,
-      UserFeeSelection: payload.userFeeSelection,
-      WalletAddress: payload.walletAddress,
-    });
+    let _payload = {};
+    if (payload.tokenID === PRV.id) {
+      _payload = {
+        Network: payload.network,
+        CurrencyType: payload.currencyType,
+        AddressType: 2,
+        IncognitoAmount: payload.incognitoAmount,
+        PaymentAddress: payload.paymentAddress,
+        Erc20TokenAddress: payload.erc20TokenAddress,
+        PrivacyTokenAddress: payload.privacyTokenAddress,
+        IncognitoTx: payload.incognitoTx,
+        WalletAddress: payload.walletAddress,
+        ID: payload.id,
+        UserFeeSelection: payload.userFeeSelection,
+        UserFeeLevel: payload.userFeeLevel,
+      };
+    } else if (payload.isDecentralized) {
+      _payload = {
+        Network: payload.network,
+        UserFeeLevel: payload.userFeeLevel,
+        ID: payload.id,
+        IncognitoAmount: payload.incognitoAmount,
+        IncognitoTx: payload.incognitoTx,
+        PaymentAddress: payload.paymentAddress,
+        PrivacyTokenAddress: payload.privacyTokenAddress,
+        UserFeeSelection: payload.userFeeSelection,
+        WalletAddress: payload.walletAddress,
+      };
+    } else {
+      _payload = {
+        Network: payload.network,
+        ID: payload.id,
+        UserFeeLevel: payload.userFeeLevel,
+        IncognitoTxToPayOutsideChainFee: payload.incognitoTx,
+        Address: payload.centralizedAddress,
+        PrivacyFee: payload.isUseTokenFee ? '0' : `${payload.fee || 0}`,
+        TokenFee: payload.isUseTokenFee ? `${payload.fee || 0}` : '0',
+        UserFeeSelection: payload.userFeeSelection,
+      };
+    }
+    return this.http.post('submitunshieldtx', { ..._payload });
   }
 
   submitSwapTx({ txRaw, feeRefundOTA }: { txRaw: string; feeRefundOTA: string }) {
@@ -171,7 +243,7 @@ class RpcClient {
   }
 
   async apiGetSwapTxs() {
-    const swapTxs: ISwapTxStorage[] = (getSwapTxs() || []).reverse();
+    const swapTxs: ISwapTxStorage[] = (getSwapTxs() || []).reverse().slice(0, 20);
     let txIDs = [];
     if (!swapTxs || swapTxs.length === 0) return [];
     txIDs = swapTxs.map((tx) => tx.txHash);
@@ -186,21 +258,38 @@ class RpcClient {
     network,
     incAddress,
     tokenID,
+    currencyType,
+    isBTC,
   }: {
     network: string;
     incAddress: string;
     tokenID: string;
+    currencyType?: number;
+    isBTC: boolean;
   }): Promise<IDepositAddress> {
     const resp: any = await this.http.post('genshieldaddress', {
       Network: network,
       AddressType: 1,
       WalletAddress: incAddress,
+      PaymentAddress: incAddress,
+      BTCIncAddress: incAddress,
       PrivacyTokenAddress: tokenID,
+      CurrencyType: currencyType,
     });
+
+    // Case bitcoin
+    if (typeof resp === 'string' && isBTC) {
+      return {
+        address: resp,
+        estimateFee: 0,
+      };
+    }
+    // Case centralized & decentralized
     return {
       address: resp.Address,
       estimateFee: resp.EstimateFee,
       tokenFee: resp.TokenFee,
+      expiredAt: resp.ExpiredAt,
     };
   }
 }
@@ -230,15 +319,21 @@ const genDepositAddress = async ({
   network,
   incAddress,
   tokenID,
+  currencyType,
+  isBTC,
 }: {
   network: string;
   incAddress: string;
   tokenID: string;
+  currencyType?: number;
+  isBTC: boolean;
 }): Promise<IDepositAddress> => {
   return rpcClient.genDepositAddress({
     network,
     incAddress,
     tokenID,
+    currencyType,
+    isBTC,
   });
 };
 

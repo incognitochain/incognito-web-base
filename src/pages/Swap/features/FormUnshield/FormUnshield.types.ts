@@ -24,6 +24,7 @@ export enum SwapExchange {
   PANCAKE_SWAP = 'pancake',
   UNISWAP = 'uniswap',
   CURVE = 'curve',
+  PDEX = 'pdex',
   SPOOKY = 'spooky',
 }
 
@@ -33,6 +34,7 @@ export enum NetworkTypePayload {
   POLYGON = 'plg',
   FANTOM = 'ftm',
   BINANCE_SMART_CHAIN = 'bsc',
+  CENTRALIZED = 'centralized',
 }
 
 export interface ISwapExchange {
@@ -78,6 +80,7 @@ export interface ISwapExchangeData {
   callData: string;
   networkID: number;
   feeAddressShardID: number;
+  poolPairs: string[];
   expectedAmount: string;
   rate: string;
 }
