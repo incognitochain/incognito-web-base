@@ -78,6 +78,9 @@ const WrapSwapIcon = styled.div`
       opacity: 0.5;
     }
   }
+  .link {
+    display: contents;
+  }
 `;
 
 const FormUnshield = React.memo((props: any) => {

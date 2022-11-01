@@ -60,7 +60,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
     let _error = error;
     const isTopUp = _error !== 'Required' && showShowTopUp && onTopUp;
     if (isTopUp) {
-      _error += ', please';
+      _error += ' Please';
     }
     return (
       <div style={{ position: 'absolute' }}>

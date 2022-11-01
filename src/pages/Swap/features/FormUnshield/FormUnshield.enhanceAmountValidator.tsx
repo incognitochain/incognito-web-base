@@ -71,7 +71,7 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
           ...currentState,
           minAmountValidator: validator.minValue(
             minAmountNum,
-            `Amount must be larger than ${minAmountText} ${selectedPrivacy?.symbol}`
+            `Amount must be larger than ${minAmountText} ${selectedPrivacy?.symbol}.`
           ),
         });
       }
