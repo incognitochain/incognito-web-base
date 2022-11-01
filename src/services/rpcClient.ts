@@ -46,6 +46,7 @@ export interface IUserFee {
   estimatedBurnAmount: number;
   estimatedExpectedAmount: number;
   centralizedAddress?: string;
+  minUnshield: number;
 }
 
 export interface IDepositAddress {
@@ -118,6 +119,7 @@ class RpcClient {
     let data: any = await this.http.post(endpoint, payload);
 
     if (currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BTC) {
+      const { Fee, MinUnshield } = data;
       data = {
         Address: paymentAddress,
         Decentralized: 0,
@@ -127,8 +129,9 @@ class RpcClient {
         ID: 0,
         TokenFee: 0,
         TokenFees: {
-          Level1: data,
+          Level1: Fee,
         },
+        MinUnshield,
       };
     }
     const feeType = data?.TokenFees ? data.TokenFees : data.PrivacyFees;
@@ -151,6 +154,7 @@ class RpcClient {
       estimateFee,
       estimatedBurnAmount,
       estimatedExpectedAmount,
+      minUnshield: data?.MinUnshield || 0,
     };
   }
 
