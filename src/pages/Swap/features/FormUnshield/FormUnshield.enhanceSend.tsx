@@ -259,6 +259,7 @@ const enhanceSend = (WrappedComponent: any) => {
         prvPayments = _prvPayments;
         tokenPayments = _tokenPayments;
       } else if (formType === FormTypes.UNSHIELD && sellToken.isPRV) {
+        /** Unshield PRV */
         const { prvPayments: _prvPayments } = await getPaymentsUnshieldPRV();
         prvPayments = _prvPayments;
       } else if (formType === FormTypes.UNSHIELD && sellToken.isBTC) {
@@ -423,14 +424,7 @@ const enhanceSend = (WrappedComponent: any) => {
         let isSignAndSendTransaction = true;
         if (formType === FormTypes.UNSHIELD) {
           /** Case Unshield Decentralized */
-          if (isDecentralized) {
-            const metadata = getUnshieldDecentralizedMetadata({ otaReceiver, burnerAddress });
-            isSignAndSendTransaction = true;
-            payload = {
-              info: String(id),
-              metadata,
-            };
-          } else if (sellToken.isBTC) {
+          if (sellToken.isBTC) {
             /** Case Unshield BTC */
             const metadata = await getUnshieldBTCMetadata(newCoins);
             isSignAndSendTransaction = true;
@@ -440,9 +434,17 @@ const enhanceSend = (WrappedComponent: any) => {
             payload = { metadata };
             isSignAndSendTransaction = true;
             /** Case Unshield PEGGING */
-          } else {
+          } else if (sellToken.isCentralized) {
             /** Case Unshield Centralized */
             isSignAndSendTransaction = true;
+          } else {
+            console.log('SANG TEST: ');
+            const metadata = getUnshieldDecentralizedMetadata({ otaReceiver, burnerAddress });
+            isSignAndSendTransaction = true;
+            payload = {
+              info: String(id),
+              metadata,
+            };
           }
         } else if (formType === FormTypes.SWAP) {
           /** Swap PDEX */
@@ -480,11 +482,11 @@ const enhanceSend = (WrappedComponent: any) => {
         };
 
         console.log('LOGS PAYLOAD 111: ', payload);
-        console.log('LOGS PAYLOAD 222: ', { sellToken, buyToken, buyNetworkName });
+        console.log('LOGS PAYLOAD 222: ', { sellToken, buyToken, buyNetworkName, formType, exchangeSelectedData });
         return new Promise(async (resolve, reject) => {
           try {
             const tx = await requestSignTransaction(payload);
-
+            console.log('LOGS PAYLOAD 333: ', { txHash: tx.txHash });
             if (formType === FormTypes.SWAP) {
               if (exchangeSelectedData.appName !== SwapExchange.PDEX) {
                 /** Submit tx swap PApps to backend after burned */
@@ -527,7 +529,7 @@ const enhanceSend = (WrappedComponent: any) => {
                   : buyToken
               ).currencyType;
 
-              console.log('LOGS PAYLOAD 333: ', { unshieldCurrencyType, isDecentralized, buyNetworkName });
+              console.log('LOGS PAYLOAD 444: ', { unshieldCurrencyType, isDecentralized, buyNetworkName });
 
               const submitTxUnshieldResponse = await rpcClient.submitUnshieldTx2({
                 network: networkName,
@@ -552,6 +554,7 @@ const enhanceSend = (WrappedComponent: any) => {
             updateMetric().then();
             resolve(tx);
           } catch (e) {
+            console.log('HANDLE UNSHIELD WITH ERROR ', e);
             reject(e);
           }
         });
