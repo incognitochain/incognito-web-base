@@ -7,6 +7,7 @@ import SelectionField from 'components/Core/ReduxForm/SelectionField';
 import { VerticalSpace } from 'components/Core/Space';
 import { TAB_LIST } from 'components/Core/Tabs';
 import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
+import { isMainnet } from 'config';
 import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React, { useEffect, useState } from 'react';
@@ -256,8 +257,8 @@ const FormUnshield = React.memo((props: any) => {
           className="buy-section-style"
           headerTitle="To"
           tokens={buyTokenList}
-          tokenSymbol={buyParentToken.symbol}
-          tokenImgUrl={buyParentToken.iconUrl}
+          tokenSymbol={!!buyParentToken ? buyParentToken?.symbol : ''}
+          tokenImgUrl={!!buyParentToken ? buyParentToken?.iconUrl : ''}
           networks={buyNetworkList}
           networkName={buyNetworkName}
           amount={userBuyBalanceFormatedText}
@@ -267,6 +268,7 @@ const FormUnshield = React.memo((props: any) => {
           footerRightText={rightLabelAddress}
           isUseInput={false}
           footerRightClass="send-to-text"
+          tokenNetwork={isMainnet ? '' : buyToken.network}
           onClickFooterRight={() => setVisibleAddress((value) => !value)}
           componentProps={{
             type: 'number',

@@ -31,11 +31,11 @@ export interface TInter {
 
 const enhanceSelect = (WrappedComponent: any) => {
   const FormDepositComp = (props: any) => {
-    const { sellToken, buyToken, formType, buyNetworkName, incAddress, onChangeField, unshieldAddress, inputAddress } =
-      props;
+    const { sellToken, buyNetworkName, incAddress, onChangeField, unshieldAddress } = props;
     const dispatch = useAppDispatch();
     const refCountChangeField = React.useRef<any>(null);
     const handleSelectSellToken = async ({ token }: { token: PToken }) => {
+      if (token.tokenID === sellToken.tokenID) return;
       dispatch(actionGetVaults());
       dispatch(actionChangeSellToken({ token }));
     };

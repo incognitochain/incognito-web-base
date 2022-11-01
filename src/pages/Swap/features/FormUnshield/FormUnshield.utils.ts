@@ -207,14 +207,6 @@ const getUnshieldData = ({
     }
   }
 
-  console.log('LOGS UTILS', {
-    sellParentID: sellParentIdentify,
-    sellID: sellIdentify,
-    buyParentID: buyParentIdentify,
-    buyID: buyIdentify,
-    swapNetwork,
-  });
-
   let isUseTokenFee = false;
   let _sellParentToken, _buyParentToken, _buyNetworkList: any;
   let _buyNetworkName: MAIN_NETWORK_NAME = MAIN_NETWORK_NAME.INCOGNITO;
@@ -516,6 +508,15 @@ const getUnshieldData = ({
     })} ${burnFeeToken.symbol}`;
   }
 
+  console.log('LOGS UTILS', {
+    sellParentID: sellParentIdentify,
+    sellID: sellIdentify,
+    buyParentID: buyParentIdentify,
+    buyID: buyIdentify,
+    swapNetwork,
+    disabledForm,
+  });
+
   return {
     sellToken: _sellToken,
     sellParentToken: _sellParentToken,
@@ -690,9 +691,28 @@ const getPrvPayments = async (data: any[], isEncryptMessage = true) => {
   return prvPayments;
 };
 
+const getINCTokenWithNetworkName = ({
+  parentToken,
+  token,
+  networkName,
+}: {
+  parentToken: SelectedPrivacy;
+  token: SelectedPrivacy;
+  networkName: MAIN_NETWORK_NAME;
+}) => {
+  let childToken = (parentToken.listUnifiedToken || []).find(
+    (token: SelectedPrivacy) => token.networkName === networkName
+  );
+  if (!childToken && token.networkName === networkName) {
+    childToken = token;
+  }
+  return childToken;
+};
+
 export {
   getBurningMetaDataTypeForUnshield,
   getExchangeName,
+  getINCTokenWithNetworkName,
   getPrvPayments,
   getTokenPayments,
   getUnshieldData,

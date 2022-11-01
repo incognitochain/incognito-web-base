@@ -21,7 +21,7 @@ import {
   UnshieldSetUserFeeAction,
   UnshieldSetUserFeePayLoad,
 } from './FormUnshield.types';
-import { parseExchangeDataModelResponse } from './FormUnshield.utils';
+import { getINCTokenWithNetworkName, parseExchangeDataModelResponse } from './FormUnshield.utils';
 
 export const actionSetToken = (payload: UnshieldSetTokenPayLoad): UnshieldSetTokenAction => ({
   type: FormUnshieldActionType.SET_TOKEN,
@@ -146,12 +146,25 @@ export const actionChangeBuyToken =
     try {
       const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
       if (!token.networkName || parentToken.currencyType === undefined) return;
+      const { sellToken, buyNetworkName } = unshieldDataSelector(getState());
 
+      // case swap INCOGNITO
       let _buyToken = parentToken;
-      const { sellToken } = unshieldDataSelector(getState());
+
+      // case unshield
       if (parentToken.hasChild && _buyToken.parentTokenID === sellToken.parentTokenID) {
         _buyToken = parentToken.listUnifiedToken[0];
       }
+      // case swap outchain
+      if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
+        const tokenMap = getINCTokenWithNetworkName({
+          parentToken,
+          token,
+          networkName: buyNetworkName,
+        });
+        if (tokenMap) _buyToken = tokenMap;
+      }
+
       const buyTokenObj: ITokenNetwork = {
         parentIdentify: _buyToken.parentTokenID,
         identify: _buyToken.identify,
@@ -189,7 +202,7 @@ export const actionChangeSellNetwork =
 export const actionChangeBuyNetwork =
   ({ network }: { network: ITokenNetwork }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
-    const { sellToken, buyToken, buyParentToken } = unshieldDataSelector(getState());
+    const { sellToken, sellParentToken, buyToken, buyParentToken } = unshieldDataSelector(getState());
 
     const parentID = getTokenIdentify({
       tokenID: !sellToken.parentTokenID.toLowerCase().includes(BIG_COINS.USDC_UNIFIED.tokenID.toLowerCase())
@@ -220,7 +233,7 @@ export const actionChangeBuyNetwork =
             dispatch(actionSetToken({ buyToken: { ...network } }));
           }
         } else {
-          // case swap
+          // case swap INCOGNITO
           if (network.networkName === MAIN_NETWORK_NAME.INCOGNITO) {
             // set unified token
             if (buyToken.tokenID !== buyToken.parentTokenID) {
@@ -237,17 +250,27 @@ export const actionChangeBuyNetwork =
               );
             }
           } else {
-            const childToken = buyParentToken.listUnifiedToken.find(
-              (token: any) => token.networkName === network.networkName
-            );
-            if (!!childToken) {
+            let _buyToken = getINCTokenWithNetworkName({
+              parentToken: buyParentToken,
+              token: buyToken,
+              networkName: network.networkName,
+            });
+            if (!_buyToken) {
+              // reset buy token with sell token mapping buy network
+              _buyToken = getINCTokenWithNetworkName({
+                parentToken: sellParentToken,
+                token: sellToken,
+                networkName: network.networkName,
+              });
+            }
+            if (!!_buyToken) {
               dispatch(
                 actionSetToken({
                   buyToken: {
-                    parentIdentify: buyParentToken.parentTokenID,
-                    identify: childToken.identify,
-                    chainID: childToken.chainID,
-                    currency: childToken.currencyType,
+                    parentIdentify: _buyToken.parentTokenID,
+                    identify: _buyToken.identify,
+                    chainID: _buyToken.chainID,
+                    currency: _buyToken.currencyType,
                     networkName: network.networkName,
                   },
                 })
