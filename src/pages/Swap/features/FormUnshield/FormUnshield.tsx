@@ -18,6 +18,7 @@ import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
+import { incognitoWalletAccountSelector } from '../../../../state/incognitoWallet';
 import { EstReceive } from '../EstReceive';
 import { actionFilterSetToken, actionFilterTokenByNetwork } from '../FormDeposit/FormDeposit.actions';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
@@ -124,8 +125,10 @@ const FormUnshield = React.memo((props: any) => {
 
     userBuyBalanceFormatedText,
     rate,
-    isIncognitoInstalled,
   } = props;
+
+  const { isIncognitoInstalled } = useIncognitoWallet();
+  const incAccount = useAppSelector(incognitoWalletAccountSelector);
 
   const { showPopup } = useIncognitoWallet();
   const [changing, setChanging] = React.useState(false);
@@ -281,7 +284,7 @@ const FormUnshield = React.memo((props: any) => {
             disabled: true,
           }}
         />
-        {!prvToken.amount && !!inputAmount && isIncognitoInstalled ? (
+        {!prvToken.amount && !!inputAmount && isIncognitoInstalled() && incAccount ? (
           <ThemedText.Error color="primary8" error fontWeight={400} marginTop="12px">
             {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network. Get
             some from the `}

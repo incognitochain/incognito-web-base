@@ -71,8 +71,6 @@ export interface IUnshield {
   slippage: string;
   rate: string;
 
-  isIncognitoInstalled: boolean;
-
   minUnshield: number;
   minUnshieldText: string;
 }
@@ -200,7 +198,6 @@ export const useUnshield = (): IUnshield => {
     slippage,
     rate,
 
-    isIncognitoInstalled: isIncognitoInstalled(),
     minUnshield,
     minUnshieldText,
   };
