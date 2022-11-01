@@ -100,10 +100,10 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
       if (!enoughPRVFee) {
         val.push(...[validator.notEnoughPRVFee]);
       }
-      // if (selectedPrivacy?.isIncognitoToken) {
-      //   val.push(...validator.combinedNanoAmount);
-      // }
-      // val.push(...validator.combinedAmount);
+      if (selectedPrivacy?.isIncognitoToken) {
+        val.push(...validator.combinedNanoAmount);
+      }
+      val.push(...validator.combinedAmount);
       return [...val];
     };
 

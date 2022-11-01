@@ -41,6 +41,8 @@ const SelectionField = (props: ISelectionFieldProps) => {
     showShowTopUp = false,
     onTopUp,
     tokenNetwork,
+
+    tokenAmountNum,
   } = props;
 
   const { error: errorMeta, touched, submitting, active } = meta;
@@ -58,7 +60,10 @@ const SelectionField = (props: ISelectionFieldProps) => {
       return null;
     }
     let _error = error;
-    const isTopUp = _error !== 'Required' && showShowTopUp && onTopUp;
+    let isTopUp = _error !== 'Required' && showShowTopUp && onTopUp;
+    if (isTopUp && (_error || '').includes('larger') && tokenAmountNum) {
+      isTopUp = false;
+    }
     if (isTopUp) {
       _error += '';
     }

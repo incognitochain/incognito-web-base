@@ -92,7 +92,6 @@ const FormUnshield = React.memo((props: any) => {
     buyToken,
     buyTokenList,
     buyNetworkList,
-    buyCurrency,
     buyNetworkName,
     userBalanceFormatedText,
     button,
@@ -238,9 +237,9 @@ const FormUnshield = React.memo((props: any) => {
             type: 'number',
           }}
           validate={validateAmount}
-          // footerRightText="Max"
           showShowTopUp={true}
           onTopUp={onTopUpCoins}
+          tokenAmountNum={sellToken.amount}
         />
         <WrapSwapIcon>
           <img

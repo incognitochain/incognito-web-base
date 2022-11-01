@@ -34,6 +34,7 @@ export interface ISelectionFieldProps {
   showShowTopUp?: boolean;
   onTopUp?: () => void;
   tokenNetwork?: string;
+  tokenAmountNum?: number;
 }
 
 interface IInputProps {
