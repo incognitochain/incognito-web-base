@@ -20,9 +20,10 @@ const Item = styled(Row)`
   cursor: pointer;
   :hover {
     background-color: ${({ theme }) => theme.bg4};
-    /* padding: 12px 0 12px 16px;
-    transform: scale(1);
-    transition: 0.1s all ease; */
+    transition: 0.2s all ease;
+  }
+  :active {
+    opacity: 0.8;
   }
   .logo {
     width: 24px;
@@ -53,7 +54,9 @@ const ExchangeModal = (props: IProps & any) => {
           src={getExchangeLogo(exchange?.exchangeName)}
           style={{ width: 32, height: 32, marginRight: 12 }}
         />
-        <ThemedText.RegularLabel color="primary5">{exchange?.exchangeName}</ThemedText.RegularLabel>
+        <ThemedText.RegularLabel className="name" color="primary5">
+          {exchange?.exchangeName}
+        </ThemedText.RegularLabel>
       </Item>
     );
   };
