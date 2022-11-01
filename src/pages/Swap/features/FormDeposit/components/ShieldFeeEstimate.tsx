@@ -36,21 +36,25 @@ const ShieldFeeEstimate = (props: ShieldFeeEstimateProps) => {
   const { value = '0.0005 ETH' || '' } = props;
   return (
     <Styled>
-      <Row className="topView">
-        <ThemedText.SmallLabel fontWeight={400} color="primary8">
-          {'Shielding fee (est.)'}
-        </ThemedText.SmallLabel>
+      {value && (
+        <>
+          <Row className="topView">
+            <ThemedText.SmallLabel fontWeight={400} color="primary8">
+              {'Shielding fee (est.)'}
+            </ThemedText.SmallLabel>
 
-        <ThemedText.SmallLabel fontWeight={400} color="primary5">
-          {value}
-        </ThemedText.SmallLabel>
-      </Row>
-      <Row className="Small">
-        <ThemedText.Small fontWeight={400} color="primary15">
-          {'This fee will be deducted from the shielded funds.'}
-        </ThemedText.Small>
-      </Row>
-      <div style={{ height: 10 }}></div>
+            <ThemedText.SmallLabel fontWeight={400} color="primary5">
+              {value}
+            </ThemedText.SmallLabel>
+          </Row>
+          <Row className="Small">
+            <ThemedText.Small fontWeight={400} color="primary15">
+              {'This fee will be deducted from the shielded funds.'}
+            </ThemedText.Small>
+          </Row>
+          <div style={{ height: 10 }} />
+        </>
+      )}
       <Row className="topView">
         <ThemedText.SmallLabel fontWeight={400} color="primary8">
           {'Estimate time'}

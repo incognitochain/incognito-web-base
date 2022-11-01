@@ -91,6 +91,12 @@ const FormDeposit = (props: IMergeProps) => {
     300
   );
 
+  const shieldingFee = React.useMemo(() => {
+    const fee = state.data?.tokenFee || state.data?.estimateFee || 0;
+    if (fee) return `${state.data?.tokenFee || state.data?.estimateFee || 0} ${sellToken.symbol}`;
+    return '';
+  }, [state, sellToken.symbol]);
+
   useEffect(() => {
     if (!incAccount?.paymentAddress) return;
     debounceGenDepositAddress();
@@ -129,7 +135,7 @@ const FormDeposit = (props: IMergeProps) => {
             expiredAt={sellToken.isCentralized && state ? state.data?.expiredAt : undefined}
           />
           {/*<MinimumShiledAmount />*/}
-          <ShieldFeeEstimate value={`${state.data?.tokenFee || state.data?.estimateFee || 0} ${sellToken.symbol}`} />
+          <ShieldFeeEstimate value={shieldingFee} />
           {/*<DescriptionBox symbol={sellToken.symbol} token={sellToken} />*/}
         </div>
       )}
