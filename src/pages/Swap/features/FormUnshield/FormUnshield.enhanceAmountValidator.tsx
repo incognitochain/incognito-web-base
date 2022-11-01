@@ -32,6 +32,7 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
       userBalance,
       inputOriginalAmount,
       enoughPRVFee,
+      minUnshieldText,
     } = props;
     const [state, setState] = React.useState({ ...initialState });
     const { maxAmountValidator, minAmountValidator } = state;
@@ -41,7 +42,23 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
         text: maxAmountText,
         autoCorrect: true,
       });
+      const minUnshieldNum = convert.toNumber({
+        text: minUnshieldText,
+        autoCorrect: true,
+      });
+
       let currentState = { ...state };
+
+      if (Number.isFinite(minUnshieldNum) && minUnshieldNum) {
+        currentState = {
+          ...currentState,
+          minAmountValidator: validator.minValue(
+            10,
+            `Amount must be larger than ${minUnshieldText} ${selectedPrivacy?.symbol}.`
+          ),
+        };
+      }
+
       if (Number.isFinite(maxAmountNum)) {
         currentState = {
           ...state,
@@ -52,9 +69,8 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
               : 'Your balance is insufficient.'
           ),
         };
-        await setState(currentState);
       }
-      if (!inputOriginalAmount || inputOriginalAmount === 0) {
+      if ((!inputOriginalAmount || inputOriginalAmount === 0) && !minUnshieldNum) {
         const minAmountText = `${
           convert.toHumanAmountString({
             decimals: selectedPrivacy.pDecimals,
@@ -67,14 +83,15 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
           autoCorrect: true,
         });
 
-        await setState({
+        currentState = {
           ...currentState,
           minAmountValidator: validator.minValue(
             minAmountNum,
             `Amount must be larger than ${minAmountText} ${selectedPrivacy?.symbol}.`
           ),
-        });
+        };
       }
+      await setState((state) => ({ ...state, ...currentState }));
     }, 200);
 
     const getAmountValidator = () => {
@@ -84,16 +101,16 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
       if (!enoughPRVFee) {
         val.push(...[validator.notEnoughPRVFee]);
       }
-      if (selectedPrivacy?.isIncognitoToken) {
-        val.push(...validator.combinedNanoAmount);
-      }
-      val.push(...validator.combinedAmount);
+      // if (selectedPrivacy?.isIncognitoToken) {
+      //   val.push(...validator.combinedNanoAmount);
+      // }
+      // val.push(...validator.combinedAmount);
       return [...val];
     };
 
     React.useEffect(() => {
       setFormValidator();
-    }, [selectedPrivacy.identify, maxAmountText, selectedPrivacy.amount, inputOriginalAmount]);
+    }, [selectedPrivacy.identify, maxAmountText, selectedPrivacy.amount, inputOriginalAmount, minUnshieldText]);
 
     const onClickMax = async () => {
       onChangeField(maxAmountText || userBalance || '0', FORM_CONFIGS.sellAmount).then();

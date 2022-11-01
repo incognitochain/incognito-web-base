@@ -38,6 +38,7 @@ const InputField = (props: any) => {
     <Input
       className="default-padding"
       type="text"
+      step="any"
       active={active}
       isError={isError}
       ref={quantityInputRef}

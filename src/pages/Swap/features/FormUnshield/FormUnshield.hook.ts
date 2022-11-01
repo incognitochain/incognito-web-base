@@ -72,6 +72,9 @@ export interface IUnshield {
   rate: string;
 
   isIncognitoInstalled: boolean;
+
+  minUnshield: number;
+  minUnshieldText: string;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -124,6 +127,8 @@ export const useUnshield = (): IUnshield => {
     swapNetwork,
     slippage,
     rate,
+    minUnshield,
+    minUnshieldText,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
@@ -196,5 +201,7 @@ export const useUnshield = (): IUnshield => {
     rate,
 
     isIncognitoInstalled: isIncognitoInstalled(),
+    minUnshield,
+    minUnshieldText,
   };
 };

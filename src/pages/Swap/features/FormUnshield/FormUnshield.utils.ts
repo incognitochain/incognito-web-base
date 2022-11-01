@@ -94,6 +94,9 @@ export interface IUnshieldData {
   slippage: string;
 
   rate: string;
+
+  minUnshield: number;
+  minUnshieldText: string;
 }
 
 const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any): string => {
@@ -527,6 +530,14 @@ const getUnshieldData = ({
     _errorMsg = 'Input amount is too small';
   }
 
+  const minUnshield = userFee?.minUnshield || 0;
+  const minUnshieldText = format.formatAmount({
+    originalAmount: Number(minUnshield || 0),
+    decimals: _sellToken.pDecimals,
+    decimalDigits: true,
+    clipAmount: false,
+  });
+
   return {
     sellToken: _sellToken,
     sellParentToken: _sellParentToken,
@@ -582,6 +593,8 @@ const getUnshieldData = ({
 
     slippage: inputSlippage,
     rate: exchangeSelectedData?.rate || '',
+    minUnshield,
+    minUnshieldText,
   };
 };
 
