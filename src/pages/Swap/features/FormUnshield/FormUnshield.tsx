@@ -14,11 +14,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Field } from 'redux-form';
 import { useAppSelector } from 'state/hooks';
+import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
-import { incognitoWalletAccountSelector } from '../../../../state/incognitoWallet';
 import { EstReceive } from '../EstReceive';
 import { actionFilterSetToken, actionFilterTokenByNetwork } from '../FormDeposit/FormDeposit.actions';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
@@ -336,6 +336,7 @@ const FormUnshield = React.memo((props: any) => {
           swapFee={swapFee}
           isFetchingFee={isFetching}
           inputAmount={inputAmount}
+          impactAmount={exchangeSelectedData?.impactAmount}
         />
         {/*<VerticalSpace />*/}
         {button.isConnected ? (

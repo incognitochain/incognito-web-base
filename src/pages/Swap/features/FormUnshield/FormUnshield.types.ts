@@ -83,6 +83,7 @@ export interface ISwapExchangeData {
   poolPairs: string[];
   expectedAmount: string;
   rate: string;
+  impactAmount: number | null;
 }
 
 export interface UnshieldSetTokenPayLoad {

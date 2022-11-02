@@ -81,6 +81,7 @@ interface IProps extends ISelectSwapExchange {
   isFetchingFee: boolean;
   desc?: string;
   inputAmount: string;
+  impactAmount?: number;
 }
 
 const EstReceive = React.memo(
@@ -101,6 +102,7 @@ const EstReceive = React.memo(
     isFetchingFee,
     desc,
     inputAmount,
+    impactAmount,
   }: IProps) => {
     const [isOpen, setOpen] = React.useState(false);
     const [isRateSellToBuy, setIsRateSellToBuy] = React.useState(true);
@@ -213,14 +215,27 @@ const EstReceive = React.memo(
             ) : null}
 
             {formType === FormTypes.SWAP && (
-              <RowBetween style={{ marginTop: 12 }}>
-                <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                  Minimum received
-                </ThemedText.SmallLabel>
-                <ThemedText.SmallLabel fontWeight={400}>{`${minReceiveAmount || 0} ${
-                  buyToken.symbol
-                }`}</ThemedText.SmallLabel>
-              </RowBetween>
+              <>
+                <RowBetween style={{ marginTop: 12 }}>
+                  <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                    Minimum received
+                  </ThemedText.SmallLabel>
+                  <ThemedText.SmallLabel fontWeight={400}>{`${minReceiveAmount || 0} ${
+                    buyToken.symbol
+                  }`}</ThemedText.SmallLabel>
+                </RowBetween>
+                {impactAmount !== null && impactAmount !== undefined && (
+                  <RowBetween style={{ marginTop: 12 }}>
+                    <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                      Price impact
+                    </ThemedText.SmallLabel>
+                    <ThemedText.SmallLabel
+                      style={{ color: impactAmount > 15 ? '#F6465D' : impactAmount > 5 ? '#FFC043' : 'white' }}
+                      fontWeight={400}
+                    >{`${impactAmount}%`}</ThemedText.SmallLabel>
+                  </RowBetween>
+                )}
+              </>
             )}
 
             <RowBetween style={{ marginTop: 12 }}>

@@ -661,6 +661,7 @@ const parseExchangeDataModelResponse = (
     networkID,
     expectedAmount: data?.AmountOutPreSlippage || '0',
     rate: data?.Rate || '1',
+    impactAmount: data?.ImpactAmount ? Number(data?.ImpactAmount || 0) : null,
   };
   return exchangeData;
 };
