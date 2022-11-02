@@ -513,14 +513,14 @@ const getUnshieldData = ({
     })} ${burnFeeToken.symbol}`;
   }
 
-  console.log('LOGS UTILS', {
-    sellParentID: sellParentIdentify,
-    sellID: sellIdentify,
-    buyParentID: buyParentIdentify,
-    buyID: buyIdentify,
-    swapNetwork,
-    disabledForm,
-  });
+  // console.log('LOGS UTILS', {
+  //   sellParentID: sellParentIdentify,
+  //   sellID: sellIdentify,
+  //   buyParentID: buyParentIdentify,
+  //   buyID: buyIdentify,
+  //   swapNetwork,
+  //   disabledForm,
+  // });
 
   let _errorMsg = errorMsg;
   if (

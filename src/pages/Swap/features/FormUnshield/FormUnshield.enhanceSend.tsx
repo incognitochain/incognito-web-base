@@ -481,12 +481,12 @@ const enhanceSend = (WrappedComponent: any) => {
           isSignAndSendTransaction,
         };
 
-        console.log('LOGS PAYLOAD 111: ', payload);
-        console.log('LOGS PAYLOAD 222: ', { sellToken, buyToken, buyNetworkName, formType, exchangeSelectedData });
+        console.log('LOGS PAYLOAD: ', payload);
+        // console.log('LOGS PAYLOAD 222: ', { sellToken, buyToken, buyNetworkName, formType, exchangeSelectedData });
         return new Promise(async (resolve, reject) => {
           try {
             const tx = await requestSignTransaction(payload);
-            console.log('LOGS PAYLOAD 333: ', { txHash: tx.txHash });
+            // console.log('LOGS PAYLOAD 333: ', { txHash: tx.txHash });
             if (formType === FormTypes.SWAP) {
               if (exchangeSelectedData.appName !== SwapExchange.PDEX) {
                 /** Submit tx swap PApps to backend after burned */
