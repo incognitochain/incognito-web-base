@@ -1,3 +1,5 @@
+import { ButtonConfirmed } from 'components/Core/Button';
+import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { VerticalSpace } from 'components/Core/Space';
 import QrCode from 'components/QrCode';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
@@ -9,8 +11,6 @@ import { useWalletModalToggle } from 'state/application/hooks';
 import styled from 'styled-components/macro';
 import { getAcronymNetwork } from 'utils/token';
 
-import { ButtonConfirmed } from '../../../../components/Core/Button';
-import { useIncognitoWallet } from '../../../../components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { Selection } from '../Selection';
 import DescriptionQrCode from './components/DescriptionQrCode';
 import ShieldFeeEstimate from './components/ShieldFeeEstimate';
@@ -20,28 +20,13 @@ const Styled = styled.div``;
 
 const FormDeposit = (props: IMergeProps) => {
   const {
-    handleSubmit,
-    button,
     sellNetworkList,
     sellTokenList,
     sellNetworkName,
     sellToken,
 
-    buyToken,
-    buyNetworkName,
-
-    amount,
-
-    validateAddress,
-    warningAddress,
-    validateAmount,
-
     onSelectNetwork,
     onSelectToken,
-    onClickMax,
-    onSend,
-    inputAddress,
-    isIncognitoAddress,
     incAccount,
   } = props;
 
