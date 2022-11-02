@@ -1,6 +1,7 @@
 import curve from 'assets/images/dex/curve.svg';
 import incognito from 'assets/images/dex/incognito.svg';
 import pancake from 'assets/images/dex/pancake.svg';
+import spooky from 'assets/images/dex/spooky.svg';
 import uni from 'assets/images/dex/uni.svg';
 import { InputContainer } from 'components/Core/ReduxForm/InputField/InputField.styled';
 import Row from 'components/Core/Row';
@@ -40,6 +41,8 @@ export const getExchangeLogo = (exchangeSelected: string) => {
     return uni;
   } else if (_exchangeSelected.includes(SwapExchange.CURVE)) {
     return curve;
+  } else if (_exchangeSelected.includes(SwapExchange.SPOOKY)) {
+    return spooky;
   } else {
     return incognito;
   }
