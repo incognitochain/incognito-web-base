@@ -7,7 +7,6 @@ import SelectionField from 'components/Core/ReduxForm/SelectionField';
 import { VerticalSpace } from 'components/Core/Space';
 import { TAB_LIST } from 'components/Core/Tabs';
 import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
-import { isMainnet } from 'config';
 import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React, { useEffect, useState } from 'react';
@@ -20,7 +19,7 @@ import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
 import { EstReceive } from '../EstReceive';
-import { actionFilterSetToken, actionFilterTokenByNetwork } from '../FormDeposit/FormDeposit.actions';
+import { actionSetToken } from '../FormDeposit/FormDeposit.actions';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
 import enhance from './FormUnshield.enhance';
 import { FormTypes, SwapExchange } from './FormUnshield.types';
@@ -158,30 +157,22 @@ const FormUnshield = React.memo((props: any) => {
         _sellToken = _sellToken.listUnifiedToken[0];
       }
     }
-    setTimeout(() => {
-      dispatch(
-        actionFilterTokenByNetwork({
-          network: {
-            parentIdentify: _sellToken.parentTokenID,
-            identify: _sellToken.identify,
-            chainID: _sellToken.chainID,
-            networkName: _sellToken.networkName,
-            currency: _sellToken.currencyType,
-          },
-        })
-      );
-      dispatch(actionFilterSetToken({ token: _sellToken }));
+    dispatch(actionSetToken({ sellToken: _sellToken }));
+    setTimeout(async () => {
+      // dispatch(
+      //   await actionFilterTokenByNetwork({
+      //     network: {
+      //       parentIdentify: _sellToken.parentTokenID,
+      //       identify: _sellToken.identify,
+      //       chainID: _sellToken.chainID,
+      //       networkName: _sellToken.networkName,
+      //       currency: _sellToken.currencyType,
+      //     },
+      //   })
+      // );
       dispatch(changeTab({ tab: TAB_LIST.SWAP.tabNames[1], rootTab: TAB_LIST.SWAP.rootTab }));
     }, 100);
   };
-
-  useEffect(() => {
-    if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress) {
-      setVisibleAddress(true);
-    } else {
-      setVisibleAddress(false);
-    }
-  }, [sellToken.tokenID, buyToken.tokenID, buyNetworkName]);
 
   const rightLabelAddress = visibleAddress ? '- Send to' : '+ Send to';
 
@@ -212,11 +203,13 @@ const FormUnshield = React.memo((props: any) => {
 
   const { time, desc } = getEstimateTime();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
       setVisibleAddress(true);
+    } else {
+      setVisibleAddress(false);
     }
-  }, [buyNetworkName]);
+  }, [sellToken.tokenID, buyToken.tokenID, buyNetworkName]);
 
   return (
     <Styled>
@@ -277,7 +270,7 @@ const FormUnshield = React.memo((props: any) => {
           footerRightText={rightLabelAddress}
           isUseInput={false}
           footerRightClass="send-to-text"
-          tokenNetwork={isMainnet ? '' : buyToken.network}
+          tokenNetwork={buyToken.network}
           onClickFooterRight={() => setVisibleAddress((value) => !value)}
           componentProps={{
             type: 'number',

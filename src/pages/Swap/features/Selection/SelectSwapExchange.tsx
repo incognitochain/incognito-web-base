@@ -48,6 +48,20 @@ export const getExchangeLogo = (exchangeSelected: string) => {
   }
 };
 
+export const formatExchangeName = (exchangeSelected: string) => {
+  const _exchangeSelected = exchangeSelected.toLowerCase();
+  if (
+    _exchangeSelected.includes(SwapExchange.PANCAKE_SWAP) ||
+    _exchangeSelected.includes(SwapExchange.UNISWAP) ||
+    _exchangeSelected.includes(SwapExchange.CURVE) ||
+    _exchangeSelected.includes(SwapExchange.SPOOKY)
+  ) {
+    return exchangeSelected;
+  } else {
+    return 'Incognito Exchange';
+  }
+};
+
 export const SelectSwapExchange = React.memo((props: ISelectSwapExchange) => {
   const { onSelectExchange, exchangeSelected, exchanges } = props;
   const { setModal } = useModal();
@@ -76,7 +90,7 @@ export const SelectSwapExchange = React.memo((props: ISelectSwapExchange) => {
             src={getExchangeLogo(exchangeSelected)}
             style={{ width: 24, height: 24, marginRight: 12 }}
           />
-          <ThemedText.RegularLabel fontWeight={500}>{exchangeSelected}</ThemedText.RegularLabel>
+          <ThemedText.RegularLabel fontWeight={500}>{formatExchangeName(exchangeSelected)}</ThemedText.RegularLabel>
         </Row>
         <ArrowDown size={24} />
       </ItemStyled>

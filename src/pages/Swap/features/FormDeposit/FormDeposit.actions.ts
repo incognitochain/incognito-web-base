@@ -5,7 +5,7 @@ import { getDepositTokenDataSelector, getPrivacyByTokenIdentifySelectors } from 
 
 import { DepositSetTokenAction, DepositSetTokenPayLoad, FormDepositActionType } from './FormDeposit.types';
 
-const actionSetToken = (payload: DepositSetTokenPayLoad): DepositSetTokenAction => ({
+export const actionSetToken = (payload: DepositSetTokenPayLoad): DepositSetTokenAction => ({
   type: FormDepositActionType.SET_TOKEN,
   payload,
 });

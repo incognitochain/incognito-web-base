@@ -1,6 +1,6 @@
 import Column from 'components/Core/Column';
 import Row from 'components/Core/Row';
-import { getExchangeLogo } from 'pages/Swap/features/Selection/SelectSwapExchange';
+import { formatExchangeName, getExchangeLogo } from 'pages/Swap/features/Selection/SelectSwapExchange';
 import React from 'react';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
@@ -55,7 +55,7 @@ const ExchangeModal = (props: IProps & any) => {
           style={{ width: 32, height: 32, marginRight: 12 }}
         />
         <ThemedText.RegularLabel className="name" color="primary5">
-          {exchange?.exchangeName}
+          {formatExchangeName(exchange?.exchangeName)}
         </ThemedText.RegularLabel>
       </Item>
     );
