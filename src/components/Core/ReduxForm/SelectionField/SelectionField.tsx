@@ -179,7 +179,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
           {isUseInput ? (
             <InputField {...props} isError={isError} />
           ) : (
-            <ThemedText.AvgMediumLabel fontSize={22} fontWeight={600}>
+            <ThemedText.AvgMediumLabel fontSize={22} fontWeight={600} style={{ marginRight: 8 }}>
               {new BigNumber(receiveValue || 0).gt(0) ? receiveValue : '0.00'}
             </ThemedText.AvgMediumLabel>
           )}

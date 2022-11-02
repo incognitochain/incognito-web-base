@@ -103,7 +103,7 @@ const enhanceSend = (WrappedComponent: any) => {
     };
     const getPaymentsCentralized = async () => {
       const { networkFee, centralizedAddress } = fee;
-      const prvPayments: any[] = [];
+      let prvPayments: any[] = [];
       let tokenPayments: any[] = [];
       if (isUseTokenFee) {
         tokenPayments = await getTokenPayments({
@@ -138,6 +138,7 @@ const enhanceSend = (WrappedComponent: any) => {
         Amount: new BigNumber(networkFee).toString(),
         Message: '',
       });
+      prvPayments = prvPayments.filter(({ Amount }: { Amount: string }) => !!Amount && Amount !== '0');
       return { prvPayments, tokenPayments };
     };
     const getPaymentsUnshieldDecentralizedAndPApps = async () => {

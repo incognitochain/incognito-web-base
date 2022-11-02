@@ -134,7 +134,12 @@ class RpcClient {
         MinUnshield,
       };
     }
-    const feeType = data?.TokenFees ? data.TokenFees : data.PrivacyFees;
+    let feeType = data?.TokenFees ? data.TokenFees : data.PrivacyFees;
+    if (!feeType) {
+      feeType = {
+        Level1: '0',
+      };
+    }
     const fee: IFee = {
       level1: feeType.Level1,
       level2: feeType.Level2,
