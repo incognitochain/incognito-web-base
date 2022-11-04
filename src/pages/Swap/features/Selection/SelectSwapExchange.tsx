@@ -1,4 +1,10 @@
+import curve from 'assets/images/dex/curve.svg';
+import incognito from 'assets/images/dex/incognito.svg';
+import pancake from 'assets/images/dex/pancake.svg';
+import spooky from 'assets/images/dex/spooky.svg';
+import uni from 'assets/images/dex/uni.svg';
 import { InputContainer } from 'components/Core/ReduxForm/InputField/InputField.styled';
+import Row from 'components/Core/Row';
 import { ExchangeModal, useModal } from 'components/Modal';
 import React from 'react';
 import { ChevronDown } from 'react-feather';
@@ -27,6 +33,35 @@ const ItemStyled = styled(InputContainer)`
   }
 `;
 
+export const getExchangeLogo = (exchangeSelected: string) => {
+  const _exchangeSelected = exchangeSelected.toLowerCase();
+  if (_exchangeSelected.includes(SwapExchange.PANCAKE_SWAP)) {
+    return pancake;
+  } else if (_exchangeSelected.includes(SwapExchange.UNISWAP)) {
+    return uni;
+  } else if (_exchangeSelected.includes(SwapExchange.CURVE)) {
+    return curve;
+  } else if (_exchangeSelected.includes(SwapExchange.SPOOKY)) {
+    return spooky;
+  } else {
+    return incognito;
+  }
+};
+
+export const formatExchangeName = (exchangeSelected: string) => {
+  const _exchangeSelected = exchangeSelected.toLowerCase();
+  if (
+    _exchangeSelected.includes(SwapExchange.PANCAKE_SWAP) ||
+    _exchangeSelected.includes(SwapExchange.UNISWAP) ||
+    _exchangeSelected.includes(SwapExchange.CURVE) ||
+    _exchangeSelected.includes(SwapExchange.SPOOKY)
+  ) {
+    return exchangeSelected;
+  } else {
+    return 'Incognito Exchange';
+  }
+};
+
 export const SelectSwapExchange = React.memo((props: ISelectSwapExchange) => {
   const { onSelectExchange, exchangeSelected, exchanges } = props;
   const { setModal } = useModal();
@@ -48,7 +83,15 @@ export const SelectSwapExchange = React.memo((props: ISelectSwapExchange) => {
         Exchange
       </ThemedText.SmallLabel>
       <ItemStyled onClick={showExchangesModal} className="border-hover input-container input-amount">
-        <ThemedText.RegularLabel fontWeight={500}>{exchangeSelected}</ThemedText.RegularLabel>
+        <Row>
+          <img
+            className="logo"
+            alt=""
+            src={getExchangeLogo(exchangeSelected)}
+            style={{ width: 24, height: 24, marginRight: 12 }}
+          />
+          <ThemedText.RegularLabel fontWeight={500}>{formatExchangeName(exchangeSelected)}</ThemedText.RegularLabel>
+        </Row>
         <ArrowDown size={24} />
       </ItemStyled>
     </div>

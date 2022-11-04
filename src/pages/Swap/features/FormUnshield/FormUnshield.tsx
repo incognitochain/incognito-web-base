@@ -5,15 +5,21 @@ import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import SelectionField from 'components/Core/ReduxForm/SelectionField';
 import { VerticalSpace } from 'components/Core/Space';
-import { MAIN_NETWORK_NAME } from 'constants/token';
+import { TAB_LIST } from 'components/Core/Tabs';
+import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
+import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Field } from 'redux-form';
+import { useAppSelector } from 'state/hooks';
+import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
+import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
 
-import { ThemedText } from '../../../../theme';
 import { EstReceive } from '../EstReceive';
+import { actionSetToken } from '../FormDeposit/FormDeposit.actions';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
 import enhance from './FormUnshield.enhance';
 import { FormTypes, SwapExchange } from './FormUnshield.types';
@@ -30,7 +36,6 @@ const Styled = styled.div`
     }
     color: ${({ theme }) => theme.btn1};
   }
-
   .send-to-text {
     padding-left: 15px;
     :hover {
@@ -73,6 +78,9 @@ const WrapSwapIcon = styled.div`
       opacity: 0.5;
     }
   }
+  .link {
+    display: contents;
+  }
 `;
 
 const FormUnshield = React.memo((props: any) => {
@@ -84,7 +92,6 @@ const FormUnshield = React.memo((props: any) => {
     buyToken,
     buyTokenList,
     buyNetworkList,
-    buyCurrency,
     buyNetworkName,
     userBalanceFormatedText,
     button,
@@ -117,12 +124,14 @@ const FormUnshield = React.memo((props: any) => {
 
     userBuyBalanceFormatedText,
     rate,
-
-    sellParentToken,
   } = props;
+
+  const { isIncognitoInstalled } = useIncognitoWallet();
+  const incAccount = useAppSelector(incognitoWalletAccountSelector);
 
   const { showPopup } = useIncognitoWallet();
   const [changing, setChanging] = React.useState(false);
+  const prvToken = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
 
   const _buttonAction = () => showPopup();
 
@@ -136,13 +145,34 @@ const FormUnshield = React.memo((props: any) => {
     buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress
   );
 
-  useEffect(() => {
-    if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO && !inputAddress) {
-      setVisibleAddress(true);
-    } else {
-      setVisibleAddress(false);
+  const onTopUpCoins = () => {
+    let _sellToken = sellToken;
+    if (_sellToken.isUnified || _sellToken.isPRV) {
+      if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
+        _sellToken = (_sellToken.listUnifiedToken || []).find((token: any) => token.networkName === buyNetworkName);
+        if (!_sellToken) {
+          _sellToken = _sellToken.listUnifiedToken[0];
+        }
+      } else {
+        _sellToken = _sellToken.listUnifiedToken[0];
+      }
     }
-  }, [sellToken.tokenID, buyToken.tokenID, buyNetworkName]);
+    dispatch(actionSetToken({ sellToken: _sellToken }));
+    setTimeout(async () => {
+      // dispatch(
+      //   await actionFilterTokenByNetwork({
+      //     network: {
+      //       parentIdentify: _sellToken.parentTokenID,
+      //       identify: _sellToken.identify,
+      //       chainID: _sellToken.chainID,
+      //       networkName: _sellToken.networkName,
+      //       currency: _sellToken.currencyType,
+      //     },
+      //   })
+      // );
+      dispatch(changeTab({ tab: TAB_LIST.SWAP.tabNames[1], rootTab: TAB_LIST.SWAP.rootTab }));
+    }, 100);
+  };
 
   const rightLabelAddress = visibleAddress ? '- Send to' : '+ Send to';
 
@@ -173,11 +203,13 @@ const FormUnshield = React.memo((props: any) => {
 
   const { time, desc } = getEstimateTime();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
       setVisibleAddress(true);
+    } else {
+      setVisibleAddress(false);
     }
-  }, [buyNetworkName]);
+  }, [sellToken.tokenID, buyToken.tokenID, buyNetworkName]);
 
   return (
     <Styled>
@@ -191,6 +223,7 @@ const FormUnshield = React.memo((props: any) => {
           tokens={sellTokenList}
           tokenSymbol={sellToken.symbol}
           tokenImgUrl={sellToken.iconUrl}
+          tokenNetwork={sellToken.network}
           onSelectToken={onSelectSellToken}
           networkName={MAIN_NETWORK_NAME.INCOGNITO}
           amount={userBalanceFormatedText}
@@ -200,17 +233,19 @@ const FormUnshield = React.memo((props: any) => {
             type: 'number',
           }}
           validate={validateAmount}
-          footerRightText="Max"
+          showShowTopUp={true}
+          onTopUp={onTopUpCoins}
+          tokenAmountNum={sellToken.amount}
         />
         <WrapSwapIcon>
           <img
             className={`${formType === FormTypes.SWAP ? 'swap-icon' : 'disable'} icon`}
             style={{ animation: changing ? `spin ${0.6}s linear` : '', width: 48, height: 48 }}
             onClick={() => {
-              if (formType === FormTypes.SWAP) {
+              if (formType === FormTypes.SWAP && !changing) {
                 onRotateSwapToken();
                 setChanging(true);
-                setTimeout(() => setChanging(false), 800);
+                setTimeout(() => setChanging(false), 1000);
               }
             }}
             src={SwapIcon}
@@ -224,8 +259,8 @@ const FormUnshield = React.memo((props: any) => {
           className="buy-section-style"
           headerTitle="To"
           tokens={buyTokenList}
-          tokenSymbol={buyParentToken.symbol}
-          tokenImgUrl={buyParentToken.iconUrl}
+          tokenSymbol={!!buyParentToken ? buyParentToken?.symbol : ''}
+          tokenImgUrl={!!buyParentToken ? buyParentToken?.iconUrl : ''}
           networks={buyNetworkList}
           networkName={buyNetworkName}
           amount={userBuyBalanceFormatedText}
@@ -235,20 +270,29 @@ const FormUnshield = React.memo((props: any) => {
           footerRightText={rightLabelAddress}
           isUseInput={false}
           footerRightClass="send-to-text"
+          tokenNetwork={buyToken.network}
           onClickFooterRight={() => setVisibleAddress((value) => !value)}
           componentProps={{
             type: 'number',
             disabled: true,
           }}
         />
-        {!!errorMsg && (
+        {!prvToken.amount && !!inputAmount && isIncognitoInstalled() && incAccount ? (
+          <ThemedText.Error color="primary8" error fontWeight={400} marginTop="12px">
+            {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network. Get
+            some from the `}
+            <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
+              faucet
+            </a>
+          </ThemedText.Error>
+        ) : !!errorMsg ? (
           <>
             <ThemedText.Error style={{ marginTop: '4px' }} error className={`error`}>
               {errorMsg}
             </ThemedText.Error>
             <VerticalSpace />
           </>
-        )}
+        ) : null}
         <VerticalSpace />
         {visibleAddress && (
           <>
@@ -285,6 +329,7 @@ const FormUnshield = React.memo((props: any) => {
           swapFee={swapFee}
           isFetchingFee={isFetching}
           inputAmount={inputAmount}
+          impactAmount={exchangeSelectedData?.impactAmount}
         />
         {/*<VerticalSpace />*/}
         {button.isConnected ? (

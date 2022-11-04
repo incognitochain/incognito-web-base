@@ -1,3 +1,5 @@
+import { ButtonConfirmed } from 'components/Core/Button';
+import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { VerticalSpace } from 'components/Core/Space';
 import QrCode from 'components/QrCode';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
@@ -9,8 +11,6 @@ import { useWalletModalToggle } from 'state/application/hooks';
 import styled from 'styled-components/macro';
 import { getAcronymNetwork } from 'utils/token';
 
-import { ButtonConfirmed } from '../../../../components/Core/Button';
-import { useIncognitoWallet } from '../../../../components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { Selection } from '../Selection';
 import DescriptionQrCode from './components/DescriptionQrCode';
 import ShieldFeeEstimate from './components/ShieldFeeEstimate';
@@ -20,28 +20,13 @@ const Styled = styled.div``;
 
 const FormDeposit = (props: IMergeProps) => {
   const {
-    handleSubmit,
-    button,
     sellNetworkList,
     sellTokenList,
     sellNetworkName,
     sellToken,
 
-    buyToken,
-    buyNetworkName,
-
-    amount,
-
-    validateAddress,
-    warningAddress,
-    validateAmount,
-
     onSelectNetwork,
     onSelectToken,
-    onClickMax,
-    onSend,
-    inputAddress,
-    isIncognitoAddress,
     incAccount,
   } = props;
 
@@ -73,6 +58,8 @@ const FormDeposit = (props: IMergeProps) => {
           network: getAcronymNetwork(sellToken),
           incAddress: incAccount?.paymentAddress,
           tokenID: sellToken.tokenID,
+          currencyType: sellToken.currencyType,
+          isBTC: sellToken.isBTC,
         });
         setState({
           data,
@@ -88,6 +75,12 @@ const FormDeposit = (props: IMergeProps) => {
     }, [incAccount?.paymentAddress, sellToken.tokenID, sellToken.currencyType]),
     300
   );
+
+  const shieldingFee = React.useMemo(() => {
+    const fee = state.data?.tokenFee || state.data?.estimateFee || 0;
+    if (fee) return `${state.data?.tokenFee || state.data?.estimateFee || 0} ${sellToken.symbol}`;
+    return '';
+  }, [state, sellToken.symbol]);
 
   useEffect(() => {
     if (!incAccount?.paymentAddress) return;
@@ -121,9 +114,14 @@ const FormDeposit = (props: IMergeProps) => {
             isBlur={!state.data?.address || !!state?.isFetching}
             isLoading={!!state?.isFetching}
           />
-          <DescriptionQrCode symbol={sellToken.symbol} paymentAddress={state && state.data?.address} />
+          <DescriptionQrCode
+            symbol={sellToken.symbol}
+            paymentAddress={state && state.data?.address}
+            expiredAt={sellToken.isCentralized && state ? state.data?.expiredAt : undefined}
+          />
           {/*<MinimumShiledAmount />*/}
-          <ShieldFeeEstimate value={`${state.data?.tokenFee || state.data?.estimateFee || 0} ${sellToken.symbol}`} />
+          <ShieldFeeEstimate value={shieldingFee} />
+          {/*<DescriptionBox symbol={sellToken.symbol} token={sellToken} />*/}
         </div>
       )}
       {/* {button.switchNetwork || !account ? (

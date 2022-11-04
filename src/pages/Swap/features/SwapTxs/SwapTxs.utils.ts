@@ -1,6 +1,12 @@
+import { BigNumber } from 'bignumber.js';
 import isEmpty from 'lodash/isEmpty';
 import { ISwapTxStorage } from 'pages/Swap/Swap.storage';
 import format from 'utils/format';
+
+import SelectedPrivacy from '../../../../models/model/SelectedPrivacyModel';
+import state from '../../../../state';
+import { getPrivacyDataByTokenIDSelector } from '../../../../state/token';
+import { SwapExchange } from '../FormUnshield/FormUnshield.types';
 
 enum ExchangeStatus {
   reverted = 'reverted',
@@ -17,6 +23,7 @@ enum TxStatus {
   executing = 'executing',
   rejected = 'rejected',
   accepted = 'accepted',
+  success = 'success',
 }
 
 enum Status {
@@ -47,6 +54,23 @@ export interface ISwapTxStatus {
   color: string;
   time: string;
   network: string;
+
+  swapStr: string;
+  rateStr: string;
+
+  sellAmountText: string;
+  buyAmountText: string;
+
+  buyTokenID: string;
+  sellTokenID: string;
+
+  sellStr: string;
+  buyStr: string;
+
+  appName: string;
+
+  sellNetwork: string;
+  buyNetwork: string;
 }
 
 const getStatusColor = (status: string) => {
@@ -66,6 +90,7 @@ const getStatusColor = (status: string) => {
       break;
     case Status.success:
     case TxStatus.accepted:
+    case TxStatus.success:
       color = '#34C759';
       break;
   }
@@ -77,11 +102,27 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
   const txs: ISwapTxStatus[] = localTxs.reduce((prev, curr) => {
     const apiResp: any = swapTxs[curr.txHash];
     if (!apiResp || isEmpty(apiResp)) return prev;
+
+    const defaultStatus = new Date().getTime() - curr.time > 60000 ? TxStatus.rejected : TxStatus.pending;
+    let _appName = '';
+    switch (curr.appName) {
+      case SwapExchange.PDEX:
+        _appName = 'Incognito';
+        break;
+      default:
+        _appName = curr.appName.charAt(0).toUpperCase() + curr.appName.slice(1);
+        break;
+    }
     let tx: any = {
       requestBurnTxInc: curr.txHash,
-      burnTxStatus: apiResp.inc_request_tx_status,
-      burnColor: getStatusColor(apiResp.inc_request_tx_status),
+      burnTxStatus: apiResp.inc_request_tx_status || defaultStatus,
+      burnColor: getStatusColor(apiResp.inc_request_tx_status || defaultStatus),
       time: format.formatDateTime({ dateTime: curr.time || new Date().getTime() }),
+      sellTokenID: curr.sellTokenID,
+      buyTokenID: curr.buyTokenID,
+      sellAmountText: curr.sellAmountText,
+      buyAmountText: curr.buyAmountText,
+      appName: _appName,
     };
 
     if (apiResp.network_result && !isEmpty(apiResp.network_result)) {
@@ -104,13 +145,51 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
       };
     }
 
+    if (!!apiResp.swap_detail) {
+      const swapDetail = apiResp.swap_detail;
+      tx = {
+        ...tx,
+        sellTokenID: swapDetail.token_in || tx.sellTokenID,
+        buyTokenID: swapDetail.token_out || tx.buyTokenID,
+        sellAmountText: swapDetail.in_amount || tx.sellAmountText,
+        buyAmountText: swapDetail.out_amount || tx.buyAmountText,
+      };
+    }
+
+    if (tx.sellTokenID && tx.buyTokenID) {
+      const sellToken: SelectedPrivacy = getPrivacyDataByTokenIDSelector(state.getState())(tx.sellTokenID);
+      const buyToken: SelectedPrivacy = getPrivacyDataByTokenIDSelector(state.getState())(tx.buyTokenID);
+      const sellStr = `${format.amountVer2({ originalAmount: tx.sellAmountText, decimals: 0 })} ${sellToken.symbol}`;
+      const buyStr = `${format.amountVer2({ originalAmount: tx.buyAmountText, decimals: 0 })} ${buyToken.symbol}`;
+      if (sellToken.symbol && buyToken.symbol) {
+        const swapStr = `${sellStr} = ${buyStr}`;
+        const rateStr = `1 ${sellToken.symbol} = ${format.amountVer2({
+          originalAmount: new BigNumber(tx.buyAmountText).div(tx.sellAmountText).toNumber(),
+          decimals: 0,
+        })} ${buyToken.symbol}`;
+        const buyNetwork = buyToken.network;
+        const sellNetwork = sellToken.network;
+        tx = {
+          ...tx,
+          sellStr,
+          buyStr,
+          swapStr,
+          rateStr,
+          sellNetwork,
+          buyNetwork,
+        };
+      } else {
+        return [...prev];
+      }
+    }
+
     // inc_request_tx_status
     // -> bsc_swap_tx_status
     // -> bsc_swap_outcome
     // -> is_redeposit === true bsc_redeposit_status
     /** to many cases, please blame @lam */
     let swapStatus = Status.processing;
-    const { burnTxStatus, outchainTxStatus, swapExchangeStatus, isRedeposit, redepositStatus } = tx;
+    const { burnTxStatus, outchainTxStatus, swapExchangeStatus, isRedeposit, redepositStatus, appName } = tx;
     switch (burnTxStatus) {
       case TxStatus.pending:
       case TxStatus.submitting:
@@ -122,6 +201,11 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
         swapStatus = Status.fail;
         break;
       case TxStatus.accepted: // <---
+      case TxStatus.success:
+        if (appName === SwapExchange.PDEX || appName === 'Incognito') {
+          swapStatus = Status.success;
+          break;
+        }
         switch (outchainTxStatus) {
           case TxStatus.pending:
           case TxStatus.submitting:
@@ -132,6 +216,7 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
             swapStatus = Status.fail; // fail
             break;
           case TxStatus.accepted: // <---
+          case TxStatus.success:
             switch (swapExchangeStatus) {
               case ExchangeStatus.pending:
                 break; // processing
@@ -151,6 +236,7 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
                       swapStatus = Status.fail; // fail
                       break;
                     case TxStatus.accepted:
+                    case TxStatus.success:
                       swapStatus = swapExchangeStatus === ExchangeStatus.success ? Status.success : Status.reverted;
                       break;
                   }
@@ -179,7 +265,7 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
     };
     return [...prev, data];
   }, []);
-  return txs;
+  return txs.filter((tx) => !!tx);
 };
 
 export { combineSwapTxs };

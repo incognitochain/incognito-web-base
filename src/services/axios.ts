@@ -39,9 +39,9 @@ const createAxiosInstance = ({ baseURL = '' }: { baseURL: string }) => {
       if (!error.response) {
         return Promise.reject(error);
       } else {
-        const response = error.response?.data;
-        const errorMessage = response.Error;
-        return Promise.reject(errorMessage);
+        const response = error?.response?.data || error;
+        let errorMessage = response?.Error || error?.Message || JSON.stringify(error);
+        return Promise.reject(camelCaseKeys(errorMessage));
       }
     }
   );

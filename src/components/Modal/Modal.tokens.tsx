@@ -1,4 +1,5 @@
 import { useFuse } from 'hooks/useFuse';
+import orderBy from 'lodash/orderBy';
 import PToken from 'models/model/pTokenModel';
 import SearchTokenBar from 'pages/Swap/features/Selection/SearchTokenBar';
 import React from 'react';
@@ -56,12 +57,16 @@ interface IProps {
   tokens: PToken[];
   onSelect: ({ token }: { token: PToken }) => void;
   showNetwork: boolean;
+  blacklist: string[];
 }
 
 const TokenModal = React.memo((props: IProps & any) => {
-  const { tokens, onSelect, showNetwork } = props;
+  const { tokens, onSelect, showNetwork, blacklist = [] } = props;
   const { closeModal } = useModal();
-  const [tokensShow = [], onSearchTokens] = useFuse(tokens, {
+  const _tokens = React.useMemo(() => {
+    return tokens.filter((token: PToken) => !blacklist.some((id: string) => id === token.identify));
+  }, [tokens, blacklist]);
+  const [tokensShow = [], onSearchTokens] = useFuse(_tokens, {
     keys: ['displayName', 'name', 'symbol', 'pSymbol'],
     matchAllOnEmptyQuery: true,
     isCaseSensitive: false,
@@ -75,6 +80,8 @@ const TokenModal = React.memo((props: IProps & any) => {
     maxPatternLength: 32,
   });
 
+  const _tokensShow = orderBy((tokensShow as any) || [], ['isPRV', 'isUnified'], ['desc', 'desc']);
+
   const keySearchChange = (key: string) => {
     if (typeof onSearchTokens === 'function') {
       onSearchTokens(key);
@@ -85,11 +92,11 @@ const TokenModal = React.memo((props: IProps & any) => {
     const { style, index } = props;
     if (typeof index !== 'number') return null;
     // @ts-ignore
-    const token = tokensShow[index];
+    const token = _tokensShow[index];
     if (!token) return null;
     return (
       <Item
-        key={token.tokenID}
+        key={token.identify}
         style={style}
         onClick={() => {
           closeModal();
@@ -125,8 +132,8 @@ const TokenModal = React.memo((props: IProps & any) => {
         <List
           overscanCount={6}
           height={500}
-          itemCount={tokensShow.length}
-          itemData={tokensShow}
+          itemCount={_tokensShow.length}
+          itemData={_tokensShow}
           itemSize={69}
           width="100%"
         >

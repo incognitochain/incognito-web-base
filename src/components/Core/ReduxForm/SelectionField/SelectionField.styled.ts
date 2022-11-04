@@ -1,7 +1,15 @@
 import { ChevronDown } from 'react-feather';
 import styled from 'styled-components/macro';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  .selectable-error {
+    display: flex;
+    margin-left: 4px;
+    text-decoration: underline;
+    color: ${({ theme }) => theme.content4};
+    cursor: pointer;
+  }
+`;
 
 export const Content = styled.div<{ isActive: boolean }>`
   border-radius: 12px;
@@ -24,6 +32,16 @@ export const Content = styled.div<{ isActive: boolean }>`
       background-color: ${({ theme }) => theme.primary14};
       transition-duration: 0.1s;
     }
+  }
+  .wrap-network {
+    background-color: ${({ theme }) => theme.bg4};
+    height: 20px;
+    margin-left: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: ${({ theme }) => theme.primary8};
+    font-size: 14px;
+    border-radius: 4px;
   }
 `;
 

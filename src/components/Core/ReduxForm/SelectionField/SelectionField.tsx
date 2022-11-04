@@ -38,6 +38,11 @@ const SelectionField = (props: ISelectionFieldProps) => {
     footerRightText,
     onClickFooterRight,
     footerRightClass,
+    showShowTopUp = false,
+    onTopUp,
+    tokenNetwork,
+
+    tokenAmountNum,
   } = props;
 
   const { error: errorMeta, touched, submitting, active } = meta;
@@ -54,11 +59,29 @@ const SelectionField = (props: ISelectionFieldProps) => {
     if (submitting) {
       return null;
     }
+    let _error = error;
+    let isTopUp = _error !== 'Required' && showShowTopUp && onTopUp;
+    if (isTopUp && (_error || '').includes('larger') && tokenAmountNum) {
+      isTopUp = false;
+    }
+    if (isTopUp) {
+      _error += '';
+    }
     return (
       <div style={{ position: 'absolute' }}>
         {(isError && (
-          <ThemedText.Error marginTop="4px" error className={`error`}>
-            {error}
+          <ThemedText.Error marginTop="4px" error className={`error`} display="flex">
+            {_error}
+            {isTopUp && (
+              <div className="selectable-error" onClick={onTopUp}>
+                Deposit now
+              </div>
+            )}
+            {isTopUp && (
+              <ThemedText.Error style={{ display: 'flex' }} error>
+                .
+              </ThemedText.Error>
+            )}
           </ThemedText.Error>
         )) ||
           (isWarning && (
@@ -156,15 +179,22 @@ const SelectionField = (props: ISelectionFieldProps) => {
           {isUseInput ? (
             <InputField {...props} isError={isError} />
           ) : (
-            <ThemedText.AvgMediumLabel fontSize={22} fontWeight={600}>
+            <ThemedText.AvgMediumLabel fontSize={22} fontWeight={600} style={{ marginRight: 8 }}>
               {new BigNumber(receiveValue || 0).gt(0) ? receiveValue : '0.00'}
             </ThemedText.AvgMediumLabel>
           )}
         </RowBetween>
         <RowBetween className="default-padding">
-          <ThemedText.SmallLabel fontWeight={400} color="primary8">
-            Balance: {amount}
-          </ThemedText.SmallLabel>
+          <Row style={{ width: 'fit-content' }}>
+            <ThemedText.SmallLabel fontWeight={400} color="primary8">
+              Balance: {amount}
+            </ThemedText.SmallLabel>
+            {!!tokenNetwork && (
+              <ThemedText.SmallLabel fontWeight={500} className="wrap-network">
+                {tokenNetwork}
+              </ThemedText.SmallLabel>
+            )}
+          </Row>
           {!!footerRightText && (
             <ThemedText.RegularLabel
               className={`${footerRightClass ? footerRightClass : ''}`}

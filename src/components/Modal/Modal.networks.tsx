@@ -12,7 +12,7 @@ import { useModal } from './Modal.provider';
 const Styled = styled(Column)`
   width: 100%;
   overflow-y: auto;
-  max-height: 40vh;
+  max-height: 530px;
   margin-top: 24px;
 `;
 

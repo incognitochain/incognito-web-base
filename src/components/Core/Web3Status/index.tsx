@@ -9,7 +9,7 @@ import Loader from 'components/Core/Loader';
 import { RowBetween } from 'components/Core/Row';
 import WalletModal from 'components/Core/WalletModal';
 import { getWalletForConnector } from 'connectors';
-import { ROOT_NETWORK_IMG } from 'constants/token';
+import { CONNECT_NETWORK_IMG } from 'constants/token';
 import { useHasSocks } from 'hooks/useSocksBalance';
 import { darken } from 'polished';
 import { useMemo } from 'react';
@@ -21,9 +21,6 @@ import { TransactionDetails } from 'state/transactions/types';
 import styled, { css } from 'styled-components/macro';
 import { shortenAddress } from 'utils';
 import { isChainAllowed } from 'utils/switchChain';
-
-import ethereumLogoUrl from '../../../assets/images/ethereum-logo.svg';
-import { SupportedChainId } from '../../../constants/chains';
 
 const IconWrapper = styled.div<{ size?: number }>`
   ${({ theme }) => theme.flexColumnNoWrap};
@@ -193,9 +190,7 @@ function Web3StatusInner() {
         ) : (
           <>
             {hasSocks ? <Sock /> : null}
-            <NetworkImg
-              iconUrl={chainId === SupportedChainId.GOERLI_ETH ? ethereumLogoUrl : ROOT_NETWORK_IMG[chainId]}
-            />
+            <NetworkImg iconUrl={CONNECT_NETWORK_IMG[chainId]} />
             <Text>{ENSName || shortenAddress(account)}</Text>
           </>
         )}

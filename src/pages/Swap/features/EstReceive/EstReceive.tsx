@@ -4,14 +4,11 @@ import Loader from 'components/Core/Loader';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import Row, { RowBetween, RowFlat } from 'components/Core/Row';
-import { PRV } from 'constants/token';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { ChevronDown } from 'react-feather';
 import { Field } from 'redux-form';
-import { useAppSelector } from 'state/hooks';
-import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 import format from 'utils/format';
@@ -84,6 +81,7 @@ interface IProps extends ISelectSwapExchange {
   isFetchingFee: boolean;
   desc?: string;
   inputAmount: string;
+  impactAmount?: number;
 }
 
 const EstReceive = React.memo(
@@ -104,10 +102,10 @@ const EstReceive = React.memo(
     isFetchingFee,
     desc,
     inputAmount,
+    impactAmount,
   }: IProps) => {
     const [isOpen, setOpen] = React.useState(false);
     const [isRateSellToBuy, setIsRateSellToBuy] = React.useState(true);
-    const prvToken = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
 
     const getRateText = () => {
       if (isRateSellToBuy) {
@@ -217,14 +215,27 @@ const EstReceive = React.memo(
             ) : null}
 
             {formType === FormTypes.SWAP && (
-              <RowBetween style={{ marginTop: 12 }}>
-                <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                  Minimum received
-                </ThemedText.SmallLabel>
-                <ThemedText.SmallLabel fontWeight={400}>{`${minReceiveAmount || 0} ${
-                  buyToken.symbol
-                }`}</ThemedText.SmallLabel>
-              </RowBetween>
+              <>
+                <RowBetween style={{ marginTop: 12 }}>
+                  <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                    Minimum received
+                  </ThemedText.SmallLabel>
+                  <ThemedText.SmallLabel fontWeight={400}>{`${minReceiveAmount || 0} ${
+                    buyToken.symbol
+                  }`}</ThemedText.SmallLabel>
+                </RowBetween>
+                {impactAmount !== null && impactAmount !== undefined && (
+                  <RowBetween style={{ marginTop: 12 }}>
+                    <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                      Price impact
+                    </ThemedText.SmallLabel>
+                    <ThemedText.SmallLabel
+                      style={{ color: impactAmount > 15 ? '#F6465D' : impactAmount > 5 ? '#FFC043' : 'white' }}
+                      fontWeight={400}
+                    >{`${impactAmount}%`}</ThemedText.SmallLabel>
+                  </RowBetween>
+                )}
+              </>
             )}
 
             <RowBetween style={{ marginTop: 12 }}>
@@ -247,15 +258,6 @@ const EstReceive = React.memo(
                 </ThemedText.SmallLabel>
                 <ThemedText.SmallLabel fontWeight={400}>{tradePath}</ThemedText.SmallLabel>
               </RowBetween>
-            )}
-            {!prvToken.amount && (
-              <ThemedText.SmallLabel color="primary8" fontWeight={400} marginTop="12px">
-                {`Incognito collects a small network fee of ${networkFee} to pay the miners who help power the network. Get
-            some from the `}
-                <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
-                  faucet
-                </a>
-              </ThemedText.SmallLabel>
             )}
           </Column>
         </ExpandView>

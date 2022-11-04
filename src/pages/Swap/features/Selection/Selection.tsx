@@ -23,6 +23,7 @@ interface ISelection {
   onSelectToken?: ({ token }: { token: PToken }) => void;
   showNetwork?: boolean;
   onSelectNetwork?: ({ network }: { network: ITokenNetwork }) => void;
+  blacklist?: string[];
   onClickRightLabel?: () => void;
   rightLabelStyle?: any;
 }
@@ -83,6 +84,7 @@ const Selection = React.memo((props: ISelection) => {
     onSelectNetwork,
     currency,
     showNetwork = false,
+    blacklist = [],
     onClickRightLabel,
     rightLabelStyle,
   } = props;
@@ -94,7 +96,7 @@ const Selection = React.memo((props: ISelection) => {
     if (isHideToken) return;
     setModal({
       closable: true,
-      data: <ModalTokens tokens={tokens} onSelect={onSelectToken} showNetwork={showNetwork} />,
+      data: <ModalTokens tokens={tokens} onSelect={onSelectToken} showNetwork={showNetwork} blacklist={blacklist} />,
       isTransparent: false,
       rightHeader: undefined,
       title: 'Select a Token',
@@ -165,7 +167,9 @@ const Selection = React.memo((props: ISelection) => {
           <RowBetween className={`selection-item ${activeNetworkHover ? 'hover-item' : ''}`} onClick={showNetworkList}>
             {rightValue ? (
               <Row>
-                {!!currency && <Image border={false} iconUrl={MAIN_NETWORK_NAME_ICON[rightValue]} />}
+                {currency !== undefined && currency !== null && (
+                  <Image border={false} iconUrl={MAIN_NETWORK_NAME_ICON[rightValue]} />
+                )}
                 {!!rightValue && (
                   <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="primary5">
                     {rightValue}

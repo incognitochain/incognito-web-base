@@ -51,6 +51,39 @@ const getNetworkNameByCurrency = ({ currency }: { currency: number }): MAIN_NETW
     case PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN:
       networkName = MAIN_NETWORK_NAME.INCOGNITO;
       break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.BTC:
+      networkName = MAIN_NETWORK_NAME.BTC;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.DASH:
+      networkName = MAIN_NETWORK_NAME.DASH;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.DOGE:
+      networkName = MAIN_NETWORK_NAME.DOGE;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.DOT:
+      networkName = MAIN_NETWORK_NAME.DOT;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.LTC:
+      networkName = MAIN_NETWORK_NAME.LTC;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.NEO:
+      networkName = MAIN_NETWORK_NAME.NEO;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.TOMO:
+      networkName = MAIN_NETWORK_NAME.TOMO;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.XMR:
+      networkName = MAIN_NETWORK_NAME.XMR;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.ZEC:
+      networkName = MAIN_NETWORK_NAME.ZEC;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.ZIL:
+      networkName = MAIN_NETWORK_NAME.ZIL;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.PRV:
+      networkName = MAIN_NETWORK_NAME.PRV;
+      break;
   }
   return networkName;
 };
@@ -65,6 +98,10 @@ const getAcronymNetwork = (token: SelectedPrivacyModel): string => {
     network = 'ftm';
   } else if (token.isBep20Token || token.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
     network = 'bsc';
+  } else if (token.isBTC) {
+    network = 'btc';
+  } else if (token.isCentralized) {
+    network = 'centralized';
   }
   return network;
 };

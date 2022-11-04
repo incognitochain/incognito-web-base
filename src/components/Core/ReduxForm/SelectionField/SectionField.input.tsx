@@ -24,20 +24,30 @@ const InputField = (props: any) => {
   const { input: inputProps, componentProps, meta, isError } = props;
   const { active } = meta || {};
   const quantityInputRef = React.useRef(null);
-
   React.useEffect(() => {
-    const ignoreScroll = (e: any) => {
+    const ignoreWheel = (e: any) => {
       e.preventDefault();
+      if (e.which === 38 || e.which === 40) {
+        e.preventDefault();
+      }
+    };
+    const ignoreUpDown = (e: any) => {
+      if (e.which === 38 || e.which === 40) {
+        e.preventDefault();
+      }
     };
     if (!quantityInputRef.current) return;
     // @ts-ignore
-    quantityInputRef.current && quantityInputRef.current.addEventListener('wheel', ignoreScroll);
+    quantityInputRef.current && quantityInputRef.current.addEventListener('wheel', ignoreWheel);
+    // @ts-ignore
+    quantityInputRef.current && quantityInputRef.current.addEventListener('keydown', ignoreUpDown);
   }, [quantityInputRef]);
 
   return (
     <Input
       className="default-padding"
       type="text"
+      step="any"
       active={active}
       isError={isError}
       ref={quantityInputRef}
