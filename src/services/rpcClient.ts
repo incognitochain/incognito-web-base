@@ -243,6 +243,28 @@ class RpcClient {
     return this.http.post('submitunshieldtx', { ..._payload });
   }
 
+  submitSwapPdex({
+    txHash,
+    tokenIDSell,
+    tokenIDBuy,
+    amountIn,
+    amountOut,
+  }: {
+    txHash: string;
+    tokenIDSell: string;
+    tokenIDBuy: string;
+    amountIn: string;
+    amountOut: string;
+  }) {
+    return this.http.post('dexswap', {
+      txhash: txHash,
+      token_sell: tokenIDSell,
+      token_buy: tokenIDBuy,
+      amount_in: amountIn,
+      amount_out: amountOut,
+    });
+  }
+
   submitSwapTx({ txRaw, feeRefundOTA }: { txRaw: string; feeRefundOTA: string }) {
     return this.http.post('papps/submitswaptx', {
       // TxHash: txHash,

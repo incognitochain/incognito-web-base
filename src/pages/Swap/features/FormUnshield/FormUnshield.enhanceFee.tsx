@@ -56,6 +56,7 @@ const enhanceFee = (WrappedComponent: any) => {
       buyToken.tokenID,
       buyNetworkName,
       slippage,
+      formType,
     ]);
 
     return <WrappedComponent {...{ ...props }} />;

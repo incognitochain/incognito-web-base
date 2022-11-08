@@ -332,7 +332,7 @@ export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getStat
       !parseFloat(inputAmount) ||
       !sellToken?.tokenID ||
       !buyParentToken?.tokenID ||
-      !incAddress ||
+      // !incAddress ||
       !buyNetworkName
     ) {
       return;
