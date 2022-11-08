@@ -23,9 +23,6 @@ export const Content = styled.div<{ isActive: boolean }>`
   .hover-item {
     :hover {
       background-color: ${({ theme }) => theme.bg4};
-      border-radius: 8px;
-      padding-left: 10px;
-      padding-right: 10px;
       transition: 0.2s all ease-in-out;
     }
     :active {
@@ -54,6 +51,8 @@ export const WrapToken = styled.div`
   cursor: pointer;
   padding-top: 12px;
   padding-bottom: 12px;
+  background-color: #404040;
+  border-radius: 100px;
 `;
 
 export const WrapNetwork = styled.div<{ isActive: boolean }>`
@@ -89,9 +88,8 @@ export const Input = styled.input<{ active: boolean; isError: boolean }>`
   text-overflow: ellipsis;
   min-height: 56px;
   color: ${({ theme }) => theme.primary5};
-  text-align: right;
   max-width: 500px;
-  margin-left: 40px;
+  margin-right: 40px;
   border-radius: 8px;
   :hover {
   }
