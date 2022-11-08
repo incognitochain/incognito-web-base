@@ -124,9 +124,14 @@ const SelectionField = (props: ISelectionFieldProps) => {
     <Row>
       {tokenSymbol ? (
         <Row>
-          {!!tokenImgUrl && <Image size={32} iconUrl={tokenImgUrl} />}
+          {!!tokenImgUrl && <Image size={24} iconUrl={tokenImgUrl} />}
           {!!tokenSymbol && (
-            <ThemedText.AvgMediumLabel style={{ marginLeft: 12, marginTop: 2 }} color="primary5">
+            <ThemedText.AvgMediumLabel
+              lineHeight={'16px'}
+              fontSize={16}
+              style={{ marginLeft: 12, marginTop: 2 }}
+              color="primary5"
+            >
               {tokenSymbol}
             </ThemedText.AvgMediumLabel>
           )}
@@ -145,17 +150,17 @@ const SelectionField = (props: ISelectionFieldProps) => {
         <Row>
           {!!networkName && <Image border={false} iconUrl={MAIN_NETWORK_NAME_ICON[networkName]} />}
           {!!networkName && (
-            <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="primary8">
+            <ThemedText.RegularLabel style={{ marginLeft: 8 }} color="text1">
               {networkName}
             </ThemedText.RegularLabel>
           )}
         </Row>
       ) : (
         <Row>
-          <ThemedText.RegularLabel color="primary8">{networkPlaceholder}</ThemedText.RegularLabel>
+          <ThemedText.RegularLabel color="text1">{networkPlaceholder}</ThemedText.RegularLabel>
         </Row>
       )}
-      {activeNetworkHover && <ArrowDown size={24} />}
+      {activeNetworkHover && <ArrowDown size={24} color="white" />}
     </WrapNetwork>
   );
   const renderHeaderTitle = () =>
@@ -169,22 +174,22 @@ const SelectionField = (props: ISelectionFieldProps) => {
     <Container className={`${className ? className : ''}`} style={{ marginBottom: isError ? 10 : 0 }}>
       <RowBetween>
         {renderHeaderTitle()}
-        {renderNetworkSelection()}
+        {/* {renderNetworkSelection()} */}
       </RowBetween>
       <Content isActive={!!active}>
-        <RowBetween>
-          <WrapToken className={`default-padding ${activeTokensHover ? 'hover-item' : ''}`} onClick={showTokensList}>
-            {renderTokenSelection()}
-          </WrapToken>
+        <RowBetween align="center" style={{ paddingTop: isUseInput ? 0 : 8, paddingBottom: isUseInput ? 0 : 8 }}>
           {isUseInput ? (
             <InputField {...props} isError={isError} />
           ) : (
-            <ThemedText.AvgMediumLabel fontSize={22} fontWeight={600} style={{ marginRight: 8 }}>
+            <ThemedText.AvgMediumLabel fontSize={22} fontWeight={600} style={{ marginRight: 8, marginLeft: 8 }}>
               {new BigNumber(receiveValue || 0).gt(0) ? receiveValue : '0.00'}
             </ThemedText.AvgMediumLabel>
           )}
+          <WrapToken className={`default-padding ${activeTokensHover ? 'hover-item' : ''}`} onClick={showTokensList}>
+            {renderTokenSelection()}
+          </WrapToken>
         </RowBetween>
-        <RowBetween className="default-padding">
+        <RowBetween align="center" className="default-padding">
           <Row style={{ width: 'fit-content' }}>
             <ThemedText.SmallLabel fontWeight={400} color="primary8">
               Balance: {amount}
@@ -195,7 +200,8 @@ const SelectionField = (props: ISelectionFieldProps) => {
               </ThemedText.SmallLabel>
             )}
           </Row>
-          {!!footerRightText && (
+          {renderNetworkSelection()}
+          {/* {!!footerRightText && (
             <ThemedText.RegularLabel
               className={`${footerRightClass ? footerRightClass : ''}`}
               style={{ cursor: 'pointer' }}
@@ -204,7 +210,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
             >
               {footerRightText}
             </ThemedText.RegularLabel>
-          )}
+          )} */}
         </RowBetween>
       </Content>
       {renderError()}

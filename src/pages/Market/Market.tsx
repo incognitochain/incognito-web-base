@@ -5,8 +5,8 @@ import React, { memo } from 'react';
 import { isMobile } from 'react-device-detect';
 
 import MarketAchieve from './features/Market.achieve';
-import MarketBanner from './features/Market.banner';
-import MarketCategory from './features/Market.category';
+// import MarketBanner from './features/Market.banner';
+// import MarketCategory from './features/Market.category';
 import MarketQuestions from './features/Market.questions';
 import MarketTokens from './features/Market.token';
 import { Styled } from './Market.styled';
@@ -21,13 +21,13 @@ const Home = () => {
         className="default-padding-horizontal market-header"
         style={{ display: 'flex', flexDirection: 'row' }}
         align="middle"
-        justify="space-between"
+        justify="center"
       >
-        <MarketBanner />
+        {/* <MarketBanner /> */}
         {!isMobile ? <Swap /> : <MarketTokens />}
       </Row>
       <div className="default-padding-horizontal">
-        <MarketCategory />
+        {/* <MarketCategory /> */}
         {!isMobile && <MarketQuestions />}
       </div>
       <MarketAchieve />

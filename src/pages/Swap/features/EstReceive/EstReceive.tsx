@@ -25,7 +25,7 @@ const Styled = styled(Column)<{ isHidden: boolean; isFetching: boolean }>`
   transition: max-height 0.4s ease-in-out, opacity 0.2s ease-in-out, 0.15s padding ease-out,
     0.15s margin-bottom ease-out;
   margin-top: 16px;
-  background-color: ${({ theme }) => theme.bg4};
+  background-color: ${({ theme }) => theme.primary14};
   border-radius: 8px;
   .wrap-header {
     padding-top: 15px;

@@ -4,9 +4,12 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 const MenuItemStyled = styled.div`
   display: flex;
   flex-direction: column;
+  background-color: ${({ theme }) => theme.bg1};
+  margin-top: 8px;
+  border-radius: 12px;
+  padding: 14px 24px 14px 24px;
   .topView {
     flex: 1;
-    padding: 20px 0px;
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -18,8 +21,6 @@ const MenuItemStyled = styled.div`
     }
 
     .icon {
-      width: 48px;
-      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -48,7 +49,7 @@ const MenuItemStyled = styled.div`
   }
 
   .childrenView {
-    margin-bottom: 20px;
+    margin-top: 16px;
     * {
       animation: fadeIn 0.6s;
       -webkit-animation: fadeIn 0.6s;
@@ -154,7 +155,6 @@ const AskQuestionItem = (props: AskQuestionItemProps) => {
             ))}
         </>
       )}
-      <div className="lineBreak" />
     </MenuItemStyled>
   );
 };

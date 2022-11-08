@@ -26,7 +26,6 @@ import { FormTypes, SwapExchange } from './FormUnshield.types';
 
 const Styled = styled.div`
   .buy-section-style {
-    margin-top: -13px;
   }
   .max-text {
     padding-left: 15px;
@@ -46,7 +45,8 @@ const Styled = styled.div`
 
 const WrapSwapIcon = styled.div`
   width: 100%;
-  height: 56px;
+  height: 80px;
+  position: relative;
   @keyframes spin {
     from {
       transform: rotate(0deg);
@@ -56,9 +56,9 @@ const WrapSwapIcon = styled.div`
     }
   }
   .icon {
-    margin-top: 16px;
     position: absolute;
     left: 46.5%;
+    top: 16px;
     :hover {
       transform: scale(1.2);
     }
@@ -219,7 +219,7 @@ const FormUnshield = React.memo((props: any) => {
           component={SelectionField}
           name={FORM_CONFIGS.sellAmount}
           inputType={INPUT_FIELD.amount}
-          headerTitle="From"
+          // headerTitle="From"
           tokens={sellTokenList}
           tokenSymbol={sellToken.symbol}
           tokenImgUrl={sellToken.iconUrl}
@@ -257,7 +257,7 @@ const FormUnshield = React.memo((props: any) => {
           name={FORM_CONFIGS.buyAmount}
           inputType={INPUT_FIELD.amount}
           className="buy-section-style"
-          headerTitle="To"
+          // headerTitle="To"
           tokens={buyTokenList}
           tokenSymbol={!!buyParentToken ? buyParentToken?.symbol : ''}
           tokenImgUrl={!!buyParentToken ? buyParentToken?.iconUrl : ''}
