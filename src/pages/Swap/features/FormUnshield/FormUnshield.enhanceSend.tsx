@@ -494,7 +494,7 @@ const enhanceSend = (WrappedComponent: any) => {
                   amountOut: `${expectedReceiveAmount}`,
                   tokenIDBuy: sellToken.tokenID,
                   tokenIDSell: buyToken.tokenID,
-                  txHash: tx.tx,
+                  txHash: tx.txHash,
                 });
               } else {
                 /** Submit tx swap PApps to backend after burned */
