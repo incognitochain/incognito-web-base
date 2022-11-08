@@ -53,6 +53,9 @@ export const WrapToken = styled.div`
   padding-bottom: 12px;
   background-color: #404040;
   border-radius: 100px;
+  :hover {
+    opacity: 0.8;
+  }
 `;
 
 export const WrapNetwork = styled.div<{ isActive: boolean }>`

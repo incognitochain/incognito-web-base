@@ -177,7 +177,13 @@ const SelectionField = (props: ISelectionFieldProps) => {
         {/* {renderNetworkSelection()} */}
       </RowBetween>
       <Content isActive={!!active}>
-        <RowBetween align="center" style={{ paddingTop: isUseInput ? 0 : 8, paddingBottom: isUseInput ? 0 : 8 }}>
+        <RowBetween
+          align="center"
+          style={{
+            paddingTop: isUseInput ? 0 : 8,
+            paddingBottom: isUseInput ? 0 : 8,
+          }}
+        >
           {isUseInput ? (
             <InputField {...props} isError={isError} />
           ) : (
@@ -185,7 +191,11 @@ const SelectionField = (props: ISelectionFieldProps) => {
               {new BigNumber(receiveValue || 0).gt(0) ? receiveValue : '0.00'}
             </ThemedText.AvgMediumLabel>
           )}
-          <WrapToken className={`default-padding ${activeTokensHover ? 'hover-item' : ''}`} onClick={showTokensList}>
+          <WrapToken
+            style={{ marginRight: 8 }}
+            className={`default-padding ${activeTokensHover ? 'hover-item' : ''}`}
+            onClick={showTokensList}
+          >
             {renderTokenSelection()}
           </WrapToken>
         </RowBetween>
