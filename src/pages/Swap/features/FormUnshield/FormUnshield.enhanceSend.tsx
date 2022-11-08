@@ -492,8 +492,8 @@ const enhanceSend = (WrappedComponent: any) => {
                 await rpcClient.submitSwapPdex({
                   amountIn: inputAmount,
                   amountOut: `${expectedReceiveAmount}`,
-                  tokenIDBuy: sellToken.tokenID,
-                  tokenIDSell: buyToken.tokenID,
+                  tokenIDBuy: buyToken.tokenID,
+                  tokenIDSell: sellToken.tokenID,
                   txHash: tx.txHash,
                 });
               } else {
