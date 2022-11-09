@@ -15,10 +15,9 @@ export const Styled = styled(Col)`
   border-radius: 18px;
   background: ${({ theme }) => theme.bg3};
   padding: 24px;
-  box-shadow: rgb(116 116 116 / 40%) 5px 5px, rgb(116 116 116 / 30%) 10px 10px, rgb(116 116 116 / 20%) 15px 15px,
-    rgb(116 116 116 / 10%) 20px 20px, rgb(116 116 116 / 5%) 25px 25px;
-
-  min-height: 500px;
+  box-shadow: rgb(116, 116, 116, 0.4) 0px 5px, rgb(116, 116, 116, 0.3) 0px 10px, rgb(116, 116, 116, 0.2) 0px 15px,
+    rgb(116, 116, 116, 0.1) 0px 20px, rgb(116, 116, 116, 0.05) 0px 25px;
+  min-height: 400px;
   .loader {
     left: 48%;
   }

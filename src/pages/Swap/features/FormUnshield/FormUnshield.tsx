@@ -45,7 +45,6 @@ const Styled = styled.div`
 
 const WrapSwapIcon = styled.div`
   width: 100%;
-  height: 80px;
   position: relative;
   @keyframes spin {
     from {
@@ -58,7 +57,7 @@ const WrapSwapIcon = styled.div`
   .icon {
     position: absolute;
     left: 46.5%;
-    top: 16px;
+    top: -20px;
     :hover {
       transform: scale(1.2);
     }
@@ -81,6 +80,13 @@ const WrapSwapIcon = styled.div`
   .link {
     display: contents;
   }
+`;
+
+const ErrorMsgContainer = styled.div`
+  padding: 15px 16px 15px 16px;
+  border: 1px solid #f6465d;
+  border-radius: 8px;
+  margin-top: 4px;
 `;
 
 const FormUnshield = React.memo((props: any) => {
@@ -240,7 +246,7 @@ const FormUnshield = React.memo((props: any) => {
         <WrapSwapIcon>
           <img
             className={`${formType === FormTypes.SWAP ? 'swap-icon' : 'disable'} icon`}
-            style={{ animation: changing ? `spin ${0.6}s linear` : '', width: 48, height: 48 }}
+            style={{ animation: changing ? `spin ${0.6}s linear` : '', width: 40, height: 40 }}
             onClick={() => {
               if (formType === FormTypes.SWAP && !changing) {
                 onRotateSwapToken();
@@ -278,39 +284,36 @@ const FormUnshield = React.memo((props: any) => {
           }}
         />
         {!prvToken.amount && !!inputAmount && isIncognitoInstalled() && incAccount ? (
-          <ThemedText.Error color="primary8" error fontWeight={400} marginTop="12px">
-            {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network. Get
+          <ErrorMsgContainer>
+            <ThemedText.Error error fontWeight={400}>
+              {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network. Get
             some from the `}
-            <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
-              faucet
-            </a>
-          </ThemedText.Error>
+              <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
+                faucet
+              </a>
+            </ThemedText.Error>
+          </ErrorMsgContainer>
         ) : !!errorMsg ? (
-          <>
+          <ErrorMsgContainer>
             <ThemedText.Error style={{ marginTop: '4px' }} error className={`error`}>
               {errorMsg}
             </ThemedText.Error>
-            <VerticalSpace />
-          </>
+          </ErrorMsgContainer>
         ) : null}
-        <VerticalSpace />
         {visibleAddress && (
-          <>
-            <Field
-              component={InputField}
-              name={FORM_CONFIGS.toAddress}
-              inputType={INPUT_FIELD.address}
-              leftTitle="Address"
-              componentProps={{
-                placeholder:
-                  buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? 'Your Incognito Address' : 'Your External Address',
-                disabled: formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO,
-              }}
-              validate={validateAddress}
-              warning={warningAddress}
-            />
-            <VerticalSpace />
-          </>
+          <Field
+            component={InputField}
+            name={FORM_CONFIGS.toAddress}
+            inputType={INPUT_FIELD.address}
+            // leftTitle="Address"
+            componentProps={{
+              placeholder:
+                buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? 'Your Incognito Address' : 'Your External Address',
+              disabled: formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO,
+            }}
+            validate={validateAddress}
+            warning={warningAddress}
+          />
         )}
         <EstReceive
           buyToken={buyToken}
@@ -331,11 +334,15 @@ const FormUnshield = React.memo((props: any) => {
           inputAmount={inputAmount}
           impactAmount={exchangeSelectedData?.impactAmount}
         />
-        {/*<VerticalSpace />*/}
+        <VerticalSpace />
         {button.isConnected ? (
-          <ButtonConfirmed type="submit">{button.text}</ButtonConfirmed>
+          <ButtonConfirmed height={'50px'} type="submit">
+            {button.text}
+          </ButtonConfirmed>
         ) : (
-          <ButtonConfirmed onClick={_buttonAction}>{button.text}</ButtonConfirmed>
+          <ButtonConfirmed height={'50px'} onClick={_buttonAction}>
+            {button.text}
+          </ButtonConfirmed>
         )}
       </form>
     </Styled>

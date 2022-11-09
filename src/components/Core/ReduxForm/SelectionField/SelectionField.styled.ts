@@ -14,11 +14,11 @@ export const Container = styled.div`
 export const Content = styled.div<{ isActive: boolean }>`
   border-radius: 12px;
   margin-top: 2px;
-  padding: 8px;
+  padding: 16px;
   border: 1px solid ${({ theme, isActive }) => (isActive ? theme.blue1 : theme.border1)};
   background-color: ${({ theme }) => theme.primary14};
   .default-padding {
-    padding: 8px;
+    padding: 4px;
   }
   .hover-item {
     :hover {
@@ -56,6 +56,7 @@ export const WrapToken = styled.div`
   :hover {
     opacity: 0.8;
   }
+  margin-left: 16px;
 `;
 
 export const WrapNetwork = styled.div<{ isActive: boolean }>`
@@ -64,6 +65,7 @@ export const WrapNetwork = styled.div<{ isActive: boolean }>`
   cursor: ${({ isActive }) => (isActive ? 'pointer' : 'unset')};
   padding-top: 3px;
   padding-bottom: 3px;
+  margin-left: 16px;
   svg {
     color: ${({ theme }) => theme.primary8};
   }
