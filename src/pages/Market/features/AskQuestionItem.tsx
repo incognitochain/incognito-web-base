@@ -44,7 +44,6 @@ const MenuItemStyled = styled.div`
   .title {
     :hover {
       cursor: pointer;
-      color: #1a73e8;
     }
   }
 
@@ -130,7 +129,7 @@ const AskQuestionItem = (props: AskQuestionItemProps) => {
         }}
       >
         <div className="title-container">
-          <h5 className={`title ${isActive ? 'color_blue' : undefined}`} style={{ fontWeight: 500 }}>
+          <h5 className={'title'} style={{ fontWeight: 500 }}>
             {title}
           </h5>
         </div>
