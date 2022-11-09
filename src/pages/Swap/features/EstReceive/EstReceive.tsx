@@ -21,10 +21,9 @@ const Styled = styled(Column)<{ isHidden: boolean; isFetching: boolean }>`
   opacity: ${({ isHidden }) => (isHidden ? 0 : 1)};
   visibility: ${({ isHidden }) => (isHidden ? 0 : 1)};
   padding: 0 16px ${({ isHidden }) => (isHidden ? '0' : '15')}px 16px;
-  margin-bottom: ${({ isHidden }) => (isHidden ? '0' : '16')}px;
   transition: max-height 0.4s ease-in-out, opacity 0.2s ease-in-out, 0.15s padding ease-out,
     0.15s margin-bottom ease-out;
-  margin-top: 16px;
+  margin-top: 4px;
   background-color: ${({ theme }) => theme.primary14};
   border-radius: 8px;
   .wrap-header {

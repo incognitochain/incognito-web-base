@@ -68,9 +68,9 @@ const SelectionField = (props: ISelectionFieldProps) => {
       _error += '';
     }
     return (
-      <div style={{ position: 'absolute' }}>
+      <div>
         {(isError && (
-          <ThemedText.Error marginTop="4px" error className={`error`} display="flex">
+          <ThemedText.Error fontWeight={400} fontSize={14} error className={`error`} display="flex">
             {_error}
             {isTopUp && (
               <div className="selectable-error" onClick={onTopUp}>
@@ -78,14 +78,14 @@ const SelectionField = (props: ISelectionFieldProps) => {
               </div>
             )}
             {isTopUp && (
-              <ThemedText.Error style={{ display: 'flex' }} error>
+              <ThemedText.Error fontWeight={400} fontSize={14} style={{ display: 'flex' }} error>
                 .
               </ThemedText.Error>
             )}
           </ThemedText.Error>
         )) ||
           (isWarning && (
-            <ThemedText.Warning marginTop="4px" warning className={`warning`}>
+            <ThemedText.Warning fontWeight={400} fontSize={14} warning className={`warning`}>
               {warning}
             </ThemedText.Warning>
           ))}
@@ -126,12 +126,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
         <Row>
           {!!tokenImgUrl && <Image size={24} iconUrl={tokenImgUrl} />}
           {!!tokenSymbol && (
-            <ThemedText.AvgMediumLabel
-              lineHeight={'16px'}
-              fontSize={16}
-              style={{ marginLeft: 12, marginTop: 2 }}
-              color="primary5"
-            >
+            <ThemedText.AvgMediumLabel lineHeight={'16px'} fontSize={16} style={{ marginLeft: 8 }} color="primary5">
               {tokenSymbol}
             </ThemedText.AvgMediumLabel>
           )}
@@ -171,45 +166,55 @@ const SelectionField = (props: ISelectionFieldProps) => {
     ) : undefined;
 
   return (
-    <Container className={`${className ? className : ''}`} style={{ marginBottom: isError ? 10 : 0 }}>
-      <RowBetween>
-        {renderHeaderTitle()}
-        {/* {renderNetworkSelection()} */}
-      </RowBetween>
+    <Container className={`${className ? className : ''}`}>
+      <RowBetween>{renderHeaderTitle()}</RowBetween>
       <Content isActive={!!active}>
-        <RowBetween
-          align="center"
-          style={{
-            paddingTop: isUseInput ? 0 : 8,
-            paddingBottom: isUseInput ? 0 : 8,
-          }}
-        >
+        <RowBetween align="center">
           {isUseInput ? (
-            <InputField {...props} isError={isError} />
+            <InputField
+              {...props}
+              componentProps={{
+                style: {
+                  fontSize: 26,
+                  fontWeight: '500',
+                  minHeight: '40px',
+                  height: '40px',
+                  paddingLeft: '0px',
+                },
+              }}
+              isError={isError}
+              fontSize={29}
+            />
           ) : (
-            <ThemedText.AvgMediumLabel fontSize={22} fontWeight={600} style={{ marginRight: 8, marginLeft: 8 }}>
+            <ThemedText.AvgMediumLabel
+              fontSize={26}
+              fontWeight={500}
+              style={{ marginRight: 0, marginLeft: 0, color: 'white' }}
+            >
               {new BigNumber(receiveValue || 0).gt(0) ? receiveValue : '0.00'}
             </ThemedText.AvgMediumLabel>
           )}
-          <WrapToken
-            style={{ marginRight: 8 }}
-            className={`default-padding ${activeTokensHover ? 'hover-item' : ''}`}
-            onClick={showTokensList}
-          >
+          <WrapToken className={`default-padding ${activeTokensHover ? 'hover-item' : ''}`} onClick={showTokensList}>
             {renderTokenSelection()}
           </WrapToken>
         </RowBetween>
-        <RowBetween align="center" className="default-padding">
-          <Row style={{ width: 'fit-content' }}>
-            <ThemedText.SmallLabel fontWeight={400} color="primary8">
-              Balance: {amount}
-            </ThemedText.SmallLabel>
-            {!!tokenNetwork && (
-              <ThemedText.SmallLabel fontWeight={500} className="wrap-network">
-                {tokenNetwork}
+        <div style={{ height: '24px' }} />
+        <RowBetween align="center">
+          {isError ? (
+            <Row style={{ width: 'fit-content' }}>{renderError()}</Row>
+          ) : (
+            <Row style={{ width: 'fit-content' }}>
+              <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                Balance: {amount}
               </ThemedText.SmallLabel>
-            )}
-          </Row>
+              {!!tokenNetwork && (
+                <ThemedText.SmallLabel fontWeight={500} className="wrap-network">
+                  {tokenNetwork}
+                </ThemedText.SmallLabel>
+              )}
+            </Row>
+          )}
+
           {renderNetworkSelection()}
           {/* {!!footerRightText && (
             <ThemedText.RegularLabel
@@ -223,7 +228,6 @@ const SelectionField = (props: ISelectionFieldProps) => {
           )} */}
         </RowBetween>
       </Content>
-      {renderError()}
     </Container>
   );
 };
