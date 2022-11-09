@@ -8,8 +8,8 @@ import Lottie from 'react-lottie';
 import { ThemedText } from 'theme';
 
 import MarketAchieve from './features/Market.achieve';
-// import MarketBanner from './features/Market.banner';
-// import MarketCategory from './features/Market.category';
+import MarketBanner from './features/Market.banner';
+import MarketCategory from './features/Market.category';
 import MarketQuestions from './features/Market.questions';
 import MarketTokens from './features/Market.token';
 import { Styled } from './Market.styled';
@@ -31,23 +31,21 @@ const Home = () => {
           align="middle"
           justify="center"
         >
-          {/* <MarketBanner /> */}
+          {isMobile && <MarketBanner />}
           {!isMobile ? <Swap /> : <MarketTokens />}
         </Row>
-        <Lottie
-          options={{
-            loop: true,
-            autoplay: true,
-            animationData,
-          }}
-          height={60}
-        />
+        {!isMobile && (
+          <Lottie
+            options={{
+              loop: true,
+              autoplay: true,
+              animationData,
+            }}
+            height={60}
+          />
+        )}
       </div>
-
-      <div className="default-padding-horizontal">
-        {/* <MarketCategory /> */}
-        {!isMobile && <MarketQuestions />}
-      </div>
+      <div className="default-padding-horizontal">{isMobile ? <MarketCategory /> : <MarketQuestions />}</div>
       <MarketAchieve />
     </Styled>
   );
