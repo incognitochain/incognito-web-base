@@ -15,7 +15,7 @@ export const Content = styled.div<{ isActive: boolean }>`
   border-radius: 12px;
   margin-top: 2px;
   padding: 16px;
-  border: 1px solid ${({ theme, isActive }) => (isActive ? theme.blue1 : theme.border1)};
+  border: 1px solid ${({ theme, isActive }) => (isActive ? theme.blue1 : theme.primary14)};
   background-color: ${({ theme }) => theme.primary14};
   .default-padding {
     padding: 4px;
