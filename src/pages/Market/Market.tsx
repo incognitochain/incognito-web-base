@@ -46,6 +46,7 @@ const Home = () => {
               animationData,
             }}
             height={60}
+            style={{ marginTop: 40 }}
           />
         )}
       </div>

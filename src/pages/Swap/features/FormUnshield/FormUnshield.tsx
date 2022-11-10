@@ -242,6 +242,7 @@ const FormUnshield = React.memo((props: any) => {
           showShowTopUp={true}
           onTopUp={onTopUpCoins}
           tokenAmountNum={sellToken.amount}
+          tokenType={'sellToken'}
         />
         <WrapSwapIcon>
           <img
@@ -282,6 +283,7 @@ const FormUnshield = React.memo((props: any) => {
             type: 'number',
             disabled: true,
           }}
+          tokenType={'buyToken'}
         />
         {!prvToken.amount && !!inputAmount && isIncognitoInstalled() && incAccount ? (
           <ErrorMsgContainer>

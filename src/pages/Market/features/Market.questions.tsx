@@ -77,6 +77,11 @@ const Styled = styled.div`
     margin-bottom: 16px;
   }
 
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
+    margin-top: 140px;
+    margin-bottom: 140px;
+  `}
+
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
     margin-top: 100px;
     margin-bottom: 100px;
