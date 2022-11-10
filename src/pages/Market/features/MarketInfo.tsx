@@ -1,6 +1,8 @@
 import { marketTranslateSelector } from 'config/Configs.selector';
-import React from 'react';
+import React, { useState } from 'react';
+import CountUp from 'react-countup';
 import { useSelector } from 'react-redux';
+import VisibilitySensor from 'react-visibility-sensor';
 import styled, { DefaultTheme } from 'styled-components/macro';
 export const Styled = styled.div`
   width: 100%;
@@ -73,6 +75,37 @@ const Item = styled.div`
     border-right: 5px solid red;
   }
 
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
+        .achieve-item-title {
+          font-weight: 500;
+          font-size: 64px;
+          line-height: 120%;
+          text-align: center;
+          margin-bottom: 0;
+        }
+        .achieve-item-sub-title {
+          font-weight: 400;
+          font-size: 20px;
+          line-height: 140%;
+          text-align: center;
+          margin-top: 10px;
+        }
+    `}
+
+    ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
+        .achieve-item-title {
+          font-weight: 500;
+          font-size: 48px;
+          line-height: 140%;
+        }
+        .achieve-item-sub-title {
+          font-size: 18px;
+          line-height: 140%;
+          margin-top: 8px;
+        }
+    `}
+  
+
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
         .achieve {
             display: flex;
@@ -105,23 +138,32 @@ const Item = styled.div`
 const MarketInfo = () => {
   const marketTrs = useSelector(marketTranslateSelector);
 
+  const [isCountUp, setIsCountUp] = useState<boolean>(false);
   const Factory = React.useMemo(
     () => [
       {
-        title: '$550M',
-        content: marketTrs.volumeTraded,
+        number: 550,
+        prefix: '$',
+        suffix: 'M',
+        desc: marketTrs.volumeTraded,
       },
       {
-        title: '1M',
-        content: marketTrs.anonymousTrades,
+        number: 1,
+        prefix: '',
+        suffix: 'M',
+        desc: marketTrs.anonymousTrades,
       },
       {
-        title: '200+',
-        content: marketTrs.privateCryptocurrencies,
+        number: 200,
+        prefix: '',
+        suffix: '+',
+        desc: marketTrs.privateCryptocurrencies,
       },
       {
-        title: '16',
-        content: marketTrs.bridgedBlockchains,
+        number: 16,
+        prefix: '',
+        suffix: '',
+        desc: marketTrs.bridgedBlockchains,
       },
     ],
     [marketTrs]
@@ -130,8 +172,25 @@ const MarketInfo = () => {
   const renderItem = (item: any) => (
     <Item style={{ flex: 1, minWidth: 200 }}>
       <div className={'achieve'}>
-        <p className="achieve-item-title">{item.title}</p>
-        <p className="description achieve-item-sub-title">{item.content}</p>
+        <VisibilitySensor
+          onChange={(isVisible) => {
+            if (isVisible) {
+              setIsCountUp(true);
+            }
+          }}
+          delayedCall
+        >
+          <CountUp
+            className="achieve-item-title"
+            start={0}
+            end={isCountUp ? item?.number : 0}
+            duration={3}
+            prefix={item?.prefix}
+            suffix={item?.suffix}
+            enableScrollSpy={true}
+          />
+        </VisibilitySensor>
+        <p className="description achieve-item-sub-title">{item.desc}</p>
       </div>
     </Item>
   );
