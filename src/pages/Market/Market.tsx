@@ -12,6 +12,7 @@ import MarketBanner from './features/Market.banner';
 import MarketCategory from './features/Market.category';
 import MarketQuestions from './features/Market.questions';
 import MarketTokens from './features/Market.token';
+import MarketInfo from './features/MarketInfo';
 import { Styled } from './Market.styled';
 
 const Home = () => {
@@ -21,10 +22,12 @@ const Home = () => {
 
   return (
     <Styled isMobile={isMobile}>
-      <div style={{ minHeight: '80vh' }}>
-        <ThemedText.LargeHeader fontWeight={500} fontSize={34} color="text1" textAlign={'center'}>
-          The privacy marketplace for crypto assets.
-        </ThemedText.LargeHeader>
+      <div style={{ minHeight: '90vh' }}>
+        {!isMobile && (
+          <ThemedText.LargeHeader fontWeight={500} fontSize={34} color="text1" textAlign={'center'}>
+            The privacy marketplace for crypto assets.
+          </ThemedText.LargeHeader>
+        )}
         <Row
           className="default-padding-horizontal market-header"
           style={{ display: 'flex', flexDirection: 'row' }}
@@ -36,6 +39,7 @@ const Home = () => {
         </Row>
         {!isMobile && (
           <Lottie
+            isClickToPauseDisabled={true}
             options={{
               loop: true,
               autoplay: true,
@@ -45,8 +49,9 @@ const Home = () => {
           />
         )}
       </div>
+      {!isMobile && <MarketInfo />}
       <div className="default-padding-horizontal">{isMobile ? <MarketCategory /> : <MarketQuestions />}</div>
-      <MarketAchieve />
+      {isMobile && <MarketAchieve />}
     </Styled>
   );
 };
