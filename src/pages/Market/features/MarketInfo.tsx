@@ -184,7 +184,7 @@ const MarketInfo = () => {
             className="achieve-item-title"
             start={0}
             end={isCountUp ? item?.number : 0}
-            duration={3}
+            duration={2}
             prefix={item?.prefix}
             suffix={item?.suffix}
             enableScrollSpy={true}
