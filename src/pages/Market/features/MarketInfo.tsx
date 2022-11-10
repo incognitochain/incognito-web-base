@@ -53,7 +53,7 @@ const Item = styled.div`
   }
   .achieve-item-title {
     font-weight: 500;
-    font-size: 48px;
+    font-size: 64px;
     line-height: 120%;
     text-align: center;
     margin-bottom: 0;
@@ -62,10 +62,10 @@ const Item = styled.div`
   .achieve-item-sub-title {
     color: ${({ theme }) => theme.text2};
     font-weight: 400;
-    font-size: 18px;
+    font-size: 20px;
     line-height: 140%;
     text-align: center;
-    margin-top: 8px;
+    margin-top: 10px;
     color: ${({ theme }) => theme.text2};
   }
   .wrap-item {
@@ -91,20 +91,6 @@ const Item = styled.div`
           margin-top: 10px;
         }
     `}
-
-    ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
-        .achieve-item-title {
-          font-weight: 500;
-          font-size: 48px;
-          line-height: 140%;
-        }
-        .achieve-item-sub-title {
-          font-size: 18px;
-          line-height: 140%;
-          margin-top: 8px;
-        }
-    `}
-  
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
         .achieve {
