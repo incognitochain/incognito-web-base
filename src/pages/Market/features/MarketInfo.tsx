@@ -5,6 +5,7 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 export const Styled = styled.div`
   width: 100%;
   display: flex;
+  margin-top: 60px;
   justify-content: 'space-between';
   align-items: center;
   flex-direction: row;

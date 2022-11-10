@@ -3,7 +3,7 @@ import { Image } from 'components/Core/Image';
 import Row, { RowBetween } from 'components/Core/Row';
 import { NetworkModal, useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
-import { MAIN_NETWORK_NAME_ICON } from 'constants/token';
+import { MAIN_NETWORK_NAME, MAIN_NETWORK_NAME_ICON } from 'constants/token';
 import React from 'react';
 import { ThemedText } from 'theme';
 
@@ -43,6 +43,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
     tokenNetwork,
 
     tokenAmountNum,
+    tokenType,
   } = props;
 
   const { error: errorMeta, touched, submitting, active } = meta;
@@ -215,7 +216,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
             </Row>
           )}
 
-          {renderNetworkSelection()}
+          {(networkName !== MAIN_NETWORK_NAME.INCOGNITO || tokenType === 'buyToken') && renderNetworkSelection()}
           {/* {!!footerRightText && (
             <ThemedText.RegularLabel
               className={`${footerRightClass ? footerRightClass : ''}`}
