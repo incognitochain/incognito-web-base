@@ -128,15 +128,6 @@ const MarketInfo = () => {
   const Factory = React.useMemo(
     () => [
       {
-        number: 6.5,
-        prefix: '$',
-        suffix: 'B+',
-        decimals: 1,
-        desc: 'Liquidity integrated',
-        tooltipContent:
-          'Incognito exchange connects liquidity from different sources such as Uniswap, Curve, PancakeSwap, and SpookySwap to enable privacy trades.',
-      },
-      {
         number: 350,
         prefix: '$',
         suffix: 'M+',
@@ -147,6 +138,15 @@ const MarketInfo = () => {
         prefix: '',
         suffix: 'M',
         desc: marketTrs.anonymousTrades,
+      },
+      {
+        number: 6.5,
+        prefix: '$',
+        suffix: 'B+',
+        decimals: 1,
+        desc: 'Liquidity integrated',
+        tooltipContent:
+          'Incognito exchange connects liquidity from different sources such as Uniswap, Curve, PancakeSwap, and SpookySwap to enable privacy trades.',
       },
       {
         number: 16,
