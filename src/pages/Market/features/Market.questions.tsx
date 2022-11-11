@@ -31,7 +31,7 @@ const questions: any = [
           '1. Transaction fee: Incognito collects a small network fee of 0.0000001 PRV to pay the validators who help power the network.',
           '2. External blockchain’s gas fee: A swap request needs to be sent and executed against a DEX (say Uniswap) on an external blockchain (say Ethereum) and users need to pay for the gas cost.',
           '3. AMM swap fee: the fee varies per asset per route per exchange that the swap is executed on (e.g., 0.3% for Uniswap, 0.25% for PancakeSwap, …). Liquidity providers of the AMM pools take the fee.',
-          '4. Privacy fee: Incognito takes a fee (0.1%) for operating the privacy exchange.',
+          '4. Privacy fee: Incognito takes a fee (0.3%) for operating the privacy exchange.',
         ],
       },
       {

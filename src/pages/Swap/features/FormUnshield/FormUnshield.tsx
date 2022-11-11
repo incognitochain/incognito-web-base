@@ -310,7 +310,7 @@ const FormUnshield = React.memo((props: any) => {
             // leftTitle="Address"
             componentProps={{
               placeholder:
-                buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? 'Your Incognito Address' : 'Your External Address',
+                buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? 'Your Incognito Address' : 'Recipient Address',
               disabled: formType === FormTypes.SWAP && buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO,
             }}
             validate={validateAddress}
