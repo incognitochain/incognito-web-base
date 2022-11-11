@@ -8,6 +8,7 @@ import ggplay from 'assets/images/install/play.png';
 // import { ReactComponent as Logo } from 'assets/svg/logo.svg';
 import logo from 'assets/images/logo.png';
 import menuBarIcon from 'assets/images/menu-bar.png';
+import { ReactComponent as MoreIcon } from 'assets/images/more.svg';
 import { ReactComponent as Logo } from 'assets/svg/logo.svg';
 import { useInternetConnnection } from 'components/Core/InternetConnection';
 import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
@@ -16,7 +17,6 @@ import useTheme from 'hooks/useTheme';
 import { routeEarnings, routeMarket, routePeggingApps, routeStructure } from 'pages';
 import React from 'react';
 // import Web3Status from 'components/Core/Web3Status';
-import { MoreVertical } from 'react-feather';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Link } from 'rebass';
 import { useDarkModeManager } from 'state/user/hooks';
@@ -333,7 +333,7 @@ export default function Header() {
                 className="more-dropdown"
               >
                 <Row align="middle" className="button-hover">
-                  <MoreVertical size={34} color="white" />
+                  <MoreIcon style={{ marginRight: 16 }} />
                 </Row>
               </Dropdown>
 
