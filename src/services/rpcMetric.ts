@@ -8,6 +8,7 @@ export enum METRIC_TYPE {
   CONFIRM_SWAP = 83,
   RESUBMIT_DEPOSIT = 84,
   RESUBMIT_SWAP = 85,
+  ESTIMATE_SWAP = 86,
 }
 
 class RpcMetric {
@@ -18,7 +19,8 @@ class RpcMetric {
   }
 
   async updateMetric({ type }: { type: METRIC_TYPE }) {
-    if (!isMainnet) return;
+    const test_domains = ['localhost:3000', 'app-staging.incognito.org', 'app-devtest.incognito.org'];
+    if (!isMainnet || test_domains.some((domain) => window.location.href.includes(domain))) return;
     try {
       const now = Math.round(new Date().getTime() / 1000);
       await this.http.post('churn', {
