@@ -8,14 +8,15 @@ import ggplay from 'assets/images/install/play.png';
 // import { ReactComponent as Logo } from 'assets/svg/logo.svg';
 import logo from 'assets/images/logo.png';
 import menuBarIcon from 'assets/images/menu-bar.png';
+import { ReactComponent as MoreIcon } from 'assets/images/more.svg';
 import { ReactComponent as Logo } from 'assets/svg/logo.svg';
 import { useInternetConnnection } from 'components/Core/InternetConnection';
-// import Web3Status from 'components/Core/Web3Status';
 import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useTheme from 'hooks/useTheme';
 import { routeEarnings, routeMarket, routePeggingApps, routeStructure } from 'pages';
 import React from 'react';
+// import Web3Status from 'components/Core/Web3Status';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Link } from 'rebass';
 import { useDarkModeManager } from 'state/user/hooks';
@@ -213,8 +214,8 @@ export default function Header() {
   //   }
   // }, [location]);
 
-  const MoreMenu = () => {
-    if (!isMobile) {
+  const MoreMenu = (type: 'diveIn' | 'download') => {
+    if (type === 'download') {
       return (
         <MenuDropdown
           className="sub-menu-header"
@@ -251,14 +252,16 @@ export default function Header() {
             <Menu.Item
               className="dropdown-menu-item"
               key={item.name}
-              style={{ marginBottom: 16 }}
+              style={{ marginBottom: 16, paddingLeft: 16, paddingRight: 16 }}
               onClick={() => window.open(item.path, '_blank')}
             >
               <Row align="middle">
                 <p className="fs-medium">{item.name}</p>
                 <div className="logo" />
               </Row>
-              <p className="text2 fs-small">{item.sub}</p>
+              <p className="text2 fs-small" style={{ textAlign: 'left' }}>
+                {item.sub}
+              </p>
             </Menu.Item>
           );
         })}
@@ -304,7 +307,7 @@ export default function Header() {
               })}
               <Dropdown
                 overlayStyle={{ width: 120 }}
-                overlay={MoreMenu}
+                overlay={MoreMenu(isMobile ? 'diveIn' : 'download')}
                 placement="bottomRight"
                 className="more-dropdown"
               >
@@ -323,6 +326,17 @@ export default function Header() {
               {/*<AccountElement active={!!account}>*/}
               {/*  <Web3Status />*/}
               {/*</AccountElement>*/}
+              <Dropdown
+                overlayStyle={{ width: 120 }}
+                overlay={MoreMenu('diveIn')}
+                placement="bottomRight"
+                className="more-dropdown"
+              >
+                <Row align="middle" className="button-hover">
+                  <MoreIcon style={{ marginRight: 16 }} />
+                </Row>
+              </Dropdown>
+
               <IncognitoWallet />
             </HeaderElement>
           </>

@@ -1,3 +1,5 @@
+import { Tooltip } from 'antd';
+import { ReactComponent as Info } from 'assets/images/info.svg';
 import { marketTranslateSelector } from 'config/Configs.selector';
 import React, { useState } from 'react';
 import CountUp from 'react-countup';
@@ -65,7 +67,6 @@ const Item = styled.div`
     font-size: 20px;
     line-height: 140%;
     text-align: center;
-    margin-top: 10px;
     color: ${({ theme }) => theme.text2};
   }
   .wrap-item {
@@ -88,7 +89,6 @@ const Item = styled.div`
           font-size: 20px;
           line-height: 140%;
           text-align: center;
-          margin-top: 10px;
         }
     `}
 
@@ -128,9 +128,18 @@ const MarketInfo = () => {
   const Factory = React.useMemo(
     () => [
       {
-        number: 550,
+        number: 6.5,
         prefix: '$',
-        suffix: 'M',
+        suffix: 'B+',
+        decimals: 1,
+        desc: 'Liquidity integrated',
+        tooltipContent:
+          'Incognito exchange connects liquidity from different sources such as Uniswap, Curve, PancakeSwap, and SpookySwap to enable privacy trades.',
+      },
+      {
+        number: 350,
+        prefix: '$',
+        suffix: 'M+',
         desc: marketTrs.volumeTraded,
       },
       {
@@ -138,12 +147,6 @@ const MarketInfo = () => {
         prefix: '',
         suffix: 'M',
         desc: marketTrs.anonymousTrades,
-      },
-      {
-        number: 200,
-        prefix: '',
-        suffix: '+',
-        desc: marketTrs.privateCryptocurrencies,
       },
       {
         number: 16,
@@ -171,12 +174,29 @@ const MarketInfo = () => {
             start={0}
             end={isCountUp ? item?.number : 0}
             duration={2}
+            decimals={item?.decimals}
+            decimal="."
             prefix={item?.prefix}
             suffix={item?.suffix}
             enableScrollSpy={true}
           />
         </VisibilitySensor>
-        <p className="description achieve-item-sub-title">{item.desc}</p>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 10,
+          }}
+        >
+          <p className="description achieve-item-sub-title">{item.desc}</p>
+          {item?.tooltipContent && (
+            <Tooltip title={item?.tooltipContent}>
+              <Info style={{ marginLeft: 5 }} />
+            </Tooltip>
+          )}
+        </div>
       </div>
     </Item>
   );
