@@ -1,8 +1,9 @@
+import useIsWindowVisible from 'hooks/useIsWindowVisible';
 import debounce from 'lodash/debounce';
 import React from 'react';
+import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
 import { useAppDispatch } from 'state/hooks';
 
-import useIsWindowVisible from '../../../../hooks/useIsWindowVisible';
 import { actionEstimateFee, actionEstimateSwapFee, actionResetFee } from './FormUnshield.actions';
 import { FormTypes } from './FormUnshield.types';
 
@@ -14,9 +15,7 @@ export interface IEstimate {
   isResetForm: boolean;
 }
 
-export const sleep = async (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
+let UPDATED_METRIC = false;
 
 const enhanceFee = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: any) => {
@@ -74,8 +73,14 @@ const enhanceFee = (WrappedComponent: any) => {
       }
     };
 
+    const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.ESTIMATE_SWAP });
+
     const debounceEstimateFee = React.useCallback(
       debounce(async () => {
+        if (!UPDATED_METRIC) {
+          updateMetric().then();
+          UPDATED_METRIC = true;
+        }
         await handleEstimateFee({ isResetForm: true });
         if (intervalRef && !intervalRef.current) {
           // @ts-ignore
