@@ -56,19 +56,20 @@ export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
       };
     }
     case FormUnshieldActionType.FETCHING_FEE: {
-      const { isFetchingFee } = action.payload;
+      const { isFetchingFee, isResetForm } = action.payload;
+      const isReset = isResetForm;
       return {
         ...state,
         isFetchingFee,
 
         // Reset unshield data when estimate trade
-        isUseBurnFeeLevel1: isFetchingFee ? true : state.isUseBurnFeeLevel1,
-        userFee: isFetchingFee ? undefined : state.userFee,
+        isUseBurnFeeLevel1: isReset ? true : state.isUseBurnFeeLevel1,
+        userFee: isReset ? undefined : state.userFee,
 
         // Reset swap data when estimate trade
-        exchangeSelected: isFetchingFee ? null : state?.exchangeSelected,
-        exchangeSupports: isFetchingFee ? [] : state?.exchangeSupports,
-        errorMsg: isFetchingFee ? null : state?.errorMsg,
+        exchangeSelected: isReset ? null : state?.exchangeSelected,
+        exchangeSupports: isReset ? [] : state?.exchangeSupports,
+        errorMsg: isReset ? null : state?.errorMsg,
       };
     }
     case FormUnshieldActionType.RESET_FEE: {

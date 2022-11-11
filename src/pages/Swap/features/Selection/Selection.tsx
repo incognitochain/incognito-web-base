@@ -29,38 +29,28 @@ interface ISelection {
 }
 
 const MainStyled = styled(Row)`
-  border: 1px solid ${({ theme }) => theme.border1};
-  border-radius: 8px;
-  min-height: 88px;
-  background-color: ${({ theme }) => theme.primary14};
   margin-top: 4px;
   position: relative;
   .section {
-    padding: 16px 16px 4px 16px;
+    flex-direction: column;
     flex: 1;
+  }
+  .space {
+    width: 25px;
   }
   .selection-item {
     width: 100%;
     cursor: pointer;
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-  .line {
-    background-color: ${({ theme }) => theme.border1};
-    width: 1px;
-    top: 0;
-    position: absolute;
-    bottom: 0;
-    left: 49%;
+    padding: 16px;
+    border: 1px solid ${({ theme }) => theme.border1};
+    border-radius: 8px;
+    background-color: ${({ theme }) => theme.primary14};
+    margin-top: 4px;
   }
   .hover-item {
     :hover {
       background-color: ${({ theme }) => theme.bg4};
-      padding-left: 6px;
-      padding-right: 4px;
-      border-radius: 8px;
-      transform: scale(1);
-      transition: 0.2s all ease;
+      transition: 0.3s all ease-in-out;
     }
   }
 `;
@@ -120,7 +110,7 @@ const Selection = React.memo((props: ISelection) => {
 
   return (
     <>
-      <RowBetween>
+      {/* <RowBetween>
         <ThemedText.SmallLabel fontWeight={400} color="primary8">
           {title}
         </ThemedText.SmallLabel>
@@ -135,7 +125,7 @@ const Selection = React.memo((props: ISelection) => {
             {rightLabel}
           </ThemedText.SmallLabel>
         )}
-      </RowBetween>
+      </RowBetween> */}
       <MainStyled>
         <div className="section">
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
@@ -156,10 +146,10 @@ const Selection = React.memo((props: ISelection) => {
                 <ThemedText.RegularLabel color="primary8">{leftPlaceholder}</ThemedText.RegularLabel>
               </Row>
             )}
-            {!isHideToken && <ArrowDown size={24} />}
+            {!isHideToken && <ArrowDown size={24} color="white" />}
           </RowBetween>
         </div>
-        <div className="line" />
+        <div className="space" />
         <div className="section">
           <ThemedText.SmallLabel fontWeight={400} color="primary8">
             Network
@@ -181,7 +171,7 @@ const Selection = React.memo((props: ISelection) => {
                 <ThemedText.RegularLabel color="primary8">{rightPlaceholder}</ThemedText.RegularLabel>
               </Row>
             )}
-            {!isHideNetwork && <ArrowDown size={24} />}
+            {!isHideNetwork && <ArrowDown size={24} color="white" />}
           </RowBetween>
         </div>
       </MainStyled>

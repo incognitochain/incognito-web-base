@@ -1,10 +1,9 @@
+import CopyIcon from 'components/Copy/index';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
-import format from '../../../../../utils/format';
-
 const Styled = styled.div`
-  margin-top: 16px;
+  margin-top: 24px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -15,14 +14,13 @@ const Styled = styled.div`
     justify-content: center;
   }
   .paymentAddress-area {
-    margin-top: 10px;
+    margin-top: 4px;
     display: flex;
     flex: 1;
-    padding: 14px;
+    padding: 16px;
     flex-direction: row;
     align-items: center;
     overflow: hidden;
-    height: 54px;
     border-radius: 8px;
     border: 1px solid ${({ theme }) => theme.border1};
     background-color: ${({ theme }) => theme.primary14};
@@ -35,27 +33,31 @@ const Styled = styled.div`
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface DescriptionQrCodeProps {
-  symbol: string;
+interface AddressBoxProps {
   paymentAddress?: string;
-  expiredAt?: string;
 }
 
-const DescriptionQrCode = ({ symbol, paymentAddress, expiredAt }: DescriptionQrCodeProps) => {
+const AddressBox = ({ paymentAddress }: AddressBoxProps) => {
   return (
     <Styled>
-      <div className="center">
-        <ThemedText.SmallLabel fontWeight={400} color="text1">
-          {`Send only ${symbol} to this shielding address`}
-        </ThemedText.SmallLabel>
-      </div>
-      {expiredAt && (
-        <ThemedText.SmallLabel fontWeight={400} color="primary15" textAlign="center" marginTop="4px">
-          {`Expires at: ${format.formatDateTime({ dateTime: expiredAt })}`}
-        </ThemedText.SmallLabel>
+      {paymentAddress && (
+        <div>
+          <ThemedText.SmallLabel fontWeight={400} color="#9C9C9C">
+            Address
+          </ThemedText.SmallLabel>
+          <div className="paymentAddress-area">
+            <div className="paymentAddressText">
+              <ThemedText.RegularLabel fontWeight={500} color="primary5" style={{ lineBreak: 'anywhere' }}>
+                {paymentAddress}
+              </ThemedText.RegularLabel>
+            </div>
+
+            <CopyIcon text={paymentAddress} />
+          </div>
+        </div>
       )}
     </Styled>
   );
 };
 
-export default DescriptionQrCode;
+export default AddressBox;

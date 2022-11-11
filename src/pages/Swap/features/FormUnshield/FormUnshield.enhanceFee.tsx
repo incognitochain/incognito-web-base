@@ -1,5 +1,7 @@
+import useIsWindowVisible from 'hooks/useIsWindowVisible';
 import debounce from 'lodash/debounce';
 import React from 'react';
+import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
 import { useAppDispatch } from 'state/hooks';
 
 import { actionEstimateFee, actionEstimateSwapFee, actionResetFee } from './FormUnshield.actions';
@@ -8,6 +10,12 @@ import { FormTypes } from './FormUnshield.types';
 export interface TInner {
   onEstimateFee: () => void;
 }
+
+export interface IEstimate {
+  isResetForm: boolean;
+}
+
+let UPDATED_METRIC = false;
 
 const enhanceFee = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: any) => {
@@ -24,29 +32,73 @@ const enhanceFee = (WrappedComponent: any) => {
       slippage,
     } = props;
 
-    const onEstimateFee = () => {
-      dispatch(actionEstimateFee());
-    };
+    const initRef = React.useRef(false);
+    const intervalRef = React.useRef<typeof setInterval>();
+    const isFocused = useIsWindowVisible();
 
-    const onEstimateSwapFee = () => {
-      dispatch(actionEstimateSwapFee());
-    };
-
-    const debounceEstimateFee = React.useMemo(() => debounce(onEstimateFee, 500), []);
-
-    const debounceEstimateSwapFee = React.useMemo(() => debounce(onEstimateSwapFee, 500), []);
-
-    React.useEffect(() => {
+    const onResetFee = () => {
       // Reset estimate fee data
       dispatch(actionResetFee());
-      // Case estimate fee for unshielded transactions
-      if (formType === FormTypes.UNSHIELD && unshieldAddress && isExternalAddress && incAddress) {
-        debounceEstimateFee();
+    };
+
+    const onClearInterval = () => {
+      if (intervalRef && intervalRef.current) {
+        // @ts-ignore
+        clearInterval(intervalRef.current);
       }
-      // Case estimate fee for swapped transactions
+    };
+
+    const onEstimateUnshieldFee = async ({ isResetForm = true }: IEstimate) => {
+      isResetForm && onResetFee();
+      return dispatch(actionEstimateFee());
+    };
+
+    const onEstimateSwapFee = async ({ isResetForm = true }: IEstimate) => {
+      isResetForm && onResetFee();
+      await dispatch(actionEstimateSwapFee({ isResetForm }));
+    };
+
+    const handleEstimateFee = async ({ isResetForm = true }: IEstimate) => {
+      let func: any = null;
       if (formType === FormTypes.SWAP) {
-        debounceEstimateSwapFee();
+        // Case estimate fee for swapped transactions
+        func = onEstimateSwapFee;
+      } else if (formType === FormTypes.UNSHIELD && unshieldAddress && isExternalAddress && incAddress) {
+        // Case estimate fee for unshielded transactions
+        func = onEstimateUnshieldFee;
       }
+
+      if (func && typeof func === 'function') {
+        await func({ isResetForm });
+      }
+    };
+
+    const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.ESTIMATE_SWAP });
+
+    const debounceEstimateFee = React.useCallback(
+      debounce(async () => {
+        if (!UPDATED_METRIC) {
+          updateMetric().then();
+          UPDATED_METRIC = true;
+        }
+        await handleEstimateFee({ isResetForm: true });
+        if (intervalRef && !intervalRef.current) {
+          // @ts-ignore
+          intervalRef.current = setInterval(async () => {
+            await handleEstimateFee({ isResetForm: false });
+          }, 15000);
+        }
+      }, 700),
+      [inputAmount, isFocused]
+    );
+
+    React.useEffect(() => {
+      if (initRef && !initRef.current) {
+        setTimeout(() => (initRef.current = true), 200);
+        return;
+      }
+      onClearInterval();
+      debounceEstimateFee();
     }, [
       unshieldAddress,
       isExternalAddress,

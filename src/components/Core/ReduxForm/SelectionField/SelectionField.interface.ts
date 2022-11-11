@@ -35,6 +35,7 @@ export interface ISelectionFieldProps {
   onTopUp?: () => void;
   tokenNetwork?: string;
   tokenAmountNum?: number;
+  tokenType: 'sellToken' | 'buyToken';
 }
 
 interface IInputProps {

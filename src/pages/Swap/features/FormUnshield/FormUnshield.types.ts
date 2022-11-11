@@ -107,6 +107,7 @@ export interface UnshieldSetUserFeeAction extends Action {
 
 export interface UnshieldFetchingUserFeePayLoad {
   isFetchingFee: boolean;
+  isResetForm?: boolean;
 }
 
 export interface UnshieldSetFetchingUserFeeAction extends Action {
@@ -147,7 +148,7 @@ export interface SwapSetNetwork extends Action {
 }
 
 export type FormUnshieldActions =
-  // Umshield action
+  // Unshield action
   | UnshieldSetTokenAction
   | UnshieldSetUserFeeAction
   | UnshieldSetFetchingUserFeeAction
