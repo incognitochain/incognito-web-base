@@ -1,4 +1,3 @@
-import { ReactComponent as Info } from 'assets/images/info.svg';
 import Row from 'components/Core/Row';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
@@ -54,7 +53,6 @@ const ShieldFeeEstimate = (props: ShieldFeeEstimateProps) => {
               >
                 {'Shielding fee (est.)'}
               </ThemedText.SmallLabel>
-              <Info width="14" height="14" />
             </Row>
 
             <ThemedText.SmallLabel fontWeight={400} color="primary5">
@@ -66,21 +64,19 @@ const ShieldFeeEstimate = (props: ShieldFeeEstimateProps) => {
               {'This fee will be deducted from the shielded funds.'}
             </ThemedText.Small>
           </Row>
-          <div style={{ height: 24 }} />
         </>
       )}
-      <Row className="bottomView">
-        <Row>
-          <ThemedText.SmallLabel fontWeight={400} color="primary8">
-            * Your {symbol} shielding transaction is estimated to complete in 10 mins.
+
+      <Row className="topView" style={{ marginTop: 8 }}>
+        <Row style={{ flex: 1 }}>
+          <ThemedText.SmallLabel fontWeight={400} color="primary8" lineHeight={'14px'} style={{ alignItems: 'center' }}>
+            Estimate time
           </ThemedText.SmallLabel>
         </Row>
-        <div style={{ height: 8 }} />
-        <Row>
-          <ThemedText.SmallLabel fontWeight={400} color="primary8">
-            * Sending coins or tokens other than {symbol} to this address may result in the loss of your funds.
-          </ThemedText.SmallLabel>
-        </Row>
+
+        <ThemedText.SmallLabel fontWeight={400} color="primary5">
+          10 mins
+        </ThemedText.SmallLabel>
       </Row>
     </Styled>
   );

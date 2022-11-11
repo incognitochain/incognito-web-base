@@ -122,7 +122,7 @@ const FormDeposit = (props: IMergeProps) => {
             expiredAt={sellToken.isCentralized && state ? state.data?.expiredAt : undefined}
           />
           {/*<MinimumShiledAmount />*/}
-          {incAccount && <ShieldFeeEstimate value={shieldingFee} symbol={sellToken.symbol} />}
+          <ShieldFeeEstimate value={shieldingFee} symbol={sellToken.symbol} />
           {/*<DescriptionBox symbol={sellToken.symbol} token={sellToken} />*/}
         </div>
       )}
