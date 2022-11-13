@@ -70,6 +70,9 @@ export interface IUnshield {
   isUseTokenFee?: boolean;
   slippage: string;
   rate: string;
+
+  minUnshield: number;
+  minUnshieldText: string;
 }
 
 export const useUnshield = (): IUnshield => {
@@ -122,6 +125,8 @@ export const useUnshield = (): IUnshield => {
     swapNetwork,
     slippage,
     rate,
+    minUnshield,
+    minUnshieldText,
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
@@ -192,5 +197,8 @@ export const useUnshield = (): IUnshield => {
 
     slippage,
     rate,
+
+    minUnshield,
+    minUnshieldText,
   };
 };

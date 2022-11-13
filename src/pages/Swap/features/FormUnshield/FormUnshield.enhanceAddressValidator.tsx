@@ -1,6 +1,5 @@
 import { validator } from 'components/Core/ReduxForm';
 import { MAIN_NETWORK_NAME } from 'constants/token';
-import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 
 import { FormTypes } from './FormUnshield.types';
@@ -12,20 +11,13 @@ export interface TInner {
 
 const enhanceAddressValidation = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: any) => {
-    const refCountChangeField = React.useRef<any>(null);
-    const {
-      isExternalAddress,
-      onChangeField,
-      unshieldAddress,
-      web3Account,
-      incAddress,
-      inputAmount,
-      buyToken,
-      formType,
-      buyNetworkName,
-    } = props;
+    const { isExternalAddress, buyToken, formType, buyNetworkName } = props;
+
     const getAddressValidator = React.useCallback(() => {
       if (formType === FormTypes.UNSHIELD) {
+        if (buyToken.isBTC || buyToken.isCentralized) {
+          return validator.combinedCentralizedAddress;
+        }
         return validator.combinedEtherAddress;
       } else {
         if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
@@ -41,21 +33,25 @@ const enhanceAddressValidation = (WrappedComponent: any) => {
     const validateAddress = getAddressValidator();
     const warningAddress = getWarningAddress();
 
-    React.useEffect(() => {
-      if (!unshieldAddress && web3Account && onChangeField && !refCountChangeField.current) {
-        onChangeField(web3Account, FORM_CONFIGS.toAddress);
-        refCountChangeField.current = true;
-      }
-    }, [
-      unshieldAddress,
-      web3Account,
-      isExternalAddress,
-      incAddress,
-      inputAmount,
-      buyToken.tokenID,
-      refCountChangeField.current,
-      formType,
-    ]);
+    // React.useEffect(() => {
+    //   if (!unshieldAddress && web3Account && onChangeField && !refCountChangeField.current) {
+    //     onChangeField(web3Account, FORM_CONFIGS.toAddress);
+    //     refCountChangeField.current = true;
+    //   }
+    //   // isEtherAddress
+    //   // isPaymentAddress
+    //   // import { isAddress as isEtherAddress } from 'ethers/lib/utils';
+    //   // const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
+    // }, [
+    //   unshieldAddress,
+    //   web3Account,
+    //   isExternalAddress,
+    //   incAddress,
+    //   inputAmount,
+    //   buyToken.tokenID,
+    //   refCountChangeField.current,
+    //   formType,
+    // ]);
 
     return <WrappedComponent {...{ ...props, validateAddress, warningAddress }} />;
   };

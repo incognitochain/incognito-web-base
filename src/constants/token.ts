@@ -4,8 +4,18 @@ import incognitoLogoUrl from 'assets/images/inc_logo.svg';
 import auroraLogo from 'assets/svg/aurora-logo.svg';
 import avalancheLogo from 'assets/svg/avalanche-logo.svg';
 import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
+import btcLogoUrl from 'assets/svg/btc-logo.svg';
+import dashLogoUrl from 'assets/svg/dash-logo.svg';
+import dogeLogoUrl from 'assets/svg/doge-logo.svg';
+import dotLogoUrl from 'assets/svg/dot-logo.svg';
+import ltcLogoUrl from 'assets/svg/ltc-logo.svg';
 import nearLogo from 'assets/svg/near-logo.svg';
+import neoLogoUrl from 'assets/svg/neo-logo.svg';
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
+import tomoLogoUrl from 'assets/svg/tomo-logo.svg';
+import xmrLogoUrl from 'assets/svg/xmr-logo.svg';
+import zecLogoUrl from 'assets/svg/zec-logo.svg';
+import zilLogoUrl from 'assets/svg/zil-logo.svg';
 import { isMainnet } from 'config';
 
 import { SupportedChainId } from './chains';
@@ -41,6 +51,7 @@ const NETWORK_NAME = {
 };
 
 const PRIVATE_TOKEN_CURRENCY_TYPE = {
+  PRV: 0,
   ETH: 1,
   BTC: 2,
   ERC20: 3,
@@ -141,6 +152,7 @@ interface IGroupNetwork {
 }
 
 enum MAIN_NETWORK_NAME {
+  PRV = 'Privacy',
   ETHEREUM = 'Ethereum',
   BSC = 'BSC',
   POLYGON = 'Polygon',
@@ -149,6 +161,16 @@ enum MAIN_NETWORK_NAME {
   AVALANCHE = 'Avalanche',
   AURORA = 'Aurora',
   NEAR = 'Near',
+  TOMO = 'TomoChain',
+  ZIL = 'Zilliqua',
+  XMR = 'Monero',
+  NEO = 'NEO',
+  DASH = 'DASH',
+  DOT = 'DOT',
+  LTC = 'Litecoin',
+  DOGE = 'DOGE',
+  ZEC = 'Zcash',
+  BTC = 'Bitcoin',
 }
 
 const MAIN_NETWORK_NAME_ICON: any = {
@@ -160,6 +182,17 @@ const MAIN_NETWORK_NAME_ICON: any = {
   [MAIN_NETWORK_NAME.AURORA]: auroraLogo,
   [MAIN_NETWORK_NAME.NEAR]: nearLogo,
   [MAIN_NETWORK_NAME.INCOGNITO]: incognitoLogoUrl,
+
+  [MAIN_NETWORK_NAME.BTC]: btcLogoUrl,
+  [MAIN_NETWORK_NAME.DASH]: dashLogoUrl,
+  [MAIN_NETWORK_NAME.DOGE]: dogeLogoUrl,
+  [MAIN_NETWORK_NAME.DOT]: dotLogoUrl,
+  [MAIN_NETWORK_NAME.LTC]: ltcLogoUrl,
+  [MAIN_NETWORK_NAME.NEO]: neoLogoUrl,
+  [MAIN_NETWORK_NAME.TOMO]: tomoLogoUrl,
+  [MAIN_NETWORK_NAME.XMR]: xmrLogoUrl,
+  [MAIN_NETWORK_NAME.ZEC]: zecLogoUrl,
+  [MAIN_NETWORK_NAME.ZIL]: zilLogoUrl,
 };
 
 const GROUP_NETWORK: IGroupNetwork = {
@@ -174,30 +207,33 @@ const GROUP_NETWORK: IGroupNetwork = {
   [MAIN_NETWORK_NAME.AVALANCHE]: [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX, PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20],
   [MAIN_NETWORK_NAME.AURORA]: [PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH, PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20],
   [MAIN_NETWORK_NAME.NEAR]: [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR, PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN],
-  [MAIN_NETWORK_NAME.INCOGNITO]: [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN],
+  [MAIN_NETWORK_NAME.INCOGNITO]: [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN, PRIVATE_TOKEN_CURRENCY_TYPE.PRV],
+
+  [MAIN_NETWORK_NAME.BTC]: [PRIVATE_TOKEN_CURRENCY_TYPE.BTC],
+  [MAIN_NETWORK_NAME.DASH]: [PRIVATE_TOKEN_CURRENCY_TYPE.DASH],
+  [MAIN_NETWORK_NAME.DOGE]: [PRIVATE_TOKEN_CURRENCY_TYPE.DOGE],
+  [MAIN_NETWORK_NAME.DOT]: [PRIVATE_TOKEN_CURRENCY_TYPE.DOT],
+  [MAIN_NETWORK_NAME.LTC]: [PRIVATE_TOKEN_CURRENCY_TYPE.LTC],
+  [MAIN_NETWORK_NAME.NEO]: [PRIVATE_TOKEN_CURRENCY_TYPE.NEO],
+  [MAIN_NETWORK_NAME.TOMO]: [PRIVATE_TOKEN_CURRENCY_TYPE.TOMO],
+  [MAIN_NETWORK_NAME.XMR]: [PRIVATE_TOKEN_CURRENCY_TYPE.XMR],
+  [MAIN_NETWORK_NAME.ZEC]: [PRIVATE_TOKEN_CURRENCY_TYPE.ZEC],
+  [MAIN_NETWORK_NAME.ZIL]: [PRIVATE_TOKEN_CURRENCY_TYPE.ZIL],
 };
 
 const ROOT_NETWORK_IMG: any = {
   [PRIVATE_TOKEN_CURRENCY_TYPE.ETH]: ethereumLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.ERC20]: ethereumLogoUrl,
-  [SupportedChainId.KOVAN]: ethereumLogoUrl,
-  [SupportedChainId.MAINNET]: ethereumLogoUrl,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB]: bnbChainLogo,
   [PRIVATE_TOKEN_CURRENCY_TYPE.BNB_BEP2]: bnbChainLogo,
   [PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20]: bnbChainLogo,
-  [SupportedChainId.BSC]: bnbChainLogo,
-  [SupportedChainId.BSC_TESTNET]: bnbChainLogo,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.MATIC]: polygonMaticLogo,
   [PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20]: polygonMaticLogo,
-  [SupportedChainId.POLYGON]: polygonMaticLogo,
-  [SupportedChainId.POLYGON_MUMBAI]: polygonMaticLogo,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.FTM]: ftmLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20]: ftmLogoUrl,
-  [SupportedChainId.FTM]: ftmLogoUrl,
-  [SupportedChainId.FTM_TESTNET]: ftmLogoUrl,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX]: avalancheLogo,
   [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20]: avalancheLogo,
@@ -216,7 +252,44 @@ const ROOT_NETWORK_IMG: any = {
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN]: incognitoLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]: incognitoLogoUrl,
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.BTC]: btcLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.DASH]: dashLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.DOGE]: dogeLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.DOT]: dotLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.LTC]: ltcLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.NEO]: neoLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.TOMO]: tomoLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.XMR]: xmrLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.ZEC]: zecLogoUrl,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.ZIL]: zilLogoUrl,
 };
+
+const CONNECT_NETWORK_IMG: any = {
+  [SupportedChainId.KOVAN]: ethereumLogoUrl,
+  [SupportedChainId.MAINNET]: ethereumLogoUrl,
+  [SupportedChainId.GOERLI_ETH]: ethereumLogoUrl,
+
+  [SupportedChainId.BSC]: bnbChainLogo,
+  [SupportedChainId.BSC_TESTNET]: bnbChainLogo,
+
+  [SupportedChainId.POLYGON]: polygonMaticLogo,
+  [SupportedChainId.POLYGON_MUMBAI]: polygonMaticLogo,
+
+  [SupportedChainId.FTM]: ftmLogoUrl,
+  [SupportedChainId.FTM_TESTNET]: ftmLogoUrl,
+};
+
+const UN_SUPPORTED_NETWORK = [
+  PRIVATE_TOKEN_CURRENCY_TYPE.NEAR,
+  PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN,
+
+  PRIVATE_TOKEN_CURRENCY_TYPE.AVAX,
+  PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20,
+
+  PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH,
+  PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20,
+];
 
 const BTC_TOKEN_ID = 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696';
 const ETH_TOKEN_ID = '3ee31eba6376fc16cadb52c8765f20b6ebff92c0b1c5ab5fc78c8c25703bb19e';
@@ -278,6 +351,7 @@ const MAIN_TOKENS = {
 
 export {
   BIG_COINS,
+  CONNECT_NETWORK_IMG,
   CRYPTO_ICON_URL,
   DECIMALS,
   GROUP_NETWORK,
@@ -291,4 +365,5 @@ export {
   PRIVATE_TOKEN_TYPE,
   PRV,
   ROOT_NETWORK_IMG,
+  UN_SUPPORTED_NETWORK,
 };

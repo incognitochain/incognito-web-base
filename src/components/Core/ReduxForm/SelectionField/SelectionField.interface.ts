@@ -31,6 +31,11 @@ export interface ISelectionFieldProps {
   footerRightText?: string;
   footerRightClass?: string;
   onClickFooterRight?: () => void;
+  showShowTopUp?: boolean;
+  onTopUp?: () => void;
+  tokenNetwork?: string;
+  tokenAmountNum?: number;
+  tokenType: 'sellToken' | 'buyToken';
 }
 
 interface IInputProps {

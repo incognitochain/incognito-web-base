@@ -13,7 +13,8 @@ const TAB_LIST: ITabList = {
     rootTab: getRootTab('SWAP'),
   },
   INCOGNITO_ACCOUNT: {
-    tabNames: ['Profile', 'Submit Proof', 'Transactions'],
+    // tabNames: ['Profile', 'Submit Proof', 'Transactions'],
+    tabNames: ['Profile', 'Transactions'],
     rootTab: getRootTab('INCOGNITO_ACCOUNT'),
   },
   SUBMIT_PROOF: {

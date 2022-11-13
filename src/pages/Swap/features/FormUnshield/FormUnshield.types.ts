@@ -24,6 +24,7 @@ export enum SwapExchange {
   PANCAKE_SWAP = 'pancake',
   UNISWAP = 'uniswap',
   CURVE = 'curve',
+  PDEX = 'pdex',
   SPOOKY = 'spooky',
   JOE = 'joe',
   TRISOLARIS = 'trisolaris',
@@ -38,6 +39,7 @@ export enum NetworkTypePayload {
   AVALANCHE = 'avax',
   AURORA = 'aurora',
   NEAR = 'near',
+  CENTRALIZED = 'centralized',
 }
 
 export interface ISwapExchange {
@@ -83,8 +85,10 @@ export interface ISwapExchangeData {
   callData: string;
   networkID: number;
   feeAddressShardID: number;
+  poolPairs: string[];
   expectedAmount: string;
   rate: string;
+  impactAmount: number | null;
 }
 
 export interface UnshieldSetTokenPayLoad {
@@ -108,6 +112,7 @@ export interface UnshieldSetUserFeeAction extends Action {
 
 export interface UnshieldFetchingUserFeePayLoad {
   isFetchingFee: boolean;
+  isResetForm?: boolean;
 }
 
 export interface UnshieldSetFetchingUserFeeAction extends Action {
@@ -148,7 +153,7 @@ export interface SwapSetNetwork extends Action {
 }
 
 export type FormUnshieldActions =
-  // Umshield action
+  // Unshield action
   | UnshieldSetTokenAction
   | UnshieldSetUserFeeAction
   | UnshieldSetFetchingUserFeeAction

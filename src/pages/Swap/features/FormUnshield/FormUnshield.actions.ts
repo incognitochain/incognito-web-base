@@ -1,12 +1,13 @@
 import { BigNumber } from 'bignumber.js';
-import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
-import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
+import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import PToken, { getTokenIdentify, ITokenNetwork } from 'models/model/pTokenModel';
+import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { rpcClient } from 'services';
 import { AppDispatch, AppState } from 'state';
 import { getPrivacyByTokenIdentifySelectors } from 'state/token';
 import convert from 'utils/convert';
+import { getAcronymNetwork } from 'utils/token';
 
-import SelectedPrivacy from '../../../../models/model/SelectedPrivacyModel';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import {
   FormTypes,
@@ -20,7 +21,7 @@ import {
   UnshieldSetUserFeeAction,
   UnshieldSetUserFeePayLoad,
 } from './FormUnshield.types';
-import { parseExchangeDataModelResponse } from './FormUnshield.utils';
+import { getINCTokenWithNetworkName, parseExchangeDataModelResponse } from './FormUnshield.utils';
 
 export const actionSetToken = (payload: UnshieldSetTokenPayLoad): UnshieldSetTokenAction => ({
   type: FormUnshieldActionType.SET_TOKEN,
@@ -70,10 +71,11 @@ export const actionChangeSellToken =
   ({ token }: { token: PToken }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
-      const { buyToken } = unshieldDataSelector(getState());
-      const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
-      if (!token.chainID || !token.networkName || !parentToken.currencyType) return;
-      const sellToken: ITokenNetwork = {
+      const { buyToken, formType, sellToken: currentSellToken, buyNetworkName } = unshieldDataSelector(getState());
+      const sellParentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
+      if (!token.networkName || sellParentToken.currencyType === undefined) return;
+
+      const _sellToken: ITokenNetwork = {
         parentIdentify: token.parentTokenID,
         identify: token.identify,
         chainID: token.chainID,
@@ -81,31 +83,57 @@ export const actionChangeSellToken =
         networkName: token.networkName,
       };
 
-      let _buyToken = parentToken;
-      if (parentToken.hasChild) {
-        _buyToken = parentToken.listUnifiedToken[0];
-      }
-      const buyTokenObj: ITokenNetwork = {
-        parentIdentify: token.parentTokenID,
-        identify: _buyToken.identify,
-        chainID: _buyToken.chainID,
-        currency: _buyToken.currencyType,
-        networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
-      };
-
-      if (parentToken.parentTokenID === buyToken.parentTokenID) {
+      if (
+        currentSellToken.networkName === buyNetworkName &&
+        (currentSellToken.isBTC || currentSellToken.isCentralized) &&
+        currentSellToken.parentTokenID === buyToken.parentTokenID
+      ) {
+        const _buyToken: ITokenNetwork = {
+          parentIdentify: buyToken.parentTokenID,
+          identify: buyToken.identify,
+          chainID: buyToken.chainID,
+          currency: buyToken.currencyType,
+          networkName: MAIN_NETWORK_NAME.INCOGNITO,
+        };
+        dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
         dispatch(
           actionSetToken({
-            sellToken,
-            buyToken: buyTokenObj,
+            sellToken: _sellToken,
+            buyToken: _buyToken,
           })
         );
       } else {
-        dispatch(
-          actionSetToken({
-            sellToken,
-          })
-        );
+        let _buyToken = sellParentToken;
+        if (_buyToken.hasChild) {
+          _buyToken = _buyToken.listUnifiedToken[0];
+        }
+        // Case unshield
+        if (sellParentToken.parentTokenID === buyToken.parentTokenID) {
+          const defaultBuyToken: ITokenNetwork = {
+            parentIdentify: token.parentTokenID,
+            identify: _buyToken.identify,
+            chainID: _buyToken.chainID,
+            currency: _buyToken.currencyType,
+            networkName: _buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+          };
+          dispatch(
+            actionSetToken({
+              sellToken: _sellToken,
+              buyToken: defaultBuyToken,
+            })
+          );
+          dispatch(actionSetSwapNetwork(_buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO));
+        } else {
+          dispatch(
+            actionSetToken({
+              sellToken: _sellToken,
+            })
+          );
+        }
+      }
+      if (formType === FormTypes.SWAP) {
+        dispatch(actionSetExchangeSelected(null));
+        dispatch(actionSetSwapExchangeSupports([]));
       }
     } catch (error) {
       console.log('ACTION FILTER TOKEN ERROR: ', error);
@@ -116,14 +144,27 @@ export const actionChangeBuyToken =
   ({ token }: { token: PToken }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
-      const { sellToken } = unshieldDataSelector(getState());
       const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
-      if (!token.chainID || !token.networkName || !parentToken.currencyType) return;
+      if (!token.networkName || parentToken.currencyType === undefined) return;
+      const { sellToken, buyNetworkName } = unshieldDataSelector(getState());
 
+      // case swap INCOGNITO
       let _buyToken = parentToken;
-      if (parentToken.hasChild) {
+
+      // case unshield
+      if (parentToken.hasChild && _buyToken.parentTokenID === sellToken.parentTokenID) {
         _buyToken = parentToken.listUnifiedToken[0];
       }
+      // case swap outchain
+      if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
+        const tokenMap = getINCTokenWithNetworkName({
+          parentToken,
+          token,
+          networkName: buyNetworkName,
+        });
+        if (tokenMap) _buyToken = tokenMap;
+      }
+
       const buyTokenObj: ITokenNetwork = {
         parentIdentify: _buyToken.parentTokenID,
         identify: _buyToken.identify,
@@ -161,19 +202,84 @@ export const actionChangeSellNetwork =
 export const actionChangeBuyNetwork =
   ({ network }: { network: ITokenNetwork }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
-    const { formType } = unshieldDataSelector(getState());
+    const { sellToken, sellParentToken, buyToken, buyParentToken } = unshieldDataSelector(getState());
+
+    const parentID = getTokenIdentify({
+      tokenID: !sellToken.parentTokenID.toLowerCase().includes(BIG_COINS.USDC_UNIFIED.tokenID.toLowerCase())
+        ? BIG_COINS.USDC_UNIFIED.tokenID
+        : BIG_COINS.ETH_UNIFIED.tokenID,
+      currencyType: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
+    });
+
+    const defBuyToken = {
+      parentIdentify: parentID,
+      identify: parentID,
+      chainID: 0,
+      currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
+      networkName: network.networkName,
+    };
+
     try {
-      if (formType === FormTypes.UNSHIELD) {
-        dispatch(
-          actionSetToken({
-            buyToken: {
-              ...network,
-            },
-          })
-        );
+      // set network and token centralized + BTC
+      if ((sellToken.isBTC || sellToken.isCentralized) && network.networkName === sellToken.networkName) {
+        dispatch(actionSetToken({ buyToken: { ...network } }));
       } else {
-        dispatch(actionSetSwapNetwork(network?.networkName));
+        // unshield
+        if (sellToken.parentTokenID === buyToken.parentTokenID) {
+          // reset field
+          if (network.networkName === MAIN_NETWORK_NAME.INCOGNITO) {
+            dispatch(actionSetToken({ buyToken: { ...defBuyToken } }));
+          } else {
+            dispatch(actionSetToken({ buyToken: { ...network } }));
+          }
+        } else {
+          // case swap INCOGNITO
+          if (network.networkName === MAIN_NETWORK_NAME.INCOGNITO) {
+            // set unified token
+            if (buyToken.tokenID !== buyToken.parentTokenID) {
+              dispatch(
+                actionSetToken({
+                  buyToken: {
+                    parentIdentify: buyParentToken.parentTokenID,
+                    identify: buyParentToken.identify,
+                    chainID: buyParentToken.chainID,
+                    currency: buyParentToken.currencyType,
+                    networkName: network.networkName,
+                  },
+                })
+              );
+            }
+          } else {
+            let _buyToken = getINCTokenWithNetworkName({
+              parentToken: buyParentToken,
+              token: buyToken,
+              networkName: network.networkName,
+            });
+            if (!_buyToken) {
+              // reset buy token with sell token mapping buy network
+              _buyToken = getINCTokenWithNetworkName({
+                parentToken: sellParentToken,
+                token: sellToken,
+                networkName: network.networkName,
+              });
+            }
+            if (!!_buyToken) {
+              dispatch(
+                actionSetToken({
+                  buyToken: {
+                    parentIdentify: _buyToken.parentTokenID,
+                    identify: _buyToken.identify,
+                    chainID: _buyToken.chainID,
+                    currency: _buyToken.currencyType,
+                    networkName: network.networkName,
+                  },
+                })
+              );
+            }
+          }
+        }
       }
+      dispatch(actionSetSwapNetwork(network?.networkName));
     } catch (error) {
       console.log('ACTION CHANGE BUY NETWORK ERROR: ', error);
     }
@@ -185,23 +291,9 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
       getState()
     );
     if (!incAddress || !unshieldAddress || !inputOriginalAmount) return;
+    dispatch(actionSetErrorMsg(''));
     dispatch(actionSetFetchingFee({ isFetchingFee: true }));
-    let network = '';
-    if (buyToken.isErc20Token || buyToken.isMainETH) {
-      network = 'eth';
-    } else if (buyToken.isPolygonErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.MATIC) {
-      network = 'plg';
-    } else if (buyToken.isFantomErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.FTM) {
-      network = 'ftm';
-    } else if (buyToken.isBep20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
-      network = 'bsc';
-    } else if (buyToken.isAvaxErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX) {
-      network = 'avax';
-    } else if (buyToken.isAuroraErc20Token || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH) {
-      network = 'aurora';
-    } else if (buyToken.isNearToken || buyToken.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.NEAR) {
-      network = 'near';
-    }
+    const network: any = getAcronymNetwork(buyToken);
 
     const incognitoAmount = new BigNumber(
       inputOriginalAmount ||
@@ -216,196 +308,189 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
       requestedAmount: inputAmount || '1',
       walletAddress: incAddress,
       unifiedTokenID: sellToken.isUnified ? sellToken.tokenID : '',
+      currencyType: buyToken.currencyType,
     };
     const data = await rpcClient.estimateFee(payload);
     dispatch(actionSetUserFee({ fee: data }));
   } catch (error) {
-    console.log('ACTION FILTER TOKEN ERROR: ', error);
-  } finally {
-    setTimeout(() => {
-      dispatch(actionSetFetchingFee({ isFetchingFee: false }));
-    }, 200);
-  }
-};
-
-export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getState: AppState & any) => {
-  try {
-    const { inputAmount, buyParentToken, buyNetworkName, incAddress, sellToken, slippage } = unshieldDataSelector(
-      getState()
-    );
-    if (
-      !inputAmount ||
-      !parseFloat(inputAmount) ||
-      !sellToken?.tokenID ||
-      !buyParentToken?.tokenID ||
-      !incAddress ||
-      !buyNetworkName
-    ) {
-      return;
-    }
-    dispatch(actionSetFetchingFee({ isFetchingFee: true }));
-    let network: NetworkTypePayload = NetworkTypePayload.INCOGNITO;
-    if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
-      network = NetworkTypePayload.ETHEREUM;
-    } else if (buyNetworkName === MAIN_NETWORK_NAME.BSC) {
-      network = NetworkTypePayload.BINANCE_SMART_CHAIN;
-    } else if (buyNetworkName === MAIN_NETWORK_NAME.POLYGON) {
-      network = NetworkTypePayload.POLYGON;
-    } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
-      network = NetworkTypePayload.FANTOM;
-    } else if (buyNetworkName === MAIN_NETWORK_NAME.AVALANCHE) {
-      network = NetworkTypePayload.AVALANCHE;
-    } else if (buyNetworkName === MAIN_NETWORK_NAME.AURORA) {
-      network = NetworkTypePayload.AURORA;
-    } else if (buyNetworkName === MAIN_NETWORK_NAME.NEAR) {
-      network = NetworkTypePayload.NEAR;
-    }
-
-    const payload = {
-      network,
-      amount: inputAmount,
-      fromToken: sellToken.tokenID,
-      toToken: buyParentToken.tokenID,
-      slippage,
-    };
-
-    // Call api estimate swap fee
-    const data = await rpcClient.estimateSwapFee(payload);
-    if (!data) throw new Error('Can not estimate trade');
-
-    let ethExchanges: ISwapExchangeData[] = [];
-    let ftmExchanges: ISwapExchangeData[] = [];
-    let plgExchanges: ISwapExchangeData[] = [];
-    let bscExchanges: ISwapExchangeData[] = [];
-    let avaxExchanges: ISwapExchangeData[] = [];
-    let auroraExchanges: ISwapExchangeData[] = [];
-    if (data?.hasOwnProperty(NetworkTypePayload.BINANCE_SMART_CHAIN)) {
-      let incTokenID = sellToken.tokenID;
-      if (sellToken?.isUnified) {
-        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 2);
-        incTokenID = childToken?.tokenID || '';
-      }
-      const exchanges = data[NetworkTypePayload.BINANCE_SMART_CHAIN];
-      if (Array.isArray(exchanges)) {
-        bscExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'BNB Chain', 2, incTokenID)
-        );
-      }
-    }
-
-    if (data?.hasOwnProperty(NetworkTypePayload.ETHEREUM)) {
-      let incTokenID = sellToken.tokenID;
-      if (sellToken?.isUnified) {
-        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 1);
-        incTokenID = childToken?.tokenID || '';
-      }
-      const exchanges = data[NetworkTypePayload.ETHEREUM];
-      if (Array.isArray(exchanges)) {
-        ethExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'Ethereum', 1, incTokenID)
-        );
-      }
-    }
-
-    if (data?.hasOwnProperty(NetworkTypePayload.POLYGON)) {
-      let incTokenID = sellToken.tokenID;
-      if (sellToken?.isUnified) {
-        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 3);
-        incTokenID = childToken?.tokenID || '';
-      }
-      const exchanges = data[NetworkTypePayload.POLYGON];
-      if (Array.isArray(exchanges)) {
-        plgExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'Polygon', 3, incTokenID)
-        );
-      }
-    }
-
-    if (data?.hasOwnProperty(NetworkTypePayload.FANTOM)) {
-      let incTokenID = sellToken.tokenID;
-      if (sellToken?.isUnified) {
-        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 4);
-        incTokenID = childToken?.tokenID || '';
-      }
-      const exchanges = data[NetworkTypePayload.FANTOM];
-      if (Array.isArray(exchanges)) {
-        ftmExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'Fantom', 4, incTokenID)
-        );
-      }
-    }
-
-    if (data?.hasOwnProperty(NetworkTypePayload.AVALANCHE)) {
-      let incTokenID = sellToken.tokenID;
-      if (sellToken?.isUnified) {
-        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 6);
-        incTokenID = childToken?.tokenID || '';
-      }
-      const exchanges = data[NetworkTypePayload.AVALANCHE];
-      if (Array.isArray(exchanges)) {
-        avaxExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'Avalanche', 6, incTokenID)
-        );
-      }
-    }
-
-    if (data?.hasOwnProperty(NetworkTypePayload.AURORA)) {
-      let incTokenID = sellToken.tokenID;
-      if (sellToken?.isUnified) {
-        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 5);
-        incTokenID = childToken?.tokenID || '';
-      }
-      const exchanges = data[NetworkTypePayload.AURORA];
-      if (Array.isArray(exchanges)) {
-        auroraExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'Aurora', 5, incTokenID)
-        );
-      }
-    }
-
-    const exchangeSupports = [
-      ...ethExchanges,
-      ...ftmExchanges,
-      ...plgExchanges,
-      ...bscExchanges,
-      ...avaxExchanges,
-      ...auroraExchanges,
-    ];
-
-    if (!exchangeSupports?.length)
-      throw new Error('Can not find any trading platform that supports for this pair token');
-
-    // Find best rate by list exchange
-    // const bestRate: ISwapExchangeData = exchangeSupports[0];
-    const bestRate: ISwapExchangeData = exchangeSupports.reduce((prev, current) => {
-      let prevFee = '0';
-      let curFee = '0';
-      if (prev.fees) {
-        prevFee = prev.fees[0].amountInBuyToken;
-      }
-      if (current.fees) {
-        curFee = current.fees[0].amountInBuyToken;
-      }
-
-      const prevValue = new BigNumber(prev.amountOut).minus(prevFee);
-      const currValue = new BigNumber(current.amountOut).minus(curFee);
-
-      return new BigNumber(prevValue).gt(currValue) ? prev : current;
-    });
-
-    // Set default exchange has best rate
-    const defaultExchange: string = bestRate?.exchangeName;
-    dispatch(actionSetExchangeSelected(defaultExchange));
-
-    dispatch(actionSetSwapExchangeSupports(exchangeSupports));
-  } catch (error) {
     dispatch(actionSetErrorMsg(typeof error === 'string' ? error : error?.message || ''));
+    console.log('ACTION ESTIMATE UNSHIELD FEE ERROR: ', error);
   } finally {
     setTimeout(() => {
       dispatch(actionSetFetchingFee({ isFetchingFee: false }));
     }, 200);
   }
 };
+
+const combineExchange = ({
+  data,
+  token,
+  network,
+  networkText,
+  networkID,
+  checkUnified = true,
+}: {
+  data: any;
+  token: SelectedPrivacy;
+  network: NetworkTypePayload;
+  networkText: string;
+  networkID: number;
+  checkUnified?: boolean;
+}) => {
+  let exchange: ISwapExchangeData[] = [];
+  if (data?.hasOwnProperty(network)) {
+    let incTokenID = token.tokenID;
+    if (token?.isUnified && checkUnified) {
+      const childToken = token?.listUnifiedToken?.find((token: any) => token?.networkID === networkID);
+      incTokenID = childToken?.tokenID || '';
+    }
+    const exchanges = data[network];
+    if (Array.isArray(exchanges)) {
+      exchange = exchanges.map((exchange: any) =>
+        parseExchangeDataModelResponse(exchange, networkText, networkID, incTokenID)
+      );
+    }
+  }
+  return exchange || [];
+};
+
+export const actionEstimateSwapFee =
+  ({ isResetForm = false }: { isResetForm: boolean }) =>
+  async (dispatch: AppDispatch, getState: AppState & any) => {
+    try {
+      const { inputAmount, buyParentToken, buyNetworkName, sellToken, slippage, exchangeSelected, isSubmitting } =
+        unshieldDataSelector(getState());
+      if (
+        !inputAmount ||
+        !parseFloat(inputAmount) ||
+        !sellToken?.tokenID ||
+        !buyParentToken?.tokenID ||
+        // !incAddress ||
+        !buyNetworkName ||
+        isSubmitting
+      ) {
+        return;
+      }
+      dispatch(actionSetFetchingFee({ isFetchingFee: true, isResetForm }));
+      let network: NetworkTypePayload = NetworkTypePayload.INCOGNITO;
+      if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
+        network = NetworkTypePayload.ETHEREUM;
+      } else if (buyNetworkName === MAIN_NETWORK_NAME.BSC) {
+        network = NetworkTypePayload.BINANCE_SMART_CHAIN;
+      } else if (buyNetworkName === MAIN_NETWORK_NAME.POLYGON) {
+        network = NetworkTypePayload.POLYGON;
+      } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
+        network = NetworkTypePayload.FANTOM;
+      }
+
+      const payload = {
+        network,
+        amount: inputAmount,
+        fromToken: sellToken.tokenID,
+        toToken: buyParentToken.tokenID,
+        slippage,
+      };
+
+      // Call api estimate swap fee
+      const data = await rpcClient.estimateSwapFee(payload);
+      if (!data) throw new Error('Can not estimate trade');
+      const pdexExchanges = combineExchange({
+        checkUnified: false,
+        data,
+        network: NetworkTypePayload.INCOGNITO,
+        networkID: 0,
+        networkText: 'PDex',
+        token: sellToken,
+      });
+      const ethExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.ETHEREUM,
+        networkID: 1,
+        networkText: 'Ethereum',
+        token: sellToken,
+      });
+      const bscExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.BINANCE_SMART_CHAIN,
+        networkID: 2,
+        networkText: 'BNB Chain',
+        token: sellToken,
+      });
+      const plgExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.POLYGON,
+        networkID: 3,
+        networkText: 'Polygon',
+        token: sellToken,
+      });
+      const ftmExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.FANTOM,
+        networkID: 4,
+        networkText: 'Fantom',
+        token: sellToken,
+      });
+      const avaxExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.AVALANCHE,
+        networkID: 6,
+        networkText: 'Avalanche',
+        token: sellToken,
+      });
+      const auroraExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.AURORA,
+        networkID: 5,
+        networkText: 'Aurora',
+        token: sellToken,
+      });
+      const exchangeSupports = [
+        ...ethExchanges,
+        ...ftmExchanges,
+        ...plgExchanges,
+        ...bscExchanges,
+        ...avaxExchanges,
+        ...auroraExchanges,
+        ...pdexExchanges,
+      ];
+      if (!exchangeSupports?.length)
+        throw new Error('Can not find any trading platform that supports for this pair token');
+
+      // Find best rate by list exchange
+      // const bestRate: ISwapExchangeData = exchangeSupports[0];
+      let bestRate: ISwapExchangeData | undefined;
+
+      if (
+        !isResetForm &&
+        exchangeSelected &&
+        exchangeSupports.some((exchange) => exchange.exchangeName === exchangeSelected)
+      ) {
+        bestRate = exchangeSupports.find((exchange) => exchange.exchangeName === exchangeSelected);
+      }
+      if (!bestRate) {
+        bestRate = exchangeSupports.reduce((prev, current) => {
+          let prevFee = '0';
+          let curFee = '0';
+          if (prev.fees) prevFee = prev.fees[0].amountInBuyToken;
+          if (current.fees) curFee = current.fees[0].amountInBuyToken;
+          const prevValue = new BigNumber(prev.amountOut).minus(prevFee);
+          const currValue = new BigNumber(current.amountOut).minus(curFee);
+          return new BigNumber(prevValue).gt(currValue) ? prev : current;
+        });
+      }
+      // Set default exchange has best rate
+      const defaultExchange: string = bestRate?.exchangeName;
+      dispatch(actionSetExchangeSelected(defaultExchange));
+
+      dispatch(actionSetSwapExchangeSupports(exchangeSupports));
+    } catch (error) {
+      dispatch(actionSetErrorMsg(typeof error === 'string' ? error : error?.message || ''));
+    } finally {
+      setTimeout(() => {
+        dispatch(actionSetFetchingFee({ isFetchingFee: false }));
+      }, 200);
+    }
+  };
 
 export const actionRotateSwapTokens = () => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {

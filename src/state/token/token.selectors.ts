@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { GROUP_NETWORK, PRIORITY_TOKEN_ID, PRV } from 'constants/token';
+import { GROUP_NETWORK, PRIORITY_TOKEN_ID } from 'constants/token';
 import orderBy from 'lodash/orderBy';
 import SelectedPrivacyModel from 'models/model/SelectedPrivacyModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
@@ -29,9 +29,7 @@ export const unshieldableTokens = createSelector(pTokensSelector, (pTokens) => {
         Object.keys(GROUP_NETWORK).find((key) => {
           return GROUP_NETWORK[key].includes(currencyType);
         })
-      ) &&
-      tokenID !== PRV.id &&
-      isVerified
+      ) && isVerified
     );
   });
   return unshieldable || [];

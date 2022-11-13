@@ -1,6 +1,7 @@
-import CopyIcon from 'components/Copy/index';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
+
+import format from '../../../../../utils/format';
 
 const Styled = styled.div`
   margin-top: 16px;
@@ -37,27 +38,21 @@ const Styled = styled.div`
 interface DescriptionQrCodeProps {
   symbol: string;
   paymentAddress?: string;
+  expiredAt?: string;
 }
 
-const DescriptionQrCode = ({ symbol, paymentAddress }: DescriptionQrCodeProps) => {
+const DescriptionQrCode = ({ symbol, paymentAddress, expiredAt }: DescriptionQrCodeProps) => {
   return (
     <Styled>
       <div className="center">
-        <ThemedText.SmallLabel fontWeight={400} color="primary8">
+        <ThemedText.SmallLabel fontWeight={400} color="text1">
           {`Send only ${symbol} to this shielding address`}
         </ThemedText.SmallLabel>
       </div>
-
-      {paymentAddress && (
-        <div className="paymentAddress-area">
-          <div className="paymentAddressText">
-            <ThemedText.RegularLabel fontWeight={500} color="primary5">
-              {paymentAddress}
-            </ThemedText.RegularLabel>
-          </div>
-
-          <CopyIcon text={paymentAddress} />
-        </div>
+      {expiredAt && (
+        <ThemedText.SmallLabel fontWeight={400} color="primary15" textAlign="center" marginTop="4px">
+          {`Expires at: ${format.formatDateTime({ dateTime: expiredAt })}`}
+        </ThemedText.SmallLabel>
       )}
     </Styled>
   );

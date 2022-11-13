@@ -175,7 +175,7 @@ const amountVer2 = ({ originalAmount, decimals }: IAmountV2): string => {
   }
 };
 
-const formatDateTime = ({ dateTime, formatPattern }: { dateTime: number; formatPattern?: string }) =>
+const formatDateTime = ({ dateTime, formatPattern }: { dateTime: number | any; formatPattern?: string }) =>
   moment(dateTime).format(formatPattern || 'DD MMM hh:mm A');
 
 const format = {

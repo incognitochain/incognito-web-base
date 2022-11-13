@@ -117,6 +117,15 @@ const validateAlphaNumericText = (message?: string) => (value: any) => {
   return !NAME_PATTERN.test(value) ? message : undefined;
 };
 
+const centralizedAddress = (message?: string) => (value: any) => {
+  if (value && (isEtherAddress(value) || isPaymentAddress(value))) {
+    return message || 'Invalid address';
+  }
+  return undefined;
+};
+
+const combinedCentralizedAddress = [required, centralizedAddress()];
+
 const validator = {
   validateAlphaNumericText,
   minLength,
@@ -135,6 +144,7 @@ const validator = {
   combinedEtherAddress,
   combinedOutchainHash,
   email,
+  combinedCentralizedAddress,
 };
 
 export default validator;

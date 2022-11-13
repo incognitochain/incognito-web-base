@@ -5,6 +5,7 @@ import {
   PRIVATE_TOKEN_CURRENCY_TYPE,
   PRIVATE_TOKEN_TYPE,
   PRV,
+  UN_SUPPORTED_NETWORK,
 } from 'constants/token';
 import isEmpty from 'lodash/isEmpty';
 import { getChainIDByCurrency, getNetworkNameByCurrency } from 'utils/token';
@@ -18,6 +19,9 @@ export interface ITokenNetwork {
   networkName: MAIN_NETWORK_NAME;
   currency: number;
 }
+
+export const getTokenIdentify = ({ tokenID, currencyType }: { tokenID: string; currencyType: number }) =>
+  `${tokenID}-${currencyType}`;
 
 class PToken {
   identify: string;
@@ -79,11 +83,13 @@ class PToken {
 
   isDecentralized: boolean;
   isCentralized: boolean;
+  isBTC: boolean;
 
   hasChild: boolean;
   isUnified: boolean;
 
   isDepositable: boolean;
+  poolPair: string;
 
   getIconUrl({ url }: { url: string }) {
     if (this.tokenID === PRVIDSTR) {
@@ -181,16 +187,23 @@ class PToken {
       (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH) ||
       this.isNearToken ||
       (!this.isPRV && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.NEAR);
-    this.isCentralized = !this.isPRV && !this.isDecentralized;
+    this.isBTC = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BTC;
+    this.isCentralized =
+      !this.isPRV &&
+      !this.isDecentralized &&
+      this.currencyType !== PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN &&
+      !this.isBTC;
 
     this.networkName = getNetworkNameByCurrency({ currency: this.currencyType });
     this.chainID = getChainIDByCurrency({ currency: this.currencyType });
-    this.identify = `${this.tokenID}-${this.currencyType}`;
+    this.identify = getTokenIdentify({ tokenID: this.tokenID, currencyType: this.currencyType });
     this.parentTokenID = this.identify;
+    this.iconUrl = this.getIconUrl({ url: data.Image });
     if (data && data.ListChildToken instanceof Array) {
       this.listChildToken = data.ListChildToken.map((item: any) => {
         const newItem = new PToken(item);
         newItem.parentTokenID = `${data.TokenID}-${data.CurrencyType}`;
+        newItem.movedUnifiedToken = true;
         return newItem;
       });
     } else {
@@ -205,13 +218,14 @@ class PToken {
     } else {
       this.listUnifiedToken = [];
     }
-
-    this.iconUrl = this.getIconUrl({ url: data.Image });
     const listChild = isEmpty(this.listUnifiedToken) ? this.listChildToken : this.listUnifiedToken;
+    // Update ListChildToken to listUnifiedToken
+    this.listUnifiedToken = listChild;
     this.supportedNetwork = [];
     this.hasChild = !isEmpty(listChild);
     this.isUnified = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN;
     this.isDepositable = data.Status !== 0;
+    this.poolPair = data.DefaultPoolPair || '';
 
     if (!isEmpty(listChild)) {
       const temp = listChild.map((token) => {
@@ -226,22 +240,33 @@ class PToken {
       });
       temp.forEach((data: any) => {
         const { currency, chainID, networkName } = data;
-        if (!currency && !chainID && networkName) return;
+        const isUnSupported = UN_SUPPORTED_NETWORK.includes(currency);
+        if ((!currency && !chainID && networkName) || isUnSupported) return;
         this.supportedNetwork?.push(data);
       });
     } else {
-      if (!!this.currencyType && !!this.chainID && !!this.networkName) {
-        this.supportedNetwork = [
-          {
-            parentIdentify: this.parentTokenID,
-            currency: this.currencyType,
-            networkName: this.networkName,
-            chainID: this.chainID,
-            identify: this.identify,
-          },
-        ];
-      }
+      const isUnSupported = UN_SUPPORTED_NETWORK.includes(this.currencyType);
+      if (isUnSupported || !this.networkName || this.currencyType === undefined) return;
+      this.supportedNetwork = [
+        {
+          parentIdentify: this.parentTokenID,
+          currency: this.currencyType,
+          networkName: this.networkName,
+          chainID: this.chainID,
+          identify: this.identify,
+        },
+      ];
     }
+
+    // if ((this.isBTC || this.isCentralized) && this.networkName) {
+    //   this.supportedNetwork.push({
+    //     parentIdentify: this.parentTokenID,
+    //     currency: this.currencyType,
+    //     networkName: this.networkName || '',
+    //     chainID: this.chainID,
+    //     identify: this.identify,
+    //   });
+    // }
   }
 }
 

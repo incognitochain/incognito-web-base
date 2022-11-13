@@ -1,3 +1,4 @@
+import { isMainnet } from '../config';
 import { PRIVATE_TOKEN_CURRENCY_TYPE } from '../constants';
 import { SupportedChainId } from '../constants/chains';
 
@@ -41,11 +42,11 @@ export enum ExplorerDataType {
  */
 export function getExplorerLink(chainId: number, data: string, type: ExplorerDataType): string {
   const prefix = ETHERSCAN_PREFIXES[chainId] ?? 'https://etherscan.io';
-  if (chainId === PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO) return `https://explorer.incognito.org/tx/${data}`;
+  if (chainId === PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO)
+    return `${isMainnet ? 'https://explorer.incognito.org' : 'https://testnet.incognito.org'}/tx/${data}`;
   switch (type) {
     case ExplorerDataType.TRANSACTION:
       return `${prefix}/tx/${data}`;
-
     case ExplorerDataType.TOKEN:
       return `${prefix}/token/${data}`;
 

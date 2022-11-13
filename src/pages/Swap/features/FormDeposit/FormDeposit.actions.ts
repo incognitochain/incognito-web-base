@@ -5,7 +5,7 @@ import { getDepositTokenDataSelector, getPrivacyByTokenIdentifySelectors } from 
 
 import { DepositSetTokenAction, DepositSetTokenPayLoad, FormDepositActionType } from './FormDeposit.types';
 
-const actionSetToken = (payload: DepositSetTokenPayLoad): DepositSetTokenAction => ({
+export const actionSetToken = (payload: DepositSetTokenPayLoad): DepositSetTokenAction => ({
   type: FormDepositActionType.SET_TOKEN,
   payload,
 });
@@ -45,7 +45,8 @@ export const actionFilterTokenByNetwork =
     try {
       const token = getDepositTokenDataSelector(getState())(network.identify);
       const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
-      if (!network.currency || !network.chainID) return;
+
+      if (!network.currency) return;
       const sellToken: ITokenNetwork = {
         identify: network.identify,
         chainID: network.chainID,

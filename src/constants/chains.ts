@@ -27,8 +27,8 @@ export enum SupportedChainId {
   AURORA_TESTNET = 1313161555,
 
   // TODO
-  NEAR = 1313161,
-  NEAR_TESTNET = 13131615,
+  NEAR = 0,
+  NEAR_TESTNET = 0,
 }
 
 export const CHAIN_IDS_TO_NAMES = {
