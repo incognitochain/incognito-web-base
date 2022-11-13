@@ -97,6 +97,8 @@ export interface IUnshieldData {
 
   minUnshield: number;
   minUnshieldText: string;
+
+  isSubmitting: boolean;
 }
 
 const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any): string => {
@@ -115,6 +117,22 @@ const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any):
   }
   tradePathStr = tradePathArrStr?.join(' > ');
   return tradePathStr;
+};
+
+const checkSwapableToken = ({ sellToken, token }: { sellToken: SelectedPrivacy; token: SelectedPrivacy }) => {
+  if (token.movedUnifiedToken) return false; // not supported moved unified token
+  if (sellToken.poolPair && token.poolPair) return true; // swapable on PDEX
+
+  // list supported network by sellToken
+  const sellChildNetworks = sellToken.isUnified
+    ? sellToken.listUnifiedToken.map((child) => child.networkName)
+    : [sellToken.networkName];
+
+  // list supported network by filtered token
+  const tokenChildNetworks = token.isUnified
+    ? token.listUnifiedToken.map((child) => child.networkName)
+    : [token.networkName];
+  return sellChildNetworks.some((networkName) => networkName && tokenChildNetworks.includes(networkName));
 };
 
 const getUnshieldData = ({
@@ -188,7 +206,9 @@ const getUnshieldData = ({
 
   if (formType === FormTypes.SWAP) {
     if (swapNetwork === MAIN_NETWORK_NAME.INCOGNITO) {
-      _buyTokenList = _buyTokenList.filter((token: any) => !token.movedUnifiedToken);
+      _buyTokenList = _buyTokenList.filter((token: SelectedPrivacy) => {
+        return checkSwapableToken({ sellToken: _sellToken, token });
+      });
     } else {
       _buyTokenList = _buyTokenList.filter((token: SelectedPrivacy) => {
         const _swapNetwork = token.networkName;
@@ -597,6 +617,8 @@ const getUnshieldData = ({
     rate: exchangeSelectedData?.rate || '',
     minUnshield,
     minUnshieldText,
+
+    isSubmitting: submitting,
   };
 };
 

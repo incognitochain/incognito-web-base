@@ -14,18 +14,15 @@ export const Container = styled.div`
 export const Content = styled.div<{ isActive: boolean }>`
   border-radius: 12px;
   margin-top: 2px;
-  padding: 8px;
-  border: 1px solid ${({ theme, isActive }) => (isActive ? theme.blue1 : theme.border1)};
+  padding: 16px;
+  border: 1px solid ${({ theme, isActive }) => (isActive ? theme.blue1 : theme.primary14)};
   background-color: ${({ theme }) => theme.primary14};
   .default-padding {
-    padding: 8px;
+    padding: 4px;
   }
   .hover-item {
     :hover {
       background-color: ${({ theme }) => theme.bg4};
-      border-radius: 8px;
-      padding-left: 10px;
-      padding-right: 10px;
       transition: 0.2s all ease-in-out;
     }
     :active {
@@ -54,6 +51,12 @@ export const WrapToken = styled.div`
   cursor: pointer;
   padding-top: 12px;
   padding-bottom: 12px;
+  background-color: #404040;
+  border-radius: 100px;
+  :hover {
+    opacity: 0.8;
+  }
+  margin-left: 16px;
 `;
 
 export const WrapNetwork = styled.div<{ isActive: boolean }>`
@@ -62,6 +65,7 @@ export const WrapNetwork = styled.div<{ isActive: boolean }>`
   cursor: ${({ isActive }) => (isActive ? 'pointer' : 'unset')};
   padding-top: 3px;
   padding-bottom: 3px;
+  margin-left: 16px;
   svg {
     color: ${({ theme }) => theme.primary8};
   }
@@ -89,9 +93,8 @@ export const Input = styled.input<{ active: boolean; isError: boolean }>`
   text-overflow: ellipsis;
   min-height: 56px;
   color: ${({ theme }) => theme.primary5};
-  text-align: right;
   max-width: 500px;
-  margin-left: 40px;
+  margin-right: 40px;
   border-radius: 8px;
   :hover {
   }

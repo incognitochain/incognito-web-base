@@ -20,28 +20,40 @@ const Styled = styled.div`
       // TO DO
     }
   }
-
   .bottomView {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    width: calc(100% + 48px);
+    margin-left: -24px;
+    margin-bottom: -24px;
+    background-color: #404040;
+    padding: 24px;
   }
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ShieldFeeEstimateProps {
   value?: string | number;
+  symbol?: string;
 }
 
 const ShieldFeeEstimate = (props: ShieldFeeEstimateProps) => {
-  const { value = '0.0005 ETH' || '' } = props;
+  const { value = '0.0005 ETH' || '', symbol } = props;
   return (
     <Styled>
       {value && (
         <>
           <Row className="topView">
-            <ThemedText.SmallLabel fontWeight={400} color="primary8">
-              {'Shielding fee (est.)'}
-            </ThemedText.SmallLabel>
+            <Row style={{ flex: 1 }}>
+              <ThemedText.SmallLabel
+                fontWeight={400}
+                color="primary8"
+                lineHeight={'14px'}
+                style={{ alignItems: 'center' }}
+              >
+                {'Shielding fee (est.)'}
+              </ThemedText.SmallLabel>
+            </Row>
 
             <ThemedText.SmallLabel fontWeight={400} color="primary5">
               {value}
@@ -52,13 +64,16 @@ const ShieldFeeEstimate = (props: ShieldFeeEstimateProps) => {
               {'This fee will be deducted from the shielded funds.'}
             </ThemedText.Small>
           </Row>
-          <div style={{ height: 10 }} />
         </>
       )}
-      <Row className="topView">
-        <ThemedText.SmallLabel fontWeight={400} color="primary8">
-          {'Estimate time'}
-        </ThemedText.SmallLabel>
+
+      <Row className="topView" style={{ marginTop: 8 }}>
+        <Row style={{ flex: 1 }}>
+          <ThemedText.SmallLabel fontWeight={400} color="primary8" lineHeight={'14px'} style={{ alignItems: 'center' }}>
+            Estimate time
+          </ThemedText.SmallLabel>
+        </Row>
+
         <ThemedText.SmallLabel fontWeight={400} color="primary5">
           10 mins
         </ThemedText.SmallLabel>

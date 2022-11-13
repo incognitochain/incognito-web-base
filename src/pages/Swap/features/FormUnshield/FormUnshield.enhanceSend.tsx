@@ -488,7 +488,15 @@ const enhanceSend = (WrappedComponent: any) => {
             const tx = await requestSignTransaction(payload);
             // console.log('LOGS PAYLOAD 333: ', { txHash: tx.txHash });
             if (formType === FormTypes.SWAP) {
-              if (exchangeSelectedData.appName !== SwapExchange.PDEX) {
+              if (exchangeSelectedData.appName === SwapExchange.PDEX) {
+                await rpcClient.submitSwapPdex({
+                  amountIn: inputAmount,
+                  amountOut: `${expectedReceiveAmount}`,
+                  tokenIDBuy: buyToken.tokenID,
+                  tokenIDSell: sellToken.tokenID,
+                  txHash: tx.txHash,
+                });
+              } else {
                 /** Submit tx swap PApps to backend after burned */
                 await rpcClient.submitSwapTx({
                   // txHash: tx.txHash,

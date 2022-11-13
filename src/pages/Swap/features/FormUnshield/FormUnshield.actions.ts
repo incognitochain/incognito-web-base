@@ -322,153 +322,153 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
   }
 };
 
-export const actionEstimateSwapFee = () => async (dispatch: AppDispatch, getState: AppState & any) => {
-  try {
-    const { inputAmount, buyParentToken, buyNetworkName, incAddress, sellToken, slippage } = unshieldDataSelector(
-      getState()
-    );
-    if (
-      !inputAmount ||
-      !parseFloat(inputAmount) ||
-      !sellToken?.tokenID ||
-      !buyParentToken?.tokenID ||
-      !incAddress ||
-      !buyNetworkName
-    ) {
-      return;
+const combineExchange = ({
+  data,
+  token,
+  network,
+  networkText,
+  networkID,
+  checkUnified = true,
+}: {
+  data: any;
+  token: SelectedPrivacy;
+  network: NetworkTypePayload;
+  networkText: string;
+  networkID: number;
+  checkUnified?: boolean;
+}) => {
+  let exchange: ISwapExchangeData[] = [];
+  if (data?.hasOwnProperty(network)) {
+    let incTokenID = token.tokenID;
+    if (token?.isUnified && checkUnified) {
+      const childToken = token?.listUnifiedToken?.find((token: any) => token?.networkID === networkID);
+      incTokenID = childToken?.tokenID || '';
     }
-    dispatch(actionSetFetchingFee({ isFetchingFee: true }));
-    let network: NetworkTypePayload = NetworkTypePayload.INCOGNITO;
-    if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
-      network = NetworkTypePayload.ETHEREUM;
-    } else if (buyNetworkName === MAIN_NETWORK_NAME.BSC) {
-      network = NetworkTypePayload.BINANCE_SMART_CHAIN;
-    } else if (buyNetworkName === MAIN_NETWORK_NAME.POLYGON) {
-      network = NetworkTypePayload.POLYGON;
-    } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
-      network = NetworkTypePayload.FANTOM;
+    const exchanges = data[network];
+    if (Array.isArray(exchanges)) {
+      exchange = exchanges.map((exchange: any) =>
+        parseExchangeDataModelResponse(exchange, networkText, networkID, incTokenID)
+      );
     }
-
-    const payload = {
-      network,
-      amount: inputAmount,
-      fromToken: sellToken.tokenID,
-      toToken: buyParentToken.tokenID,
-      slippage,
-    };
-
-    // Call api estimate swap fee
-    const data = await rpcClient.estimateSwapFee(payload);
-    if (!data) throw new Error('Can not estimate trade');
-
-    let ethExchanges: ISwapExchangeData[] = [];
-    let ftmExchanges: ISwapExchangeData[] = [];
-    let plgExchanges: ISwapExchangeData[] = [];
-    let bscExchanges: ISwapExchangeData[] = [];
-    let pdexExchanges: ISwapExchangeData[] = [];
-
-    if (data?.hasOwnProperty(NetworkTypePayload.INCOGNITO)) {
-      const incTokenID = sellToken.tokenID;
-      const exchanges = data[NetworkTypePayload.INCOGNITO];
-      if (Array.isArray(exchanges)) {
-        pdexExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'PDex', 0, incTokenID)
-        );
-      }
-    }
-
-    if (data?.hasOwnProperty(NetworkTypePayload.BINANCE_SMART_CHAIN)) {
-      let incTokenID = sellToken.tokenID;
-      if (sellToken?.isUnified) {
-        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 2);
-        incTokenID = childToken?.tokenID || '';
-      }
-      const exchanges = data[NetworkTypePayload.BINANCE_SMART_CHAIN];
-      if (Array.isArray(exchanges)) {
-        bscExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'BNB Chain', 2, incTokenID)
-        );
-      }
-    }
-
-    if (data?.hasOwnProperty(NetworkTypePayload.ETHEREUM)) {
-      let incTokenID = sellToken.tokenID;
-      if (sellToken?.isUnified) {
-        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 1);
-        incTokenID = childToken?.tokenID || '';
-      }
-      const exchanges = data[NetworkTypePayload.ETHEREUM];
-      if (Array.isArray(exchanges)) {
-        ethExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'Ethereum', 1, incTokenID)
-        );
-      }
-    }
-
-    if (data?.hasOwnProperty(NetworkTypePayload.POLYGON)) {
-      let incTokenID = sellToken.tokenID;
-      if (sellToken?.isUnified) {
-        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 3);
-        incTokenID = childToken?.tokenID || '';
-      }
-      const exchanges = data[NetworkTypePayload.POLYGON];
-      if (Array.isArray(exchanges)) {
-        plgExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'Polygon', 3, incTokenID)
-        );
-      }
-    }
-
-    if (data?.hasOwnProperty(NetworkTypePayload.FANTOM)) {
-      let incTokenID = sellToken.tokenID;
-      if (sellToken?.isUnified) {
-        const childToken = sellToken?.listUnifiedToken?.find((token: any) => token?.networkID === 4);
-        incTokenID = childToken?.tokenID || '';
-      }
-      const exchanges = data[NetworkTypePayload.FANTOM];
-      if (Array.isArray(exchanges)) {
-        ftmExchanges = exchanges.map((exchange: any) =>
-          parseExchangeDataModelResponse(exchange, 'Fantom', 4, incTokenID)
-        );
-      }
-    }
-
-    const exchangeSupports = [...ethExchanges, ...ftmExchanges, ...plgExchanges, ...bscExchanges, ...pdexExchanges];
-
-    if (!exchangeSupports?.length)
-      throw new Error('Can not find any trading platform that supports for this pair token');
-
-    // Find best rate by list exchange
-    // const bestRate: ISwapExchangeData = exchangeSupports[0];
-    const bestRate: ISwapExchangeData = exchangeSupports.reduce((prev, current) => {
-      let prevFee = '0';
-      let curFee = '0';
-      if (prev.fees) {
-        prevFee = prev.fees[0].amountInBuyToken;
-      }
-      if (current.fees) {
-        curFee = current.fees[0].amountInBuyToken;
-      }
-
-      const prevValue = new BigNumber(prev.amountOut).minus(prevFee);
-      const currValue = new BigNumber(current.amountOut).minus(curFee);
-
-      return new BigNumber(prevValue).gt(currValue) ? prev : current;
-    });
-
-    // Set default exchange has best rate
-    const defaultExchange: string = bestRate?.exchangeName;
-    dispatch(actionSetExchangeSelected(defaultExchange));
-
-    dispatch(actionSetSwapExchangeSupports(exchangeSupports));
-  } catch (error) {
-    dispatch(actionSetErrorMsg(typeof error === 'string' ? error : error?.message || ''));
-  } finally {
-    setTimeout(() => {
-      dispatch(actionSetFetchingFee({ isFetchingFee: false }));
-    }, 200);
   }
+  return exchange || [];
 };
+
+export const actionEstimateSwapFee =
+  ({ isResetForm = false }: { isResetForm: boolean }) =>
+  async (dispatch: AppDispatch, getState: AppState & any) => {
+    try {
+      const { inputAmount, buyParentToken, buyNetworkName, sellToken, slippage, exchangeSelected, isSubmitting } =
+        unshieldDataSelector(getState());
+      if (
+        !inputAmount ||
+        !parseFloat(inputAmount) ||
+        !sellToken?.tokenID ||
+        !buyParentToken?.tokenID ||
+        // !incAddress ||
+        !buyNetworkName ||
+        isSubmitting
+      ) {
+        return;
+      }
+      dispatch(actionSetFetchingFee({ isFetchingFee: true, isResetForm }));
+      let network: NetworkTypePayload = NetworkTypePayload.INCOGNITO;
+      if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
+        network = NetworkTypePayload.ETHEREUM;
+      } else if (buyNetworkName === MAIN_NETWORK_NAME.BSC) {
+        network = NetworkTypePayload.BINANCE_SMART_CHAIN;
+      } else if (buyNetworkName === MAIN_NETWORK_NAME.POLYGON) {
+        network = NetworkTypePayload.POLYGON;
+      } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
+        network = NetworkTypePayload.FANTOM;
+      }
+
+      const payload = {
+        network,
+        amount: inputAmount,
+        fromToken: sellToken.tokenID,
+        toToken: buyParentToken.tokenID,
+        slippage,
+      };
+
+      // Call api estimate swap fee
+      const data = await rpcClient.estimateSwapFee(payload);
+      if (!data) throw new Error('Can not estimate trade');
+      const pdexExchanges = combineExchange({
+        checkUnified: false,
+        data,
+        network: NetworkTypePayload.INCOGNITO,
+        networkID: 0,
+        networkText: 'PDex',
+        token: sellToken,
+      });
+      const ethExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.ETHEREUM,
+        networkID: 1,
+        networkText: 'Ethereum',
+        token: sellToken,
+      });
+      const bscExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.BINANCE_SMART_CHAIN,
+        networkID: 2,
+        networkText: 'BNB Chain',
+        token: sellToken,
+      });
+      const plgExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.POLYGON,
+        networkID: 3,
+        networkText: 'Polygon',
+        token: sellToken,
+      });
+      const ftmExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.FANTOM,
+        networkID: 4,
+        networkText: 'Fantom',
+        token: sellToken,
+      });
+      const exchangeSupports = [...ethExchanges, ...ftmExchanges, ...plgExchanges, ...bscExchanges, ...pdexExchanges];
+      if (!exchangeSupports?.length)
+        throw new Error('Can not find any trading platform that supports for this pair token');
+
+      // Find best rate by list exchange
+      // const bestRate: ISwapExchangeData = exchangeSupports[0];
+      let bestRate: ISwapExchangeData | undefined;
+
+      if (
+        !isResetForm &&
+        exchangeSelected &&
+        exchangeSupports.some((exchange) => exchange.exchangeName === exchangeSelected)
+      ) {
+        bestRate = exchangeSupports.find((exchange) => exchange.exchangeName === exchangeSelected);
+      }
+      if (!bestRate) {
+        bestRate = exchangeSupports.reduce((prev, current) => {
+          let prevFee = '0';
+          let curFee = '0';
+          if (prev.fees) prevFee = prev.fees[0].amountInBuyToken;
+          if (current.fees) curFee = current.fees[0].amountInBuyToken;
+          const prevValue = new BigNumber(prev.amountOut).minus(prevFee);
+          const currValue = new BigNumber(current.amountOut).minus(curFee);
+          return new BigNumber(prevValue).gt(currValue) ? prev : current;
+        });
+      }
+      // Set default exchange has best rate
+      const defaultExchange: string = bestRate?.exchangeName;
+      dispatch(actionSetExchangeSelected(defaultExchange));
+
+      dispatch(actionSetSwapExchangeSupports(exchangeSupports));
+    } catch (error) {
+      dispatch(actionSetErrorMsg(typeof error === 'string' ? error : error?.message || ''));
+    } finally {
+      setTimeout(() => {
+        dispatch(actionSetFetchingFee({ isFetchingFee: false }));
+      }, 200);
+    }
+  };
 
 export const actionRotateSwapTokens = () => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {

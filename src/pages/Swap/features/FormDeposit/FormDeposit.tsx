@@ -12,6 +12,7 @@ import styled from 'styled-components/macro';
 import { getAcronymNetwork } from 'utils/token';
 
 import { Selection } from '../Selection';
+import AddressBox from './components/AddressBox';
 import DescriptionQrCode from './components/DescriptionQrCode';
 import ShieldFeeEstimate from './components/ShieldFeeEstimate';
 import enhance, { IMergeProps } from './FormDeposit.enhance';
@@ -103,9 +104,10 @@ const FormDeposit = (props: IMergeProps) => {
         currency={sellToken.currencyType}
         showNetwork={true}
       />
-      <VerticalSpace />
       {isShowQrCode && (
-        <div style={{ marginTop: '30px' }}>
+        <div>
+          <AddressBox paymentAddress={state && state.data?.address} />
+          <VerticalSpace />
           <QrCode
             qrCodeProps={{
               value: state.data?.address || 'NON VALUE',
@@ -120,7 +122,7 @@ const FormDeposit = (props: IMergeProps) => {
             expiredAt={sellToken.isCentralized && state ? state.data?.expiredAt : undefined}
           />
           {/*<MinimumShiledAmount />*/}
-          <ShieldFeeEstimate value={shieldingFee} />
+          <ShieldFeeEstimate value={shieldingFee} symbol={sellToken.symbol} />
           {/*<DescriptionBox symbol={sellToken.symbol} token={sellToken} />*/}
         </div>
       )}
@@ -135,7 +137,7 @@ const FormDeposit = (props: IMergeProps) => {
       {!incAccount && (
         <>
           <VerticalSpace />
-          <ButtonConfirmed onClick={showPopup}>
+          <ButtonConfirmed style={{ height: '50px' }} onClick={showPopup}>
             {isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet'}
           </ButtonConfirmed>
         </>

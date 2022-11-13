@@ -83,6 +83,7 @@ class PToken {
   isUnified: boolean;
 
   isDepositable: boolean;
+  poolPair: string;
 
   getIconUrl({ url }: { url: string }) {
     if (this.tokenID === PRVIDSTR) {
@@ -198,6 +199,7 @@ class PToken {
     this.hasChild = !isEmpty(listChild);
     this.isUnified = this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN;
     this.isDepositable = data.Status !== 0;
+    this.poolPair = data.DefaultPoolPair || '';
 
     if (!isEmpty(listChild)) {
       const temp = listChild.map((token) => {

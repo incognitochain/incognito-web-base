@@ -31,7 +31,7 @@ const questions: any = [
           '1. Transaction fee: Incognito collects a small network fee of 0.0000001 PRV to pay the validators who help power the network.',
           '2. External blockchain’s gas fee: A swap request needs to be sent and executed against a DEX (say Uniswap) on an external blockchain (say Ethereum) and users need to pay for the gas cost.',
           '3. AMM swap fee: the fee varies per asset per route per exchange that the swap is executed on (e.g., 0.3% for Uniswap, 0.25% for PancakeSwap, …). Liquidity providers of the AMM pools take the fee.',
-          '4. Privacy fee: Incognito takes a fee (0.1%) for operating the privacy exchange.',
+          '4. Privacy fee: Incognito takes a fee (0.3%) for operating the privacy exchange.',
         ],
       },
       {
@@ -46,7 +46,8 @@ const questions: any = [
 ];
 
 const Styled = styled.div`
-  margin-top: 80px;
+  margin-top: 100px;
+  margin-bottom: 100px;
   display: flex;
   flex-direction: row;
   .leftView {
@@ -76,12 +77,19 @@ const Styled = styled.div`
     margin-bottom: 16px;
   }
 
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
+    margin-top: 140px;
+    margin-bottom: 140px;
+  `}
+
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-    margin-top: 80px;
+    margin-top: 100px;
+    margin-bottom: 100px;
   `}
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
     margin-top: 40px;
+    margin-bottom: 40px;
     flex-direction: column;
       .leftView .title-container {
         text-align: center;
@@ -120,16 +128,18 @@ const ValidatorAskedQuestion = () => {
     <Styled>
       <div className="leftView" style={{ marginRight: isMobile ? 0 : 80 }}>
         <div className="title-container center">
-          <h1 className="title-custom">Frequently asked questions</h1>
+          <h1 className="title-custom">What is Incognito Exchange?</h1>
         </div>
         <div className="title-container center">
           <h6 className="description-custom" style={{ color: '#9C9C9C' }}>
-            Incognito exchange is a one-stop shop that facilitates anonymous swap for all coins across many popular
-            blockchains such as Bitcoin, Monero, Ethereum, BNB Chain, Avalanche, etc. While every existing DEX has its
-            own drawback: sufficient liquidity but no privacy or privacy supported but shortage liquidity, Incognito
-            exchange takes a novel approach to achieve both by implementing privacy via zero-knowledge proofs,
-            inter-blockchain trading with huge liquidity via interoperable dApps (a.k.a DEXs such as Uniswap, Curve,
-            PancakeSwap and SpookySwap).
+            Incognito exchange is a one-stop-shop that facilitates anonymous swap for all coins across many popular
+            blockchains such as Bitcoin, Monero, Ethereum, BNB Chain, Avalanche, etc.
+            <br />
+            <br />
+            While every existing DEX has its own drawback: sufficient liquidity but no privacy or privacy supported but
+            shortage liquidity, Incognito exchange takes a novel approach to achieve both by implementing privacy via
+            zero-knowledge proofs, inter-blockchain trading with huge liquidity via interoperable dApps (a.k.a DEXs such
+            as Uniswap, Curve, PancakeSwap and SpookySwap).
           </h6>
         </div>
       </div>
