@@ -81,6 +81,17 @@ export const DEFAULT_NETWORK: ITokenNetwork[] = [
     networkName: MAIN_NETWORK_NAME.FANTOM,
     currency: PRIVATE_TOKEN_CURRENCY_TYPE.FTM,
   },
+  {
+    identify: MAIN_NETWORK_NAME.AVALANCHE,
+    networkName: MAIN_NETWORK_NAME.AVALANCHE,
+    currency: PRIVATE_TOKEN_CURRENCY_TYPE.AVAX,
+  },
+
+  {
+    identify: MAIN_NETWORK_NAME.AURORA,
+    networkName: MAIN_NETWORK_NAME.AURORA,
+    currency: PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH,
+  },
 ];
 
 let dataObj = {

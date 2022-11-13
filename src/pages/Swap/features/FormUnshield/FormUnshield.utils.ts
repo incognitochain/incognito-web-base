@@ -19,6 +19,9 @@ const {
   BurningFantomRequestMeta,
   BurningPBSCRequestMeta,
   BurningPLGRequestMeta,
+  BurningAvaxRequestMeta,
+  BurningAuroraRequestMeta,
+  BurningNearRequestMeta,
   BurningRequestMeta,
   getBurningAddress,
 } = require('incognito-chain-web-js/build/wallet');
@@ -638,6 +641,15 @@ const getExchangeName = (exchange: SwapExchange) => {
   if (exchange === SwapExchange.SPOOKY) {
     return 'Spooky';
   }
+  if (exchange === SwapExchange.JOE) {
+    return 'Trader JOE';
+  }
+
+  if (exchange === SwapExchange.TRISOLARIS) {
+    return 'Trisolaris';
+  }
+
+  return exchange;
 };
 
 // Parse fee data from api estimate swap fee
@@ -693,7 +705,12 @@ const getBurningMetaDataTypeForUnshield = (sellToken: SelectedPrivacy) => {
   if (sellToken?.isBep20Token || sellToken.isMainBSC) return BurningPBSCRequestMeta;
   if (sellToken?.isPolygonErc20Token || sellToken.isMainMATIC) return BurningPLGRequestMeta;
   if (sellToken?.isFantomErc20Token || sellToken.isMainFTM) return BurningFantomRequestMeta;
-
+  if (sellToken?.isAvaxErc20Token || sellToken.isMainAVAX) {
+    return BurningAvaxRequestMeta;
+  }
+  if (sellToken?.isAuroraErc20Token || sellToken.isMainAURORA) {
+    return BurningAuroraRequestMeta;
+  }
   return BurningRequestMeta;
 };
 

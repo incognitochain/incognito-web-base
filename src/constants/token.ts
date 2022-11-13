@@ -1,12 +1,15 @@
 import ethereumLogoUrl from 'assets/images/ethereum-logo.svg';
 import ftmLogoUrl from 'assets/images/ftm_logo.svg';
 import incognitoLogoUrl from 'assets/images/inc_logo.svg';
+import auroraLogo from 'assets/svg/aurora-logo.svg';
+import avalancheLogo from 'assets/svg/avalanche-logo.svg';
 import bnbChainLogo from 'assets/svg/bnbchain-logo.svg';
 import btcLogoUrl from 'assets/svg/btc-logo.svg';
 import dashLogoUrl from 'assets/svg/dash-logo.svg';
 import dogeLogoUrl from 'assets/svg/doge-logo.svg';
 import dotLogoUrl from 'assets/svg/dot-logo.svg';
 import ltcLogoUrl from 'assets/svg/ltc-logo.svg';
+import nearLogo from 'assets/svg/near-logo.svg';
 import neoLogoUrl from 'assets/svg/neo-logo.svg';
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg';
 import tomoLogoUrl from 'assets/svg/tomo-logo.svg';
@@ -42,6 +45,9 @@ const NETWORK_NAME = {
   PRV: 'Privacy',
   POLYGON: 'Polygon',
   FANTOM: 'Fantom',
+  AVALANCHE: 'Avalanche',
+  AURORA: 'Aurora',
+  NEAR: 'Near',
 };
 
 const PRIVATE_TOKEN_CURRENCY_TYPE = {
@@ -70,17 +76,17 @@ const PRIVATE_TOKEN_CURRENCY_TYPE = {
   FANTOM_ERC20: 22,
   UNIFIED_TOKEN: 25,
 
-  // Near bridge
-  NEAR: 26,
-  NEAR_TOKEN: 27,
-
-  // Avax bridge
+  // Avalanche
   AVAX: 28,
   AVAX_ERC20: 29,
 
-  // Aurora bridge
-  AURORA_ETH: 30, //30
-  AURORA_ERC20: 31, //31
+  // Aurora
+  AURORA_ETH: 30,
+  AURORA_ERC20: 31,
+
+  // Near
+  NEAR: 26,
+  NEAR_TOKEN: 27,
 };
 
 const PRIVATE_TOKEN_CURRENCY_NAME = {
@@ -97,14 +103,14 @@ const PRIVATE_TOKEN_CURRENCY_NAME = {
   [PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20]: 'Fantom',
   [PRIVATE_TOKEN_CURRENCY_TYPE.FTM]: 'Fantom',
 
-  [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR]: 'Near',
-  [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN]: 'Near',
-
-  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX]: 'Avax',
-  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20]: 'Avax',
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX]: 'Avalanche',
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20]: 'Avalanche',
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH]: 'Aurora',
   [PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20]: 'Aurora',
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR]: 'Near',
+  [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN]: 'Near',
 };
 
 const DECIMALS = {
@@ -152,6 +158,9 @@ enum MAIN_NETWORK_NAME {
   POLYGON = 'Polygon',
   FANTOM = 'Fantom',
   INCOGNITO = 'Incognito',
+  AVALANCHE = 'Avalanche',
+  AURORA = 'Aurora',
+  NEAR = 'Near',
   TOMO = 'TomoChain',
   ZIL = 'Zilliqua',
   XMR = 'Monero',
@@ -162,9 +171,6 @@ enum MAIN_NETWORK_NAME {
   DOGE = 'DOGE',
   ZEC = 'Zcash',
   BTC = 'Bitcoin',
-  NEAR = 'Near',
-  AVAX = 'Avax',
-  AURORA = 'Aurora',
 }
 
 const MAIN_NETWORK_NAME_ICON: any = {
@@ -172,6 +178,9 @@ const MAIN_NETWORK_NAME_ICON: any = {
   [MAIN_NETWORK_NAME.BSC]: bnbChainLogo,
   [MAIN_NETWORK_NAME.POLYGON]: polygonMaticLogo,
   [MAIN_NETWORK_NAME.FANTOM]: ftmLogoUrl,
+  [MAIN_NETWORK_NAME.AVALANCHE]: avalancheLogo,
+  [MAIN_NETWORK_NAME.AURORA]: auroraLogo,
+  [MAIN_NETWORK_NAME.NEAR]: nearLogo,
   [MAIN_NETWORK_NAME.INCOGNITO]: incognitoLogoUrl,
 
   [MAIN_NETWORK_NAME.BTC]: btcLogoUrl,
@@ -195,6 +204,9 @@ const GROUP_NETWORK: IGroupNetwork = {
   ],
   [MAIN_NETWORK_NAME.POLYGON]: [PRIVATE_TOKEN_CURRENCY_TYPE.MATIC, PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20],
   [MAIN_NETWORK_NAME.FANTOM]: [PRIVATE_TOKEN_CURRENCY_TYPE.FTM, PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20],
+  [MAIN_NETWORK_NAME.AVALANCHE]: [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX, PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20],
+  [MAIN_NETWORK_NAME.AURORA]: [PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH, PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20],
+  [MAIN_NETWORK_NAME.NEAR]: [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR, PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN],
   [MAIN_NETWORK_NAME.INCOGNITO]: [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN, PRIVATE_TOKEN_CURRENCY_TYPE.PRV],
 
   [MAIN_NETWORK_NAME.BTC]: [PRIVATE_TOKEN_CURRENCY_TYPE.BTC],
@@ -222,6 +234,21 @@ const ROOT_NETWORK_IMG: any = {
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.FTM]: ftmLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20]: ftmLogoUrl,
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX]: avalancheLogo,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20]: avalancheLogo,
+  [SupportedChainId.AVAX]: avalancheLogo,
+  [SupportedChainId.AVAX_TESTNET]: avalancheLogo,
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH]: auroraLogo,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20]: auroraLogo,
+  [SupportedChainId.AURORA]: auroraLogo,
+  [SupportedChainId.AURORA_TESTNET]: auroraLogo,
+
+  [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR]: nearLogo,
+  [PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN]: nearLogo,
+  [SupportedChainId.NEAR]: nearLogo,
+  [SupportedChainId.NEAR_TESTNET]: nearLogo,
 
   [PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN]: incognitoLogoUrl,
   [PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]: incognitoLogoUrl,

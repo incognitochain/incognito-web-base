@@ -29,6 +29,15 @@ export const INFURA_NETWORK_URLS: { [key in SupportedChainId]: string } = {
 
   [SupportedChainId.FTM]: `https://rpcapi.fantom.network`,
   [SupportedChainId.FTM_TESTNET]: `https://rpc.testnet.fantom.network`,
+
+  [SupportedChainId.AVAX]: `https://api.avax.network/ext/bc/C/rpc`,
+  [SupportedChainId.AVAX_TESTNET]: `https://api.avax-test.network/ext/bc/C/rpc`,
+
+  [SupportedChainId.AURORA]: `https://mainnet.aurora.dev`,
+  [SupportedChainId.AURORA_TESTNET]: `https://testnet.aurora.dev`,
+
+  [SupportedChainId.NEAR]: `https://rpc.mainnet.near.org`,
+  [SupportedChainId.NEAR_TESTNET]: `https://rpc.testnet.near.org`,
 };
 
 /**
@@ -50,6 +59,16 @@ export const INC_CONTRACT_ADDRESS: { [key in SupportedChainId]: string } = {
 
   [SupportedChainId.FTM]: '0x43D037A562099A4C2c95b1E2120cc43054450629',
   [SupportedChainId.FTM_TESTNET]: '0x9cb4baf1b60DaBB6B22BcFf07cc0e10395423aed',
+
+  // TODO
+  [SupportedChainId.AVAX]: '',
+  [SupportedChainId.AVAX_TESTNET]: '',
+
+  [SupportedChainId.AURORA]: '',
+  [SupportedChainId.AURORA_TESTNET]: '',
+
+  [SupportedChainId.NEAR]: '',
+  [SupportedChainId.NEAR_TESTNET]: '',
 };
 
 export const getWeb3 = ({ chainId }: { chainId: SupportedChainId }): Web3 => {
