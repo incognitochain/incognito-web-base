@@ -47,8 +47,8 @@ const questions: any = [
 const Styled = styled.div`
   display: flex;
   max-width: 880px;
-  padding-top: 100px;
-  padding-bottom: 100px;
+  padding-top: 120px;
+  padding-bottom: 120px;
   flex-direction: column;
   justify-content: center;
   margin: 0 auto;
@@ -75,8 +75,8 @@ const Styled = styled.div`
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
-    padding-top: 100px;
-    padding-bottom: 100px;
+    padding-top: 120px;
+    padding-bottom: 120px;
     max-width: 880px;
   `}
 
