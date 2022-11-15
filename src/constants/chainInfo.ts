@@ -203,7 +203,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.NEAR]: {
     networkType: NetworkType.L1,
     docs: 'https://incognito.org/',
-    explorer: 'hhttps://explorer.near.org',
+    explorer: 'https://explorer.near.org',
     infoLink: 'https://incognito.org/',
     label: 'Near Chain',
     logoUrl: nearLogo,
