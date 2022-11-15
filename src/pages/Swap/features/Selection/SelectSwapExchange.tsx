@@ -43,6 +43,10 @@ export const getExchangeLogo = (exchangeSelected: string) => {
     return curve;
   } else if (_exchangeSelected.includes(SwapExchange.SPOOKY)) {
     return spooky;
+  } else if (_exchangeSelected.includes(SwapExchange.JOE)) {
+    return spooky;
+  } else if (_exchangeSelected.includes(SwapExchange.TRISOLARIS)) {
+    return spooky;
   } else {
     return incognito;
   }
@@ -54,6 +58,8 @@ export const formatExchangeName = (exchangeSelected: string) => {
     _exchangeSelected.includes(SwapExchange.PANCAKE_SWAP) ||
     _exchangeSelected.includes(SwapExchange.UNISWAP) ||
     _exchangeSelected.includes(SwapExchange.CURVE) ||
+    _exchangeSelected.includes(SwapExchange.JOE) ||
+    _exchangeSelected.includes(SwapExchange.TRISOLARIS) ||
     _exchangeSelected.includes(SwapExchange.SPOOKY)
   ) {
     return exchangeSelected;
