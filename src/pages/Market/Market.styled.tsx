@@ -8,6 +8,19 @@ export const Styled = styled.div<{ isMobile: boolean }>`
     padding-right: ${({ isMobile }) => isMobile && 200};
   }
 
+  .fade-in-section {
+    opacity: 0;
+    transform: translateY(20vh);
+    visibility: hidden;
+    transition: opacity 1200ms ease-out, transform 600ms ease-out, visibility 1200ms ease-out;
+    will-change: opacity, transform, visibility;
+  }
+  .fade-in-section.is-visible {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+  }
+
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
       .market-header {
         padding-top: 40px;

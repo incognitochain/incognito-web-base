@@ -45,14 +45,14 @@ const questions: any = [
 ];
 
 const Styled = styled.div`
-  margin-top: 100px;
-  margin-bottom: 100px;
   display: flex;
   max-width: 880px;
+  padding-top: 100px;
+  padding-bottom: 100px;
   flex-direction: column;
   justify-content: center;
   margin: 0 auto;
-  .leftView {
+  .titleView {
     display: flex;
     flex-direction: column;
     .title-container {
@@ -65,7 +65,7 @@ const Styled = styled.div`
     }
   }
 
-  .rightView {
+  .questionView {
     margin-top: 40px;
   }
 
@@ -75,33 +75,33 @@ const Styled = styled.div`
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
-    margin-top: 100px;
-    margin-bottom: 100px;
+    padding-top: 100px;
+    padding-bottom: 100px;
     max-width: 880px;
   `}
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
     max-width: 720px;
-    margin-top: 100px;
-    margin-bottom: 100px;
+    padding-top: 100px;
+    padding-bottom: 100px;
   `}
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-    margin-top: 40px;
-    margin-bottom: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
     flex-direction: column;
-      .leftView .title-container {
+      .titleView .title-container {
         .title-custom {
           width: 100%;
         }
       }
-      .rightView {
+      .questionView {
         margin-top: 40px;
       }
   `}
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
-    margin-top: 20px;
+    padding-top: 20px;
   `}
 `;
 
@@ -124,7 +124,7 @@ const ValidatorAskedQuestion = () => {
 
   return (
     <Styled>
-      <div className="leftView">
+      <div className="titleView">
         <div className="title-container">
           <h1 className="title-custom">What is Incognito Exchange?</h1>
         </div>
@@ -141,7 +141,7 @@ const ValidatorAskedQuestion = () => {
           </h6>
         </div>
       </div>
-      <div className="rightView">
+      <div className="questionView">
         {questions?.map((question: any, i: number) => (
           <AskQuestionItem
             key={i}
