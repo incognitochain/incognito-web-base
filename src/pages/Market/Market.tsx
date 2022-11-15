@@ -36,7 +36,7 @@ const Home = () => {
 
   return (
     <Styled isMobile={isMobile}>
-      <div style={{ minHeight: !isMobile ? 'calc(100vh - 100px)' : undefined }}>
+      <div style={{ minHeight: !isMobile && isVisible ? 'calc(100vh - 100px)' : undefined }}>
         {!isMobile && <MarketTitleBox />}
         <Row
           className="default-padding-horizontal market-header"
@@ -60,8 +60,10 @@ const Home = () => {
           />
         )}
       </div>
-      {!isMobile && <MarketInfo />}
-      <div className="default-padding-horizontal">{isMobile ? <MarketCategory /> : <MarketQuestions />}</div>
+      <div className={`fade-in-section ${!isVisible ? 'is-visible' : ''}`}>
+        {!isMobile && <MarketInfo />}
+        <div className="default-padding-horizontal">{isMobile ? <MarketCategory /> : <MarketQuestions />}</div>
+      </div>
       {isMobile && <MarketAchieve />}
     </Styled>
   );
