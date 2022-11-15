@@ -2,7 +2,7 @@
 import { Row } from 'antd';
 import animationData from 'assets/scroll-animation.json';
 import Swap from 'pages/Swap';
-import React, { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import Lottie from 'react-lottie';
 
@@ -16,13 +16,27 @@ import MarketTitleBox from './features/MarketTitleBox';
 import { Styled } from './Market.styled';
 
 const Home = () => {
-  React.useEffect(() => {
-    // console.log('DIMENSIONS::::', window.innerWidth, window.innerHeight);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+
+  useEffect(() => {
+    window.addEventListener('scroll', listenToScroll);
+    return () => window.removeEventListener('scroll', listenToScroll);
   }, []);
+
+  const listenToScroll = () => {
+    let heightToHideFrom = 100;
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+
+    if (winScroll > heightToHideFrom) {
+      isVisible && setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  };
 
   return (
     <Styled isMobile={isMobile}>
-      <div style={{ minHeight: '90vh' }}>
+      <div style={{ minHeight: !isMobile ? 'calc(100vh - 100px)' : undefined }}>
         {!isMobile && <MarketTitleBox />}
         <Row
           className="default-padding-horizontal market-header"
@@ -33,7 +47,7 @@ const Home = () => {
           {isMobile && <MarketBanner />}
           {!isMobile ? <Swap /> : <MarketTokens />}
         </Row>
-        {!isMobile && (
+        {!isMobile && isVisible && (
           <Lottie
             isClickToPauseDisabled={true}
             options={{
