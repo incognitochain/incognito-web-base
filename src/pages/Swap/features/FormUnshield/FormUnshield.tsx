@@ -58,9 +58,6 @@ const WrapSwapIcon = styled.div`
     position: absolute;
     left: 46.5%;
     top: -20px;
-    :hover {
-      transform: scale(1.2);
-    }
   }
   .disable {
     opacity: 0.5;
@@ -69,8 +66,6 @@ const WrapSwapIcon = styled.div`
   .swap-icon {
     cursor: pointer;
     :hover {
-      transform: scale(1.2);
-      transition-duration: 0.3s;
       opacity: 0.8;
     }
     :active {
@@ -244,10 +239,11 @@ const FormUnshield = React.memo((props: any) => {
           tokenAmountNum={sellToken.amount}
           tokenType={'sellToken'}
         />
+        <div style={{ height: 2 }} />
         <WrapSwapIcon>
           <img
             className={`${formType === FormTypes.SWAP ? 'swap-icon' : 'disable'} icon`}
-            style={{ animation: changing ? `spin ${0.6}s linear` : '', width: 40, height: 40 }}
+            style={{ width: 40, height: 40 }}
             onClick={() => {
               if (formType === FormTypes.SWAP && !changing) {
                 onRotateSwapToken();
