@@ -48,6 +48,7 @@ const Styled = styled.div`
   margin-top: 100px;
   margin-bottom: 100px;
   display: flex;
+  max-width: 880px;
   flex-direction: column;
   justify-content: center;
   margin: 0 auto;
