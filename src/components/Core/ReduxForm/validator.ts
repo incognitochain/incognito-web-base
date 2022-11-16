@@ -74,12 +74,24 @@ const etherAddress = (message?: string) => (value: string) => {
   return undefined;
 };
 
+const nearAddress = (message?: string) => (value: string) => {
+  // if (value && value?.length < 15) {
+  //   return 'Invalid address';
+  // }
+  // if (!isEtherAddress(value)) {
+  //   return message || 'Please enter External address';
+  // }
+
+  return undefined;
+};
+
 const combinedAmount = [required, number, largerThan(0, 'Please enter an amount greater than 0')];
 
 const combinedNanoAmount = [required, isInteger, number, minValue(1, 'Please enter an amount greater than 1.')];
 
 const combinedIncognitoAddress = [required, incognitoAddress()];
 const combinedEtherAddress = [required, etherAddress()];
+const combinedNearAddress = [required, nearAddress()];
 const combinedUnknownAddress = [required, minLength(15)];
 
 const combinedAccountName = [
@@ -142,6 +154,7 @@ const validator = {
   combinedIncognitoAddress,
   combinedUnknownAddress,
   combinedEtherAddress,
+  combinedNearAddress,
   combinedOutchainHash,
   email,
   combinedCentralizedAddress,

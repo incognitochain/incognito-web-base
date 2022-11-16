@@ -18,6 +18,9 @@ const enhanceAddressValidation = (WrappedComponent: any) => {
         if (buyToken.isBTC || buyToken.isCentralized) {
           return validator.combinedCentralizedAddress;
         }
+        if (buyToken.isNearToken || buyToken.isMainNEAR) {
+          return validator.combinedNearAddress;
+        }
         return validator.combinedEtherAddress;
       } else {
         if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
