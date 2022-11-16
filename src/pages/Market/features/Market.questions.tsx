@@ -1,6 +1,5 @@
 import { memo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import VisibilitySensor from 'react-visibility-sensor';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 import AskQuestionItem from './AskQuestionItem';
@@ -114,8 +113,6 @@ const AnswerItem = ({ answer }: any) => {
 const ValidatorAskedQuestion = () => {
   const history = useHistory();
   const [activeText, setActiveText] = useState<string>('');
-  const [isVisibleDiv1, setIsVisibleDiv1] = useState<boolean>(false);
-  const [isVisibleDiv2, setIsVisibleDiv2] = useState<boolean>(false);
 
   const itemOnClick = (text: string) => {
     if (text === activeText) {
@@ -127,58 +124,35 @@ const ValidatorAskedQuestion = () => {
 
   return (
     <Styled>
-      <VisibilitySensor
-        onChange={(isVisible) => {
-          if (isVisible) {
-            setIsVisibleDiv1(true);
-          } else {
-            setIsVisibleDiv1(false);
-          }
-        }}
-        delayedCall
-      >
-        <div className={`titleView fade-in-section ${isVisibleDiv1 ? 'is-visible' : ''}`}>
-          <div className="title-container">
-            <h1 className="title-custom">What is Incognito Exchange?</h1>
-          </div>
-          <div className="title-container">
-            <h6 className="description-custom" style={{ color: '#9C9C9C' }}>
-              Incognito exchange is a one-stop-shop that facilitates anonymous swap for all coins across many popular
-              blockchains such as Bitcoin, Monero, Ethereum, BNB Chain, Avalanche, etc.
-              <br />
-              <br />
-              While every existing DEX has its own drawback: sufficient liquidity but no privacy or privacy supported
-              but shortage liquidity, Incognito exchange takes a novel approach to achieve both by implementing privacy
-              via zero-knowledge proofs, inter-blockchain trading with huge liquidity via interoperable dApps (a.k.a
-              DEXs such as Uniswap, Curve, PancakeSwap and SpookySwap).
-            </h6>
-          </div>
+      <div className="titleView">
+        <div className="title-container">
+          <h1 className="title-custom">What is Incognito Exchange?</h1>
         </div>
-      </VisibilitySensor>
-
-      <VisibilitySensor
-        onChange={(isVisible) => {
-          if (isVisible) {
-            setIsVisibleDiv2(true);
-          } else {
-            setIsVisibleDiv2(false);
-          }
-        }}
-        delayedCall
-      >
-        <div className={`questionView fade-in-section ${isVisibleDiv2 ? 'is-visible' : ''}`}>
-          {questions?.map((question: any, i: number) => (
-            <AskQuestionItem
-              key={i}
-              itemOnClick={itemOnClick}
-              title={question?.title}
-              isActive={question?.title === activeText}
-              subItem={<AnswerItem answer={question?.answer} />}
-              subsAnswers={question?.subsAnswers}
-            />
-          ))}
+        <div className="title-container">
+          <h6 className="description-custom" style={{ color: '#9C9C9C' }}>
+            Incognito exchange is a one-stop-shop that facilitates anonymous swap for all coins across many popular
+            blockchains such as Bitcoin, Monero, Ethereum, BNB Chain, Avalanche, etc.
+            <br />
+            <br />
+            While every existing DEX has its own drawback: sufficient liquidity but no privacy or privacy supported but
+            shortage liquidity, Incognito exchange takes a novel approach to achieve both by implementing privacy via
+            zero-knowledge proofs, inter-blockchain trading with huge liquidity via interoperable dApps (a.k.a DEXs such
+            as Uniswap, Curve, PancakeSwap and SpookySwap).
+          </h6>
         </div>
-      </VisibilitySensor>
+      </div>
+      <div className="questionView">
+        {questions?.map((question: any, i: number) => (
+          <AskQuestionItem
+            key={i}
+            itemOnClick={itemOnClick}
+            title={question?.title}
+            isActive={question?.title === activeText}
+            subItem={<AnswerItem answer={question?.answer} />}
+            subsAnswers={question?.subsAnswers}
+          />
+        ))}
+      </div>
     </Styled>
   );
 };

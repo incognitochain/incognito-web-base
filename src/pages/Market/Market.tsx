@@ -60,12 +60,10 @@ const Home = () => {
           />
         )}
       </div>
-      {!isMobile && (
-        <div className={`fade-in-section ${!isVisible ? 'is-visible' : ''}`}>
-          <MarketInfo />
-        </div>
-      )}
-      <div className="default-padding-horizontal">{isMobile ? <MarketCategory /> : <MarketQuestions />}</div>
+      <div className={`fade-in-section ${!isVisible ? 'is-visible' : ''}`}>
+        {!isMobile && <MarketInfo />}
+        <div className="default-padding-horizontal">{isMobile ? <MarketCategory /> : <MarketQuestions />}</div>
+      </div>
       {isMobile && <MarketAchieve />}
     </Styled>
   );
