@@ -103,7 +103,7 @@ const Item = styled.div`
             line-height: 27px;
         }
         .achieve-item-title {
-            font-size: 40px;
+            font-size: 48px;
         }
     `}
 
