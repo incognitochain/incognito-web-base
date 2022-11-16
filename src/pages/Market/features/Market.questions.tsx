@@ -135,9 +135,6 @@ const ValidatorAskedQuestion = () => {
             setIsVisibleDiv1(false);
           }
         }}
-        offset={{
-          bottom: -400,
-        }}
         delayedCall
       >
         <div className={`titleView fade-in-section ${isVisibleDiv1 ? 'is-visible' : ''}`}>
@@ -166,9 +163,6 @@ const ValidatorAskedQuestion = () => {
           } else {
             setIsVisibleDiv2(false);
           }
-        }}
-        offset={{
-          bottom: -400,
         }}
         delayedCall
       >
