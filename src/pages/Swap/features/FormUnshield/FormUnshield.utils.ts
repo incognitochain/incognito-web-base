@@ -24,7 +24,7 @@ const {
   BurningNearRequestMeta,
   BurningRequestMeta,
   getBurningAddress,
-} = require('incognito-chain-web-js/build/wallet');
+} = require('incognito-chain-web-js/build/web/wallet');
 export interface IFee {
   networkFee: number;
   networkFeeToken: string;
@@ -710,6 +710,9 @@ const getBurningMetaDataTypeForUnshield = (sellToken: SelectedPrivacy) => {
   }
   if (sellToken?.isAuroraErc20Token || sellToken.isMainAURORA) {
     return BurningAuroraRequestMeta;
+  }
+  if (sellToken?.isNearToken || sellToken.isMainNEAR) {
+    return BurningNearRequestMeta;
   }
   return BurningRequestMeta;
 };

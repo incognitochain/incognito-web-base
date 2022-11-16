@@ -381,6 +381,10 @@ export const actionEstimateSwapFee =
         network = NetworkTypePayload.POLYGON;
       } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
         network = NetworkTypePayload.FANTOM;
+      } else if (buyNetworkName === MAIN_NETWORK_NAME.AVALANCHE) {
+        network = NetworkTypePayload.AVALANCHE;
+      } else if (buyNetworkName === MAIN_NETWORK_NAME.AURORA) {
+        network = NetworkTypePayload.AURORA;
       }
 
       const payload = {
