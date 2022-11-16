@@ -1,5 +1,4 @@
 import { memo, useState } from 'react';
-import { isMobile } from 'react-device-detect';
 import { useHistory } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
@@ -46,18 +45,18 @@ const questions: any = [
 ];
 
 const Styled = styled.div`
-  margin-top: 100px;
-  margin-bottom: 100px;
   display: flex;
-  flex-direction: row;
-  .leftView {
+  max-width: 880px;
+  padding-top: 120px;
+  padding-bottom: 120px;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  .titleView {
     display: flex;
-    flex: 1;
     flex-direction: column;
     .title-container {
-      text-align: left;
       .title-custom {
-        width: 100%;
       }
       .description-custom {
         width: 100%;
@@ -66,10 +65,8 @@ const Styled = styled.div`
     }
   }
 
-  .rightView {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
+  .questionView {
+    margin-top: 40px;
   }
 
   .br {
@@ -78,32 +75,33 @@ const Styled = styled.div`
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
-    margin-top: 140px;
-    margin-bottom: 140px;
+    padding-top: 120px;
+    padding-bottom: 120px;
+    max-width: 880px;
   `}
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-    margin-top: 100px;
-    margin-bottom: 100px;
+    max-width: 720px;
+    padding-top: 100px;
+    padding-bottom: 100px;
   `}
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-    margin-top: 40px;
-    margin-bottom: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
     flex-direction: column;
-      .leftView .title-container {
-        text-align: center;
+      .titleView .title-container {
         .title-custom {
           width: 100%;
         }
       }
-      .rightView {
+      .questionView {
         margin-top: 40px;
       }
   `}
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
-    margin-top: 20px;
+    padding-top: 20px;
   `}
 `;
 
@@ -126,11 +124,11 @@ const ValidatorAskedQuestion = () => {
 
   return (
     <Styled>
-      <div className="leftView" style={{ marginRight: isMobile ? 0 : 80 }}>
-        <div className="title-container center">
+      <div className="titleView">
+        <div className="title-container">
           <h1 className="title-custom">What is Incognito Exchange?</h1>
         </div>
-        <div className="title-container center">
+        <div className="title-container">
           <h6 className="description-custom" style={{ color: '#9C9C9C' }}>
             Incognito exchange is a one-stop-shop that facilitates anonymous swap for all coins across many popular
             blockchains such as Bitcoin, Monero, Ethereum, BNB Chain, Avalanche, etc.
@@ -143,7 +141,7 @@ const ValidatorAskedQuestion = () => {
           </h6>
         </div>
       </div>
-      <div className="rightView">
+      <div className="questionView">
         {questions?.map((question: any, i: number) => (
           <AskQuestionItem
             key={i}

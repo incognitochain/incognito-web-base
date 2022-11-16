@@ -55,23 +55,27 @@ const WrapSwapIcon = styled.div`
     }
   }
   .icon {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    border: 4px solid #303030;
+    background-color: #252525;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     left: 46.5%;
     top: -20px;
-    :hover {
-      transform: scale(1.2);
-    }
   }
   .disable {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: unset;
   }
   .swap-icon {
     cursor: pointer;
     :hover {
-      transform: scale(1.2);
-      transition-duration: 0.3s;
-      opacity: 0.8;
+      background-color: #404040;
+      transition: 0.3s all ease-in-out;
     }
     :active {
       opacity: 0.5;
@@ -244,8 +248,9 @@ const FormUnshield = React.memo((props: any) => {
           tokenAmountNum={sellToken.amount}
           tokenType={'sellToken'}
         />
+        <div style={{ height: 2 }} />
         <WrapSwapIcon>
-          <img
+          <div
             className={`${formType === FormTypes.SWAP ? 'swap-icon' : 'disable'} icon`}
             style={{ animation: changing ? `spin ${0.6}s linear` : '', width: 40, height: 40 }}
             onClick={() => {
@@ -255,9 +260,9 @@ const FormUnshield = React.memo((props: any) => {
                 setTimeout(() => setChanging(false), 1000);
               }
             }}
-            src={SwapIcon}
-            alt="swap-svg"
-          />
+          >
+            <img style={{ width: 16, height: 16 }} src={SwapIcon} alt="swap-svg" />
+          </div>
         </WrapSwapIcon>
         <Field
           component={SelectionField}
