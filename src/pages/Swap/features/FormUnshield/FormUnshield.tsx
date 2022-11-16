@@ -250,19 +250,18 @@ const FormUnshield = React.memo((props: any) => {
         />
         <div style={{ height: 2 }} />
         <WrapSwapIcon>
-          <div className={`${formType === FormTypes.SWAP ? 'swap-icon' : 'disable'} icon`}>
-            <img
-              style={{ width: 16, height: 16 }}
-              onClick={() => {
-                if (formType === FormTypes.SWAP && !changing) {
-                  onRotateSwapToken();
-                  setChanging(true);
-                  setTimeout(() => setChanging(false), 1000);
-                }
-              }}
-              src={SwapIcon}
-              alt="swap-svg"
-            />
+          <div
+            className={`${formType === FormTypes.SWAP ? 'swap-icon' : 'disable'} icon`}
+            style={{ animation: changing ? `spin ${0.6}s linear` : '', width: 40, height: 40 }}
+            onClick={() => {
+              if (formType === FormTypes.SWAP && !changing) {
+                onRotateSwapToken();
+                setChanging(true);
+                setTimeout(() => setChanging(false), 1000);
+              }
+            }}
+          >
+            <img style={{ width: 16, height: 16 }} src={SwapIcon} alt="swap-svg" />
           </div>
         </WrapSwapIcon>
         <Field
