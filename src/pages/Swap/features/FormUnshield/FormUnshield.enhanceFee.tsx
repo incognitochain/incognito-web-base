@@ -35,17 +35,16 @@ const enhanceFee = (WrappedComponent: any) => {
     const initRef = React.useRef(false);
     const intervalRef = React.useRef<typeof setInterval>();
     const isFocused = useIsWindowVisible();
-
     const onResetFee = () => {
       // Reset estimate fee data
       dispatch(actionResetFee());
     };
 
     const onClearInterval = () => {
-      if (intervalRef && intervalRef.current) {
-        // @ts-ignore
-        clearInterval(intervalRef.current);
-      }
+      // @ts-ignore
+      clearInterval(intervalRef.current);
+      // @ts-ignore
+      intervalRef.current = null;
     };
 
     const onEstimateUnshieldFee = async ({ isResetForm = true }: IEstimate) => {
@@ -82,14 +81,14 @@ const enhanceFee = (WrappedComponent: any) => {
           UPDATED_METRIC = true;
         }
         await handleEstimateFee({ isResetForm: true });
-        if (intervalRef && !intervalRef.current) {
+        if (intervalRef && !intervalRef.current && formType === FormTypes.SWAP) {
           // @ts-ignore
           intervalRef.current = setInterval(async () => {
             await handleEstimateFee({ isResetForm: false });
           }, 15000);
         }
       }, 700),
-      [inputAmount, isFocused]
+      [inputAmount, isFocused, unshieldAddress, formType, incAddress, isExternalAddress]
     );
 
     React.useEffect(() => {
