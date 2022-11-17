@@ -25,6 +25,9 @@ const ETHERSCAN_PREFIXES: { [chainId: number]: string } = {
 
   [SupportedChainId.AURORA]: 'https://testnet.aurorascan.dev',
   [SupportedChainId.AURORA_TESTNET]: 'https://aurorascan.dev',
+
+  [SupportedChainId.NEAR]: 'https://explorer.near.org',
+  [SupportedChainId.AURORA_TESTNET]: 'https://explorer.testnet.near.org',
 };
 
 export enum ExplorerDataType {
