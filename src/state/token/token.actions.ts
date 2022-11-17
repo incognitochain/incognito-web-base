@@ -54,9 +54,7 @@ export const actionGetPTokens = () => async (dispatch: AppDispatch, getState: Ap
       'identify'
     );
 
-    // const depositableList = list.filter(({ movedUnifiedToken, isVerified }) => !movedUnifiedToken && isVerified);
-    const depositableList = list.filter(({ movedUnifiedToken, isVerified }) => !movedUnifiedToken);
-
+    const depositableList = list.filter(({ movedUnifiedToken, isVerified }) => !movedUnifiedToken && isVerified);
     // flatten tokens
     const flattenTokens = depositableList.reduce((tokens: PTokenModel[], currToken) => {
       let _tokens: PTokenModel[] = [currToken];
