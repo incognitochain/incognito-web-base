@@ -36,7 +36,7 @@ const Home = () => {
 
   return (
     <Styled isMobile={isMobile}>
-      <div style={{ minHeight: !isMobile && isVisible ? 'calc(100vh - 100px)' : undefined }}>
+      <div>
         {!isMobile && <MarketTitleBox />}
         <Row
           className="default-padding-horizontal market-header"
