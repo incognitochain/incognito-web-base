@@ -280,7 +280,10 @@ const getUnshieldData = ({
     });
   }
 
-  const isExternalAddress = _buyToken.isCentralized || _buyToken.isBTC ? true : isEtherAddress(inputAddress);
+  const isExternalAddress =
+    _buyToken.isCentralized || _buyToken.isBTC || _buyToken.isNearToken || _buyToken.isMainNEAR
+      ? true
+      : isEtherAddress(inputAddress);
 
   // amount validator
   const inputOriginalAmount =
