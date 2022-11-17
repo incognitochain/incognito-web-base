@@ -1,5 +1,6 @@
 import curve from 'assets/images/dex/curve.svg';
 import incognito from 'assets/images/dex/incognito.svg';
+import joe from 'assets/images/dex/joe.svg';
 import pancake from 'assets/images/dex/pancake.svg';
 import spooky from 'assets/images/dex/spooky.svg';
 import uni from 'assets/images/dex/uni.svg';
@@ -44,9 +45,9 @@ export const getExchangeLogo = (exchangeSelected: string) => {
   } else if (_exchangeSelected.includes(SwapExchange.SPOOKY)) {
     return spooky;
   } else if (_exchangeSelected.includes(SwapExchange.JOE)) {
-    return spooky;
+    return joe;
   } else if (_exchangeSelected.includes(SwapExchange.TRISOLARIS)) {
-    return spooky;
+    return joe;
   } else {
     return incognito;
   }
