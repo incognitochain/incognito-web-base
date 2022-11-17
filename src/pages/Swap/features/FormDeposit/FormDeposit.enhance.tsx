@@ -60,6 +60,10 @@ const enhance = (WrappedComponent: any) => {
         case SupportedChainId.AURORA_TESTNET:
           tokens = network[MAIN_NETWORK_NAME.AURORA];
           break;
+        case SupportedChainId.NEAR:
+        case SupportedChainId.NEAR_TESTNET:
+          tokens = network[MAIN_NETWORK_NAME.NEAR];
+          break;
       }
       if (tokens && tokens.length > 0) {
         onSelectToken({ token: tokens[0] });
