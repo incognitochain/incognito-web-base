@@ -64,6 +64,7 @@ const incognitoAddress = (message?: string) => (value: string) => {
 };
 
 const etherAddress = (message?: string) => (value: string) => {
+  value = value?.trim();
   if (value && value?.length < 15) {
     return 'Invalid address';
   }
@@ -75,6 +76,7 @@ const etherAddress = (message?: string) => (value: string) => {
 };
 
 const nearAddress = (message?: string) => (value: string) => {
+  value = value?.trim();
   const ACCOUNT_ID_REGEX = /^(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$/;
 
   if (value.length >= 2 && value.length <= 64 && ACCOUNT_ID_REGEX.test(value)) {
@@ -129,6 +131,7 @@ const validateAlphaNumericText = (message?: string) => (value: any) => {
 };
 
 const centralizedAddress = (message?: string) => (value: any) => {
+  value = value?.trim();
   if (value && (isEtherAddress(value) || isPaymentAddress(value))) {
     return message || 'Invalid address';
   }
