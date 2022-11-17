@@ -20,29 +20,16 @@ export const pTokensSelector = createSelector(tokenSelectors, ({ pTokens }) => p
 
 export const depositableSelectors = createSelector(tokenSelectors, (token) => token.depositable);
 
-// export const unshieldableTokens = createSelector(pTokensSelector, (pTokens) => {
-//   const pTokensArr = Object.values(pTokens || {});
-//   const unshieldable = pTokensArr.filter(({ tokenID, currencyType, hasChild, isUnified, isVerified }) => {
-//     if (isUnified && !hasChild) return false;
-//     return (
-//       Boolean(
-//         Object.keys(GROUP_NETWORK).find((key) => {
-//           return GROUP_NETWORK[key].includes(currencyType);
-//         })
-//       ) && isVerified
-//     );
-//   });
-//   return unshieldable || [];
-// });
-
 export const unshieldableTokens = createSelector(pTokensSelector, (pTokens) => {
   const pTokensArr = Object.values(pTokens || {});
   const unshieldable = pTokensArr.filter(({ tokenID, currencyType, hasChild, isUnified, isVerified }) => {
     if (isUnified && !hasChild) return false;
-    return Boolean(
-      Object.keys(GROUP_NETWORK).find((key) => {
-        return GROUP_NETWORK[key].includes(currencyType);
-      })
+    return (
+      Boolean(
+        Object.keys(GROUP_NETWORK).find((key) => {
+          return GROUP_NETWORK[key].includes(currencyType);
+        })
+      ) && isVerified
     );
   });
   return unshieldable || [];
