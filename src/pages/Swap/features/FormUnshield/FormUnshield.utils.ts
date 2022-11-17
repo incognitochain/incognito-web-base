@@ -187,7 +187,8 @@ const getUnshieldData = ({
   const submitting = isSubmitting(FORM_CONFIGS.formName)(state);
 
   const inputAmount: string = formSelector(state, FORM_CONFIGS.sellAmount);
-  const inputAddress = formSelector(state, FORM_CONFIGS.toAddress);
+  let inputAddress = formSelector(state, FORM_CONFIGS.toAddress);
+  inputAddress = inputAddress?.trim();
   const inputSlippage: string = formSelector(state, FORM_CONFIGS.slippage) || '0';
 
   // get all tokens
