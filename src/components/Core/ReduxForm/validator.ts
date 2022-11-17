@@ -75,14 +75,13 @@ const etherAddress = (message?: string) => (value: string) => {
 };
 
 const nearAddress = (message?: string) => (value: string) => {
-  // if (value && value?.length < 15) {
-  //   return 'Invalid address';
-  // }
-  // if (!isEtherAddress(value)) {
-  //   return message || 'Please enter External address';
-  // }
+  const ACCOUNT_ID_REGEX = /^(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$/;
 
-  return undefined;
+  if (value.length >= 2 && value.length <= 64 && ACCOUNT_ID_REGEX.test(value)) {
+    return undefined;
+  }
+
+  return 'Invalid address';
 };
 
 const combinedAmount = [required, number, largerThan(0, 'Please enter an amount greater than 0')];
