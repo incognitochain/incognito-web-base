@@ -529,6 +529,12 @@ const enhanceSend = (WrappedComponent: any) => {
                 networkName = NetworkTypePayload.POLYGON;
               } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
                 networkName = NetworkTypePayload.FANTOM;
+              } else if (buyNetworkName === MAIN_NETWORK_NAME.AVALANCHE) {
+                networkName = NetworkTypePayload.AVALANCHE;
+              } else if (buyNetworkName === MAIN_NETWORK_NAME.AURORA) {
+                networkName = NetworkTypePayload.AURORA;
+              } else if (buyNetworkName === MAIN_NETWORK_NAME.NEAR) {
+                networkName = NetworkTypePayload.NEAR;
               } else {
                 networkName = NetworkTypePayload.CENTRALIZED;
               }

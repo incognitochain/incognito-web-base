@@ -52,6 +52,18 @@ const enhance = (WrappedComponent: any) => {
         case SupportedChainId.POLYGON_MUMBAI:
           tokens = network[MAIN_NETWORK_NAME.POLYGON];
           break;
+        case SupportedChainId.AVAX:
+        case SupportedChainId.AVAX_TESTNET:
+          tokens = network[MAIN_NETWORK_NAME.AVALANCHE];
+          break;
+        case SupportedChainId.AURORA:
+        case SupportedChainId.AURORA_TESTNET:
+          tokens = network[MAIN_NETWORK_NAME.AURORA];
+          break;
+        case SupportedChainId.NEAR:
+        case SupportedChainId.NEAR_TESTNET:
+          tokens = network[MAIN_NETWORK_NAME.NEAR];
+          break;
       }
       if (tokens && tokens.length > 0) {
         onSelectToken({ token: tokens[0] });

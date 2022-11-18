@@ -64,6 +64,7 @@ const incognitoAddress = (message?: string) => (value: string) => {
 };
 
 const etherAddress = (message?: string) => (value: string) => {
+  value = value?.trim();
   if (value && value?.length < 15) {
     return 'Invalid address';
   }
@@ -74,12 +75,24 @@ const etherAddress = (message?: string) => (value: string) => {
   return undefined;
 };
 
+const nearAddress = (message?: string) => (value: string) => {
+  value = value?.trim();
+  const ACCOUNT_ID_REGEX = /^(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$/;
+
+  if (value.length >= 2 && value.length <= 64 && ACCOUNT_ID_REGEX.test(value)) {
+    return undefined;
+  }
+
+  return 'Invalid address';
+};
+
 const combinedAmount = [required, number, largerThan(0, 'Please enter an amount greater than 0')];
 
 const combinedNanoAmount = [required, isInteger, number, minValue(1, 'Please enter an amount greater than 1.')];
 
 const combinedIncognitoAddress = [required, incognitoAddress()];
 const combinedEtherAddress = [required, etherAddress()];
+const combinedNearAddress = [required, nearAddress()];
 const combinedUnknownAddress = [required, minLength(15)];
 
 const combinedAccountName = [
@@ -118,6 +131,7 @@ const validateAlphaNumericText = (message?: string) => (value: any) => {
 };
 
 const centralizedAddress = (message?: string) => (value: any) => {
+  value = value?.trim();
   if (value && (isEtherAddress(value) || isPaymentAddress(value))) {
     return message || 'Invalid address';
   }
@@ -142,6 +156,7 @@ const validator = {
   combinedIncognitoAddress,
   combinedUnknownAddress,
   combinedEtherAddress,
+  combinedNearAddress,
   combinedOutchainHash,
   email,
   combinedCentralizedAddress,
