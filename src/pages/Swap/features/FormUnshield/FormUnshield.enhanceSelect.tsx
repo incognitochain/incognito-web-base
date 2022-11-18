@@ -35,6 +35,7 @@ const enhanceSelect = (WrappedComponent: any) => {
     const dispatch = useAppDispatch();
     const refCountChangeField = React.useRef<any>(null);
     const handleSelectSellToken = async ({ token }: { token: PToken }) => {
+      console.log('SANG TEST: ', token);
       if (token.tokenID === sellToken.tokenID) return;
       dispatch(actionGetVaults());
       dispatch(actionChangeSellToken({ token }));
