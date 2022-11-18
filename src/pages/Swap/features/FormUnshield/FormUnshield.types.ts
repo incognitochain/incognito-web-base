@@ -26,6 +26,8 @@ export enum SwapExchange {
   CURVE = 'curve',
   PDEX = 'pdex',
   SPOOKY = 'spooky',
+  JOE = 'joe',
+  TRISOLARIS = 'trisolaris',
 }
 
 export enum NetworkTypePayload {
@@ -34,6 +36,9 @@ export enum NetworkTypePayload {
   POLYGON = 'plg',
   FANTOM = 'ftm',
   BINANCE_SMART_CHAIN = 'bsc',
+  AVALANCHE = 'avax',
+  AURORA = 'aurora',
+  NEAR = 'near',
   CENTRALIZED = 'centralized',
 }
 

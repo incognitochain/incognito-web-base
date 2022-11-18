@@ -15,7 +15,7 @@ export const actionFilterSetToken =
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
       const parentToken = getPrivacyByTokenIdentifySelectors(getState())(token.parentTokenID);
-      if (!token.chainID || !token.networkName) return;
+      if (token.chainID === null || token.chainID === undefined || !token.networkName) return;
       const sellToken: ITokenNetwork = {
         identify: token.identify,
         chainID: token.chainID,

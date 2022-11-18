@@ -381,6 +381,10 @@ export const actionEstimateSwapFee =
         network = NetworkTypePayload.POLYGON;
       } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
         network = NetworkTypePayload.FANTOM;
+      } else if (buyNetworkName === MAIN_NETWORK_NAME.AVALANCHE) {
+        network = NetworkTypePayload.AVALANCHE;
+      } else if (buyNetworkName === MAIN_NETWORK_NAME.AURORA) {
+        network = NetworkTypePayload.AURORA;
       }
 
       const payload = {
@@ -430,7 +434,29 @@ export const actionEstimateSwapFee =
         networkText: 'Fantom',
         token: sellToken,
       });
-      const exchangeSupports = [...ethExchanges, ...ftmExchanges, ...plgExchanges, ...bscExchanges, ...pdexExchanges];
+      const avaxExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.AVALANCHE,
+        networkID: 6,
+        networkText: 'Avalanche',
+        token: sellToken,
+      });
+      const auroraExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.AURORA,
+        networkID: 5,
+        networkText: 'Aurora',
+        token: sellToken,
+      });
+      const exchangeSupports = [
+        ...ethExchanges,
+        ...ftmExchanges,
+        ...plgExchanges,
+        ...bscExchanges,
+        ...avaxExchanges,
+        ...auroraExchanges,
+        ...pdexExchanges,
+      ];
       if (!exchangeSupports?.length)
         throw new Error('Can not find any trading platform that supports for this pair token');
 

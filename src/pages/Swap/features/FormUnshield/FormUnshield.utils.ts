@@ -19,9 +19,12 @@ const {
   BurningFantomRequestMeta,
   BurningPBSCRequestMeta,
   BurningPLGRequestMeta,
+  BurningAvaxRequestMeta,
+  BurningAuroraRequestMeta,
+  BurningNearRequestMeta,
   BurningRequestMeta,
   getBurningAddress,
-} = require('incognito-chain-web-js/build/wallet');
+} = require('incognito-chain-web-js/build/web/wallet');
 export interface IFee {
   networkFee: number;
   networkFeeToken: string;
@@ -184,7 +187,8 @@ const getUnshieldData = ({
   const submitting = isSubmitting(FORM_CONFIGS.formName)(state);
 
   const inputAmount: string = formSelector(state, FORM_CONFIGS.sellAmount);
-  const inputAddress = formSelector(state, FORM_CONFIGS.toAddress);
+  let inputAddress = formSelector(state, FORM_CONFIGS.toAddress);
+  inputAddress = inputAddress?.trim();
   const inputSlippage: string = formSelector(state, FORM_CONFIGS.slippage) || '0';
 
   // get all tokens
@@ -277,7 +281,10 @@ const getUnshieldData = ({
     });
   }
 
-  const isExternalAddress = _buyToken.isCentralized || _buyToken.isBTC ? true : isEtherAddress(inputAddress);
+  const isExternalAddress =
+    _buyToken.isCentralized || _buyToken.isBTC || _buyToken.isNearToken || _buyToken.isMainNEAR
+      ? true
+      : isEtherAddress(inputAddress);
 
   // amount validator
   const inputOriginalAmount =
@@ -638,6 +645,15 @@ const getExchangeName = (exchange: SwapExchange) => {
   if (exchange === SwapExchange.SPOOKY) {
     return 'Spooky';
   }
+  if (exchange === SwapExchange.JOE) {
+    return 'Trader JOE';
+  }
+
+  if (exchange === SwapExchange.TRISOLARIS) {
+    return 'Trisolaris';
+  }
+
+  return exchange;
 };
 
 // Parse fee data from api estimate swap fee
@@ -693,7 +709,15 @@ const getBurningMetaDataTypeForUnshield = (sellToken: SelectedPrivacy) => {
   if (sellToken?.isBep20Token || sellToken.isMainBSC) return BurningPBSCRequestMeta;
   if (sellToken?.isPolygonErc20Token || sellToken.isMainMATIC) return BurningPLGRequestMeta;
   if (sellToken?.isFantomErc20Token || sellToken.isMainFTM) return BurningFantomRequestMeta;
-
+  if (sellToken?.isAvaxErc20Token || sellToken.isMainAVAX) {
+    return BurningAvaxRequestMeta;
+  }
+  if (sellToken?.isAuroraErc20Token || sellToken.isMainAURORA) {
+    return BurningAuroraRequestMeta;
+  }
+  if (sellToken?.isNearToken || sellToken.isMainNEAR) {
+    return BurningNearRequestMeta;
+  }
   return BurningRequestMeta;
 };
 

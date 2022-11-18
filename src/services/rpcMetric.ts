@@ -9,6 +9,7 @@ export enum METRIC_TYPE {
   RESUBMIT_DEPOSIT = 84,
   RESUBMIT_SWAP = 85,
   ESTIMATE_SWAP = 86,
+  CONFIRM_UNSHIELD = 87,
 }
 
 class RpcMetric {

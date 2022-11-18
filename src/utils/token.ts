@@ -22,6 +22,18 @@ const getChainIDByCurrency = ({ currency }: { currency: number }): SupportedChai
     case PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20:
       chainID = isMainnet ? SupportedChainId.FTM : SupportedChainId.FTM_TESTNET;
       break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.AVAX:
+    case PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20:
+      chainID = isMainnet ? SupportedChainId.AVAX : SupportedChainId.AVAX_TESTNET;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH:
+    case PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20:
+      chainID = isMainnet ? SupportedChainId.AURORA : SupportedChainId.AURORA_TESTNET;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.NEAR:
+    case PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN:
+      chainID = isMainnet ? SupportedChainId.NEAR : SupportedChainId.NEAR_TESTNET;
+      break;
     case PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN:
       chainID = 25;
       break;
@@ -47,6 +59,18 @@ const getNetworkNameByCurrency = ({ currency }: { currency: number }): MAIN_NETW
     case PRIVATE_TOKEN_CURRENCY_TYPE.FTM:
     case PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20:
       networkName = MAIN_NETWORK_NAME.FANTOM;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.AVAX:
+    case PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20:
+      networkName = MAIN_NETWORK_NAME.AVALANCHE;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH:
+    case PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ERC20:
+      networkName = MAIN_NETWORK_NAME.AURORA;
+      break;
+    case PRIVATE_TOKEN_CURRENCY_TYPE.NEAR:
+    case PRIVATE_TOKEN_CURRENCY_TYPE.NEAR_TOKEN:
+      networkName = MAIN_NETWORK_NAME.NEAR;
       break;
     case PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN:
       networkName = MAIN_NETWORK_NAME.INCOGNITO;
@@ -98,6 +122,12 @@ const getAcronymNetwork = (token: SelectedPrivacyModel): string => {
     network = 'ftm';
   } else if (token.isBep20Token || token.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB) {
     network = 'bsc';
+  } else if (token.isAvaxErc20Token || token.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AVAX) {
+    network = 'avax';
+  } else if (token.isAuroraErc20Token || token.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.AURORA_ETH) {
+    network = 'aurora';
+  } else if (token.isNearToken || token.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.NEAR) {
+    network = 'near';
   } else if (token.isBTC) {
     network = 'btc';
   } else if (token.isCentralized) {
@@ -120,6 +150,15 @@ const getChainIDByAcronymNetwork = (network: string): number | any => {
       break;
     case 'ftm':
       chainID = isMainnet ? SupportedChainId.FTM : SupportedChainId.FTM_TESTNET;
+      break;
+    case 'avax':
+      chainID = isMainnet ? SupportedChainId.AVAX : SupportedChainId.AVAX_TESTNET;
+      break;
+    case 'aurora':
+      chainID = isMainnet ? SupportedChainId.AURORA : SupportedChainId.AURORA_TESTNET;
+      break;
+    case 'near':
+      chainID = isMainnet ? SupportedChainId.NEAR : SupportedChainId.NEAR_TESTNET;
       break;
   }
   return chainID;
