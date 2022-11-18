@@ -81,6 +81,7 @@ interface IProps extends ISelectSwapExchange {
   desc?: string;
   inputAmount: string;
   impactAmount?: number;
+  errorMsg?: string;
 }
 
 const EstReceive = React.memo(
@@ -102,6 +103,7 @@ const EstReceive = React.memo(
     desc,
     inputAmount,
     impactAmount,
+    errorMsg,
   }: IProps) => {
     const [isOpen, setOpen] = React.useState(false);
     const [isRateSellToBuy, setIsRateSellToBuy] = React.useState(true);
@@ -140,7 +142,11 @@ const EstReceive = React.memo(
               {getRateText()}
             </ThemedText.SmallLabel>
           )}
-          {!rate && <ThemedText.SmallLabel fontWeight={500}>Fetching best price...</ThemedText.SmallLabel>}
+          {!rate && (
+            <ThemedText.SmallLabel fontWeight={500}>
+              {errorMsg ? 'Advanced' : 'Fetching best price...'}
+            </ThemedText.SmallLabel>
+          )}
         </Row>
       ) : (
         <ThemedText.RegularLabel fontWeight={500}>
@@ -148,7 +154,9 @@ const EstReceive = React.memo(
         </ThemedText.RegularLabel>
       );
 
-    const isHidden = !isFetchingFee && (!inputAmount || (formType === FormTypes.SWAP && !rate));
+    let isHidden = !isFetchingFee && (!inputAmount || (formType === FormTypes.SWAP && !rate));
+    if (errorMsg && errorMsg.includes('slippage')) isHidden = false;
+
     return (
       <Styled isHidden={isHidden} isFetching={isFetchingFee}>
         <RowBetween style={{ cursor: 'pointer' }} onClick={() => setOpen((isOpen) => !isOpen)}>
