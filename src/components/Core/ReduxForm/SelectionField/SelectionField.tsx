@@ -44,6 +44,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
 
     tokenAmountNum,
     tokenType,
+    componentProps,
   } = props;
 
   const { error: errorMeta, touched, submitting, active } = meta;
@@ -182,6 +183,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
                   height: '40px',
                   paddingLeft: '0px',
                 },
+                ...componentProps,
               }}
               isError={isError}
               fontSize={29}

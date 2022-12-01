@@ -5,12 +5,14 @@ interface IENVS {
   REACT_APP_API_SERVICE: string;
   REACT_APP_SITE_KEY: string;
   REACT_APP_EXPLORER_SERVICE_URL: string;
+  REACT_APP_API_COIN_SERVICE: string;
 }
 
 const defaultEnvs = {
   REACT_APP_ENV: 'production',
   REACT_APP_API_SERVICE: '',
   REACT_APP_EXPLORER_SERVICE_URL: '',
+  REACT_APP_API_COIN_SERVICE: '',
 };
 
 export const getEnvs = () => {
@@ -43,3 +45,5 @@ export const isMainnet: boolean = ENVS.REACT_APP_ENV === 'production';
 export const SITE_KEY: string = ENVS.REACT_APP_SITE_KEY;
 
 export const API_SERVICE: string = ENVS.REACT_APP_API_SERVICE;
+
+export const API_COIN_SERVICE: string = ENVS.REACT_APP_API_COIN_SERVICE;

@@ -47,7 +47,7 @@ const enhanceSend = (WrappedComponent: any) => {
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
     const { setModal, clearAllModal } = useModal();
-    const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.CONFIRM_SWAP });
+    const updateMetric = ({ type }: { type: METRIC_TYPE }) => rpcMetric.updateMetric({ type });
 
     const remoteAddress = React.useMemo(() => {
       let remoteAddress: string = inputAddress || '';
@@ -418,6 +418,9 @@ const enhanceSend = (WrappedComponent: any) => {
       }
       if (formType === FormTypes.SWAP && (errorMsg || isFetching)) return;
       try {
+        updateMetric({
+          type: formType === FormTypes.SWAP ? METRIC_TYPE.CONFIRM_SWAP : METRIC_TYPE.CONFIRM_UNSHIELD,
+        }).then();
         const { prvPayments, tokenPayments } = await getTokenAndPrivacyPayments();
         const { otaReceiver, burnerAddress, feeRefundOTA, newCoins } = await getKeySetINC();
 
@@ -565,7 +568,6 @@ const enhanceSend = (WrappedComponent: any) => {
               });
               console.log({ submitTxUnshieldResponse });
             }
-            updateMetric().then();
             resolve(tx);
           } catch (e) {
             console.log('HANDLE UNSHIELD WITH ERROR ', e);

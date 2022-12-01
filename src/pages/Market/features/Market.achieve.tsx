@@ -1,5 +1,6 @@
 import { Card, Col, List, Row } from 'antd';
 import { marketTranslateSelector } from 'config/Configs.selector';
+import { KEY_TRADE_VOLUME } from 'pages/App.enhance';
 import React from 'react';
 import { isMobile } from 'react-device-detect';
 import { useSelector } from 'react-redux';
@@ -122,7 +123,7 @@ const MarketAchieve = () => {
   const Factory = React.useMemo(
     () => [
       {
-        title: '$550M',
+        title: `${localStorage.getItem(KEY_TRADE_VOLUME) || 340}M`,
         content: marketTrs.volumeTraded,
         className: 'achieve-margin-right',
       },

@@ -340,6 +340,7 @@ const FormUnshield = React.memo((props: any) => {
           isFetchingFee={isFetching}
           inputAmount={inputAmount}
           impactAmount={exchangeSelectedData?.impactAmount}
+          errorMsg={errorMsg}
         />
         <VerticalSpace />
         {button.isConnected ? (

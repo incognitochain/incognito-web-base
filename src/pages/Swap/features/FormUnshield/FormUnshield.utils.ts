@@ -198,7 +198,7 @@ const getUnshieldData = ({
   const _sellToken = getDataByTokenID(sellIdentify);
   const _sellTokenList = orderBy(
     unshieldAbleTokens.filter((token) => {
-      return !(token.isPRV && token.movedUnifiedToken);
+      return !(token.isPRV && token.movedUnifiedToken) && !token.isNearToken;
     }),
     ['isPRV', 'isUnified'],
     ['desc', 'desc']
@@ -216,7 +216,7 @@ const getUnshieldData = ({
     } else {
       _buyTokenList = _buyTokenList.filter((token: SelectedPrivacy) => {
         const _swapNetwork = token.networkName;
-        // remove al unified tokens
+        // remove all unified tokens
         if (!_swapNetwork || token.hasChild) return false;
 
         // case un-unified tokens
@@ -233,6 +233,8 @@ const getUnshieldData = ({
       });
     }
   }
+
+  _buyTokenList = _buyTokenList.filter((token) => !token.isNearToken);
 
   let isUseTokenFee = false;
   let _sellParentToken, _buyParentToken, _buyNetworkList: any;
