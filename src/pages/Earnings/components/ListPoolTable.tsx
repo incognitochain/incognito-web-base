@@ -3,11 +3,11 @@ import type { ColumnsType } from 'antd/es/table';
 import { API_COIN_SERVICE } from 'config';
 import { CRYPTO_ICON_URL, PRIVATE_TOKEN_CURRENCY_NAME } from 'constants/token';
 import React, { useEffect, useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
-// import { colorsSelector } from 'theme/Theme.selector';
 import { Pool } from '../Earnings.types';
 import { parseListPoolApiResponse } from '../Earnings.utils';
 
@@ -164,7 +164,10 @@ const ListPoolTable = () => {
           pagination={false}
           rowClassName="tableRow"
           onRow={(r) => ({
-            onClick: () => history.push('/', { tokenId1: r?.token1ID, tokenId2: r?.token2ID }),
+            onClick: () => {
+              if (isMobile) return;
+              history.push('/', { tokenId1: r?.token1ID, tokenId2: r?.token2ID });
+            },
           })}
         />
       </div>
