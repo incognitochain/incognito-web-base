@@ -3,7 +3,10 @@ import { isAddress as isEtherAddress } from 'ethers/lib/utils';
 import PToken, { ITokenNetwork } from 'models/model/pTokenModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import store from 'state';
 import { useAppDispatch } from 'state/hooks';
+import { getPrivacyDataByTokenIDSelector } from 'state/token';
 
 import {
   actionChangeBuyNetwork,
@@ -33,6 +36,9 @@ const enhanceSelect = (WrappedComponent: any) => {
   const FormDepositComp = (props: any) => {
     const { sellToken, buyNetworkName, incAddress, onChangeField, unshieldAddress } = props;
     const dispatch = useAppDispatch();
+    const history = useHistory();
+    const location: any = useLocation();
+
     const refCountChangeField = React.useRef<any>(null);
     const handleSelectSellToken = async ({ token }: { token: PToken }) => {
       if (token.tokenID === sellToken.tokenID) return;
@@ -56,6 +62,19 @@ const enhanceSelect = (WrappedComponent: any) => {
     };
 
     const handleRotateSwapToken = () => dispatch(actionRotateSwapTokens());
+
+    React.useEffect(() => {
+      history.replace(`/`, {});
+    }, []);
+
+    React.useEffect(() => {
+      if (location?.state?.tokenId1 && location?.state?.tokenId2) {
+        const sellTokenData = getPrivacyDataByTokenIDSelector(store.getState())(location?.state.tokenId1);
+        const buyTokenData = getPrivacyDataByTokenIDSelector(store.getState())(location?.state.tokenId2);
+        handleSelectSellToken({ token: sellTokenData });
+        handleSelectBuyToken({ token: buyTokenData });
+      }
+    }, [location?.state?.tokenId1, location?.state?.tokenId2]);
 
     React.useEffect(() => {
       if (!refCountChangeField.current) {
