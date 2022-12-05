@@ -1,39 +1,68 @@
-import { Row, Table } from 'antd';
+import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { API_COIN_SERVICE } from 'config';
 import { CRYPTO_ICON_URL, PRIVATE_TOKEN_CURRENCY_NAME } from 'constants/token';
 import React, { useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
+import { ImArrowDown, ImArrowUp } from 'react-icons/im';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components/macro';
-import { ThemedText } from 'theme';
+import styled, { DefaultTheme } from 'styled-components/macro';
 
 import { Pool } from '../Earnings.types';
 import { parseListPoolApiResponse } from '../Earnings.utils';
 
 const Styled = styled.div`
   margin-top: 64px;
-  margin-bottom: 110px;
+  .baseText {
+    font-size: 18px
+    font-weight: 500;
+    line-height: 140%;
+    color: #ffffff;
+  }
+  .greenBoldText {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 140%;
+    color: #0ECB81;
+  }
+  .smallText {
+    font-weight: 400;
+    font-size: 12px;
+    letter-spacing: -0.02em;
+    color: #757575;
+  }
   table {
     border: 1px solid #363636;
     border-radius: 16px;
   }
+  .ant-table-column-sorter {
+    display: none;
+  }
+
+  .ant-table-thead th.ant-table-column-has-sorters: hover {
+    background-color: #303030;
+  }
+
+  td.ant-table-column-sort {
+      background: transparent;
+  }
+
   ant-spin-blur {
     border-radius: 16px;
     opacity: 1;
   }
   .tableRow {
-    width: 100%;
+    height: 64px;
   }
   .tableRow:hover td {
     cursor: pointer;
-    background: #303030 !important;
+    background: #252525 !important;
   }
 
-  element.style {
-  }
   .ant-table {
     background: transparent;
+    font-size: 18px;
+    font-weight: 500;
   }
   .ant-table-wrapper {
     border-radius: 33px;
@@ -45,6 +74,18 @@ const Styled = styled.div`
     font-size: 18px;
     line-height: 140%;
     color: #757575;
+    padding: 0px 32px;
+    height: 64px;
+  }
+
+  .headerTitle {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 140%;
+    color: #757575;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 
   .ant-table-tbody > tr > td {
@@ -58,13 +99,68 @@ const Styled = styled.div`
   .ant-table-container .ant-table-content table .ant-table-thead tr th:last-child {
     border-top-right-radius: 16px;
   }
+  .ant-table-tbody > tr > td {
+    padding: 0px 32px;
+  }
+
+  .poolContainer {
+    display: flex;
+    width: fit-content;
+    align-item: center;
+  }
+
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
+    .tableRow {
+      height: 56px;
+    }
+    .baseText {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 140%;
+      color: #ffffff;
+    }
+    .greenBoldText {
+      font-weight: 700;
+      font-size: 16px;
+    }
+  `}
+
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+    .poolContainer {
+      display: flex;
+      flex-direction: column;
+    }
+    .tableRow {
+      height: 72px;
+    }
+    
+  `}
+
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+    .ant-table-tbody > tr > td {
+      border-bottom: 1px solid #363636;
+    }
+    .ant-table-thead > tr > th {
+      font-weight: 500;
+      font-size: 16px;
+      height: 40px;
+    }
+  `}
 `;
 
 const NetworkBox = styled.div`
+  width: fit-content;
   background: #303030;
   border-radius: 4px;
+  display: flex;
   padding-left: 4px;
   padding-right: 4px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+    margin-top: 8px;
+  `}
 `;
 
 const ListPoolTable = () => {
@@ -86,57 +182,86 @@ const ListPoolTable = () => {
     {
       title: '#',
       key: 'index',
-      render: (text, record, index) => <ThemedText.MediumLabel color="#757575">{index + 1}</ThemedText.MediumLabel>,
-      responsive: ['sm'],
+      render: (text, record, index) => (
+        <p className="baseText" style={{ color: '#757575' }}>
+          {index + 1}
+        </p>
+      ),
+      responsive: ['md'],
     },
     {
       title: 'Pool',
       dataIndex: 'pool',
       key: 'pool',
       render: (text, record, index) => (
-        <Row>
-          <img src={getIconUrl(record.token1Symbol)} style={{ width: 24, height: 24, borderRadius: 12 }} />
-          <img
-            src={getIconUrl(record.token2Symbol)}
-            style={{ width: 24, height: 24, borderRadius: 12, marginRight: 8 }}
-          />
-          <ThemedText.RegularLabel style={{ marginRight: 8 }}>
-            {record?.token1Symbol} / {record?.token2Symbol}
-          </ThemedText.RegularLabel>
+        <div className="poolContainer">
+          <div style={{ display: 'flex' }}>
+            <img src={getIconUrl(record.token1Symbol)} style={{ width: 24, height: 24, borderRadius: 12 }} />
+            <img
+              src={getIconUrl(record.token2Symbol)}
+              style={{ width: 24, height: 24, borderRadius: 12, marginRight: 8 }}
+            />
+            <p className="baseText" style={{ marginRight: 8 }}>
+              {record?.token1Symbol} / {record?.token2Symbol}
+            </p>
+          </div>
+
           <NetworkBox>
-            <ThemedText.RegularLabel color="#757575">
+            <span className="smallText" style={{ color: '#757575' }}>
               {PRIVATE_TOKEN_CURRENCY_NAME[record.token1CurrencyType]} /{' '}
               {PRIVATE_TOKEN_CURRENCY_NAME[record.token2CurrencyType]}
-            </ThemedText.RegularLabel>
+            </span>
           </NetworkBox>
-        </Row>
+        </div>
       ),
     },
     {
       title: 'TVL',
       dataIndex: 'totalValueLockUSD',
       key: 'totalValueLockUSD',
-      responsive: ['sm'],
-      render: (text) => <ThemedText.RegularLabel>${text.toFixed(2)}m</ThemedText.RegularLabel>,
+      responsive: ['md'],
+      render: (text) => <p className="baseText">${text.toFixed(2)}m</p>,
     },
     {
       title: 'Volume 24H',
       dataIndex: 'volume',
       key: 'volume',
-      responsive: ['sm'],
-      render: (text) => <ThemedText.RegularLabel>${text.toFixed(2)}m</ThemedText.RegularLabel>,
+      responsive: ['md'],
+      render: (text) => <p className="baseText">${text.toFixed(2)}m</p>,
     },
     {
-      title: 'APY',
       key: 'apy',
       dataIndex: 'apy',
-      render: (text) => <ThemedText.MediumLabel color="#0ECB81">{text}%</ThemedText.MediumLabel>,
+      render: (text) => <p className="greenBoldText">{text}%</p>,
       align: 'right',
+      defaultSortOrder: 'descend',
+      showSorterTooltip: false,
+      sortDirections: ['descend', 'ascend', 'descend'],
+      sorter: {
+        compare: (a, b) => a.apy - b.apy,
+        multiple: 3,
+      },
+      // eslint-disable-next-line react/prop-types
+      title: ({ sortColumns }) => {
+        // eslint-disable-next-line react/prop-types
+        const sortedColumn = sortColumns?.find(({ column }) => column.key === 'apy');
+        return (
+          <div className="headerTitle">
+            APY
+            {sortedColumn ? (
+              sortedColumn.order === 'ascend' ? (
+                <ImArrowUp size={12} style={{ marginLeft: 4, marginRight: 0 }} />
+              ) : (
+                <ImArrowDown size={12} style={{ marginLeft: 4, marginRight: 0 }} />
+              )
+            ) : null}
+          </div>
+        );
+      },
     },
   ];
 
   const getListPool = () => {
-    console.log(API_COIN_SERVICE);
     setLoading(true);
     fetch(`${API_COIN_SERVICE}/pdex/v3/listpools?pair=all&verify=true`)
       .then((response) => response.json())
@@ -146,7 +271,10 @@ const ListPoolTable = () => {
         setPools(listPool);
         setLoading(false);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
