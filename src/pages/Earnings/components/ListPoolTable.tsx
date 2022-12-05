@@ -26,8 +26,8 @@ const Styled = styled.div`
     color: #0ECB81;
   }
   .smallText {
-    font-weight: 400;
     font-size: 12px;
+    line-height: 16px;
     letter-spacing: -0.02em;
     color: #757575;
   }
@@ -106,7 +106,7 @@ const Styled = styled.div`
   .poolContainer {
     display: flex;
     width: fit-content;
-    align-item: center;
+    align-items: center;
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
@@ -122,6 +122,9 @@ const Styled = styled.div`
     .greenBoldText {
       font-weight: 700;
       font-size: 16px;
+    }
+    .ant-table-thead > tr > th {
+      height: 56px;
     }
   `}
 
@@ -153,6 +156,7 @@ const NetworkBox = styled.div`
   background: #303030;
   border-radius: 4px;
   display: flex;
+  height: 16px;
   padding-left: 4px;
   padding-right: 4px;
   text-align: center;
@@ -207,10 +211,10 @@ const ListPoolTable = () => {
           </div>
 
           <NetworkBox>
-            <span className="smallText" style={{ color: '#757575' }}>
+            <p className="smallText" style={{ color: '#757575' }}>
               {PRIVATE_TOKEN_CURRENCY_NAME[record.token1CurrencyType]} /{' '}
               {PRIVATE_TOKEN_CURRENCY_NAME[record.token2CurrencyType]}
-            </span>
+            </p>
           </NetworkBox>
         </div>
       ),
