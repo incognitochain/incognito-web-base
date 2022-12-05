@@ -224,14 +224,14 @@ const ListPoolTable = () => {
       dataIndex: 'totalValueLockUSD',
       key: 'totalValueLockUSD',
       responsive: ['md'],
-      render: (text) => <p className="baseText">${text.toFixed(2)}m</p>,
+      render: (text) => <p className="baseText">${text.toFixed(2)}</p>,
     },
     {
       title: 'Volume 24H',
       dataIndex: 'volume',
       key: 'volume',
       responsive: ['md'],
-      render: (text) => <p className="baseText">${text.toFixed(2)}m</p>,
+      render: (text) => <p className="baseText">${text.toFixed(2)}</p>,
     },
     {
       key: 'apy',
