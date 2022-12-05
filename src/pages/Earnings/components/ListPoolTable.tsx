@@ -132,11 +132,11 @@ const Styled = styled.div`
     .poolContainer {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
     }
     .tableRow {
       height: 72px;
     }
-    
   `}
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
