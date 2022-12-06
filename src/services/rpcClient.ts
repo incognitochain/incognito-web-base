@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { API_SERVICE } from 'config';
+import { API_COIN_SERVICE, API_SERVICE } from 'config';
 import PTokenModel from 'models/model/pTokenModel';
 import { getSwapTxs, ISwapTxStorage } from 'pages/Swap/Swap.storage';
 import createAxiosInstance from 'services/axios';
@@ -333,6 +333,12 @@ const getTokenListNoCache = async (): Promise<PTokenModel[]> => {
   return tokens.filter(({ tokenID }) => !!tokenID);
 };
 
+const getPools = async (): Promise<any> => {
+  const response = await fetch(`${API_COIN_SERVICE}/pdex/v3/listpools?pair=all&verify=true`);
+  const data = await response.json();
+  return data?.Result;
+};
+
 const getVaults = async (): Promise<any> => {
   const vaults = await rpcClient.getVaults();
   return vaults;
@@ -368,5 +374,5 @@ const genDepositAddress = async ({
   });
 };
 
-export { genDepositAddress, getTokenListNoCache, getVaults, submitDepositTx };
+export { genDepositAddress, getPools, getTokenListNoCache, getVaults, submitDepositTx };
 export default rpcClient;

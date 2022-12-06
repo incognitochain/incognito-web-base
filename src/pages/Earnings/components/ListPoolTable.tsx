@@ -1,15 +1,17 @@
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { API_COIN_SERVICE } from 'config';
+import arrowBottomActive from 'assets/svg/arrow-bottom-active.svg';
+import arrowDisable from 'assets/svg/arrow-disable.svg';
+import arrowTopActive from 'assets/svg/arrow-top-active.svg';
 import { CRYPTO_ICON_URL, PRIVATE_TOKEN_CURRENCY_NAME } from 'constants/token';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { isMobile } from 'react-device-detect';
-import { ImArrowDown, ImArrowUp } from 'react-icons/im';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { isFetchingPoolsSelectors, poolsSelectors } from 'state/pools/pool.selectors';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 import { Pool } from '../Earnings.types';
-import { parseListPoolApiResponse } from '../Earnings.utils';
 
 const Styled = styled.div`
   margin-top: 64px;
@@ -37,6 +39,13 @@ const Styled = styled.div`
   }
   .ant-table-column-sorter {
     display: none;
+  }
+
+  .ant-table-column-title {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 140%;
+    color: #757575;
   }
 
   .ant-table-thead th.ant-table-column-has-sorters: hover {
@@ -168,9 +177,6 @@ const NetworkBox = styled.div`
 `;
 
 const ListPoolTable = () => {
-  const [pools, setPools] = useState<Pool[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-
   const history = useHistory();
 
   const getIconUrl = (symbol: string) => {
@@ -227,11 +233,33 @@ const ListPoolTable = () => {
       render: (text) => <p className="baseText">${text.toFixed(2)}</p>,
     },
     {
-      title: 'Volume 24H',
       dataIndex: 'volume',
       key: 'volume',
       responsive: ['md'],
+      align: 'left',
+      showSorterTooltip: false,
+      sortDirections: ['descend', 'ascend', 'descend'],
       render: (text) => <p className="baseText">${text.toFixed(2)}</p>,
+      sorter: (a, b) => a.volume - b.volume,
+      // eslint-disable-next-line react/prop-types
+      title: ({ sortColumns }) => {
+        // eslint-disable-next-line react/prop-types
+        const sortedColumn = sortColumns?.find(({ column }) => column.key === 'volume');
+        return (
+          <div className="headerTitle" style={{ justifyContent: 'flex-start' }}>
+            Volume 24H
+            {sortedColumn ? (
+              sortedColumn.order === 'ascend' ? (
+                <img src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              ) : (
+                <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              )
+            ) : (
+              <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+            )}
+          </div>
+        );
+      },
     },
     {
       key: 'apy',
@@ -239,12 +267,9 @@ const ListPoolTable = () => {
       render: (text) => <p className="greenBoldText">{text}%</p>,
       align: 'right',
       defaultSortOrder: 'descend',
-      showSorterTooltip: false,
       sortDirections: ['descend', 'ascend', 'descend'],
-      sorter: {
-        compare: (a, b) => a.apy - b.apy,
-        multiple: 3,
-      },
+      showSorterTooltip: false,
+      sorter: (a, b) => a.apy - b.apy,
       // eslint-disable-next-line react/prop-types
       title: ({ sortColumns }) => {
         // eslint-disable-next-line react/prop-types
@@ -254,45 +279,30 @@ const ListPoolTable = () => {
             APY
             {sortedColumn ? (
               sortedColumn.order === 'ascend' ? (
-                <ImArrowUp size={12} style={{ marginLeft: 4, marginRight: 0 }} />
+                <img src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
               ) : (
-                <ImArrowDown size={12} style={{ marginLeft: 4, marginRight: 0 }} />
+                <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
               )
-            ) : null}
+            ) : (
+              <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+            )}
           </div>
         );
       },
     },
   ];
 
-  const getListPool = () => {
-    setLoading(true);
-    fetch(`${API_COIN_SERVICE}/pdex/v3/listpools?pair=all&verify=true`)
-      .then((response) => response.json())
-      .then((data) => {
-        let listPool = parseListPoolApiResponse(data?.Result || []);
-        listPool.sort((a, b) => b.apy - a.apy);
-        setPools(listPool);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    getListPool();
-  }, []);
+  const listPool = useSelector(poolsSelectors);
+  const isFetching = useSelector(isFetchingPoolsSelectors);
 
   return (
     <Styled>
       <div>
         <Table
           columns={columns}
-          dataSource={pools}
+          dataSource={listPool}
           size="large"
-          loading={loading}
+          loading={isFetching}
           pagination={false}
           rowClassName="tableRow"
           onRow={(r) => ({
