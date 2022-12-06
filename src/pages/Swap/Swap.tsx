@@ -1,8 +1,11 @@
 import { Col } from 'antd';
 import Loader from 'components/Core/Loader';
 import { TAB_LIST, Tabs } from 'components/Core/Tabs';
+import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
 import { selectedTabSelector } from 'components/Core/Tabs/Tabs.selectors';
-import { useAppSelector } from 'state/hooks';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from 'state/hooks';
 import { isFetchingSelectors as isFetchingTokenSelector } from 'state/token';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
@@ -187,10 +190,13 @@ const Swap = (props: any) => {
   const selectedTab = useAppSelector(selectedTabSelector)(HEADER_TAB.rootTab);
   const isFetching = useAppSelector(isFetchingTokenSelector);
 
+  const dispatch = useAppDispatch();
+  const location: any = useLocation();
+
   const renderForm = () => {
     // Deposit
-    if (selectedTab === HEADER_TAB.tabNames[0]) return <FormUnshield {...props} />;
-    return <FormDeposit {...props} />;
+    if (selectedTab === HEADER_TAB.tabNames[1]) return <FormDeposit {...props} />;
+    return <FormUnshield {...props} />;
   };
 
   const renderContent = () => (
@@ -199,6 +205,12 @@ const Swap = (props: any) => {
       {renderForm()}
     </>
   );
+
+  React.useEffect(() => {
+    if (location?.state?.tokenId1 && location?.state?.tokenId2) {
+      dispatch(changeTab({ tab: TAB_LIST.SWAP.tabNames[0], rootTab: TAB_LIST.SWAP.rootTab }));
+    }
+  }, [location?.state?.tokenId1, location?.state?.tokenId2]);
 
   return (
     <>

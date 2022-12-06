@@ -1,5 +1,5 @@
 import { Button, Col, Row } from 'antd';
-import logoStrokeImg from 'assets/images/logo-stroke.png';
+import logoStrokeImg from 'assets/images/infrastrure-logo.png';
 import SectionHead from 'components/Core/SectionHead';
 import { structureTranslateSelector } from 'config/Configs.selector';
 import React from 'react';
