@@ -585,7 +585,7 @@ export default function Header() {
               </div>
             </Row>
           </Row>
-          <Col>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             {menuItem.map((item) => {
               if (item.isLink) {
                 return (
@@ -622,7 +622,7 @@ export default function Header() {
                 </NavLink>
               );
             })}
-          </Col>
+          </div>
           <Row
             align="middle"
             className="padding-horizontal"
@@ -665,7 +665,7 @@ export default function Header() {
           {expand && isMobile && (
             <Col style={{ marginTop: 24 }}>
               {moreItem.map((item) => (
-                <div className="wrap-drawer-sub-item" key={item.name}>
+                <div className="wrap-drawer-sub-item padding padding-horizontal" key={item.name}>
                   <Link href={item.path} target="_blank" rel="noopener noreferrer" className="padding-horizontal">
                     <Row align="middle">
                       <p className="drawer-sub-item-label">{item.name}</p>
