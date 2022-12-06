@@ -43,8 +43,6 @@ const Styled = styled.div`
     font-size: 18px;
     line-height: 140%;
     color: #757575;
-    display: flex;
-    align-items: center;
   }
 
   .ant-table-thead th.ant-table-column-has-sorters: hover {
