@@ -12,6 +12,7 @@ import { updateVersion } from './global/actions';
 import incognitoWallet from './incognitoWallet/incognitoWallet.reducer';
 import lists from './lists/reducer';
 import logs from './logs/slice';
+import pool from './pools/pool.reducer';
 import { routingApi } from './routing/slice';
 // import swap from './swap/reducer';
 import token from './token/token.reducer';
@@ -32,6 +33,7 @@ const store = configureStore({
     lists,
     logs,
     token,
+    pool,
     [routingApi.reducerPath]: routingApi.reducer,
     tabs,
     form,
