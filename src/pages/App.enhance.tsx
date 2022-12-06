@@ -2,6 +2,7 @@ import axios from 'axios';
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { actionGetPools } from 'state/pools';
 import { actionGetPTokens } from 'state/token';
 
 export const KEY_TRADE_VOLUME = 'TRADE_VOLUME';
@@ -24,8 +25,13 @@ const enhance = (WrappedComponent: React.FunctionComponent) => {
       }
     };
 
+    const getListPool = () => {
+      dispatch(actionGetPools());
+    };
+
     React.useEffect(() => {
       getPTokenList();
+      getListPool();
     }, []);
 
     return (

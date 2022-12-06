@@ -16,9 +16,11 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useTheme from 'hooks/useTheme';
 import { routeEarnings, routeMarket, routePeggingApps, routeStructure } from 'pages';
 import React from 'react';
+import { useSelector } from 'react-redux';
 // import Web3Status from 'components/Core/Web3Status';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Link } from 'rebass';
+import { poolsSelectors } from 'state/pools';
 import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
 import { isMobile } from 'utils/userAgent';
@@ -55,7 +57,7 @@ const menuItem: MenuItemProps[] = [
   //   isLink: true,
   // },
   {
-    name: 'Earnings',
+    name: 'Earning',
     path: routeEarnings,
   },
 ];
@@ -375,6 +377,9 @@ export default function Header() {
   const [expand, setExpand] = React.useState(false);
   const history = useHistory();
   const location = useLocation();
+
+  const listPool = useSelector(poolsSelectors);
+
   const openMenu = () => {
     setVisible(true);
   };
@@ -454,15 +459,16 @@ export default function Header() {
   };
 
   const renderEarningBox = () => {
+    if (!listPool?.length) return;
     return (
       <EarningBox>
         <div className="content">
           <div className="content__container">
             <ul className="content__container__list">
               <li className="content__container__list__item">Up to</li>
-              <li className="content__container__list__item">30%</li>
+              <li className="content__container__list__item">{listPool[0].apy}%</li>
               <li className="content__container__list__item">Up to</li>
-              <li className="content__container__list__item">30%</li>
+              <li className="content__container__list__item">{listPool[0].apy}%</li>
             </ul>
           </div>
         </div>
@@ -502,7 +508,7 @@ export default function Header() {
                         style={{ display: 'flex', alignItems: 'center' }}
                       >
                         {item.name}
-                        {item.name === 'Earnings' && renderEarningBox()}
+                        {item.name === 'Earning' && renderEarningBox()}
                       </NavLink>
                     )}
                   </div>
