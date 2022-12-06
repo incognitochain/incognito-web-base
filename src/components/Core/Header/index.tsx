@@ -181,6 +181,7 @@ const EarningBox = styled.div`
           font-weight: 600;
           font-size: 12px;
           color: #ffffff;
+          text-align: center;
         }
       }
     }
