@@ -250,9 +250,9 @@ const ListPoolTable = () => {
             Volume 24H
             {sortedColumn ? (
               sortedColumn.order === 'ascend' ? (
-                <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
-              ) : (
                 <img src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              ) : (
+                <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
               )
             ) : (
               <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
@@ -279,9 +279,9 @@ const ListPoolTable = () => {
             APY
             {sortedColumn ? (
               sortedColumn.order === 'ascend' ? (
-                <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
-              ) : (
                 <img src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              ) : (
+                <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
               )
             ) : (
               <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
