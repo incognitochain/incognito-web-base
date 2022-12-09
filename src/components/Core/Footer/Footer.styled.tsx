@@ -10,6 +10,9 @@ export const Styled = styled(Row)`
   .wrap-social {
     flex-direction: row;
     align-items: flex-start;
+    button :hover {
+      opacity: 0.8;
+    }
   }
   .normal-label {
     font-style: normal;
