@@ -54,6 +54,14 @@ const Footer = () => {
         >
           Twitter
         </button>
+        <button
+          className="normal-label default-margin-left button-text"
+          onClick={() => {
+            window.open('https://discord.com/invite/Wh6xRFz72U', '_blank');
+          }}
+        >
+          Discord
+        </button>
       </Row>
     </Styled>
   );
