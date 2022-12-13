@@ -5,6 +5,7 @@ import { getSwapTxs, ISwapTxStorage } from 'pages/Swap/Swap.storage';
 import createAxiosInstance from 'services/axios';
 
 import { PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from '../constants';
+import { unshieldFeeBuilder } from '../models/unshield.utils';
 import { combineSwapTxs } from '../pages/Swap/features/SwapTxs/SwapTxs.utils';
 
 interface ISummitEtherHash {
@@ -47,6 +48,7 @@ export interface IUserFee {
   estimatedExpectedAmount: number;
   centralizedAddress?: string;
   minUnshield: number;
+  feeAddressShardID?: number;
 }
 
 export interface IDepositAddress {
@@ -82,7 +84,7 @@ class RpcClient {
     });
   }
 
-  async estimateFee({
+  async estimateUnshieldWithAddress({
     network,
     requestedAmount,
     incognitoAmount,
@@ -117,7 +119,6 @@ class RpcClient {
     }
 
     let data: any = await this.http.post(endpoint, payload);
-
     if (currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BTC) {
       const { Fee, MinUnshield } = data;
       data = {
@@ -162,6 +163,36 @@ class RpcClient {
       minUnshield: data?.MinUnshield || 0,
     };
   }
+  // tokenID = parent tokenID
+  async estimateUnshieldWithoutAddress({
+    network,
+    amount,
+    tokenID,
+    isUnified,
+  }: {
+    network: string;
+    amount: number;
+    tokenID: string;
+    isUnified: boolean;
+  }): Promise<IUserFee | undefined> {
+    const endpoint = `unshield/estimatefee?network=${network}&amount=${amount}&tokenid=${tokenID}`;
+    let data: any = await this.http.get(endpoint);
+    const estimateData = isUnified
+      ? {
+          BurntAmount: data?.burntAmount,
+          ExpectedAmount: data?.expectedReceive,
+          Fee: data?.protocolFee,
+        }
+      : {};
+    const fee = { Level1: data?.feeAmount };
+    const mappingData = {
+      EstimateReceivedAmount: estimateData,
+      FeeAddress: data?.feeAddress,
+      [tokenID !== PRV.id ? 'TokenFees' : 'PrivacyFees']: fee,
+      FeeAddressShardID: data?.feeAddressShardID,
+    };
+    return unshieldFeeBuilder(mappingData);
+  }
 
   async estimateSwapFee({ network, amount, fromToken, toToken, slippage }: ISwapFeePayload): Promise<any> {
     const data: any = await this.http.post('papps/estimateswapfee', {
@@ -182,7 +213,7 @@ class RpcClient {
     });
   }
 
-  submitUnshieldTx2(payload: {
+  submitUnshieldCentralizedTx(payload: {
     network: string;
     userFeeLevel: number;
     id: number;
@@ -241,6 +272,13 @@ class RpcClient {
       };
     }
     return this.http.post('submitunshieldtx', { ..._payload });
+  }
+
+  submitUnshieldDecentralizedTx({ txRaw, feeRefundOTA }: { txRaw: string; feeRefundOTA: string }) {
+    return this.http.post('unshield/submittx', {
+      TxRaw: txRaw,
+      FeeRefundOTA: feeRefundOTA,
+    });
   }
 
   submitSwapPdex({

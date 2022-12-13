@@ -83,9 +83,10 @@ const enhanceSend = (WrappedComponent: any) => {
       const incognito = getIncognitoInject();
 
       // Get OTA Receiver and Burner address
+      const shardID = (exchangeSelectedData || fee || {}).feeAddressShardID;
       const { result }: { result: any } = await incognito.request({
         method: 'wallet_requestAccounts',
-        params: { senderShardID: (exchangeSelectedData || {}).feeAddressShardID },
+        params: { senderShardID: shardID },
       });
       const otaReceiver = result?.otaReceiver;
       const burnerAddress = result?.burnerAddress;
@@ -427,25 +428,25 @@ const enhanceSend = (WrappedComponent: any) => {
         let payload: any;
         let isSignAndSendTransaction = true;
         if (formType === FormTypes.UNSHIELD) {
-          /** Case Unshield Decentralized */
           if (sellToken.isBTC) {
             /** Case Unshield BTC */
             const metadata = await getUnshieldBTCMetadata(newCoins);
             isSignAndSendTransaction = true;
             payload = { metadata };
           } else if (sellToken.isPRV) {
+            /** Case Unshield PRV */
             const metadata = await getUnshieldPRVMetadata({ burnerAddress });
             payload = { metadata };
-            isSignAndSendTransaction = true;
-            /** Case Unshield PEGGING */
+            isSignAndSendTransaction = false;
           } else if (sellToken.isCentralized) {
             /** Case Unshield Centralized */
             isSignAndSendTransaction = true;
           } else {
+            /** Case Unshield Decentralized */
             const metadata = getUnshieldDecentralizedMetadata({ otaReceiver, burnerAddress });
-            isSignAndSendTransaction = true;
+            isSignAndSendTransaction = false;
             payload = {
-              info: String(id),
+              info: typeof id === 'number' ? String(id) : '',
               metadata,
             };
           }
@@ -489,7 +490,7 @@ const enhanceSend = (WrappedComponent: any) => {
         return new Promise(async (resolve, reject) => {
           try {
             const tx = await requestSignTransaction(payload);
-            // console.log('LOGS PAYLOAD 333: ', { txHash: tx.txHash });
+            console.log('LOGS PAYLOAD 000: ', { tx });
             if (formType === FormTypes.SWAP) {
               if (exchangeSelectedData.appName === SwapExchange.PDEX) {
                 await rpcClient.submitSwapPdex({
@@ -545,28 +546,43 @@ const enhanceSend = (WrappedComponent: any) => {
                   ? buyToken.listUnifiedToken.find((token: any) => token.networkName === buyNetworkName)
                   : buyToken
               ).currencyType;
+              const isUnshieldWithoutAddress =
+                !sellToken.isCentralized && !sellToken.isBTC && !sellToken.isNearToken && !sellToken.isMainNEAR;
 
-              console.log('LOGS PAYLOAD 444: ', { unshieldCurrencyType, isDecentralized, buyNetworkName });
-
-              const submitTxUnshieldResponse = await rpcClient.submitUnshieldTx2({
-                network: networkName,
-                userFeeLevel: useFast2xFee ? 2 : 1,
-                id: id || 0,
-                incognitoAmount: String(burnOriginalAmount),
-                incognitoTx: tx.txHash,
-                paymentAddress: inputAddress,
-                privacyTokenAddress: buyToken.tokenID,
-                userFeeSelection: isUseTokenFee ? 1 : 2,
-                walletAddress: incAddress,
-                fee: feeBurnCombine.amount,
+              console.log('LOGS PAYLOAD 111: ', {
+                unshieldCurrencyType,
                 isDecentralized,
-                isUseTokenFee,
-                centralizedAddress: fee.centralizedAddress,
-                tokenID: sellToken.tokenID,
-                erc20TokenAddress: buyToken.contractID,
-                currencyType: unshieldCurrencyType,
+                buyNetworkName,
+                isUnshieldWithoutAddress,
               });
-              console.log({ submitTxUnshieldResponse });
+              let submitTxUnshieldResponse;
+              if (isUnshieldWithoutAddress) {
+                submitTxUnshieldResponse = await rpcClient.submitUnshieldDecentralizedTx({
+                  txRaw: tx.rawData,
+                  feeRefundOTA,
+                });
+              } else {
+                submitTxUnshieldResponse = await rpcClient.submitUnshieldCentralizedTx({
+                  network: networkName,
+                  userFeeLevel: useFast2xFee ? 2 : 1,
+                  id: id || 0,
+                  incognitoAmount: String(burnOriginalAmount),
+                  incognitoTx: tx.txHash,
+                  paymentAddress: inputAddress,
+                  privacyTokenAddress: buyToken.tokenID,
+                  userFeeSelection: isUseTokenFee ? 1 : 2,
+                  walletAddress: incAddress,
+                  fee: feeBurnCombine.amount,
+                  isDecentralized,
+                  isUseTokenFee,
+                  centralizedAddress: fee.centralizedAddress,
+                  tokenID: sellToken.tokenID,
+                  erc20TokenAddress: buyToken.contractID,
+                  currencyType: unshieldCurrencyType,
+                });
+              }
+
+              console.log('LOGS PAYLOAD 222: ', submitTxUnshieldResponse);
             }
             resolve(tx);
           } catch (e) {
