@@ -300,7 +300,8 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
         convert.toOriginalAmount({ humanAmount: '1', round: false, decimals: buyToken.pDecimals }).toString()
     ).toString();
 
-    const payload = {
+    // with address payload
+    const withPayload = {
       network,
       incognitoAmount,
       paymentAddress: unshieldAddress,
@@ -310,7 +311,24 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
       unifiedTokenID: sellToken.isUnified ? sellToken.tokenID : '',
       currencyType: buyToken.currencyType,
     };
-    const data = await rpcClient.estimateFee(payload);
+
+    // without address payload
+    const withoutPayload = {
+      network,
+      tokenID: sellToken.tokenID,
+      amount: convert.toOriginalAmount({
+        humanAmount: inputAmount || '0',
+        round: false,
+        decimals: sellToken.pDecimals,
+      }),
+      isUnified: sellToken.isUnified,
+    };
+    const isUnshieldWithoutAddress =
+      !sellToken.isCentralized && !sellToken.isBTC && !sellToken.isNearToken && !sellToken.isMainNEAR;
+    const data = isUnshieldWithoutAddress
+      ? await rpcClient.estimateUnshieldWithoutAddress(withoutPayload)
+      : await rpcClient.estimateUnshieldWithAddress(withPayload);
+
     dispatch(actionSetUserFee({ fee: data }));
   } catch (error) {
     dispatch(actionSetErrorMsg(typeof error === 'string' ? error : error?.message || ''));

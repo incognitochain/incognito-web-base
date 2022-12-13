@@ -4,6 +4,7 @@ import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from '
 import { Reducer } from 'redux';
 
 import { FormUnshieldActions, FormUnshieldActionType, IFormUnshieldState } from './FormUnshield.types';
+const { ACCOUNT_CONSTANT } = require('incognito-chain-web-js/build/wallet');
 
 const initialState: IFormUnshieldState = {
   sellToken: {
@@ -20,7 +21,7 @@ const initialState: IFormUnshieldState = {
     chainID: isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN,
     networkName: MAIN_NETWORK_NAME.INCOGNITO,
   },
-  networkFee: 100,
+  networkFee: ACCOUNT_CONSTANT.MAX_FEE_PER_TX,
   networkFeeToken: PRV.identify,
 
   isFetchingFee: false,
