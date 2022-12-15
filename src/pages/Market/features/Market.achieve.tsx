@@ -70,7 +70,9 @@ const Item = styled.div`
     margin: auto;
   }
   .achieve-item-title {
-    font-size: 54px;
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 120%;
     margin-bottom: 0;
     color: ${({ theme }) => theme.text1};
   }
@@ -95,17 +97,11 @@ const Item = styled.div`
         .achieve-item-sub-title {
             line-height: 27px;
         }
-        .achieve-item-title {
-            font-size: 40px;
-        }
     `}
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
           .ant-card-body {
             padding: 0px;
-          }
-          .achieve-item-title {
-            font-size: 34px;
           }
           .achieve-circle {
             width: 145px;

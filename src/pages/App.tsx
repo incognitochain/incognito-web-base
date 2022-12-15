@@ -91,7 +91,7 @@ const App = () => {
     if (!isInternetAlready) {
       history.replace('/internet-disconnected');
     } else {
-      history.replace('/');
+      // history.replace('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInternetAlready]);

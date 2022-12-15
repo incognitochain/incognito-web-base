@@ -11,7 +11,7 @@ const GroupButtons = () => {
     <ButtonWrapper>
       <div
         className="btn-buy fs-regular"
-        onClick={() => history.push('/swap', { tokenId1: BIG_COINS.ETH_UNIFIED.tokenID, tokenId2: PRV.id })}
+        onClick={() => history.push('/swap', { tokenId1: BIG_COINS.USDT.tokenID, tokenId2: PRV.id })}
       >
         Get PRV
       </div>

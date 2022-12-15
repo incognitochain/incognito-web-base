@@ -129,9 +129,9 @@ const AskQuestionItem = (props: AskQuestionItemProps) => {
         }}
       >
         <div className="title-container">
-          <h5 className={'title'} style={{ fontWeight: 500 }}>
+          <p className={'h7 title'} style={{ fontWeight: 500, color: 'white' }}>
             {title}
-          </h5>
+          </p>
         </div>
         <div className="icon">
           <i className={`arrow ${isActive ? 'up' : 'down'}`} />
@@ -144,11 +144,11 @@ const AskQuestionItem = (props: AskQuestionItemProps) => {
           {subsAnswers &&
             subsAnswers.map(({ title, subs }: { title: string; subs: string[] }) => (
               <div key={title}>
-                <h6 className="childrenView">{title}</h6>
+                <p className="h8 childrenView">{title}</p>
                 {subs.map((sub) => (
-                  <h6 style={{ marginLeft: '16px' }} className="childrenView" key={sub}>
+                  <p style={{ marginLeft: '16px' }} className="h8 childrenView" key={sub}>
                     {sub}
-                  </h6>
+                  </p>
                 ))}
               </div>
             ))}

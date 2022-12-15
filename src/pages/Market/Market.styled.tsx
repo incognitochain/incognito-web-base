@@ -2,6 +2,7 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 export const Styled = styled.div<{ isMobile: boolean }>`
   width: 100%;
   .fade-in-section {
+    margin-top: 100px;
     opacity: 0;
     transform: translateY(20vh);
     visibility: hidden;
