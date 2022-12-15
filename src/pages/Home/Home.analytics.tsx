@@ -1,7 +1,6 @@
 import { Tooltip } from 'antd';
 import { ReactComponent as Info } from 'assets/images/info.svg';
 import { marketTranslateSelector } from 'config/Configs.selector';
-import { KEY_TRADE_VOLUME } from 'pages/App.enhance';
 import React, { useState } from 'react';
 import CountUp from 'react-countup';
 import { useSelector } from 'react-redux';
@@ -114,31 +113,30 @@ const Analytics = () => {
   const Factory = React.useMemo(
     () => [
       {
-        number: localStorage.getItem(KEY_TRADE_VOLUME) || 347,
+        number: 250,
         prefix: '$',
         suffix: 'M+',
-        desc: marketTrs.volumeTraded,
+        desc: 'Volume shielded',
       },
       {
         number: 1,
         prefix: '',
         suffix: 'M',
-        desc: marketTrs.anonymousTrades,
+        desc: 'Anonymous trades',
       },
       {
-        number: 6.5,
-        prefix: '$',
-        suffix: 'B+',
-        decimals: 1,
-        desc: 'Liquidity integrated',
-        tooltipContent:
-          'Incognito exchange connects liquidity from different sources such as Uniswap, Curve, PancakeSwap, and SpookySwap to enable privacy trades.',
+        number: 100,
+        prefix: '',
+        suffix: '+',
+        desc: 'Coins supported',
+        // tooltipContent:
+        //   'Incognito exchange connects liquidity from different sources such as Uniswap, Curve, PancakeSwap, and SpookySwap to enable privacy trades.',
       },
       {
         number: 16,
         prefix: '',
         suffix: '',
-        desc: marketTrs.bridgedBlockchains,
+        desc: 'Bridged blockchains',
       },
     ],
     [marketTrs]
