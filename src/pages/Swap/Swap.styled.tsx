@@ -17,6 +17,9 @@ const LeftColumn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  h3 {
+    font-weight: 700;
+  }
   .pig-image {
     width: 24px;
     height: 24px;

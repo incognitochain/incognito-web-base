@@ -119,7 +119,7 @@ const MarketAchieve = () => {
   const Factory = React.useMemo(
     () => [
       {
-        title: `${localStorage.getItem(KEY_TRADE_VOLUME) || 340}M`,
+        title: `${localStorage.getItem(KEY_TRADE_VOLUME) || 347}M`,
         content: marketTrs.volumeTraded,
         className: 'achieve-margin-right',
       },

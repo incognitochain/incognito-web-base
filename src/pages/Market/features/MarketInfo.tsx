@@ -134,7 +134,7 @@ const MarketInfo = () => {
   const Factory = React.useMemo(
     () => [
       {
-        number: localStorage.getItem(KEY_TRADE_VOLUME) || 340,
+        number: localStorage.getItem(KEY_TRADE_VOLUME) || 347,
         prefix: '$',
         suffix: 'M+',
         desc: marketTrs.volumeTraded,
