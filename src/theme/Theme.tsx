@@ -952,12 +952,12 @@ export const ThemedGlobalStyle = createGlobalStyle`
         line-height: 140%;
       `}
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-        font-size: 28px;
+        font-size: 40px;
         font-weight: 500;
         line-height: 140%;
       `}
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-        font-size: 24px;
+        font-size: 40px;
         font-weight: 500;
         line-height: 140%;
       `}
