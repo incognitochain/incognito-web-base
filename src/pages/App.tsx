@@ -115,7 +115,7 @@ const App = () => {
           <Route exact path="/earnings" component={Earnings} />
           <Route exact path="/privacy-policy" component={Policy} />
           <Route exact path="/term-of-service" component={TermOfService} />
-          <Route exact path="/earnings/validator" component={Validators} />
+          <Route exact path="/mine/validator" component={Validators} />
         </>
       </Switch>
     );

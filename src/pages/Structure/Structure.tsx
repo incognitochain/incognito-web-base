@@ -1,10 +1,47 @@
+import ExplorerIcon from 'components/icons/explorer.icon';
+import OverviewIcon from 'components/icons/overview.icon';
+import PNodeIcon from 'components/icons/pnode.icon';
+import VNodeIcon from 'components/icons/vnode.icon';
 import { structureTranslateSelector } from 'config/Configs.selector';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import Section1 from './features/Structure.section1';
 import Section3 from './features/Structure.section3';
-import { Styled } from './Structure.styled';
+import { Header, Icon, Styled } from './Structure.styled';
+
+export const HeaderNode = () => {
+  const history = useHistory();
+  const Factory = [
+    { icon: <OverviewIcon />, desc: 'Overview', path: '/mine', func: () => history.replace('/mine') },
+    { icon: <PNodeIcon />, desc: 'Node', func: () => {} },
+    {
+      icon: <VNodeIcon />,
+      desc: 'Virtual Node',
+      path: '/mine/validator',
+      func: () => history.replace('/mine/validator'),
+    },
+    {
+      icon: <ExplorerIcon />,
+      desc: 'Network Explorer',
+      func: () => window.open('https://explorer.incognito.org/', '_blank'),
+    },
+  ];
+  return (
+    <Header>
+      {Factory.map((item) => {
+        const isSelected = item.path && window.location.pathname === (item.path || '');
+        return (
+          <Icon isSelected={!!isSelected} className="wrap-item" key={item.desc} onClick={item.func}>
+            {item.icon}
+            <p className="h8">{item.desc}</p>
+          </Icon>
+        );
+      })}
+    </Header>
+  );
+};
 
 const Structure = () => {
   const structureTrs = useSelector(structureTranslateSelector);
@@ -30,6 +67,7 @@ const Structure = () => {
   );
   return (
     <Styled>
+      <HeaderNode />
       <Section1 />
       {/* <CircleList
         grid={{

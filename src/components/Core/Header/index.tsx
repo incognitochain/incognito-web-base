@@ -499,7 +499,7 @@ export default function Header() {
     const hrefLink = !isInternetAlready || !isMobile ? '.' : INCOGNITO_LANDING_PAGE;
     return (
       <>
-        <Title onClick={() => history.push(hrefLink)}>
+        <Title onClick={() => history.replace('/')}>
           <IncognitoIcon>
             <Logo fill={darkMode ? white : black} width="142" height="100%" title="logo" />
           </IncognitoIcon>
