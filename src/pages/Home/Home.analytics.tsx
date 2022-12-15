@@ -11,6 +11,7 @@ export const Styled = styled.div`
   margin-left: auto;
   margin-right: auto;
   width: 70%;
+  max-width: 1200px;
   display: flex;
   margin-top: 80px;
   justify-content: space-between;
