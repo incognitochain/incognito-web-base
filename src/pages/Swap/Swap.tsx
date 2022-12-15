@@ -48,11 +48,9 @@ const Swap = (props: any) => {
       <LeftColumn>
         <h3>The easiest way to anonymously buy, trade, and hold 100+ cryptocurrencies.</h3>
         <Row>
-          <Row className="wrap-item">
+          <Row className="wrap-item" onClick={() => history.push('/earnings')}>
             <img src={PigImg} className="pig-image" />
-            <p className="h8 provide-text" onClick={() => history.push('/earnings')}>
-              Provide liquidity and earn
-            </p>
+            <p className="h8 provide-text">Provide liquidity and earn</p>
             <img src={ArrowLeftImg} className="arrow-image" />
           </Row>
           <Row className="wrap-item watch-item">

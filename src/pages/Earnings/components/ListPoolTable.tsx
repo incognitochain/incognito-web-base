@@ -308,7 +308,7 @@ const ListPoolTable = () => {
           onRow={(r) => ({
             onClick: () => {
               if (isMobile) return;
-              history.push('/', { tokenId1: r?.token1ID, tokenId2: r?.token2ID });
+              history.push('/swap', { tokenId1: r?.token1ID, tokenId2: r?.token2ID });
             },
           })}
         />

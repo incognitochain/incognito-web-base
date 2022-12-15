@@ -10,6 +10,7 @@ import MarketCategory from './features/Market.category';
 import MarketQuestions from './features/Market.questions';
 import MarketTokens from './features/Market.token';
 import MarketInfo from './features/MarketInfo';
+import MarketTitleBox from './features/MarketTitleBox';
 import { Styled } from './Market.styled';
 
 const Home = () => {
@@ -34,7 +35,7 @@ const Home = () => {
   return (
     <Styled isMobile={isMobile}>
       <div>
-        {/*{!isMobile && <MarketTitleBox />}*/}
+        {!isMobile && <MarketTitleBox />}
         <Row
           className="default-padding-horizontal market-header"
           style={{ display: 'flex', flexDirection: 'row' }}

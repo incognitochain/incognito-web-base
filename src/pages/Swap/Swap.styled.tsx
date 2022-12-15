@@ -61,6 +61,7 @@ const RightColumn = styled(Col)`
     right: 0;
     margin-right: auto;
     margin-left: auto;
+    position: absolute;
   }
   overflow: hidden;
   .wrap-token {
