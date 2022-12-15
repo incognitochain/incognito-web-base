@@ -7,7 +7,7 @@ export const Styled = styled(Row)`
   height: 76px;
   width: 100%;
   background-color: ${({ theme }) => theme.bg2};
-  border-bottom: 1px solid ${({ theme }) => theme.border1};
+  //border-bottom: 1px solid ${({ theme }) => theme.border1};
   z-index: 2;
   display: flex;
   flex-direction: row;
@@ -25,7 +25,8 @@ export const Styled = styled(Row)`
     flex-direction: row;
     display: flex;
     .menuItem {
-      margin-right: 40px;
+      margin-right: 16px;
+      margin-left: 16px;
       font-weight: 500;
       font-size: 18px;
       line-height: 140%;

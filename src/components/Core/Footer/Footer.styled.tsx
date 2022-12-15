@@ -6,7 +6,7 @@ export const Styled = styled(Row)`
   padding-bottom: 25px;
   padding-top: 25px;
   justify-content: space-between;
-  border-top: 1px solid ${({ theme }) => theme.border1};
+  // border-top: 1px solid ${({ theme }) => theme.border1};
   .wrap-social {
     flex-direction: row;
     align-items: flex-start;
@@ -27,6 +27,14 @@ export const Styled = styled(Row)`
   }
   .button-text {
     cursor: pointer;
+  }
+  .center-view-desktop {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    width: fit-content;
   }
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
   `}

@@ -14,7 +14,7 @@ import { useInternetConnnection } from 'components/Core/InternetConnection';
 import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useTheme from 'hooks/useTheme';
-import { routeEarnings, routeMarket, routePeggingApps, routeStructure } from 'pages';
+import { routeMarket, routePeggingApps, routeStructure } from 'pages';
 import React from 'react';
 import { useSelector } from 'react-redux';
 // import Web3Status from 'components/Core/Web3Status';
@@ -38,17 +38,25 @@ interface MenuItemProps {
 }
 
 const menuItem: MenuItemProps[] = [
+  // {
+  //   name: 'Markets',
+  //   path: routeMarket,
+  // },
+  // {
+  //   name: 'Home',
+  //   path: routeHome,
+  // },
   {
-    name: 'Markets',
+    name: 'Swap',
     path: routeMarket,
   },
   {
-    name: 'Apps',
-    path: routePeggingApps,
+    name: 'Mine',
+    path: routeStructure,
   },
   {
-    name: 'Infrastructure',
-    path: routeStructure,
+    name: 'Use',
+    path: routePeggingApps,
   },
   // {
   //   name: 'Community',
@@ -56,10 +64,10 @@ const menuItem: MenuItemProps[] = [
   //   target: '_blank',
   //   isLink: true,
   // },
-  {
-    name: 'Earning',
-    path: routeEarnings,
-  },
+  // {
+  //   name: 'Earning',
+  //   path: routeEarnings,
+  // },
 ];
 
 const moreItem = [
@@ -142,6 +150,17 @@ const HeaderElement = styled.div`
   /* addresses safaris lack of support for "gap" */
   & > *:not(:first-child) {
     margin-left: 8px;
+  }
+
+  .navigation-list {
+    align-items: center;
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
   }
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
@@ -480,7 +499,7 @@ export default function Header() {
     const hrefLink = !isInternetAlready || !isMobile ? '.' : INCOGNITO_LANDING_PAGE;
     return (
       <>
-        <Title href={hrefLink}>
+        <Title onClick={() => history.push(hrefLink)}>
           <IncognitoIcon>
             <Logo fill={darkMode ? white : black} width="142" height="100%" title="logo" />
           </IncognitoIcon>
@@ -490,10 +509,10 @@ export default function Header() {
         {/*</HeaderElement>*/}
         <HeaderElement>
           {/* <Menu /> */}
-          <div style={{ alignItems: 'center', display: 'flex' }} className="default-padding-horizontal">
+          <div className="navigation-list default-padding-horizontal">
             <div className="wrap-menu-desktop center">
               {menuItem.map((item) => {
-                const isActive = item.name === pathName ? true : false;
+                const isActive = item.name === pathName;
                 return (
                   <div className="menuItem" onClick={() => setPathName(item.name)} key={item.name}>
                     {item?.isLink ? (
@@ -514,17 +533,17 @@ export default function Header() {
                   </div>
                 );
               })}
-              <Dropdown
-                overlayStyle={{ width: 120 }}
-                overlay={MoreMenu(isMobile ? 'diveIn' : 'download')}
-                placement="bottomRight"
-                className="more-dropdown"
-              >
-                <Row align="middle" className="button-hover">
-                  <p className="sub-menu-text">{isMobile ? 'Dive in' : 'Download'}</p>
-                  <img className="logo" alt="" src={downImg} style={{ width: 14, height: 14, marginLeft: 10 }} />
-                </Row>
-              </Dropdown>
+              {/*<Dropdown*/}
+              {/*  overlayStyle={{ width: 120 }}*/}
+              {/*  overlay={MoreMenu(isMobile ? 'diveIn' : 'download')}*/}
+              {/*  placement="bottomRight"*/}
+              {/*  className="more-dropdown"*/}
+              {/*>*/}
+              {/*  <Row align="middle" className="button-hover">*/}
+              {/*    <p className="sub-menu-text">{isMobile ? 'Dive in' : 'Download'}</p>*/}
+              {/*    <img className="logo" alt="" src={downImg} style={{ width: 14, height: 14, marginLeft: 10 }} />*/}
+              {/*  </Row>*/}
+              {/*</Dropdown>*/}
             </div>
           </div>
         </HeaderElement>

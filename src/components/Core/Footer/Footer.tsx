@@ -1,17 +1,19 @@
 import { Col, Row } from 'antd';
+import { FOOTER_ID } from 'pages/App';
 import { route as PolicyRoute } from 'pages/Policy/Policy.route';
 import { route as TermRoute } from 'pages/TermOfService/TermOfService.route';
 import React, { memo } from 'react';
+import { isMobile } from 'react-device-detect';
 
 import { Styled } from './Footer.styled';
 
 const Footer = () => {
   return (
-    <Styled className="default-padding-horizontal">
+    <Styled className="default-padding-horizontal" id={FOOTER_ID}>
       <Col className="wrap-branch">
         <p className="normal-label">© 2022 Incognito</p>
       </Col>
-      <Row className="wrap-social">
+      <Row className={`wrap-social ${isMobile ? '' : 'center-view-desktop'}`}>
         <button
           className="normal-label button-text"
           onClick={() => {

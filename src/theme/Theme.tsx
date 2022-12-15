@@ -383,6 +383,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
     .fs-regular {
         font-size: ${FONTS.SIZE.regular}px;
         line-height: ${FONTS.SIZE.regular + 7}px;
+        font-weight: 500;
     }
 
     .fs-medium {
@@ -902,9 +903,9 @@ export const ThemedGlobalStyle = createGlobalStyle`
     h1 {
       color: ${({ theme }) => theme.color_white};
       font-size: 64px;
-        font-weight: 500;
-        line-height: 120%;
-        letter-spacing: -0.005em;
+      font-weight: 500;
+      line-height: 120%;
+      letter-spacing: -0.005em;
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
         font-size: 64px;
         font-weight: 500;
@@ -921,6 +922,23 @@ export const ThemedGlobalStyle = createGlobalStyle`
         font-weight: 500;
         line-height: 124%;
       `}
+    }
+
+    h2 {
+      color: ${({ theme }) => theme.color_white};
+      font-size: 48px;
+      font-weight: 500;
+      line-height: 120%;
+      letter-spacing: -0.005em;
+      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
+          font-size: 48;
+        `}
+      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
+          font-size: 38px;
+        `}
+      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+          font-size: 34px;
+        `}
     }
 
     h3 {
@@ -1061,6 +1079,29 @@ export const ThemedGlobalStyle = createGlobalStyle`
         line-height: 140%;
       `}
     }
+
+  .h8 {
+    color: ${({ theme }) => theme.color_grey};
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 140%;
+
+    ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 140%;
+      `}
+    ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 140%;
+      `}
+    ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 140%;
+      `}
+  }
 
 
     .margin-add {

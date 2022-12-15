@@ -9,9 +9,11 @@ import VisibilitySensor from 'react-visibility-sensor';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled.div`
-  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
   display: flex;
-  margin-top: 60px;
+  margin-top: 80px;
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
@@ -39,38 +41,23 @@ export const Styled = styled.div`
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-          .achieve-sub-title {
-          }
-          .ant-card-body {
-            padding: 0px;
-          }
-          .achieve-wrap {
-          }
+    width: 100%;
+    .ant-card-body {
+      padding: 0px;
+    }
   `}
-  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-          .achieve-sub-title {
-          }
-          .ant-card-body {
-            padding: 0px;
-          }
-          .achieve-wrap {
-          }
-          .item-margin-top {
-          }
-    `}
 `;
 
 const Item = styled.div`
   .achieve {
-    flex: 1,
+    flex: 1;
     display: flex;
     flex-direction: column;
     text-align: center;
-    border-right: 1px solid #363636;
   }
   .achieve-item-title {
-    font-weight: 500;
-    font-size: 64px;
+    font-weight: 700;
+    font-size: 34px;
     line-height: 120%;
     text-align: center;
     margin-bottom: 0;
@@ -78,30 +65,14 @@ const Item = styled.div`
   }
   .achieve-item-sub-title {
     color: ${({ theme }) => theme.text2};
-    font-weight: 400;
-    font-size: 20px;
+    font-weight: 500;
     line-height: 140%;
     text-align: center;
-    color: ${({ theme }) => theme.text2};
-  }
-  .wrap-item {
-  }
-
-  .border-right {
-    border-right: 5px solid red;
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
-        .achieve-item-title {
-          font-weight: 500;
-          font-size: 64px;
-          line-height: 120%;
-          text-align: center;
-          margin-bottom: 0;
-        }
         .achieve-item-sub-title {
           font-weight: 400;
-          font-size: 20px;
           line-height: 140%;
           text-align: center;
         }
@@ -136,14 +107,14 @@ const Item = styled.div`
     `}
 `;
 
-const MarketInfo = () => {
+const Analytics = () => {
   const marketTrs = useSelector(marketTranslateSelector);
 
   const [isCountUp, setIsCountUp] = useState<boolean>(false);
   const Factory = React.useMemo(
     () => [
       {
-        number: localStorage.getItem(KEY_TRADE_VOLUME) || 340,
+        number: localStorage.getItem(KEY_TRADE_VOLUME) || 347,
         prefix: '$',
         suffix: 'M+',
         desc: marketTrs.volumeTraded,
@@ -188,7 +159,7 @@ const MarketInfo = () => {
             className="achieve-item-title"
             start={0}
             end={isCountUp ? item?.number : 0}
-            duration={2}
+            duration={1}
             decimals={item?.decimals}
             decimal="."
             prefix={item?.prefix}
@@ -205,7 +176,7 @@ const MarketInfo = () => {
             marginTop: 10,
           }}
         >
-          <p className="description achieve-item-sub-title">{item.desc}</p>
+          <p className="h8 achieve-item-sub-title">{item.desc}</p>
           {item?.tooltipContent && (
             <Tooltip title={item?.tooltipContent}>
               <Info style={{ marginLeft: 5 }} />
@@ -224,4 +195,4 @@ const MarketInfo = () => {
   );
 };
 
-export default React.memo(MarketInfo);
+export default React.memo(Analytics);

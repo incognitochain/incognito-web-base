@@ -15,7 +15,7 @@ const FallbackWrapper = styled.div`
 `;
 
 const BodyWrapper = styled.div<{ margin?: string }>`
-  padding: 1rem;
+  //padding: 1rem;
   width: 100%;
 `;
 

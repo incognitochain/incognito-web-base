@@ -11,7 +11,7 @@ import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWa
 import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
-import { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -22,6 +22,7 @@ import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
 import Earnings from './Earnings';
 import Validators from './Earnings/features/Validators/Validators';
+import Home from './Home';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
 import PageNotFound from './PageNotFound/PageNotFound';
@@ -29,6 +30,9 @@ import PeggingApp from './PeggingApp';
 import Policy from './Policy';
 import Structure from './Structure';
 import TermOfService from './TermOfService';
+
+export const HEADER_ID = 'HEADER_VIEW';
+export const FOOTER_ID = 'FOOTER_VIEW';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -40,7 +44,7 @@ const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 120px 0px 0px 0px;
+  padding: 130px 0 0 0;
   align-items: center;
   flex: 1;
   z-index: 1;
@@ -87,7 +91,7 @@ const App = () => {
     if (!isInternetAlready) {
       history.replace('/internet-disconnected');
     } else {
-      // history.replace('/');
+      history.replace('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInternetAlready]);
@@ -103,10 +107,11 @@ const App = () => {
           {/* <Route exact path="/swap/:outputCurrency" component={RedirectToSwap} /> */}
           <Route exact path="/page-not-found" component={PageNotFound} />
           <Route exact path="/internet-disconnected" component={InternetDisconnected} />
-          <Route exact path="/" component={Market} />
-          <Route exact path="/market" component={Market} />
-          <Route exact path="/apps" component={PeggingApp} />
-          <Route exact path="/infrastructure" component={Structure} />
+          {/*<Route exact path="/" component={Market} />*/}
+          <Route exact path="/" component={Home} />
+          <Route exact path="/swap" component={Market} />
+          <Route exact path="/use" component={PeggingApp} />
+          <Route exact path="/mine" component={Structure} />
           <Route exact path="/earnings" component={Earnings} />
           <Route exact path="/privacy-policy" component={Policy} />
           <Route exact path="/term-of-service" component={TermOfService} />
@@ -121,7 +126,7 @@ const App = () => {
       <Route component={DarkModeQueryParamReader} />
       <IncognitoWalletProvider>
         <AppWrapper>
-          <HeaderWrapper>
+          <HeaderWrapper id={HEADER_ID}>
             <Header />
           </HeaderWrapper>
           <BodyWrapper>
