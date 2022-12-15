@@ -4,6 +4,7 @@ import PNodeIcon from 'components/icons/pnode.icon';
 import VNodeIcon from 'components/icons/vnode.icon';
 import { structureTranslateSelector } from 'config/Configs.selector';
 import React from 'react';
+import { isMobile } from 'react-device-detect';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -24,7 +25,7 @@ export const HeaderNode = () => {
     },
     {
       icon: <ExplorerIcon />,
-      desc: 'Network Explorer',
+      desc: isMobile ? 'Explorer' : 'Network Explorer',
       func: () => window.open('https://explorer.incognito.org/', '_blank'),
     },
   ];

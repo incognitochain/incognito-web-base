@@ -135,7 +135,7 @@ export const WrapperContent = styled.div`
     color: ${({ theme }) => theme.btn1};
   }
   .watch-item {
-    margin-left: 41px;
+    margin-bottom: 20px;
     .h8 {
       margin-left: 8px;
       color: white;
