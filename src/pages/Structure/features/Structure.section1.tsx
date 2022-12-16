@@ -57,8 +57,7 @@ const Styled = styled(Row)`
         font-size: 18px;
       }
       .logo-stroke {
-        width: 170px;
-        height: 170px;
+        width: 90%;
         margin-bottom: 45px;
       }
   `}
