@@ -14,44 +14,55 @@ import TwitterSVG from './images/twitter.svg';
 
 const Footer = () => {
   const renderSocial1 = () => {
-    if (isMobile) {
-      return (
-        <Row className="wrap-social">
-          <button
-            className="normal-label button-text"
-            onClick={() => {
-              window.open('https://we.incognito.org', '_blank');
-            }}
-          >
-            Forum
-          </button>
-          <button
-            className="normal-label default-margin-left button-text"
-            onClick={() => {
-              window.open('https://t.me/incognitochain', '_blank');
-            }}
-          >
-            Telegram
-          </button>
-          <button
-            className="normal-label default-margin-left button-text"
-            onClick={() => {
-              window.open('https://twitter.com/IncognitoChain', '_blank');
-            }}
-          >
-            Twitter
-          </button>
-          <button
-            className="normal-label default-margin-left button-text"
-            onClick={() => {
-              window.open('https://discord.com/invite/Wh6xRFz72U', '_blank');
-            }}
-          >
-            Discord
-          </button>
-        </Row>
-      );
-    }
+    // if (isMobile) {
+    //   return (
+    //     <Row className="wrap-social">
+    //       <button
+    //         className="normal-label button-text"
+    //         onClick={() => {
+    //           window.open('https://we.incognito.org', '_blank');
+    //         }}
+    //       >
+    //         Forum
+    //       </button>
+    //       <button
+    //         className="normal-label button-text"
+    //         onClick={() => {
+    //           window.open(
+    //             'https://we.incognito.org/t/incognito-whitepaper-incognito-mode-for-cryptonetworks/168',
+    //             '_blank'
+    //           );
+    //         }}
+    //       >
+    //         White paper
+    //       </button>
+    //       <button
+    //         className="normal-label default-margin-left button-text"
+    //         onClick={() => {
+    //           window.open('https://t.me/incognitochain', '_blank');
+    //         }}
+    //       >
+    //         Telegram
+    //       </button>
+    //       <button
+    //         className="normal-label default-margin-left button-text"
+    //         onClick={() => {
+    //           window.open('https://twitter.com/IncognitoChain', '_blank');
+    //         }}
+    //       >
+    //         Twitter
+    //       </button>
+    //       <button
+    //         className="normal-label default-margin-left button-text"
+    //         onClick={() => {
+    //           window.open('https://discord.com/invite/Wh6xRFz72U', '_blank');
+    //         }}
+    //       >
+    //         Discord
+    //       </button>
+    //     </Row>
+    //   );
+    // }
     return (
       <Row className="wrap-social">
         <Tooltip title="Forum">

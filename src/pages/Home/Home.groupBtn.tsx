@@ -15,7 +15,7 @@ const GroupButtons = () => {
       >
         Get PRV
       </div>
-      <div className="btn-watch">
+      <div className="btn-watch" onClick={() => window.open('https://www.youtube.com/watch?v=bafTu0kGfq4', '_blank')}>
         <WatchIcon />
         <p className="text-watch fs-regular">Watch the film</p>
       </div>

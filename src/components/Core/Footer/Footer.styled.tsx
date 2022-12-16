@@ -1,12 +1,13 @@
-import { Row } from 'antd';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
-export const Styled = styled(Row)`
+export const Styled = styled.div`
   width: 100%;
   padding-bottom: 15px;
   padding-top: 15px;
   justify-content: space-between;
   align-items: center;
+  display: flex;
+  flex-direction: row;
   // border-top: 1px solid ${({ theme }) => theme.border1};
   .wrap-social {
     flex-direction: row;
@@ -55,13 +56,17 @@ export const Styled = styled(Row)`
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
   `}
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+    flex-direction: column;
+    align-items: start;
     .default-margin-left {
       margin-left: 0px;
+      margin-right: 12px;
     }
     .wrap-social {
-      flex-direction: column;
-      margin-top: 12px;
-      width: 50%;
+      // flex-direction: column;
+      // margin-top: 12px;
+      // width: 50%;
+      margin-top: 12px
     }
     .normal-label {
       margin-bottom: 4px;    
