@@ -14,6 +14,7 @@ export const Header = styled.div`
   flex-wrap: wrap;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin-top: 0px;
+    border-radius: 8px;
   `}
 `;
 

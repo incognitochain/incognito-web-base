@@ -944,30 +944,15 @@ export const ThemedGlobalStyle = createGlobalStyle`
     h3 {
       color: ${({ theme }) => theme.color_white};
       font-size: 40px;
-        font-weight: 500;
-        line-height: 140%;
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
-        font-size: 40px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-        font-size: 40px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-        font-size: 40px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
+      font-weight: 700;
+      line-height: 140%;
     }
 
     .h3_1 {
       color: ${({ theme }) => theme.color_white};
       font-size: 34px;
-        font-weight: 500;
-        line-height: 140%;
+      font-weight: 500;
+      line-height: 140%;
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
         font-size: 34px;
         font-weight: 500;
