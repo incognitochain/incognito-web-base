@@ -2,8 +2,6 @@
 import 'antd/dist/antd.css';
 import './reset.scss';
 
-import messageIcon from 'assets/svg/message.svg';
-import supportIcon from 'assets/svg/support.svg';
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Footer from 'components/Core/Footer';
 import Header from 'components/Core/Header';
@@ -12,7 +10,6 @@ import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
 import React, { Suspense, useEffect } from 'react';
-import { isMobile } from 'react-device-detect';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components/macro';
@@ -133,32 +130,32 @@ const App = () => {
             <Popups />
             <Suspense fallback={<Loader />}>{renderContent()}</Suspense>
             <Footer />
-            {!isMobile && (
-              <div
-                style={{
-                  position: 'fixed',
-                  bottom: 24,
-                  right: 24,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  zIndex: 3,
-                }}
-              >
-                <SupportIcon
-                  onClick={() => {
-                    window.open('https://we.incognito.org/g/Support', '_blank');
-                  }}
-                  src={messageIcon}
-                />
-                <div style={{ height: 16 }} />
-                <SupportIcon
-                  onClick={() => {
-                    window.open('https://t.me/incognitochain', '_blank');
-                  }}
-                  src={supportIcon}
-                />
-              </div>
-            )}
+            {/*{!isMobile && (*/}
+            {/*  <div*/}
+            {/*    style={{*/}
+            {/*      position: 'fixed',*/}
+            {/*      bottom: 24,*/}
+            {/*      right: 24,*/}
+            {/*      display: 'flex',*/}
+            {/*      flexDirection: 'column',*/}
+            {/*      zIndex: 3,*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    <SupportIcon*/}
+            {/*      onClick={() => {*/}
+            {/*        window.open('https://we.incognito.org/g/Support', '_blank');*/}
+            {/*      }}*/}
+            {/*      src={messageIcon}*/}
+            {/*    />*/}
+            {/*    <div style={{ height: 16 }} />*/}
+            {/*    <SupportIcon*/}
+            {/*      onClick={() => {*/}
+            {/*        window.open('https://t.me/incognitochain', '_blank');*/}
+            {/*      }}*/}
+            {/*      src={supportIcon}*/}
+            {/*    />*/}
+            {/*  </div>*/}
+            {/*)}*/}
           </BodyWrapper>
         </AppWrapper>
       </IncognitoWalletProvider>

@@ -502,8 +502,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
     }
     
     .default-padding-horizontal {
-      padding-left: 105px;
-      padding-right: 105px;
+      padding-left: 205px;
+      padding-right: 205px;
     }
 
     .ant-btn-round.ant-btn-lg {
@@ -774,8 +774,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
         .default-padding-horizontal {
-          padding-left: 105px;
-          padding-right: 105px;
+          padding-left: 205px;
+          padding-right: 205px;
         }
         .sub-title-text {
           font-size: 18px;
