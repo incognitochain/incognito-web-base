@@ -1,13 +1,13 @@
 import { IRouteProps } from 'pages';
 import { lazy } from 'react';
 
-export const route = '/infrastructure';
+export const route = '/mine';
 
 const StructureRoute: IRouteProps = {
   path: route,
   exact: true,
   component: lazy(() => import('./Structure')),
-  name: 'infrastructure',
+  name: 'mine',
   to: route,
 };
 

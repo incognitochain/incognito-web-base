@@ -9,7 +9,6 @@ export const Styled = styled.div`
   margin-top: 0px;
   text-align: center;
   .padding-vertical-container {
-    padding-top: 66px;
     padding-bottom: 110px;
   }
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
@@ -67,8 +66,8 @@ export const Styled = styled.div`
 const Earnings = () => {
   return (
     <Styled>
-      <div className="default-padding-horizontal padding-vertical-container">
-        <h1>Become a Liquidity Provider for DEX</h1>
+      <div className="default-max-width padding-vertical-container">
+        <h3>Become a Liquidity Provider for DEX</h3>
         <div className="row-button">
           <div
             className="button"

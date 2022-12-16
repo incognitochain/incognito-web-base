@@ -6,8 +6,10 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 export const Styled = styled(Row)`
   height: 76px;
   width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   background-color: ${({ theme }) => theme.bg2};
-  border-bottom: 1px solid ${({ theme }) => theme.border1};
+  //border-bottom: 1px solid ${({ theme }) => theme.border1};
   z-index: 2;
   display: flex;
   flex-direction: row;
@@ -25,7 +27,8 @@ export const Styled = styled(Row)`
     flex-direction: row;
     display: flex;
     .menuItem {
-      margin-right: 40px;
+      margin-right: 16px;
+      margin-left: 16px;
       font-weight: 500;
       font-size: 18px;
       line-height: 140%;
@@ -183,7 +186,7 @@ export const DrawerStyled = styled(Drawer)`
   .wrap-drawer-sub-item {
     padding-top: 8px;
     padding-bottom: 8px;
-    border-top: 1px solid ${({ theme }) => theme.border1};
+    //border-top: 1px solid ${({ theme }) => theme.border1};
   }
   .logo {
     margin-right: 16px;
@@ -215,7 +218,10 @@ export const DrawerStyled = styled(Drawer)`
     color: #9c9c9c;
   }
   .wrap-drawer-sub-item:last-child {
-    border-bottom: 1px solid ${({ theme }) => theme.border1};
+    //border-bottom: 1px solid ${({ theme }) => theme.border1};
+  }
+  .ant-drawer-header {
+    margin-top: -1px;
   }
   .ant-drawer-body {
     padding-top: 0;

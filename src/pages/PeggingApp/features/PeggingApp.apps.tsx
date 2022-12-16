@@ -54,7 +54,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   display: flex;
 
   .wrap-item-content {
-    padding: 60px 60px 50px;
+    padding: 30px 30px 20px;
     border-radius: 16px;
     flex: 1;
   }
@@ -86,7 +86,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
 
   .wrap-chain {
     margin-right: 10px;
-    min-height: 48px;
+    min-height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -94,6 +94,9 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
     padding-left: 16px;
     border-radius: 8px;
     background: ${({ theme }) => theme.background3};
+    p {
+      color: white;
+    }
   }
 
   .wrap-main-content {
@@ -101,7 +104,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .desc-text {
-    margin-top: 40px;
+    margin-top: 32px;
   }
 
   .medium-text {
@@ -212,7 +215,7 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
       <Row style={{ minWidth: 250 }}>
         {data.chain.map((item: any) => (
           <div style={{ marginTop: 12 }} key={item} className="wrap-chain background3">
-            <p className="description5 color-white">{item}</p>
+            <p className="h8">{item}</p>
           </div>
         ))}
       </Row>
@@ -239,16 +242,16 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
             {!isMobile && Status}
             <div className="wrap-name">
               <Row align="middle">
-                <p className="normal-text h3_1">{data.name}</p>
+                <h5 className="normal-text">{data.name}</h5>
                 {isMobile && Status}
               </Row>
-              <h6 className="text2 normal-text name-desc-text">{data.nameDesc}</h6>
+              <p className="text2 normal-text name-desc-text h8">{data.nameDesc}</p>
             </div>
             {!isMobile && ChainList}
           </Col>
           {isMobile && ChainList}
         </Row>
-        <p className="normal-text desc-text description color-white">
+        <p className="normal-text desc-text description h8 color-white" style={{ color: 'white' }}>
           {data.desc}{' '}
           {!!data.link && (
             <span
@@ -318,7 +321,7 @@ const PeggingListApps = () => {
         data={{
           img: joeImg,
           name: 'pTraderJoe',
-          status: 'COMING SOON',
+          status: 'SHIPPED',
           nameDesc: 'Private Trader Joe',
           chain: ['Avalanche', 'DEX'],
           desc: 'Trade confidentially on Trader Joe. Faster privacy swap is enabled by fast transaction finality on Avalanche.',

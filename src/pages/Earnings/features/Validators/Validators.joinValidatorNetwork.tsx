@@ -1,6 +1,5 @@
 import validator from 'assets/images/validator.png';
-import { memo } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { memo } from 'react';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 const Styled = styled.div`
@@ -10,6 +9,23 @@ const Styled = styled.div`
   width: 100%;
   border-radius: 24px;
   background-color: ${({ theme }: { theme: DefaultTheme }) => theme.color_grey2};
+  .btn-buy {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+    padding: 14px 24px;
+    width: 156px;
+    height: 50px;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: ${({ theme }) => theme.btn1};
+    color: ${({ theme }) => theme.color_white};
+    :hover {
+      opacity: 0.8;
+    }
+  }
 
   .leftView {
     display: flex;
@@ -71,7 +87,6 @@ const Styled = styled.div`
 `;
 
 const ValidatorsJoinNetwork = () => {
-  const history = useHistory();
   return (
     <Styled>
       <div className="leftView">
@@ -81,6 +96,21 @@ const ValidatorsJoinNetwork = () => {
             Validators imply a group of nodes that perform consensus work, including verifying transactions, voting to
             add new blocks to the blockchain and earning block rewards.
           </h6>
+          <div
+            className="btn-buy fs-regular"
+            onClick={() => {
+              const view = document.getElementById('HOW_STAKE');
+              if (view) {
+                const y = view.getBoundingClientRect().top + window.scrollY - 120;
+                window.scroll({
+                  top: y,
+                  behavior: 'smooth',
+                });
+              }
+            }}
+          >
+            How to stake
+          </div>
         </div>
       </div>
       <div className="rightView center">

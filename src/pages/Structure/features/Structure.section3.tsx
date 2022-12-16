@@ -42,6 +42,7 @@ const Styled = styled(Row)`
     text-align: center;
     margin-bottom: 60px;
     width: 100%;
+    line-height: 132%;
   }
 
   .descripiton-1 {
@@ -183,8 +184,8 @@ const Section3 = () => {
   );
 
   return (
-    <Styled align="middle" justify="space-between" className="default-padding-horizontal default-margin-top">
-      <p className="fw-medium main-title-text section3-title">{`Privacy infrastructure\n for the digital economy.`}</p>
+    <Styled align="middle" justify="space-between" className="default-max-width default-margin-top">
+      <h3 className="section3-title">{`Privacy infrastructure\n for the digital economy.`}</h3>
       {Factory.map((item) => (
         <Item key={item.title} {...item} />
       ))}

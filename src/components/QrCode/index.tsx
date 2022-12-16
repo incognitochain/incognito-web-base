@@ -35,8 +35,11 @@ const Styled = styled.div`
   }
   .loader {
     position: absolute;
-    top: 40%;
-    left: 48% !important;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 `;
 

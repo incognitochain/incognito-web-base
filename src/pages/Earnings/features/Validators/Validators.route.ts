@@ -1,7 +1,7 @@
 import { IRouteProps } from 'pages';
 import { lazy } from 'react';
 
-export const route = '/earnings/validator';
+export const route = '/mine/validator';
 
 const ValidatorsRoute: IRouteProps = {
   path: route,
