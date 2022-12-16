@@ -17,6 +17,7 @@ const LeftColumn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex-wrap: wrap;
   h3 {
     font-weight: 700;
   }
@@ -36,13 +37,15 @@ const LeftColumn = styled.div`
       opacity: 0.8;
     }
   }
+  .provide-item {
+    margin-right: 41px;
+  }
   .provide-text {
     margin-left: 8px;
     margin-right: 8px;
     color: ${({ theme }) => theme.btn1};
   }
   .watch-item {
-    margin-left: 41px;
     .h8 {
       margin-left: 8px;
       color: white;
