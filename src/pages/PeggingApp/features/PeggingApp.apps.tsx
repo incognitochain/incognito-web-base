@@ -321,7 +321,7 @@ const PeggingListApps = () => {
         data={{
           img: joeImg,
           name: 'pTraderJoe',
-          status: 'COMING SOON',
+          status: 'SHIPPED',
           nameDesc: 'Private Trader Joe',
           chain: ['Avalanche', 'DEX'],
           desc: 'Trade confidentially on Trader Joe. Faster privacy swap is enabled by fast transaction finality on Avalanche.',

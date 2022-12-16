@@ -65,16 +65,6 @@ const Footer = () => {
     // }
     return (
       <Row className="wrap-social">
-        <Tooltip title="Forum">
-          <img
-            src={ForumSVG}
-            className="default-margin-left"
-            alt="image"
-            onClick={() => {
-              window.open('https://we.incognito.org', '_blank');
-            }}
-          />
-        </Tooltip>
         <Tooltip title="White paper">
           <img
             src={BookSVG}
@@ -85,6 +75,16 @@ const Footer = () => {
                 'https://we.incognito.org/t/incognito-whitepaper-incognito-mode-for-cryptonetworks/168',
                 '_blank'
               );
+            }}
+          />
+        </Tooltip>
+        <Tooltip title="Forum">
+          <img
+            src={ForumSVG}
+            className="default-margin-left"
+            alt="image"
+            onClick={() => {
+              window.open('https://we.incognito.org', '_blank');
             }}
           />
         </Tooltip>

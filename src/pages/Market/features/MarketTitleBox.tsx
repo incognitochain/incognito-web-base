@@ -1,8 +1,10 @@
 import { Row } from 'antd';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 
+import { poolsSelectors } from '../../../state/pools';
 import ArrowLeftImg from './arrow-left.png';
 
 const Styled = styled.div`
@@ -38,12 +40,13 @@ const Styled = styled.div`
 `;
 const MarketTitleBox = () => {
   const history = useHistory();
+  const listPool = useSelector(poolsSelectors);
   return (
     <Styled>
-      <p className="h8 text1">Become a liquidity provider and earn up to 40% APY.</p>
+      <p className="h8 text1">Become a liquidity provider and earn up to {listPool[0]?.apy || ''}% APY.</p>
       <Row className="row" onClick={() => history.push('/earnings')}>
         <p className="h8 text2">Provide liquidity</p>
-        <img src={ArrowLeftImg} />
+        <img src={ArrowLeftImg} alt="image" />
       </Row>
     </Styled>
   );
