@@ -9,7 +9,12 @@ const Container = styled.div`
   gap: 80px;
   grid-template-columns: auto auto;
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-    gap: 80px;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-top: -55px;
+    gap: 40px;
+    grid-template-columns: auto;
+    justify-content: center;
   `}
 `;
 
@@ -52,6 +57,14 @@ const LeftColumn = styled.div`
       color: white;
     }
   }
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+    h3 {
+      text-align: center;
+    }
+    .wrap-item {
+      margin-top: 20px;
+    }
+  `}
 `;
 
 const RightColumn = styled(Col)`
