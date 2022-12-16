@@ -18,7 +18,8 @@ const Home = () => {
     const footer = document.getElementById(FOOTER_ID);
     if (height && header && footer) {
       const headerHeight = header.clientHeight;
-      const footerHeight = footer.clientHeight;
+      // const footerHeight = footer.clientHeight;
+      const footerHeight = 0;
       contentSize = height - headerHeight - footerHeight - 55;
     }
     setContentSize(contentSize);
