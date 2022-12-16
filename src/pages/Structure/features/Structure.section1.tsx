@@ -78,7 +78,7 @@ const Section1 = () => {
   const structureTrs = useSelector(structureTranslateSelector);
   const history = useHistory();
   return (
-    <Styled align="middle" justify="space-between" className="default-padding-horizontal default-margin-bottom">
+    <Styled align="middle" justify="space-between" className="default-max-width default-margin-bottom">
       <Col className="col-section1">
         <SectionHead title="Privacy Infrastructure" />
         <h3 className="main-title h3">{structureTrs.mainTitle}</h3>

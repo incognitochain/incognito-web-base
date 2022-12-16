@@ -3,8 +3,8 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled(Row)`
   width: 100%;
-  padding-bottom: 25px;
-  padding-top: 25px;
+  padding-bottom: 12px;
+  padding-top: 12px;
   justify-content: space-between;
   // border-top: 1px solid ${({ theme }) => theme.border1};
   .wrap-social {
@@ -17,10 +17,10 @@ export const Styled = styled(Row)`
   .normal-label {
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
-    line-height: 30px;
+    font-size: 12px;
+    line-height: 120%;
     letter-spacing: 0.005em;
-    color: ${({ theme }) => theme.text1};
+    color: ${({ theme }) => theme.text2};
   }
   .default-margin-left {
     margin-left: 24px;
@@ -49,8 +49,6 @@ export const Styled = styled(Row)`
     }
     .normal-label {
       margin-bottom: 4px;    
-      font-size: 16px;
-      line-height: 24px;
     }
     .wrap-branch {
       width: 100%;

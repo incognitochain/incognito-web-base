@@ -30,7 +30,7 @@ const Collections = () => {
   };
 
   return (
-    <CollectionWrapper>
+    <CollectionWrapper className="default-max-width">
       <CollectionItem onClick={() => openLink({ link: '/swap' })}>
         {renderHeader({ title: 'Swap', desc: 'Trade 100+ cryptocurrencies anonymously.', showIcon: !isMobile })}
         <img className="swap-image" src={SwapImg} alt="image" />

@@ -556,7 +556,7 @@ export default function Header() {
               {/*</AccountElement>*/}
               <Dropdown
                 overlayStyle={{ width: 120 }}
-                overlay={MoreMenu('diveIn')}
+                overlay={MoreMenu('download')}
                 placement="bottomRight"
                 className="more-dropdown"
               >
@@ -656,7 +656,8 @@ export default function Header() {
                 fontSize: 34,
               }}
             >
-              {isMobile ? 'Dive in' : 'Download'}
+              {/*{isMobile ? 'Dive in' : 'Download'}*/}
+              Download
             </p>
             <img
               className="dropdown-icon"
@@ -670,7 +671,7 @@ export default function Header() {
               }}
             />
           </Row>
-          {expand && !isMobile && (
+          {expand && (
             <Col style={{ marginTop: 24 }}>
               {appStoreIcons.map((item) => (
                 <div className="wrap-drawer-sub-item" key={item.name}>
@@ -681,25 +682,25 @@ export default function Header() {
               ))}
             </Col>
           )}
-          {expand && isMobile && (
-            <Col style={{ marginTop: 24 }}>
-              {moreItem.map((item) => (
-                <div className="wrap-drawer-sub-item padding padding-horizontal" key={item.name}>
-                  <Link href={item.path} target="_blank" rel="noopener noreferrer" className="padding-horizontal">
-                    <Row align="middle">
-                      <p className="drawer-sub-item-label">{item.name}</p>
-                      <div className="logo" />
-                    </Row>
-                    <p className="drawer-sub-item-desc-label">{item.sub}</p>
-                  </Link>
-                </div>
-              ))}
-            </Col>
-          )}
+          {/*{expand && isMobile && (*/}
+          {/*  <Col style={{ marginTop: 24 }}>*/}
+          {/*    {moreItem.map((item) => (*/}
+          {/*      <div className="wrap-drawer-sub-item padding padding-horizontal" key={item.name}>*/}
+          {/*        <Link href={item.path} target="_blank" rel="noopener noreferrer" className="padding-horizontal">*/}
+          {/*          <Row align="middle">*/}
+          {/*            <p className="drawer-sub-item-label">{item.name}</p>*/}
+          {/*            <div className="logo" />*/}
+          {/*          </Row>*/}
+          {/*          <p className="drawer-sub-item-desc-label">{item.sub}</p>*/}
+          {/*        </Link>*/}
+          {/*      </div>*/}
+          {/*    ))}*/}
+          {/*  </Col>*/}
+          {/*)}*/}
         </DrawerStyled>
       </>
     );
   };
 
-  return <Styled className="default-padding-horizontal">{renderContent()}</Styled>;
+  return <Styled className="default-max-width">{renderContent()}</Styled>;
 }

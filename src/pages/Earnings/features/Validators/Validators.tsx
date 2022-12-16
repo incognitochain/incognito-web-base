@@ -15,7 +15,7 @@ const Validators = () => {
   return (
     <div style={{ width: '100%' }}>
       <HeaderNode />
-      <Styled className="default-padding-horizontal default-margin-bottom">
+      <Styled className="default-max-width default-margin-bottom">
         <ValidatorsSubRoute />
         <ValidatorsJoinNetwork />
         <ValidatorRewardEstimation />

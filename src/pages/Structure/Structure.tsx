@@ -1,6 +1,5 @@
 import ExplorerIcon from 'components/icons/explorer.icon';
 import OverviewIcon from 'components/icons/overview.icon';
-import PNodeIcon from 'components/icons/pnode.icon';
 import VNodeIcon from 'components/icons/vnode.icon';
 import { structureTranslateSelector } from 'config/Configs.selector';
 import React from 'react';
@@ -16,7 +15,6 @@ export const HeaderNode = () => {
   const history = useHistory();
   const Factory = [
     { icon: <OverviewIcon />, desc: 'Overview', path: '/mine', func: () => history.replace('/mine') },
-    { icon: <PNodeIcon />, desc: 'Node', func: () => {} },
     {
       icon: <VNodeIcon />,
       desc: 'Virtual Node',
@@ -67,10 +65,11 @@ const Structure = () => {
     [structureTrs]
   );
   return (
-    <Styled>
+    <>
       <HeaderNode />
-      <Section1 />
-      {/* <CircleList
+      <Styled>
+        <Section1 />
+        {/* <CircleList
         grid={{
           xs: 2,
           sm: 2,
@@ -81,8 +80,9 @@ const Structure = () => {
         }}
         data={Factory}
       /> */}
-      <Section3 />
-    </Styled>
+        <Section3 />
+      </Styled>
+    </>
   );
 };
 

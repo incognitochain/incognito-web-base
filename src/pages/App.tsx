@@ -58,6 +58,7 @@ const HeaderWrapper = styled.div`
   position: fixed;
   top: 0;
   z-index: 2;
+  background-color: ${({ theme }) => theme.bg2};
 `;
 
 const SupportIcon = styled.img`

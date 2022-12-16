@@ -62,13 +62,12 @@ const ButtonWrapper = styled(Row)`
 `;
 
 const CollectionWrapper = styled(Row)`
-  max-width: 1270px;
   margin-top: 42px;
   display: grid;
   grid-gap: 30px;
   margin-left: auto;
   margin-right: auto;
-  justify-content: center;
+  justify-content: space-around;
   grid-template-columns: repeat(auto-fill, 390px);
   ${({ theme }) => theme.mediaWidth.upToSmall`
     grid-template-columns: repeat(auto-fill, calc(100vw - 30px));
@@ -81,15 +80,15 @@ const CollectionItem = styled.div`
     opacity: 0.8;
   }
   border-radius: 8px;
-  padding: 32px 8px 8px 8px;
+  padding: 24px;
   aspect-ratio: 390 / 251;
   background-color: ${({ theme }) => theme.color_grey3};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   .header {
-    margin-right: 24px;
-    margin-left: 28px;
+    //margin-right: 24px;
+    //margin-left: 28px;
   }
   .sub-header {
     margin-top: 8px;
@@ -100,19 +99,25 @@ const CollectionItem = styled.div`
   }
   .swap-image {
     align-self: end;
-    max-width: 60%;
+    max-width: 75%;
     max-height: 100%;
-    margin-right: 28px;
+    margin-right: auto;
+    margin-left: auto;
   }
   .pnode-image {
-    margin-left: 28px;
-    max-width: calc(100% - 28px);
+    //margin-left: 28px;
+    max-width: 100%;
     max-height: 100%;
+    margin-right: auto;
+    margin-left: auto;
   }
   .dapps-image {
-    margin-left: 44px;
-    max-width: calc(100% - 44px);
+    //margin-left: 44px;
+    //max-width: calc(100% - 44px);
+    max-width: 90%;
     max-height: 100%;
+    margin-right: auto;
+    margin-left: auto;
   }
 `;
 

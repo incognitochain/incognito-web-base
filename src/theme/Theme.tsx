@@ -502,8 +502,14 @@ export const ThemedGlobalStyle = createGlobalStyle`
     }
     
     .default-padding-horizontal {
-      padding-left: 135px;
-      padding-right: 135px;
+      //padding-left: 280px;
+      //padding-right: 280px;
+    }
+
+    .default-max-width {
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .ant-btn-round.ant-btn-lg {
@@ -613,8 +619,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
     .header1 {
       color: ${({ theme }) => theme.color_white};
       font-size: 28px;
-        font-weight: 500;
-        line-height: 140%;
+      font-weight: 500;
+      line-height: 140%;
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
         font-size: 28px;
         font-weight: 500;
@@ -774,8 +780,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
         .default-padding-horizontal {
-          padding-left: 135px;
-          padding-right: 135px;
+          // padding-left: 280px;
+          // padding-right: 280px;
         }
         .sub-title-text {
           font-size: 18px;
@@ -815,6 +821,9 @@ export const ThemedGlobalStyle = createGlobalStyle`
         .default-padding-horizontal {
           padding-left: 16px;
           padding-right: 16px;
+        }
+        .default-max-width {
+          max-width: 95%;
         }
         .sub-title-text {
           font-size: 16px;
@@ -996,7 +1005,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     h5 {
       color: ${({ theme }) => theme.color_white};
-        font-size: 26px;
+        font-size: 24px;
         font-weight: 800;
         line-height: 140%;
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
@@ -1005,12 +1014,12 @@ export const ThemedGlobalStyle = createGlobalStyle`
         line-height: 140%;
       `}
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 500;
         line-height: 120%;
       `}
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 500;
         line-height: 124%;
       `}

@@ -9,7 +9,7 @@ import { Styled } from './Footer.styled';
 
 const Footer = () => {
   return (
-    <Styled className="default-padding-horizontal" id={FOOTER_ID}>
+    <Styled className="default-max-width" id={FOOTER_ID}>
       <Col className="wrap-branch">
         <p className="normal-label">© 2022 Incognito</p>
       </Col>
@@ -35,10 +35,10 @@ const Footer = () => {
         <button
           className="normal-label button-text"
           onClick={() => {
-            window.open('https://incognito.org/mediakit', '_blank');
+            window.open('https://explorer.incognito.org', '_blank');
           }}
         >
-          Media Kit
+          Explorer
         </button>
         <button
           className="normal-label default-margin-left button-text"

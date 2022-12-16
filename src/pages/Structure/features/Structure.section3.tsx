@@ -184,7 +184,7 @@ const Section3 = () => {
   );
 
   return (
-    <Styled align="middle" justify="space-between" className="default-padding-horizontal default-margin-top">
+    <Styled align="middle" justify="space-between" className="default-max-width default-margin-top">
       <h3 className="section3-title">{`Privacy infrastructure\n for the digital economy.`}</h3>
       {Factory.map((item) => (
         <Item key={item.title} {...item} />

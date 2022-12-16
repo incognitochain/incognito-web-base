@@ -10,11 +10,9 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 export const Styled = styled.div`
   margin-left: auto;
   margin-right: auto;
-  width: 70%;
-  max-width: 1200px;
   display: flex;
   margin-top: 80px;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
@@ -185,7 +183,7 @@ const Analytics = () => {
     </Item>
   );
   return (
-    <Styled>
+    <Styled className="default-max-width">
       {Factory?.map((item, i) => {
         return renderItem(item);
       })}

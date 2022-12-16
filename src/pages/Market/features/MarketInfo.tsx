@@ -207,7 +207,7 @@ const MarketInfo = () => {
     </Item>
   );
   return (
-    <Styled>
+    <Styled className="default-max-width">
       {Factory?.map((item, i) => {
         return renderItem(item);
       })}

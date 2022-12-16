@@ -3,7 +3,6 @@ import Loader from 'components/Core/Loader';
 import { TAB_LIST, Tabs } from 'components/Core/Tabs';
 import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
 import { selectedTabSelector } from 'components/Core/Tabs/Tabs.selectors';
-import { WatchIcon } from 'components/icons';
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'state/hooks';
@@ -44,7 +43,7 @@ const Swap = (props: any) => {
   }, [location?.state?.tokenId1, location?.state?.tokenId2]);
 
   return (
-    <Container>
+    <Container className="default-max-width">
       <LeftColumn>
         <h3>The easiest way to anonymously buy, trade, and hold 100+ cryptocurrencies.</h3>
         <Row>
@@ -53,10 +52,10 @@ const Swap = (props: any) => {
             <p className="h8 provide-text">Provide liquidity and earn</p>
             <img src={ArrowLeftImg} className="arrow-image" />
           </Row>
-          <Row className="wrap-item watch-item">
-            <WatchIcon />
-            <p className="h8">See how it works</p>
-          </Row>
+          {/*<Row className="wrap-item watch-item">*/}
+          {/*  <WatchIcon />*/}
+          {/*  <p className="h8">See how it works</p>*/}
+          {/*</Row>*/}
         </Row>
       </LeftColumn>
       <RightColumn className="token-extra">{isFetching ? <Loader /> : renderContent()}</RightColumn>

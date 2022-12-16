@@ -650,7 +650,7 @@ const TermOfService = () => {
   );
 
   return (
-    <Styled className="default-padding-horizontal">
+    <Styled className="default-max-width">
       <p className="fw-medium text-align-center term-main-title">
         INCOGNITO WALLET APPLICATION and INCOGNITO WEBSITE <br />
         Terms of Service

@@ -5,6 +5,7 @@ export const Styled = styled.div``;
 export const Header = styled.div`
   margin-top: -55px;
   min-height: 98px;
+  width: 100%;
   background-color: ${({ theme }) => theme.bg3};
   margin-bottom: 100px;
   display: flex;

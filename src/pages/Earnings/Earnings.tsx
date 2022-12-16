@@ -67,8 +67,8 @@ export const Styled = styled.div`
 const Earnings = () => {
   return (
     <Styled>
-      <div className="default-padding-horizontal padding-vertical-container">
-        <h1>Become a Liquidity Provider for DEX</h1>
+      <div className="default-max-width padding-vertical-container">
+        <h2>Become a Liquidity Provider for DEX</h2>
         <div className="row-button">
           <div
             className="button"

@@ -4,9 +4,10 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 const Container = styled.div`
   display: grid;
   flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
   gap: 80px;
   grid-template-columns: auto auto;
-  max-width: 1270px;
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
     gap: 80px;
   `}

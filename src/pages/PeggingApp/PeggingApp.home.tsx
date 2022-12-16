@@ -1,9 +1,7 @@
-import { Row } from 'antd';
 import { peggingAppTranslateSelector } from 'config/Configs.selector';
 import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
 
-import { WatchIcon } from '../../components/icons';
 import PeggingListApps from './features/PeggingApp.apps';
 import { Styled, WrapperContent } from './PeggingApp.styled';
 
@@ -25,12 +23,12 @@ const renderSectionBottom = () => {
       <h3 className="fw-bold" style={{ textAlign: 'center' }}>
         {peggingTrs.mainTitle}
       </h3>
-      <Row className="sub-menu">
-        <Row className="wrap-item watch-item">
-          <WatchIcon />
-          <p className="h8">See how it works</p>
-        </Row>
-      </Row>
+      {/*<Row className="sub-menu">*/}
+      {/*  <Row className="wrap-item watch-item">*/}
+      {/*    <WatchIcon />*/}
+      {/*    <p className="h8">See how it works</p>*/}
+      {/*  </Row>*/}
+      {/*</Row>*/}
       <PeggingListApps />
     </WrapperContent>
   );
@@ -39,7 +37,7 @@ const renderSectionBottom = () => {
 const Home = () => {
   // const peggingTrs = useSelector(peggingAppTranslateSelector);
   return (
-    <Styled>
+    <Styled className="default-max-width">
       {/*<div className="section-1 default-padding-horizontal default-margin-top">*/}
       {/*  <Col style={{ flexDirection: 'column' }}>*/}
       {/*    <SectionHead title="Privacy apps" className="section-head" />*/}
