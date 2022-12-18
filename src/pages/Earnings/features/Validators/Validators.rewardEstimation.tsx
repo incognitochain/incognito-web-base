@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { memo, useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
-import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, CartesianGrid, ComposedChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import styled, { DefaultTheme } from 'styled-components/macro';
 import { convertISOtoMMYYYY } from 'utils/timeUtils';
 
@@ -184,7 +184,7 @@ const ValidatorRewardEstimation = () => {
     const activeValidatorChartData: ChartDataItem[] = listData;
     const result = activeValidatorChartData.map((item, index) => ({
       time: convertISOtoMMYYYY(item.startOfMonth),
-      APR: formatPrice({ price: item.averageAPR }),
+      // APR: formatPrice({ price: item.averageAPR }),
       'Active Validator': item.activeValidator,
     }));
     setDrawDataChart(result);
@@ -269,16 +269,16 @@ const ValidatorRewardEstimation = () => {
                 domain={[0, MAX_APR]}
                 tickCount={8}
               />
-              <Line
-                isAnimationActive={false}
-                type="monotone"
-                orientation="right"
-                strokeWidth={0.8}
-                dataKey="APR"
-                dot={{ stroke: '#FFFFFF', strokeWidth: 1, r: 4, strokeDasharray: '' }}
-                stroke="#FFFFFF"
-                fill={'#FFFFFF'}
-              />
+              {/*<Line*/}
+              {/*  isAnimationActive={false}*/}
+              {/*  type="monotone"*/}
+              {/*  orientation="right"*/}
+              {/*  strokeWidth={0.8}*/}
+              {/*  dataKey="APR"*/}
+              {/*  dot={{ stroke: '#FFFFFF', strokeWidth: 1, r: 4, strokeDasharray: '' }}*/}
+              {/*  stroke="#FFFFFF"*/}
+              {/*  fill={'#FFFFFF'}*/}
+              {/*/>*/}
             </ComposedChart>
           </ResponsiveContainer>
         </div>
