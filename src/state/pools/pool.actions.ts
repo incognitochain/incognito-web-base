@@ -1,3 +1,4 @@
+import { PRV } from 'constants/token';
 import { getPools } from 'services/rpcClient';
 
 import { AppDispatch, AppState } from '../index';
@@ -20,7 +21,34 @@ export const actionGetPools = () => async (dispatch: AppDispatch, getState: AppS
     let pools = parseListPoolApiResponse(data);
     pools.sort((a, b) => b.apy - a.apy);
 
-    dispatch(actionSetPools(pools));
+    const poolsArrayNoPRV = pools.filter((pool) => pool?.token1ID !== PRV.id && pool?.token2ID !== PRV.id);
+    const poolsArrayHasPRV = pools.filter((pool) => pool?.token1ID === PRV.id || pool?.token2ID === PRV.id);
+
+    const btcPrvPool = poolsArrayHasPRV.filter((pool) => pool?.token1Symbol === 'BTC' && pool?.token2Symbol === 'PRV');
+    const ethPrvPool = poolsArrayHasPRV.filter((pool) => pool?.token1Symbol === 'ETH' && pool?.token2Symbol === 'PRV');
+    const usdtPrvPool = poolsArrayHasPRV.filter(
+      (pool) => pool?.token1Symbol === 'USDT' && pool?.token2Symbol === 'PRV'
+    );
+    const bnbPrvPool = poolsArrayHasPRV.filter((pool) => pool?.token1Symbol === 'BNB' && pool?.token2Symbol === 'PRV');
+
+    const newPoolsArrayHasPRV = poolsArrayHasPRV?.filter(
+      (pool) =>
+        (pool?.token1Symbol !== 'BTC' || pool?.token2Symbol !== 'PRV') &&
+        (pool?.token1Symbol !== 'ETH' || pool?.token2Symbol !== 'PRV') &&
+        (pool?.token1Symbol !== 'BNB' || pool?.token2Symbol !== 'PRV') &&
+        (pool?.token1Symbol !== 'USDT' || pool?.token2Symbol !== 'PRV')
+    );
+
+    let newPools: any = [
+      ...btcPrvPool,
+      ...ethPrvPool,
+      ...usdtPrvPool,
+      ...bnbPrvPool,
+      ...newPoolsArrayHasPRV,
+      ...poolsArrayNoPRV,
+    ];
+
+    dispatch(actionSetPools(newPools));
   } catch (e) {
     console.log('GET POOLS WITH ERROR: ', e);
   }
