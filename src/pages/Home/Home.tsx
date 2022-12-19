@@ -6,7 +6,7 @@ import Analytics from './Home.analytics';
 import Collections from './Home.colections';
 import GroupButtons from './Home.groupBtn';
 import { Container } from './Home.styled';
-
+import BGImg from './images/background.png';
 const Home = () => {
   const { width, height } = useWindowSize();
 
@@ -30,15 +30,19 @@ const Home = () => {
   }, [width, height]);
 
   return (
-    <Container height={contentSize}>
-      <h2 className="main-header-text">The privacy layer of crypto</h2>
-      <p className="h8 sub-header-text">
-        Privacy is a fundamental human right. Even more so for crypto users. Which is why we build Incognito to protect
-        it.
-      </p>
-      <GroupButtons />
-      <Analytics />
-      <Collections />
+    <Container height={contentSize} style={{ backgroundImage: `url(${BGImg})` }}>
+      <div className="section-1">
+        <h2 className="main-header-text">The privacy layer of crypto</h2>
+        <p className="sub-header-text">
+          Privacy is a fundamental human right. Even more so for crypto users. Which is why we build Incognito to
+          protect it.
+        </p>
+        <GroupButtons />
+      </div>
+      <div className="section-2">
+        <Analytics />
+        <Collections />
+      </div>
     </Container>
   );
 };

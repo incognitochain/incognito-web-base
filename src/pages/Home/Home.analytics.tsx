@@ -16,6 +16,7 @@ export const Styled = styled.div`
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
+  width: 100%;
   .achieve-title {
     text-align: center;
   }
