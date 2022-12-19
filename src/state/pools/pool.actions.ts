@@ -29,13 +29,13 @@ export const actionGetPools = () => async (dispatch: AppDispatch, getState: AppS
     const prvUsdtPool = poolsArrayHasPRV.filter(
       (pool) => pool?.token1Symbol === 'PRV' && pool?.token2Symbol === 'USDT'
     );
-    const bnbPrvPool = poolsArrayHasPRV.filter((pool) => pool?.token1Symbol === 'BNB' && pool?.token2Symbol === 'PRV');
+    const xmrPrvPool = poolsArrayHasPRV.filter((pool) => pool?.token1Symbol === 'XMR' && pool?.token2Symbol === 'PRV');
 
     const newPoolsArrayHasPRV = poolsArrayHasPRV?.filter(
       (pool) =>
         (pool?.token1Symbol !== 'BTC' || pool?.token2Symbol !== 'PRV') &&
         (pool?.token1Symbol !== 'ETH' || pool?.token2Symbol !== 'PRV') &&
-        (pool?.token1Symbol !== 'BNB' || pool?.token2Symbol !== 'PRV') &&
+        (pool?.token1Symbol !== 'XMR' || pool?.token2Symbol !== 'PRV') &&
         (pool?.token1Symbol !== 'PRV' || pool?.token2Symbol !== 'USDT')
     );
 
@@ -43,7 +43,7 @@ export const actionGetPools = () => async (dispatch: AppDispatch, getState: AppS
       ...btcPrvPool,
       ...ethPrvPool,
       ...prvUsdtPool,
-      ...bnbPrvPool,
+      ...xmrPrvPool,
       ...newPoolsArrayHasPRV,
       ...poolsArrayNoPRV,
     ];
