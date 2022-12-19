@@ -20,6 +20,9 @@ import { DarkModeQueryParamReader } from 'theme';
 
 import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
+import CreateProposal from './Dao/CreateProposal';
+import Governance from './Dao/Governance';
+import ProposalDetail from './Dao/ProposalDetail';
 import Earnings from './Earnings';
 import Validators from './Earnings/features/Validators/Validators';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
@@ -111,6 +114,9 @@ const App = () => {
           <Route exact path="/privacy-policy" component={Policy} />
           <Route exact path="/term-of-service" component={TermOfService} />
           <Route exact path="/earnings/validator" component={Validators} />
+          <Route exact path="/vote" component={Governance} />
+          <Route exact path="/create-proposal" component={CreateProposal} />
+          <Route exact path="/vote/:id" component={ProposalDetail} />
         </>
       </Switch>
     );
