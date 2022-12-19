@@ -45,8 +45,8 @@ export const Styled = styled.div`
     width: fit-content;
   }
   img {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     cursor: pointer;
     :hover {
       opacity: 0.8;

@@ -6,7 +6,7 @@ import React, { memo } from 'react';
 import { isMobile } from 'react-device-detect';
 
 import { Styled } from './Footer.styled';
-import BookSVG from './images/book.png';
+import BookSVG from './images/book.svg';
 import DiscordSVG from './images/discord.svg';
 import ForumSVG from './images/forum.svg';
 import TelegramSVG from './images/telegram.svg';
