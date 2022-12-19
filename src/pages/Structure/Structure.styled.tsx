@@ -26,18 +26,20 @@ export const Icon = styled.div<{ isSelected: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 120px;
   :hover {
     opacity: 0.8;
   }
   p {
     margin-top: 8px;
-    color: ${({ isSelected, theme }) => (isSelected ? theme.btn1 : '')};
+    font-size: 14px;
+    color: ${({ isSelected, theme }) => (isSelected ? theme.color_grey : 'white')};
   }
   svg {
     width: 40px;
     height: 40px;
     path {
-      fill: ${({ isSelected, theme }) => (isSelected ? theme.btn1 : 'white')};
+      fill: ${({ isSelected, theme }) => (isSelected ? theme.color_grey : 'white')};
     }
   }
   ${({ theme }) => theme.mediaWidth.upToSmall`

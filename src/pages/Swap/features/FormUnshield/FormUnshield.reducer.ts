@@ -1,5 +1,3 @@
-import { isMainnet } from 'config';
-import { SupportedChainId } from 'constants/chains';
 import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { Reducer } from 'redux';
 
@@ -8,18 +6,18 @@ const { ACCOUNT_CONSTANT } = require('incognito-chain-web-js/build/wallet');
 
 const initialState: IFormUnshieldState = {
   sellToken: {
-    parentIdentify: `${BIG_COINS.ETH_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
-    identify: `${BIG_COINS.ETH_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
-    currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
-    networkName: MAIN_NETWORK_NAME.INCOGNITO,
-    chainID: isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN,
+    parentIdentify: `${BIG_COINS.BITCOIN.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.BTC}`,
+    identify: `${BIG_COINS.BITCOIN.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.BTC}`,
+    currency: PRIVATE_TOKEN_CURRENCY_TYPE.BTC,
+    networkName: MAIN_NETWORK_NAME.BTC,
+    chainID: undefined,
   },
   buyToken: {
-    parentIdentify: `${BIG_COINS.USDC_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
-    identify: `${BIG_COINS.USDC_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
-    currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
-    chainID: isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN,
-    networkName: MAIN_NETWORK_NAME.INCOGNITO,
+    parentIdentify: `${BIG_COINS.PRV.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.PRV}`,
+    identify: `${BIG_COINS.PRV.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.PRV}`,
+    currency: PRIVATE_TOKEN_CURRENCY_TYPE.PRV,
+    chainID: undefined,
+    networkName: MAIN_NETWORK_NAME.PRV,
   },
   networkFee: ACCOUNT_CONSTANT.MAX_FEE_PER_TX,
   networkFeeToken: PRV.identify,

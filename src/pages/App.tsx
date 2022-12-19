@@ -19,6 +19,7 @@ import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
 import Earnings from './Earnings';
 import Validators from './Earnings/features/Validators/Validators';
+import { GetPRV } from './GetPRV';
 import Home from './Home';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
@@ -114,6 +115,7 @@ const App = () => {
           <Route exact path="/privacy-policy" component={Policy} />
           <Route exact path="/term-of-service" component={TermOfService} />
           <Route exact path="/mine/validator" component={Validators} />
+          <Route exact path="/get-prv" component={GetPRV} />
         </>
       </Switch>
     );

@@ -30,7 +30,7 @@ export const Styled = styled(Row)`
       margin-right: 16px;
       margin-left: 16px;
       font-weight: 500;
-      font-size: 18px;
+      font-size: 16px;
       line-height: 140%;
     }
   }

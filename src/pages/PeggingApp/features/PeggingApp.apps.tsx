@@ -13,10 +13,13 @@ import unknowImg from 'assets/images/unknow-icon.png';
 import React from 'react';
 // import { isMobile } from 'react-device-detect';
 import styled, { DefaultTheme } from 'styled-components/macro';
-const Styled = styled(Row)`
+const Styled = styled.div`
   margin-top: 60px;
-  flex-direction: row;
-  justify-content: space-between;
+  //flex-direction: row;
+  //justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 30px;
   .line-view {
     width: 24px;
   }
@@ -34,6 +37,24 @@ const Styled = styled(Row)`
     margin-top: 40px;
   }
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+        grid-template-columns: auto auto;
+        flex-direction: column;
+        margin-top: 0px;
+        .app-margin-top {
+            margin-top: 0px;
+        }
+        .app-margin-right {
+          margin-right: 0px;
+        }
+        .app-margin-left {
+          margin-left: 0px;
+        }
+        .app-margin-top-small {
+            margin-top: 8px;
+        }
+  `}
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+        grid-template-columns: auto;
         flex-direction: column;
         margin-top: 0px;
         .app-margin-top {
@@ -64,9 +85,9 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .item-img {
-    margin-right: 32px;
-    width: 120px;
-    height: 120px;
+    margin-right: 24px;
+    width: 88px;
+    height: 88px;
   }
 
   .large-text {
@@ -85,8 +106,8 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .wrap-chain {
-    margin-right: 10px;
-    min-height: 40px;
+    margin-right: 8px;
+    min-height: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -100,7 +121,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .wrap-main-content {
-    flex-direction: column;
+    //flex-direction: column;
   }
 
   .desc-text {
@@ -112,7 +133,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .name-desc-text {
-    margin-left: 16px;
+    //margin-left: 16px;
   }
 
   .link-text {
@@ -121,37 +142,19 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .wrap-status {
-    padding: 2px 8px;
-    border: 1px solid ${({ theme }) => theme.text1};
+    padding: 1px 4px;
     width: fit-content;
     color: ${({ theme }) => theme.text1};
     border-radius: 4px;
     margin-bottom: 8px;
+    background-color: ${({ theme }) => theme.bg4};
   }
 
   .status-text {
     height: fit-content;
   }
-
-  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-      .wrap-item-content {
-        padding: 32px 32px 40px;
-      }
-      .item-img {
-        width: 90px;
-        height: 90px;
-      }
-      .large-text {
-        font-size: 22px;
-        line-height: 30px;
-      }
-      .medium-text {
-        font-size: 16px;
-      }
-      .status-text {
-        font-size: 12px;
-      }
-  `};
+  .wrap-apps-head {
+  }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
         width: 100%;
@@ -165,8 +168,8 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
         }
         .item-img {
             margin-right: 16px;
-            width: 50px;
-            height: 50px;
+            width: 70px;
+            height: 70px;
         }
        .desc-text {
          margin-top: 24px;
@@ -188,8 +191,6 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
       }
       .name-desc-text {
         margin-left: 0px;
-      }
-      .wrap-apps-head {
       }
       .wrap-chain {
         margin-right: 8px;
@@ -234,8 +235,8 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
   );
   let isMobile = false;
   return (
-    <StyledItem md={24} xl={12} key={data.name} isMobile={isMobile}>
-      <Col className={`wrap-item-content background2 ${className}`}>
+    <StyledItem key={data.name} isMobile={isMobile}>
+      <Col className={`wrap-item-content background2`}>
         <Row align="middle" className="wrap-apps-head">
           <img src={data.img} className="item-img" alt="icon" />
           <Col className="wrap-main-content">
@@ -245,11 +246,12 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
                 <h5 className="normal-text">{data.name}</h5>
                 {isMobile && Status}
               </Row>
-              <p className="text2 normal-text name-desc-text h8">{data.nameDesc}</p>
             </div>
-            {!isMobile && ChainList}
+            <p className="text2 normal-text name-desc-text h8">{data.nameDesc}</p>
+            {/*{!isMobile && ChainList}*/}
           </Col>
-          {isMobile && ChainList}
+          {/*{isMobile && ChainList}*/}
+          {ChainList}
         </Row>
         <p className="normal-text desc-text description h8 color-white" style={{ color: 'white' }}>
           {data.desc}{' '}
