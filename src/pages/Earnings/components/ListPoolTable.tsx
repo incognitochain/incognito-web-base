@@ -238,7 +238,6 @@ const ListPoolTable = () => {
       responsive: ['md'],
       align: 'left',
       showSorterTooltip: false,
-      sortDirections: ['descend', 'ascend', 'descend'],
       render: (text) => <p className="baseText">${text.toFixed(2)}</p>,
       sorter: (a, b) => a.volume - b.volume,
       // eslint-disable-next-line react/prop-types
@@ -251,8 +250,10 @@ const ListPoolTable = () => {
             {sortedColumn ? (
               sortedColumn.order === 'ascend' ? (
                 <img src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
-              ) : (
+              ) : sortedColumn?.order === 'descend' ? (
                 <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              ) : (
+                <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
               )
             ) : (
               <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
@@ -266,8 +267,6 @@ const ListPoolTable = () => {
       dataIndex: 'apy',
       render: (text) => <p className="greenBoldText">{text}%</p>,
       align: 'right',
-      defaultSortOrder: 'descend',
-      sortDirections: ['descend', 'ascend', 'descend'],
       showSorterTooltip: false,
       sorter: (a, b) => a.apy - b.apy,
       // eslint-disable-next-line react/prop-types
@@ -280,8 +279,10 @@ const ListPoolTable = () => {
             {sortedColumn ? (
               sortedColumn.order === 'ascend' ? (
                 <img src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
-              ) : (
+              ) : sortedColumn?.order === 'descend' ? (
                 <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              ) : (
+                <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
               )
             ) : (
               <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
