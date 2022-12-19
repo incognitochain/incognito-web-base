@@ -177,6 +177,8 @@ const getUnshieldData = ({
     parentIdentify: buyParentIdentify,
   } = buyToken;
 
+  console.log('SANG TEST: ', { sellToken, buyToken });
+
   const formType: FormTypes =
     sellParentIdentify && buyParentIdentify && sellParentIdentify === buyParentIdentify
       ? FormTypes.UNSHIELD
