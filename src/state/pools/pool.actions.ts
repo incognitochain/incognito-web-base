@@ -36,9 +36,9 @@ export const actionGetPools = () => async (dispatch: AppDispatch, getState: AppS
     const newPoolsArrayHasPRV = poolsArrayHasPRV?.filter(
       (pool) =>
         (pool?.token1Symbol !== 'BTC' || pool?.token2Symbol !== 'PRV') &&
-        (pool?.token1Symbol !== 'ETH' || pool?.token1CurrencyType === 25 || pool?.token2Symbol !== 'PRV') &&
+        (pool?.token1Symbol !== 'ETH' || pool?.token1CurrencyType !== 25 || pool?.token2Symbol !== 'PRV') &&
         (pool?.token1Symbol !== 'XMR' || pool?.token2Symbol !== 'PRV') &&
-        (pool?.token1Symbol !== 'PRV' || pool?.token2Symbol !== 'USDT' || pool?.token2CurrencyType === 25)
+        (pool?.token1Symbol !== 'PRV' || pool?.token2Symbol !== 'USDT' || pool?.token2CurrencyType !== 25)
     );
 
     let newPools: any = [
