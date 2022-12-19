@@ -1,18 +1,14 @@
 import * as React from 'react';
 
-const OverviewIcon = (props: any) => (
-  <svg width={40} height={40} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <g clipPath="url(#a)" fill="#fff">
-      <path d="M39.517 39.517a1.667 1.667 0 0 0 0-2.367l-4.183-4.167a.433.433 0 0 1 0-.516 9.216 9.216 0 1 0-2.817 2.816.433.433 0 0 1 .517 0l4.167 4.184a1.667 1.667 0 0 0 2.316.05Zm-11.966-6.184a5.834 5.834 0 1 1 0-11.668 5.834 5.834 0 0 1 0 11.668Z" />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M16.033 25.35a11.668 11.668 0 0 1 6.55-8.333 11.267 11.267 0 0 1 6.934-.95.418.418 0 0 0 .483-.45V8.683a2.5 2.5 0 0 0-.733-1.766L23.083.733A2.5 2.5 0 0 0 21.317 0H2.5A2.5 2.5 0 0 0 0 2.5v31.667a2.5 2.5 0 0 0 2.5 2.5h16.667a.417.417 0 0 0 .3-.7 11.667 11.667 0 0 1-3.434-10.617ZM5 10c0-.92.746-1.667 1.667-1.667h16.666a1.667 1.667 0 1 1 0 3.334H6.667C5.747 11.667 5 10.92 5 10Zm1.667 5a1.667 1.667 0 0 0 0 3.333h6.666a1.667 1.667 0 1 0 0-3.333H6.667Z"
-      />
+const OverviewIcon = ({ color = '#fff' }: { color: string }) => (
+  <svg width={40} height={40} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clipPath="url(#a)" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6.25 11.25h17.5m-17.5 7.5h6.25m-6.25 7.5h6.25m0 7.5H3.75a2.5 2.5 0 0 1-2.5-2.5V3.75a2.5 2.5 0 0 1 2.5-2.5h17.715a2.5 2.5 0 0 1 1.767.732l4.786 4.786a2.5 2.5 0 0 1 .732 1.767V12.5" />
+      <path d="M26.273 35a8.75 8.75 0 1 0 0-17.5 8.75 8.75 0 0 0 0 17.5Zm12.477 3.75-6.29-6.313" />
     </g>
     <defs>
       <clipPath id="a">
-        <path fill="#fff" d="M0 0h40v40H0z" />
+        <path fill={color} d="M0 0h40v40H0z" />
       </clipPath>
     </defs>
   </svg>

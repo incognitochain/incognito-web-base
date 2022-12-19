@@ -38,9 +38,6 @@ export const Icon = styled.div<{ isSelected: boolean }>`
   svg {
     width: 40px;
     height: 40px;
-    path {
-      fill: ${({ isSelected, theme }) => (isSelected ? theme.color_grey : 'white')};
-    }
   }
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin-left: 10px;
