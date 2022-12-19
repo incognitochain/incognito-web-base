@@ -14,15 +14,15 @@ import { Header, Icon, Styled } from './Structure.styled';
 export const HeaderNode = () => {
   const history = useHistory();
   const Factory = [
-    { icon: <OverviewIcon />, desc: 'Overview', path: '/mine', func: () => history.replace('/mine') },
+    { icon: OverviewIcon, desc: 'Overview', path: '/mine', func: () => history.replace('/mine') },
     {
-      icon: <VNodeIcon />,
+      icon: VNodeIcon,
       desc: 'Virtual Node',
       path: '/mine/validator',
       func: () => history.replace('/mine/validator'),
     },
     {
-      icon: <ExplorerIcon />,
+      icon: ExplorerIcon,
       desc: isMobile ? 'Explorer' : 'Network Explorer',
       func: () => window.open('https://explorer.incognito.org/', '_blank'),
     },
@@ -31,9 +31,11 @@ export const HeaderNode = () => {
     <Header>
       {Factory.map((item) => {
         const isSelected = item.path && window.location.pathname === (item.path || '');
+        const VectorIcon = item.icon;
         return (
           <Icon isSelected={!!isSelected} className="wrap-item" key={item.desc} onClick={item.func}>
-            {item.icon}
+            {/* eslint-disable-next-line react/jsx-pascal-case */}
+            {<VectorIcon color={isSelected ? '#9C9C9C' : 'white'} />}
             <p className="h8">{item.desc}</p>
           </Icon>
         );

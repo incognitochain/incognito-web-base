@@ -1,12 +1,16 @@
+import 'react-modal-video/scss/modal-video.scss';
+
 import { WatchIcon } from 'components/icons';
 import { BIG_COINS, PRV } from 'constants/token';
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
+import ModalVideo from 'react-modal-video';
 import { useHistory } from 'react-router-dom';
 
 import { ButtonWrapper } from './Home.styled';
 
 const GroupButtons = () => {
   const history = useHistory();
+  const [isOpen, setOpen] = useState(false);
   return (
     <ButtonWrapper>
       <div
@@ -15,10 +19,23 @@ const GroupButtons = () => {
       >
         Get PRV
       </div>
-      <div className="btn-watch" onClick={() => window.open('https://www.youtube.com/watch?v=bafTu0kGfq4', '_blank')}>
+      <div
+        className="btn-watch"
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
         <WatchIcon />
         <p className="text-watch fs-regular">Watch the film</p>
       </div>
+      <ModalVideo
+        channel="youtube"
+        allowFullScreen={true}
+        isOpen={isOpen}
+        youtube={{ mute: 0, autoplay: 1 }}
+        videoId="bafTu0kGfq4"
+        onClose={() => setOpen(false)}
+      />
     </ButtonWrapper>
   );
 };
