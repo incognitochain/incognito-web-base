@@ -6,10 +6,10 @@ const { ACCOUNT_CONSTANT } = require('incognito-chain-web-js/build/wallet');
 
 const initialState: IFormUnshieldState = {
   sellToken: {
-    parentIdentify: `${BIG_COINS.BITCOIN.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.BTC}`,
-    identify: `${BIG_COINS.BITCOIN.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.BTC}`,
-    currency: PRIVATE_TOKEN_CURRENCY_TYPE.BTC,
-    networkName: MAIN_NETWORK_NAME.BTC,
+    parentIdentify: `${BIG_COINS.USDT_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
+    identify: `${BIG_COINS.USDT_UNIFIED.tokenID}-${PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN}`,
+    currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
+    networkName: MAIN_NETWORK_NAME.INCOGNITO,
     chainID: undefined,
   },
   buyToken: {
