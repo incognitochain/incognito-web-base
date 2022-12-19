@@ -11,11 +11,16 @@ const Container = styled.div<{ height: number }>`
     text-align: center;
   }
   .sub-header-text {
-    max-width: 527px;
+    max-width: 580px;
     text-align: center;
+    font-weight: 500;
+    font-size: 20px;
     margin-top: 16px;
     margin-left: auto;
     margin-right: auto;
+  }
+  .modal-video {
+    background-color: rgba(0, 0, 0, 0.7);
   }
 `;
 
@@ -58,6 +63,15 @@ const ButtonWrapper = styled(Row)`
   .text-watch {
     color: ${({ theme }) => theme.color_white};
     margin-left: 8px;
+  }
+  iframe {
+    border-radius: 16px;
+  }
+  .modal-video-movie-wrap {
+    background-color: transparent;
+  }
+  .modal-video-close-btn {
+    display: none;
   }
 `;
 
