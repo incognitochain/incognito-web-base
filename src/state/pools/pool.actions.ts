@@ -26,8 +26,8 @@ export const actionGetPools = () => async (dispatch: AppDispatch, getState: AppS
 
     const btcPrvPool = poolsArrayHasPRV.filter((pool) => pool?.token1Symbol === 'BTC' && pool?.token2Symbol === 'PRV');
     const ethPrvPool = poolsArrayHasPRV.filter((pool) => pool?.token1Symbol === 'ETH' && pool?.token2Symbol === 'PRV');
-    const usdtPrvPool = poolsArrayHasPRV.filter(
-      (pool) => pool?.token1Symbol === 'USDT' && pool?.token2Symbol === 'PRV'
+    const prvUsdtPool = poolsArrayHasPRV.filter(
+      (pool) => pool?.token1Symbol === 'PRV' && pool?.token2Symbol === 'USDT'
     );
     const bnbPrvPool = poolsArrayHasPRV.filter((pool) => pool?.token1Symbol === 'BNB' && pool?.token2Symbol === 'PRV');
 
@@ -36,13 +36,13 @@ export const actionGetPools = () => async (dispatch: AppDispatch, getState: AppS
         (pool?.token1Symbol !== 'BTC' || pool?.token2Symbol !== 'PRV') &&
         (pool?.token1Symbol !== 'ETH' || pool?.token2Symbol !== 'PRV') &&
         (pool?.token1Symbol !== 'BNB' || pool?.token2Symbol !== 'PRV') &&
-        (pool?.token1Symbol !== 'USDT' || pool?.token2Symbol !== 'PRV')
+        (pool?.token1Symbol !== 'PRV' || pool?.token2Symbol !== 'USDT')
     );
 
     let newPools: any = [
       ...btcPrvPool,
       ...ethPrvPool,
-      ...usdtPrvPool,
+      ...prvUsdtPool,
       ...bnbPrvPool,
       ...newPoolsArrayHasPRV,
       ...poolsArrayNoPRV,
