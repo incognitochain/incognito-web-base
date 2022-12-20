@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 
 const Container = styled.div<{ height: number }>`
   min-height: ${({ height }) => height}px;
+  margin-top: -25px;
   width: 100%;
   padding-bottom: 10px;
   background-repeat: no-repeat;
