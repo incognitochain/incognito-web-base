@@ -39,8 +39,8 @@ const Home = () => {
         </p>
         <GroupButtons />
       </div>
+      <Analytics />
       <div className="section-2">
-        <Analytics />
         <Collections />
       </div>
     </Container>
