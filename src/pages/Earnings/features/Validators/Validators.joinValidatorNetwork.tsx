@@ -30,11 +30,11 @@ const Styled = styled.div`
   .leftView {
     display: flex;
     flex: 1;
-    padding: 70px;
+    padding: 40px;
     justify-content: center;
     flex-direction: column;
     .descriptionContainer {
-      margin-top: 40px;
+      margin-top: 20px;
     }
   }
 
@@ -59,7 +59,7 @@ const Styled = styled.div`
     flex-direction: row;
     .leftView {
       flex: 1.1;
-      padding: 50px;
+      padding: 40px;
     }
     .rightView {
       flex: 0.9;
@@ -90,12 +90,12 @@ const ValidatorsJoinNetwork = () => {
   return (
     <Styled>
       <div className="leftView">
-        <h1>Join the Validator Network</h1>
+        <h3>Join the Validator Network</h3>
         <div className="descriptionContainer">
-          <h6>
+          <p className="h8">
             Validators imply a group of nodes that perform consensus work, including verifying transactions, voting to
             add new blocks to the blockchain and earning block rewards.
-          </h6>
+          </p>
           <div
             className="btn-buy fs-regular"
             onClick={() => {

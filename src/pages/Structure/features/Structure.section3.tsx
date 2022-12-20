@@ -33,6 +33,8 @@ const Styled = styled(Row)`
     cursor: pointer;
     margin-top: 24px;
     text-align: left;
+    font-weight: 500;
+    font-size: 16px;
   }
   .section3-item {
     padding-bottom: 60px;
@@ -51,6 +53,7 @@ const Styled = styled(Row)`
   .title-2 {
     white-space: pre-wrap;
     text-align: left;
+    font-weight: 700;
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
@@ -107,7 +110,7 @@ ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
 const Item = React.memo(({ image, title, desc, linkText, isRevert, link }: IFactory) => {
   const _Image = React.useMemo(
     () => (
-      <Col xs={24} lg={8}>
+      <Col xs={24} lg={10}>
         <Image className="image" src={image} alt="structure" />
       </Col>
     ),
@@ -115,12 +118,14 @@ const Item = React.memo(({ image, title, desc, linkText, isRevert, link }: IFact
   );
   const _Content = React.useMemo(
     () => (
-      <Col xs={24} xxl={10} lg={12}>
-        <h3 className="title margin-add title-2">{title}</h3>
-        <h6 className="text2 descripiton-1">{desc}</h6>
-        <a className="link-text description" href={link}>
+      <Col xs={24} xxl={10} lg={10}>
+        <h4 className="title margin-add title-2">{title}</h4>
+        <p className="text2 h8" style={{ marginBottom: 24 }}>
+          {desc}
+        </p>
+        <a className="link-text" href={link}>
           {` ${linkText}`}
-          <img src={linkImg} style={{ width: 18, height: 'auto', marginLeft: 5 }} alt="link-icon" />
+          <img src={linkImg} style={{ width: 16, height: 'auto', marginLeft: 5, marginBottom: 2 }} alt="link-icon" />
         </a>
       </Col>
     ),

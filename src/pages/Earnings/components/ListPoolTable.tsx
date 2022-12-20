@@ -203,27 +203,31 @@ const ListPoolTable = () => {
       title: 'Pool',
       dataIndex: 'pool',
       key: 'pool',
-      render: (text, record, index) => (
-        <div className="poolContainer">
-          <div style={{ display: 'flex' }}>
-            <img src={getIconUrl(record.token1Symbol)} style={{ width: 24, height: 24, borderRadius: 12 }} />
-            <img
-              src={getIconUrl(record.token2Symbol)}
-              style={{ width: 24, height: 24, borderRadius: 12, marginRight: 8 }}
-            />
-            <p className="baseText" style={{ marginRight: 8 }}>
-              {record?.token1Symbol} / {record?.token2Symbol}
-            </p>
-          </div>
+      render: (text, record, index) => {
+        const size1 = record.token1Symbol === 'PRV' ? 32 : 28;
+        const size2 = record.token2Symbol === 'PRV' ? 32 : 28;
+        return (
+          <div className="poolContainer">
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <img src={getIconUrl(record.token1Symbol)} style={{ width: size1, height: size1, borderRadius: 12 }} />
+              <img
+                src={getIconUrl(record.token2Symbol)}
+                style={{ width: size2, height: size2, borderRadius: 12, marginRight: 8 }}
+              />
+              <p className="baseText" style={{ marginRight: 8 }}>
+                {record?.token1Symbol} / {record?.token2Symbol}
+              </p>
+            </div>
 
-          <NetworkBox>
-            <p className="smallText" style={{ color: '#757575' }}>
-              {PRIVATE_TOKEN_CURRENCY_NAME[record.token1CurrencyType]} /{' '}
-              {PRIVATE_TOKEN_CURRENCY_NAME[record.token2CurrencyType]}
-            </p>
-          </NetworkBox>
-        </div>
-      ),
+            <NetworkBox>
+              <p className="smallText" style={{ color: '#757575' }}>
+                {PRIVATE_TOKEN_CURRENCY_NAME[record.token1CurrencyType]} /{' '}
+                {PRIVATE_TOKEN_CURRENCY_NAME[record.token2CurrencyType]}
+              </p>
+            </NetworkBox>
+          </div>
+        );
+      },
     },
     {
       title: 'TVL',

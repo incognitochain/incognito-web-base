@@ -99,6 +99,9 @@ const ButtonWrapper = styled(Row)`
   .modal-video-close-btn {
     display: none;
   }
+  .modal-video-body {
+    max-width: 1200px;
+  }
 `;
 
 const CollectionWrapper = styled(Row)`
@@ -119,10 +122,10 @@ const CollectionItem = styled.div`
   :hover {
     opacity: 0.8;
   }
-  border-radius: 8px;
+  border-radius: 16px;
   padding: 24px;
   aspect-ratio: 390 / 320;
-  background-color: ${({ theme }) => theme.color_grey3};
+  background-color: ${({ theme }) => theme.color_grey2};
   display: flex;
   flex-direction: column;
   justify-content: space-between;

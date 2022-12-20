@@ -84,7 +84,7 @@ const ValidatorAskedQuestion = () => {
     <Styled>
       <div className="leftView">
         <div className="title-container center">
-          <h1 className="title-custom">Frequently Asked Questions</h1>
+          <h3 className="title-custom">{`Frequently Asked\n Questions`}</h3>
         </div>
 
         <button
