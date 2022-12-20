@@ -204,7 +204,7 @@ const ValidatorHowToStack = () => {
     <Styled ref={myRef} id="HOW_STAKE">
       <div className="topView">
         <div className="topLeft">
-          <h1>How to stake</h1>
+          <h3>How to stake</h3>
         </div>
         <div className="topRight">
           <button
