@@ -3,13 +3,14 @@ import { PRVIcon } from 'components/icons';
 import React, { memo } from 'react';
 
 import Analytics from './GetPRV.analytics';
+import Promote from './GetPRV.promote';
 import { Container, Content, Header } from './GetPRV.styled';
 
 const GetPRV = () => {
   return (
     <Container className="default-max-width">
       <Header>
-        <Col>
+        <Col className="col-1">
           <Col>
             <h3>Get PRV</h3>
             <p className="sub-header h8">
@@ -29,6 +30,7 @@ const GetPRV = () => {
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the standard
           dummy text ever since the 1500s
         </p>
+        <Promote />
       </Content>
     </Container>
   );
