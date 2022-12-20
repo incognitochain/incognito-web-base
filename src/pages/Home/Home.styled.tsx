@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 
 const Container = styled.div<{ height: number }>`
   min-height: ${({ height }) => height}px;
+  margin-top: -25px;
   width: 100%;
   padding-bottom: 10px;
   background-repeat: no-repeat;
@@ -10,6 +11,7 @@ const Container = styled.div<{ height: number }>`
   border: inset 14px transparent;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   .main-header-text {
     width: 100%;
     font-weight: 600;
@@ -105,7 +107,6 @@ const ButtonWrapper = styled(Row)`
 `;
 
 const CollectionWrapper = styled(Row)`
-  margin-top: 42px;
   display: grid;
   grid-gap: 30px;
   margin-left: auto;

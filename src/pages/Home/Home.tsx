@@ -20,7 +20,7 @@ const Home = () => {
       const headerHeight = header.clientHeight;
       // const footerHeight = footer.clientHeight;
       const footerHeight = 0;
-      contentSize = height - headerHeight - footerHeight - 55;
+      contentSize = height - headerHeight - footerHeight - 35;
     }
     setContentSize(contentSize);
   };
@@ -39,8 +39,8 @@ const Home = () => {
         </p>
         <GroupButtons />
       </div>
+      <Analytics />
       <div className="section-2">
-        <Analytics />
         <Collections />
       </div>
     </Container>
