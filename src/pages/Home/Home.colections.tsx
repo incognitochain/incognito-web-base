@@ -19,7 +19,7 @@ const SwapAnimation = () => {
       preserveAspectRatio: 'xMidYMid slice',
     },
   };
-  return <Lottie style={{ width: '100%', aspectRatio: '312 / 120', height: 'fit-content' }} options={defaultOptions} />;
+  return <Lottie style={{ width: '85%', aspectRatio: '312 / 120', height: 'fit-content' }} options={defaultOptions} />;
 };
 
 const Collections = () => {
@@ -37,7 +37,6 @@ const Collections = () => {
   };
 
   const openLink = ({ link, tokenID1, tokenID2 }: { link: string; tokenID1?: string; tokenID2?: string }) => {
-    if (isMobile) return;
     // history.push('/', { tokenId1: r?.token1ID, tokenId2: r?.token2ID });
     history.push(link, {});
   };
