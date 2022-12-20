@@ -99,6 +99,9 @@ const ButtonWrapper = styled(Row)`
   .modal-video-close-btn {
     display: none;
   }
+  .modal-video-body {
+    max-width: 1200px;
+  }
 `;
 
 const CollectionWrapper = styled(Row)`
