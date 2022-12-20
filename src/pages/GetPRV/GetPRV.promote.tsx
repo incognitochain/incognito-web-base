@@ -8,7 +8,7 @@ import StakeSVG from './images/stake.svg';
 export const Styled = styled.div`
   display: grid;
   grid-template-columns: auto auto auto;
-  gap: 80px;
+  gap: 40px;
   margin-top: 50px;
   .wrap-item {
     display: flex;
