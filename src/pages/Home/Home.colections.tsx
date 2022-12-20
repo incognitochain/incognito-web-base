@@ -1,13 +1,26 @@
 import { Row } from 'antd';
+import animationData from 'assets/swap.json';
 import { LinkIcon } from 'components/icons';
 import React, { memo } from 'react';
 import { isMobile } from 'react-device-detect';
+import Lottie from 'react-lottie';
 import { useHistory } from 'react-router-dom';
 
 import { CollectionItem, CollectionWrapper } from './Home.styled';
 import DAppsImg from './images/dapps.png';
 import PNodeImg from './images/pnode.png';
-import SwapImg from './images/swap.png';
+
+const SwapAnimation = () => {
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
+  return <Lottie style={{ width: '100%', aspectRatio: '312 / 120', height: 'fit-content' }} options={defaultOptions} />;
+};
 
 const Collections = () => {
   const history = useHistory();
@@ -33,7 +46,8 @@ const Collections = () => {
     <CollectionWrapper className="default-max-width">
       <CollectionItem onClick={() => openLink({ link: '/swap' })}>
         {renderHeader({ title: 'Swap', desc: 'Trade 100+ cryptocurrencies anonymously.', showIcon: !isMobile })}
-        <img className="swap-image" src={SwapImg} alt="image" />
+        {/*<img className="swap-image" src={SwapImg} alt="image" />*/}
+        <SwapAnimation />
       </CollectionItem>
       <CollectionItem onClick={() => openLink({ link: '/mine' })}>
         {renderHeader({ title: 'Mine', desc: 'Power privacy with a beautiful device.' })}
