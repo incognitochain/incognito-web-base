@@ -25,6 +25,12 @@ const Styled = styled(Row)`
   .btn-become-validator {
     margin-top: 50px;
     width: 196px;
+    background-color: ${({ theme }) => theme.btn1};
+    font-size: 14px;
+    height: 50px !important;
+    :hover {
+      opacity: 0.8;
+    }
   }
   .col-section1 {
     display: flex;
@@ -53,7 +59,7 @@ const Styled = styled(Row)`
       }
       .btn-become-validator {
         margin-top: 24px;
-        height: 50px;
+        height: 40px;
         font-size: 18px;
       }
       .logo-stroke {

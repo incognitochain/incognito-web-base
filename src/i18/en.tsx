@@ -21,7 +21,7 @@ const language: ILanguage = {
     volumeTraded: 'Volume traded',
     anonymousTrades: 'Anonymous trades',
     privateCryptocurrencies: 'Private cryptocurrencies',
-    bridgedBlockchains: 'Bridged blockchains',
+    bridgedBlockchains: 'Bridges supported',
   },
   peggingApp: {
     mainTitle: 'Use your favorite\ncrypto apps privately.',

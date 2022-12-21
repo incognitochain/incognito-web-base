@@ -119,10 +119,10 @@ const Analytics = () => {
         desc: 'Volume shielded',
       },
       {
-        number: 1,
-        prefix: '',
+        number: 6,
+        prefix: '+',
         suffix: 'M',
-        desc: 'Anonymous trades',
+        desc: 'Anonymous transactions',
       },
       {
         number: 100,
@@ -136,7 +136,7 @@ const Analytics = () => {
         number: 16,
         prefix: '',
         suffix: '',
-        desc: 'Bridged blockchains',
+        desc: 'Bridges supported',
       },
     ],
     [marketTrs]
