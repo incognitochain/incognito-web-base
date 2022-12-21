@@ -150,7 +150,7 @@ const CollectionItem = styled.div`
   }
   .pnode-image {
     //margin-left: 28px;
-    max-width: 40%;
+    max-width: 70%;
     max-height: 100%;
     margin-right: auto;
     margin-left: auto;

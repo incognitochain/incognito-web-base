@@ -1,5 +1,6 @@
 import { Row } from 'antd';
-import animationData from 'assets/swap.json';
+import swapAnim from 'assets/swap.json';
+import useAnim from 'assets/use.json';
 import { LinkIcon } from 'components/icons';
 import React, { memo } from 'react';
 import { isMobile } from 'react-device-detect';
@@ -7,19 +8,30 @@ import Lottie from 'react-lottie';
 import { useHistory } from 'react-router-dom';
 
 import { CollectionItem, CollectionWrapper } from './Home.styled';
-import DAppsImg from './images/dapps.png';
 import PNodeImg from './images/pnode.png';
 
 const SwapAnimation = () => {
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData,
+    animationData: swapAnim as any,
     rendererSettings: {
       preserveAspectRatio: 'xMidYMid slice',
     },
   };
   return <Lottie style={{ width: '85%', aspectRatio: '312 / 120', height: 'fit-content' }} options={defaultOptions} />;
+};
+
+const UseAnimation = () => {
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: useAnim as any,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
+  return <Lottie style={{ width: '85%', aspectRatio: '326 / 164', height: 'fit-content' }} options={defaultOptions} />;
 };
 
 const Collections = () => {
@@ -54,7 +66,8 @@ const Collections = () => {
       </CollectionItem>
       <CollectionItem onClick={() => openLink({ link: '/use' })}>
         {renderHeader({ title: 'Use', desc: 'Use Uniswap and 10+ dapps privately.' })}
-        <img className="dapps-image" src={DAppsImg} alt="image" />
+        {/*<img className="dapps-image" src={DAppsImg} alt="image" />*/}
+        <UseAnimation />
       </CollectionItem>
     </CollectionWrapper>
   );
