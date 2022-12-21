@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { memo, useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
-import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, CartesianGrid, ComposedChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import styled, { DefaultTheme } from 'styled-components/macro';
 import { convertISOtoMMYYYY } from 'utils/timeUtils';
 
@@ -33,9 +33,13 @@ const ChartDataInit: ChartData = {
 };
 
 const Styled = styled.div<{ isMobile: boolean }>`
-  margin-top: 140px;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
+  h5 {
+    font-size: 20px;
+    margin-top: 8px;
+  }
 
   .contentView {
     margin-top: 60px;
@@ -65,7 +69,7 @@ const Styled = styled.div<{ isMobile: boolean }>`
           display: flex;
           flex-direction: row;
           justify-content: space-between;
-          margin-bottom: 30px;
+          margin-bottom: 16px;
         }
       }
     }
@@ -184,7 +188,7 @@ const ValidatorRewardEstimation = () => {
     const activeValidatorChartData: ChartDataItem[] = listData;
     const result = activeValidatorChartData.map((item, index) => ({
       time: convertISOtoMMYYYY(item.startOfMonth),
-      APR: formatPrice({ price: item.averageAPR }),
+      // APR: formatPrice({ price: item.averageAPR }),
       'Active Validator': item.activeValidator,
     }));
     setDrawDataChart(result);
@@ -196,7 +200,7 @@ const ValidatorRewardEstimation = () => {
 
   return (
     <Styled isMobile={isMobile}>
-      <h1 className="text-center">Rewards Estimation</h1>
+      <h3 className="text-center">Rewards Estimation</h3>
       <div className="contentView">
         <div className="leftView">
           <ResponsiveContainer className="chart-container" width="96%">
@@ -269,16 +273,16 @@ const ValidatorRewardEstimation = () => {
                 domain={[0, MAX_APR]}
                 tickCount={8}
               />
-              <Line
-                isAnimationActive={false}
-                type="monotone"
-                orientation="right"
-                strokeWidth={0.8}
-                dataKey="APR"
-                dot={{ stroke: '#FFFFFF', strokeWidth: 1, r: 4, strokeDasharray: '' }}
-                stroke="#FFFFFF"
-                fill={'#FFFFFF'}
-              />
+              {/*<Line*/}
+              {/*  isAnimationActive={false}*/}
+              {/*  type="monotone"*/}
+              {/*  orientation="right"*/}
+              {/*  strokeWidth={0.8}*/}
+              {/*  dataKey="APR"*/}
+              {/*  dot={{ stroke: '#FFFFFF', strokeWidth: 1, r: 4, strokeDasharray: '' }}*/}
+              {/*  stroke="#FFFFFF"*/}
+              {/*  fill={'#FFFFFF'}*/}
+              {/*/>*/}
             </ComposedChart>
           </ResponsiveContainer>
         </div>

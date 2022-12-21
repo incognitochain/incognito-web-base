@@ -11,7 +11,6 @@ import { route as ValidatorRoute } from '../../Earnings/features/Validators/Vali
 
 const Styled = styled(Row)`
   .main-title {
-    font-weight: 500;
     letter-spacing: 0.015em;
     white-space: pre-wrap;
   }
@@ -20,8 +19,8 @@ const Styled = styled(Row)`
     letter-spacing: 0.01em;
   }
   .logo-stroke {
-    width: 35%;
-    max-width: 432px;
+    width: 45%;
+    max-width: 700px;
   }
   .btn-become-validator {
     margin-top: 50px;
@@ -58,8 +57,7 @@ const Styled = styled(Row)`
         font-size: 18px;
       }
       .logo-stroke {
-        width: 170px;
-        height: 170px;
+        width: 90%;
         margin-bottom: 45px;
       }
   `}
@@ -80,15 +78,11 @@ const Section1 = () => {
   const structureTrs = useSelector(structureTranslateSelector);
   const history = useHistory();
   return (
-    <Styled
-      align="middle"
-      justify="space-between"
-      className="default-padding-horizontal default-margin-top default-margin-bottom"
-    >
-      <Col className="col-section1 ">
+    <Styled align="middle" justify="space-between" className="default-max-width default-margin-bottom">
+      <Col className="col-section1">
         <SectionHead title="Privacy Infrastructure" />
-        <p className="main-title main-title-text">{structureTrs.mainTitle}</p>
-        <p className="sub-main-title sub-title-text text2">{structureTrs.mainDesc}</p>
+        <h3 className="main-title h3">{structureTrs.mainTitle}</h3>
+        <p className="sub-main-title sub-title-text h8">{structureTrs.mainDesc}</p>
         <Button
           type="primary"
           shape="round"

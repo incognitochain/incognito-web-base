@@ -57,6 +57,8 @@ const Styled = styled.div`
     flex-direction: column;
     .title-container {
       .title-custom {
+        text-align: center;
+        font-weight: 700;
       }
       .description-custom {
         width: 100%;
@@ -107,7 +109,7 @@ const Styled = styled.div`
 
 const AnswerItem = ({ answer }: any) => {
   const text = answer.replace(/\n/g, '<span class="br"></span>');
-  return <h6 dangerouslySetInnerHTML={{ __html: text }} style={{ color: '#9C9C9C' }}></h6>;
+  return <p className="h8" dangerouslySetInnerHTML={{ __html: text }} style={{ color: '#9C9C9C' }}></p>;
 };
 
 const ValidatorAskedQuestion = () => {
@@ -126,10 +128,10 @@ const ValidatorAskedQuestion = () => {
     <Styled>
       <div className="titleView">
         <div className="title-container">
-          <h1 className="title-custom">What is Incognito Exchange?</h1>
+          <h3 className="title-custom">What is Incognito Exchange?</h3>
         </div>
         <div className="title-container">
-          <h6 className="description-custom" style={{ color: '#9C9C9C' }}>
+          <p className="h8 description-custom" style={{ color: '#9C9C9C' }}>
             Incognito exchange is a one-stop-shop that facilitates anonymous swap for all coins across many popular
             blockchains such as Bitcoin, Monero, Ethereum, BNB Chain, Avalanche, etc.
             <br />
@@ -138,7 +140,7 @@ const ValidatorAskedQuestion = () => {
             shortage liquidity, Incognito exchange takes a novel approach to achieve both by implementing privacy via
             zero-knowledge proofs, inter-blockchain trading with huge liquidity via interoperable dApps (a.k.a DEXs such
             as Uniswap, Curve, PancakeSwap and SpookySwap).
-          </h6>
+          </p>
         </div>
       </div>
       <div className="questionView">

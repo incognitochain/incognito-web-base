@@ -153,6 +153,16 @@ const BIG_COINS = {
       ? '545ef6e26d4d428b16117523935b6be85ec0a63e8c2afeb0162315eb0ce3d151'
       : '6fa448f24835b0c72e62004edf391679fdbc391a82e4edb3726d16251509a2d0',
   },
+  USDT_UNIFIED: {
+    tokenID: isMainnet
+      ? '076a4423fa20922526bd50b0d7b0dc1c593ce16e15ba141ede5fb5a28aa3f229'
+      : '6fa448f24835b0c72e62004edf391679fdbc391a82e4edb3726d16251509a2d0',
+  },
+  BITCOIN: {
+    tokenID: isMainnet
+      ? 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696'
+      : 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
+  },
 };
 
 const PRIVATE_TOKEN_TYPE = {

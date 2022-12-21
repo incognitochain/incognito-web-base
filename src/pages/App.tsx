@@ -2,8 +2,6 @@
 import 'antd/dist/antd.css';
 import './reset.scss';
 
-import messageIcon from 'assets/svg/message.svg';
-import supportIcon from 'assets/svg/support.svg';
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Footer from 'components/Core/Footer';
 import Header from 'components/Core/Header';
@@ -11,8 +9,7 @@ import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWa
 import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
-import { Suspense, useEffect } from 'react';
-import { isMobile } from 'react-device-detect';
+import React, { Suspense, useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components/macro';
@@ -25,6 +22,8 @@ import Governance from './Dao/Governance';
 import ProposalDetail from './Dao/ProposalDetail';
 import Earnings from './Earnings';
 import Validators from './Earnings/features/Validators/Validators';
+import { GetPRV } from './GetPRV';
+import Home from './Home';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
 import PageNotFound from './PageNotFound/PageNotFound';
@@ -32,6 +31,9 @@ import PeggingApp from './PeggingApp';
 import Policy from './Policy';
 import Structure from './Structure';
 import TermOfService from './TermOfService';
+
+export const HEADER_ID = 'HEADER_VIEW';
+export const FOOTER_ID = 'FOOTER_VIEW';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -43,7 +45,7 @@ const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 120px 0px 0px 0px;
+  padding: 130px 0 0 0;
   align-items: center;
   flex: 1;
   z-index: 1;
@@ -60,6 +62,7 @@ const HeaderWrapper = styled.div`
   position: fixed;
   top: 0;
   z-index: 2;
+  background-color: ${({ theme }) => theme.bg2};
 `;
 
 const SupportIcon = styled.img`
@@ -106,17 +109,19 @@ const App = () => {
           {/* <Route exact path="/swap/:outputCurrency" component={RedirectToSwap} /> */}
           <Route exact path="/page-not-found" component={PageNotFound} />
           <Route exact path="/internet-disconnected" component={InternetDisconnected} />
-          <Route exact path="/" component={Market} />
-          <Route exact path="/market" component={Market} />
-          <Route exact path="/apps" component={PeggingApp} />
-          <Route exact path="/infrastructure" component={Structure} />
+          {/*<Route exact path="/" component={Market} />*/}
+          <Route exact path="/" component={Home} />
+          <Route exact path="/swap" component={Market} />
+          <Route exact path="/use" component={PeggingApp} />
+          <Route exact path="/mine" component={Structure} />
           <Route exact path="/earnings" component={Earnings} />
           <Route exact path="/privacy-policy" component={Policy} />
           <Route exact path="/term-of-service" component={TermOfService} />
-          <Route exact path="/earnings/validator" component={Validators} />
           <Route exact path="/vote" component={Governance} />
           <Route exact path="/create-proposal" component={CreateProposal} />
           <Route exact path="/vote/:id" component={ProposalDetail} />
+          <Route exact path="/mine/validator" component={Validators} />
+          <Route exact path="/get-prv" component={GetPRV} />
         </>
       </Switch>
     );
@@ -127,39 +132,39 @@ const App = () => {
       <Route component={DarkModeQueryParamReader} />
       <IncognitoWalletProvider>
         <AppWrapper>
-          <HeaderWrapper>
+          <HeaderWrapper id={HEADER_ID}>
             <Header />
           </HeaderWrapper>
           <BodyWrapper>
             <Popups />
             <Suspense fallback={<Loader />}>{renderContent()}</Suspense>
             <Footer />
-            {!isMobile && (
-              <div
-                style={{
-                  position: 'fixed',
-                  bottom: 24,
-                  right: 24,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  zIndex: 3,
-                }}
-              >
-                <SupportIcon
-                  onClick={() => {
-                    window.open('https://we.incognito.org/g/Support', '_blank');
-                  }}
-                  src={messageIcon}
-                />
-                <div style={{ height: 16 }} />
-                <SupportIcon
-                  onClick={() => {
-                    window.open('https://t.me/incognitochain', '_blank');
-                  }}
-                  src={supportIcon}
-                />
-              </div>
-            )}
+            {/*{!isMobile && (*/}
+            {/*  <div*/}
+            {/*    style={{*/}
+            {/*      position: 'fixed',*/}
+            {/*      bottom: 24,*/}
+            {/*      right: 24,*/}
+            {/*      display: 'flex',*/}
+            {/*      flexDirection: 'column',*/}
+            {/*      zIndex: 3,*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    <SupportIcon*/}
+            {/*      onClick={() => {*/}
+            {/*        window.open('https://we.incognito.org/g/Support', '_blank');*/}
+            {/*      }}*/}
+            {/*      src={messageIcon}*/}
+            {/*    />*/}
+            {/*    <div style={{ height: 16 }} />*/}
+            {/*    <SupportIcon*/}
+            {/*      onClick={() => {*/}
+            {/*        window.open('https://t.me/incognitochain', '_blank');*/}
+            {/*      }}*/}
+            {/*      src={supportIcon}*/}
+            {/*    />*/}
+            {/*  </div>*/}
+            {/*)}*/}
           </BodyWrapper>
         </AppWrapper>
       </IncognitoWalletProvider>

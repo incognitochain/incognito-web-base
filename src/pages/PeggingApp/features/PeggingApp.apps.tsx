@@ -13,10 +13,13 @@ import unknowImg from 'assets/images/unknow-icon.png';
 import React from 'react';
 // import { isMobile } from 'react-device-detect';
 import styled, { DefaultTheme } from 'styled-components/macro';
-const Styled = styled(Row)`
+const Styled = styled.div`
   margin-top: 60px;
-  flex-direction: row;
-  justify-content: space-between;
+  //flex-direction: row;
+  //justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 30px;
   .line-view {
     width: 24px;
   }
@@ -34,6 +37,24 @@ const Styled = styled(Row)`
     margin-top: 40px;
   }
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+        grid-template-columns: auto auto;
+        flex-direction: column;
+        margin-top: 0px;
+        .app-margin-top {
+            margin-top: 0px;
+        }
+        .app-margin-right {
+          margin-right: 0px;
+        }
+        .app-margin-left {
+          margin-left: 0px;
+        }
+        .app-margin-top-small {
+            margin-top: 8px;
+        }
+  `}
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+        grid-template-columns: auto;
         flex-direction: column;
         margin-top: 0px;
         .app-margin-top {
@@ -54,7 +75,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   display: flex;
 
   .wrap-item-content {
-    padding: 60px 60px 50px;
+    padding: 30px 30px 20px;
     border-radius: 16px;
     flex: 1;
   }
@@ -64,9 +85,9 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .item-img {
-    margin-right: 32px;
-    width: 120px;
-    height: 120px;
+    margin-right: 24px;
+    width: 88px;
+    height: 88px;
   }
 
   .large-text {
@@ -85,8 +106,8 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .wrap-chain {
-    margin-right: 10px;
-    min-height: 48px;
+    margin-right: 8px;
+    min-height: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -94,14 +115,17 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
     padding-left: 16px;
     border-radius: 8px;
     background: ${({ theme }) => theme.background3};
+    p {
+      color: white;
+    }
   }
 
   .wrap-main-content {
-    flex-direction: column;
+    //flex-direction: column;
   }
 
   .desc-text {
-    margin-top: 40px;
+    margin-top: 32px;
   }
 
   .medium-text {
@@ -109,7 +133,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .name-desc-text {
-    margin-left: 16px;
+    //margin-left: 16px;
   }
 
   .link-text {
@@ -118,37 +142,19 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .wrap-status {
-    padding: 2px 8px;
-    border: 1px solid ${({ theme }) => theme.text1};
+    padding: 1px 4px;
     width: fit-content;
     color: ${({ theme }) => theme.text1};
     border-radius: 4px;
     margin-bottom: 8px;
+    background-color: ${({ theme }) => theme.bg4};
   }
 
   .status-text {
     height: fit-content;
   }
-
-  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-      .wrap-item-content {
-        padding: 32px 32px 40px;
-      }
-      .item-img {
-        width: 90px;
-        height: 90px;
-      }
-      .large-text {
-        font-size: 22px;
-        line-height: 30px;
-      }
-      .medium-text {
-        font-size: 16px;
-      }
-      .status-text {
-        font-size: 12px;
-      }
-  `};
+  .wrap-apps-head {
+  }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
         width: 100%;
@@ -162,8 +168,8 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
         }
         .item-img {
             margin-right: 16px;
-            width: 50px;
-            height: 50px;
+            width: 70px;
+            height: 70px;
         }
        .desc-text {
          margin-top: 24px;
@@ -185,8 +191,6 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
       }
       .name-desc-text {
         margin-left: 0px;
-      }
-      .wrap-apps-head {
       }
       .wrap-chain {
         margin-right: 8px;
@@ -212,7 +216,7 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
       <Row style={{ minWidth: 250 }}>
         {data.chain.map((item: any) => (
           <div style={{ marginTop: 12 }} key={item} className="wrap-chain background3">
-            <p className="description5 color-white">{item}</p>
+            <p className="h8">{item}</p>
           </div>
         ))}
       </Row>
@@ -231,24 +235,25 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
   );
   let isMobile = false;
   return (
-    <StyledItem md={24} xl={12} key={data.name} isMobile={isMobile}>
-      <Col className={`wrap-item-content background2 ${className}`}>
+    <StyledItem key={data.name} isMobile={isMobile}>
+      <Col className={`wrap-item-content background2`}>
         <Row align="middle" className="wrap-apps-head">
           <img src={data.img} className="item-img" alt="icon" />
           <Col className="wrap-main-content">
             {!isMobile && Status}
             <div className="wrap-name">
               <Row align="middle">
-                <p className="normal-text h3_1">{data.name}</p>
+                <h5 className="normal-text">{data.name}</h5>
                 {isMobile && Status}
               </Row>
-              <h6 className="text2 normal-text name-desc-text">{data.nameDesc}</h6>
             </div>
-            {!isMobile && ChainList}
+            <p className="text2 normal-text name-desc-text h8">{data.nameDesc}</p>
+            {/*{!isMobile && ChainList}*/}
           </Col>
-          {isMobile && ChainList}
+          {/*{isMobile && ChainList}*/}
+          {ChainList}
         </Row>
-        <p className="normal-text desc-text description color-white">
+        <p className="normal-text desc-text description h8 color-white" style={{ color: 'white' }}>
           {data.desc}{' '}
           {!!data.link && (
             <span
@@ -318,7 +323,7 @@ const PeggingListApps = () => {
         data={{
           img: joeImg,
           name: 'pTraderJoe',
-          status: 'COMING SOON',
+          status: 'SHIPPED',
           nameDesc: 'Private Trader Joe',
           chain: ['Avalanche', 'DEX'],
           desc: 'Trade confidentially on Trader Joe. Faster privacy swap is enabled by fast transaction finality on Avalanche.',
