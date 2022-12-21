@@ -33,7 +33,7 @@ export const Icon = styled.div<{ isSelected: boolean }>`
   p {
     margin-top: 8px;
     font-size: 14px;
-    color: ${({ isSelected, theme }) => (isSelected ? theme.color_grey : 'white')};
+    color: ${({ isSelected, theme }) => (isSelected ? 'white' : theme.color_grey)};
   }
   svg {
     width: 40px;
