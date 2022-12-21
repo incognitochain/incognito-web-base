@@ -35,7 +35,7 @@ export const HeaderNode = () => {
         return (
           <Icon isSelected={!!isSelected} className="wrap-item" key={item.desc} onClick={item.func}>
             {/* eslint-disable-next-line react/jsx-pascal-case */}
-            {<VectorIcon color={isSelected ? '#9C9C9C' : 'white'} />}
+            {<VectorIcon color={isSelected ? 'white' : '#9C9C9C'} />}
             <p className="h8">{item.desc}</p>
           </Icon>
         );

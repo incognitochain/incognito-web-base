@@ -1,7 +1,8 @@
 import styled from 'styled-components/macro';
 
-const Container = styled.div`
+const Container = styled.div<{ height: number }>`
   padding-bottom: 80px;
+  min-height: ${({ height }) => height}px;
   width: 100%;
 `;
 
@@ -30,8 +31,8 @@ const Header = styled.div`
       padding: 26px;
       gap: 20px;
       svg {
-        max-width: 120px;
-        min-width: 120px;
+        max-width: 200px;
+        min-width: 200px;
         margin-left: auto;
         margin-right: auto;
       }

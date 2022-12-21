@@ -38,6 +38,7 @@ export interface IFee {
   extraFee: number;
   useFast2xFee?: boolean;
   centralizedAddress?: string;
+  feeAddressShardID?: number;
 }
 
 export interface IUnshieldData {
@@ -330,13 +331,15 @@ const getUnshieldData = ({
     estimatedBurnAmount: 0,
     estimatedExpectedAmount: 0,
     extraFee: 0,
+    feeAddressShardID: undefined,
   };
   let burnFeeTokenIdentify = '';
   let estReceiveAmount: any;
   let expectedReceiveAmount: any = '0';
   if (userFee) {
     isUseTokenFee = userFee?.isUseTokenFee || false;
-    const { fee, id, feeAddress, estimatedBurnAmount, estimatedExpectedAmount, estimateFee } = userFee;
+    const { fee, id, feeAddress, estimatedBurnAmount, estimatedExpectedAmount, estimateFee, feeAddressShardID } =
+      userFee;
     const burnFee = isUseBurnFeeLevel1 ? fee.level1 : fee.level2;
     burnFeeTokenIdentify = isUseTokenFee ? _sellToken.identify : PRV.identify;
     const burnFeeToken = isUseTokenFee ? _sellToken.tokenID : PRV.id;
@@ -361,6 +364,7 @@ const getUnshieldData = ({
       estimatedBurnAmount,
       estimatedExpectedAmount,
       useFast2xFee: !isUseBurnFeeLevel1,
+      feeAddressShardID,
     };
 
     const minAmount: number = new BigNumber(_sellToken.identify === networkFeeToken ? 1 + networkFee : 1)
