@@ -26,7 +26,7 @@ const LeftColumn = styled.div`
   flex-wrap: wrap;
   h3 {
     font-weight: 700;
-    font-size: 36px;
+    font-size: 34px;
   }
   .pig-image {
     width: 24px;

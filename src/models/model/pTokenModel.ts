@@ -39,6 +39,7 @@ class PToken {
   shortName: string;
   network: string;
   networkName?: MAIN_NETWORK_NAME;
+  formatedNetworkName?: string;
   supportedNetwork?: ITokenNetwork[];
   chainID?: SupportedChainId;
   iconUrl: string;
@@ -139,7 +140,8 @@ class PToken {
     this.pricePRV = data?.PricePrv || 0;
 
     this.change = data?.PercentChange24h || '';
-    this.network = data?.Network;
+    this.formatedNetworkName = this.networkName === 'Incognito' ? 'Incognito' : `p${this.networkName}`;
+    this.network = ['Incognito', 'Unified'].includes(data?.Network) ? 'Incognito' : `p${data?.Network}`;
     this.movedUnifiedToken = data?.MovedUnifiedToken;
 
     // Token
