@@ -64,7 +64,12 @@ const enhanceSelect = (WrappedComponent: any) => {
     const handleRotateSwapToken = () => dispatch(actionRotateSwapTokens());
 
     React.useEffect(() => {
-      history.replace(`/swap`, {});
+      // let path = window.location.pathname;
+      // const search = window.location.search;
+      // if (search && search.includes('exchange')) {
+      //   path += search;
+      // }
+      // history.replace(path, {});
     }, []);
 
     React.useEffect(() => {

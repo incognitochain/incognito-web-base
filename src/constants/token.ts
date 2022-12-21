@@ -18,6 +18,7 @@ import zecLogoUrl from 'assets/svg/zec-logo.svg';
 import zilLogoUrl from 'assets/svg/zil-logo.svg';
 import { isMainnet } from 'config';
 
+import { SwapExchange } from '../pages/Swap/features/FormUnshield/FormUnshield.types';
 import { SupportedChainId } from './chains';
 const { PRVIDSTR } = require('incognito-chain-web-js/build/web/wallet');
 
@@ -370,11 +371,29 @@ const MAIN_TOKENS = {
   ZIL_TOKEN_ID,
 };
 
+const GROUP_CURRENCY_TYPE_BY_EXCHANGE: IGroupNetwork = {
+  [SwapExchange.UNISWAP]: [
+    PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
+    PRIVATE_TOKEN_CURRENCY_TYPE.ERC20,
+    PRIVATE_TOKEN_CURRENCY_TYPE.MATIC,
+    PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20,
+  ],
+
+  [SwapExchange.PANCAKE_SWAP]: [PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB, PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20],
+
+  [SwapExchange.CURVE]: [PRIVATE_TOKEN_CURRENCY_TYPE.MATIC, PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20],
+
+  [SwapExchange.SPOOKY]: [PRIVATE_TOKEN_CURRENCY_TYPE.FTM, PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20],
+
+  [SwapExchange.JOE]: [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX, PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20],
+};
+
 export {
   BIG_COINS,
   CONNECT_NETWORK_IMG,
   CRYPTO_ICON_URL,
   DECIMALS,
+  GROUP_CURRENCY_TYPE_BY_EXCHANGE,
   GROUP_NETWORK,
   MAIN_NETWORK_NAME,
   MAIN_NETWORK_NAME_ICON,
