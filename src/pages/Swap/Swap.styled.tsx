@@ -19,13 +19,14 @@ const Container = styled.div`
 `;
 
 const LeftColumn = styled.div`
-  max-width: 570px;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
   h3 {
     font-weight: 700;
+    font-size: 36px;
   }
   .pig-image {
     width: 24px;
