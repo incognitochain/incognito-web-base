@@ -37,17 +37,17 @@ const Promote = () => {
     {
       icon: StakeSVG,
       title: 'Staking',
-      desc: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      desc: 'Users will be able to stake their tokens to become Incognito network validators to perform consensus work, including verifying transactions, voting to add new blocks to the blockchain and earning block rewards.',
     },
     {
       icon: PaymentSVG,
-      title: 'Payment',
-      desc: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      title: 'Utility',
+      desc: 'PRV is accepted as utility token for paying the network fee to participate in privacy markets and use your favorite apps privately.',
     },
     {
       icon: GovernanceSVG,
       title: 'Governance',
-      desc: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      desc: 'PRV holders will shape the future of Incognito by signaling their support for upgrades to the ecosystem and directing usage of a Community Treasury.',
     },
   ];
 
