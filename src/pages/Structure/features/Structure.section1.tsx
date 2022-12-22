@@ -36,7 +36,8 @@ const Styled = styled(Row)`
   .btn-buy-pnode {
     margin-top: 50px;
     width: 196px;
-    background-color: ${({ theme }) => theme.btn1};
+    background-color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.btn1};
     font-size: 14px;
     height: 50px !important;
     margin-left: 24px;
@@ -139,7 +140,7 @@ const Section1 = () => {
           {/*    window.open('https://node1-staging.incognito.org/', '_blank');*/}
           {/*  }}*/}
           {/*>*/}
-          {/*  Buy a PNode*/}
+          {/*  Buy a Node*/}
           {/*</Button>*/}
         </Row>
       </Col>
