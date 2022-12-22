@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from '../../services/rpcMetric';
 import ListPoolTable from './components/ListPoolTable';
 
 export const Styled = styled.div`
@@ -72,6 +73,10 @@ const Earnings = () => {
           <div
             className="button"
             onClick={() => {
+              updateMetric({
+                metric: METRIC_TYPE.EARN_NOW,
+                uniqMetric: METRIC_UNIQ.EARN_NOW_UNIQ,
+              });
               window.open('https://we.incognito.org/t/how-to-contribute-liquidity-and-earn-rewards/15254', '_blank');
             }}
           >
@@ -81,6 +86,10 @@ const Earnings = () => {
             className="button"
             style={{ backgroundColor: 'transparent', marginLeft: 8 }}
             onClick={() => {
+              updateMetric({
+                metric: METRIC_TYPE.EARN_MORE_DETAIL,
+                uniqMetric: METRIC_UNIQ.EARN_MORE_DETAIL_UNIQ,
+              });
               window.open('https://we.incognito.org/t/incognito-exchange-liquidity-mining/16083', '_blank');
             }}
           >
