@@ -26,6 +26,9 @@ import Market from './Market';
 import PageNotFound from './PageNotFound/PageNotFound';
 import PeggingApp from './PeggingApp';
 import Policy from './Policy';
+import POpensea from './POpensea';
+import POpenseaDetail from './POpenseaDetail';
+import POpenseaNFTDetail from './POpenseaNFTDetail';
 import Structure from './Structure';
 import TermOfService from './TermOfService';
 
@@ -116,6 +119,9 @@ const App = () => {
           <Route exact path="/term-of-service" component={TermOfService} />
           <Route exact path="/mine/validator" component={Validators} />
           <Route exact path="/get-prv" component={GetPRV} />
+          <Route exact path="/popensea" component={POpensea} />
+          <Route exact path="/popensea/collection-detail" component={POpenseaDetail} />
+          <Route exact path="/popensea/collection-detail/nft-detail" component={POpenseaNFTDetail} />
         </>
       </Switch>
     );

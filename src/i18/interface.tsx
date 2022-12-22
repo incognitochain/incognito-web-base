@@ -3,6 +3,7 @@ export interface ILanguage {
   market: IMarket;
   peggingApp: IPeggingApp;
   structure: IStructure;
+  pOpensea: IPOpenseaApp;
 }
 
 export interface IMarket {
@@ -59,4 +60,8 @@ export interface IStructure {
   privacyFuel: string;
   privacyFuelDesc: string;
   privacyFuelMore: string;
+}
+
+export interface IPOpenseaApp {
+  mainTitle: string;
 }

@@ -11,6 +11,7 @@ import trisolarisImg from 'assets/images/trisolaris-icon.png';
 import uniImg from 'assets/images/uni-icon.png';
 import unknowImg from 'assets/images/unknow-icon.png';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 // import { isMobile } from 'react-device-detect';
 import styled, { DefaultTheme } from 'styled-components/macro';
 const Styled = styled.div`
@@ -210,7 +211,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   `};
 `;
 
-const Item = React.memo(({ className, data }: { className?: string; data: any }) => {
+const Item = React.memo(({ className, data, onClick }: { className?: string; data: any; onClick?(): void }) => {
   const ChainList = React.useMemo(
     () => (
       <Row style={{ minWidth: 250 }}>
@@ -235,7 +236,7 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
   );
   let isMobile = false;
   return (
-    <StyledItem key={data.name} isMobile={isMobile}>
+    <StyledItem key={data.name} isMobile={isMobile} onClick={onClick}>
       <Col className={`wrap-item-content background2`}>
         <Row align="middle" className="wrap-apps-head">
           <img src={data.img} className="item-img" alt="icon" />
@@ -273,8 +274,25 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
 });
 
 const PeggingListApps = () => {
+  const history = useHistory();
+
+  const onClickpOpensea = () => {
+    history.replace('/popensea');
+  };
   return (
     <Styled>
+      <Item
+        data={{
+          img: cakeImg,
+          name: 'pOpensea',
+          nameDesc: 'Private Pancake',
+          status: 'SHIPPED',
+          chain: ['BNB Chain', 'DEX'],
+          desc: "Trade anonymously on BNB Chain's leading DEX. Deep liquidity and super low fees – now with privacy.",
+        }}
+        className="app-margin-right"
+        onClick={onClickpOpensea}
+      />
       <Item
         data={{
           img: cakeImg,
