@@ -16,6 +16,7 @@ export const Styled = styled.div`
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
+  max-width: 1000px !important;
   .achieve-title {
     text-align: center;
   }
@@ -111,16 +112,10 @@ const Analytics = () => {
   const Factory = React.useMemo(
     () => [
       {
-        number: '59985000',
+        number: '31155919',
         prefix: '',
         suffix: '',
-        desc: 'Supply at public sale',
-      },
-      {
-        number: 0.5,
-        prefix: '$',
-        suffix: '',
-        desc: 'Supply at public sale',
+        desc: 'Circulating Supply',
       },
       {
         number: '100000000',

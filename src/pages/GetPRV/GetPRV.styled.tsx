@@ -15,8 +15,12 @@ const Header = styled.div`
   gap: 100px;
   .sub-header {
     margin-top: 16px;
-    flex: 1;
     margin-right: 20px;
+    max-width: 450px;
+  }
+  .btn-get-prv {
+    max-width: 180px;
+    margin-top: 50px;
   }
   svg {
     min-width: 265px;
