@@ -3,6 +3,7 @@ import maxBy from 'lodash/maxBy';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from 'services/rpcMetric';
 import { poolsSelectors } from 'state/pools';
 import styled from 'styled-components/macro';
 
@@ -46,7 +47,16 @@ const MarketTitleBox = () => {
   return (
     <Styled>
       <p className="h8 text1">Become a liquidity provider and earn up to {higherAPYPool?.apy || ''}% APY.</p>
-      <Row className="row" onClick={() => history.push('/earnings')}>
+      <Row
+        className="row"
+        onClick={() => {
+          updateMetric({
+            metric: METRIC_TYPE.SWAP_PROVIDE_LIQUIDITY,
+            uniqMetric: METRIC_UNIQ.SWAP_PROVIDE_LIQUIDITY_UNIQ,
+          });
+          history.push('/earnings');
+        }}
+      >
         <p className="h8 text2">Provide liquidity</p>
         <img src={ArrowLeftImg} alt="image" />
       </Row>

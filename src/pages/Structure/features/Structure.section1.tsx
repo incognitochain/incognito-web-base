@@ -2,13 +2,12 @@ import { Button, Col, Row } from 'antd';
 import logoStrokeImg from 'assets/images/infrastrure-logo.png';
 import SectionHead from 'components/Core/SectionHead';
 import { structureTranslateSelector } from 'config/Configs.selector';
+import { route as ValidatorRoute } from 'pages/Earnings/features/Validators/Validators.route';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from 'services/rpcMetric';
 import styled, { DefaultTheme } from 'styled-components/macro';
-
-import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from '../../../services/rpcMetric';
-import { route as ValidatorRoute } from '../../Earnings/features/Validators/Validators.route';
 
 const Styled = styled(Row)`
   .main-title {
