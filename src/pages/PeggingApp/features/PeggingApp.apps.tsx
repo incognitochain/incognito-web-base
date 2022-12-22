@@ -10,15 +10,15 @@ import spookyImg from 'assets/images/spooky-icon.png';
 import trisolarisImg from 'assets/images/trisolaris-icon.png';
 import uniImg from 'assets/images/uni-icon.png';
 import unknowImg from 'assets/images/unknow-icon.png';
+import { LinkIcon } from 'components/icons';
+import { MAIN_NETWORK_NAME } from 'constants/token';
+import { actionSetSwapNetwork } from 'pages/Swap/features/FormUnshield/FormUnshield.actions';
 import { SwapExchange } from 'pages/Swap/features/FormUnshield/FormUnshield.types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { useAppDispatch } from 'state/hooks';
 // import { isMobile } from 'react-device-detect';
 import styled, { DefaultTheme } from 'styled-components/macro';
-
-import { MAIN_NETWORK_NAME } from '../../../constants';
-import { useAppDispatch } from '../../../state/hooks';
-import { actionSetSwapNetwork } from '../../Swap/features/FormUnshield/FormUnshield.actions';
 
 const Styled = styled.div`
   margin-top: 60px;
@@ -42,6 +42,11 @@ const Styled = styled.div`
   }
   .app-margin-top {
     margin-top: 40px;
+  }
+  .vector-link-icon {
+    position: absolute;
+    top: 24px;
+    right: 24px;
   }
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
         grid-template-columns: auto auto;
@@ -75,6 +80,10 @@ const Styled = styled.div`
         }
         .app-margin-top-small {
             margin-top: 8px;
+        }
+        .vector-link-icon {
+          top: 16px;
+          right: 16px;
         }
   `}
 `;
@@ -262,6 +271,7 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
       <Col className={`wrap-item-content background2`}>
         <Row align="middle" className="wrap-apps-head">
           <img src={data.img} className="item-img" alt="icon" />
+          {canClick && <LinkIcon className="vector-link-icon" />}
           <Col className="wrap-main-content">
             {!isMobile && Status}
             <div className="wrap-name">
