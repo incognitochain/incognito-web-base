@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux';
 // import Web3Status from 'components/Core/Web3Status';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Link } from 'rebass';
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from 'services/rpcMetric';
 import { poolsSelectors } from 'state/pools';
 import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
@@ -35,6 +36,8 @@ interface MenuItemProps {
   path: string;
   isLink?: string;
   target?: string;
+  metric?: number;
+  uniqMetric?: number;
 }
 
 const menuItem: MenuItemProps[] = [
@@ -49,14 +52,20 @@ const menuItem: MenuItemProps[] = [
   {
     name: 'Swap',
     path: routeMarket,
+    metric: METRIC_TYPE.HEADER_SWAP,
+    uniqMetric: METRIC_UNIQ.HEADER_SWAP_UNIQ,
   },
   {
     name: 'Mine',
     path: routeStructure,
+    metric: METRIC_TYPE.HEADER_MINE,
+    uniqMetric: METRIC_UNIQ.HEADER_MINE_UNIQ,
   },
   {
     name: 'Use',
     path: routePeggingApps,
+    metric: METRIC_TYPE.HEADER_PAPPS,
+    uniqMetric: METRIC_UNIQ.HEADER_PAPPS_UNIQ,
   },
   // {
   //   name: 'Community',
@@ -514,7 +523,16 @@ export default function Header() {
               {menuItem.map((item) => {
                 const isActive = item.name === pathName;
                 return (
-                  <div className="menuItem" onClick={() => setPathName(item.name)} key={item.name}>
+                  <div
+                    className="menuItem"
+                    onClick={() => {
+                      if (item.metric && item.uniqMetric) {
+                        updateMetric({ metric: item.metric, uniqMetric: item.uniqMetric });
+                      }
+                      setPathName(item.name);
+                    }}
+                    key={item.name}
+                  >
                     {item?.isLink ? (
                       <Link href={item.path} target="_blank" rel="noopener noreferrer">
                         {item.name}
