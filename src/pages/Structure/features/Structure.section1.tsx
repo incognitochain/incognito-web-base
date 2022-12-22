@@ -126,21 +126,21 @@ const Section1 = () => {
           >
             {structureTrs.becomeValidator}
           </Button>
-          {/*<Button*/}
-          {/*  type="primary"*/}
-          {/*  shape="round"*/}
-          {/*  size="large"*/}
-          {/*  className="button1 btn-buy-pnode"*/}
-          {/*  onClick={() => {*/}
-          {/*    updateMetric({*/}
-          {/*      metric: METRIC_TYPE.MINE_BUY_PNODE,*/}
-          {/*      uniqMetric: METRIC_UNIQ.MINE_BUY_PNODE_UNIQ,*/}
-          {/*    });*/}
-          {/*    window.open('https://node1-staging.incognito.org/', '_blank');*/}
-          {/*  }}*/}
-          {/*>*/}
-          {/*  Buy a Node*/}
-          {/*</Button>*/}
+          <Button
+            type="primary"
+            shape="round"
+            size="large"
+            className="button1 btn-buy-pnode"
+            onClick={() => {
+              updateMetric({
+                metric: METRIC_TYPE.MINE_BUY_PNODE,
+                uniqMetric: METRIC_UNIQ.MINE_BUY_PNODE_UNIQ,
+              });
+              window.open('https://node.incognito.org/', '_blank');
+            }}
+          >
+            Buy a Node
+          </Button>
         </Row>
       </Col>
       <img src={logoStrokeImg} className="logo-stroke" alt="logo-stroke" />

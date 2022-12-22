@@ -1,6 +1,6 @@
 import ExplorerIcon from 'components/icons/explorer.icon';
 import OverviewIcon from 'components/icons/overview.icon';
-// import PNodeIcon from 'components/icons/pnode.icon';
+import PNodeIcon from 'components/icons/pnode.icon';
 import VNodeIcon from 'components/icons/vnode.icon';
 import { structureTranslateSelector } from 'config/Configs.selector';
 import React from 'react';
@@ -25,14 +25,14 @@ export const HeaderNode = () => {
         history.replace('/mine');
       },
     },
-    // {
-    //   icon: PNodeIcon,
-    //   desc: 'PNode',
-    //   func: () => {
-    //     updateMetric({ metric: METRIC_TYPE.MINE_PNODE, uniqMetric: METRIC_UNIQ.MINE_PNODE_UNIQ });
-    //     window.open('https://node1-staging.incognito.org/', '_blank');
-    //   },
-    // },
+    {
+      icon: PNodeIcon,
+      desc: 'PNode',
+      func: () => {
+        updateMetric({ metric: METRIC_TYPE.MINE_PNODE, uniqMetric: METRIC_UNIQ.MINE_PNODE_UNIQ });
+        window.open('https://node.incognito.org/', '_blank');
+      },
+    },
     {
       icon: VNodeIcon,
       desc: 'Virtual Node',
