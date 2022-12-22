@@ -10,13 +10,23 @@ import spookyImg from 'assets/images/spooky-icon.png';
 import trisolarisImg from 'assets/images/trisolaris-icon.png';
 import uniImg from 'assets/images/uni-icon.png';
 import unknowImg from 'assets/images/unknow-icon.png';
+import { LinkIcon } from 'components/icons';
+import { MAIN_NETWORK_NAME } from 'constants/token';
+import { actionSetSwapNetwork } from 'pages/Swap/features/FormUnshield/FormUnshield.actions';
+import { SwapExchange } from 'pages/Swap/features/FormUnshield/FormUnshield.types';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useAppDispatch } from 'state/hooks';
 // import { isMobile } from 'react-device-detect';
 import styled, { DefaultTheme } from 'styled-components/macro';
-const Styled = styled(Row)`
+
+const Styled = styled.div`
   margin-top: 60px;
-  flex-direction: row;
-  justify-content: space-between;
+  //flex-direction: row;
+  //justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 30px;
   .line-view {
     width: 24px;
   }
@@ -33,7 +43,13 @@ const Styled = styled(Row)`
   .app-margin-top {
     margin-top: 40px;
   }
+  .vector-link-icon {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+  }
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+        grid-template-columns: auto auto;
         flex-direction: column;
         margin-top: 0px;
         .app-margin-top {
@@ -49,12 +65,37 @@ const Styled = styled(Row)`
             margin-top: 8px;
         }
   `}
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+        grid-template-columns: auto;
+        flex-direction: column;
+        margin-top: 0px;
+        .app-margin-top {
+            margin-top: 0px;
+        }
+        .app-margin-right {
+          margin-right: 0px;
+        }
+        .app-margin-left {
+          margin-left: 0px;
+        }
+        .app-margin-top-small {
+            margin-top: 8px;
+        }
+        .vector-link-icon {
+          top: 16px;
+          right: 16px;
+        }
+  `}
 `;
-const StyledItem = styled(Col)<{ isMobile: boolean }>`
+const StyledItem = styled(Col)<{ isMobile: boolean; canClick: boolean }>`
   display: flex;
+  :hover {
+    opacity: ${({ canClick, isMobile }) => (canClick && !isMobile ? 0.8 : 1)};
+    cursor: ${({ canClick, isMobile }) => (canClick && !isMobile ? 'pointer' : 'unset')};
+  }
 
   .wrap-item-content {
-    padding: 60px 60px 50px;
+    padding: 30px 30px 20px;
     border-radius: 16px;
     flex: 1;
   }
@@ -64,9 +105,9 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .item-img {
-    margin-right: 32px;
-    width: 120px;
-    height: 120px;
+    margin-right: 24px;
+    width: 88px;
+    height: 88px;
   }
 
   .large-text {
@@ -85,8 +126,8 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .wrap-chain {
-    margin-right: 10px;
-    min-height: 48px;
+    margin-right: 8px;
+    min-height: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -94,14 +135,17 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
     padding-left: 16px;
     border-radius: 8px;
     background: ${({ theme }) => theme.background3};
+    p {
+      color: white;
+    }
   }
 
   .wrap-main-content {
-    flex-direction: column;
+    //flex-direction: column;
   }
 
   .desc-text {
-    margin-top: 40px;
+    margin-top: 32px;
   }
 
   .medium-text {
@@ -109,7 +153,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .name-desc-text {
-    margin-left: 16px;
+    //margin-left: 16px;
   }
 
   .link-text {
@@ -118,37 +162,19 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
   }
 
   .wrap-status {
-    padding: 2px 8px;
-    border: 1px solid ${({ theme }) => theme.text1};
+    padding: 1px 4px;
     width: fit-content;
     color: ${({ theme }) => theme.text1};
     border-radius: 4px;
     margin-bottom: 8px;
+    background-color: ${({ theme }) => theme.bg4};
   }
 
   .status-text {
     height: fit-content;
   }
-
-  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-      .wrap-item-content {
-        padding: 32px 32px 40px;
-      }
-      .item-img {
-        width: 90px;
-        height: 90px;
-      }
-      .large-text {
-        font-size: 22px;
-        line-height: 30px;
-      }
-      .medium-text {
-        font-size: 16px;
-      }
-      .status-text {
-        font-size: 12px;
-      }
-  `};
+  .wrap-apps-head {
+  }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
         width: 100%;
@@ -162,8 +188,8 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
         }
         .item-img {
             margin-right: 16px;
-            width: 50px;
-            height: 50px;
+            width: 70px;
+            height: 70px;
         }
        .desc-text {
          margin-top: 24px;
@@ -186,8 +212,6 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
       .name-desc-text {
         margin-left: 0px;
       }
-      .wrap-apps-head {
-      }
       .wrap-chain {
         margin-right: 8px;
         border-radius: 4px;
@@ -207,12 +231,14 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
 `;
 
 const Item = React.memo(({ className, data }: { className?: string; data: any }) => {
+  const history = useHistory();
+  const dispatch = useAppDispatch();
   const ChainList = React.useMemo(
     () => (
       <Row style={{ minWidth: 250 }}>
         {data.chain.map((item: any) => (
           <div style={{ marginTop: 12 }} key={item} className="wrap-chain background3">
-            <p className="description5 color-white">{item}</p>
+            <p className="h8">{item}</p>
           </div>
         ))}
       </Row>
@@ -230,25 +256,37 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
     []
   );
   let isMobile = false;
+  const canClick = !!data.exchange;
   return (
-    <StyledItem md={24} xl={12} key={data.name} isMobile={isMobile}>
-      <Col className={`wrap-item-content background2 ${className}`}>
+    <StyledItem
+      key={data.name}
+      isMobile={isMobile}
+      canClick={canClick}
+      onClick={() => {
+        if (!canClick) return;
+        dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
+        history.push(`papps?name=${data.exchange}`);
+      }}
+    >
+      <Col className={`wrap-item-content background2`}>
         <Row align="middle" className="wrap-apps-head">
           <img src={data.img} className="item-img" alt="icon" />
+          {canClick && <LinkIcon className="vector-link-icon" />}
           <Col className="wrap-main-content">
             {!isMobile && Status}
             <div className="wrap-name">
               <Row align="middle">
-                <p className="normal-text h3_1">{data.name}</p>
+                <h5 className="normal-text">{data.name}</h5>
                 {isMobile && Status}
               </Row>
-              <h6 className="text2 normal-text name-desc-text">{data.nameDesc}</h6>
             </div>
-            {!isMobile && ChainList}
+            <p className="text2 normal-text name-desc-text h8">{data.nameDesc}</p>
+            {/*{!isMobile && ChainList}*/}
           </Col>
-          {isMobile && ChainList}
+          {/*{isMobile && ChainList}*/}
+          {ChainList}
         </Row>
-        <p className="normal-text desc-text description color-white">
+        <p className="normal-text desc-text description h8 color-white" style={{ color: 'white' }}>
           {data.desc}{' '}
           {!!data.link && (
             <span
@@ -278,6 +316,7 @@ const PeggingListApps = () => {
           status: 'SHIPPED',
           chain: ['BNB Chain', 'DEX'],
           desc: "Trade anonymously on BNB Chain's leading DEX. Deep liquidity and super low fees – now with privacy.",
+          exchange: SwapExchange.PANCAKE_SWAP,
         }}
         className="app-margin-right"
       />
@@ -289,6 +328,7 @@ const PeggingListApps = () => {
           status: 'SHIPPED',
           chain: ['Polygon', 'Ethereum', 'DEX'],
           desc: 'Trade confidentially on everyone’s favorite DEX. Faster and cheaper thanks to Polygon, and private like all Incognito apps.',
+          exchange: SwapExchange.UNISWAP,
         }}
         className="app-margin-top-small app-margin-left full-height"
       />
@@ -300,6 +340,7 @@ const PeggingListApps = () => {
           status: 'SHIPPED',
           chain: ['Polygon', 'DEX'],
           desc: 'Swap stablecoins with complete confidentiality using Privacy Curve. Low fees on Polygon meets full privacy on Incognito.',
+          exchange: SwapExchange.CURVE,
         }}
         className="app-margin-top app-margin-top-small app-margin-right"
       />
@@ -311,6 +352,7 @@ const PeggingListApps = () => {
           nameDesc: 'Private SpookySwap',
           chain: ['Fantom', 'DEX'],
           desc: 'Explore DeFi on Fantom with full privacy for your activity and assets. Swap Fantom coins anonymously with Private SpookySwap.',
+          exchange: SwapExchange.SPOOKY,
         }}
         className="app-margin-top app-margin-top-small app-margin-left"
       />
@@ -318,10 +360,11 @@ const PeggingListApps = () => {
         data={{
           img: joeImg,
           name: 'pTraderJoe',
-          status: 'COMING SOON',
+          status: 'SHIPPED',
           nameDesc: 'Private Trader Joe',
           chain: ['Avalanche', 'DEX'],
           desc: 'Trade confidentially on Trader Joe. Faster privacy swap is enabled by fast transaction finality on Avalanche.',
+          exchange: SwapExchange.JOE,
         }}
         className="app-margin-top app-margin-top-small app-margin-right"
       />

@@ -3,6 +3,8 @@ import { memo, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from '../../../../services/rpcMetric';
+
 const ItemStyled = styled.div`
   flex: 1;
   height: 100%;
@@ -201,10 +203,10 @@ const ValidatorHowToStack = () => {
   }, []);
 
   return (
-    <Styled ref={myRef}>
+    <Styled ref={myRef} id="HOW_STAKE">
       <div className="topView">
         <div className="topLeft">
-          <h1>How to stake</h1>
+          <h3>How to stake</h3>
         </div>
         <div className="topRight">
           <button
@@ -220,6 +222,7 @@ const ValidatorHowToStack = () => {
             size="large"
             className="button1 prvButton"
             onClick={() => {
+              updateMetric({ metric: METRIC_TYPE.MINE_BUY_PRV, uniqMetric: METRIC_UNIQ.MINE_BUY_PRV_UNIQ });
               window.open('https://we.incognito.org/t/how-to-buy-prv-in-3-steps/793', '_blank');
             }}
           >

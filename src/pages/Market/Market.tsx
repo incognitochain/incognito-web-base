@@ -1,10 +1,8 @@
 // import { Row } from 'antd';
 import { Row } from 'antd';
-import animationData from 'assets/scroll-animation.json';
 import Swap from 'pages/Swap';
 import { memo, useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
-import Lottie from 'react-lottie';
 
 import MarketAchieve from './features/Market.achieve';
 import MarketBanner from './features/Market.banner';
@@ -16,7 +14,7 @@ import MarketTitleBox from './features/MarketTitleBox';
 import { Styled } from './Market.styled';
 
 const Home = () => {
-  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
     window.addEventListener('scroll', listenToScroll);
@@ -24,14 +22,14 @@ const Home = () => {
   }, []);
 
   const listenToScroll = () => {
-    let heightToHideFrom = 100;
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-
-    if (winScroll > heightToHideFrom) {
-      isVisible && setIsVisible(false);
-    } else {
-      setIsVisible(true);
-    }
+    // let heightToHideFrom = 100;
+    // const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    //
+    // if (winScroll > heightToHideFrom) {
+    //   isVisible && setIsVisible(false);
+    // } else {
+    //   setIsVisible(true);
+    // }
   };
 
   return (
@@ -47,22 +45,22 @@ const Home = () => {
           {isMobile && <MarketBanner />}
           {!isMobile ? <Swap /> : <MarketTokens />}
         </Row>
-        {!isMobile && isVisible && (
-          <Lottie
-            isClickToPauseDisabled={true}
-            options={{
-              loop: true,
-              autoplay: true,
-              animationData,
-            }}
-            height={60}
-            style={{ marginTop: 40 }}
-          />
-        )}
+        {/*{!isMobile && isVisible && (*/}
+        {/*  <Lottie*/}
+        {/*    isClickToPauseDisabled={true}*/}
+        {/*    options={{*/}
+        {/*      loop: true,*/}
+        {/*      autoplay: true,*/}
+        {/*      animationData,*/}
+        {/*    }}*/}
+        {/*    height={60}*/}
+        {/*    style={{ marginTop: 40 }}*/}
+        {/*  />*/}
+        {/*)}*/}
       </div>
       <div className={`fade-in-section ${!isVisible ? 'is-visible' : ''}`}>
         {!isMobile && <MarketInfo />}
-        <div className="default-padding-horizontal">{isMobile ? <MarketCategory /> : <MarketQuestions />}</div>
+        <div className="default-max-width">{isMobile ? <MarketCategory /> : <MarketQuestions />}</div>
       </div>
       {isMobile && <MarketAchieve />}
     </Styled>

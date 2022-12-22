@@ -12,7 +12,7 @@ export const Styled = styled.div`
   width: 100%;
   display: flex;
   margin-top: 60px;
-  justify-content: 'space-between';
+  justify-content: space-between;
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
@@ -62,15 +62,15 @@ export const Styled = styled.div`
 
 const Item = styled.div`
   .achieve {
-    flex: 1,
+    flex: 1;
     display: flex;
     flex-direction: column;
     text-align: center;
-    border-right: 1px solid #363636;
+    //border-right: 1px solid #363636;
   }
   .achieve-item-title {
-    font-weight: 500;
-    font-size: 64px;
+    font-weight: 700;
+    font-size: 34px;
     line-height: 120%;
     text-align: center;
     margin-bottom: 0;
@@ -78,8 +78,7 @@ const Item = styled.div`
   }
   .achieve-item-sub-title {
     color: ${({ theme }) => theme.text2};
-    font-weight: 400;
-    font-size: 20px;
+    font-weight: 500;
     line-height: 140%;
     text-align: center;
     color: ${({ theme }) => theme.text2};
@@ -93,15 +92,10 @@ const Item = styled.div`
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
         .achieve-item-title {
-          font-weight: 500;
-          font-size: 64px;
-          line-height: 120%;
           text-align: center;
           margin-bottom: 0;
         }
         .achieve-item-sub-title {
-          font-weight: 400;
-          font-size: 20px;
           line-height: 140%;
           text-align: center;
         }
@@ -115,10 +109,8 @@ const Item = styled.div`
             margin: auto;
         }
         .achieve-item-sub-title {
-            line-height: 27px;
         }
         .achieve-item-title {
-            font-size: 48px;
         }
     `}
 
@@ -126,7 +118,6 @@ const Item = styled.div`
           .ant-card-body {
           }
           .achieve-item-title {
-            font-size: 34px;
           }
           .achieve {
             margin-bottom: 24px;
@@ -143,7 +134,7 @@ const MarketInfo = () => {
   const Factory = React.useMemo(
     () => [
       {
-        number: localStorage.getItem(KEY_TRADE_VOLUME) || 340,
+        number: localStorage.getItem(KEY_TRADE_VOLUME) || 347,
         prefix: '$',
         suffix: 'M+',
         desc: marketTrs.volumeTraded,
@@ -174,7 +165,7 @@ const MarketInfo = () => {
   );
 
   const renderItem = (item: any) => (
-    <Item style={{ flex: 1, minWidth: 200 }}>
+    <Item style={{ flex: 1, minWidth: 200 }} key={item?.number}>
       <div className={'achieve'}>
         <VisibilitySensor
           onChange={(isVisible) => {
@@ -205,7 +196,7 @@ const MarketInfo = () => {
             marginTop: 10,
           }}
         >
-          <p className="description achieve-item-sub-title">{item.desc}</p>
+          <p className="h8 achieve-item-sub-title">{item.desc}</p>
           {item?.tooltipContent && (
             <Tooltip title={item?.tooltipContent}>
               <Info style={{ marginLeft: 5 }} />
@@ -216,7 +207,7 @@ const MarketInfo = () => {
     </Item>
   );
   return (
-    <Styled>
+    <Styled className="default-max-width">
       {Factory?.map((item, i) => {
         return renderItem(item);
       })}

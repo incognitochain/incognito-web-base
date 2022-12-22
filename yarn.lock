@@ -4687,6 +4687,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-modal-video@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@types/react-modal-video/-/react-modal-video-1.2.0.tgz#1c6ab0841820fee3a1501b3bdd4b3ef4f515a8af"
+  integrity sha512-k1EZIbSZI1U1rZ1y/TA2qRhGy2CsBRPI2FN98KLfYV14RIrKVFoNFz1AFGEP9oSmU1bH5a+QXH2+jCZI68XwVw==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-redux@^7.1.16":
   version "7.1.18"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.18.tgz#2bf8fd56ebaae679a90ebffe48ff73717c438e04"
@@ -17921,6 +17928,13 @@ react-markdown@^4.3.1:
     unist-util-visit "^1.3.0"
     xtend "^4.0.1"
 
+react-modal-video@^1.2.10:
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/react-modal-video/-/react-modal-video-1.2.10.tgz#c7617358fc6baa066d056b5e45217f872a6f98af"
+  integrity sha512-NIg7B3wbYTHKv28SgW+hoOeMsEcQrMSEjDBL89rXEL9x3yLDhhCkU4vq6uVwBJ3tUK1YeOQyWFn2jy8zK2KMrw==
+  dependencies:
+    react-transition-group "^2.2.1"
+
 react-popper@^2.2.3:
   version "2.2.5"
   resolved "https://registry.npmjs.org/react-popper/-/react-popper-2.2.5.tgz"
@@ -18107,7 +18121,7 @@ react-toastify@^8.1.0:
   dependencies:
     clsx "^1.1.1"
 
-react-transition-group@2.9.0:
+react-transition-group@2.9.0, react-transition-group@^2.2.1:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.9.0.tgz#df9cdb025796211151a436c69a8f3b97b5b07c8d"
   integrity sha512-+HzNTCHpeQyl4MJ/bdE0u6XRMe9+XG/+aL4mCxVN4DnPBQ0/5bfHWPDuOZUzYdMj94daZaZdCCc1Dzt9R/xSSg==

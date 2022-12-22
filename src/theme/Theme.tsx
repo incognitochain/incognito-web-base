@@ -383,6 +383,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
     .fs-regular {
         font-size: ${FONTS.SIZE.regular}px;
         line-height: ${FONTS.SIZE.regular + 7}px;
+        font-weight: 500;
     }
 
     .fs-medium {
@@ -501,8 +502,14 @@ export const ThemedGlobalStyle = createGlobalStyle`
     }
     
     .default-padding-horizontal {
-      padding-left: 105px;
-      padding-right: 105px;
+      //padding-left: 280px;
+      //padding-right: 280px;
+    }
+
+    .default-max-width {
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .ant-btn-round.ant-btn-lg {
@@ -612,8 +619,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
     .header1 {
       color: ${({ theme }) => theme.color_white};
       font-size: 28px;
-        font-weight: 500;
-        line-height: 140%;
+      font-weight: 500;
+      line-height: 140%;
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
         font-size: 28px;
         font-weight: 500;
@@ -773,8 +780,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
         .default-padding-horizontal {
-          padding-left: 105px;
-          padding-right: 105px;
+          // padding-left: 280px;
+          // padding-right: 280px;
         }
         .sub-title-text {
           font-size: 18px;
@@ -814,6 +821,9 @@ export const ThemedGlobalStyle = createGlobalStyle`
         .default-padding-horizontal {
           padding-left: 16px;
           padding-right: 16px;
+        }
+        .default-max-width {
+          max-width: 95%;
         }
         .sub-title-text {
           font-size: 16px;
@@ -902,9 +912,9 @@ export const ThemedGlobalStyle = createGlobalStyle`
     h1 {
       color: ${({ theme }) => theme.color_white};
       font-size: 64px;
-        font-weight: 500;
-        line-height: 120%;
-        letter-spacing: -0.005em;
+      font-weight: 500;
+      line-height: 120%;
+      letter-spacing: -0.005em;
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
         font-size: 64px;
         font-weight: 500;
@@ -923,33 +933,35 @@ export const ThemedGlobalStyle = createGlobalStyle`
       `}
     }
 
+    h2 {
+      color: ${({ theme }) => theme.color_white};
+      font-size: 48px;
+      font-weight: 500;
+      line-height: 120%;
+      letter-spacing: -0.005em;
+      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
+          font-size: 48;
+        `}
+      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
+          font-size: 38px;
+        `}
+      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+          font-size: 34px;
+        `}
+    }
+
     h3 {
       color: ${({ theme }) => theme.color_white};
       font-size: 40px;
-        font-weight: 500;
-        line-height: 140%;
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
-        font-size: 40px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-        font-size: 28px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-        font-size: 24px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
+      font-weight: 700;
+      line-height: 140%;
     }
 
     .h3_1 {
       color: ${({ theme }) => theme.color_white};
       font-size: 34px;
-        font-weight: 500;
-        line-height: 140%;
+      font-weight: 500;
+      line-height: 140%;
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
         font-size: 34px;
         font-weight: 500;
@@ -993,7 +1005,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     h5 {
       color: ${({ theme }) => theme.color_white};
-        font-size: 26px;
+        font-size: 24px;
         font-weight: 800;
         line-height: 140%;
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
@@ -1002,12 +1014,12 @@ export const ThemedGlobalStyle = createGlobalStyle`
         line-height: 140%;
       `}
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 500;
         line-height: 120%;
       `}
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 500;
         line-height: 124%;
       `}
@@ -1061,6 +1073,29 @@ export const ThemedGlobalStyle = createGlobalStyle`
         line-height: 140%;
       `}
     }
+
+  .h8 {
+    color: ${({ theme }) => theme.color_grey};
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 140%;
+
+    ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 140%;
+      `}
+    ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 140%;
+      `}
+    ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 140%;
+      `}
+  }
 
 
     .margin-add {

@@ -334,7 +334,7 @@ const Policy = () => {
   );
 
   return (
-    <Styled className="default-padding-horizontal">
+    <Styled className="default-max-width">
       <p className="fw-medium text-align-center policy-main-title">INCOGNITO’S PRIVACY POLICY</p>
       {renderSection1()}
       {renderSection2()}

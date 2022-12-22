@@ -14,12 +14,13 @@ import { useInternetConnnection } from 'components/Core/InternetConnection';
 import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useTheme from 'hooks/useTheme';
-import { routeEarnings, routeMarket, routePeggingApps, routeStructure } from 'pages';
+import { routeMarket, routePeggingApps, routeStructure } from 'pages';
 import React from 'react';
 import { useSelector } from 'react-redux';
 // import Web3Status from 'components/Core/Web3Status';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Link } from 'rebass';
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from 'services/rpcMetric';
 import { poolsSelectors } from 'state/pools';
 import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
@@ -35,20 +36,36 @@ interface MenuItemProps {
   path: string;
   isLink?: string;
   target?: string;
+  metric?: number;
+  uniqMetric?: number;
 }
 
 const menuItem: MenuItemProps[] = [
+  // {
+  //   name: 'Markets',
+  //   path: routeMarket,
+  // },
+  // {
+  //   name: 'Home',
+  //   path: routeHome,
+  // },
   {
-    name: 'Markets',
+    name: 'Swap',
     path: routeMarket,
+    metric: METRIC_TYPE.HEADER_SWAP,
+    uniqMetric: METRIC_UNIQ.HEADER_SWAP_UNIQ,
   },
   {
-    name: 'Apps',
-    path: routePeggingApps,
-  },
-  {
-    name: 'Infrastructure',
+    name: 'Mine',
     path: routeStructure,
+    metric: METRIC_TYPE.HEADER_MINE,
+    uniqMetric: METRIC_UNIQ.HEADER_MINE_UNIQ,
+  },
+  {
+    name: 'Use',
+    path: routePeggingApps,
+    metric: METRIC_TYPE.HEADER_PAPPS,
+    uniqMetric: METRIC_UNIQ.HEADER_PAPPS_UNIQ,
   },
   // {
   //   name: 'Community',
@@ -56,10 +73,10 @@ const menuItem: MenuItemProps[] = [
   //   target: '_blank',
   //   isLink: true,
   // },
-  {
-    name: 'Earning',
-    path: routeEarnings,
-  },
+  // {
+  //   name: 'Earning',
+  //   path: routeEarnings,
+  // },
 ];
 
 const moreItem = [
@@ -142,6 +159,17 @@ const HeaderElement = styled.div`
   /* addresses safaris lack of support for "gap" */
   & > *:not(:first-child) {
     margin-left: 8px;
+  }
+
+  .navigation-list {
+    align-items: center;
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
   }
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
@@ -480,7 +508,7 @@ export default function Header() {
     const hrefLink = !isInternetAlready || !isMobile ? '.' : INCOGNITO_LANDING_PAGE;
     return (
       <>
-        <Title href={hrefLink}>
+        <Title onClick={() => history.replace('/')}>
           <IncognitoIcon>
             <Logo fill={darkMode ? white : black} width="142" height="100%" title="logo" />
           </IncognitoIcon>
@@ -490,12 +518,21 @@ export default function Header() {
         {/*</HeaderElement>*/}
         <HeaderElement>
           {/* <Menu /> */}
-          <div style={{ alignItems: 'center', display: 'flex' }} className="default-padding-horizontal">
+          <div className="navigation-list default-padding-horizontal">
             <div className="wrap-menu-desktop center">
               {menuItem.map((item) => {
-                const isActive = item.name === pathName ? true : false;
+                const isActive = item.name === pathName;
                 return (
-                  <div className="menuItem" onClick={() => setPathName(item.name)} key={item.name}>
+                  <div
+                    className="menuItem"
+                    onClick={() => {
+                      if (item.metric && item.uniqMetric) {
+                        updateMetric({ metric: item.metric, uniqMetric: item.uniqMetric });
+                      }
+                      setPathName(item.name);
+                    }}
+                    key={item.name}
+                  >
                     {item?.isLink ? (
                       <Link href={item.path} target="_blank" rel="noopener noreferrer">
                         {item.name}
@@ -514,17 +551,17 @@ export default function Header() {
                   </div>
                 );
               })}
-              <Dropdown
-                overlayStyle={{ width: 120 }}
-                overlay={MoreMenu(isMobile ? 'diveIn' : 'download')}
-                placement="bottomRight"
-                className="more-dropdown"
-              >
-                <Row align="middle" className="button-hover">
-                  <p className="sub-menu-text">{isMobile ? 'Dive in' : 'Download'}</p>
-                  <img className="logo" alt="" src={downImg} style={{ width: 14, height: 14, marginLeft: 10 }} />
-                </Row>
-              </Dropdown>
+              {/*<Dropdown*/}
+              {/*  overlayStyle={{ width: 120 }}*/}
+              {/*  overlay={MoreMenu(isMobile ? 'diveIn' : 'download')}*/}
+              {/*  placement="bottomRight"*/}
+              {/*  className="more-dropdown"*/}
+              {/*>*/}
+              {/*  <Row align="middle" className="button-hover">*/}
+              {/*    <p className="sub-menu-text">{isMobile ? 'Dive in' : 'Download'}</p>*/}
+              {/*    <img className="logo" alt="" src={downImg} style={{ width: 14, height: 14, marginLeft: 10 }} />*/}
+              {/*  </Row>*/}
+              {/*</Dropdown>*/}
             </div>
           </div>
         </HeaderElement>
@@ -537,7 +574,7 @@ export default function Header() {
               {/*</AccountElement>*/}
               <Dropdown
                 overlayStyle={{ width: 120 }}
-                overlay={MoreMenu('diveIn')}
+                overlay={MoreMenu('download')}
                 placement="bottomRight"
                 className="more-dropdown"
               >
@@ -637,7 +674,8 @@ export default function Header() {
                 fontSize: 34,
               }}
             >
-              {isMobile ? 'Dive in' : 'Download'}
+              {/*{isMobile ? 'Dive in' : 'Download'}*/}
+              Download
             </p>
             <img
               className="dropdown-icon"
@@ -651,7 +689,7 @@ export default function Header() {
               }}
             />
           </Row>
-          {expand && !isMobile && (
+          {expand && (
             <Col style={{ marginTop: 24 }}>
               {appStoreIcons.map((item) => (
                 <div className="wrap-drawer-sub-item" key={item.name}>
@@ -662,25 +700,25 @@ export default function Header() {
               ))}
             </Col>
           )}
-          {expand && isMobile && (
-            <Col style={{ marginTop: 24 }}>
-              {moreItem.map((item) => (
-                <div className="wrap-drawer-sub-item padding padding-horizontal" key={item.name}>
-                  <Link href={item.path} target="_blank" rel="noopener noreferrer" className="padding-horizontal">
-                    <Row align="middle">
-                      <p className="drawer-sub-item-label">{item.name}</p>
-                      <div className="logo" />
-                    </Row>
-                    <p className="drawer-sub-item-desc-label">{item.sub}</p>
-                  </Link>
-                </div>
-              ))}
-            </Col>
-          )}
+          {/*{expand && isMobile && (*/}
+          {/*  <Col style={{ marginTop: 24 }}>*/}
+          {/*    {moreItem.map((item) => (*/}
+          {/*      <div className="wrap-drawer-sub-item padding padding-horizontal" key={item.name}>*/}
+          {/*        <Link href={item.path} target="_blank" rel="noopener noreferrer" className="padding-horizontal">*/}
+          {/*          <Row align="middle">*/}
+          {/*            <p className="drawer-sub-item-label">{item.name}</p>*/}
+          {/*            <div className="logo" />*/}
+          {/*          </Row>*/}
+          {/*          <p className="drawer-sub-item-desc-label">{item.sub}</p>*/}
+          {/*        </Link>*/}
+          {/*      </div>*/}
+          {/*    ))}*/}
+          {/*  </Col>*/}
+          {/*)}*/}
         </DrawerStyled>
       </>
     );
   };
 
-  return <Styled className="default-padding-horizontal">{renderContent()}</Styled>;
+  return <Styled className="default-max-width">{renderContent()}</Styled>;
 }
