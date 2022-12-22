@@ -8,6 +8,7 @@ import React from 'react';
 import { isMobile } from 'react-device-detect';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from 'services/rpcMetric';
 import { isFetchingPoolsSelectors, poolsSelectors } from 'state/pools/pool.selectors';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
@@ -321,6 +322,10 @@ const ListPoolTable = () => {
           onRow={(r) => ({
             onClick: () => {
               if (isMobile) return;
+              updateMetric({
+                metric: METRIC_TYPE.EARN_SELECT,
+                uniqMetric: METRIC_UNIQ.EARN_SELECT_UNIQ,
+              });
               history.push('/swap', { tokenId1: r?.token1ID, tokenId2: r?.token2ID });
             },
           })}

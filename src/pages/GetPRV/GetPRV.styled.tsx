@@ -20,7 +20,8 @@ const Header = styled.div`
   }
   .btn-get-prv {
     max-width: 180px;
-    margin-top: 50px;
+    margin-top: 40px;
+    max-height: 48px;
   }
   svg {
     min-width: 265px;
@@ -51,6 +52,9 @@ const Header = styled.div`
       h3 {
         text-align: center;
       }
+      .btn-get-prv {
+        margin-top: 30px;
+      }
   `}
 `;
 
@@ -68,6 +72,7 @@ const Content = styled.div`
     max-width: 638px;
     margin-left: auto;
     margin-right: auto;
+    text-align: justify;
   }
   ${({ theme }) => theme.mediaWidth.upToLarge`
     margin-top: 50px;

@@ -2,6 +2,8 @@ import validator from 'assets/images/validator.png';
 import React, { memo } from 'react';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from '../../../../services/rpcMetric';
+
 const Styled = styled.div`
   display: flex;
   margin-top: 40px;
@@ -102,6 +104,7 @@ const ValidatorsJoinNetwork = () => {
               const view = document.getElementById('HOW_STAKE');
               if (view) {
                 const y = view.getBoundingClientRect().top + window.scrollY - 120;
+                updateMetric({ metric: METRIC_TYPE.MINE_HOW_STAKE, uniqMetric: METRIC_UNIQ.MINE_HOW_STAKE_UNIQ });
                 window.scroll({
                   top: y,
                   behavior: 'smooth',
