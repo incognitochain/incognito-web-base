@@ -7,6 +7,7 @@ import Collections from './Home.colections';
 import GroupButtons from './Home.groupBtn';
 import { Container } from './Home.styled';
 import BGImg from './images/background.png';
+
 const Home = () => {
   const { width, height } = useWindowSize();
 

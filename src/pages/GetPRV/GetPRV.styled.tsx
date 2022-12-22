@@ -21,6 +21,7 @@ const Header = styled.div`
   .btn-get-prv {
     max-width: 180px;
     margin-top: 50px;
+    max-height: 48px;
   }
   svg {
     min-width: 265px;

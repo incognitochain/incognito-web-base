@@ -1,10 +1,12 @@
 import { Col, Row } from 'antd';
+import { ButtonConfirmed } from 'components/Core/Button';
 import { PRVIcon } from 'components/icons';
+import { BIG_COINS, PRV } from 'constants/token';
+import { useWindowSize } from 'hooks/useWindowSize';
 import React, { memo } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { ButtonConfirmed } from '../../components/Core/Button';
-import { useWindowSize } from '../../hooks/useWindowSize';
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from '../../services/rpcMetric';
 import { FOOTER_ID, HEADER_ID } from '../App';
 import Analytics from './GetPRV.analytics';
 import Promote from './GetPRV.promote';
@@ -45,7 +47,13 @@ const GetPRV = () => {
             </p>
           </Col>
           <Row>
-            <ButtonConfirmed className="btn-get-prv" onClick={() => history.replace('/swap')}>
+            <ButtonConfirmed
+              className="btn-get-prv"
+              onClick={() => {
+                updateMetric({ metric: METRIC_TYPE.GETPRV_GET_PRV, uniqMetric: METRIC_UNIQ.GETPRV_GET_PRV_UNIQ });
+                history.push('/swap', { tokenId1: BIG_COINS.USDT_UNIFIED.tokenID, tokenId2: PRV.id });
+              }}
+            >
               Get PRV
             </ButtonConfirmed>
           </Row>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 const PNodeIcon = ({ color = '#fff' }: { color: string }) => (
-  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width={40} height={40} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <mask id="a" fill={color}>
       <path d="M5 3.006c0-2.9 3.705-4.112 5.42-1.774l24.888 33.95c1.453 1.98.038 4.773-2.42 4.773H8a3 3 0 0 1-3-3V3.005Z" />
     </mask>
@@ -9,7 +9,7 @@ const PNodeIcon = ({ color = '#fff' }: { color: string }) => (
       fill={color}
       mask="url(#a)"
     />
-    <rect x="16.443" y="33.594" width="7.282" height="2.08" rx="1.04" fill={color} />
+    <rect x={16.443} y={33.594} width={7.282} height={2.08} rx={1.04} fill="#9C9C9C" />
   </svg>
 );
 export default PNodeIcon;
