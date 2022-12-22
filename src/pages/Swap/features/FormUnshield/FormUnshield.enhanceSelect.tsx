@@ -8,6 +8,7 @@ import store from 'state';
 import { useAppDispatch } from 'state/hooks';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 
+import { useQuery } from '../../Swap.hooks';
 import {
   actionChangeBuyNetwork,
   actionChangeBuyToken,
@@ -19,6 +20,8 @@ import {
   actionSetSwapExchangeSupports,
   actionSetSwapNetwork,
 } from './FormUnshield.actions';
+import { MAP_TOKEN_BY_PAPPS } from './FormUnshield.constants';
+import { SwapExchange } from './FormUnshield.types';
 const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
 
 export interface TInter {
@@ -38,6 +41,8 @@ const enhanceSelect = (WrappedComponent: any) => {
     const dispatch = useAppDispatch();
     const history = useHistory();
     const location: any = useLocation();
+    const query = useQuery();
+    const pAppName = query.get('name') as any;
 
     const refCountChangeField = React.useRef<any>(null);
     const handleSelectSellToken = async ({ token }: { token: PToken }) => {
@@ -63,14 +68,23 @@ const enhanceSelect = (WrappedComponent: any) => {
 
     const handleRotateSwapToken = () => dispatch(actionRotateSwapTokens());
 
-    React.useEffect(() => {
-      // let path = window.location.pathname;
-      // const search = window.location.search;
-      // if (search && search.includes('exchange')) {
-      //   path += search;
-      // }
-      // history.replace(path, {});
-    }, []);
+    const redirect = () => {
+      const exchangeSupported = Object.values(SwapExchange);
+      let path = window.location.pathname;
+      const search = new URLSearchParams(window.location.search).get('name') as any;
+      const token = MAP_TOKEN_BY_PAPPS[pAppName];
+      if (pAppName && exchangeSupported.includes(search) && token) {
+        path += window.location.search;
+        const sellTokenData = getPrivacyDataByTokenIDSelector(store.getState())(token.tokenID1);
+        const buyTokenData = getPrivacyDataByTokenIDSelector(store.getState())(token.tokenID2);
+        handleSelectSellToken({ token: sellTokenData }).then();
+        handleSelectBuyToken({ token: buyTokenData });
+        return history.replace(path, {});
+      }
+      history.replace('/swap', {});
+    };
+
+    React.useEffect(redirect, [pAppName]);
 
     React.useEffect(() => {
       if (location?.state?.tokenId1 && location?.state?.tokenId2) {

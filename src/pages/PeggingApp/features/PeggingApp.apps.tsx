@@ -10,9 +10,16 @@ import spookyImg from 'assets/images/spooky-icon.png';
 import trisolarisImg from 'assets/images/trisolaris-icon.png';
 import uniImg from 'assets/images/uni-icon.png';
 import unknowImg from 'assets/images/unknow-icon.png';
+import { SwapExchange } from 'pages/Swap/features/FormUnshield/FormUnshield.types';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 // import { isMobile } from 'react-device-detect';
 import styled, { DefaultTheme } from 'styled-components/macro';
+
+import { MAIN_NETWORK_NAME } from '../../../constants';
+import { useAppDispatch } from '../../../state/hooks';
+import { actionSetSwapNetwork } from '../../Swap/features/FormUnshield/FormUnshield.actions';
+
 const Styled = styled.div`
   margin-top: 60px;
   //flex-direction: row;
@@ -71,8 +78,12 @@ const Styled = styled.div`
         }
   `}
 `;
-const StyledItem = styled(Col)<{ isMobile: boolean }>`
+const StyledItem = styled(Col)<{ isMobile: boolean; canClick: boolean }>`
   display: flex;
+  :hover {
+    opacity: ${({ canClick, isMobile }) => (canClick && !isMobile ? 0.8 : 1)};
+    cursor: ${({ canClick, isMobile }) => (canClick && !isMobile ? 'pointer' : 'unset')};
+  }
 
   .wrap-item-content {
     padding: 30px 30px 20px;
@@ -211,6 +222,8 @@ const StyledItem = styled(Col)<{ isMobile: boolean }>`
 `;
 
 const Item = React.memo(({ className, data }: { className?: string; data: any }) => {
+  const history = useHistory();
+  const dispatch = useAppDispatch();
   const ChainList = React.useMemo(
     () => (
       <Row style={{ minWidth: 250 }}>
@@ -234,8 +247,18 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
     []
   );
   let isMobile = false;
+  const canClick = !!data.exchange;
   return (
-    <StyledItem key={data.name} isMobile={isMobile}>
+    <StyledItem
+      key={data.name}
+      isMobile={isMobile}
+      canClick={canClick}
+      onClick={() => {
+        if (!canClick) return;
+        dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
+        history.push(`papps?name=${data.exchange}`);
+      }}
+    >
       <Col className={`wrap-item-content background2`}>
         <Row align="middle" className="wrap-apps-head">
           <img src={data.img} className="item-img" alt="icon" />
@@ -283,6 +306,7 @@ const PeggingListApps = () => {
           status: 'SHIPPED',
           chain: ['BNB Chain', 'DEX'],
           desc: "Trade anonymously on BNB Chain's leading DEX. Deep liquidity and super low fees – now with privacy.",
+          exchange: SwapExchange.PANCAKE_SWAP,
         }}
         className="app-margin-right"
       />
@@ -294,6 +318,7 @@ const PeggingListApps = () => {
           status: 'SHIPPED',
           chain: ['Polygon', 'Ethereum', 'DEX'],
           desc: 'Trade confidentially on everyone’s favorite DEX. Faster and cheaper thanks to Polygon, and private like all Incognito apps.',
+          exchange: SwapExchange.UNISWAP,
         }}
         className="app-margin-top-small app-margin-left full-height"
       />
@@ -305,6 +330,7 @@ const PeggingListApps = () => {
           status: 'SHIPPED',
           chain: ['Polygon', 'DEX'],
           desc: 'Swap stablecoins with complete confidentiality using Privacy Curve. Low fees on Polygon meets full privacy on Incognito.',
+          exchange: SwapExchange.CURVE,
         }}
         className="app-margin-top app-margin-top-small app-margin-right"
       />
@@ -316,6 +342,7 @@ const PeggingListApps = () => {
           nameDesc: 'Private SpookySwap',
           chain: ['Fantom', 'DEX'],
           desc: 'Explore DeFi on Fantom with full privacy for your activity and assets. Swap Fantom coins anonymously with Private SpookySwap.',
+          exchange: SwapExchange.SPOOKY,
         }}
         className="app-margin-top app-margin-top-small app-margin-left"
       />
@@ -327,6 +354,7 @@ const PeggingListApps = () => {
           nameDesc: 'Private Trader Joe',
           chain: ['Avalanche', 'DEX'],
           desc: 'Trade confidentially on Trader Joe. Faster privacy swap is enabled by fast transaction finality on Avalanche.',
+          exchange: SwapExchange.JOE,
         }}
         className="app-margin-top app-margin-top-small app-margin-right"
       />

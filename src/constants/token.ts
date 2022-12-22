@@ -18,7 +18,6 @@ import zecLogoUrl from 'assets/svg/zec-logo.svg';
 import zilLogoUrl from 'assets/svg/zil-logo.svg';
 import { isMainnet } from 'config';
 
-import { SwapExchange } from '../pages/Swap/features/FormUnshield/FormUnshield.types';
 import { SupportedChainId } from './chains';
 const { PRVIDSTR } = require('incognito-chain-web-js/build/web/wallet');
 
@@ -164,6 +163,26 @@ const BIG_COINS = {
       ? 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696'
       : 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
   },
+  BNB: {
+    tokenID: isMainnet
+      ? 'e5032c083f0da67ca141331b6005e4a3740c50218f151a5e829e9d03227e33e2'
+      : 'e5032c083f0da67ca141331b6005e4a3740c50218f151a5e829e9d03227e33e2',
+  },
+  FTM: {
+    tokenID: isMainnet
+      ? '6eed691cb14d11066f939630ff647f5f1c843a8f964d9a4d295fa9cd1111c474'
+      : '6eed691cb14d11066f939630ff647f5f1c843a8f964d9a4d295fa9cd1111c474',
+  },
+  AVAX: {
+    tokenID: isMainnet
+      ? 'c469fb02623a023b469c81e1564193da7d85fe918cd4a4fdd2c64f97f59f60f5'
+      : 'c469fb02623a023b469c81e1564193da7d85fe918cd4a4fdd2c64f97f59f60f5',
+  },
+  USDC_AVAX: {
+    tokenID: isMainnet
+      ? '9624c2357d9be1cb0136e2743d891382e754cc82b53bc249a22fb890e62cf3a6'
+      : '9624c2357d9be1cb0136e2743d891382e754cc82b53bc249a22fb890e62cf3a6',
+  },
 };
 
 const PRIVATE_TOKEN_TYPE = {
@@ -171,7 +190,7 @@ const PRIVATE_TOKEN_TYPE = {
   TOKEN: 1, // including ERC20, BEP1, BEP2,...
 };
 
-interface IGroupNetwork {
+export interface IGroupNetwork {
   [key: string]: number[];
 }
 
@@ -371,29 +390,11 @@ const MAIN_TOKENS = {
   ZIL_TOKEN_ID,
 };
 
-const GROUP_CURRENCY_TYPE_BY_EXCHANGE: IGroupNetwork = {
-  [SwapExchange.UNISWAP]: [
-    PRIVATE_TOKEN_CURRENCY_TYPE.ETH,
-    PRIVATE_TOKEN_CURRENCY_TYPE.ERC20,
-    PRIVATE_TOKEN_CURRENCY_TYPE.MATIC,
-    PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20,
-  ],
-
-  [SwapExchange.PANCAKE_SWAP]: [PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BNB, PRIVATE_TOKEN_CURRENCY_TYPE.BSC_BEP20],
-
-  [SwapExchange.CURVE]: [PRIVATE_TOKEN_CURRENCY_TYPE.MATIC, PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20],
-
-  [SwapExchange.SPOOKY]: [PRIVATE_TOKEN_CURRENCY_TYPE.FTM, PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20],
-
-  [SwapExchange.JOE]: [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX, PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20],
-};
-
 export {
   BIG_COINS,
   CONNECT_NETWORK_IMG,
   CRYPTO_ICON_URL,
   DECIMALS,
-  GROUP_CURRENCY_TYPE_BY_EXCHANGE,
   GROUP_NETWORK,
   MAIN_NETWORK_NAME,
   MAIN_NETWORK_NAME_ICON,
