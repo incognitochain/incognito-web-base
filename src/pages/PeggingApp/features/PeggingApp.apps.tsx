@@ -143,6 +143,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean; canClick: boolean }>`
 
   .wrap-main-content {
     //flex-direction: column;
+    //top: ${({ canClick }) => (canClick ? -20 : 0)}px;
   }
 
   .desc-text {
@@ -276,11 +277,11 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
           <img src={data.img} className="item-img" alt="icon" />
           {canClick && <LinkIcon className="vector-link-icon" />}
           <Col className="wrap-main-content">
-            {!isMobile && Status}
+            {!isMobile && !canClick && Status}
             <div className="wrap-name">
               <Row align="middle">
                 <h5 className="normal-text">{data.name}</h5>
-                {isMobile && Status}
+                {isMobile && !canClick && Status}
               </Row>
             </div>
             <p className="text2 normal-text name-desc-text h8">{data.nameDesc}</p>

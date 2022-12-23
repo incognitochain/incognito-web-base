@@ -502,8 +502,8 @@ const getUnshieldData = ({
       decimals: _sellToken.pDecimals,
     });
 
-    tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
-
+    // tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
+    tradePath = exchangeSelectedData?.tradePathStr || '';
     let tradeFeeText = '';
     if (isUseTokenFee) {
       tradeFeeText = `${
@@ -751,7 +751,7 @@ const parseExchangeDataModelResponse = (
     appName: data?.AppName,
     exchangeName: `${getExchangeName(data?.AppName)} (${networkName})`,
     fees: parseFeeDataModelResponse(data?.Fee || []) || [],
-    routes: data?.Paths || [],
+    routes: data?.PathsContract || [],
     incTokenID: incTokenID || '',
     feeAddress: data?.FeeAddress || '',
     callContract: data?.CallContract,
@@ -762,6 +762,7 @@ const parseExchangeDataModelResponse = (
     expectedAmount: data?.AmountOutPreSlippage || '0',
     rate: data?.Rate || '1',
     impactAmount: data?.ImpactAmount ? Number(data?.ImpactAmount || 0) : null,
+    tradePathStr: data.Paths || '',
   };
   return exchangeData;
 };
