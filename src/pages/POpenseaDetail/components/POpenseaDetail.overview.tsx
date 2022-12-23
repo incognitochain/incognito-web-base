@@ -1,4 +1,5 @@
-import bannerImg from 'assets/images/banners/collection-banner.png';
+import ImagePlaceholder from 'components/ImagePlaceholder';
+import { POpenseaCollection } from 'models/model/POpenseaCollection';
 import { memo } from 'react';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
@@ -12,7 +13,7 @@ const Styled = styled.div`
     flex-direction: column;
   }
   .banner {
-    height: 240px;
+    height: 200px;
     width: 100%;
     border-radius: 16px;
     object-fit: cover;
@@ -20,6 +21,9 @@ const Styled = styled.div`
 
   .avatar-container {
     align-self: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
   }
 
   .avatar {
@@ -27,8 +31,9 @@ const Styled = styled.div`
     height: 140px;
     border: 4px solid ${({ theme }) => theme.white};
     border-radius: 16px;
-    margin-top: -114px;
+    margin-top: -96px;
     object-fit: cover;
+    align-self: center;
   }
 
   .collection-name {
@@ -111,6 +116,7 @@ const Styled = styled.div`
     .artis-container {
       padding-left: 8px;
       padding-right: 8px;
+      flex-direction: column;
     }
 
     .volumn-container {
@@ -120,8 +126,14 @@ const Styled = styled.div`
   `}
 `;
 
-const POpenseaDetailOverview = () => {
-  const renderTitleItem = (title: string, subTitle: string) => {
+interface POpenseaDetailOverviewProps {
+  collection: POpenseaCollection;
+}
+
+const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
+  const { collection } = props;
+
+  const renderTitleItem = (title?: string, subTitle?: string) => {
     return (
       <div className="artis-container">
         <p className="title">{title}</p>
@@ -130,7 +142,7 @@ const POpenseaDetailOverview = () => {
     );
   };
 
-  const renderVolumnItem = (title: string, subTitle: string) => {
+  const renderVolumnItem = (title?: string, subTitle?: string) => {
     return (
       <div className="volumn-container">
         <p className="volumn">{title}</p>
@@ -138,28 +150,29 @@ const POpenseaDetailOverview = () => {
       </div>
     );
   };
+
   return (
     <Styled>
       <div className="banner-container">
-        <img alt="banner" className="banner" src={bannerImg} />
+        <ImagePlaceholder className="banner" src={collection.bannerImageUrl} />
         <div className="avatar-container">
-          <img alt="avatar" className="avatar" src={bannerImg} />
-          <p className="collection-name">Wolf Game</p>
-          {renderTitleItem('By', 'wg_deployer')}
+          <ImagePlaceholder className="avatar" src={collection.imageUrl} />
+          <p className="collection-name">{collection.name}</p>
+          {renderTitleItem('By', collection.mediumUsername)}
         </div>
         <div className="info-container">
           {renderTitleItem('Items', '12832')}
-          {renderTitleItem('Created', 'Nov 2021')}
-          {renderTitleItem('Creator fee', '6.9%')}
+          {renderTitleItem('Created', collection.getCreatedDateWith('ll'))}
+          {renderTitleItem('Creator fee', `%`)}
           {renderTitleItem('Chain', 'Etherum')}
           {renderTitleItem('Category', 'Gaming')}
         </div>
         <div className="info-container">
-          {renderVolumnItem('24,641 ETH', 'total volume')}
-          {renderVolumnItem('0.968 ETH', 'floor price')}
+          {renderVolumnItem(`${collection.stats?.totalVolume} ETH`, 'total volume')}
+          {renderVolumnItem(`${collection.stats?.floorPrice} ETH`, 'floor price')}
           {renderVolumnItem('0.8505 wETH', 'best offer')}
           {renderVolumnItem('4%', 'listed')}
-          {renderVolumnItem('2,723', 'owners')}
+          {renderVolumnItem(`${collection.stats?.numOwners}`, 'owners')}
           {renderVolumnItem('20%', 'unique owners')}
         </div>
       </div>

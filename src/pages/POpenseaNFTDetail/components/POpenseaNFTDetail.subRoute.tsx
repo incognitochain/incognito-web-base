@@ -8,8 +8,8 @@ const Styled = styled.div`
   flex-direction: row;
 
   .sub-title {
-    font-weight: 500;
-    font-size: 16px;
+    font-weight: 400;
+    font-size: 14px;
     letter-spacing: 0.01em;
     text-align: center;
     margin-right: 8px;
@@ -53,7 +53,11 @@ const POpenseaNFTDetailSubRoute = (props: POpenseaDetailSubRouteProps) => {
         <p className="sub-title earnings-text">pOpensea</p>
       </button>
       <p className="sub-title">/</p>
-      <button>
+      <button
+        onClick={() => {
+          history.goBack();
+        }}
+      >
         <p className="sub-title earnings-text">{props.collectionName}</p>
       </button>
       <p className="sub-title">/</p>

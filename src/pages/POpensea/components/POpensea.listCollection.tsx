@@ -3,17 +3,24 @@ import type { ColumnsType } from 'antd/es/table';
 import arrowBottomActive from 'assets/svg/arrow-bottom-active.svg';
 import arrowDisable from 'assets/svg/arrow-disable.svg';
 import arrowTopActive from 'assets/svg/arrow-top-active.svg';
-import { CRYPTO_ICON_URL } from 'constants/token';
-import { Pool } from 'pages/Earnings/Earnings.types';
+import ImagePlaceholder from 'components/ImagePlaceholder';
+import { POpenseaCollection } from 'models/model/POpenseaCollection';
 import React from 'react';
 import { isMobile } from 'react-device-detect';
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { isFetchingPoolsSelectors, poolsSelectors } from 'state/pools/pool.selectors';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 const Styled = styled.div`
   margin-top: 24px;
+
+  tr {
+    height: 80px !important;
+  }
+  .logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
   .baseText {
     font-size: 18px;
     font-weight: 500;
@@ -45,10 +52,6 @@ const Styled = styled.div`
     color: #757575;
   }
 
-  .ant-table-theadth.ant-table-column-has-sorters: hover {
-    background-color: #303030;
-  }
-
   td.ant-table-column-sort {
     background: transparent;
   }
@@ -59,7 +62,6 @@ const Styled = styled.div`
   }
   .tableRow {
     height: 64px;
-    margin-top: 16px;
   }
   .tableRow:hover td {
     cursor: pointer;
@@ -158,101 +160,161 @@ const Styled = styled.div`
   `}
 `;
 
-const POpenseaListCollection = () => {
-  const history = useHistory();
+interface POpenseaListCollectionProps {
+  isFetching: boolean;
+  collections: POpenseaCollection[];
+  onClickItem: (item: POpenseaCollection) => void;
+  onEndReach?: () => void;
+}
 
-  const getIconUrl = (symbol: string) => {
-    const formatedSymbol = String(symbol).toUpperCase();
-    if (symbol === 'PRV') {
-      return 'https://statics.incognito.org/wallet/cryptocurrency-icons/32@2x/color/prv@2x.png';
-    }
-    const url = `${CRYPTO_ICON_URL}/${formatedSymbol}.png`;
+const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
+  const { isFetching, collections, onClickItem } = props;
+
+  const getIconUrl = (url: string) => {
     return url;
   };
 
-  const columns: ColumnsType<Pool> = [
+  const columns: ColumnsType<POpenseaCollection> = [
     {
       title: '#',
       key: 'index',
-      render: (text, record, index) => <p className="baseText">{index + 1}</p>,
+      render: (text, record, index) => (
+        <p key={index.toString()} className="baseText">
+          {index + 1}
+        </p>
+      ),
       responsive: ['md'],
     },
     {
       title: 'Collection',
       dataIndex: 'collection',
       key: 'collection',
-      render: (text, record, index) => (
-        <div className="poolContainer">
+      render: (text, record: POpenseaCollection, index) => (
+        <div key={index.toString()} className="poolContainer">
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img src={getIconUrl(record.token1Symbol)} style={{ width: 64, height: 64, borderRadius: 8 }} />
+            <ImagePlaceholder className="logo" src={getIconUrl(record.imageUrl || '')} />
             <p className="baseText" style={{ marginLeft: 24 }}>
-              {record?.token1Symbol}
+              {record.name}
             </p>
           </div>
         </div>
       ),
     },
     {
-      title: 'TVL',
-      dataIndex: 'totalValueLockUSD',
-      key: 'totalValueLockUSD',
+      dataIndex: 'Volumn',
+      key: 'volumn',
       responsive: ['md'],
-      render: (text) => <p className="baseText">${text.toFixed(2)}</p>,
-    },
-    {
-      dataIndex: 'volume',
-      key: 'volume',
-      responsive: ['md'],
-      align: 'left',
+      align: 'center',
       showSorterTooltip: false,
-      render: (text) => <p className="baseText">${text.toFixed(2)}</p>,
-      sorter: (a, b) => a.volume - b.volume,
+      render: (text, record) => <p className="baseText">{record.stats?.totalVolume} ETH</p>,
+      sorter: (a, b) => (a.stats?.totalVolume || 0) - (b.stats?.totalVolume || 0),
       // eslint-disable-next-line react/prop-types
       title: ({ sortColumns }) => {
         // eslint-disable-next-line react/prop-types
-        const sortedColumn = sortColumns?.find(({ column }) => column.key === 'volume');
+        const sortedColumn = sortColumns?.find(({ column }) => column.key === 'volumn');
         return (
-          <div className="headerTitle" style={{ justifyContent: 'flex-start' }}>
-            Volume 24H
+          <div className="headerTitle" style={{ justifyContent: 'center' }}>
+            Volumn
             {sortedColumn ? (
               sortedColumn.order === 'ascend' ? (
-                <img src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
+                <img alt="" src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
               ) : sortedColumn?.order === 'descend' ? (
-                <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
+                <img alt="" src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
               ) : (
-                <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+                <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
               )
             ) : (
-              <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+              <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
             )}
           </div>
         );
       },
     },
     {
-      key: 'apy',
-      dataIndex: 'apy',
-      render: (text) => <p className="greenBoldText">{text}%</p>,
-      align: 'right',
+      dataIndex: 'Floorprice',
+      key: 'floorprice',
+      responsive: ['md'],
+      align: 'center',
       showSorterTooltip: false,
-      sorter: (a, b) => a.apy - b.apy,
+      render: (text, record) => <p className="baseText">{record.stats?.floorPrice} ETH</p>,
+      sorter: (a, b) => (a.stats?.floorPrice || 0) - (b.stats?.floorPrice || 0),
       // eslint-disable-next-line react/prop-types
       title: ({ sortColumns }) => {
         // eslint-disable-next-line react/prop-types
-        const sortedColumn = sortColumns?.find(({ column }) => column.key === 'apy');
+        const sortedColumn = sortColumns?.find(({ column }) => column.key === 'floorprice');
         return (
-          <div className="headerTitle">
-            APY
+          <div className="headerTitle" style={{ justifyContent: 'center' }}>
+            Floorprice
             {sortedColumn ? (
               sortedColumn.order === 'ascend' ? (
-                <img src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
+                <img alt="" src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
               ) : sortedColumn?.order === 'descend' ? (
-                <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
+                <img alt="" src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
               ) : (
-                <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+                <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
               )
             ) : (
-              <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+              <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      dataIndex: 'Sales',
+      key: 'totalsales',
+      responsive: ['md'],
+      align: 'center',
+      showSorterTooltip: false,
+      render: (text, record) => <p className="baseText">{record.stats?.totalSales}</p>,
+      sorter: (a, b) => (a.stats?.totalSales || 0) - (b.stats?.totalSales || 0),
+      // eslint-disable-next-line react/prop-types
+      title: ({ sortColumns }) => {
+        // eslint-disable-next-line react/prop-types
+        const sortedColumn = sortColumns?.find(({ column }) => column.key === 'totalsales');
+        return (
+          <div className="headerTitle" style={{ justifyContent: 'center' }}>
+            Sales
+            {sortedColumn ? (
+              sortedColumn.order === 'ascend' ? (
+                <img alt="" src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              ) : sortedColumn?.order === 'descend' ? (
+                <img alt="" src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              ) : (
+                <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+              )
+            ) : (
+              <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      dataIndex: 'Unique Owners',
+      key: 'unique_owners',
+      responsive: ['md'],
+      align: 'center',
+      showSorterTooltip: false,
+      render: (text, record) => <p className="baseText">{record.stats?.numOwners}</p>,
+      sorter: (a, b) => (a.stats?.numOwners || 0) - (b.stats?.numOwners || 0),
+      // eslint-disable-next-line react/prop-types
+      title: ({ sortColumns }) => {
+        // eslint-disable-next-line react/prop-types
+        const sortedColumn = sortColumns?.find(({ column }) => column.key === 'unique_owners');
+        return (
+          <div className="headerTitle" style={{ justifyContent: 'center' }}>
+            Unique Owners
+            {sortedColumn ? (
+              sortedColumn.order === 'ascend' ? (
+                <img alt="" src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              ) : sortedColumn?.order === 'descend' ? (
+                <img alt="" src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              ) : (
+                <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+              )
+            ) : (
+              <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
             )}
           </div>
         );
@@ -260,27 +322,22 @@ const POpenseaListCollection = () => {
     },
   ];
 
-  const listPool = useSelector(poolsSelectors);
-  const isFetching = useSelector(isFetchingPoolsSelectors);
-
   return (
     <Styled>
-      <div>
-        <Table
-          columns={columns}
-          dataSource={listPool}
-          size="large"
-          loading={isFetching}
-          pagination={false}
-          rowClassName="tableRow"
-          onRow={(r) => ({
-            onClick: () => {
-              if (isMobile) return;
-              history.push('/popensea/collection-detail', { tokenId1: r?.token1ID, tokenId2: r?.token2ID });
-            },
-          })}
-        />
-      </div>
+      <Table
+        columns={columns}
+        dataSource={collections}
+        size="large"
+        // loading={isFetching}
+        pagination={false}
+        rowClassName="tableRow"
+        onRow={(collection) => ({
+          onClick: () => {
+            if (isMobile) return;
+            onClickItem(collection);
+          },
+        })}
+      />
     </Styled>
   );
 };

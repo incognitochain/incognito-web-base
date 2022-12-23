@@ -9,8 +9,8 @@ const Styled = styled.div`
   flex-direction: row;
 
   .sub-title {
-    font-weight: 500;
-    font-size: 16px;
+    font-weight: 400;
+    font-size: 14px;
     letter-spacing: 0.01em;
     text-align: center;
     margin-right: 8px;

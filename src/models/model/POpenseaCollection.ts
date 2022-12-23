@@ -1,121 +1,284 @@
-export interface POpenseaCollection {
-  primary_asset_contracts: PrimaryAssetContract[];
-  traits: Traits;
-  stats: Stats;
-  banner_image_url: any;
-  chat_url: any;
-  created_date: string;
-  default_to_fiat: boolean;
-  description: any;
-  dev_buyer_fee_basis_points: string;
-  dev_seller_fee_basis_points: string;
-  discord_url: any;
-  display_data: DisplayData;
-  external_url: any;
-  featured: boolean;
-  featured_image_url: any;
-  hidden: boolean;
-  safelist_request_status: string;
-  image_url: any;
-  is_subject_to_whitelist: boolean;
-  large_image_url: any;
-  medium_username: any;
-  name: string;
-  only_proxied_transfers: boolean;
-  opensea_buyer_fee_basis_points: string;
-  opensea_seller_fee_basis_points: string;
-  payout_address: any;
-  require_email: boolean;
-  short_description: any;
-  slug: string;
-  telegram_url: any;
-  twitter_username: any;
-  instagram_username: any;
-  wiki_url: any;
-  is_nsfw: boolean;
-  fees: Fees;
-  is_rarity_enabled: boolean;
+import { get } from 'lodash';
+import moment from 'moment';
+
+export class POpenseaCollection {
+  primaryAssetContracts?: PrimaryAssetContract[];
+  stats?: Stats;
+  displayData?: DisplayData;
+  fees?: Fees;
+  editors?: string[];
+  paymentTokens?: PaymentToken[];
+  traits?: any;
+  bannerImageUrl?: string;
+  chatUrl?: string;
+  createdDate?: string;
+  defaultToFiat?: boolean;
+  description?: string;
+  devBuyerFeeBasisPoints?: string;
+  devSellerFeeBasisPoints?: string;
+  discordUrl?: string;
+  externalUrl?: string;
+  featured?: boolean;
+  featuredImageUrl?: string;
+  hidden?: boolean;
+  safelistRequestStatus?: string;
+  imageUrl?: string;
+  isSubjectToWhitelist?: boolean;
+  largeImageUrl?: string;
+  mediumUsername?: string;
+  name?: string;
+  onlyProxiedTransfers?: boolean;
+  openseaBuyerFeeBasisPoints?: string;
+  openseaSellerFeeBasisPoints?: string;
+  payoutAddress?: string;
+  requireEmail?: boolean;
+  shortDescription?: string;
+  slug?: string;
+  telegramUrl?: string;
+  twitterUsername?: string;
+  instagramUsername?: string;
+  wikiUrl?: string;
+  isNsfw?: boolean;
+  isRarityEnabled?: boolean;
+
+  getCreatedDateWith(format?: string) {
+    return this.createdDate ? moment(new Date(this.createdDate)).format(format) : '';
+  }
 }
 
-export interface PrimaryAssetContract {
-  address: string;
-  asset_contract_type: string;
-  created_date: string;
-  name: string;
-  nft_version: any;
-  opensea_version: any;
-  owner: number;
-  schema_name: string;
+export interface PaymentToken {
+  id: number;
   symbol: string;
-  total_supply: string;
-  description: any;
-  external_link: any;
-  image_url: any;
-  default_to_fiat: boolean;
-  dev_buyer_fee_basis_points: number;
-  dev_seller_fee_basis_points: number;
-  only_proxied_transfers: boolean;
-  opensea_buyer_fee_basis_points: number;
-  opensea_seller_fee_basis_points: number;
-  buyer_fee_basis_points: number;
-  seller_fee_basis_points: number;
-  payout_address: any;
-}
-
-export interface Traits {}
-
-export interface Stats {
-  one_hour_volume: number;
-  one_hour_change: number;
-  one_hour_sales: number;
-  one_hour_sales_change: number;
-  one_hour_average_price: number;
-  one_hour_difference: number;
-  six_hour_volume: number;
-  six_hour_change: number;
-  six_hour_sales: number;
-  six_hour_sales_change: number;
-  six_hour_average_price: number;
-  six_hour_difference: number;
-  one_day_volume: number;
-  one_day_change: number;
-  one_day_sales: number;
-  one_day_sales_change: number;
-  one_day_average_price: number;
-  one_day_difference: number;
-  seven_day_volume: number;
-  seven_day_change: number;
-  seven_day_sales: number;
-  seven_day_average_price: number;
-  seven_day_difference: number;
-  thirty_day_volume: number;
-  thirty_day_change: number;
-  thirty_day_sales: number;
-  thirty_day_average_price: number;
-  thirty_day_difference: number;
-  total_volume: number;
-  total_sales: number;
-  total_supply: number;
-  count: number;
-  num_owners: number;
-  average_price: number;
-  num_reports: number;
-  market_cap: number;
-  floor_price: number;
+  address: string;
+  imageUrl: string;
+  name: string;
+  decimals: number;
+  ethPrice: number;
+  usdPrice: number;
 }
 
 export interface DisplayData {
-  card_display_style: string;
-  images: any[];
+  cardDisplayStyle?: string;
+  images?: any[];
 }
 
 export interface Fees {
-  seller_fees: SellerFees;
-  opensea_fees: OpenseaFees;
+  sellerFees?: any;
+  openseaFees?: any;
 }
 
-export interface SellerFees {}
+export interface PrimaryAssetContract {
+  address?: string;
+  assetContractType?: string;
+  createdDate?: string;
+  name?: string;
+  nftVersion?: string;
+  openseaVersion?: string;
+  owner?: number;
+  schemaName?: string;
+  symbol?: string;
+  totalSupply?: string;
+  description?: string;
+  externalLink?: string;
+  imageUrl?: string;
+  defaultToFiat?: boolean;
+  devBuyerFeeBasisPoints?: number;
+  devSellerFeeBasisPoints?: number;
+  onlyProxiedTransfers?: boolean;
+  openseaBuyerFeeBasisPoints?: number;
+  openseaSellerFeeBasisPoints?: number;
+  buyerFeeBasisPoints?: number;
+  sellerFeeBasisPoints?: number;
+  payoutAddress?: string;
+}
 
-export interface OpenseaFees {
-  '0x0000a26b00c1f0df003000390027140000faa719': number;
+export interface Stats {
+  oneHourVolume?: number;
+  oneHourChange?: number;
+  oneHourSales?: number;
+  oneHourSalesChange?: number;
+  oneHourAveragePrice?: number;
+  oneHourDifference?: number;
+  sixHourVolume?: number;
+  sixHourChange?: number;
+  sixHourSales?: number;
+  sixHourSalesChange?: number;
+  sixHourAveragePrice?: number;
+  sixHourDifference?: number;
+  oneDayVolume?: number;
+  oneDayChange?: number;
+  oneDaySales?: number;
+  oneDaySalesChange?: number;
+  oneDayAveragePrice?: number;
+  oneDayDifference?: number;
+  sevenDayVolume?: number;
+  sevenDayChange?: number;
+  sevenDaySales?: number;
+  sevenDayAveragePrice?: number;
+  sevenDayDifference?: number;
+  thirtyDayVolume?: number;
+  thirtyDayChange?: number;
+  thirtyDaySales?: number;
+  thirtyDayAveragePrice?: number;
+  thirtyDayDifference?: number;
+  totalVolume?: number;
+  totalSales?: number;
+  totalSupply?: number;
+  count?: number;
+  numOwners?: number;
+  averagePrice?: number;
+  numReports?: number;
+  marketCap?: number;
+  floorPrice?: number;
+}
+
+export class Convert {
+  public static toPOpenseaCollection(json: any): POpenseaCollection {
+    const collection = new POpenseaCollection();
+    if (json && json.payment_tokens && json.payment_tokens.length > 0) {
+      collection.paymentTokens = json.payment_tokens.map((item: any) => Convert.toPaymentToken(item));
+    }
+    if (json && json.primary_asset_contracts && json.primary_asset_contracts.length > 0) {
+      collection.primaryAssetContracts = json.primary_asset_contracts.map((item: any) =>
+        Convert.toPrimaryAssetContract(item)
+      );
+    }
+    if (json && json.stats) {
+      collection.stats = Convert.toStats(json.stats);
+    }
+    if (json && json.display_data) {
+      collection.displayData = Convert.toDisplayData(json.display_data);
+    }
+    if (json && json.fees) {
+      collection.fees = Convert.toFees(json.fees);
+    }
+    collection.editors = get(json, 'editors');
+    collection.traits = get(json, 'traits');
+    collection.bannerImageUrl = get(json, 'banner_image_url');
+    collection.chatUrl = get(json, 'chat_url');
+    collection.createdDate = get(json, 'created_date');
+    collection.defaultToFiat = get(json, 'default_to_fiat');
+    collection.description = get(json, 'description');
+    collection.devBuyerFeeBasisPoints = get(json, 'dev_buyer_fee_basis_points');
+    collection.devSellerFeeBasisPoints = get(json, 'dev_seller_fee_basis_points');
+    collection.discordUrl = get(json, 'discord_url');
+    collection.externalUrl = get(json, 'external_url');
+    collection.featured = get(json, 'featured');
+    collection.hidden = get(json, 'hidden');
+    collection.safelistRequestStatus = get(json, 'safelist_request_status');
+    collection.imageUrl = get(json, 'image_url');
+    collection.isSubjectToWhitelist = get(json, 'is_subject_to_whitelist');
+    collection.largeImageUrl = get(json, 'large_image_url');
+    collection.mediumUsername = get(json, 'medium_username');
+    collection.onlyProxiedTransfers = get(json, 'name');
+    collection.name = get(json, 'name');
+    collection.openseaBuyerFeeBasisPoints = get(json, 'name');
+    collection.openseaSellerFeeBasisPoints = get(json, 'name');
+    collection.payoutAddress = get(json, 'name');
+    collection.requireEmail = get(json, 'name');
+    collection.shortDescription = get(json, 'name');
+    collection.telegramUrl = get(json, 'name');
+    collection.twitterUsername = get(json, 'name');
+    collection.instagramUsername = get(json, 'name');
+    collection.wikiUrl = get(json, 'name');
+    collection.isNsfw = get(json, 'name');
+    collection.isRarityEnabled = get(json, 'name');
+    return collection;
+  }
+
+  public static toPaymentToken(json: any): PaymentToken {
+    return {
+      id: get(json, 'id'),
+      symbol: get(json, 'symbol'),
+      address: get(json, 'address'),
+      imageUrl: get(json, 'imageUrl'),
+      name: get(json, 'name'),
+      decimals: get(json, 'decimals'),
+      ethPrice: get(json, 'ethPrice'),
+      usdPrice: get(json, 'usdPrice'),
+    };
+  }
+
+  public static toPrimaryAssetContract(json: any): PrimaryAssetContract {
+    return {
+      address: get(json, 'address'),
+      assetContractType: get(json, 'asset_contract_type'),
+      createdDate: get(json, 'created_date'),
+      name: get(json, 'name'),
+      nftVersion: get(json, 'nft_version'),
+      openseaVersion: get(json, 'opensea_version'),
+      owner: get(json, 'owner'),
+      schemaName: get(json, 'schema_name'),
+      symbol: get(json, 'symbol'),
+      totalSupply: get(json, 'total_supply'),
+      description: get(json, 'description'),
+      externalLink: get(json, 'external_link'),
+      imageUrl: get(json, 'image_url'),
+      defaultToFiat: get(json, 'default_to_fiat'),
+      devBuyerFeeBasisPoints: get(json, 'dev_buyer_fee_basis_points'),
+      devSellerFeeBasisPoints: get(json, 'dev_seller_fee_basis_points'),
+      onlyProxiedTransfers: get(json, 'only_proxied_transfers'),
+      openseaBuyerFeeBasisPoints: get(json, 'opensea_buyer_fee_basis_points'),
+      openseaSellerFeeBasisPoints: get(json, 'opensea_seller_fee_basis_points'),
+      buyerFeeBasisPoints: get(json, 'buyer_fee_basis_points'),
+      sellerFeeBasisPoints: get(json, 'seller_fee_basis_points'),
+      payoutAddress: get(json, 'payout_address'),
+    };
+  }
+
+  public static toStats(json: any): Stats {
+    return {
+      oneHourVolume: get(json, 'one_hour_volume'),
+      oneHourChange: get(json, 'one_hour_change'),
+      oneHourSales: get(json, 'one_hour_sales'),
+      oneHourSalesChange: get(json, 'one_hour_sales_change'),
+      oneHourAveragePrice: get(json, 'one_hour_average_price'),
+      oneHourDifference: get(json, 'one_hour_difference'),
+      sixHourVolume: get(json, 'six_hour_volume'),
+      sixHourChange: get(json, 'six_hour_change'),
+      sixHourSales: get(json, 'six_hour_sales'),
+      sixHourSalesChange: get(json, 'six_hour_sales_change'),
+      sixHourAveragePrice: get(json, 'six_hour_average_price'),
+      sixHourDifference: get(json, 'six_hour_difference'),
+      oneDayVolume: get(json, 'one_day_volume'),
+      oneDayChange: get(json, 'one_day_change'),
+      oneDaySales: get(json, 'one_day_sales'),
+      oneDaySalesChange: get(json, 'one_day_sales_change'),
+      oneDayAveragePrice: get(json, 'one_day_average_price'),
+      oneDayDifference: get(json, 'one_day_difference'),
+      sevenDayVolume: get(json, 'seven_day_volume'),
+      sevenDayAveragePrice: get(json, 'seven_day_average_price'),
+      sevenDayChange: get(json, 'seven_day_change'),
+      sevenDayDifference: get(json, 'seven_day_difference'),
+      sevenDaySales: get(json, 'seven_day_sales'),
+      thirtyDayVolume: get(json, 'thirty_day_volume'),
+      thirtyDayChange: get(json, 'thirty_day_change'),
+      thirtyDaySales: get(json, 'thirty_day_sales'),
+      thirtyDayDifference: get(json, 'thirty_day_difference'),
+      thirtyDayAveragePrice: get(json, 'thirty_day_average_price'),
+      totalVolume: get(json, 'total_volume'),
+      totalSales: get(json, 'total_sales'),
+      totalSupply: get(json, 'total_supply'),
+      averagePrice: get(json, 'average_price'),
+      count: get(json, 'count'),
+      numReports: get(json, 'num_reports'),
+      marketCap: get(json, 'market_cap'),
+      floorPrice: get(json, 'floor_price'),
+      numOwners: get(json, 'num_owners'),
+    };
+  }
+
+  public static toDisplayData(json: any): DisplayData {
+    return {
+      cardDisplayStyle: get(json, 'card_display_style'),
+      images: get(json, 'images'),
+    };
+  }
+
+  public static toFees(json: any): Fees {
+    return {
+      sellerFees: get(json, 'seller_fees'),
+      openseaFees: get(json, 'opensea_fees'),
+    };
+  }
 }

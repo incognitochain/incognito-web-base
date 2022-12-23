@@ -1,25 +1,27 @@
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 60px;
+  margin-top: 32px;
 
   .list {
     margin-top: 30px;
   }
 
-  .list-item {
-    background-color: ${({ theme }) => theme.bg4};
+  .card {
+    width: 100%;
+    height: auto;
+    background-color: ${({ theme }) => theme.bg3};
     border-radius: 16px;
-    width: 285px;
   }
 
   .item-img {
-    width: 285px;
-    height: 285px;
-    object-fit: contain;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    object-fit: cover;
+    background-color: ${({ theme }) => theme.bg4};
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
   }
 
   .item-info {
@@ -33,13 +35,14 @@ export const Styled = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
   }
 
   .item-name {
     font-weight: 600;
     font-size: 16px;
     line-height: 140%;
+    overflow-wrap: break-word;
+    width: 50%;
   }
 
   .item-id {
@@ -47,6 +50,7 @@ export const Styled = styled.div`
     font-size: 16px;
     line-height: 140%;
     text-align: right;
+    width: 40%;
   }
 
   .item-price {
@@ -156,6 +160,7 @@ export const Styled = styled.div`
     background-color: ${({ theme }) => theme.bg3};
     border-radius: 8px;
     border-width: 1px;
+    min-width: 190px;
 
     :hover {
       border: 1px solid ${({ theme }) => theme.border5};
@@ -188,25 +193,38 @@ export const Styled = styled.div`
     line-height: 140%;
   }
 
-  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+      margin-top: 24px;
       .filter-container {
         flex-direction: column;
         justify-content: left;
       }
 
-      .search-container {
-        flex-direction: column;
-        flex: 1;
-        width: 80%;
-      }
-
       .input-container {
-        width: 100%;
         margin-top: 16px;
       }
 
       .sort-button {
         margin-top: 16px;
+        width: 100%;
+      }
+
+    `}
+
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToExtraSmall`
+      margin-top: 16px;
+
+      .search-container {
+        flex-direction: column;
+        align-items: center;
+
+      }
+
+      .input-container {
+        width: 100%;
+      }
+
+      .sort-button {
         width: 100%;
       }
 

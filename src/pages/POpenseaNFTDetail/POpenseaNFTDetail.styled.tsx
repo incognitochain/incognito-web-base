@@ -26,8 +26,9 @@ export const WrapperContent = styled.div`
       width: 100%;
       aspect-ratio: 1 / 1;
       background-color: ${({ theme }) => theme.bg4};
-      object-fit: contain;
+      object-fit: cover;
       border-radius: 24px;
+      background-image: url('assets/images/placeholder.png');
     }
   }
 

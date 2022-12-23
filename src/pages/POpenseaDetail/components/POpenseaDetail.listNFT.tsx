@@ -1,33 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { Dropdown, List, Menu } from 'antd';
 import ArrowDownSVG from 'assets/images/arrow-down-white.svg';
-import spookyImg from 'assets/images/spooky-icon.png';
 import SearchSVG from 'assets/svg/search-icon.svg';
+import ImagePlaceholder from 'components/ImagePlaceholder';
+import { POpenseaNft } from 'models/model/POpenseaNFT';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 import { Styled, TextInputStyled } from './POpenseaDetail.listNFT.styled';
-
-const data = [
-  {
-    title: 'Title 1',
-  },
-  {
-    title: 'Title 2',
-  },
-  {
-    title: 'Title 3',
-  },
-  {
-    title: 'Title 4',
-  },
-  {
-    title: 'Title 5',
-  },
-  {
-    title: 'Title 6',
-  },
-];
 
 enum SortType {
   PriceLowToHigh = 'Price low to high',
@@ -35,21 +14,19 @@ enum SortType {
 }
 
 interface POpenseaDetailListNFTProps {
+  nfts: POpenseaNft[];
+  total?: number;
+  onClickNFTItem: (item: POpenseaNft) => void;
   onSearchChange?: (key: string) => void;
 }
 
 const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
-  const history = useHistory();
   const [keySearch, setKeySearch] = React.useState('');
   const [currentSortType, setCurrentSortType] = React.useState<SortType>(SortType.PriceLowToHigh);
 
   const onChange = (e: any) => {
     setKeySearch(e.target.value);
     props.onSearchChange && props.onSearchChange(e.target.value);
-  };
-
-  const onClickNFTItem = () => {
-    history.replace('/popensea/collection-detail/nft-detail');
   };
 
   const renderFilterComponent = () => {
@@ -66,7 +43,7 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
       <div className="filter-container">
         <div className="total-container">
           <p className="total-items">Items</p>
-          <p className="total-number">(13,737 items)</p>
+          <p className="total-number">{`(${props.total} items)`}</p>
         </div>
         <div className="search-container">
           <div className="input-container">
@@ -113,17 +90,19 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
           xl: 4,
           xxl: 4,
         }}
-        dataSource={data}
-        renderItem={(item: any) => (
-          <List.Item className="list-item" onClick={onClickNFTItem}>
-            <img alt="item-img" className="item-img" src={spookyImg} />
-            <div className="item-info">
-              <div className="item-name-container">
-                <p className="item-name">{item.title}</p>
-                <p className="item-id">#13760</p>
+        dataSource={props.nfts}
+        renderItem={(item: POpenseaNft) => (
+          <List.Item onClick={() => props.onClickNFTItem(item)}>
+            <div className="card">
+              <ImagePlaceholder className="item-img" src={item.imageUrl} />
+              <div className="item-info">
+                <div className="item-name-container">
+                  <p className="item-name">{item.name}</p>
+                  <p className="item-id">{`#${item.id}`}</p>
+                </div>
+                <p className="item-price">{`${item.numSales} ETH`}</p>
+                <p className="item-last-sale">{`Last sale: ${item.lastSale} ETH`}</p>
               </div>
-              <p className="item-price">0.969 ETH</p>
-              <p className="item-last-sale">Last sale: 0.850 ETH</p>
             </div>
           </List.Item>
         )}

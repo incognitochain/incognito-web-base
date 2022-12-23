@@ -6,10 +6,11 @@ const Styled = styled.div`
   display: flex;
   /* margin-top: 20px; */
   flex-direction: row;
+  width: 100%;
 
   .sub-title {
-    font-weight: 500;
-    font-size: 16px;
+    font-weight: 400;
+    font-size: 14px;
     letter-spacing: 0.01em;
     text-align: center;
     margin-right: 8px;
@@ -26,7 +27,7 @@ const Styled = styled.div`
 `;
 
 interface POpenseaDetailSubRouteProps {
-  collectionName: string;
+  collectionName?: string;
 }
 
 const POpenseaDetailSubRoute = (props: POpenseaDetailSubRouteProps) => {
@@ -46,7 +47,7 @@ const POpenseaDetailSubRoute = (props: POpenseaDetailSubRouteProps) => {
       <button
         className="hover"
         onClick={() => {
-          history.push('/popensea');
+          history.goBack();
         }}
       >
         <p className="sub-title earnings-text">pOpensea</p>

@@ -120,8 +120,8 @@ const App = () => {
           <Route exact path="/mine/validator" component={Validators} />
           <Route exact path="/get-prv" component={GetPRV} />
           <Route exact path="/popensea" component={POpensea} />
-          <Route exact path="/popensea/collection-detail" component={POpenseaDetail} />
-          <Route exact path="/popensea/collection-detail/nft-detail" component={POpenseaNFTDetail} />
+          <Route exact path="/popensea/detail/:contract" component={POpenseaDetail} />
+          <Route exact path="/popensea/nft-detail/:contract/:tokenId" component={POpenseaNFTDetail} />
         </>
       </Switch>
     );
