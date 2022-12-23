@@ -12,10 +12,6 @@ const TAB_LIST: ITabList = {
     tabNames: ['Swap', 'Deposit'],
     rootTab: getRootTab('SWAP'),
   },
-  SWAP_PAPP: {
-    tabNames: [],
-    rootTab: getRootTab('SWAP_PAPP'),
-  },
   INCOGNITO_ACCOUNT: {
     // tabNames: ['Profile', 'Submit Proof', 'Transactions'],
     tabNames: ['Profile', 'Transactions'],
