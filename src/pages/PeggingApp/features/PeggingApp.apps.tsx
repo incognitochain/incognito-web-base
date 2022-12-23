@@ -162,7 +162,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean; canClick: boolean }>`
   }
 
   .wrap-status {
-    padding: 1px 4px;
+    padding: 1px 6px;
     width: fit-content;
     color: ${({ theme }) => theme.text1};
     border-radius: 4px;
@@ -172,6 +172,7 @@ const StyledItem = styled(Col)<{ isMobile: boolean; canClick: boolean }>`
 
   .status-text {
     height: fit-content;
+    font-size: 14px;
   }
   .wrap-apps-head {
   }
@@ -248,8 +249,8 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
   const Status = React.useMemo(
     () =>
       data.status ? (
-        <div className="wrap-status">
-          <p className="status-text description4 normal-text color-white">{data.status}</p>
+        <div className="wrap-status" style={{ backgroundColor: data.status === 'SHIPPED' ? '#27AE60' : '#404040' }}>
+          <p className="status-text color-white">{data.status}</p>
           {/* <p className="status-text fw-medium normal-text">{data.status}</p> */}
         </div>
       ) : null,
