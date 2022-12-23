@@ -27,7 +27,7 @@ export const HeaderNode = () => {
     },
     {
       icon: PNodeIcon,
-      desc: 'PNode',
+      desc: 'Node',
       func: () => {
         updateMetric({ metric: METRIC_TYPE.MINE_PNODE, uniqMetric: METRIC_UNIQ.MINE_PNODE_UNIQ });
         window.open('https://node.incognito.org/', '_blank');
