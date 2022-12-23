@@ -1,14 +1,17 @@
 import { BigNumber } from 'bignumber.js';
 import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import { minBy } from 'lodash';
 import PToken, { getTokenIdentify, ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
+import { getQueryPAppName } from 'pages/Swap/Swap.hooks';
 import { rpcClient } from 'services';
 import { AppDispatch, AppState } from 'state';
 import { getPrivacyByTokenIdentifySelectors } from 'state/token';
 import convert from 'utils/convert';
+import format from 'utils/format';
 import { getAcronymNetwork } from 'utils/token';
 
-import { getQueryPAppName } from '../../Swap.hooks';
+import { GROUP_NETWORK_ID_BY_EXCHANGE } from './FormUnshield.constants';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import {
   FormTypes,
@@ -382,8 +385,17 @@ export const actionEstimateSwapFee =
   ({ isResetForm = false }: { isResetForm: boolean }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
-      const { inputAmount, buyParentToken, buyNetworkName, sellToken, slippage, exchangeSelected, isSubmitting } =
-        unshieldDataSelector(getState());
+      const {
+        inputAmount,
+        buyParentToken,
+        buyNetworkName,
+        sellToken,
+        slippage,
+        exchangeSelected,
+        isSubmitting,
+        vaults,
+        inputOriginalAmount,
+      } = unshieldDataSelector(getState());
       if (
         !inputAmount ||
         !parseFloat(inputAmount) ||
@@ -458,18 +470,18 @@ export const actionEstimateSwapFee =
         networkText: 'Fantom',
         token: sellToken,
       });
-      const avaxExchanges = combineExchange({
-        data,
-        network: NetworkTypePayload.AVALANCHE,
-        networkID: 6,
-        networkText: 'Avalanche',
-        token: sellToken,
-      });
       const auroraExchanges = combineExchange({
         data,
         network: NetworkTypePayload.AURORA,
         networkID: 5,
         networkText: 'Aurora',
+        token: sellToken,
+      });
+      const avaxExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.AVALANCHE,
+        networkID: 6,
+        networkText: 'Avalanche',
         token: sellToken,
       });
       let exchangeSupports = [
@@ -483,9 +495,31 @@ export const actionEstimateSwapFee =
       ];
 
       const queryPAppName = getQueryPAppName();
-      console.log('SANG TEST: ', { exchangeSupports, queryPAppName });
       if (queryPAppName.isValid && queryPAppName.pAppName) {
         exchangeSupports = exchangeSupports.filter((exchange) => exchange.appName === queryPAppName.pAppName);
+      }
+
+      if (!exchangeSupports?.length) {
+        if (sellToken?.isUnified && vaults?.UnifiedTokenVaults) {
+          const tokenVault = vaults?.UnifiedTokenVaults[sellToken?.tokenID] || {};
+          const networkIDs = queryPAppName.isValid
+            ? GROUP_NETWORK_ID_BY_EXCHANGE[queryPAppName.pAppName]
+            : sellToken.listUnifiedToken.map((token) => token.networkID);
+          const incTokens = Object.values(tokenVault).filter(
+            (item: any) => item?.NetworkID && networkIDs.includes(item?.NetworkID)
+          );
+          const minTokenVault = minBy(incTokens, function (o: any) {
+            return o.Amount;
+          });
+
+          if (inputOriginalAmount >= minTokenVault.Amount) {
+            const formatAmount = format.amountVer2({
+              originalAmount: Number(minTokenVault?.Amount || 0),
+              decimals: 9,
+            });
+            throw new Error(`Max amount you can swap with this pair is ${formatAmount} ${sellToken.symbol}`);
+          }
+        }
       }
 
       if (!exchangeSupports?.length) {

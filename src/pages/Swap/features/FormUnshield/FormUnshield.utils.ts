@@ -105,6 +105,7 @@ export interface IUnshieldData {
   minUnshieldText: string;
 
   isSubmitting: boolean;
+  vaults: any;
 }
 
 const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any): string => {
@@ -688,6 +689,8 @@ const getUnshieldData = ({
     minUnshieldText,
 
     isSubmitting: submitting,
+
+    vaults,
   };
 };
 
