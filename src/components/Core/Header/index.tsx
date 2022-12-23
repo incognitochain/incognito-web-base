@@ -176,6 +176,14 @@ const HeaderElement = styled.div`
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
     align-items: center;
+    .wrap-inc-waller {
+      position: absolute;
+      right: 70px;
+    }
+  `};
+
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    align-items: center;
   `};
 `;
 
