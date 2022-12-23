@@ -23,6 +23,11 @@ const renderSectionBottom = () => {
       <h3 className="fw-bold" style={{ textAlign: 'center' }}>
         {peggingTrs.mainTitle}
       </h3>
+      <p className="h7 sub-header-text">
+        Incognito keeps your dapp usage history private with{' '}
+        <span style={{ color: 'white' }}>zero-knowledge proofs</span>. Now you can buy, trade and spend crypto
+        privately, and other people won’t see your activity on the blockchain.
+      </p>
       {/*<Row className="sub-menu">*/}
       {/*  <Row className="wrap-item watch-item">*/}
       {/*    <WatchIcon />*/}

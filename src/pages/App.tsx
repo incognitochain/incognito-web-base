@@ -17,6 +17,7 @@ import { DarkModeQueryParamReader } from 'theme';
 
 import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
+import BuyNode from './BuyNode';
 import Earnings from './Earnings';
 import Validators from './Earnings/features/Validators/Validators';
 import { GetPRV } from './GetPRV';
@@ -118,6 +119,7 @@ const App = () => {
           <Route exact path="/term-of-service" component={TermOfService} />
           <Route exact path="/mine/validator" component={Validators} />
           <Route exact path="/get-prv" component={GetPRV} />
+          <Route exact path="/buy-node" component={BuyNode} />
         </>
       </Switch>
     );
