@@ -5,6 +5,7 @@ export const Styled = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding-bottom: 20px;
     .title {
       white-space: pre-wrap;
       font-weight: 500;

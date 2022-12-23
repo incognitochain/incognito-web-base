@@ -20,11 +20,14 @@ import { useSelector } from 'react-redux';
 // import Web3Status from 'components/Core/Web3Status';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Link } from 'rebass';
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from 'services/rpcMetric';
 import { poolsSelectors } from 'state/pools';
 import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
 import { isMobile } from 'utils/userAgent';
 
+import { actionFreeSwapForm } from '../../../pages/Swap/features/FormUnshield/FormUnshield.actions';
+import { useAppDispatch } from '../../../state/hooks';
 import IncognitoWallet from '../IncognitoWallet';
 // import IncognitoWallet from '../IncognitoWallet';
 import { DrawerStyled, MenuDropdown, Styled } from './Header.styled';
@@ -35,6 +38,8 @@ interface MenuItemProps {
   path: string;
   isLink?: string;
   target?: string;
+  metric?: number;
+  uniqMetric?: number;
 }
 
 const menuItem: MenuItemProps[] = [
@@ -49,14 +54,20 @@ const menuItem: MenuItemProps[] = [
   {
     name: 'Swap',
     path: routeMarket,
+    metric: METRIC_TYPE.HEADER_SWAP,
+    uniqMetric: METRIC_UNIQ.HEADER_SWAP_UNIQ,
   },
   {
     name: 'Mine',
     path: routeStructure,
+    metric: METRIC_TYPE.HEADER_MINE,
+    uniqMetric: METRIC_UNIQ.HEADER_MINE_UNIQ,
   },
   {
     name: 'Use',
     path: routePeggingApps,
+    metric: METRIC_TYPE.HEADER_PAPPS,
+    uniqMetric: METRIC_UNIQ.HEADER_PAPPS_UNIQ,
   },
   // {
   //   name: 'Community',
@@ -164,6 +175,14 @@ const HeaderElement = styled.div`
   }
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
+    align-items: center;
+    .wrap-inc-waller {
+      position: absolute;
+      right: 70px;
+    }
+  `};
+
+  ${({ theme }) => theme.mediaWidth.upToSmall`
     align-items: center;
   `};
 `;
@@ -390,6 +409,7 @@ export default function Header() {
   const { white, black } = useTheme();
   const isInternetAlready = useInternetConnnection();
   const scrollY = useScrollPosition();
+  const dispatch = useAppDispatch();
 
   const [pathName, setPathName] = React.useState<string>('');
   const [visible, setVisible] = React.useState(false);
@@ -514,7 +534,16 @@ export default function Header() {
               {menuItem.map((item) => {
                 const isActive = item.name === pathName;
                 return (
-                  <div className="menuItem" onClick={() => setPathName(item.name)} key={item.name}>
+                  <div
+                    className="menuItem"
+                    onClick={() => {
+                      if (item.metric && item.uniqMetric) {
+                        updateMetric({ metric: item.metric, uniqMetric: item.uniqMetric });
+                      }
+                      setPathName(item.name);
+                    }}
+                    key={item.name}
+                  >
                     {item?.isLink ? (
                       <Link href={item.path} target="_blank" rel="noopener noreferrer">
                         {item.name}
@@ -523,6 +552,11 @@ export default function Header() {
                       <NavLink
                         target={item.target}
                         to={item.path}
+                        onClick={() => {
+                          if (item.path === '/swap') {
+                            dispatch(actionFreeSwapForm());
+                          }
+                        }}
                         className={`${isActive ? 'color-blue' : 'color-white'}`}
                         style={{ display: 'flex', alignItems: 'center' }}
                       >

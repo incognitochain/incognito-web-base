@@ -98,6 +98,9 @@ const enhanceFee = (WrappedComponent: any) => {
       }
       onClearInterval();
       debounceEstimateFee();
+      return () => {
+        onClearInterval();
+      };
     }, [
       unshieldAddress,
       isExternalAddress,

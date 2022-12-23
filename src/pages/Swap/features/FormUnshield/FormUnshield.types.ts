@@ -6,6 +6,7 @@ import { IUserFee } from 'services/rpcClient';
 export enum FormUnshieldActionType {
   SET_TOKEN = 'FORM_UNSHIELD/SET_TOKEN',
   FETCHING_FEE = 'FORM_UNSHIELD/FETCHING_FEE',
+  FREE_SWAP_FORM = 'FORM_UNSHIELD/FREE_SWAP_FORM',
   SET_USER_FEE = 'FORM_UNSHIELD/SET_USER_FEE',
   RESET_FEE = 'FORM_UNSHIELD/RESET_FEE',
   SET_VAULTS = 'FORM_UNSHIELD/SET_VAULTS',
@@ -152,6 +153,10 @@ export interface SwapSetNetwork extends Action {
   payload: any;
 }
 
+export interface FreeSwapFormAction extends Action {
+  type: FormUnshieldActionType.FREE_SWAP_FORM;
+}
+
 export type FormUnshieldActions =
   // Unshield action
   | UnshieldSetTokenAction
@@ -163,4 +168,5 @@ export type FormUnshieldActions =
   | SwapSetExchangeSupportsAction
   | SwapSetExchangeSelectedAction
   | SwapSetEstimateTradeErrorMsg
-  | SwapSetNetwork;
+  | SwapSetNetwork
+  | FreeSwapFormAction;

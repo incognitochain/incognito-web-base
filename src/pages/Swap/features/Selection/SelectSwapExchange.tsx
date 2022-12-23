@@ -26,11 +26,13 @@ const ArrowDown = styled(ChevronDown)<{ open?: boolean }>`
 
 const ItemStyled = styled(InputContainer)`
   cursor: pointer;
-  :hover {
-    opacity: 0.9;
-    transition: 0.2s all ease;
-    padding-right: 18px;
-    padding-left: 18px;
+  .active {
+    :hover {
+      opacity: 0.9;
+      transition: 0.2s all ease;
+      padding-right: 18px;
+      padding-left: 18px;
+    }
   }
 `;
 
@@ -84,12 +86,17 @@ export const SelectSwapExchange = React.memo((props: ISelectSwapExchange) => {
     });
   };
 
+  const active = exchanges.length > 1;
+
   return (
     <div style={{ marginTop: 8, marginBottom: 16 }}>
       <ThemedText.SmallLabel fontWeight={400} color="primary8" marginBottom="4px">
         Exchange
       </ThemedText.SmallLabel>
-      <ItemStyled onClick={showExchangesModal} className="border-hover input-container input-amount">
+      <ItemStyled
+        onClick={showExchangesModal}
+        className={`border-hover input-container input-amount ${active ? 'active' : ''}`}
+      >
         <Row>
           <img
             className="logo"
@@ -99,7 +106,7 @@ export const SelectSwapExchange = React.memo((props: ISelectSwapExchange) => {
           />
           <ThemedText.RegularLabel fontWeight={500}>{formatExchangeName(exchangeSelected)}</ThemedText.RegularLabel>
         </Row>
-        <ArrowDown size={24} />
+        {active && <ArrowDown size={24} />}
       </ItemStyled>
     </div>
   );

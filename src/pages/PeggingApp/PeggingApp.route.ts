@@ -1,7 +1,7 @@
 import { IRouteProps } from 'pages';
 import { lazy } from 'react';
 
-export const route = '/use';
+export const route = '/papps';
 
 const PeggingAppRoute: IRouteProps = {
   path: route,

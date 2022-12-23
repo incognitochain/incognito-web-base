@@ -8,18 +8,18 @@ import VisibilitySensor from 'react-visibility-sensor';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled.div`
-  margin-left: auto;
-  margin-right: auto;
   display: flex;
-  margin-top: 80px;
+  margin: 40px auto;
   justify-content: space-around;
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
+
   .achieve-title {
     text-align: center;
   }
+
   .achieve-sub-title {
     text-align: center;
     letter-spacing: 0.01em;
@@ -33,6 +33,7 @@ export const Styled = styled.div`
     transition: opacity 1200ms ease-out, transform 600ms ease-out, visibility 1200ms ease-out;
     will-change: opacity, transform, visibility;
   }
+
   .fade-in-section.is-visible {
     opacity: 1;
     transform: none;
@@ -118,10 +119,10 @@ const Analytics = () => {
         desc: 'Volume shielded',
       },
       {
-        number: 1,
-        prefix: '',
+        number: 6,
+        prefix: '+',
         suffix: 'M',
-        desc: 'Anonymous trades',
+        desc: 'Anonymous transactions',
       },
       {
         number: 100,
@@ -135,7 +136,7 @@ const Analytics = () => {
         number: 16,
         prefix: '',
         suffix: '',
-        desc: 'Bridged blockchains',
+        desc: 'Bridges supported',
       },
     ],
     [marketTrs]

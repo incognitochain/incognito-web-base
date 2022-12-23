@@ -139,7 +139,7 @@ class PToken {
     this.pricePRV = data?.PricePrv || 0;
 
     this.change = data?.PercentChange24h || '';
-    this.network = data?.Network;
+    this.network = ['Incognito', 'Unified'].includes(data?.Network) ? 'Incognito' : `p${data?.Network}`;
     this.movedUnifiedToken = data?.MovedUnifiedToken;
 
     // Token

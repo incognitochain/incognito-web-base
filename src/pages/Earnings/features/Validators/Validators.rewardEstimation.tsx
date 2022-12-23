@@ -33,9 +33,13 @@ const ChartDataInit: ChartData = {
 };
 
 const Styled = styled.div<{ isMobile: boolean }>`
-  margin-top: 140px;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
+  h5 {
+    font-size: 20px;
+    margin-top: 8px;
+  }
 
   .contentView {
     margin-top: 60px;
@@ -65,7 +69,7 @@ const Styled = styled.div<{ isMobile: boolean }>`
           display: flex;
           flex-direction: row;
           justify-content: space-between;
-          margin-bottom: 30px;
+          margin-bottom: 16px;
         }
       }
     }
@@ -196,7 +200,7 @@ const ValidatorRewardEstimation = () => {
 
   return (
     <Styled isMobile={isMobile}>
-      <h1 className="text-center">Rewards Estimation</h1>
+      <h3 className="text-center">Rewards Estimation</h3>
       <div className="contentView">
         <div className="leftView">
           <ResponsiveContainer className="chart-container" width="96%">

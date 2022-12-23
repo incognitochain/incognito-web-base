@@ -8,6 +8,7 @@ import store from 'state';
 import { useAppDispatch } from 'state/hooks';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 
+import { useQuery } from '../../Swap.hooks';
 import {
   actionChangeBuyNetwork,
   actionChangeBuyToken,
@@ -18,7 +19,10 @@ import {
   actionSetExchangeSelected,
   actionSetSwapExchangeSupports,
   actionSetSwapNetwork,
+  actionSetToken,
 } from './FormUnshield.actions';
+import { MAP_TOKEN_BY_PAPPS } from './FormUnshield.constants';
+import { SwapExchange } from './FormUnshield.types';
 const { isPaymentAddress } = require('incognito-chain-web-js/build/web/wallet');
 
 export interface TInter {
@@ -38,6 +42,7 @@ const enhanceSelect = (WrappedComponent: any) => {
     const dispatch = useAppDispatch();
     const history = useHistory();
     const location: any = useLocation();
+    const pAppName = useQuery();
 
     const refCountChangeField = React.useRef<any>(null);
     const handleSelectSellToken = async ({ token }: { token: PToken }) => {
@@ -63,16 +68,48 @@ const enhanceSelect = (WrappedComponent: any) => {
 
     const handleRotateSwapToken = () => dispatch(actionRotateSwapTokens());
 
-    React.useEffect(() => {
-      history.replace(`/swap`, {});
-    }, []);
+    const setTokensDefault = ({ tokenID1, tokenID2 }: { tokenID1: string; tokenID2: string }) => {
+      const sellToken = getPrivacyDataByTokenIDSelector(store.getState())(tokenID1);
+      const buyToken = getPrivacyDataByTokenIDSelector(store.getState())(tokenID2);
+      if (!sellToken.symbol || !buyToken.symbol) return;
+      const sell: ITokenNetwork = {
+        parentIdentify: sellToken.parentTokenID,
+        identify: sellToken.identify,
+        chainID: sellToken.chainID,
+        currency: sellToken.currencyType,
+        networkName: sellToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+      };
+      const buy: ITokenNetwork = {
+        parentIdentify: buyToken.parentTokenID,
+        identify: buyToken.identify,
+        chainID: buyToken.chainID,
+        currency: buyToken.currencyType,
+        networkName: buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+      };
+      dispatch(
+        actionSetToken({
+          sellToken: sell,
+          buyToken: buy,
+        })
+      );
+    };
+
+    const redirect = () => {
+      const exchangeSupported = Object.values(SwapExchange);
+      const token = MAP_TOKEN_BY_PAPPS[pAppName];
+      if (pAppName && exchangeSupported.includes(pAppName) && token) {
+        return setTokensDefault({ tokenID1: token.tokenID1, tokenID2: token.tokenID2 });
+      }
+      history.replace('/swap', {});
+    };
+
+    React.useEffect(redirect, [pAppName]);
 
     React.useEffect(() => {
-      if (location?.state?.tokenId1 && location?.state?.tokenId2) {
-        const sellTokenData = getPrivacyDataByTokenIDSelector(store.getState())(location?.state.tokenId1);
-        const buyTokenData = getPrivacyDataByTokenIDSelector(store.getState())(location?.state.tokenId2);
-        handleSelectSellToken({ token: sellTokenData });
-        handleSelectBuyToken({ token: buyTokenData });
+      const tokenID1 = location?.state?.tokenId1;
+      const tokenID2 = location?.state?.tokenId2;
+      if (tokenID1 && tokenID2) {
+        return setTokensDefault({ tokenID1, tokenID2 });
       }
     }, [location?.state?.tokenId1, location?.state?.tokenId2]);
 

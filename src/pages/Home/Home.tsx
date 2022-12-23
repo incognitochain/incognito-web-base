@@ -7,6 +7,7 @@ import Collections from './Home.colections';
 import GroupButtons from './Home.groupBtn';
 import { Container } from './Home.styled';
 import BGImg from './images/background.png';
+
 const Home = () => {
   const { width, height } = useWindowSize();
 
@@ -20,7 +21,7 @@ const Home = () => {
       const headerHeight = header.clientHeight;
       // const footerHeight = footer.clientHeight;
       const footerHeight = 0;
-      contentSize = height - headerHeight - footerHeight - 55;
+      contentSize = height - headerHeight - footerHeight - 35;
     }
     setContentSize(contentSize);
   };
@@ -39,8 +40,8 @@ const Home = () => {
         </p>
         <GroupButtons />
       </div>
+      <Analytics />
       <div className="section-2">
-        <Analytics />
         <Collections />
       </div>
     </Container>
