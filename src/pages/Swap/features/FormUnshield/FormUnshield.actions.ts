@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
-import { minBy } from 'lodash';
+import { maxBy } from 'lodash';
 import PToken, { getTokenIdentify, ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { getQueryPAppName } from 'pages/Swap/Swap.hooks';
@@ -508,13 +508,13 @@ export const actionEstimateSwapFee =
           const incTokens = Object.values(tokenVault).filter(
             (item: any) => item?.NetworkID && networkIDs.includes(item?.NetworkID)
           );
-          const minTokenVault = minBy(incTokens, function (o: any) {
+          const maxTokenVault = maxBy(incTokens, function (o: any) {
             return o.Amount;
           });
 
-          if (inputOriginalAmount >= minTokenVault.Amount) {
+          if (inputOriginalAmount >= maxTokenVault.Amount) {
             const formatAmount = format.amountVer2({
-              originalAmount: Number(minTokenVault?.Amount || 0),
+              originalAmount: Number(maxTokenVault?.Amount || 0),
               decimals: 9,
             });
             throw new Error(`Max amount you can swap with this pair is ${formatAmount} ${sellToken.symbol}`);
