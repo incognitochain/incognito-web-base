@@ -58,7 +58,7 @@ const GetPRV = () => {
                 history.push('/swap', { tokenId1: BIG_COINS.USDT_UNIFIED.tokenID, tokenId2: PRV.id });
               }}
             >
-              Get PRV
+              Buy PRV
             </ButtonConfirmed>
           </Row>
         </Col>

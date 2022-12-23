@@ -24,7 +24,7 @@ const Styled = styled(Row)`
   }
   .btn-become-validator {
     margin-top: 50px;
-    //width: 196px;
+    min-width: 196px;
     background-color: ${({ theme }) => theme.btn1};
     font-size: 18px !important;
     height: 50px !important;
@@ -34,7 +34,7 @@ const Styled = styled(Row)`
   }
   .btn-buy-pnode {
     margin-top: 50px;
-    //width: 196px;
+    min-width: 196px;
     background-color: ${({ theme }) => theme.white};
     color: ${({ theme }) => theme.btn1};
     font-size: 18px !important;
