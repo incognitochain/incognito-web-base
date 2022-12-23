@@ -90,6 +90,7 @@ export interface ISwapExchangeData {
   expectedAmount: string;
   rate: string;
   impactAmount: number | null;
+  tradePathStr: string;
 }
 
 export interface UnshieldSetTokenPayLoad {
