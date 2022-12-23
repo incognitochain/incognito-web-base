@@ -19,6 +19,7 @@ import {
   actionSetExchangeSelected,
   actionSetSwapExchangeSupports,
   actionSetSwapNetwork,
+  actionSetToken,
 } from './FormUnshield.actions';
 import { MAP_TOKEN_BY_PAPPS } from './FormUnshield.constants';
 import { SwapExchange } from './FormUnshield.types';
@@ -41,8 +42,7 @@ const enhanceSelect = (WrappedComponent: any) => {
     const dispatch = useAppDispatch();
     const history = useHistory();
     const location: any = useLocation();
-    const query = useQuery();
-    const pAppName = query.get('name') as any;
+    const pAppName = useQuery();
 
     const refCountChangeField = React.useRef<any>(null);
     const handleSelectSellToken = async ({ token }: { token: PToken }) => {
@@ -68,18 +68,37 @@ const enhanceSelect = (WrappedComponent: any) => {
 
     const handleRotateSwapToken = () => dispatch(actionRotateSwapTokens());
 
+    const setTokensDefault = ({ tokenID1, tokenID2 }: { tokenID1: string; tokenID2: string }) => {
+      const sellToken = getPrivacyDataByTokenIDSelector(store.getState())(tokenID1);
+      const buyToken = getPrivacyDataByTokenIDSelector(store.getState())(tokenID2);
+      if (!sellToken.symbol || !buyToken.symbol) return;
+      const sell: ITokenNetwork = {
+        parentIdentify: sellToken.parentTokenID,
+        identify: sellToken.identify,
+        chainID: sellToken.chainID,
+        currency: sellToken.currencyType,
+        networkName: sellToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+      };
+      const buy: ITokenNetwork = {
+        parentIdentify: buyToken.parentTokenID,
+        identify: buyToken.identify,
+        chainID: buyToken.chainID,
+        currency: buyToken.currencyType,
+        networkName: buyToken.networkName || MAIN_NETWORK_NAME.INCOGNITO,
+      };
+      dispatch(
+        actionSetToken({
+          sellToken: sell,
+          buyToken: buy,
+        })
+      );
+    };
+
     const redirect = () => {
       const exchangeSupported = Object.values(SwapExchange);
-      let path = window.location.pathname;
-      const search = new URLSearchParams(window.location.search).get('name') as any;
       const token = MAP_TOKEN_BY_PAPPS[pAppName];
-      if (pAppName && exchangeSupported.includes(search) && token) {
-        path += window.location.search;
-        const sellTokenData = getPrivacyDataByTokenIDSelector(store.getState())(token.tokenID1);
-        const buyTokenData = getPrivacyDataByTokenIDSelector(store.getState())(token.tokenID2);
-        handleSelectSellToken({ token: sellTokenData }).then();
-        handleSelectBuyToken({ token: buyTokenData });
-        return history.replace(path, {});
+      if (pAppName && exchangeSupported.includes(pAppName) && token) {
+        return setTokensDefault({ tokenID1: token.tokenID1, tokenID2: token.tokenID2 });
       }
       history.replace('/swap', {});
     };
@@ -87,11 +106,10 @@ const enhanceSelect = (WrappedComponent: any) => {
     React.useEffect(redirect, [pAppName]);
 
     React.useEffect(() => {
-      if (location?.state?.tokenId1 && location?.state?.tokenId2) {
-        const sellTokenData = getPrivacyDataByTokenIDSelector(store.getState())(location?.state.tokenId1);
-        const buyTokenData = getPrivacyDataByTokenIDSelector(store.getState())(location?.state.tokenId2);
-        handleSelectSellToken({ token: sellTokenData });
-        handleSelectBuyToken({ token: buyTokenData });
+      const tokenID1 = location?.state?.tokenId1;
+      const tokenID2 = location?.state?.tokenId2;
+      if (tokenID1 && tokenID2) {
+        return setTokensDefault({ tokenID1, tokenID2 });
       }
     }, [location?.state?.tokenId1, location?.state?.tokenId2]);
 

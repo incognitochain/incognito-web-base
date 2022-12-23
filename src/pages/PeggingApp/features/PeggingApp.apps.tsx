@@ -266,7 +266,7 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
       onClick={() => {
         if (!canClick) return;
         dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
-        history.push(`papps?name=${data.exchange}`);
+        history.push(`papps/${data.exchange}`);
       }}
     >
       <Col className={`wrap-item-content background2`}>

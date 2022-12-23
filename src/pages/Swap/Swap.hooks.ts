@@ -1,19 +1,24 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { MAP_TOKEN_BY_PAPPS } from './features/FormUnshield/FormUnshield.constants';
 
 const useQuery = () => {
-  const { search } = useLocation();
+  const params = useParams() as any;
   return React.useMemo(() => {
-    return new URLSearchParams(search);
-  }, [search]);
+    return params?.id || '';
+  }, [params?.id]);
 };
 
 const getQueryPAppName = () => {
   const handleQuery = () => {
-    const pAppName = new URLSearchParams(window.location.search).get('name');
-    const isValid = !!MAP_TOKEN_BY_PAPPS[pAppName || ''];
+    const location = window.location;
+    const paths = location.pathname.split('/').filter((path) => !!path);
+    let pAppName = '';
+    if (paths.length === 2 && paths[0] === 'papps') {
+      pAppName = paths[1];
+    }
+    const isValid = !!MAP_TOKEN_BY_PAPPS[pAppName];
     return { pAppName, isValid };
   };
   return handleQuery();

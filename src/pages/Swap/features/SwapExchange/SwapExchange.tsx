@@ -10,6 +10,7 @@ import { capitalizeFirstLetter } from '../ItemDetail/ItemDetail';
 import { Container, Content } from './SwapExchange.styled';
 
 const SwapExchange = (props: any) => {
+  const { isInitingForm } = props;
   const isFetching = useAppSelector(isFetchingTokenSelector);
 
   const renderForm = () => {

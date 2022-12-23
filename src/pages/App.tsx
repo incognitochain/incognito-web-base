@@ -110,8 +110,8 @@ const App = () => {
           {/*<Route exact path="/" component={Market} />*/}
           <Route exact path="/" component={Home} />
           <Route exact path="/swap" component={Market} />
-          <Route exact path="/papps/:name?" component={SwapExchange} />
-          <Route exact path="/use" component={PeggingApp} />
+          <Route exact path="/papps/:id" component={SwapExchange} />
+          <Route exact path="/papps" component={PeggingApp} />
           <Route exact path="/mine" component={Structure} />
           <Route exact path="/earnings" component={Earnings} />
           <Route exact path="/privacy-policy" component={Policy} />
