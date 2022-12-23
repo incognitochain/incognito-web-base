@@ -17,6 +17,7 @@ import { DarkModeQueryParamReader } from 'theme';
 
 import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
+import BuyNode from './BuyNode';
 import CreateProposal from './Dao/CreateProposal';
 import Governance from './Dao/Governance';
 import ProposalDetail from './Dao/ProposalDetail';
@@ -30,6 +31,7 @@ import PageNotFound from './PageNotFound/PageNotFound';
 import PeggingApp from './PeggingApp';
 import Policy from './Policy';
 import Structure from './Structure';
+import SwapExchange from './Swap/features/SwapExchange';
 import TermOfService from './TermOfService';
 
 export const HEADER_ID = 'HEADER_VIEW';
@@ -63,15 +65,6 @@ const HeaderWrapper = styled.div`
   top: 0;
   z-index: 2;
   background-color: ${({ theme }) => theme.bg2};
-`;
-
-const SupportIcon = styled.img`
-  height: 50px;
-  width: 50px;
-  :hover {
-    cursor: pointer;
-    opacity: 0.8;
-  }
 `;
 
 const App = () => {
@@ -112,7 +105,8 @@ const App = () => {
           {/*<Route exact path="/" component={Market} />*/}
           <Route exact path="/" component={Home} />
           <Route exact path="/swap" component={Market} />
-          <Route exact path="/use" component={PeggingApp} />
+          <Route exact path="/papps/:id" component={SwapExchange} />
+          <Route exact path="/papps" component={PeggingApp} />
           <Route exact path="/mine" component={Structure} />
           <Route exact path="/earnings" component={Earnings} />
           <Route exact path="/privacy-policy" component={Policy} />
@@ -122,6 +116,7 @@ const App = () => {
           <Route exact path="/vote/:id" component={ProposalDetail} />
           <Route exact path="/mine/validator" component={Validators} />
           <Route exact path="/get-prv" component={GetPRV} />
+          <Route exact path="/buy-node" component={BuyNode} />
         </>
       </Switch>
     );

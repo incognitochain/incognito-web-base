@@ -5,6 +5,7 @@ import orderBy from 'lodash/orderBy';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
+import { getQueryPAppName } from 'pages/Swap/Swap.hooks';
 import { formValueSelector, isSubmitting, isValid } from 'redux-form';
 import { AppState } from 'state';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
@@ -12,6 +13,7 @@ import { unshieldableTokens } from 'state/token';
 import convert from 'utils/convert';
 import format from 'utils/format';
 
+import { GROUP_CURRENCY_TYPE_BY_PAPP_NAME, GROUP_SUPPORTED_NETWORK_BY_PAPPS } from './FormUnshield.constants';
 import { FormTypes, IFormUnshieldState, ISwapExchangeData, ISwapFee, SwapExchange } from './FormUnshield.types';
 
 const {
@@ -103,6 +105,7 @@ export interface IUnshieldData {
   minUnshieldText: string;
 
   isSubmitting: boolean;
+  vaults: any;
 }
 
 const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any): string => {
@@ -137,6 +140,36 @@ const checkSwapableToken = ({ sellToken, token }: { sellToken: SelectedPrivacy; 
     ? token.listUnifiedToken.map((child) => child.networkName)
     : [token.networkName];
   return sellChildNetworks.some((networkName) => networkName && tokenChildNetworks.includes(networkName));
+};
+
+const filterTokensByPAppName = ({
+  tokens,
+  queryPAppName,
+  ignoreFields = [],
+}: {
+  tokens: SelectedPrivacy[];
+  queryPAppName: any;
+  ignoreFields?: string[];
+}): SelectedPrivacy[] => {
+  let tokensList = tokens;
+  let supportedCurrencyType: any[] = [];
+  if (queryPAppName.isValid) {
+    const pAppName = queryPAppName.pAppName as any;
+    supportedCurrencyType = (GROUP_CURRENCY_TYPE_BY_PAPP_NAME[pAppName] as any[]) || [];
+    tokensList = tokensList.filter((token) => {
+      // PRV not supported for PApps now!
+      // @ts-ignore
+      if (token.isPRV || ignoreFields.some((field: string) => token[field])) return false;
+      const mainTokenValid = supportedCurrencyType.includes(token.currencyType);
+      const childCurrencyType = token.listUnifiedToken.map((childToken) => childToken.currencyType);
+      let subTokenValid = false;
+      if (childCurrencyType && childCurrencyType.length > 0) {
+        subTokenValid = supportedCurrencyType.some((currencyType) => childCurrencyType.includes(currencyType));
+      }
+      return mainTokenValid || subTokenValid;
+    });
+  }
+  return tokensList;
 };
 
 const getUnshieldData = ({
@@ -197,8 +230,11 @@ const getUnshieldData = ({
 
   // sell token
   const _sellToken = getDataByTokenID(sellIdentify);
-  const _sellTokenList = orderBy(
-    unshieldAbleTokens.filter((token) => {
+  // getPAppName
+  const queryPAppName = getQueryPAppName();
+  let _sellTokenList = filterTokensByPAppName({ tokens: unshieldAbleTokens, queryPAppName });
+  _sellTokenList = orderBy(
+    _sellTokenList.filter((token) => {
       return !(token.isPRV && token.movedUnifiedToken) && !token.isNearToken;
     }),
     ['isPRV', 'isUnified'],
@@ -235,7 +271,21 @@ const getUnshieldData = ({
     }
   }
 
-  _buyTokenList = _buyTokenList.filter((token) => !token.isNearToken);
+  _buyTokenList = filterTokensByPAppName({
+    tokens: _buyTokenList,
+    queryPAppName,
+    ignoreFields: ['isCentralized', 'isNearToken'],
+  });
+
+  // _buyTokenList = _buyTokenList.filter((token) => {
+  //   const isNear = token.isNearToken;
+  //   let isValid = true;
+  //   // PRV not supported PApps
+  //   if (queryPAppName.isValid) {
+  //     isValid = !token.isPRV && !token.isCentralized;
+  //   }
+  //   return !isNear && isValid;
+  // });
 
   let isUseTokenFee = false;
   let _sellParentToken, _buyParentToken, _buyNetworkList: any;
@@ -282,6 +332,13 @@ const getUnshieldData = ({
       networkName: MAIN_NETWORK_NAME.INCOGNITO,
       currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
     });
+  }
+
+  if (queryPAppName.isValid && queryPAppName.pAppName) {
+    const networkByPApps = GROUP_SUPPORTED_NETWORK_BY_PAPPS[queryPAppName.pAppName];
+    _buyNetworkList = _buyNetworkList.filter(({ networkName }: { networkName: string }) =>
+      networkByPApps.includes(networkName)
+    );
   }
 
   const isExternalAddress =
@@ -446,8 +503,11 @@ const getUnshieldData = ({
       decimals: _sellToken.pDecimals,
     });
 
-    tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
-
+    if (exchangeSelectedData && exchangeSelectedData.appName === SwapExchange.PDEX) {
+      tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
+    } else {
+      tradePath = exchangeSelectedData?.tradePathStr || '';
+    }
     let tradeFeeText = '';
     if (isUseTokenFee) {
       tradeFeeText = `${
@@ -632,6 +692,8 @@ const getUnshieldData = ({
     minUnshieldText,
 
     isSubmitting: submitting,
+
+    vaults,
   };
 };
 
@@ -695,7 +757,7 @@ const parseExchangeDataModelResponse = (
     appName: data?.AppName,
     exchangeName: `${getExchangeName(data?.AppName)} (${networkName})`,
     fees: parseFeeDataModelResponse(data?.Fee || []) || [],
-    routes: data?.Paths || [],
+    routes: data?.Paths || data?.PathsContract || [],
     incTokenID: incTokenID || '',
     feeAddress: data?.FeeAddress || '',
     callContract: data?.CallContract,
@@ -706,6 +768,7 @@ const parseExchangeDataModelResponse = (
     expectedAmount: data?.AmountOutPreSlippage || '0',
     rate: data?.Rate || '1',
     impactAmount: data?.ImpactAmount ? Number(data?.ImpactAmount || 0) : null,
+    tradePathStr: data.Paths || '',
   };
   return exchangeData;
 };

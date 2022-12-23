@@ -1,12 +1,14 @@
 import { Col, Row } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { PRVIcon } from 'components/icons';
-import { BIG_COINS, PRV } from 'constants/token';
+import { BIG_COINS, MAIN_NETWORK_NAME, PRV } from 'constants/token';
 import { useWindowSize } from 'hooks/useWindowSize';
+import { actionSetSwapNetwork } from 'pages/Swap/features/FormUnshield/FormUnshield.actions';
 import React, { memo } from 'react';
 import { useHistory } from 'react-router-dom';
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from 'services/rpcMetric';
+import { useAppDispatch } from 'state/hooks';
 
-import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from '../../services/rpcMetric';
 import { FOOTER_ID, HEADER_ID } from '../App';
 import Analytics from './GetPRV.analytics';
 import Promote from './GetPRV.promote';
@@ -15,6 +17,7 @@ import { Container, Content, Header } from './GetPRV.styled';
 const GetPRV = () => {
   const { width, height } = useWindowSize();
   const history = useHistory();
+  const dispatch = useAppDispatch();
 
   const [contentSize, setContentSize] = React.useState(height || 0);
 
@@ -50,11 +53,12 @@ const GetPRV = () => {
             <ButtonConfirmed
               className="btn-get-prv"
               onClick={() => {
+                dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
                 updateMetric({ metric: METRIC_TYPE.GETPRV_GET_PRV, uniqMetric: METRIC_UNIQ.GETPRV_GET_PRV_UNIQ });
                 history.push('/swap', { tokenId1: BIG_COINS.USDT_UNIFIED.tokenID, tokenId2: PRV.id });
               }}
             >
-              Get PRV
+              Buy PRV
             </ButtonConfirmed>
           </Row>
         </Col>

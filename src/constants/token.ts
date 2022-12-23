@@ -163,6 +163,31 @@ const BIG_COINS = {
       ? 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696'
       : 'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
   },
+  BNB: {
+    tokenID: isMainnet
+      ? 'e5032c083f0da67ca141331b6005e4a3740c50218f151a5e829e9d03227e33e2'
+      : 'e5032c083f0da67ca141331b6005e4a3740c50218f151a5e829e9d03227e33e2',
+  },
+  FTM: {
+    tokenID: isMainnet
+      ? '6eed691cb14d11066f939630ff647f5f1c843a8f964d9a4d295fa9cd1111c474'
+      : '6eed691cb14d11066f939630ff647f5f1c843a8f964d9a4d295fa9cd1111c474',
+  },
+  AVAX: {
+    tokenID: isMainnet
+      ? 'c469fb02623a023b469c81e1564193da7d85fe918cd4a4fdd2c64f97f59f60f5'
+      : 'c469fb02623a023b469c81e1564193da7d85fe918cd4a4fdd2c64f97f59f60f5',
+  },
+  USDC_AVAX: {
+    tokenID: isMainnet
+      ? '9624c2357d9be1cb0136e2743d891382e754cc82b53bc249a22fb890e62cf3a6'
+      : '9624c2357d9be1cb0136e2743d891382e754cc82b53bc249a22fb890e62cf3a6',
+  },
+  USDC_FTM: {
+    tokenID: isMainnet
+      ? '92dd7f24165decadb4764d0b29972e51c317ef9f8510447e1bab5b142ca94804'
+      : '92dd7f24165decadb4764d0b29972e51c317ef9f8510447e1bab5b142ca94804',
+  },
 };
 
 const PRIVATE_TOKEN_TYPE = {
@@ -170,7 +195,7 @@ const PRIVATE_TOKEN_TYPE = {
   TOKEN: 1, // including ERC20, BEP1, BEP2,...
 };
 
-interface IGroupNetwork {
+export interface IGroupNetwork {
   [key: string]: number[];
 }
 
