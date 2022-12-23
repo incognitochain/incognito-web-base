@@ -13,6 +13,7 @@ import { unshieldDataSelector } from './FormUnshield.selectors';
 import {
   FormTypes,
   FormUnshieldActionType,
+  FreeSwapFormAction,
   ISwapExchangeData,
   NetworkTypePayload,
   UnshieldFetchingUserFeePayLoad,
@@ -27,6 +28,10 @@ import { getINCTokenWithNetworkName, parseExchangeDataModelResponse } from './Fo
 export const actionSetToken = (payload: UnshieldSetTokenPayLoad): UnshieldSetTokenAction => ({
   type: FormUnshieldActionType.SET_TOKEN,
   payload,
+});
+
+export const actionFreeSwapForm = (): FreeSwapFormAction => ({
+  type: FormUnshieldActionType.FREE_SWAP_FORM,
 });
 
 const actionSetUserFee = (payload: UnshieldSetUserFeePayLoad): UnshieldSetUserFeeAction => ({

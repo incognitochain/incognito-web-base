@@ -26,6 +26,8 @@ import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
 import { isMobile } from 'utils/userAgent';
 
+import { actionFreeSwapForm } from '../../../pages/Swap/features/FormUnshield/FormUnshield.actions';
+import { useAppDispatch } from '../../../state/hooks';
 import IncognitoWallet from '../IncognitoWallet';
 // import IncognitoWallet from '../IncognitoWallet';
 import { DrawerStyled, MenuDropdown, Styled } from './Header.styled';
@@ -399,6 +401,7 @@ export default function Header() {
   const { white, black } = useTheme();
   const isInternetAlready = useInternetConnnection();
   const scrollY = useScrollPosition();
+  const dispatch = useAppDispatch();
 
   const [pathName, setPathName] = React.useState<string>('');
   const [visible, setVisible] = React.useState(false);
@@ -541,6 +544,11 @@ export default function Header() {
                       <NavLink
                         target={item.target}
                         to={item.path}
+                        onClick={() => {
+                          if (item.path === '/swap') {
+                            dispatch(actionFreeSwapForm());
+                          }
+                        }}
                         className={`${isActive ? 'color-blue' : 'color-white'}`}
                         style={{ display: 'flex', alignItems: 'center' }}
                       >
