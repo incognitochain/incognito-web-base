@@ -16,6 +16,7 @@ import { actionSetSwapNetwork } from 'pages/Swap/features/FormUnshield/FormUnshi
 import { SwapExchange } from 'pages/Swap/features/FormUnshield/FormUnshield.types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from 'services/rpcMetric';
 import { useAppDispatch } from 'state/hooks';
 // import { isMobile } from 'react-device-detect';
 import styled, { DefaultTheme } from 'styled-components/macro';
@@ -266,6 +267,7 @@ const Item = React.memo(({ className, data }: { className?: string; data: any })
       onClick={() => {
         if (!canClick) return;
         dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
+        updateMetric({ metric: data.metric, uniqMetric: data.metricUniq });
         history.push(`papps/${data.exchange}`);
       }}
     >
@@ -318,6 +320,8 @@ const PeggingListApps = () => {
           chain: ['BNB Chain', 'DEX'],
           desc: "Trade anonymously on BNB Chain's leading DEX. Deep liquidity and super low fees – now with privacy.",
           exchange: SwapExchange.PANCAKE_SWAP,
+          metric: METRIC_TYPE.PAPP_PANCAKE,
+          metricUniq: METRIC_UNIQ.PAPP_PANCAKE_UNIQ,
         }}
         className="app-margin-right"
       />
@@ -330,6 +334,8 @@ const PeggingListApps = () => {
           chain: ['Polygon', 'Ethereum', 'DEX'],
           desc: 'Trade confidentially on everyone’s favorite DEX. Faster and cheaper thanks to Polygon, and private like all Incognito apps.',
           exchange: SwapExchange.UNISWAP,
+          metric: METRIC_TYPE.PAPP_UNISWAP,
+          metricUniq: METRIC_UNIQ.PAPP_UNISWAP_UNIQ,
         }}
         className="app-margin-top-small app-margin-left full-height"
       />
@@ -342,6 +348,8 @@ const PeggingListApps = () => {
           chain: ['Polygon', 'DEX'],
           desc: 'Swap stablecoins with complete confidentiality using Privacy Curve. Low fees on Polygon meets full privacy on Incognito.',
           exchange: SwapExchange.CURVE,
+          metric: METRIC_TYPE.PAPP_CURVE,
+          metricUniq: METRIC_UNIQ.PAPP_CURVE_UNIQ,
         }}
         className="app-margin-top app-margin-top-small app-margin-right"
       />
@@ -354,6 +362,8 @@ const PeggingListApps = () => {
           chain: ['Fantom', 'DEX'],
           desc: 'Explore DeFi on Fantom with full privacy for your activity and assets. Swap Fantom coins anonymously with Private SpookySwap.',
           exchange: SwapExchange.SPOOKY,
+          metric: METRIC_TYPE.PAPP_SPOOKY,
+          metricUniq: METRIC_UNIQ.PAPP_SPOOKY_UNIQ,
         }}
         className="app-margin-top app-margin-top-small app-margin-left"
       />
@@ -366,6 +376,8 @@ const PeggingListApps = () => {
           chain: ['Avalanche', 'DEX'],
           desc: 'Trade confidentially on Trader Joe. Faster privacy swap is enabled by fast transaction finality on Avalanche.',
           exchange: SwapExchange.JOE,
+          metric: METRIC_TYPE.PAPP_TRADER_JOE,
+          metricUniq: METRIC_UNIQ.PAPP_TRADER_JOE_UNIQ,
         }}
         className="app-margin-top app-margin-top-small app-margin-right"
       />
