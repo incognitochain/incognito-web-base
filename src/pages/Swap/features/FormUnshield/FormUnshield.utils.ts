@@ -751,7 +751,7 @@ const parseExchangeDataModelResponse = (
     appName: data?.AppName,
     exchangeName: `${getExchangeName(data?.AppName)} (${networkName})`,
     fees: parseFeeDataModelResponse(data?.Fee || []) || [],
-    routes: data?.Paths || [],
+    routes: data?.PathsContract || [],
     incTokenID: incTokenID || '',
     feeAddress: data?.FeeAddress || '',
     callContract: data?.CallContract,
