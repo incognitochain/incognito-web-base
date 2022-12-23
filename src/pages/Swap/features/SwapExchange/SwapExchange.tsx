@@ -10,7 +10,6 @@ import { capitalizeFirstLetter } from '../ItemDetail/ItemDetail';
 import { Container, Content } from './SwapExchange.styled';
 
 const SwapExchange = (props: any) => {
-  const { isInitingForm } = props;
   const isFetching = useAppSelector(isFetchingTokenSelector);
 
   const renderForm = () => {
@@ -19,12 +18,14 @@ const SwapExchange = (props: any) => {
 
   const renderContent = () => {
     const query = getQueryPAppName();
+    const name = query?.pAppName || '';
+    const appName = name === 'joe' ? 'TraderJoe' : name;
     return (
       <>
         <p
           className="h7"
           style={{ color: 'white', fontWeight: 600, fontSize: 20, lineHeight: '140%' }}
-        >{`p${capitalizeFirstLetter(query?.pAppName || '')}`}</p>
+        >{`p${capitalizeFirstLetter(appName)}`}</p>
         {renderForm()}
       </>
     );
