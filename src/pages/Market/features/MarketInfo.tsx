@@ -165,7 +165,7 @@ const MarketInfo = () => {
   );
 
   const renderItem = (item: any) => (
-    <Item style={{ flex: 1, minWidth: 200 }}>
+    <Item style={{ flex: 1, minWidth: 200 }} key={item?.number}>
       <div className={'achieve'}>
         <VisibilitySensor
           onChange={(isVisible) => {

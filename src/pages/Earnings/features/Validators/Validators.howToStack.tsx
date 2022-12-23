@@ -1,6 +1,7 @@
 import { Button, Col, Row } from 'antd';
+import { BIG_COINS, PRV } from 'constants/token';
 import { memo, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from '../../../../services/rpcMetric';
@@ -123,6 +124,11 @@ const Styled = styled.div`
 
       .prvButton {
         margin-left: 40px;
+        font-size: 16px !important;
+        background-color: ${({ theme }) => theme.btn1};
+        :hover {
+          opacity: 0.8;
+        }
       }
 
       p {
@@ -194,6 +200,7 @@ const Styled = styled.div`
 const ValidatorHowToStack = () => {
   const myRef = useRef<any>(undefined);
   const location = useLocation();
+  const history = useHistory();
   const state = location.state as { activeScroll: boolean };
 
   useEffect(() => {
@@ -223,7 +230,8 @@ const ValidatorHowToStack = () => {
             className="button1 prvButton"
             onClick={() => {
               updateMetric({ metric: METRIC_TYPE.MINE_BUY_PRV, uniqMetric: METRIC_UNIQ.MINE_BUY_PRV_UNIQ });
-              window.open('https://we.incognito.org/t/how-to-buy-prv-in-3-steps/793', '_blank');
+              // window.open('https://we.incognito.org/t/how-to-buy-prv-in-3-steps/793', '_blank');
+              history.push('/swap', { tokenId1: BIG_COINS.USDT_UNIFIED.tokenID, tokenId2: PRV.id });
             }}
           >
             {'Buy PRV'}

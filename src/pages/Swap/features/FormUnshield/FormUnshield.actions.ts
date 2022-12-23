@@ -8,10 +8,12 @@ import { getPrivacyByTokenIdentifySelectors } from 'state/token';
 import convert from 'utils/convert';
 import { getAcronymNetwork } from 'utils/token';
 
+import { getQueryPAppName } from '../../Swap.hooks';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import {
   FormTypes,
   FormUnshieldActionType,
+  FreeSwapFormAction,
   ISwapExchangeData,
   NetworkTypePayload,
   UnshieldFetchingUserFeePayLoad,
@@ -26,6 +28,10 @@ import { getINCTokenWithNetworkName, parseExchangeDataModelResponse } from './Fo
 export const actionSetToken = (payload: UnshieldSetTokenPayLoad): UnshieldSetTokenAction => ({
   type: FormUnshieldActionType.SET_TOKEN,
   payload,
+});
+
+export const actionFreeSwapForm = (): FreeSwapFormAction => ({
+  type: FormUnshieldActionType.FREE_SWAP_FORM,
 });
 
 const actionSetUserFee = (payload: UnshieldSetUserFeePayLoad): UnshieldSetUserFeeAction => ({
@@ -466,7 +472,7 @@ export const actionEstimateSwapFee =
         networkText: 'Aurora',
         token: sellToken,
       });
-      const exchangeSupports = [
+      let exchangeSupports = [
         ...ethExchanges,
         ...ftmExchanges,
         ...plgExchanges,
@@ -475,8 +481,15 @@ export const actionEstimateSwapFee =
         ...auroraExchanges,
         ...pdexExchanges,
       ];
-      if (!exchangeSupports?.length)
+
+      if (!exchangeSupports?.length) {
         throw new Error('Can not find any trading platform that supports for this pair token');
+      }
+
+      const queryPAppName = getQueryPAppName();
+      if (queryPAppName.isValid && queryPAppName.pAppName) {
+        exchangeSupports = exchangeSupports.filter((exchange) => exchange.appName === queryPAppName.pAppName);
+      }
 
       // Find best rate by list exchange
       // const bestRate: ISwapExchangeData = exchangeSupports[0];

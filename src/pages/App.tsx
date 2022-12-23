@@ -27,6 +27,7 @@ import PageNotFound from './PageNotFound/PageNotFound';
 import PeggingApp from './PeggingApp';
 import Policy from './Policy';
 import Structure from './Structure';
+import SwapExchange from './Swap/features/SwapExchange';
 import TermOfService from './TermOfService';
 
 export const HEADER_ID = 'HEADER_VIEW';
@@ -109,7 +110,8 @@ const App = () => {
           {/*<Route exact path="/" component={Market} />*/}
           <Route exact path="/" component={Home} />
           <Route exact path="/swap" component={Market} />
-          <Route exact path="/use" component={PeggingApp} />
+          <Route exact path="/papps/:id" component={SwapExchange} />
+          <Route exact path="/papps" component={PeggingApp} />
           <Route exact path="/mine" component={Structure} />
           <Route exact path="/earnings" component={Earnings} />
           <Route exact path="/privacy-policy" component={Policy} />

@@ -78,7 +78,7 @@ const Collections = () => {
       <CollectionItem
         onClick={() => {
           updateMetric({ metric: METRIC_TYPE.HOME_PAPPS, uniqMetric: METRIC_UNIQ.HOME_PAPPS_UNIQ });
-          openLink({ link: '/use' });
+          openLink({ link: '/papps' });
         }}
       >
         {renderHeader({ title: 'Use', desc: 'Use Uniswap and 10+ dapps privately.' })}
