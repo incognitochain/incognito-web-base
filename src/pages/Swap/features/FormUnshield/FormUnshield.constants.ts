@@ -18,7 +18,7 @@ export const MAP_TOKEN_BY_PAPPS: any = {
   [SwapExchange.PANCAKE_SWAP]: { tokenID1: BIG_COINS.USDC_UNIFIED.tokenID, tokenID2: BIG_COINS.BNB.tokenID },
   [SwapExchange.UNISWAP]: { tokenID1: BIG_COINS.USDC_UNIFIED.tokenID, tokenID2: BIG_COINS.ETH_UNIFIED.tokenID },
   [SwapExchange.CURVE]: { tokenID1: BIG_COINS.USDC_UNIFIED.tokenID, tokenID2: BIG_COINS.USDT_UNIFIED.tokenID },
-  [SwapExchange.SPOOKY]: { tokenID1: BIG_COINS.USDC_UNIFIED.tokenID, tokenID2: BIG_COINS.FTM.tokenID },
+  [SwapExchange.SPOOKY]: { tokenID1: BIG_COINS.USDC_FTM.tokenID, tokenID2: BIG_COINS.FTM.tokenID },
   [SwapExchange.JOE]: { tokenID1: BIG_COINS.USDC_AVAX.tokenID, tokenID2: BIG_COINS.AVAX.tokenID },
 };
 
