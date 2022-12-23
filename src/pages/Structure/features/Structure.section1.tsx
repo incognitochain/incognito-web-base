@@ -26,7 +26,7 @@ const Styled = styled(Row)`
     margin-top: 50px;
     min-width: 196px;
     background-color: ${({ theme }) => theme.btn1};
-    font-size: 18px !important;
+    font-size: 16px !important;
     height: 50px !important;
     :hover {
       opacity: 0.8;
@@ -37,7 +37,7 @@ const Styled = styled(Row)`
     min-width: 196px;
     background-color: ${({ theme }) => theme.white};
     color: ${({ theme }) => theme.btn1};
-    font-size: 18px !important;
+    font-size: 16px !important;
     height: 50px !important;
     margin-left: 24px;
     :hover {
