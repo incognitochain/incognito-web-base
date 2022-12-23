@@ -119,6 +119,15 @@ export const WrapperContent = styled.div`
     margin-right: auto;
     width: fit-content;
   }
+  .sub-header-text {
+    max-width: 800px;
+    text-align: center;
+    font-weight: 400;
+    font-size: 20px;
+    margin-top: 16px;
+    margin-left: auto;
+    margin-right: auto;
+  }
   .arrow-image {
     width: 12px;
     height: 12px;
@@ -167,4 +176,11 @@ export const WrapperContent = styled.div`
       font-size: 14px;
     }
   }
+    ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+        .sub-header-text {
+          margin-bottom: 20px;
+        }
+    `}
+  }
+
 `;
