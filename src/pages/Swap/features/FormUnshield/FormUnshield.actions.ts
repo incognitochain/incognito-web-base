@@ -482,13 +482,14 @@ export const actionEstimateSwapFee =
         ...pdexExchanges,
       ];
 
-      if (!exchangeSupports?.length) {
-        throw new Error('Can not find any trading platform that supports for this pair token');
-      }
-
       const queryPAppName = getQueryPAppName();
+      console.log('SANG TEST: ', { exchangeSupports, queryPAppName });
       if (queryPAppName.isValid && queryPAppName.pAppName) {
         exchangeSupports = exchangeSupports.filter((exchange) => exchange.appName === queryPAppName.pAppName);
+      }
+
+      if (!exchangeSupports?.length) {
+        throw new Error('Can not find any trading platform that supports for this pair token');
       }
 
       // Find best rate by list exchange
