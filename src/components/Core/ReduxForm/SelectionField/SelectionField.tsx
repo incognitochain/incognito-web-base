@@ -62,7 +62,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
       return null;
     }
     let _error = error;
-    let isTopUp = _error !== 'Required' && showShowTopUp && onTopUp;
+    let isTopUp = _error !== 'Required' && m && onTopUp;
     if (isTopUp && (_error || '').includes('larger') && tokenAmountNum) {
       isTopUp = false;
     }
