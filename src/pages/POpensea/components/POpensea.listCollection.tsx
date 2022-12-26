@@ -22,10 +22,10 @@ const Styled = styled.div`
     object-fit: cover;
   }
   .baseText {
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 140%;
     color: #ffffff;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
   }
   .greenBoldText {
     font-weight: 700;
@@ -89,9 +89,9 @@ const Styled = styled.div`
 
   .headerTitle {
     font-weight: 500;
-    font-size: 18px;
+    font-size: 14px;
     line-height: 140%;
-    color: #757575;
+    color: #9c9c9c;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -176,7 +176,6 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
 
   const columns: ColumnsType<POpenseaCollection> = [
     {
-      title: '#',
       key: 'index',
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText">
@@ -184,9 +183,13 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
         </p>
       ),
       responsive: ['md'],
+      title: () => (
+        <div className="headerTitle" style={{ justifyContent: 'center' }}>
+          #
+        </div>
+      ),
     },
     {
-      title: 'Collection',
       dataIndex: 'collection',
       key: 'collection',
       render: (text, record: POpenseaCollection, index) => (
@@ -199,6 +202,11 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
           </div>
         </div>
       ),
+      title: () => (
+        <div className="headerTitle" style={{ justifyContent: 'center' }}>
+          Collection
+        </div>
+      ),
     },
     {
       dataIndex: 'Volumn',
@@ -206,7 +214,11 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       responsive: ['md'],
       align: 'center',
       showSorterTooltip: false,
-      render: (text, record) => <p className="baseText">{record.stats?.totalVolume} ETH</p>,
+      render: (text, record, index) => (
+        <p key={index.toString()} className="baseText">
+          {record.stats?.totalVolume?.toFixed(2)} ETH
+        </p>
+      ),
       sorter: (a, b) => (a.stats?.totalVolume || 0) - (b.stats?.totalVolume || 0),
       // eslint-disable-next-line react/prop-types
       title: ({ sortColumns }) => {
@@ -236,7 +248,11 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       responsive: ['md'],
       align: 'center',
       showSorterTooltip: false,
-      render: (text, record) => <p className="baseText">{record.stats?.floorPrice} ETH</p>,
+      render: (text, record, index) => (
+        <p key={index.toString()} className="baseText">
+          {record.stats?.floorPrice?.toFixed(3)} ETH
+        </p>
+      ),
       sorter: (a, b) => (a.stats?.floorPrice || 0) - (b.stats?.floorPrice || 0),
       // eslint-disable-next-line react/prop-types
       title: ({ sortColumns }) => {
@@ -266,7 +282,11 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       responsive: ['md'],
       align: 'center',
       showSorterTooltip: false,
-      render: (text, record) => <p className="baseText">{record.stats?.totalSales}</p>,
+      render: (text, record, index) => (
+        <p key={index.toString()} className="baseText">
+          {record.stats?.totalSales}
+        </p>
+      ),
       sorter: (a, b) => (a.stats?.totalSales || 0) - (b.stats?.totalSales || 0),
       // eslint-disable-next-line react/prop-types
       title: ({ sortColumns }) => {
@@ -296,7 +316,11 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       responsive: ['md'],
       align: 'center',
       showSorterTooltip: false,
-      render: (text, record) => <p className="baseText">{record.stats?.numOwners}</p>,
+      render: (text, record, index) => (
+        <p key={index.toString()} className="baseText">
+          {record.stats?.numOwners}
+        </p>
+      ),
       sorter: (a, b) => (a.stats?.numOwners || 0) - (b.stats?.numOwners || 0),
       // eslint-disable-next-line react/prop-types
       title: ({ sortColumns }) => {
@@ -328,7 +352,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
         columns={columns}
         dataSource={collections}
         size="large"
-        // loading={isFetching}
+        loading={isFetching}
         pagination={false}
         rowClassName="tableRow"
         onRow={(collection) => ({

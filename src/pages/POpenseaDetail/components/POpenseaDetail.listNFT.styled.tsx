@@ -43,6 +43,7 @@ export const Styled = styled.div`
     line-height: 140%;
     overflow-wrap: break-word;
     width: 50%;
+    height: 50px;
   }
 
   .item-id {

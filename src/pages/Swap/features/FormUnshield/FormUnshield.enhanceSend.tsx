@@ -328,6 +328,9 @@ const enhanceSend = (WrappedComponent: any) => {
       let externalCallData: string = exchangeSelectedData?.callData;
       let externalCallAddress: string = exchangeSelectedData?.callContract;
 
+      console.log('externalCallData: ', externalCallData);
+      console.log('externalCallAddress: ', externalCallAddress);
+
       if (externalCallData.startsWith('0x')) {
         externalCallData = externalCallData.slice(2);
       }
@@ -367,6 +370,7 @@ const enhanceSend = (WrappedComponent: any) => {
         BurnTokenID: sellToken?.tokenID,
         Type: 348,
       };
+      console.log('Metadata: ', metadata);
       return metadata;
     };
     const getSwapPDexMetadata = ({ otaReceivers }: { otaReceivers: string[] }) => {

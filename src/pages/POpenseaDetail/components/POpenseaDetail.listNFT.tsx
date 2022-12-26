@@ -91,21 +91,28 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
           xxl: 4,
         }}
         dataSource={props.nfts}
-        renderItem={(item: POpenseaNft) => (
-          <List.Item onClick={() => props.onClickNFTItem(item)}>
-            <div className="card">
-              <ImagePlaceholder className="item-img" src={item.imageUrl} />
-              <div className="item-info">
-                <div className="item-name-container">
-                  <p className="item-name">{item.name}</p>
-                  <p className="item-id">{`#${item.id}`}</p>
+        renderItem={(item: POpenseaNft, index: number) => {
+          const seaportSellOrder =
+            item.seaportSellOrders && item.seaportSellOrders.length > 0 ? item.seaportSellOrders[0] : undefined;
+          const lastSale = item.lastSale;
+          return (
+            <List.Item key={index.toString()} onClick={() => props.onClickNFTItem(item)}>
+              <div className="card">
+                <ImagePlaceholder className="item-img" src={item.imageUrl} />
+                <div className="item-info">
+                  <div className="item-name-container">
+                    <p className="item-name">{item.name}</p>
+                    {/* <p className="item-id">{`#${item.id}`}</p> */}
+                  </div>
+                  {seaportSellOrder && <p className="item-price">{`${seaportSellOrder.currentPrice} ETH`}</p>}
+                  {lastSale && lastSale.totalPrice && (
+                    <p className="item-last-sale">{`Last sale: ${lastSale.totalPrice} ETH`}</p>
+                  )}
                 </div>
-                <p className="item-price">{`${item.numSales} ETH`}</p>
-                <p className="item-last-sale">{`Last sale: ${item.lastSale} ETH`}</p>
               </div>
-            </div>
-          </List.Item>
-        )}
+            </List.Item>
+          );
+        }}
       />
     </Styled>
   );

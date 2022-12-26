@@ -21,7 +21,13 @@ class RpcPOpensea {
   }
 
   getNFTDetail(contract: string, tokenId: string) {
-    return this.http.get(`papps/opensea/nft-detail?contract=${contract}&token_id=${tokenId}`);
+    return this.http.get(`papps/opensea/nft-detail?contract=${contract}&nftid=${tokenId}`);
+  }
+
+  estimateFee(contract: string, tokenId: string, burntoken: string, burnamount: string, recipient: string) {
+    return this.http.get(
+      `papps/opensea/estimatebuyfee?contract=${contract}&burntoken=${burntoken}&burnamount=${burnamount}&nftid=${tokenId}&recipient=${recipient}`
+    );
   }
 }
 
@@ -42,5 +48,16 @@ const getPOpeanseaNFTDetail = async (contract: string, tokenId: string): Promise
   return response;
 };
 
-export { getPOpeanseaCollections, getPOpeanseaNFTDetail, getPOpeanseaNFTs };
+const postEstimateFee = async (
+  contract: string,
+  tokenId: string,
+  burntoken: string,
+  burnamount: string,
+  recipient: string
+): Promise<any> => {
+  const response = await rpcPOpensea.estimateFee(contract, tokenId, burntoken, burnamount, recipient);
+  return response;
+};
+
+export { getPOpeanseaCollections, getPOpeanseaNFTDetail, getPOpeanseaNFTs, postEstimateFee };
 export default rpcPOpensea;

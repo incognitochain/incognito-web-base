@@ -31,7 +31,7 @@ const Styled = styled.div`
     height: 140px;
     border: 4px solid ${({ theme }) => theme.white};
     border-radius: 16px;
-    margin-top: -96px;
+    margin-top: -104px;
     object-fit: cover;
     align-self: center;
   }

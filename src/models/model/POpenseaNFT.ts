@@ -9,7 +9,12 @@
 
 import { get } from 'lodash';
 
-import { Convert as ConvertCollection, POpenseaCollection, PrimaryAssetContract } from './POpenseaCollection';
+import {
+  Convert as ConvertCollection,
+  PaymentToken,
+  POpenseaCollection,
+  PrimaryAssetContract,
+} from './POpenseaCollection';
 
 export class POpenseaNft {
   id?: number;
@@ -34,8 +39,8 @@ export class POpenseaNft {
   tokenMetadata?: string;
   isNsfw?: boolean;
   owner?: string;
-  seaportSellOrders?: string;
-  lastSale?: string;
+  seaportSellOrders?: SeaportSellOrders[];
+  lastSale?: LastSale;
   topBid?: string;
   listingDate?: string;
   supportsWyvern?: boolean;
@@ -47,6 +52,47 @@ export class POpenseaNft {
   auctions?: any[];
   ownership?: string;
   highestBuyerCommitment?: string;
+  tokenId?: string;
+}
+
+export interface POpenseaBuyFee {
+  calldata: string;
+  fee: {
+    feeAddress: string;
+    feeAddressShardID: number;
+    feeAmount: number;
+    feeInUSD: number;
+    privacyFee: number;
+    tokenid: string;
+  };
+}
+
+export interface LastSale {
+  asset?: Asset;
+  assetBundle?: string;
+  auctionType?: string;
+  createdDate?: string;
+  eventTimestamp?: string;
+  eventType?: string;
+  paymentToken?: PaymentToken;
+  quantity?: string;
+  totalPrice?: string;
+  transaction?: Transaction;
+}
+
+export interface Transaction {
+  blockHash?: string;
+  blockNumber?: string;
+  fromAccount?: Creator;
+  id?: number;
+  timestamp?: string;
+  toAccount?: Creator;
+  transactionHash?: string;
+  transactionIndex?: string;
+}
+
+export interface Asset {
+  decimals?: string;
   tokenId?: string;
 }
 
@@ -82,6 +128,13 @@ export interface Creator {
   config?: string;
 }
 
+export interface Maker {
+  user?: number;
+  profileImgUrl?: string;
+  address?: string;
+  config?: string;
+}
+
 export interface TopOwnership {
   owner?: Creator;
   quantity?: string;
@@ -97,12 +150,66 @@ export interface Trait {
   order?: string;
 }
 
+export interface Parameter {
+  conduitKey: string;
+  consideration: Consideration[];
+  counter: number;
+  endTime: string;
+  offer: Offer;
+  offerer: string;
+  orderType: number;
+  salt: string;
+  startTime: string;
+  totalOriginalConsiderationItems: number;
+  zone: string;
+  zoneHash: string;
+}
+
+export interface Consideration {
+  endAmount: string;
+  identifierOrCriteria: string;
+  itemType: number;
+  recipient: string;
+  startAmount: string;
+  token: string;
+}
+
+export interface Offer {
+  endAmount: string;
+  identifierOrCriteria: string;
+  itemType: number;
+  startAmount: string;
+  token: string;
+}
+export interface SeaportSellOrders {
+  cancelled: boolean;
+  clientSignature: string;
+  closingDate: string;
+  createdDate: string;
+  criteriaProof: string;
+  currentPrice: string;
+  expirationTime: string;
+  finalized: boolean;
+  listingTime: number;
+  maker: Maker;
+  makerFees: { account: Maker; basisPoints: string }[];
+  markedInvalid: boolean;
+  orderHash: string;
+  orderType: string;
+  protocolAddress: string;
+  relayId: string;
+  side: string;
+  taker: any;
+  taker_fees: any[];
+  protocol_data: { parameters: Parameter; signature: string };
+}
+
 export class Convert {
   public static toPOpenseaNft(json: any): POpenseaNft {
     const nft = new POpenseaNft();
     nft.id = get(json, 'id');
-    if (json.asset_ontract) {
-      nft.assetContract = ConvertCollection.toPrimaryAssetContract(json.asset_ontract);
+    if (json.asset_contract) {
+      nft.assetContract = ConvertCollection.toPrimaryAssetContract(json.asset_contract);
     }
     if (json.collection) {
       nft.collection = ConvertCollection.toPOpenseaCollection(json.collection);
@@ -116,9 +223,13 @@ export class Convert {
     if (json && json.traits && json.traits.length > 0) {
       nft.traits = json.traits.map((item: any) => Convert.toTrait(item));
     }
+    if (json && json.seaport_sell_orders && json.seaport_sell_orders.length > 0) {
+      nft.seaportSellOrders = json.seaport_sell_orders.map((item: any) => Convert.toSeaportSellOrders(item));
+    }
     nft.numSales = get(json, 'num_sales');
     nft.backgroundColor = get(json, 'background_color');
-    nft.imageUrl = get(json, 'image_url');
+    nft.animationUrl = get(json, 'animation_url');
+    nft.animationOriginalUrl = get(json, 'animation_original_url');
     nft.imagePreviewUrl = get(json, 'image_preview_url');
     nft.imageThumbnailUrl = get(json, 'image_thumbnail_url');
     nft.description = get(json, 'description');
@@ -131,7 +242,6 @@ export class Convert {
     nft.isNsfw = get(json, 'is_nsfw');
     nft.imageUrl = get(json, 'image_url');
     nft.owner = get(json, 'owner');
-    nft.seaportSellOrders = get(json, 'seaport_sell_orders');
     nft.lastSale = get(json, 'last_sale');
     nft.listingDate = get(json, 'listing_date');
     nft.supportsWyvern = get(json, 'supports_wyvern');
@@ -149,6 +259,131 @@ export class Convert {
     return nft;
   }
 
+  public static toSeaportSellOrders(json: any): SeaportSellOrders {
+    return {
+      cancelled: get(json, 'cancelled'),
+      clientSignature: get(json, 'client_signature'),
+      closingDate: get(json, 'closing_date'),
+      createdDate: get(json, 'created_date'),
+      criteriaProof: get(json, 'criteria_proof'),
+      currentPrice: get(json, 'current_price'),
+      expirationTime: get(json, 'expiration_time'),
+      finalized: get(json, 'finalized'),
+      maker: Convert.toMarker(json.maker),
+      listingTime: get(json, 'listing_time'),
+      markedInvalid: get(json, 'marked_invalid'),
+      orderHash: get(json, 'order_hash'),
+      orderType: get(json, 'order_type'),
+      protocolAddress: get(json, 'protocol_address'),
+      relayId: get(json, 'relay_id'),
+      side: get(json, 'side'),
+      taker: get(json, 'taker'),
+      taker_fees: get(json, 'taker_fees'),
+      protocol_data: {
+        parameters: Convert.toParameter(json.protocol_data.parameters),
+        signature: json.protocol_data.signature,
+      },
+      makerFees:
+        json.maker_fees && json.maker_fees.length > 0
+          ? json.maker_fees.map((item: any) => ({
+              account: Convert.toMarker(item.account),
+              basisPoints: item.basis_points,
+            }))
+          : [],
+    };
+  }
+
+  public static toParameter(json: any): Parameter {
+    return {
+      conduitKey: get(json, 'conduitKey'),
+      consideration:
+        json.consideration &&
+        json.consideration.length > 0 &&
+        json.consideration.map((item: any) => Convert.toConsideration(item)),
+      counter: get(json, 'counter'),
+      endTime: get(json, 'endTime'),
+      offer: Convert.toOffer(json.offer),
+      offerer: get(json, 'offerer'),
+      orderType: get(json, 'orderType'),
+      salt: get(json, 'salt'),
+      startTime: get(json, 'startTime'),
+      totalOriginalConsiderationItems: get(json, 'totalOriginalConsiderationItems'),
+      zone: get(json, 'zone'),
+      zoneHash: get(json, 'zoneHash'),
+    };
+  }
+
+  public static toPOpenseaBuyFee(json: any): POpenseaBuyFee {
+    const Fee = get(json, 'Fee');
+    return {
+      calldata: get(json, 'Calldata'),
+      fee: {
+        feeAddress: get(Fee, 'feeAddress'),
+        feeAddressShardID: get(Fee, 'feeAddressShardID'),
+        feeAmount: get(Fee, 'feeAmount'),
+        feeInUSD: get(Fee, 'feeInUSD'),
+        privacyFee: get(Fee, 'privacyFee'),
+        tokenid: get(Fee, 'tokenid'),
+      },
+    };
+  }
+
+  public static toOffer(json: any): Offer {
+    return {
+      endAmount: get(json, 'endAmount'),
+      identifierOrCriteria: get(json, 'identifierOrCriteria'),
+      itemType: get(json, 'itemType'),
+      startAmount: get(json, 'startAmount'),
+      token: get(json, 'token'),
+    };
+  }
+
+  public static toConsideration(json: any): Consideration {
+    return {
+      endAmount: get(json, 'endAmount'),
+      identifierOrCriteria: get(json, 'identifierOrCriteria'),
+      itemType: get(json, 'itemType'),
+      recipient: get(json, 'recipient'),
+      startAmount: get(json, 'startAmount'),
+      token: get(json, 'token'),
+    };
+  }
+
+  public static toLastSale(json: any): LastSale {
+    return {
+      asset: Convert.toAsset(json.asset),
+      assetBundle: get(json, 'asset_bundle'),
+      paymentToken: ConvertCollection.toPaymentToken(json.payment_token),
+      auctionType: get(json, 'auction_type'),
+      createdDate: get(json, 'created_date'),
+      eventTimestamp: get(json, 'event_timestamp'),
+      eventType: get(json, 'event_type'),
+      quantity: get(json, 'quantity'),
+      totalPrice: get(json, 'total_price'),
+      transaction: Convert.toTransaction(json.transaction),
+    };
+  }
+
+  public static toTransaction(json: any): Transaction {
+    return {
+      blockHash: get(json, 'block_hash'),
+      blockNumber: get(json, 'block_number'),
+      fromAccount: Convert.toCreator(json.from_account),
+      id: get(json, 'id'),
+      timestamp: get(json, 'timestamp'),
+      toAccount: Convert.toCreator(json.to_account),
+      transactionHash: get(json, 'transaction_hash'),
+      transactionIndex: get(json, 'transaction_index'),
+    };
+  }
+
+  public static toAsset(json: any): Asset {
+    return {
+      decimals: get(json, 'decimals'),
+      tokenId: get(json, 'token_id'),
+    };
+  }
+
   public static toCreator(json: any): Creator {
     return {
       user: { username: get(json, 'user').username },
@@ -158,9 +393,18 @@ export class Convert {
     };
   }
 
+  public static toMarker(json: any): Maker {
+    return {
+      user: get(json, 'user'),
+      profileImgUrl: get(json, 'profile_img_url'),
+      address: get(json, 'address'),
+      config: get(json, 'config'),
+    };
+  }
+
   public static toTopOwnership(json: any): TopOwnership {
     return {
-      owner: get(json, 'owner'),
+      owner: Convert.toCreator(json.owner),
       quantity: get(json, 'quantity'),
       createdDate: get(json, 'created_date'),
     };

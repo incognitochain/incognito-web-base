@@ -1,6 +1,11 @@
 import { Convert, POpenseaCollection } from 'models/model/POpenseaCollection';
 import { Convert as ConvertNFT, POpenseaNft } from 'models/model/POpenseaNFT';
-import { getPOpeanseaCollections, getPOpeanseaNFTDetail, getPOpeanseaNFTs } from 'services/rpcPOpensea';
+import {
+  getPOpeanseaCollections,
+  getPOpeanseaNFTDetail,
+  getPOpeanseaNFTs,
+  postEstimateFee,
+} from 'services/rpcPOpensea';
 
 import { AppDispatch, AppState } from '../index';
 import { POpenseaActionType } from './pOpensea.types';
@@ -70,6 +75,18 @@ export const actionGetPOpenseaNFTDetail =
       }
     } catch (e) {
       console.log('GET POPENSEA NFTS WITH ERROR: ', e);
+    } finally {
+    }
+  };
+
+export const actionBuyNFTDetail =
+  (contract: string, tokenId: string, burntoken: string, burnamount: string, recipient: string) =>
+  async (dispatch: AppDispatch, getState: AppState & any) => {
+    try {
+      const data = await postEstimateFee(contract, tokenId, burntoken, burnamount, recipient);
+      console.log('RESPONSE: ', data);
+    } catch (e) {
+      console.log('BUY NFT WITH ERROR: ', e);
     } finally {
     }
   };

@@ -1,3 +1,4 @@
+import { ChevronDown } from 'react-feather';
 import styled, { DefaultTheme } from 'styled-components/macro';
 export const Styled = styled.div`
   padding-bottom: 40px;
@@ -33,7 +34,7 @@ export const WrapperContent = styled.div`
   }
 
   .section-2 {
-    flex: 0.55;
+    flex: 0.5;
     display: flex;
     flex-direction: column;
 
@@ -205,6 +206,26 @@ export const WrapperContent = styled.div`
       line-height: 140%;
       text-align: right;
     }
+
+    .select-tokens-list {
+      height: 48px;
+      background: #252525;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      padding-left: 16px;
+      padding-right: 16px;
+      margin-left: 16px;
+    }
+
+    .selected-token-icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+    }
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
@@ -225,4 +246,25 @@ export const WrapperContent = styled.div`
     }
 
   `}
+`;
+
+export const TextInputStyled = styled.input`
+  display: flex;
+  flex: 1;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 140%;
+  height: 48px;
+  background: #252525;
+  border-radius: 8px;
+  color: white;
+  padding-left: 16px;
+  padding-right: 16px;
+`;
+
+export const ArrowDown = styled(ChevronDown)<{ open?: boolean }>`
+  color: ${({ theme }) => theme.white};
+  width: 16px;
+  height: 20px;
+  margin-left: 4px;
 `;

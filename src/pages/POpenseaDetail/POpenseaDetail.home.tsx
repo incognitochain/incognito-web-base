@@ -41,7 +41,7 @@ const POpenseaDetail = () => {
       <WrapperContent>
         <POpenseaDetailSubRoute collectionName={selectedCollection.name} />
         <POpenseaDetailOverview collection={selectedCollection} />
-        <POpenseaDetailListNFT total={selectedCollection.stats?.count} nfts={nfts} onClickNFTItem={onClickNFTItem} />
+        <POpenseaDetailListNFT total={nfts.length} nfts={nfts} onClickNFTItem={onClickNFTItem} />
       </WrapperContent>
     </Styled>
   );
