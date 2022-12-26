@@ -76,7 +76,7 @@ export const WrapAppItem = styled.div<{ isMobile: boolean; canClick: boolean }>`
     height: 273px !important;
     :hover {
       opacity: ${({ canClick, isMobile }) => (canClick && !isMobile ? 0.8 : 1)};
-      cursor: ${({ canClick, isMobile }) => (canClick && !isMobile ? 'pointer' : 'unset')};
+      cursor: ${({ canClick }) => (canClick ? 'pointer' : 'unset')};
     }
     .exchange-logo {
       width: 80px;

@@ -74,22 +74,27 @@ const enhanceFee = (WrappedComponent: any) => {
 
     const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.ESTIMATE_SWAP });
 
-    const debounceEstimateFee = React.useCallback(
-      debounce(async () => {
-        if (!UPDATED_METRIC) {
-          updateMetric().then();
-          UPDATED_METRIC = true;
-        }
-        await handleEstimateFee({ isResetForm: true });
-        if (intervalRef && !intervalRef.current && formType === FormTypes.SWAP) {
-          // @ts-ignore
-          intervalRef.current = setInterval(async () => {
-            await handleEstimateFee({ isResetForm: false });
-          }, 15000);
-        }
-      }, 700),
-      [inputAmount, isFocused, unshieldAddress, formType, incAddress, isExternalAddress]
-    );
+    const onEstimate = async () => {
+      if (!UPDATED_METRIC) {
+        updateMetric().then();
+        UPDATED_METRIC = true;
+      }
+      await handleEstimateFee({ isResetForm: true });
+      if (intervalRef && !intervalRef.current && formType === FormTypes.SWAP) {
+        // @ts-ignore
+        intervalRef.current = setInterval(async () => {
+          await handleEstimateFee({ isResetForm: false });
+        }, 15000);
+      }
+    };
+
+    const debounceEstimateFee = React.useCallback(debounce(onEstimate, 700), [
+      isFocused,
+      unshieldAddress,
+      formType,
+      incAddress,
+      isExternalAddress,
+    ]);
 
     React.useEffect(() => {
       if (initRef && !initRef.current) {
