@@ -1005,24 +1005,9 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     h5 {
       color: ${({ theme }) => theme.color_white};
-        font-size: 24px;
-        font-weight: 800;
-        line-height: 140%;
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
-        font-size: 24px;
-        font-weight: 800;
-        line-height: 140%;
-      `}
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-        font-size: 24px;
-        font-weight: 500;
-        line-height: 120%;
-      `}
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-        font-size: 24px;
-        font-weight: 500;
-        line-height: 124%;
-      `}
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 140%;
     }
 
     h6 {

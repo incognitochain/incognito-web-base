@@ -50,3 +50,36 @@ export const GROUP_SUPPORTED_NETWORK_BY_PAPPS: any = {
 
   [SwapExchange.JOE]: [MAIN_NETWORK_NAME.INCOGNITO, MAIN_NETWORK_NAME.AVALANCHE],
 };
+
+export const SELECTION_NETWORKS: any[] = [
+  {
+    label: 'All',
+    network: [
+      MAIN_NETWORK_NAME.ETHEREUM,
+      MAIN_NETWORK_NAME.BSC,
+      MAIN_NETWORK_NAME.POLYGON,
+      MAIN_NETWORK_NAME.FANTOM,
+      MAIN_NETWORK_NAME.AVALANCHE,
+    ],
+  },
+  {
+    label: MAIN_NETWORK_NAME.ETHEREUM,
+    network: [MAIN_NETWORK_NAME.ETHEREUM],
+  },
+  {
+    label: 'Binance Chain',
+    network: [MAIN_NETWORK_NAME.BSC],
+  },
+  {
+    label: MAIN_NETWORK_NAME.POLYGON,
+    network: [MAIN_NETWORK_NAME.POLYGON],
+  },
+  {
+    label: MAIN_NETWORK_NAME.FANTOM,
+    network: [MAIN_NETWORK_NAME.FANTOM],
+  },
+  {
+    label: MAIN_NETWORK_NAME.AVALANCHE,
+    network: [MAIN_NETWORK_NAME.AVALANCHE],
+  },
+];
