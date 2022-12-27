@@ -16,7 +16,13 @@ const Header = styled.div`
   .sub-header {
     margin-top: 16px;
     margin-right: 20px;
-    max-width: 450px;
+    max-width: 470px;
+    color: ${({ theme }) => theme.text1};
+  }
+  .col-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   .btn-get-prv {
     max-width: 180px;
@@ -69,10 +75,11 @@ const Content = styled.div`
     color: ${({ theme }) => theme.color_white};
   }
   .h7 {
-    max-width: 638px;
+    max-width: 685px;
     margin-left: auto;
     margin-right: auto;
-    text-align: justify;
+    text-align: center;
+    white-space: pre-wrap;
   }
   ${({ theme }) => theme.mediaWidth.upToLarge`
     margin-top: 50px;

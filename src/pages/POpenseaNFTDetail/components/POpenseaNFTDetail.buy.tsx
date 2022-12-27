@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 import { getIncognitoInject, useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
+import { BIG_COINS } from 'constants/token';
 import { Convert, POpenseaBuyFee, POpenseaNft } from 'models/model/POpenseaNFT';
 import PToken from 'models/model/pTokenModel';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
@@ -25,7 +26,9 @@ interface POpenseaNFTDetailBuyProps {
 }
 const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const { selectedNFT } = props;
-  const tokens = useSelector(unshieldableTokens).filter((token) => token.isMainETH);
+  const tokens = useSelector(unshieldableTokens).filter(
+    (token) => token.isMainETH || token.tokenID === BIG_COINS.ETH_UNIFIED.tokenID
+  );
 
   const networkFee = useSelector(networkFeePOpenseaSelectors);
   const { requestSignTransaction } = useIncognitoWallet();
@@ -41,6 +44,11 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const [reciptientAddress, setReciptientAddress] = useState('');
   const [selectedToken, setSelectedToken] = useState<PToken | undefined>();
   const [buyFee, setBuyFee] = useState<POpenseaBuyFee | undefined>();
+
+  const childToken =
+    selectedToken && selectedToken.isUnified
+      ? selectedToken?.listUnifiedToken.find((token) => token.networkID === 1)
+      : undefined;
 
   useEffect(() => {
     tokens.length > 0 && selectedToken === undefined && setSelectedToken(tokens[0]);
@@ -83,11 +91,11 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const getBurnOriginalAmount = () => {
     const burnHumanAmount = convert.toHumanAmount({
       originalAmount: new BigNumber(seaportSellOrder?.currentPrice || 0).toNumber(),
-      decimals: selectedToken?.decimals || 18,
+      decimals: childToken?.decimals || 18,
     });
     return convert.toOriginalAmount({
       humanAmount: new BigNumber(burnHumanAmount).toString(),
-      decimals: selectedToken?.pDecimals || 0,
+      decimals: childToken?.pDecimals || 0,
       round: true,
     });
   };
@@ -124,9 +132,6 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
       const otaReceiver = result?.otaReceiver;
 
       // get child token with burn network
-      const childToken = selectedToken.isUnified
-        ? selectedToken?.listUnifiedToken.find((token) => token.networkID === 1)
-        : selectedToken;
       const incTokenID = childToken?.tokenID;
 
       let callContract = buyFee.callContract;
@@ -238,7 +243,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
         <p className="price-coin">
           {format.amountVer2({
             originalAmount: new BigNumber(seaportSellOrder.currentPrice || 0).toNumber(),
-            decimals: selectedToken?.decimals || 18,
+            decimals: childToken?.decimals || 18,
           })}{' '}
           {selectedToken?.symbol}
         </p>
@@ -250,7 +255,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
       <p className="current-price">
         {format.amountVer2({
           originalAmount: new BigNumber(buyFee?.fee.feeAmount || 0).toNumber(),
-          decimals: selectedToken?.pDecimals || 18,
+          decimals: childToken?.pDecimals || 18,
         })}{' '}
         {selectedToken?.symbol} ={' '}
         {format.amountVer2({

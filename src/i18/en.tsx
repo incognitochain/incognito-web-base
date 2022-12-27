@@ -24,7 +24,7 @@ const language: ILanguage = {
     bridgedBlockchains: 'Bridges supported',
   },
   peggingApp: {
-    mainTitle: 'Use your favorite\ncrypto apps privately.',
+    mainTitle: 'The dapps you love. With privacy.',
     howWork: 'How it works',
     private: 'Private',
     privateSub: 'Trade, lend, borrow, invest, etc. – confidentially.',

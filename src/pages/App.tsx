@@ -17,6 +17,7 @@ import { DarkModeQueryParamReader } from 'theme';
 
 import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
+import BuyNode from './BuyNode';
 import Earnings from './Earnings';
 import Validators from './Earnings/features/Validators/Validators';
 import { GetPRV } from './GetPRV';
@@ -30,6 +31,7 @@ import POpensea from './POpensea';
 import POpenseaDetail from './POpenseaDetail';
 import POpenseaNFTDetail from './POpenseaNFTDetail';
 import Structure from './Structure';
+import DepositPage from './Swap/features/DepositPage';
 import SwapExchange from './Swap/features/SwapExchange';
 import TermOfService from './TermOfService';
 
@@ -124,6 +126,8 @@ const App = () => {
           <Route exact path="/popensea" component={POpensea} />
           <Route exact path="/popensea/detail/:contract" component={POpenseaDetail} />
           <Route exact path="/popensea/nft-detail/:contract/:tokenId" component={POpenseaNFTDetail} />
+          <Route exact path="/buy-node" component={BuyNode} />
+          <Route exact path="/deposit" component={DepositPage} />
         </>
       </Switch>
     );

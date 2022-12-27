@@ -11,6 +11,7 @@ import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Field } from 'redux-form';
 import { useAppSelector } from 'state/hooks';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
@@ -18,6 +19,7 @@ import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
+import { getQueryPAppName } from '../../Swap.hooks';
 import { EstReceive } from '../EstReceive';
 import { actionSetToken } from '../FormDeposit/FormDeposit.actions';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
@@ -138,6 +140,7 @@ const FormUnshield = React.memo((props: any) => {
 
   const { isIncognitoInstalled } = useIncognitoWallet();
   const incAccount = useAppSelector(incognitoWalletAccountSelector);
+  const history = useHistory();
 
   const { showPopup } = useIncognitoWallet();
   const [changing, setChanging] = React.useState(false);
@@ -180,7 +183,12 @@ const FormUnshield = React.memo((props: any) => {
       //     },
       //   })
       // );
-      dispatch(changeTab({ tab: TAB_LIST.SWAP.tabNames[1], rootTab: TAB_LIST.SWAP.rootTab }));
+      const { isValid } = getQueryPAppName();
+      if (isValid) {
+        history.push('/deposit');
+      } else {
+        dispatch(changeTab({ tab: TAB_LIST.SWAP.tabNames[1], rootTab: TAB_LIST.SWAP.rootTab }));
+      }
     }, 100);
   };
 
