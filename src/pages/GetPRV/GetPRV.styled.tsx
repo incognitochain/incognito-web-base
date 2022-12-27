@@ -18,6 +18,11 @@ const Header = styled.div`
     margin-right: 20px;
     max-width: 450px;
   }
+  .col-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
   .btn-get-prv {
     max-width: 180px;
     margin-top: 40px;
@@ -69,10 +74,11 @@ const Content = styled.div`
     color: ${({ theme }) => theme.color_white};
   }
   .h7 {
-    max-width: 638px;
+    max-width: 685px;
     margin-left: auto;
     margin-right: auto;
-    text-align: justify;
+    text-align: center;
+    white-space: pre-wrap;
   }
   ${({ theme }) => theme.mediaWidth.upToLarge`
     margin-top: 50px;

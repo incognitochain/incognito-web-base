@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import { Col } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { PRVIcon } from 'components/icons';
 import { BIG_COINS, MAIN_NETWORK_NAME, PRV } from 'constants/token';
@@ -48,8 +48,6 @@ const GetPRV = () => {
               PRV is the native cryptocurrency of Incognito. Holders will shape the future of Incognito by signaling
               their support for upgrades to the ecosystem and directing usage of a Community Treasury.
             </p>
-          </Col>
-          <Row>
             <ButtonConfirmed
               className="btn-get-prv"
               onClick={() => {
@@ -60,7 +58,7 @@ const GetPRV = () => {
             >
               Buy PRV
             </ButtonConfirmed>
-          </Row>
+          </Col>
         </Col>
         <PRVIcon />
       </Header>
@@ -70,7 +68,7 @@ const GetPRV = () => {
         <p className="h7">
           Privacy (PRV) is used it to participate in privacy markets, use your favorite apps privately, stake it to earn
           block rewards, and govern the network. PRV is minted for every new block mined, and has a fixed maximum supply
-          of 100M.&nbsp;
+          of 100M.{`\n`}
           <a
             href="https://we.incognito.org/t/network-incentive-privacy-prv-mining-distribution/172"
             target="_blank"
