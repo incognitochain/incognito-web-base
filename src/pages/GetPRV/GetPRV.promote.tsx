@@ -37,7 +37,7 @@ const Promote = () => {
     {
       icon: StakeSVG,
       title: 'Staking',
-      desc: 'Users will be able to stake their tokens to become Incognito network validators to perform consensus work, including verifying transactions, voting to add new blocks to the blockchain and earning block rewards.',
+      desc: 'Users will be able to stake their tokens to become Incognito network validators to perform consensus work and earn block rewards.',
     },
     {
       icon: PaymentSVG,
