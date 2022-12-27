@@ -118,6 +118,14 @@ const Styled = styled.div`
     align-items: center;
   }
 
+  .text-owner {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 140%;
+    color: #9c9c9c;
+    text-align: center;
+  }
+
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
     .tableRow {
       height: 56px;
@@ -184,7 +192,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       ),
       responsive: ['md'],
       title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center' }}>
+        <div className="headerTitle" style={{ justifyContent: 'left' }}>
           #
         </div>
       ),
@@ -203,7 +211,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
         </div>
       ),
       title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center' }}>
+        <div className="headerTitle" style={{ justifyContent: 'left' }}>
           Collection
         </div>
       ),
@@ -216,7 +224,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       showSorterTooltip: false,
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText">
-          {record.stats?.totalVolume?.toFixed(2)} ETH
+          {record.stats?.totalVolume?.toFixed(1)} ETH
         </p>
       ),
       sorter: (a, b) => (a.stats?.totalVolume || 0) - (b.stats?.totalVolume || 0),
@@ -250,7 +258,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       showSorterTooltip: false,
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText">
-          {record.stats?.floorPrice?.toFixed(3)} ETH
+          {record.stats?.floorPrice?.toFixed(1)} ETH
         </p>
       ),
       sorter: (a, b) => (a.stats?.floorPrice || 0) - (b.stats?.floorPrice || 0),
@@ -316,19 +324,30 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       responsive: ['md'],
       align: 'center',
       showSorterTooltip: false,
-      render: (text, record, index) => (
-        <p key={index.toString()} className="baseText">
-          {record.stats?.numOwners}
-        </p>
-      ),
-      sorter: (a, b) => (a.stats?.numOwners || 0) - (b.stats?.numOwners || 0),
+      render: (text, record, index) => {
+        const stats = record.stats;
+        return (
+          <div>
+            <p key={index.toString()} className="baseText">
+              {Math.round(
+                stats && stats.totalSupply && stats.numOwners ? (stats.numOwners / stats.totalSupply) * 100 : 0
+              )}
+              %
+            </p>
+            <p className="text-owner">{stats?.numOwners} owners</p>
+          </div>
+        );
+      },
+      sorter: (a, b) =>
+        (((a.stats?.numOwners || 0) / (a.stats?.totalSupply || 1)) * 100 || 0) -
+        (((b.stats?.numOwners || 0) / (b.stats?.totalSupply || 1)) * 100 || 0),
       // eslint-disable-next-line react/prop-types
       title: ({ sortColumns }) => {
         // eslint-disable-next-line react/prop-types
         const sortedColumn = sortColumns?.find(({ column }) => column.key === 'unique_owners');
         return (
           <div className="headerTitle" style={{ justifyContent: 'center' }}>
-            Unique Owners
+            % Unique Owners
             {sortedColumn ? (
               sortedColumn.order === 'ascend' ? (
                 <img alt="" src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
@@ -352,7 +371,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
         columns={columns}
         dataSource={collections}
         size="large"
-        loading={isFetching}
+        // loading={isFetching}
         pagination={false}
         rowClassName="tableRow"
         onRow={(collection) => ({

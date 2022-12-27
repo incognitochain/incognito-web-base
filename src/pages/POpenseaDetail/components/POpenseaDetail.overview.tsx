@@ -62,11 +62,11 @@ const Styled = styled.div`
   }
 
   .sub-title {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 16px;
     letter-spacing: 0.01em;
     text-align: center;
-    margin-left: 4px;
+    margin-left: 8px;
   }
 
   .info-container {
@@ -128,10 +128,13 @@ const Styled = styled.div`
 
 interface POpenseaDetailOverviewProps {
   collection: POpenseaCollection;
+  total: number;
 }
 
 const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
-  const { collection } = props;
+  const { collection, total } = props;
+
+  const stats = collection.stats;
 
   const renderTitleItem = (title?: string, subTitle?: string) => {
     return (
@@ -161,19 +164,25 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
           {renderTitleItem('By', collection.mediumUsername)}
         </div>
         <div className="info-container">
-          {renderTitleItem('Items', '12832')}
+          {renderTitleItem('Items', `${total}`)}
           {renderTitleItem('Created', collection.getCreatedDateWith('ll'))}
-          {renderTitleItem('Creator fee', `%`)}
+          {collection &&
+            collection.openseaSellerFeeBasisPoints &&
+            renderTitleItem('Creator fee', `${Math.round(parseInt(collection.openseaSellerFeeBasisPoints) / 100)}%`)}
           {renderTitleItem('Chain', 'Etherum')}
-          {renderTitleItem('Category', 'Gaming')}
+          {renderTitleItem('Category', '?')}
         </div>
         <div className="info-container">
-          {renderVolumnItem(`${collection.stats?.totalVolume} ETH`, 'total volume')}
-          {renderVolumnItem(`${collection.stats?.floorPrice} ETH`, 'floor price')}
-          {renderVolumnItem('0.8505 wETH', 'best offer')}
-          {renderVolumnItem('4%', 'listed')}
-          {renderVolumnItem(`${collection.stats?.numOwners}`, 'owners')}
-          {renderVolumnItem('20%', 'unique owners')}
+          {stats && renderVolumnItem(`${stats?.totalVolume?.toFixed(1)} ETH`, 'total volume')}
+          {stats && renderVolumnItem(`${stats?.floorPrice?.toFixed(1)} ETH`, 'floor price')}
+          {renderVolumnItem(' wETH', 'best offer')}
+          {renderVolumnItem('%', 'listed')}
+          {stats && renderVolumnItem(`${stats?.numOwners}`, 'owners')}
+          {stats &&
+            renderVolumnItem(
+              `${Math.round(((stats.numOwners || 0) / (stats.totalSupply || 1)) * 100)}%`,
+              'unique owners'
+            )}
         </div>
       </div>
     </Styled>

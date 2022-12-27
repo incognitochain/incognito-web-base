@@ -57,6 +57,8 @@ export class POpenseaNft {
 
 export interface POpenseaBuyFee {
   calldata: string;
+  callContract: string;
+  receiveToken: string;
   fee: {
     feeAddress: string;
     feeAddressShardID: number;
@@ -317,6 +319,8 @@ export class Convert {
     const Fee = get(json, 'Fee');
     return {
       calldata: get(json, 'Calldata'),
+      callContract: get(json, 'CallContract'),
+      receiveToken: get(json, 'ReceiveToken'),
       fee: {
         feeAddress: get(Fee, 'feeAddress'),
         feeAddressShardID: get(Fee, 'feeAddressShardID'),

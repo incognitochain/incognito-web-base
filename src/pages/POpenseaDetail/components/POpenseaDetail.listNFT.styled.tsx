@@ -4,7 +4,7 @@ export const Styled = styled.div`
   margin-top: 32px;
 
   .list {
-    margin-top: 30px;
+    margin-top: 16px;
   }
 
   .card {
@@ -12,6 +12,7 @@ export const Styled = styled.div`
     height: auto;
     background-color: ${({ theme }) => theme.bg3};
     border-radius: 16px;
+    margin-top: 14px;
   }
 
   .item-img {
@@ -43,7 +44,7 @@ export const Styled = styled.div`
     line-height: 140%;
     overflow-wrap: break-word;
     width: 50%;
-    height: 50px;
+    height: 40px;
   }
 
   .item-id {
@@ -180,6 +181,10 @@ export const Styled = styled.div`
     margin-right: 16px;
   }
 
+  ant-dropdown-open {
+    background-color: ${({ theme }) => theme.bg3};
+  }
+
   .sort-menu {
     background-color: ${({ theme }) => theme.bg3};
     border-radius: 8px;
@@ -238,4 +243,5 @@ export const TextInputStyled = styled.input`
   font-weight: 400;
   font-size: 16px;
   line-height: 140%;
+  color: white;
 `;

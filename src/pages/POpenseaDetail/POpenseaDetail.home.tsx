@@ -4,6 +4,7 @@ import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import {
+  actionGetPOpenseaCollectionDetail,
   actionGetPOpenseaNFTs,
   actionSetSelectedNFT,
   pOpenseaNFTsSelectors,
@@ -24,8 +25,11 @@ const POpenseaDetail = () => {
   const nfts = useSelector(pOpenseaNFTsSelectors);
 
   React.useEffect(() => {
-    contract && dispatch(actionGetPOpenseaNFTs(contract));
-  }, [contract]);
+    if (contract && nfts.length === 0) {
+      dispatch(actionGetPOpenseaCollectionDetail(contract));
+      dispatch(actionGetPOpenseaNFTs(contract));
+    }
+  }, []);
 
   const onClickNFTItem = (item: POpenseaNft) => {
     if (selectedCollection.primaryAssetContracts && selectedCollection.primaryAssetContracts.length > 0) {
@@ -40,8 +44,8 @@ const POpenseaDetail = () => {
     <Styled className="default-max-width">
       <WrapperContent>
         <POpenseaDetailSubRoute collectionName={selectedCollection.name} />
-        <POpenseaDetailOverview collection={selectedCollection} />
-        <POpenseaDetailListNFT total={nfts.length} nfts={nfts} onClickNFTItem={onClickNFTItem} />
+        <POpenseaDetailOverview total={nfts.length} collection={selectedCollection} />
+        <POpenseaDetailListNFT total={nfts.length} onClickNFTItem={onClickNFTItem} />
       </WrapperContent>
     </Styled>
   );

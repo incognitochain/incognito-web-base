@@ -1,6 +1,7 @@
 import { Convert, POpenseaCollection } from 'models/model/POpenseaCollection';
 import { Convert as ConvertNFT, POpenseaNft } from 'models/model/POpenseaNFT';
 import {
+  getPOpeanseaCollectionDetail,
   getPOpeanseaCollections,
   getPOpeanseaNFTDetail,
   getPOpeanseaNFTs,
@@ -50,6 +51,20 @@ export const actionGetPOpenseaCollections = () => async (dispatch: AppDispatch, 
     dispatch(actionFetchingCollections(false));
   }
 };
+
+export const actionGetPOpenseaCollectionDetail =
+  (contract: string) => async (dispatch: AppDispatch, getState: AppState & any) => {
+    try {
+      const data = await getPOpeanseaCollectionDetail(contract);
+      if (data && data.Detail) {
+        const collection = Convert.toPOpenseaCollection(data.Detail);
+        dispatch(actionSetSelectedCollection(collection));
+      }
+    } catch (e) {
+      console.log('GET POPENSEA COLLECTION DETAIL WITH ERROR: ', e);
+    } finally {
+    }
+  };
 
 export const actionGetPOpenseaNFTs = (contract: string) => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {

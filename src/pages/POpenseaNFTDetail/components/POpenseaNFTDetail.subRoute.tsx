@@ -1,3 +1,4 @@
+import { routePeggingApps } from 'pages';
 import { memo } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components/macro';
@@ -37,7 +38,7 @@ const POpenseaNFTDetailSubRoute = (props: POpenseaDetailSubRouteProps) => {
       <button
         className="hover"
         onClick={() => {
-          history.push('/use');
+          history.push(routePeggingApps);
         }}
       >
         <p className="sub-title earnings-text">Use</p>

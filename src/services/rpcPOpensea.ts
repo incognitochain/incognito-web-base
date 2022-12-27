@@ -14,6 +14,10 @@ class RpcPOpensea {
     return this.http.get('papps/opensea/collections');
   }
 
+  getCollectionDetail(contract: string) {
+    return this.http.get(`papps/opensea/collection-detail?contract=${contract}`);
+  }
+
   getNFTs(contract: string, limit?: number) {
     return this.http.get(
       `papps/opensea/collection-assets?contract=${contract}&limit=${limit || DEFAULT_LIMIT}&offset=0`
@@ -38,6 +42,11 @@ const getPOpeanseaCollections = async (): Promise<any> => {
   return response;
 };
 
+const getPOpeanseaCollectionDetail = async (contract: string): Promise<any> => {
+  const response = await rpcPOpensea.getCollectionDetail(contract);
+  return response;
+};
+
 const getPOpeanseaNFTs = async (contract: string, limit?: number): Promise<any> => {
   const response = await rpcPOpensea.getNFTs(contract, limit);
   return response;
@@ -59,5 +68,11 @@ const postEstimateFee = async (
   return response;
 };
 
-export { getPOpeanseaCollections, getPOpeanseaNFTDetail, getPOpeanseaNFTs, postEstimateFee };
+export {
+  getPOpeanseaCollectionDetail,
+  getPOpeanseaCollections,
+  getPOpeanseaNFTDetail,
+  getPOpeanseaNFTs,
+  postEstimateFee,
+};
 export default rpcPOpensea;

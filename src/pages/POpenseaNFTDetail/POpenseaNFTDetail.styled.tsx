@@ -151,13 +151,19 @@ export const WrapperContent = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 30%;
+      width: 35%;
       height: 50px;
-      left: 1129px;
-      top: 385px;
 
       background-color: ${({ theme }) => theme.color_blue};
       border-radius: 8px;
+
+      :hover {
+        background-color: ${({ theme }) => theme.primary1};
+      }
+
+      :focus {
+        background-color: ${({ theme }) => theme.primary1};
+      }
     }
 
     .text-buy {
@@ -219,6 +225,15 @@ export const WrapperContent = styled.div`
       padding-left: 16px;
       padding-right: 16px;
       margin-left: 16px;
+
+      :hover {
+        border: 1px solid ${({ theme }) => theme.border5};
+      }
+
+      :focus {
+        border: 1px solid ${({ theme }) => theme.border5};
+        color: ${({ theme }) => theme.primary5};
+      }
     }
 
     .selected-token-icon {
@@ -260,6 +275,25 @@ export const TextInputStyled = styled.input`
   color: white;
   padding-left: 16px;
   padding-right: 16px;
+
+  :hover {
+    border: 1px solid ${({ theme }) => theme.border5};
+  }
+
+  :focus {
+    border: 1px solid ${({ theme }) => theme.border5};
+    color: ${({ theme }) => theme.primary5};
+  }
+
+  ::placeholder {
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 140%;
+    color: ${({ theme }) => theme.primary7};
+  }
 `;
 
 export const ArrowDown = styled(ChevronDown)<{ open?: boolean }>`

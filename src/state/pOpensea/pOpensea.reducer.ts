@@ -3,13 +3,16 @@ import { POpenseaNft } from 'models/model/POpenseaNFT';
 import { Reducer } from 'redux';
 
 import { POpenseaActionType } from './pOpensea.types';
+const { ACCOUNT_CONSTANT } = require('incognito-chain-web-js/build/wallet');
 
 export interface IPOpenseaReducer {
   isFetching: boolean;
   collections: POpenseaCollection[];
   selectedCollection?: POpenseaCollection;
   nfts: POpenseaNft[];
+  filterNfts: POpenseaNft[];
   seletedNFT?: POpenseaNft;
+  networkFee: number;
 }
 
 const initialState: IPOpenseaReducer = {
@@ -17,7 +20,9 @@ const initialState: IPOpenseaReducer = {
   collections: [],
   selectedCollection: undefined,
   nfts: [],
+  filterNfts: [],
   seletedNFT: undefined,
+  networkFee: ACCOUNT_CONSTANT.MAX_FEE_PER_TX,
 };
 
 export const reducer: Reducer<IPOpenseaReducer, any> = (state = initialState, action): IPOpenseaReducer => {

@@ -45,20 +45,21 @@ interface ExpandableProps {
   icon: any;
   title: string;
   child: React.ReactElement;
+  expand?: boolean;
 }
 
 export default function Expandable(props: ExpandableProps) {
-  const { icon, title, child } = props;
+  const { icon, title, child, expand } = props;
 
-  const [isExpand, setIsExpand] = React.useState(false);
+  const [isExpand, setIsExpand] = React.useState(expand);
 
   const onClickExpand = () => {
     setIsExpand(!isExpand);
   };
 
   return (
-    <Styled isExpand={isExpand}>
-      <div className="container-expand" onClick={onClickExpand}>
+    <Styled isExpand={isExpand} onClick={onClickExpand}>
+      <div className="container-expand">
         <div className="content-expand">
           <img className="left-icon" alt="img" src={icon} />
           <p className="title">{title}</p>

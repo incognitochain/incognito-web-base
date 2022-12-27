@@ -170,19 +170,19 @@ export class Convert {
     collection.isSubjectToWhitelist = get(json, 'is_subject_to_whitelist');
     collection.largeImageUrl = get(json, 'large_image_url');
     collection.mediumUsername = get(json, 'medium_username');
-    collection.onlyProxiedTransfers = get(json, 'name');
+    collection.onlyProxiedTransfers = get(json, 'only_proxied_transfers');
     collection.name = get(json, 'name');
-    collection.openseaBuyerFeeBasisPoints = get(json, 'name');
-    collection.openseaSellerFeeBasisPoints = get(json, 'name');
-    collection.payoutAddress = get(json, 'name');
-    collection.requireEmail = get(json, 'name');
-    collection.shortDescription = get(json, 'name');
-    collection.telegramUrl = get(json, 'name');
-    collection.twitterUsername = get(json, 'name');
+    collection.openseaBuyerFeeBasisPoints = get(json, 'opensea_buyer_fee_basis_points');
+    collection.openseaSellerFeeBasisPoints = get(json, 'opensea_seller_fee_basis_points');
+    collection.payoutAddress = get(json, 'payout_address');
+    collection.requireEmail = get(json, 'require_email');
+    collection.shortDescription = get(json, 'short_description');
+    collection.telegramUrl = get(json, 'telegram_url');
+    collection.twitterUsername = get(json, 'twitter_username');
     collection.instagramUsername = get(json, 'name');
-    collection.wikiUrl = get(json, 'name');
-    collection.isNsfw = get(json, 'name');
-    collection.isRarityEnabled = get(json, 'name');
+    collection.wikiUrl = get(json, 'wiki_url');
+    collection.isNsfw = get(json, 'is_nsfw');
+    collection.isRarityEnabled = get(json, 'is_rarity_enabled');
     return collection;
   }
 

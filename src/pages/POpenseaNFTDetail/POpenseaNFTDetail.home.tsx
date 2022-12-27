@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import icDesciption from 'assets/svg/ic-description.svg';
-import icGaming from 'assets/svg/ic-gaming.svg';
+// import icGaming from 'assets/svg/ic-gaming.svg';
 import icInfo from 'assets/svg/ic-info.svg';
-import icStar from 'assets/svg/ic-star.svg';
+// import icStar from 'assets/svg/ic-star.svg';
 import icVerify from 'assets/svg/ic-verify.svg';
-import icView from 'assets/svg/ic-view.svg';
+// import icView from 'assets/svg/ic-view.svg';
 import Expandable from 'components/Expandable';
 import ImagePlaceholder from 'components/ImagePlaceholder';
 import React, { memo } from 'react';
@@ -34,15 +34,17 @@ const Home = () => {
     return (
       <React.Fragment>
         <div className="artis-container">
-          <a className="artis">{selectedNFT.creator?.user?.username}</a>
+          <a className="artis">{selectedNFT.collection?.name}</a>
           <img src={icVerify} />
         </div>
 
-        <p className="name">{selectedNFT.name}</p>
+        <p className="name">
+          {selectedNFT.name} #{selectedNFT.id}
+        </p>
         <p className="owner-by">
           Owner by <a>{assetContract ? assetContract.owner : ''}</a>
         </p>
-        <div className="view-container">
+        {/* <div className="view-container">
           <div className="view-content">
             <img src={icView} />
             <p className="view-title">10 views</p>
@@ -55,7 +57,7 @@ const Home = () => {
             <img src={icGaming} />
             <p className="view-title">Gaming</p>
           </div>
-        </div>
+        </div> */}
       </React.Fragment>
     );
   };
@@ -72,9 +74,15 @@ const Home = () => {
       { title: 'Contract Address', value: assetContract ? assetContract.address : '' },
       { title: 'Token ID', value: selectedNFT.tokenId },
       { title: 'Token Standard', value: assetContract ? assetContract.schemaName : '' },
-      { title: 'Chain', value: '' },
-      { title: 'Last updated', value: '' },
-      { title: 'Creator Fee', value: assetContract ? `${assetContract.sellerFeeBasisPoints}` : '' },
+      { title: 'Chain', value: 'Etherum' },
+      // { title: 'Last updated', value: '' },
+      {
+        title: 'Creator Fee',
+        value:
+          assetContract && assetContract.openseaSellerFeeBasisPoints
+            ? `${Math.round(assetContract.openseaSellerFeeBasisPoints / 100)}%`
+            : '',
+      },
     ];
 
     const renderItem = (title: string, value?: string) => (
@@ -102,7 +110,7 @@ const Home = () => {
           <div className="section-2">
             {renderOverviewNFTComponent()}
             <POpenseaNFTDetailBuy selectedNFT={selectedNFT} />
-            <Expandable icon={icInfo} title="Details" child={renderDetailsChild()} />
+            <Expandable icon={icInfo} expand title="Details" child={renderDetailsChild()} />
             <Expandable icon={icDesciption} title="Desciption" child={renderDescriptionChild()} />
           </div>
         </div>

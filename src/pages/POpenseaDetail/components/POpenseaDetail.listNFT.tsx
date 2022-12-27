@@ -2,27 +2,32 @@
 import { Dropdown, List, Menu } from 'antd';
 import ArrowDownSVG from 'assets/images/arrow-down-white.svg';
 import SearchSVG from 'assets/svg/search-icon.svg';
+import BigNumber from 'bignumber.js';
 import ImagePlaceholder from 'components/ImagePlaceholder';
 import { POpenseaNft } from 'models/model/POpenseaNFT';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { pOpenseaFilterNFTsSelectors } from 'state/pOpensea';
+import format from 'utils/format';
 
 import { Styled, TextInputStyled } from './POpenseaDetail.listNFT.styled';
 
-enum SortType {
+export enum SortNftType {
   PriceLowToHigh = 'Price low to high',
   PriceHighToLow = 'Price high to low',
 }
 
 interface POpenseaDetailListNFTProps {
-  nfts: POpenseaNft[];
   total?: number;
   onClickNFTItem: (item: POpenseaNft) => void;
   onSearchChange?: (key: string) => void;
 }
 
 const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
-  const [keySearch, setKeySearch] = React.useState('');
-  const [currentSortType, setCurrentSortType] = React.useState<SortType>(SortType.PriceLowToHigh);
+  const [keySearch, setKeySearch] = React.useState<string | undefined>();
+  const [currentSortType, setCurrentSortType] = React.useState<SortNftType>(SortNftType.PriceLowToHigh);
+
+  const nfts = useSelector(pOpenseaFilterNFTsSelectors)(currentSortType, keySearch);
 
   const onChange = (e: any) => {
     setKeySearch(e.target.value);
@@ -31,9 +36,9 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
 
   const renderFilterComponent = () => {
     const renderSortItem = (key: any, label: string) => {
-      const typedString: keyof typeof SortType = key;
+      const typedString: keyof typeof SortNftType = key;
       return (
-        <button className="sort-item" onClick={() => setCurrentSortType(SortType[typedString])}>
+        <button className="sort-item" onClick={() => setCurrentSortType(SortNftType[typedString])}>
           {label}
         </button>
       );
@@ -60,7 +65,7 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
             overlay={
               <Menu
                 rootClassName="sort-menu"
-                items={Object.entries(SortType).map(([key, value]) => ({
+                items={Object.entries(SortNftType).map(([key, value]) => ({
                   key: value,
                   label: renderSortItem(key, value),
                 }))}
@@ -82,15 +87,15 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
       <List
         className="list"
         grid={{
-          gutter: 16,
+          gutter: 30,
           xs: 1,
           sm: 2,
-          md: 3,
+          md: 2,
           lg: 3,
           xl: 4,
           xxl: 4,
         }}
-        dataSource={props.nfts}
+        dataSource={nfts}
         renderItem={(item: POpenseaNft, index: number) => {
           const seaportSellOrder =
             item.seaportSellOrders && item.seaportSellOrders.length > 0 ? item.seaportSellOrders[0] : undefined;
@@ -102,9 +107,17 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
                 <div className="item-info">
                   <div className="item-name-container">
                     <p className="item-name">{item.name}</p>
-                    {/* <p className="item-id">{`#${item.id}`}</p> */}
+                    <p className="item-id">{`#${item.id}`}</p>
                   </div>
-                  {seaportSellOrder && <p className="item-price">{`${seaportSellOrder.currentPrice} ETH`}</p>}
+                  {seaportSellOrder && (
+                    <p className="item-price">
+                      {format.amountVer2({
+                        originalAmount: new BigNumber(seaportSellOrder.currentPrice || 0).toNumber(),
+                        decimals: 18,
+                      })}
+                      {' ETH'}
+                    </p>
+                  )}
                   {lastSale && lastSale.totalPrice && (
                     <p className="item-last-sale">{`Last sale: ${lastSale.totalPrice} ETH`}</p>
                   )}
