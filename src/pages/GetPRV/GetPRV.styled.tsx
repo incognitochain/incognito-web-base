@@ -16,7 +16,8 @@ const Header = styled.div`
   .sub-header {
     margin-top: 16px;
     margin-right: 20px;
-    max-width: 450px;
+    max-width: 470px;
+    color: ${({ theme }) => theme.text1};
   }
   .col-1 {
     display: flex;

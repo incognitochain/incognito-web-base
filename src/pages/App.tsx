@@ -28,6 +28,7 @@ import PageNotFound from './PageNotFound/PageNotFound';
 import PeggingApp from './PeggingApp';
 import Policy from './Policy';
 import Structure from './Structure';
+import DepositPage from './Swap/features/DepositPage';
 import SwapExchange from './Swap/features/SwapExchange';
 import TermOfService from './TermOfService';
 
@@ -120,6 +121,7 @@ const App = () => {
           <Route exact path="/mine/validator" component={Validators} />
           <Route exact path="/get-prv" component={GetPRV} />
           <Route exact path="/buy-node" component={BuyNode} />
+          <Route exact path="/deposit" component={DepositPage} />
         </>
       </Switch>
     );

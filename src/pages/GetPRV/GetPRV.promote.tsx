@@ -17,7 +17,7 @@ export const Styled = styled.div`
   }
   h6 {
     font-weight: 700;
-    color: white;
+    color: ${({ theme }) => theme.text1};
     margin-top: 16px;
   }
   .h8 {

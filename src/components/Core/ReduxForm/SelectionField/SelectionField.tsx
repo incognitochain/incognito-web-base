@@ -183,6 +183,9 @@ const SelectionField = (props: ISelectionFieldProps) => {
                   height: '40px',
                   paddingLeft: '0px',
                 },
+                onKeyDown: (e: any) => {
+                  if (e.keyCode === 9) e.preventDefault();
+                },
                 ...componentProps,
               }}
               isError={isError}

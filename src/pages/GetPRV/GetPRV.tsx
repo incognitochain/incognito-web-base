@@ -44,7 +44,7 @@ const GetPRV = () => {
         <Col className="col-1">
           <Col>
             <h3>Privacy (PRV)</h3>
-            <p className="sub-header h8">
+            <p className="sub-header h7">
               PRV is the native cryptocurrency of Incognito. Holders will shape the future of Incognito by signaling
               their support for upgrades to the ecosystem and directing usage of a Community Treasury.
             </p>
