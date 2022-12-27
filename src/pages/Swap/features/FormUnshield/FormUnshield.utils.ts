@@ -146,10 +146,12 @@ const filterTokensByPAppName = ({
   tokens,
   queryPAppName,
   ignoreFields = [],
+  pairToken,
 }: {
   tokens: SelectedPrivacy[];
   queryPAppName: any;
   ignoreFields?: string[];
+  pairToken?: SelectedPrivacy;
 }): SelectedPrivacy[] => {
   let tokensList = tokens;
   let supportedCurrencyType: any[] = [];
@@ -159,7 +161,7 @@ const filterTokensByPAppName = ({
     tokensList = tokensList.filter((token) => {
       // case PDEX supp
       if (queryPAppName.isPDex) {
-        return token.poolPair;
+        return token.poolPair && token.tokenID !== pairToken?.tokenID;
       }
       // PRV not supported for PApps now!
       // @ts-ignore
@@ -170,7 +172,7 @@ const filterTokensByPAppName = ({
       if (childCurrencyType && childCurrencyType.length > 0) {
         subTokenValid = supportedCurrencyType.some((currencyType) => childCurrencyType.includes(currencyType));
       }
-      return mainTokenValid || subTokenValid;
+      return (mainTokenValid || subTokenValid) && token.tokenID !== pairToken?.tokenID;
     });
   }
   return tokensList;
@@ -234,9 +236,14 @@ const getUnshieldData = ({
 
   // sell token
   const _sellToken = getDataByTokenID(sellIdentify);
+
+  // buy token
+  const _buyToken = getDataByTokenID(buyIdentify);
+  let _buyTokenList = [...unshieldAbleTokens];
+
   // getPAppName
   const queryPAppName = getQueryPAppName();
-  let _sellTokenList = filterTokensByPAppName({ tokens: unshieldAbleTokens, queryPAppName });
+  let _sellTokenList = filterTokensByPAppName({ tokens: unshieldAbleTokens, queryPAppName, pairToken: _buyToken });
   _sellTokenList = orderBy(
     _sellTokenList.filter((token) => {
       return !(token.isPRV && token.movedUnifiedToken) && !token.isNearToken;
@@ -244,10 +251,6 @@ const getUnshieldData = ({
     ['isPRV', 'isUnified'],
     ['desc', 'desc']
   );
-
-  // buy token
-  const _buyToken = getDataByTokenID(buyIdentify);
-  let _buyTokenList = [...unshieldAbleTokens];
 
   if (formType === FormTypes.SWAP) {
     if (swapNetwork === MAIN_NETWORK_NAME.INCOGNITO) {
@@ -279,6 +282,7 @@ const getUnshieldData = ({
     tokens: _buyTokenList,
     queryPAppName,
     ignoreFields: queryPAppName?.isPDex ? [] : ['isCentralized', 'isNearToken'],
+    pairToken: _sellToken,
   });
 
   // _buyTokenList = _buyTokenList.filter((token) => {
@@ -339,10 +343,21 @@ const getUnshieldData = ({
   }
 
   if (queryPAppName.isValid && queryPAppName.pAppName) {
-    const networkByPApps = GROUP_SUPPORTED_NETWORK_BY_PAPPS[queryPAppName.pAppName];
-    _buyNetworkList = _buyNetworkList.filter(({ networkName }: { networkName: string }) =>
-      networkByPApps.includes(networkName)
-    );
+    if (queryPAppName.isPDex) {
+      _buyNetworkList = [
+        {
+          parentIdentify: sellParentIdentify,
+          identify: _sellParentToken?.identify,
+          networkName: MAIN_NETWORK_NAME.INCOGNITO,
+          currency: PRIVATE_TOKEN_CURRENCY_TYPE.UNIFIED_TOKEN,
+        },
+      ];
+    } else {
+      const networkByPApps = GROUP_SUPPORTED_NETWORK_BY_PAPPS[queryPAppName.pAppName];
+      _buyNetworkList = _buyNetworkList.filter(({ networkName }: { networkName: string }) => {
+        return networkByPApps.includes(networkName);
+      });
+    }
   }
 
   const isExternalAddress =

@@ -14,6 +14,7 @@ export const Styled = styled.div`
   margin-right: auto;
   display: flex;
   margin-top: 60px;
+  padding-top: 100px;
   justify-content: space-around;
   align-items: center;
   flex-direction: row;
@@ -107,6 +108,15 @@ const Item = styled.div`
     `}
 `;
 
+const Line = styled.div`
+  width: 100vw;
+  height: 1px;
+  border: 1px solid ${({ theme }) => theme.border1};
+  position: absolute;
+  left: 0;
+  right: 0;
+`;
+
 const Analytics = () => {
   const marketTrs = useSelector(marketTranslateSelector);
 
@@ -127,6 +137,7 @@ const Analytics = () => {
         suffix: '',
         decimals: length,
         desc: 'Price',
+        nonCount: true,
       },
       {
         number: totalSupply,
@@ -147,27 +158,34 @@ const Analytics = () => {
     return (
       <Item style={{ flex: 1, minWidth: 200 }}>
         <div className={'achieve'}>
-          <VisibilitySensor
-            onChange={(isVisible) => {
-              if (isVisible) {
-                setIsCountUp(true);
-              }
-            }}
-            delayedCall
-          >
-            <CountUp
-              className="achieve-item-title"
-              start={0}
-              end={isCountUp ? item?.number : 0}
-              duration={1}
-              decimal="."
-              prefix={item?.prefix}
-              suffix={item?.suffix}
-              decimals={item?.decimals}
-              separator=","
-              enableScrollSpy={true}
-            />
-          </VisibilitySensor>
+          {item.nonCount ? (
+            <h3 className="achieve-item-title">
+              {item?.prefix}
+              {item?.number}
+            </h3>
+          ) : (
+            <VisibilitySensor
+              onChange={(isVisible) => {
+                if (isVisible) {
+                  setIsCountUp(true);
+                }
+              }}
+              delayedCall
+            >
+              <CountUp
+                className="achieve-item-title"
+                start={0}
+                end={isCountUp ? item?.number : 0}
+                duration={1}
+                decimal="."
+                prefix={item?.prefix}
+                suffix={item?.suffix}
+                decimals={item?.decimals}
+                separator=","
+                enableScrollSpy={true}
+              />
+            </VisibilitySensor>
+          )}
           <div
             style={{
               display: 'flex',
@@ -189,14 +207,14 @@ const Analytics = () => {
     );
   };
   return (
-    <>
-      <h3>Token Metrics</h3>
+    <div>
+      <Line />
       <Styled className="default-max-width">
         {Factory?.map((item, i) => {
           return renderItem(item);
         })}
       </Styled>
-    </>
+    </div>
   );
 };
 

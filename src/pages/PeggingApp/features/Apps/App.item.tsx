@@ -25,7 +25,7 @@ const AppItem = React.memo(({ data }: { data: IFactory }) => {
           if (data.metric && data.metricUniq) {
             updateMetric({ metric: data.metric, uniqMetric: data.metricUniq });
           }
-          history.push(`papps/${data.exchange}`);
+          history.push(`papps/${data.exchange}`, { appName: data.name });
         }}
       >
         <Row justify="space-between">
