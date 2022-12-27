@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { Convert, POpenseaCollection } from 'models/model/POpenseaCollection';
 import { Convert as ConvertNFT, POpenseaNft } from 'models/model/POpenseaNFT';
 import {
@@ -83,7 +84,7 @@ export const actionGetPOpenseaNFTs = (contract: string) => async (dispatch: AppD
 export const actionGetPOpenseaNFTDetail =
   (contract: string, tokenId: string) => async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
-      const data = await getPOpeanseaNFTDetail(contract, tokenId);
+      const data = await retryGetPOpenseaNFTDetail(contract, tokenId);
       if (data) {
         const nft = ConvertNFT.toPOpenseaNft(data);
         dispatch(actionSetSelectedNFT(nft));
@@ -105,3 +106,21 @@ export const actionBuyNFTDetail =
     } finally {
     }
   };
+
+const retryGetPOpenseaNFTDetail = async (contract: string, tokenId: string, retries: number = 5) => {
+  let count = retries;
+  while (count > 0) {
+    try {
+      const data = await getPOpeanseaNFTDetail(contract, tokenId);
+      if (data && data.id) {
+        return data;
+      } else {
+        await new Promise((r) => setTimeout(r, 1000));
+      }
+    } catch (error) {
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+    count -= 1;
+  }
+  return undefined;
+};

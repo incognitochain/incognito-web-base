@@ -29,7 +29,7 @@ const Home = () => {
   }, [contract, tokenId]);
 
   const renderOverviewNFTComponent = () => {
-    const assetContract = selectedNFT.assetContract;
+    // const assetContract = selectedNFT.assetContract;
 
     return (
       <React.Fragment>
@@ -41,9 +41,9 @@ const Home = () => {
         <p className="name">
           {selectedNFT.name} #{selectedNFT.id}
         </p>
-        <p className="owner-by">
+        {/* <p className="owner-by">
           Owner by <a>{assetContract ? assetContract.owner : ''}</a>
-        </p>
+        </p> */}
         {/* <div className="view-container">
           <div className="view-content">
             <img src={icView} />
@@ -111,7 +111,7 @@ const Home = () => {
             {renderOverviewNFTComponent()}
             <POpenseaNFTDetailBuy selectedNFT={selectedNFT} />
             <Expandable icon={icInfo} expand title="Details" child={renderDetailsChild()} />
-            <Expandable icon={icDesciption} title="Desciption" child={renderDescriptionChild()} />
+            <Expandable icon={icDesciption} expand title="Desciption" child={renderDescriptionChild()} />
           </div>
         </div>
       </WrapperContent>

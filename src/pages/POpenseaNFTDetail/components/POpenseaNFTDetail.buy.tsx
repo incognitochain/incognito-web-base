@@ -4,16 +4,19 @@
 import icClock from 'assets/svg/ic-clock.svg';
 import BigNumber from 'bignumber.js';
 import { getIncognitoInject, useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+import { TransactionSubmittedContent } from 'components/Core/TransactionConfirmationModal';
 import { useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
-import { BIG_COINS } from 'constants/token';
+import LoadingTransaction from 'components/Modal/Modal.transaction';
+import { BIG_COINS, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { Convert, POpenseaBuyFee, POpenseaNft } from 'models/model/POpenseaNFT';
 import PToken from 'models/model/pTokenModel';
+import moment from 'moment';
+import { actionSetErrorMsg } from 'pages/Swap/features/FormUnshield/FormUnshield.actions';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
 import React, { memo, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import rpcClient from 'services/rpcClient';
-import { postEstimateFee } from 'services/rpcPOpensea';
+import { useDispatch, useSelector } from 'react-redux';
+import rpcPOpensea, { postEstimateFee } from 'services/rpcPOpensea';
 import { networkFeePOpenseaSelectors } from 'state/pOpensea';
 import { unshieldableTokens } from 'state/token';
 import convert from 'utils/convert';
@@ -26,12 +29,13 @@ interface POpenseaNFTDetailBuyProps {
 }
 const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const { selectedNFT } = props;
+  const dispatch = useDispatch();
   const tokens = useSelector(unshieldableTokens).filter(
     (token) => token.isMainETH || token.tokenID === BIG_COINS.ETH_UNIFIED.tokenID
   );
 
   const networkFee = useSelector(networkFeePOpenseaSelectors);
-  const { requestSignTransaction } = useIncognitoWallet();
+  const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
 
   const seaportSellOrder =
     selectedNFT.seaportSellOrders && selectedNFT.seaportSellOrders.length > 0
@@ -39,7 +43,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
       : undefined;
   const assetContract = selectedNFT.assetContract;
 
-  const { setModal } = useModal();
+  const { setModal, clearAllModal } = useModal();
 
   const [reciptientAddress, setReciptientAddress] = useState('');
   const [selectedToken, setSelectedToken] = useState<PToken | undefined>();
@@ -101,112 +105,121 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   };
 
   const getBurnPayments = async (): Promise<any> => {
-    let prvPayments: any[] = [];
-    let tokenPayments: any[] = [];
+    try {
+      let prvPayments: any[] = [];
+      let tokenPayments: any[] = [];
 
-    tokenPayments = await getTokenPayments({
-      data: [
-        {
-          paymentAddress: buyFee?.fee?.feeAddress,
-          amount: buyFee?.fee.feeAmount || 0,
-        },
-      ],
-      burnAmount: getBurnOriginalAmount(),
-    });
-    return {
-      prvPayments,
-      tokenPayments,
-    };
+      tokenPayments = await getTokenPayments({
+        data: [
+          {
+            paymentAddress: buyFee?.fee?.feeAddress,
+            amount: buyFee?.fee.feeAmount || 0,
+          },
+        ],
+        burnAmount: getBurnOriginalAmount(),
+      });
+      return {
+        prvPayments,
+        tokenPayments,
+      };
+    } catch (error) {
+      throw error;
+    }
   };
 
   const getMetadata = async (): Promise<any> => {
     if (buyFee && selectedToken && seaportSellOrder) {
-      const incognito = getIncognitoInject();
+      try {
+        const incognito = getIncognitoInject();
 
-      // Get OTA Receiver and Burner address
-      const shardID = buyFee.fee.feeAddressShardID;
-      const { result }: { result: any } = await incognito.request({
-        method: 'wallet_requestAccounts',
-        params: { senderShardID: shardID },
-      });
-      const otaReceiver = result?.otaReceiver;
+        // Get OTA Receiver and Burner address
+        const shardID = buyFee.fee.feeAddressShardID;
+        const { result }: { result: any } = await incognito.request({
+          method: 'wallet_requestAccounts',
+          params: { senderShardID: shardID },
+        });
+        const otaReceiver = result?.otaReceiver;
 
-      // get child token with burn network
-      const incTokenID = childToken?.tokenID;
+        // get child token with burn network
+        const incTokenID = childToken?.tokenID;
 
-      let callContract = buyFee.callContract;
-      if (callContract.startsWith('0x')) {
-        callContract = callContract.slice(2);
+        let callContract = buyFee.callContract;
+        if (callContract.startsWith('0x')) {
+          callContract = callContract.slice(2);
+        }
+
+        let withdrawAddress = reciptientAddress;
+        if (withdrawAddress.startsWith('0x')) {
+          withdrawAddress = withdrawAddress.slice(2);
+        }
+
+        const metadata = {
+          Data: [
+            {
+              IncTokenID: incTokenID,
+              RedepositReceiver: otaReceiver,
+              BurningAmount: getBurnOriginalAmount(),
+              ExternalNetworkID: 1,
+              ExternalCalldata: buyFee.calldata,
+              ExternalCallAddress: callContract,
+              ReceiveToken: buyFee.receiveToken,
+              WithdrawAddress: withdrawAddress,
+            },
+          ],
+          BurnTokenID: selectedToken.tokenID,
+          Type: 348,
+        };
+        return {
+          metadata,
+          feeRefundOTA: result.otaReceiverWithCfg,
+        };
+      } catch (error) {
+        throw error;
       }
-
-      let withdrawAddress = reciptientAddress;
-      if (withdrawAddress.startsWith('0x')) {
-        withdrawAddress = withdrawAddress.slice(2);
-      }
-
-      const metadata = {
-        Data: [
-          {
-            IncTokenID: incTokenID,
-            RedepositReceiver: otaReceiver,
-            BurningAmount: getBurnOriginalAmount(),
-            ExternalNetworkID: 1,
-            ExternalCalldata: buyFee.calldata,
-            ExternalCallAddress: callContract,
-            ReceiveToken: buyFee.receiveToken,
-            WithdrawAddress: withdrawAddress,
-          },
-        ],
-        BurnTokenID: selectedToken.tokenID,
-        Type: 348,
-      };
-      return {
-        metadata,
-        feeRefundOTA: result.otaReceiverWithCfg,
-      };
     }
   };
 
   const onClickBuy = async () => {
-    const { metadata, feeRefundOTA } = await getMetadata();
-    const { prvPayments, tokenPayments } = await getBurnPayments();
-
-    const payload = {
-      metadata,
-      info: '',
-      networkFee,
-      prvPayments,
-      tokenPayments,
-      tokenID: selectedToken?.tokenID,
-      txType: 7,
-      receiverAddress: reciptientAddress,
-      isSignAndSendTransaction: false,
-    };
-
-    console.log('LOGS PAYLOAD: ', payload);
-    try {
-      const tx = await requestSignTransaction(payload);
-      console.log('LOGS TX: ', { tx });
-
-      await rpcClient.submitSwapTx({
-        txRaw: tx.rawData,
-        feeRefundOTA,
+    if (!isIncognitoInstalled()) {
+      return requestIncognitoAccount();
+    }
+    if (buyFee) {
+      setModal({
+        isTransparent: false,
+        closable: true,
+        data: <LoadingTransaction pendingText="Waiting For Confirmation" />,
       });
+      const { metadata, feeRefundOTA } = await getMetadata();
+      const { prvPayments, tokenPayments } = await getBurnPayments();
 
-      const buyTx = {
-        txHash: tx.txHash,
-        incAddress: '',
-        time: new Date().getTime(),
-        appName: 'pOpensea',
-        sellTokenID: selectedToken?.tokenID,
-        buyTokenID: selectedToken?.tokenID,
-        sellAmountText: '',
-        buyAmountText: '',
+      const payload = {
+        metadata,
+        info: '',
+        networkFee,
+        prvPayments,
+        tokenPayments,
+        tokenID: selectedToken?.tokenID,
+        txType: 7,
+        receiverAddress: reciptientAddress,
+        isSignAndSendTransaction: false,
       };
 
-      console.log('LOGS RESULT: ', buyTx);
-    } catch (e) {
-      console.log('BUY NFT WITH ERROR: ', e);
+      try {
+        const tx = await requestSignTransaction(payload);
+        await rpcPOpensea.submitBuyTx({
+          txRaw: tx.rawData,
+          feeRefundOTA,
+        });
+        clearAllModal();
+        setModal({
+          isTransparent: false,
+          closable: true,
+          data: <TransactionSubmittedContent chainId={PRIVATE_TOKEN_CURRENCY_TYPE.ETH} hash={tx.txHash} />,
+        });
+      } catch (e) {
+        dispatch(actionSetErrorMsg(typeof e === 'string' ? e : ''));
+        clearAllModal();
+      }
     }
   };
 
@@ -270,7 +283,9 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     <div className="price-container">
       <div className="view-content">
         <img src={icClock} />
-        <p className="time-sale">{`Sale ends ${seaportSellOrder ? seaportSellOrder.closingDate : ''}`}</p>
+        <p className="time-sale">{`Sale ends ${
+          seaportSellOrder ? moment(seaportSellOrder.closingDate).format('MMMM DD, YYYY [at] hh:mm AZ') : ''
+        }`}</p>
       </div>
       <div className="price-indicator" />
       <div className="buy-container">

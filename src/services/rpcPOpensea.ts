@@ -33,6 +33,13 @@ class RpcPOpensea {
       `papps/opensea/estimatebuyfee?contract=${contract}&burntoken=${burntoken}&burnamount=${burnamount}&nftid=${tokenId}&recipient=${recipient}`
     );
   }
+
+  submitBuyTx({ txRaw, feeRefundOTA }: { txRaw: string; feeRefundOTA: string }) {
+    return this.http.post('papps/opensea/submitbuytx', {
+      TxRaw: txRaw,
+      FeeRefundOTA: feeRefundOTA,
+    });
+  }
 }
 
 const rpcPOpensea = new RpcPOpensea();
