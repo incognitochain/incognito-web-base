@@ -9,7 +9,7 @@ export const Styled = styled.div`
   display: grid;
   grid-template-columns: auto auto auto;
   gap: 40px;
-  margin-top: 50px;
+  margin-top: 60px;
   .wrap-item {
     display: flex;
     flex-direction: column;
@@ -19,7 +19,6 @@ export const Styled = styled.div`
     font-weight: 700;
     color: white;
     margin-top: 16px;
-    margin-bottom: 16px;
   }
   .h8 {
     color: ${({ theme }) => theme.color_grey};
