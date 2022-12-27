@@ -1,6 +1,7 @@
 import avveImg from 'assets/images/avve-logo.png';
 import cakeImg from 'assets/images/cake-icon.png';
 import curveImg from 'assets/images/curve-icon.png';
+import incImg from 'assets/images/inc_logo.svg';
 import joeImg from 'assets/images/joe-icon.png';
 import raydiumImg from 'assets/images/raydium-logo.png';
 import solendImg from 'assets/images/solend-logo.png';
@@ -39,6 +40,18 @@ export interface IFactory {
 }
 
 const Factory: IFactory[] = [
+  {
+    img: incImg,
+    name: 'Incognito DEX',
+    nameDesc: 'Privacy Swap',
+    status: 'SHIPPED',
+    chain: ['DEX', 'Bitcoin', 'Monero'],
+    desc: 'The Incognito DEX is a privacy-focused non-custodial exchange. It allows users to trade crypto anonymously by obscuring their activity from public ledger.',
+    exchange: SwapExchange.PDEX,
+    metric: METRIC_TYPE.PAPP_PANCAKE,
+    metricUniq: METRIC_UNIQ.PAPP_PANCAKE_UNIQ,
+    network: [MAIN_NETWORK_NAME.INCOGNITO],
+  },
   {
     img: cakeImg,
     name: 'pPancake',

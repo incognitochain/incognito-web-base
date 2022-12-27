@@ -21,7 +21,7 @@ const SwapExchange = (props: any) => {
   const renderContent = () => {
     const query = getQueryPAppName();
     const name = query?.pAppName || '';
-    const appName = name === 'joe' ? 'TraderJoe' : name;
+    const appName = name === 'joe' ? 'TraderJoe' : name === 'pdex' ? 'Incognito DEX' : name;
     return (
       <>
         <Row>
@@ -31,10 +31,9 @@ const SwapExchange = (props: any) => {
             src={getExchangeLogo(appName)}
             style={{ width: 28, height: 28, marginRight: 12 }}
           />
-          <p
-            className="h7"
-            style={{ color: 'white', fontWeight: 600, fontSize: 20, lineHeight: '140%' }}
-          >{`p${capitalizeFirstLetter(appName)}`}</p>
+          <p className="h7" style={{ color: 'white', fontWeight: 600, fontSize: 20, lineHeight: '140%' }}>{`${
+            appName === 'Incognito DEX' ? '' : 'p'
+          }${capitalizeFirstLetter(appName)}`}</p>
         </Row>
         {renderForm()}
       </>

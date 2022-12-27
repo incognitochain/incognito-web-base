@@ -157,6 +157,10 @@ const filterTokensByPAppName = ({
     const pAppName = queryPAppName.pAppName as any;
     supportedCurrencyType = (GROUP_CURRENCY_TYPE_BY_PAPP_NAME[pAppName] as any[]) || [];
     tokensList = tokensList.filter((token) => {
+      // case PDEX supp
+      if (queryPAppName.isPDex) {
+        return token.poolPair;
+      }
       // PRV not supported for PApps now!
       // @ts-ignore
       if (token.isPRV || ignoreFields.some((field: string) => token[field])) return false;
@@ -274,7 +278,7 @@ const getUnshieldData = ({
   _buyTokenList = filterTokensByPAppName({
     tokens: _buyTokenList,
     queryPAppName,
-    ignoreFields: ['isCentralized', 'isNearToken'],
+    ignoreFields: queryPAppName?.isPDex ? [] : ['isCentralized', 'isNearToken'],
   });
 
   // _buyTokenList = _buyTokenList.filter((token) => {

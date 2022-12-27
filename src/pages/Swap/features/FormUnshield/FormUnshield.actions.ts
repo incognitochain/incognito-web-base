@@ -500,6 +500,9 @@ export const actionEstimateSwapFee =
       }
 
       if (!exchangeSupports?.length) {
+        if (queryPAppName?.isPDex) {
+          throw 'The amount exceeds the swap limit. Please retry with smaller amount.';
+        }
         if (sellToken?.isUnified && vaults?.UnifiedTokenVaults) {
           const tokenVault = vaults?.UnifiedTokenVaults[sellToken?.tokenID] || {};
           const networkIDs = queryPAppName.isValid

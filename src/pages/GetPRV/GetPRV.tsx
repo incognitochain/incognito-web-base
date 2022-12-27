@@ -12,7 +12,9 @@ import { useAppDispatch } from 'state/hooks';
 import { FOOTER_ID, HEADER_ID } from '../App';
 import Analytics from './GetPRV.analytics';
 import Promote from './GetPRV.promote';
-import { Container, Content, Header } from './GetPRV.styled';
+import { Container, Content, Header, WrapChart } from './GetPRV.styled';
+import PieImg from './images/pie.png';
+import RewardImg from './images/reward.png';
 
 const GetPRV = () => {
   const { width, height } = useWindowSize();
@@ -43,10 +45,23 @@ const GetPRV = () => {
       <Header>
         <Col className="col-1">
           <Col>
-            <h3>Privacy (PRV)</h3>
+            {/*<h3>Privacy (PRV)</h3>*/}
+            {/*<p className="sub-header h7">*/}
+            {/*  PRV is the native cryptocurrency of Incognito. Holders will shape the future of Incognito by signaling*/}
+            {/*  their support for upgrades to the ecosystem and directing usage of a Community Treasury.*/}
+            {/*</p>*/}
+            <h3>What is PRV?</h3>
             <p className="sub-header h7">
-              PRV is the native cryptocurrency of Incognito. Holders will shape the future of Incognito by signaling
-              their support for upgrades to the ecosystem and directing usage of a Community Treasury.
+              Privacy (PRV) is used it to participate in privacy markets, use your favorite apps privately, stake it to
+              earn block rewards, and govern the network. PRV is minted for every new block mined, and has a fixed
+              maximum supply of 100M.
+              {/*<a*/}
+              {/*  href="https://we.incognito.org/t/network-incentive-privacy-prv-mining-distribution/172"*/}
+              {/*  target="_blank"*/}
+              {/*  rel="noreferrer"*/}
+              {/*>*/}
+              {/*  More on PRV economics*/}
+              {/*</a>*/}
             </p>
             <ButtonConfirmed
               className="btn-get-prv"
@@ -62,9 +77,9 @@ const GetPRV = () => {
         </Col>
         <PRVIcon />
       </Header>
-      <Analytics />
+      <Promote />
       <Content>
-        <h3>What is PRV?</h3>
+        {/*<h3>What is PRV?</h3>
         <p className="h7">
           Privacy (PRV) is used it to participate in privacy markets, use your favorite apps privately, stake it to earn
           block rewards, and govern the network. PRV is minted for every new block mined, and has a fixed maximum supply
@@ -76,9 +91,19 @@ const GetPRV = () => {
           >
             More on PRV economics
           </a>
-        </p>
-        <Promote />
+        </p>*/}
+        <Analytics />
       </Content>
+      <WrapChart>
+        <div>
+          <p className="head-pie">Allocation</p>
+          <img className="pie-img" src={PieImg} />
+        </div>
+        <div>
+          <p className="head-reward">PRV Block Rewards</p>
+          <img className="reward-img" src={RewardImg} />
+        </div>
+      </WrapChart>
     </Container>
   );
 };

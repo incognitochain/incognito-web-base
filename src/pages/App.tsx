@@ -111,6 +111,8 @@ const App = () => {
           <Route exact path="/internet-disconnected" component={InternetDisconnected} />
           {/*<Route exact path="/" component={Market} />*/}
           <Route exact path="/" component={Home} />
+          <Route exact path="/mine.html" component={Structure} />
+          <Route exact path="/mine" component={Structure} />
           <Route exact path="/swap" component={Market} />
           <Route exact path="/papps/:id" component={SwapExchange} />
           <Route exact path="/papps" component={PeggingApp} />

@@ -24,6 +24,7 @@ export const Styled = styled.div`
     color: ${({ theme }) => theme.color_grey};
     max-width: 358px;
     text-align: center;
+    margin-top: 8px;
   }
   ${({ theme }) => theme.mediaWidth.upToMedium`
     gap: 30px;
