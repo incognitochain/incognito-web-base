@@ -27,7 +27,10 @@ import { ArrowDown, TextInputStyled } from '../POpenseaNFTDetail.styled';
 
 interface POpenseaNFTDetailBuyProps {
   selectedNFT: POpenseaNft;
+  onEstimateFee?: () => void;
+  onClickBuy?: () => void;
 }
+
 const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const { selectedNFT } = props;
 
