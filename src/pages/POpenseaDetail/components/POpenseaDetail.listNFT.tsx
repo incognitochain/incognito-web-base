@@ -107,8 +107,7 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
                 <ImagePlaceholder className="item-img" src={item.imageUrl} />
                 <div className="item-info">
                   <div className="item-name-container">
-                    <p className="item-name">{item.name}</p>
-                    <p className="item-id">{`#${item.id}`}</p>
+                    <p className="item-name">{item.getOriginalName()}</p>
                   </div>
                   {seaportSellOrder && (
                     <p className="item-price">

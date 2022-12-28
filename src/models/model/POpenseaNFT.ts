@@ -53,6 +53,13 @@ export class POpenseaNft {
   ownership?: string;
   highestBuyerCommitment?: string;
   tokenId?: string;
+
+  getOriginalName() {
+    if (this.name && this.name.includes('#')) {
+      return `${this.name}`;
+    }
+    return `${this.name ? this.name + ' #' : ''}${this.tokenId}`;
+  }
 }
 
 export interface POpenseaBuyFee {

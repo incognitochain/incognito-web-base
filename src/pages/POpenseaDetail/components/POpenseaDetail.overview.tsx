@@ -162,7 +162,6 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
         <div className="avatar-container">
           <ImagePlaceholder className="avatar" src={collection.imageUrl} />
           <p className="collection-name">{collection.name}</p>
-          {/* {renderTitleItem('By', collection.mediumUsername)} */}
         </div>
         <div className="info-container">
           {renderTitleItem('Items', `${total}`)}
@@ -171,13 +170,10 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
             collection.openseaSellerFeeBasisPoints &&
             renderTitleItem('Creator fee', `${Math.round(parseInt(collection.openseaSellerFeeBasisPoints) / 100)}%`)}
           {renderTitleItem('Chain', 'Etherum')}
-          {/* {renderTitleItem('Category', '?')} */}
         </div>
         <div className="info-container">
           {stats && renderVolumnItem(`${stats?.totalVolume?.toFixed(1)} ETH`, 'total volume')}
           {stats && renderVolumnItem(`${stats?.floorPrice?.toFixed(1)} ETH`, 'floor price')}
-          {/* {renderVolumnItem(' wETH', 'best offer')} */}
-          {/* {renderVolumnItem('%', 'listed')} */}
           {stats && renderVolumnItem(`${stats?.numOwners}`, 'owners')}
           {stats &&
             renderVolumnItem(
