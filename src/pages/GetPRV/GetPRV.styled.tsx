@@ -86,4 +86,46 @@ const Content = styled.div`
   `}
 `;
 
-export { Container, Content, Header };
+const WrapChart = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 100px;
+  .head-pie {
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 140%;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .pie-img {
+    max-width: 450px;
+  }
+  .head-reward {
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 140%;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .reward-img {
+    max-width: 670px;
+  }
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    .head-reward {
+      margin-top: 50px;
+    }
+    .reward-img {
+      max-width: 630px;
+    }
+  `}
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    .reward-img {
+      max-width: 98%;
+    }
+  `}
+`;
+
+export { Container, Content, Header, WrapChart };

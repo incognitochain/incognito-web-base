@@ -1099,7 +1099,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
       button {
         color: ${({ theme }) => theme.text1};
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 600;
         height: 38px;
         padding-left: 8px;

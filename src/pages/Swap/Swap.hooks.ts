@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { MAP_TOKEN_BY_PAPPS } from './features/FormUnshield/FormUnshield.constants';
+import { SwapExchange } from './features/FormUnshield/FormUnshield.types';
 
 const useQuery = () => {
   const params = useParams() as any;
@@ -19,7 +20,8 @@ const getQueryPAppName = () => {
       pAppName = paths[1];
     }
     const isValid = !!MAP_TOKEN_BY_PAPPS[pAppName];
-    return { pAppName, isValid };
+    const isPDex = pAppName === SwapExchange.PDEX;
+    return { pAppName, isValid, isPDex };
   };
   return handleQuery();
 };

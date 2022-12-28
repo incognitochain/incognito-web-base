@@ -97,8 +97,8 @@ const SelectionField = (props: ISelectionFieldProps) => {
 
   const { setModal } = useModal();
 
-  const activeNetworkHover = !!(networks && networks.length > 0);
-  const activeTokensHover = !!(tokens && tokens.length > 0);
+  const activeNetworkHover = !!(networks && networks.length > 1);
+  const activeTokensHover = !!(tokens && tokens.length > 1);
 
   const showTokensList = () => {
     if (!activeTokensHover) return;

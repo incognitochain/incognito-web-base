@@ -2,7 +2,7 @@ import axios from 'axios';
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { actionGetPools } from 'state/pools';
+import { actionGetPools, actionSetExplorer } from 'state/pools';
 import { actionGetPTokens } from 'state/token';
 
 export const KEY_TRADE_VOLUME = 'TRADE_VOLUME';
@@ -19,6 +19,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => {
             data.data.data.find((item: any) => item['metricType'] === 'TRADING_VOLUME_TOTAL').value / 1e6
           );
           localStorage.setItem(KEY_TRADE_VOLUME, `${volume}`);
+          dispatch(actionSetExplorer(data.data.data));
         });
       } catch (e) {
         console.log('GET DATA ERROR', e);

@@ -203,7 +203,7 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
     // -> bsc_swap_tx_status
     // -> bsc_swap_outcome
     // -> is_redeposit === true bsc_redeposit_status
-    /** to many cases, please blame @lam */
+    /** much case, please blame @lam */
     let swapStatus = Status.processing;
     const { burnTxStatus, outchainTxStatus, swapExchangeStatus, isRedeposit, redepositStatus, appName } = tx;
     switch (burnTxStatus) {

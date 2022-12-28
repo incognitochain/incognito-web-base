@@ -14,48 +14,24 @@ import { WrapAppItem } from './Apps.styled';
 const AppItem = React.memo(({ data }: { data: IFactory }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const ChainList = React.useMemo(
-    () => (
-      <Row style={{ minWidth: 250 }}>
-        {data.chain.map((item: any) => (
-          <div style={{ marginTop: 12 }} key={item} className="">
-            <p className="h8">{item}</p>
-          </div>
-        ))}
-      </Row>
-    ),
-    []
-  );
-  const Status = React.useMemo(
-    () =>
-      data.status ? (
-        <div className="wrap-status" style={{ backgroundColor: data.status === 'SHIPPED' ? '#27AE60' : '#404040' }}>
-          <p className="status-text color-white">{data.status}</p>
-        </div>
-      ) : null,
-    []
-  );
   const canClick = !!data.exchange || !!data.route;
   return (
-    <WrapAppItem
-      key={data.name}
-      isMobile={isMobile}
-      canClick={canClick}
-      onClick={() => {
-        if (!canClick) return;
-        if (data.exchange) {
+    <WrapAppItem key={data.name} isMobile={isMobile} canClick={canClick}>
+      <div
+        className="box"
+        onClick={() => {
+          if (!canClick) return;
+          if (data.route) {
+            history.push(data.route);
+            return;
+          }
           dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
           if (data.metric && data.metricUniq) {
             updateMetric({ metric: data.metric, uniqMetric: data.metricUniq });
           }
-          history.push(`papps/${data.exchange}`);
-        }
-        if (data.route) {
-          history.push(data.route);
-        }
-      }}
-    >
-      <div className="box">
+          history.push(`papps/${data.exchange}`, { appName: data.name });
+        }}
+      >
         <Row justify="space-between">
           <img src={data?.img} className="exchange-logo" alt="exchange-logo" />
           {canClick && <LinkIcon className="vector-link-icon" />}

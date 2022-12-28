@@ -1,6 +1,7 @@
 export enum PoolActionType {
   FETCHING = 'POOL/FETCHING',
   SET_POOLS = 'POOL/SET_POOLS',
+  SET_EXPLORER = 'POOL/SET_EXPLORER',
 }
 
 export interface PoolApiResponse {
@@ -50,4 +51,5 @@ export interface Pool {
 export interface IPoolReducer {
   isFetching: boolean;
   pools: Pool[];
+  explores: any[];
 }
