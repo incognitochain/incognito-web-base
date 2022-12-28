@@ -1,12 +1,12 @@
 import ListProposal from './components/ListProposal';
 import TopView from './components/TopView';
-import TreasuryBox from './components/TreasuryBox';
+// import TreasuryBox from './components/TreasuryBox';
 
 const Governance = () => {
   return (
-    <div className="default-padding-horizontal" style={{ width: '100%' }}>
+    <div className="default-max-width" style={{ width: '100%' }}>
       <TopView />
-      <TreasuryBox />
+      {/* <TreasuryBox /> */}
       <ListProposal />
     </div>
   );

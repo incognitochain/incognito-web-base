@@ -1,16 +1,55 @@
-import { Row } from 'antd';
-import React from 'react';
+import { Skeleton } from 'antd';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import useBlockNumber from 'lib/hooks/useBlockNumber';
 import { useHistory } from 'react-router-dom';
+import { Proposal } from 'state/dao/types';
 import styled from 'styled-components/macro';
 
+import ProposalStatusBox from './ProposalStatus';
+
+dayjs.extend(relativeTime);
+
 interface ProposalItemProps {
-  id: number;
-  title: string;
-  status: any;
-  expired?: any;
+  proposal: Proposal;
 }
 
-const Container = styled.div`
+const Label = styled.p`
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 116%;
+  text-align: center;
+  color: #757575;
+`;
+
+const AVERAGE_BLOCK_TIME_IN_SECS = 12;
+
+const getCountdownCopy = (proposal: Proposal, currentBlock?: number) => {
+  const timestamp = Date.now();
+  const startDate =
+    proposal && timestamp && currentBlock
+      ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock), 'seconds')
+      : undefined;
+
+  const endDate =
+    proposal && timestamp && currentBlock
+      ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock), 'seconds')
+      : undefined;
+
+  // const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
+
+  const now = dayjs();
+
+  if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
+    return <Label>Ends {endDate.fromNow()}</Label>;
+  }
+  // if (endDate?.isBefore(now)) {
+  //   return <Label>Expires {expiresDate.fromNow()}</Label>;
+  // }
+  return <Label>Starts {dayjs(startDate).fromNow()}</Label>;
+};
+
+const ProposalContainer = styled.div`
   width: 100%;
   padding: 18px 16px;
   display: flex;
@@ -27,81 +66,46 @@ const Container = styled.div`
   }
 `;
 
-const Number = styled.p`
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 140%;
-  color: #757575;
-`;
-
-const Title = styled.p`
+const ProposalTitle = styled.span`
+  width: 80%;
   font-weight: 500;
   font-size: 18px;
   line-height: 140%;
   color: #ffffff;
-  margin-left: 40px;
-`;
-
-const Label = styled.p`
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 116%;
-  text-align: center;
-  color: #757575;
-`;
-
-const StatusBoxContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 12px;
-  background: #757575;
-  border-radius: 6px;
-  margin-left: 16px;
-`;
-
-const StatusText = styled.p`
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 116%;
-  color: #ffffff;
 `;
 
 const ProposalItem = (props: ProposalItemProps) => {
-  const { title, id, expired, status } = props;
+  const { title, id, status } = props?.proposal;
   const history = useHistory();
 
-  const getStatusColor = () => {
-    if (status === 'active') return '#03A66D';
-    if (status === 'cancelled') return '#757575';
-    if (status === 'executed') return '#6BA0FB';
-    if (status === 'defeated') return '#CF304A';
-  };
-
-  const renderStatusBox = (status: 'active' | 'cancelled' | 'executed' | 'defeated') => {
-    return (
-      <StatusBoxContainer style={{ backgroundColor: getStatusColor() }}>
-        <StatusText>Defeated</StatusText>
-      </StatusBoxContainer>
-    );
-  };
+  const currentBlock = useBlockNumber();
 
   const goToDetail = () => {
     history.push(`vote/${id}`);
   };
 
   return (
-    <Container onClick={goToDetail}>
-      <Row align="middle">
-        <Number>{id}</Number>
-        <Title>{title}</Title>
-      </Row>
-      <Row align="middle">
-        {expired && <Label>Ends in {expired} days</Label>}
-        {renderStatusBox('active')}
-      </Row>
-    </Container>
+    <ProposalContainer onClick={goToDetail}>
+      <ProposalTitle>{title}</ProposalTitle>
+      {/* {getCountdownCopy(props?.proposal, 10)} */}
+      <div>
+        <ProposalStatusBox status={status} />
+      </div>
+    </ProposalContainer>
+  );
+};
+
+export const ProposalItemLoading = () => {
+  return (
+    <ProposalContainer>
+      <ProposalTitle>
+        <Skeleton.Input active={true} size={'small'} />
+      </ProposalTitle>
+      <Skeleton.Input active={true} size={'small'} />
+      <div>
+        <Skeleton.Button active={true} size={'small'} />
+      </div>
+    </ProposalContainer>
   );
 };
 

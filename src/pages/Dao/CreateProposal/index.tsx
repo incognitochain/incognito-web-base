@@ -1,12 +1,20 @@
 /* eslint-disable react/no-children-prop */
-import { Checkbox, DatePicker, Form, Input, Radio, Select } from 'antd';
-import { ButtonConfirmed } from 'components/Core/Button';
-import { InputField } from 'components/Core/ReduxForm';
-import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { notification } from 'antd';
+import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchProposalFee } from 'services/rpcClient';
+import { createProposal } from 'state/dao/operations';
+import { Fee, TransactionType } from 'state/dao/types';
 import styled from 'styled-components/macro';
 
-const { TextArea } = Input;
+import CreateProposalButton from './components/CreateProposalButton';
+import { ModalConfirm } from './components/ModalConfirm';
+import ProposalForm from './components/ProposalForm';
+
+const MINIMUM_PRV_BALANCE_TO_CREATE_PROPOSAL = 1000;
+
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const Styled = styled.div`
   textarea.ant-input {
@@ -36,185 +44,125 @@ const FormContainer = styled.div`
   align-self: center;
   margin-bottom: 40px;
   width: 100%;
-  max-width: 700px;
 `;
-
-const InputField1 = styled(TextArea)`
-  width: 100%;
-  background: #252525;
-  border-radius: 8px;
-  border: 0px;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 140%;
-  color: #9c9c9c;
-  padding: 14px 16px;
-  margin-top: 8px;
-  min-height: 500px;
-`;
-
-const InputFieldLabel = styled.p`
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 140%;
-  color: #ffffff;
-`;
-
-const Space = styled.div`
-  width: 100%;
-  height: 24px;
-`;
-
-const FormItem = Form.Item;
-const RadioGroup = Radio.Group;
-const { Option } = Select;
-const { RangePicker } = DatePicker;
-
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 14 },
-  },
-};
-
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 14,
-      offset: 6,
-    },
-  },
-};
-
-const makeField =
-  (Component: any) =>
-  // eslint-disable-next-line react/prop-types
-  ({ input, meta, children, hasFeedback, label, ...rest }: any) => {
-    // eslint-disable-next-line react/prop-types
-    const hasError = meta.touched && meta.invalid;
-    return (
-      <FormItem
-        {...formItemLayout}
-        label={label}
-        validateStatus={hasError ? 'error' : 'success'}
-        hasFeedback={hasFeedback && hasError}
-        // eslint-disable-next-line react/prop-types
-        help={hasError && meta?.error}
-      >
-        <Component {...input} {...rest} children={children} />
-      </FormItem>
-    );
-  };
-
-const AInput = makeField(Input);
-const ARadioGroup = makeField(RadioGroup);
-const ASelect = makeField(Select);
-const ACheckbox = makeField(Checkbox);
-const ATextarea = makeField(InputField1);
-const ARangePicker = makeField(RangePicker);
 
 const CreateProposal = () => {
+  const [titleValue, setTitleValue] = useState('');
+  const [descriptionValue, setDescriptionValue] = useState('');
+
+  const [isFetchingFee, setIsFetchingFee] = useState<boolean>(false);
+  const [fee, setFee] = useState<Fee>();
+
+  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState<boolean>(false);
+
+  const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
+
+  const handleChangeTitle = useCallback(
+    (title: string) => {
+      setTitleValue(title);
+    },
+    [setTitleValue]
+  );
+
+  const handleChangeDescription = useCallback(
+    (body: string) => {
+      setDescriptionValue(body);
+    },
+    [setDescriptionValue]
+  );
+
+  const getFee = async () => {
+    try {
+      setIsFetchingFee(true);
+      const feeResponse: Fee = await fetchProposalFee();
+      setIsFetchingFee(false);
+      setFee(feeResponse);
+      setIsVisibleModalConfirm(true);
+    } catch (error) {
+      setIsFetchingFee(false);
+    }
+  };
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const showSubmitVotePopupMessage = (type: NotificationType, title: string, message: string) => {
+    api[type]({
+      message: title,
+      description: message,
+    });
+  };
+
+  const onCreateProposal = () => {
+    getFee();
+  };
+
+  const dispatch = useDispatch();
+
+  const createProposalRequest = () => {
+    try {
+      dispatch(
+        createProposal(
+          {
+            prvBurnAmount: 20000000000,
+            fee,
+            description: descriptionValue,
+            requestSignTransaction,
+            transactionType: TransactionType.CREATE_PROPOSAL,
+            title: titleValue,
+          },
+          (data) => {
+            if (data) {
+              showSubmitVotePopupMessage('success', 'Success', 'Create proposal success');
+            }
+          }
+        )
+      );
+    } catch (error) {
+      showSubmitVotePopupMessage('error', 'Failed', 'Create proposal failed');
+    }
+  };
+
+  const isDisabledButton = !titleValue?.trim()?.length || !descriptionValue?.trim()?.length;
+
   return (
     <Styled>
+      {contextHolder}
       <div
-        className="default-padding-horizontal"
+        className="default-max-width"
         style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
       >
         <DescriptionContainer>
           <DescriptionText>
-            Tip: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-            nulla pariatur.
+            Tip: Add one or more proposal actions and describe your proposal for the community. The proposal cannot be
+            modified after submission, so please verify all information before submitting. The voting period will begin
+            after 2 days and last for 5 days.{'\n\n'}You MUST maintain enough voting power to meet the proposal
+            threshold until your proposal is executed. If you fail to do so, anyone can cancel your proposal.
           </DescriptionText>
         </DescriptionContainer>
         <FormContainer>
-          <form>
-            <InputFieldLabel>Proposal</InputFieldLabel>
-            {/* <Field
-            component={InputField1}
-            name="Proposal"
-            leftTitle="Proposal"
-            placeholder="Proposal title"
-            componentProps={{
-              placeholder: 'Proposal title',
-              type: 'text',
-              style: {
-                height: '200px',
-              },
-            }}
-          /> */}
-            <Field
-              component={InputField}
-              name="Proposal"
-              inputType="text"
-              // leftTitle="Slippage tolerance (%)"
-              componentProps={{
-                placeholder: 'Proposal title',
-                type: 'text',
-              }}
-            />
-            <Space />
-            <InputFieldLabel>Summary</InputFieldLabel>
-            <Field
-              component={InputField1}
-              name="Summary"
-              leftTitle="Summary"
-              placeholder="Insert your summary here"
-              componentProps={{
-                placeholder: 'Proposal title',
-                type: 'text',
-                style: {
-                  height: '200px',
-                },
-              }}
-            />
-            <Space />
-            <InputFieldLabel>Methodology</InputFieldLabel>
-            <Field
-              component={InputField1}
-              name="Methodology"
-              placeholder="Insert your methodology"
-              componentProps={{
-                placeholder: 'Proposal title',
-                type: 'text',
-                style: {
-                  height: '400px',
-                },
-              }}
-            />
-            <Space />
-            <InputFieldLabel>Conclusion</InputFieldLabel>
-            <Field
-              component={InputField1}
-              name="Conclusion"
-              placeholder="Insert your conclusion here"
-              componentProps={{
-                placeholder: 'Proposal title',
-                type: 'text',
-                style: {
-                  height: '200px',
-                },
-              }}
-            />
-            <Space />
-            <ButtonConfirmed disabled height={'50px'} type="submit">
-              Button
-            </ButtonConfirmed>
-          </form>
+          <ProposalForm
+            title={titleValue}
+            description={descriptionValue}
+            onChangeTitle={handleChangeTitle}
+            onChangeDescription={handleChangeDescription}
+          />
+          <CreateProposalButton
+            isLoading={isFetchingFee}
+            disabled={isDisabledButton}
+            handleCreateProposal={onCreateProposal}
+          />
         </FormContainer>
       </div>
+      <ModalConfirm
+        onRequestCreateProposal={() => {
+          createProposalRequest();
+          setIsVisibleModalConfirm(false);
+        }}
+        fee={fee}
+        onCancel={() => setIsVisibleModalConfirm(false)}
+        isOpen={isVisibleModalConfirm}
+      />
     </Styled>
   );
 };
-export default reduxForm({
-  form: 'createProposal',
-})(CreateProposal);
+export default CreateProposal;

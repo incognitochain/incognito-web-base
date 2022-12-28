@@ -1,33 +1,21 @@
 /* eslint-disable react/no-children-prop */
 
+import { Skeleton } from 'antd';
 import styled from 'styled-components/macro';
 
 interface InfoBoxProps {
-  leftTitle: string;
-  rightTitle: string;
-  rightValue: string;
+  leftTitle?: string;
+  rightTitle?: any;
+  rightValue?: string | number;
+  isLoading?: boolean;
 }
-
-const AddressWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const AddressItemContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-top: 8px;
-  padding-bottom: 8px;
-`;
 
 const DescText = styled.p`
   font-weight: 500;
   font-size: 18px;
   line-height: 140%;
   color: #757575;
+  margin-right: 16px;
 `;
 
 const Box2Container = styled.div`
@@ -42,16 +30,39 @@ const Box2Container = styled.div`
   margin-top: 26px;
 `;
 
+const RightLabel = styled.p`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 140%;
+  text-align: right;
+  color: #757575;
+`;
+
+const RightLabelValue = styled.p`
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  text-align: right;
+  color: #ffffff;
+  margin-top: 4px;
+`;
+
 const InfoBox = (props: InfoBoxProps) => {
-  const { leftTitle, rightTitle, rightValue } = props;
+  const { leftTitle, rightTitle, rightValue, isLoading } = props;
 
   return (
     <Box2Container>
       <DescText>{leftTitle}</DescText>
-      <div>
-        <p>{rightTitle}</p>
-        <p>{rightValue}</p>
-      </div>
+      {isLoading ? (
+        <div>
+          <Skeleton.Input active size="large" />
+        </div>
+      ) : (
+        <div>
+          <RightLabel>{rightTitle}</RightLabel>
+          <RightLabelValue>{rightValue}</RightLabelValue>
+        </div>
+      )}
     </Box2Container>
   );
 };

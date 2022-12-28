@@ -1,17 +1,27 @@
-import { Input } from 'antd';
+import { Modal } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
-import Modal from 'components/Core/Modal';
-import { useState } from 'react';
+import React from 'react';
+import { IoCloseOutline } from 'react-icons/io5';
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 import styled from 'styled-components/macro';
 
-const { TextArea } = Input;
+const ModalWrapper = styled(Modal)`
+  .ant-modal {
+    border-radius: 20px;
+  }
+
+  .ant-modal-content {
+    background: #303030;
+    border-radius: 20px;
+  }
+`;
 
 const ModalContainer = styled.div`
-  width: 900px;
   display: flex;
   flex-direction: column;
-  padding: 32px;
+  background: #303030;
+  border-radius: 16px;
+  padding: 0px;
 `;
 
 const ModalHeader = styled.div`
@@ -54,17 +64,16 @@ const ReasonTitle = styled.p`
   margin-left: 16px;
 `;
 
-const ReasonTextInput = styled(TextArea)`
-  background: #252525;
-  border-radius: 8px;
-  border-width: 0px;
-  padding: 14px 16px;
-  margin-top: 8px;
-`;
+interface ModalVoteProps {
+  isOpen?: boolean;
+  onCancel: (isOpen: boolean) => void;
+  onChooseVoteOption: (voteOption: 1 | 2) => void;
+  onSubmitVote: () => void;
+  selectedVote: 1 | 2;
+}
 
-export function ModalConfirm(props: any) {
-  const [selectedReasonId, setSelectedReasonId] = useState<number>();
-
+export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
+  const { isOpen, onCancel, onChooseVoteOption, onSubmitVote, selectedVote } = props;
   const reasons: any = [
     {
       id: 1,
@@ -78,8 +87,8 @@ export function ModalConfirm(props: any) {
 
   const renderReasonOption = (reason: any) => {
     return (
-      <ReasonOptionItemContainer onClick={() => setSelectedReasonId(reason?.id)}>
-        {selectedReasonId === reason?.id ? (
+      <ReasonOptionItemContainer onClick={() => onChooseVoteOption(reason?.id)}>
+        {selectedVote === reason?.id ? (
           <MdCheckBox size={24} color="#1A73E8" />
         ) : (
           <MdCheckBoxOutlineBlank color="#9C9C9C" size={24} />
@@ -90,7 +99,15 @@ export function ModalConfirm(props: any) {
   };
 
   return (
-    <Modal isOpen={props?.isOpen} onDismiss={() => null}>
+    <ModalWrapper
+      centered
+      open={isOpen}
+      width={600}
+      footer={null}
+      bodyStyle={{ padding: 32, borderRadius: 16, backgroundColor: '#303030' }}
+      closeIcon={<IoCloseOutline size={24} color="#FFFFFF" />}
+      onCancel={() => onCancel?.(false)}
+    >
       <ModalContainer>
         <ModalHeader>
           <div />
@@ -98,13 +115,10 @@ export function ModalConfirm(props: any) {
           <div />
         </ModalHeader>
         <ReasonContainer>{reasons?.map((item: any, i: any) => renderReasonOption(item))}</ReasonContainer>
-
-        <p style={{ fontSize: 14 }}>Reason (Optional)</p>
-        <ReasonTextInput placeholder="Insert your methodology" />
-        <ButtonConfirmed height={'50px'} type="submit" style={{ marginTop: 24 }}>
+        <ButtonConfirmed onClick={onSubmitVote} height={'50px'} type="submit" style={{ marginTop: 24 }}>
           Submit Votes
         </ButtonConfirmed>
       </ModalContainer>
-    </Modal>
+    </ModalWrapper>
   );
-}
+};

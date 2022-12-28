@@ -1,54 +1,38 @@
 import { List } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
-import { ModalConfirm } from 'pages/Dao/ProposalDetail/components/ModalConfirm';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { getProposals } from 'state/dao/operations';
+import { isFetchingProposalsSelector, proposalsSelector } from 'state/dao/selectors';
+import { Proposal } from 'state/dao/types';
+import { useAppDispatch } from 'state/hooks';
 
-import ProposalItem from './ProposalItem';
-
-const data = [
-  {
-    id: 198,
-    expired: 3,
-    status: 'active',
-    title: 'PropBox: A Nouns Proposal Incubator',
-  },
-  {
-    id: 197,
-    expired: 3,
-    status: 'active',
-    title: '133 SharkLabs -- A nounish incubator by SharkDAO',
-  },
-  {
-    id: 196,
-    expired: 3,
-    status: 'active',
-    title: 'Mucho Love 4 Month Extension',
-  },
-  {
-    id: 195,
-    status: 'canceled',
-    title: 'Liberating Proposal Threshold for 26 years',
-  },
-  {
-    id: 194,
-    status: 'executed',
-    title: 'John Hamon X Nouns',
-  },
-  {
-    id: 193,
-    status: 'defeated',
-    title: 'Integrate 8/8 Anniversary Art',
-  },
-  {
-    id: 192,
-    expired: 3,
-    status: 'active',
-    title: 'Mucho Love 4 Month Extension',
-  },
-];
+import ProposalItem, { ProposalItemLoading } from './ProposalItem';
 
 const ListProposal: React.FC = () => {
-  const [modalConfirmVisible, setModalConfirmVisible] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+
+  const getProposal = () => {
+    dispatch(getProposals());
+  };
+
+  useEffect(() => {
+    getProposal();
+  }, []);
+
+  const history = useHistory();
+
+  const isFetchingProposals = useSelector(isFetchingProposalsSelector);
+  const proposals: Proposal[] = useSelector(proposalsSelector);
+
+  const renderLoading = () => {
+    return <List dataSource={[1, 2, 3, 4, 5]} renderItem={() => <ProposalItemLoading />} />;
+  };
+
+  const renderListProposal = () => {
+    return <List dataSource={proposals} renderItem={(item: Proposal) => <ProposalItem proposal={item} />} />;
+  };
 
   return (
     <div style={{ width: '100%', marginTop: 40 }}>
@@ -65,17 +49,16 @@ const ListProposal: React.FC = () => {
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           {/* <p>You have no Votes.</p> */}
           <ButtonConfirmed
-            onClick={() => setModalConfirmVisible(true)}
+            onClick={() => history.push('/create-proposal')}
             height={'40px'}
             type="submit"
             backgroundColor={'#9C9C9C'}
           >
-            Submit Proposal
+            Add Proposal
           </ButtonConfirmed>
         </div>
       </div>
-      <List dataSource={data} renderItem={(item) => <ProposalItem {...item} />} />
-      <ModalConfirm isOpen={modalConfirmVisible} />
+      {!proposals?.length && isFetchingProposals ? renderLoading() : renderListProposal()}
     </div>
   );
 };
