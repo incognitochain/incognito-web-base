@@ -2,13 +2,11 @@
 import { List, Menu } from 'antd';
 import ArrowDownSVG from 'assets/images/arrow-down-white.svg';
 import SearchSVG from 'assets/svg/search-icon.svg';
-import BigNumber from 'bignumber.js';
 import ImagePlaceholder from 'components/ImagePlaceholder';
 import { POpenseaNft } from 'models/model/POpenseaNFT';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { pOpenseaFilterNFTsSelectors } from 'state/pOpensea';
-import format from 'utils/format';
 
 import { SortSelect, Styled, TextInputStyled } from './POpenseaDetail.listNFT.styled';
 
@@ -111,21 +109,11 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
                   </div>
                   {seaportSellOrder && (
                     <p className="item-price">
-                      {format.amountVer2({
-                        originalAmount: new BigNumber(seaportSellOrder.currentPrice || 0).toNumber(),
-                        decimals: 18,
-                      })}
+                      {seaportSellOrder.getPricingAmountStr(18)}
                       {' ETH'}
                     </p>
                   )}
-                  <p className="item-last-sale">
-                    {lastSale && lastSale.totalPrice
-                      ? `Last sale: ${format.amountVer2({
-                          originalAmount: new BigNumber(lastSale.totalPrice).toNumber(),
-                          decimals: lastSale.paymentToken?.decimals || 18,
-                        })} ${lastSale.paymentToken?.symbol}`
-                      : ''}
-                  </p>
+                  <p className="item-last-sale">{lastSale?.getLastSaleStr()}</p>
                 </div>
               </div>
             </List.Item>

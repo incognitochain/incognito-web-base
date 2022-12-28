@@ -7,7 +7,11 @@
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
 
+import { BigNumber } from 'bignumber.js';
 import { get } from 'lodash';
+import moment from 'moment';
+import convert from 'utils/convert';
+import format from 'utils/format';
 
 import {
   Convert as ConvertCollection,
@@ -60,13 +64,17 @@ export class POpenseaNft {
     }
     return `${this.name ? this.name + ' #' : ''}${this.tokenId}`;
   }
+
+  getSeaportSellOrder() {
+    return this.seaportSellOrders && this.seaportSellOrders.length > 0 ? this.seaportSellOrders[0] : undefined;
+  }
 }
 
-export interface POpenseaBuyFee {
-  calldata: string;
-  callContract: string;
-  receiveToken: string;
-  fee: {
+export class POpenseaBuyFee {
+  calldata?: string;
+  callContract!: string;
+  receiveToken?: string;
+  fee?: {
     feeAddress: string;
     feeAddressShardID: number;
     feeAmount: number;
@@ -74,9 +82,33 @@ export interface POpenseaBuyFee {
     privacyFee: number;
     tokenid: string;
   };
+
+  getFeeAmountStr(pDecimals: number) {
+    return format.amountVer2({
+      originalAmount: new BigNumber(this.fee && this.fee.feeAmount ? this.fee.feeAmount : 0).toNumber(),
+      decimals: pDecimals,
+    });
+  }
+
+  getFeeUsdStr() {
+    return this.fee && this.fee.feeInUSD
+      ? format.amountVer2({
+          originalAmount: this.fee.feeInUSD,
+          decimals: 0,
+        })
+      : '';
+  }
+
+  getFeeAmout() {
+    return this.fee ? this.fee.feeAmount : 0;
+  }
+
+  getFeeAddressShardID() {
+    return this.fee ? this.fee.feeAddressShardID : '';
+  }
 }
 
-export interface LastSale {
+export class LastSale {
   asset?: Asset;
   assetBundle?: string;
   auctionType?: string;
@@ -87,6 +119,15 @@ export interface LastSale {
   quantity?: string;
   totalPrice?: string;
   transaction?: Transaction;
+
+  getLastSaleStr() {
+    return this.totalPrice
+      ? `Last sale: ${format.amountVer2({
+          originalAmount: new BigNumber(this.totalPrice).toNumber(),
+          decimals: this.paymentToken?.decimals || 18,
+        })} ${this.paymentToken?.symbol}`
+      : '';
+  }
 }
 
 export interface Transaction {
@@ -190,27 +231,54 @@ export interface Offer {
   startAmount: string;
   token: string;
 }
-export interface SeaportSellOrders {
-  cancelled: boolean;
-  clientSignature: string;
-  closingDate: string;
-  createdDate: string;
-  criteriaProof: string;
-  currentPrice: string;
-  expirationTime: string;
-  finalized: boolean;
-  listingTime: number;
-  maker: Maker;
-  makerFees: { account: Maker; basisPoints: string }[];
-  markedInvalid: boolean;
-  orderHash: string;
-  orderType: string;
-  protocolAddress: string;
-  relayId: string;
-  side: string;
+export class SeaportSellOrders {
+  cancelled?: boolean;
+  clientSignature?: string;
+  closingDate?: string;
+  createdDate?: string;
+  criteriaProof?: string;
+  currentPrice?: string;
+  expirationTime?: string;
+  finalized?: boolean;
+  listingTime?: number;
+  maker?: Maker;
+  makerFees?: { account: Maker; basisPoints: string }[];
+  markedInvalid?: boolean;
+  orderHash?: string;
+  orderType?: string;
+  protocolAddress?: string;
+  relayId?: string;
+  side?: string;
   taker: any;
-  taker_fees: any[];
-  protocol_data: { parameters: Parameter; signature: string };
+  taker_fees?: any[];
+  protocol_data?: { parameters: Parameter; signature: string };
+
+  getCurrentPrice() {
+    return this.currentPrice ? this.currentPrice : '0';
+  }
+
+  getPricingAmountStr(decimals: number) {
+    return format.amountVer2({
+      originalAmount: new BigNumber(this.currentPrice || 0).toNumber(),
+      decimals,
+    });
+  }
+
+  getBurnOriginalAmount(decimals: number, pDecimals: number) {
+    const burnHumanAmount = convert.toHumanAmount({
+      originalAmount: new BigNumber(this.currentPrice || 0).toNumber(),
+      decimals,
+    });
+    return convert.toOriginalAmount({
+      humanAmount: new BigNumber(burnHumanAmount).toString(),
+      decimals: pDecimals || 0,
+      round: true,
+    });
+  }
+
+  getSaleEnd() {
+    return moment(this.closingDate).format('MMMM DD, YYYY [at] hh:mm AZ');
+  }
 }
 
 export class Convert {
@@ -271,37 +339,37 @@ export class Convert {
   }
 
   public static toSeaportSellOrders(json: any): SeaportSellOrders {
-    return {
-      cancelled: get(json, 'cancelled'),
-      clientSignature: get(json, 'client_signature'),
-      closingDate: get(json, 'closing_date'),
-      createdDate: get(json, 'created_date'),
-      criteriaProof: get(json, 'criteria_proof'),
-      currentPrice: get(json, 'current_price'),
-      expirationTime: get(json, 'expiration_time'),
-      finalized: get(json, 'finalized'),
-      maker: Convert.toMarker(json.maker),
-      listingTime: get(json, 'listing_time'),
-      markedInvalid: get(json, 'marked_invalid'),
-      orderHash: get(json, 'order_hash'),
-      orderType: get(json, 'order_type'),
-      protocolAddress: get(json, 'protocol_address'),
-      relayId: get(json, 'relay_id'),
-      side: get(json, 'side'),
-      taker: get(json, 'taker'),
-      taker_fees: get(json, 'taker_fees'),
-      protocol_data: {
-        parameters: Convert.toParameter(json.protocol_data.parameters),
-        signature: json.protocol_data.signature,
-      },
-      makerFees:
-        json.maker_fees && json.maker_fees.length > 0
-          ? json.maker_fees.map((item: any) => ({
-              account: Convert.toMarker(item.account),
-              basisPoints: item.basis_points,
-            }))
-          : [],
+    let seaportSellOrders = new SeaportSellOrders();
+    seaportSellOrders.cancelled = get(json, 'cancelled');
+    seaportSellOrders.clientSignature = get(json, 'client_signature');
+    seaportSellOrders.closingDate = get(json, 'closing_date');
+    seaportSellOrders.createdDate = get(json, 'created_date');
+    seaportSellOrders.criteriaProof = get(json, 'criteria_proof');
+    seaportSellOrders.currentPrice = get(json, 'current_price');
+    seaportSellOrders.expirationTime = get(json, 'expiration_time');
+    seaportSellOrders.finalized = get(json, 'finalized');
+    seaportSellOrders.maker = Convert.toMarker(json.maker);
+    seaportSellOrders.listingTime = get(json, 'listing_time');
+    seaportSellOrders.markedInvalid = get(json, 'marked_invalid');
+    seaportSellOrders.orderHash = get(json, 'order_hash');
+    seaportSellOrders.orderType = get(json, 'order_type');
+    seaportSellOrders.protocolAddress = get(json, 'protocol_address');
+    seaportSellOrders.relayId = get(json, 'relay_id');
+    seaportSellOrders.side = get(json, 'side');
+    seaportSellOrders.taker = get(json, 'taker');
+    seaportSellOrders.taker_fees = get(json, 'taker_fees');
+    seaportSellOrders.protocol_data = {
+      parameters: Convert.toParameter(json.protocol_data.parameters),
+      signature: json.protocol_data.signature,
     };
+    seaportSellOrders.makerFees =
+      json.maker_fees && json.maker_fees.length > 0
+        ? json.maker_fees.map((item: any) => ({
+            account: Convert.toMarker(item.account),
+            basisPoints: item.basis_points,
+          }))
+        : [];
+    return seaportSellOrders;
   }
 
   public static toParameter(json: any): Parameter {
@@ -326,19 +394,19 @@ export class Convert {
 
   public static toPOpenseaBuyFee(json: any): POpenseaBuyFee {
     const Fee = get(json, 'Fee');
-    return {
-      calldata: get(json, 'Calldata'),
-      callContract: get(json, 'CallContract'),
-      receiveToken: get(json, 'ReceiveToken'),
-      fee: {
-        feeAddress: get(Fee, 'feeAddress'),
-        feeAddressShardID: get(Fee, 'feeAddressShardID'),
-        feeAmount: get(Fee, 'feeAmount'),
-        feeInUSD: get(Fee, 'feeInUSD'),
-        privacyFee: get(Fee, 'privacyFee'),
-        tokenid: get(Fee, 'tokenid'),
-      },
+    const buyFee = new POpenseaBuyFee();
+    buyFee.calldata = get(json, 'Calldata');
+    buyFee.callContract = get(json, 'CallContract');
+    buyFee.receiveToken = get(json, 'ReceiveToken');
+    buyFee.fee = {
+      feeAddress: get(Fee, 'feeAddress'),
+      feeAddressShardID: get(Fee, 'feeAddressShardID'),
+      feeAmount: get(Fee, 'feeAmount'),
+      feeInUSD: get(Fee, 'feeInUSD'),
+      privacyFee: get(Fee, 'privacyFee'),
+      tokenid: get(Fee, 'tokenid'),
     };
+    return buyFee;
   }
 
   public static toOffer(json: any): Offer {
@@ -363,18 +431,18 @@ export class Convert {
   }
 
   public static toLastSale(json: any): LastSale {
-    return {
-      asset: json.asset ? Convert.toAsset(json.asset) : undefined,
-      assetBundle: get(json, 'asset_bundle'),
-      paymentToken: json.payment_token ? ConvertCollection.toPaymentToken(json.payment_token) : undefined,
-      auctionType: get(json, 'auction_type'),
-      createdDate: get(json, 'created_date'),
-      eventTimestamp: get(json, 'event_timestamp'),
-      eventType: get(json, 'event_type'),
-      quantity: get(json, 'quantity'),
-      totalPrice: get(json, 'total_price'),
-      transaction: json.transaction ? Convert.toTransaction(json.transaction) : undefined,
-    };
+    let lastSale = new LastSale();
+    lastSale.asset = json.asset ? Convert.toAsset(json.asset) : undefined;
+    lastSale.assetBundle = get(json, 'asset_bundle');
+    lastSale.paymentToken = json.payment_token ? ConvertCollection.toPaymentToken(json.payment_token) : undefined;
+    lastSale.auctionType = get(json, 'auction_type');
+    lastSale.createdDate = get(json, 'created_date');
+    lastSale.eventTimestamp = get(json, 'event_timestamp');
+    lastSale.eventType = get(json, 'event_type');
+    lastSale.quantity = get(json, 'quantity');
+    lastSale.totalPrice = get(json, 'total_price');
+    lastSale.transaction = json.transaction ? Convert.toTransaction(json.transaction) : undefined;
+    return lastSale;
   }
 
   public static toTransaction(json: any): Transaction {

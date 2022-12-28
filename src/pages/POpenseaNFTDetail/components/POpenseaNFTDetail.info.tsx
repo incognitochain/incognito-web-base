@@ -27,7 +27,7 @@ const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
   const renderDetailItem = (title: string, value?: string) => (
     <div className="child-detail-item">
       <p className="child-detail-title">{title}</p>
-      <p className="child-detail-value">{title === 'Contract Address' && value ? shortenString(value) : value}</p>
+      <p className="child-detail-value">{value}</p>
     </div>
   );
 
@@ -39,7 +39,10 @@ const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
         : '';
 
     const details = [
-      { title: 'Contract Address', value: assetContract ? assetContract.address : '' },
+      {
+        title: 'Contract Address',
+        value: assetContract && assetContract.address ? shortenString(assetContract.address) : '',
+      },
       { title: 'Token ID', value: selectedNFT.tokenId },
       { title: 'Token Standard', value: assetContract ? assetContract.schemaName : '' },
       { title: 'Chain', value: 'Etherum' },

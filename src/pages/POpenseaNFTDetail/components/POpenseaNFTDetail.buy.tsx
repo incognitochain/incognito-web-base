@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import icClock from 'assets/svg/ic-clock.svg';
-import BigNumber from 'bignumber.js';
 import { getIncognitoInject, useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { TransactionSubmittedContent } from 'components/Core/TransactionConfirmationModal';
 import { useModal } from 'components/Modal';
@@ -11,7 +10,6 @@ import LoadingTransaction from 'components/Modal/Modal.transaction';
 import { BIG_COINS, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import { Convert, POpenseaBuyFee, POpenseaNft } from 'models/model/POpenseaNFT';
 import PToken from 'models/model/pTokenModel';
-import moment from 'moment';
 import { actionSetErrorMsg } from 'pages/Swap/features/FormUnshield/FormUnshield.actions';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
 import { setSwapTx } from 'pages/Swap/Swap.storage';
@@ -20,8 +18,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import rpcPOpensea, { postEstimateFee } from 'services/rpcPOpensea';
 import { networkFeePOpenseaSelectors } from 'state/pOpensea';
 import { unshieldableTokens } from 'state/token';
-import convert from 'utils/convert';
-import format from 'utils/format';
 
 import { ArrowDown, TextInputStyled } from '../POpenseaNFTDetail.styled';
 
@@ -47,10 +43,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     (token) => token.isMainETH || token.tokenID === BIG_COINS.ETH_UNIFIED.tokenID
   );
 
-  const seaportSellOrder =
-    selectedNFT.seaportSellOrders && selectedNFT.seaportSellOrders.length > 0
-      ? selectedNFT.seaportSellOrders[0]
-      : undefined;
+  const seaportSellOrder = selectedNFT.getSeaportSellOrder();
   const assetContract = selectedNFT.assetContract;
 
   const childToken =
@@ -58,12 +51,11 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
       ? selectedToken?.listUnifiedToken.find((token) => token.networkID === 1)
       : undefined;
 
-  const buyPriceAmount = seaportSellOrder
-    ? format.amountVer2({
-        originalAmount: new BigNumber(seaportSellOrder.currentPrice || 0).toNumber(),
-        decimals: childToken?.decimals || 18,
-      })
-    : '0';
+  const buyPriceAmount = seaportSellOrder ? seaportSellOrder.getPricingAmountStr(childToken?.decimals || 18) : '0';
+
+  const burnOriginalAmount = seaportSellOrder
+    ? seaportSellOrder.getBurnOriginalAmount(childToken?.decimals || 18, childToken?.pDecimals || 0)
+    : undefined;
 
   useEffect(() => {
     tokens.length > 0 && selectedToken === undefined && setSelectedToken(tokens[0]);
@@ -92,7 +84,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
           contract,
           tokenId,
           selectedToken.tokenID,
-          seaportSellOrder.currentPrice,
+          seaportSellOrder.getCurrentPrice(),
           reciptientAddress
         );
         if (res && res.Calldata) {
@@ -101,18 +93,6 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
         }
       } catch (error) {}
     }
-  };
-
-  const getBurnOriginalAmount = () => {
-    const burnHumanAmount = convert.toHumanAmount({
-      originalAmount: new BigNumber(seaportSellOrder?.currentPrice || 0).toNumber(),
-      decimals: childToken?.decimals || 18,
-    });
-    return convert.toOriginalAmount({
-      humanAmount: new BigNumber(burnHumanAmount).toString(),
-      decimals: childToken?.pDecimals || 0,
-      round: true,
-    });
   };
 
   const getBurnPayments = async (): Promise<any> => {
@@ -124,10 +104,10 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
         data: [
           {
             paymentAddress: buyFee?.fee?.feeAddress,
-            amount: buyFee?.fee.feeAmount || 0,
+            amount: buyFee?.getFeeAmout(),
           },
         ],
-        burnAmount: getBurnOriginalAmount(),
+        burnAmount: burnOriginalAmount,
       });
       return {
         prvPayments,
@@ -144,7 +124,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
         const incognito = getIncognitoInject();
 
         // Get OTA Receiver and Burner address
-        const shardID = buyFee.fee.feeAddressShardID;
+        const shardID = buyFee.getFeeAddressShardID();
         const { result }: { result: any } = await incognito.request({
           method: 'wallet_requestAccounts',
           params: { senderShardID: shardID },
@@ -169,7 +149,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
             {
               IncTokenID: incTokenID,
               RedepositReceiver: otaReceiver,
-              BurningAmount: getBurnOriginalAmount(),
+              BurningAmount: burnOriginalAmount,
               ExternalNetworkID: 1,
               ExternalCalldata: buyFee.calldata,
               ExternalCallAddress: callContract,
@@ -284,22 +264,9 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const renderFee = () =>
     buyFee && (
       <p className="current-price">
-        {format.amountVer2({
-          originalAmount: new BigNumber(buyFee?.fee.feeAmount || 0).toNumber(),
-          decimals: childToken?.pDecimals || 9,
-        })}{' '}
-        {selectedToken?.symbol} ={' '}
-        {format.amountVer2({
-          originalAmount: buyFee.fee.feeInUSD,
-          decimals: 0,
-        })}{' '}
-        $
+        {buyFee.getFeeAmountStr(childToken?.pDecimals || 9)} {selectedToken?.symbol} = {buyFee.getFeeUsdStr()} $
       </p>
     );
-
-  // const renderError = () => {
-  //   return <p>Your balance is insufficient.</p>;
-  // };
 
   return (
     <React.Fragment>
@@ -307,9 +274,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
         <div className="price-container">
           <div className="view-content">
             <img src={icClock} />
-            <p className="time-sale">{`Sale ends ${
-              seaportSellOrder ? moment(seaportSellOrder.closingDate).format('MMMM DD, YYYY [at] hh:mm AZ') : ''
-            }`}</p>
+            <p className="time-sale">{`Sale ends ${seaportSellOrder.getSaleEnd()}`}</p>
           </div>
           <div className="price-indicator" />
           <div className="buy-container">
@@ -328,7 +293,6 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
               <p className="current-price">Current price</p>
               {renderCurrentPrice()}
               {renderFee()}
-              {/* {renderError()} */}
             </div>
 
             <button className="btn-buy" onClick={onClickBuy}>

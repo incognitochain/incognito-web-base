@@ -37,14 +37,11 @@ export const pOpenseaFilterNFTsSelectors = createSelector(
         }
         return a.lastSale && a.lastSale.totalPrice ? -1 : b.lastSale && b.lastSale.totalPrice ? 1 : 0;
       } else {
-        if (
-          a.seaportSellOrders &&
-          b.seaportSellOrders &&
-          a.seaportSellOrders.length > 0 &&
-          b.seaportSellOrders.length > 0
-        ) {
-          const priceA = a.seaportSellOrders[0].currentPrice;
-          const priceB = b.seaportSellOrders[0].currentPrice;
+        const aSeaportSell = a.getSeaportSellOrder();
+        const bSeaportSell = a.getSeaportSellOrder();
+        if (aSeaportSell && bSeaportSell) {
+          const priceA = aSeaportSell.getCurrentPrice();
+          const priceB = bSeaportSell.getCurrentPrice();
           if (sort === SortNftType.PriceLowToHigh) {
             return parseFloat(priceA) - parseFloat(priceB);
           } else if (sort === SortNftType.PriceHighToLow) {
