@@ -31,6 +31,7 @@ import PageNotFound from './PageNotFound/PageNotFound';
 import PeggingApp from './PeggingApp';
 import Policy from './Policy';
 import Structure from './Structure';
+import DepositPage from './Swap/features/DepositPage';
 import SwapExchange from './Swap/features/SwapExchange';
 import TermOfService from './TermOfService';
 
@@ -104,6 +105,8 @@ const App = () => {
           <Route exact path="/internet-disconnected" component={InternetDisconnected} />
           {/*<Route exact path="/" component={Market} />*/}
           <Route exact path="/" component={Home} />
+          <Route exact path="/mine.html" component={Structure} />
+          <Route exact path="/mine" component={Structure} />
           <Route exact path="/swap" component={Market} />
           <Route exact path="/papps/:id" component={SwapExchange} />
           <Route exact path="/papps" component={PeggingApp} />
@@ -117,6 +120,7 @@ const App = () => {
           <Route exact path="/mine/validator" component={Validators} />
           <Route exact path="/get-prv" component={GetPRV} />
           <Route exact path="/buy-node" component={BuyNode} />
+          <Route exact path="/deposit" component={DepositPage} />
         </>
       </Switch>
     );

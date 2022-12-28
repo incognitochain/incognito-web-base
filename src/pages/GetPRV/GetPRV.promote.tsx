@@ -9,7 +9,7 @@ export const Styled = styled.div`
   display: grid;
   grid-template-columns: auto auto auto;
   gap: 40px;
-  margin-top: 50px;
+  margin-top: 60px;
   .wrap-item {
     display: flex;
     flex-direction: column;
@@ -17,14 +17,14 @@ export const Styled = styled.div`
   }
   h6 {
     font-weight: 700;
-    color: white;
+    color: ${({ theme }) => theme.text1};
     margin-top: 16px;
-    margin-bottom: 16px;
   }
   .h8 {
     color: ${({ theme }) => theme.color_grey};
     max-width: 358px;
     text-align: center;
+    margin-top: 8px;
   }
   ${({ theme }) => theme.mediaWidth.upToMedium`
     gap: 30px;
@@ -35,19 +35,19 @@ export const Styled = styled.div`
 const Promote = () => {
   const Factory = [
     {
-      icon: StakeSVG,
-      title: 'Staking',
-      desc: 'Users will be able to stake their tokens to become Incognito network validators to perform consensus work, including verifying transactions, voting to add new blocks to the blockchain and earning block rewards.',
+      icon: PaymentSVG,
+      title: 'Privacy fuel',
+      desc: 'PRV is used to pay transaction fees to participate in all Incognito’s privacy activities.',
     },
     {
-      icon: PaymentSVG,
-      title: 'Utility',
-      desc: "PRV is Incognito's utility token for paying the network fee to participate in privacy markets and use your favorite apps privately.",
+      icon: StakeSVG,
+      title: 'Staking',
+      desc: 'Network validators stake PRV to secure the network and earn block rewards.',
     },
     {
       icon: GovernanceSVG,
       title: 'Governance',
-      desc: 'PRV holders will shape the future of Incognito by signaling their support for upgrades to the ecosystem and directing usage of a Community Treasury.',
+      desc: 'PRV holders will shape the future of Incognito by signaling their support for upgrades and directing usage of a Community Treasury.',
     },
   ];
 

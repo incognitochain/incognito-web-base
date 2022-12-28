@@ -5,18 +5,21 @@ import React, { useState } from 'react';
 import CountUp from 'react-countup';
 import { useSelector } from 'react-redux';
 import VisibilitySensor from 'react-visibility-sensor';
+import { useAppSelector } from 'state/hooks';
+import { explorerSelectors } from 'state/pools';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled.div`
   margin-left: auto;
   margin-right: auto;
   display: flex;
-  margin-top: 80px;
+  margin-top: 60px;
+  padding-top: 100px;
   justify-content: space-around;
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
-  max-width: 1000px !important;
+  max-width: 1100px !important;
   .achieve-title {
     text-align: center;
   }
@@ -105,14 +108,39 @@ const Item = styled.div`
     `}
 `;
 
+const Line = styled.div`
+  width: 100vw;
+  height: 1px;
+  border: 1px solid ${({ theme }) => theme.border1};
+  position: absolute;
+  left: 0;
+  right: 0;
+`;
+
 const Analytics = () => {
   const marketTrs = useSelector(marketTranslateSelector);
 
-  const [isCountUp, setIsCountUp] = useState<boolean>(false);
-  const Factory = React.useMemo(
-    () => [
+  const [isCountUp, setIsCountUp] = useState<boolean>(true);
+  const { prvPrice: price, totalSupply } = useAppSelector(explorerSelectors);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const Factory = React.useMemo(() => {
+    const last = `${price}`.split('.');
+    let length = 0;
+    if (last && last.length > 1) {
+      length = last[1].length;
+    }
+    return [
       {
-        number: '31155919',
+        number: price,
+        prefix: '$',
+        suffix: '',
+        decimals: length,
+        desc: 'Price',
+        nonCount: true,
+      },
+      {
+        number: totalSupply,
         prefix: '',
         suffix: '',
         desc: 'Circulating Supply',
@@ -123,59 +151,70 @@ const Analytics = () => {
         suffix: '',
         desc: 'Total supply',
       },
-    ],
-    [marketTrs]
-  );
+    ];
+  }, [marketTrs, totalSupply, price]);
 
-  const renderItem = (item: any) => (
-    <Item style={{ flex: 1, minWidth: 200 }}>
-      <div className={'achieve'}>
-        <VisibilitySensor
-          onChange={(isVisible) => {
-            if (isVisible) {
-              setIsCountUp(true);
-            }
-          }}
-          delayedCall
-        >
-          <CountUp
-            className="achieve-item-title"
-            start={0}
-            end={isCountUp ? item?.number : 0}
-            duration={1}
-            decimals={item?.decimals}
-            decimal="."
-            prefix={item?.prefix}
-            suffix={item?.suffix}
-            separator=","
-            enableScrollSpy={true}
-          />
-        </VisibilitySensor>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: 10,
-          }}
-        >
-          <p className="h8 achieve-item-sub-title">{item.desc}</p>
-          {item?.tooltipContent && (
-            <Tooltip title={item?.tooltipContent}>
-              <Info style={{ marginLeft: 5 }} />
-            </Tooltip>
+  const renderItem = (item: any) => {
+    return (
+      <Item style={{ flex: 1, minWidth: 200 }}>
+        <div className={'achieve'}>
+          {item.nonCount ? (
+            <h3 className="achieve-item-title">
+              {item?.prefix}
+              {item?.number}
+            </h3>
+          ) : (
+            <VisibilitySensor
+              onChange={(isVisible) => {
+                if (isVisible) {
+                  setIsCountUp(true);
+                }
+              }}
+              delayedCall
+            >
+              <CountUp
+                className="achieve-item-title"
+                start={0}
+                end={isCountUp ? item?.number : 0}
+                duration={1}
+                decimal="."
+                prefix={item?.prefix}
+                suffix={item?.suffix}
+                decimals={item?.decimals}
+                separator=","
+                enableScrollSpy={true}
+              />
+            </VisibilitySensor>
           )}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 10,
+            }}
+          >
+            <p className="h8 achieve-item-sub-title">{item.desc}</p>
+            {item?.tooltipContent && (
+              <Tooltip title={item?.tooltipContent}>
+                <Info style={{ marginLeft: 5 }} />
+              </Tooltip>
+            )}
+          </div>
         </div>
-      </div>
-    </Item>
-  );
+      </Item>
+    );
+  };
   return (
-    <Styled className="default-max-width">
-      {Factory?.map((item, i) => {
-        return renderItem(item);
-      })}
-    </Styled>
+    <div>
+      <Line />
+      <Styled className="default-max-width">
+        {Factory?.map((item, i) => {
+          return renderItem(item);
+        })}
+      </Styled>
+    </div>
   );
 };
 

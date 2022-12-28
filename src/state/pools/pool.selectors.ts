@@ -1,6 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { BigNumber } from 'bignumber.js';
 import { AppState } from 'state';
 
+import convert from '../../utils/convert';
+import format from '../../utils/format';
 import { getPrivacyDataByTokenIDSelector } from '../token';
 
 export const poolSelectors = createSelector(
@@ -23,3 +26,19 @@ export const poolsSelectors = createSelector(
     });
   }
 );
+export const explorerSelectors = createSelector(poolSelectors, (pool) => {
+  const prvPrice = pool.explores.find((item: any) => item['metricType'] === 'PRV_PRICE')?.value || 0;
+  console.log('SANG TEST: ', prvPrice);
+  const price = convert.toNumber({
+    text: format.amountVer2({
+      originalAmount: new BigNumber(prvPrice).toNumber(),
+      decimals: 0,
+    }),
+    autoCorrect: true,
+  });
+  const totalSupply = pool.explores.find((item: any) => item['metricType'] === 'PRV_CIRCULATING_SUPPLY')?.value;
+  return {
+    prvPrice: price,
+    totalSupply,
+  };
+});

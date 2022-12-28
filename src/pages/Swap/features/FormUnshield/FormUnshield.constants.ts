@@ -20,6 +20,7 @@ export const MAP_TOKEN_BY_PAPPS: any = {
   [SwapExchange.CURVE]: { tokenID1: BIG_COINS.USDC_UNIFIED.tokenID, tokenID2: BIG_COINS.USDT_UNIFIED.tokenID },
   [SwapExchange.SPOOKY]: { tokenID1: BIG_COINS.USDC_FTM.tokenID, tokenID2: BIG_COINS.FTM.tokenID },
   [SwapExchange.JOE]: { tokenID1: BIG_COINS.USDC_AVAX.tokenID, tokenID2: BIG_COINS.AVAX.tokenID },
+  [SwapExchange.PDEX]: { tokenID1: BIG_COINS.USDT_UNIFIED.tokenID, tokenID2: BIG_COINS.PRV.tokenID },
 };
 
 export const GROUP_CURRENCY_TYPE_BY_PAPP_NAME: any = {
@@ -37,6 +38,8 @@ export const GROUP_CURRENCY_TYPE_BY_PAPP_NAME: any = {
   [SwapExchange.SPOOKY]: [PRIVATE_TOKEN_CURRENCY_TYPE.FTM, PRIVATE_TOKEN_CURRENCY_TYPE.FANTOM_ERC20],
 
   [SwapExchange.JOE]: [PRIVATE_TOKEN_CURRENCY_TYPE.AVAX, PRIVATE_TOKEN_CURRENCY_TYPE.AVAX_ERC20],
+
+  [SwapExchange.PDEX]: [...Object.values(PRIVATE_TOKEN_CURRENCY_TYPE)],
 };
 
 export const GROUP_SUPPORTED_NETWORK_BY_PAPPS: any = {
@@ -49,8 +52,50 @@ export const GROUP_SUPPORTED_NETWORK_BY_PAPPS: any = {
   [SwapExchange.SPOOKY]: [MAIN_NETWORK_NAME.INCOGNITO, MAIN_NETWORK_NAME.FANTOM],
 
   [SwapExchange.JOE]: [MAIN_NETWORK_NAME.INCOGNITO, MAIN_NETWORK_NAME.AVALANCHE],
+
+  [SwapExchange.PDEX]: [...Object.values(MAIN_NETWORK_NAME)],
 };
 
+export const SELECTION_NETWORKS: any[] = [
+  {
+    label: 'All',
+    network: [
+      MAIN_NETWORK_NAME.ETHEREUM,
+      MAIN_NETWORK_NAME.BSC,
+      MAIN_NETWORK_NAME.POLYGON,
+      MAIN_NETWORK_NAME.FANTOM,
+      MAIN_NETWORK_NAME.AVALANCHE,
+    ],
+  },
+  {
+    label: MAIN_NETWORK_NAME.BTC,
+    network: [MAIN_NETWORK_NAME.INCOGNITO],
+  },
+  {
+    label: MAIN_NETWORK_NAME.XMR,
+    network: [MAIN_NETWORK_NAME.INCOGNITO],
+  },
+  {
+    label: MAIN_NETWORK_NAME.ETHEREUM,
+    network: [MAIN_NETWORK_NAME.ETHEREUM],
+  },
+  {
+    label: 'Binance Chain',
+    network: [MAIN_NETWORK_NAME.BSC],
+  },
+  {
+    label: MAIN_NETWORK_NAME.POLYGON,
+    network: [MAIN_NETWORK_NAME.POLYGON],
+  },
+  {
+    label: MAIN_NETWORK_NAME.FANTOM,
+    network: [MAIN_NETWORK_NAME.FANTOM],
+  },
+  {
+    label: MAIN_NETWORK_NAME.AVALANCHE,
+    network: [MAIN_NETWORK_NAME.AVALANCHE],
+  },
+];
 export const GROUP_NETWORK_ID_BY_EXCHANGE: any = {
   [SwapExchange.UNISWAP]: [1, 3],
 
@@ -61,4 +106,6 @@ export const GROUP_NETWORK_ID_BY_EXCHANGE: any = {
   [SwapExchange.SPOOKY]: [4],
 
   [SwapExchange.JOE]: [6],
+
+  [SwapExchange.PDEX]: [],
 };
