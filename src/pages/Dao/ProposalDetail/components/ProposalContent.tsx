@@ -25,22 +25,23 @@ const Container = styled.div`
     font-weight: 400;
     font-size: 16px;
     line-height: 140%;
-    color: #9c9c9c;
+    color: #757575;
   }
 
   .markdown p {
     font-size: 16px;
-    color: #9c9c9c;
+    color: #757575;
   }
 
   .markdown h1 {
-    font-size: 28px;
-    margin-top: 16px;
-    font-weight: bold;
+    font-weight: 500;
+    font-size: 34px;
+    margin-top: 24px;
     color: #ffffff;
   }
 
   .markdown h2 {
+    font-weight: 500;
     font-size: 24px;
     margin-top: 16px;
     font-weight: bold;
@@ -50,7 +51,7 @@ const Container = styled.div`
   .markdown h3 {
     font-size: 20px;
     margin-top: 16px;
-    font-weight: bold;
+    font-weight: 500;
     color: #ffffff;
   }
 
