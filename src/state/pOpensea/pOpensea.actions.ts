@@ -107,7 +107,7 @@ export const actionBuyNFTDetail =
     }
   };
 
-const retryGetPOpenseaNFTDetail = async (contract: string, tokenId: string, retries: number = 5) => {
+const retryGetPOpenseaNFTDetail = async (contract: string, tokenId: string, retries: number = 3) => {
   let count = retries;
   while (count > 0) {
     try {

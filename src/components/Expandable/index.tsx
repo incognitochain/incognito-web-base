@@ -7,6 +7,7 @@ const Styled = styled.div<{ isExpand?: boolean }>`
   border-radius: 12px;
   padding: 24px;
   margin-top: 16px;
+  cursor: pointer;
 
   .container-expand {
     display: flex;

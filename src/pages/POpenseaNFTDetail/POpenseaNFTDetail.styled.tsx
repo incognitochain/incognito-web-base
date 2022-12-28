@@ -156,6 +156,7 @@ export const WrapperContent = styled.div`
 
       background-color: ${({ theme }) => theme.color_blue};
       border-radius: 8px;
+      cursor: pointer;
 
       :hover {
         background-color: ${({ theme }) => theme.primary1};
@@ -225,6 +226,7 @@ export const WrapperContent = styled.div`
       padding-left: 16px;
       padding-right: 16px;
       margin-left: 16px;
+      cursor: pointer;
 
       :hover {
         border: 1px solid ${({ theme }) => theme.border5};

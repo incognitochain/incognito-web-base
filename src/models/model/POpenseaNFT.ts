@@ -228,6 +228,9 @@ export class Convert {
     if (json && json.seaport_sell_orders && json.seaport_sell_orders.length > 0) {
       nft.seaportSellOrders = json.seaport_sell_orders.map((item: any) => Convert.toSeaportSellOrders(item));
     }
+    if (json && json.last_sale) {
+      nft.lastSale = Convert.toLastSale(json.last_sale);
+    }
     nft.numSales = get(json, 'num_sales');
     nft.backgroundColor = get(json, 'background_color');
     nft.animationUrl = get(json, 'animation_url');
@@ -244,7 +247,6 @@ export class Convert {
     nft.isNsfw = get(json, 'is_nsfw');
     nft.imageUrl = get(json, 'image_url');
     nft.owner = get(json, 'owner');
-    nft.lastSale = get(json, 'last_sale');
     nft.listingDate = get(json, 'listing_date');
     nft.supportsWyvern = get(json, 'supports_wyvern');
     nft.rarityData = get(json, 'rarity_data');
@@ -355,16 +357,16 @@ export class Convert {
 
   public static toLastSale(json: any): LastSale {
     return {
-      asset: Convert.toAsset(json.asset),
+      asset: json.asset ? Convert.toAsset(json.asset) : undefined,
       assetBundle: get(json, 'asset_bundle'),
-      paymentToken: ConvertCollection.toPaymentToken(json.payment_token),
+      paymentToken: json.payment_token ? ConvertCollection.toPaymentToken(json.payment_token) : undefined,
       auctionType: get(json, 'auction_type'),
       createdDate: get(json, 'created_date'),
       eventTimestamp: get(json, 'event_timestamp'),
       eventType: get(json, 'event_type'),
       quantity: get(json, 'quantity'),
       totalPrice: get(json, 'total_price'),
-      transaction: Convert.toTransaction(json.transaction),
+      transaction: json.transaction ? Convert.toTransaction(json.transaction) : undefined,
     };
   }
 
@@ -372,10 +374,10 @@ export class Convert {
     return {
       blockHash: get(json, 'block_hash'),
       blockNumber: get(json, 'block_number'),
-      fromAccount: Convert.toCreator(json.from_account),
+      fromAccount: json.from_account ? Convert.toCreator(json.from_account) : undefined,
       id: get(json, 'id'),
       timestamp: get(json, 'timestamp'),
-      toAccount: Convert.toCreator(json.to_account),
+      toAccount: json.to_account ? Convert.toCreator(json.to_account) : undefined,
       transactionHash: get(json, 'transaction_hash'),
       transactionIndex: get(json, 'transaction_index'),
     };
@@ -390,7 +392,7 @@ export class Convert {
 
   public static toCreator(json: any): Creator {
     return {
-      user: { username: get(json, 'user').username },
+      user: { username: get(json, 'user') ? get(json, 'user').username : '' },
       profileImgUrl: get(json, 'profile_img_url'),
       address: get(json, 'address'),
       config: get(json, 'config'),

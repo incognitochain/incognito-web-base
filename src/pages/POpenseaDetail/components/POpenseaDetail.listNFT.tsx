@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Dropdown, List, Menu } from 'antd';
+import { List, Menu } from 'antd';
 import ArrowDownSVG from 'assets/images/arrow-down-white.svg';
 import SearchSVG from 'assets/svg/search-icon.svg';
 import BigNumber from 'bignumber.js';
@@ -10,11 +10,12 @@ import { useSelector } from 'react-redux';
 import { pOpenseaFilterNFTsSelectors } from 'state/pOpensea';
 import format from 'utils/format';
 
-import { Styled, TextInputStyled } from './POpenseaDetail.listNFT.styled';
+import { SortSelect, Styled, TextInputStyled } from './POpenseaDetail.listNFT.styled';
 
 export enum SortNftType {
   PriceLowToHigh = 'Price low to high',
   PriceHighToLow = 'Price high to low',
+  HighestLastSale = 'Highest last sale',
 }
 
 interface POpenseaDetailListNFTProps {
@@ -38,8 +39,8 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
     const renderSortItem = (key: any, label: string) => {
       const typedString: keyof typeof SortNftType = key;
       return (
-        <button className="sort-item" onClick={() => setCurrentSortType(SortNftType[typedString])}>
-          {label}
+        <button onClick={() => setCurrentSortType(SortNftType[typedString])}>
+          <p>{label}</p>
         </button>
       );
     };
@@ -61,7 +62,7 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
               autoFocus={false}
             />
           </div>
-          <Dropdown
+          <SortSelect
             overlay={
               <Menu
                 rootClassName="sort-menu"
@@ -76,7 +77,7 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
               <p className="sort-text">{currentSortType.toString()}</p>
               <img src={ArrowDownSVG} />
             </button>
-          </Dropdown>
+          </SortSelect>
         </div>
       </div>
     );
@@ -118,9 +119,14 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
                       {' ETH'}
                     </p>
                   )}
-                  {lastSale && lastSale.totalPrice && (
-                    <p className="item-last-sale">{`Last sale: ${lastSale.totalPrice} ETH`}</p>
-                  )}
+                  <p className="item-last-sale">
+                    {lastSale && lastSale.totalPrice
+                      ? `Last sale: ${format.amountVer2({
+                          originalAmount: new BigNumber(lastSale.totalPrice).toNumber(),
+                          decimals: lastSale.paymentToken?.decimals || 18,
+                        })} ${lastSale.paymentToken?.symbol}`
+                      : ''}
+                  </p>
                 </div>
               </div>
             </List.Item>

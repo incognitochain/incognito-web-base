@@ -70,7 +70,7 @@ const Factory: IFactory[] = [
     name: 'pOpensea',
     nameDesc: 'Private Opensea',
     status: 'SHIPPED',
-    chain: ['Ethereum', 'Market place', 'NFT'],
+    chain: ['Ethereum', 'Marketplace', 'NFT'],
     desc: 'Purchase and hoard rare digital items and collectibles without anyone knowing about it.',
     metric: METRIC_TYPE.PAPP_OPENSEA,
     metricUniq: METRIC_UNIQ.PAPP_OPENSEA_UNIQ,

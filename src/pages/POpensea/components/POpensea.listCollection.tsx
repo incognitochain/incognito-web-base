@@ -112,6 +112,10 @@ const Styled = styled.div`
     padding: 0px 32px;
   }
 
+  .ant-table-tbody > tr.ant-table-placeholder:hover > td {
+    background-color: ${({ theme }) => theme.background1};
+  }
+
   .poolContainer {
     display: flex;
     width: fit-content;

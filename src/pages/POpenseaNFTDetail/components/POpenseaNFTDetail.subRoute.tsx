@@ -29,6 +29,7 @@ const Styled = styled.div`
 interface POpenseaDetailSubRouteProps {
   collectionName: string;
   nftName: string;
+  contract: string;
 }
 
 const POpenseaNFTDetailSubRoute = (props: POpenseaDetailSubRouteProps) => {
@@ -56,7 +57,7 @@ const POpenseaNFTDetailSubRoute = (props: POpenseaDetailSubRouteProps) => {
       <p className="sub-title">/</p>
       <button
         onClick={() => {
-          history.goBack();
+          history.push(`/popensea/detail/${props.contract}`);
         }}
       >
         <p className="sub-title earnings-text">{props.collectionName}</p>

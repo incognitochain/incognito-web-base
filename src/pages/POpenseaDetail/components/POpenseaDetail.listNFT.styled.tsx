@@ -1,3 +1,4 @@
+import { Dropdown } from 'antd';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled.div`
@@ -13,6 +14,7 @@ export const Styled = styled.div`
     background-color: ${({ theme }) => theme.bg3};
     border-radius: 16px;
     margin-top: 14px;
+    cursor: pointer;
   }
 
   .item-img {
@@ -67,6 +69,7 @@ export const Styled = styled.div`
     font-size: 14px;
     line-height: 140%;
     margin-top: 4px;
+    height: 16px;
     color: ${({ theme }) => theme.primary8};
   }
 
@@ -181,22 +184,11 @@ export const Styled = styled.div`
     margin-right: 16px;
   }
 
-  ant-dropdown-open {
-    background-color: ${({ theme }) => theme.bg3};
-  }
-
   .sort-menu {
     background-color: ${({ theme }) => theme.bg3};
     border-radius: 8px;
     display: flex;
     padding-left: 16px;
-  }
-
-  .sort-item {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 140%;
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
@@ -235,6 +227,14 @@ export const Styled = styled.div`
       }
 
     `}
+`;
+
+export const SortSelect = styled(Dropdown)`
+  cursor: pointer;
+
+  .ant-dropdown-selection {
+    background-color: transparent;
+  }
 `;
 
 export const TextInputStyled = styled.input`

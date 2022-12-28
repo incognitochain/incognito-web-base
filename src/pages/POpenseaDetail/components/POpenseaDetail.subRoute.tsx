@@ -48,7 +48,7 @@ const POpenseaDetailSubRoute = (props: POpenseaDetailSubRouteProps) => {
       <button
         className="hover"
         onClick={() => {
-          history.goBack();
+          history.push('/popensea');
         }}
       >
         <p className="sub-title earnings-text">pOpensea</p>

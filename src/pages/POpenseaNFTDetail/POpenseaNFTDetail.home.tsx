@@ -4,7 +4,7 @@ import icDesciption from 'assets/svg/ic-description.svg';
 // import icGaming from 'assets/svg/ic-gaming.svg';
 import icInfo from 'assets/svg/ic-info.svg';
 // import icStar from 'assets/svg/ic-star.svg';
-import icVerify from 'assets/svg/ic-verify.svg';
+// import icVerify from 'assets/svg/ic-verify.svg';
 // import icView from 'assets/svg/ic-view.svg';
 import Expandable from 'components/Expandable';
 import ImagePlaceholder from 'components/ImagePlaceholder';
@@ -30,16 +30,15 @@ const Home = () => {
 
   const renderOverviewNFTComponent = () => {
     // const assetContract = selectedNFT.assetContract;
-
     return (
       <React.Fragment>
         <div className="artis-container">
           <a className="artis">{selectedNFT.collection?.name}</a>
-          <img src={icVerify} />
+          {/* <img src={icVerify} /> */}
         </div>
 
         <p className="name">
-          {selectedNFT.name} #{selectedNFT.id}
+          {selectedNFT.name} {selectedNFT.id ? `#${selectedNFT.id}` : ''}
         </p>
         {/* <p className="owner-by">
           Owner by <a>{assetContract ? assetContract.owner : ''}</a>
@@ -100,6 +99,7 @@ const Home = () => {
         <POpenseaNFTDetailSubRoute
           collectionName={selectedNFT.collection ? selectedNFT.collection.name || '' : ''}
           nftName={selectedNFT.name || ''}
+          contract={contract}
         />
         <div className="content">
           <div className="section-1">

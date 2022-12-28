@@ -279,37 +279,47 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
       </p>
     );
 
+  // const renderError = () => {
+  //   return <p>Your balance is insufficient.</p>;
+  // };
+
   return (
-    <div className="price-container">
-      <div className="view-content">
-        <img src={icClock} />
-        <p className="time-sale">{`Sale ends ${
-          seaportSellOrder ? moment(seaportSellOrder.closingDate).format('MMMM DD, YYYY [at] hh:mm AZ') : ''
-        }`}</p>
-      </div>
-      <div className="price-indicator" />
-      <div className="buy-container">
-        <TextInputStyled
-          placeholder={'Reciptient Address'}
-          type={'text'}
-          onChange={onChangeReciptientAddress}
-          value={reciptientAddress}
-          autoFocus={false}
-        />
-        {renderSelectTokenList()}
-      </div>
-      <div className="price-indicator" />
-      <div className="buy-container">
-        <div className="price-view">
-          <p className="current-price">Current price</p>
-          {renderCurrentPrice()}
-          {renderFee()}
+    <React.Fragment>
+      {seaportSellOrder && seaportSellOrder.currentPrice && (
+        <div className="price-container">
+          <div className="view-content">
+            <img src={icClock} />
+            <p className="time-sale">{`Sale ends ${
+              seaportSellOrder ? moment(seaportSellOrder.closingDate).format('MMMM DD, YYYY [at] hh:mm AZ') : ''
+            }`}</p>
+          </div>
+          <div className="price-indicator" />
+          <div className="buy-container">
+            <TextInputStyled
+              placeholder={'Reciptient Address'}
+              type={'text'}
+              onChange={onChangeReciptientAddress}
+              value={reciptientAddress}
+              autoFocus={false}
+            />
+            {renderSelectTokenList()}
+          </div>
+          <div className="price-indicator" />
+          <div className="buy-container">
+            <div className="price-view">
+              <p className="current-price">Current price</p>
+              {renderCurrentPrice()}
+              {renderFee()}
+              {/* {renderError()} */}
+            </div>
+
+            <button className="btn-buy" onClick={onClickBuy}>
+              <p className="text-buy">Buy</p>
+            </button>
+          </div>
         </div>
-        <button className="btn-buy" onClick={onClickBuy}>
-          <p className="text-buy">Buy</p>
-        </button>
-      </div>
-    </div>
+      )}
+    </React.Fragment>
   );
 };
 
