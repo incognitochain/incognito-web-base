@@ -45,16 +45,8 @@ export const Styled = styled.div`
     font-size: 16px;
     line-height: 140%;
     overflow-wrap: break-word;
-    width: 50%;
-    height: 40px;
-  }
-
-  .item-id {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 140%;
-    text-align: right;
-    width: 40%;
+    width: 100%;
+    /* height: 40px; */
   }
 
   .item-price {

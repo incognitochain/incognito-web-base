@@ -19,9 +19,7 @@ const POpenseaNFTDetailOverview = (props: POpenseaNFTDetailOverviewProps) => {
         {/* <img src={icVerify} /> */}
       </div>
 
-      <p className="name">
-        {selectedNFT.name} {selectedNFT.id ? `#${selectedNFT.id}` : ''}
-      </p>
+      <p className="name">{selectedNFT.getOriginalName()}</p>
       {/* <p className="owner-by">
         Owner by <a>{assetContract ? assetContract.owner : ''}</a>
       </p> */}
