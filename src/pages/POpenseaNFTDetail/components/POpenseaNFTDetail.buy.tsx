@@ -286,7 +286,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
       <p className="current-price">
         {format.amountVer2({
           originalAmount: new BigNumber(buyFee?.fee.feeAmount || 0).toNumber(),
-          decimals: childToken?.pDecimals || 18,
+          decimals: childToken?.pDecimals || 9,
         })}{' '}
         {selectedToken?.symbol} ={' '}
         {format.amountVer2({
