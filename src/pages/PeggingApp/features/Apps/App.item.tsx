@@ -14,13 +14,17 @@ import { WrapAppItem } from './Apps.styled';
 const AppItem = React.memo(({ data }: { data: IFactory }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const canClick = !!data.exchange;
+  const canClick = !!data.exchange || !!data.route;
   return (
     <WrapAppItem key={data.name} isMobile={isMobile} canClick={canClick}>
       <div
         className="box"
         onClick={() => {
           if (!canClick) return;
+          if (data.route) {
+            history.push(data.route);
+            return;
+          }
           dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
           if (data.metric && data.metricUniq) {
             updateMetric({ metric: data.metric, uniqMetric: data.metricUniq });

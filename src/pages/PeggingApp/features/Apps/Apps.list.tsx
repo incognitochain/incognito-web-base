@@ -3,6 +3,7 @@ import cakeImg from 'assets/images/cake-icon.png';
 import curveImg from 'assets/images/curve-icon.png';
 import incImg from 'assets/images/inc_logo.svg';
 import joeImg from 'assets/images/joe-icon.png';
+import openseaImg from 'assets/images/opensea-icon.png';
 import raydiumImg from 'assets/images/raydium-logo.png';
 import solendImg from 'assets/images/solend-logo.png';
 import spookyImg from 'assets/images/spooky-icon.png';
@@ -35,6 +36,7 @@ export interface IFactory {
 
   link?: string;
   linkPath?: string;
+  route?: string;
 
   network: MAIN_NETWORK_NAME[];
 }
@@ -75,6 +77,18 @@ const Factory: IFactory[] = [
     metric: METRIC_TYPE.PAPP_UNISWAP,
     metricUniq: METRIC_UNIQ.PAPP_UNISWAP_UNIQ,
     network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],
+  },
+  {
+    img: openseaImg,
+    name: 'pOpensea',
+    nameDesc: 'Private Opensea',
+    status: 'SHIPPED',
+    chain: ['Ethereum', 'Marketplace', 'NFT'],
+    desc: 'Purchase and hoard rare digital items and collectibles without anyone knowing about it.',
+    metric: METRIC_TYPE.PAPP_OPENSEA,
+    metricUniq: METRIC_UNIQ.PAPP_OPENSEA_UNIQ,
+    network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],
+    route: '/popensea',
   },
   {
     img: curveImg,
