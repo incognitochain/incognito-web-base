@@ -1,6 +1,9 @@
 import styled, { DefaultTheme } from 'styled-components/macro';
+
 export const Styled = styled.div`
   padding-bottom: 40px;
+  width: 100%;
+  min-height: calc(100vh - 135px);
   .section-1 {
     display: flex;
     flex-direction: row;
@@ -182,5 +185,4 @@ export const WrapperContent = styled.div`
         }
     `}
   }
-
 `;

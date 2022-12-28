@@ -5,6 +5,7 @@ import { IPoolReducer, PoolActionType } from './pool.types';
 const initialState: IPoolReducer = {
   isFetching: false,
   pools: [],
+  explores: [],
 };
 
 export const reducer: Reducer<IPoolReducer, any> = (state = initialState, action): IPoolReducer => {
@@ -21,6 +22,12 @@ export const reducer: Reducer<IPoolReducer, any> = (state = initialState, action
       return {
         ...state,
         isFetching: true,
+      };
+    }
+    case PoolActionType.SET_EXPLORER: {
+      return {
+        ...state,
+        explores: action.payload,
       };
     }
     default:

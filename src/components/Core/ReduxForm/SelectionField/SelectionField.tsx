@@ -62,7 +62,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
       return null;
     }
     let _error = error;
-    let isTopUp = _error !== 'Required' && showShowTopUp && onTopUp;
+    let isTopUp = _error !== 'Required' && onTopUp;
     if (isTopUp && (_error || '').includes('larger') && tokenAmountNum) {
       isTopUp = false;
     }
@@ -97,8 +97,8 @@ const SelectionField = (props: ISelectionFieldProps) => {
 
   const { setModal } = useModal();
 
-  const activeNetworkHover = !!(networks && networks.length > 0);
-  const activeTokensHover = !!(tokens && tokens.length > 0);
+  const activeNetworkHover = !!(networks && networks.length > 1);
+  const activeTokensHover = !!(tokens && tokens.length > 1);
 
   const showTokensList = () => {
     if (!activeTokensHover) return;
@@ -182,6 +182,9 @@ const SelectionField = (props: ISelectionFieldProps) => {
                   minHeight: '40px',
                   height: '40px',
                   paddingLeft: '0px',
+                },
+                onKeyDown: (e: any) => {
+                  if (e.keyCode === 9) e.preventDefault();
                 },
                 ...componentProps,
               }}

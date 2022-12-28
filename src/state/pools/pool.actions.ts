@@ -14,6 +14,11 @@ const actionFetchingPools = () => ({
   type: PoolActionType.FETCHING,
 });
 
+export const actionSetExplorer = (payload: any[]) => ({
+  type: PoolActionType.SET_EXPLORER,
+  payload,
+});
+
 export const actionGetPools = () => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {
     await dispatch(actionFetchingPools());
