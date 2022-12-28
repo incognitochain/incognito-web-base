@@ -14,6 +14,7 @@ import PToken from 'models/model/pTokenModel';
 import moment from 'moment';
 import { actionSetErrorMsg } from 'pages/Swap/features/FormUnshield/FormUnshield.actions';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
+import { setSwapTx } from 'pages/Swap/Swap.storage';
 import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import rpcPOpensea, { postEstimateFee } from 'services/rpcPOpensea';
@@ -29,13 +30,19 @@ interface POpenseaNFTDetailBuyProps {
 }
 const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const { selectedNFT } = props;
+
   const dispatch = useDispatch();
+  const { setModal, clearAllModal } = useModal();
+  const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
+
+  const [reciptientAddress, setReciptientAddress] = useState('');
+  const [selectedToken, setSelectedToken] = useState<PToken | undefined>();
+  const [buyFee, setBuyFee] = useState<POpenseaBuyFee | undefined>();
+
+  const networkFee = useSelector(networkFeePOpenseaSelectors);
   const tokens = useSelector(unshieldableTokens).filter(
     (token) => token.isMainETH || token.tokenID === BIG_COINS.ETH_UNIFIED.tokenID
   );
-
-  const networkFee = useSelector(networkFeePOpenseaSelectors);
-  const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
 
   const seaportSellOrder =
     selectedNFT.seaportSellOrders && selectedNFT.seaportSellOrders.length > 0
@@ -43,16 +50,17 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
       : undefined;
   const assetContract = selectedNFT.assetContract;
 
-  const { setModal, clearAllModal } = useModal();
-
-  const [reciptientAddress, setReciptientAddress] = useState('');
-  const [selectedToken, setSelectedToken] = useState<PToken | undefined>();
-  const [buyFee, setBuyFee] = useState<POpenseaBuyFee | undefined>();
-
   const childToken =
     selectedToken && selectedToken.isUnified
       ? selectedToken?.listUnifiedToken.find((token) => token.networkID === 1)
       : undefined;
+
+  const buyPriceAmount = seaportSellOrder
+    ? format.amountVer2({
+        originalAmount: new BigNumber(seaportSellOrder.currentPrice || 0).toNumber(),
+        decimals: childToken?.decimals || 18,
+      })
+    : '0';
 
   useEffect(() => {
     tokens.length > 0 && selectedToken === undefined && setSelectedToken(tokens[0]);
@@ -183,7 +191,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     if (!isIncognitoInstalled()) {
       return requestIncognitoAccount();
     }
-    if (buyFee) {
+    if (buyFee && selectedToken) {
       setModal({
         isTransparent: false,
         closable: true,
@@ -198,7 +206,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
         networkFee,
         prvPayments,
         tokenPayments,
-        tokenID: selectedToken?.tokenID,
+        tokenID: selectedToken.tokenID,
         txType: 7,
         receiverAddress: reciptientAddress,
         isSignAndSendTransaction: false,
@@ -210,11 +218,22 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
           txRaw: tx.rawData,
           feeRefundOTA,
         });
+
+        if (tx.txHash) {
+          setSwapTx({
+            txHash: tx.txHash,
+            time: new Date().getTime(),
+            appName: 'opensea',
+            buyTokenID: selectedToken.tokenID,
+            buyAmountText: buyPriceAmount,
+          });
+        }
+
         clearAllModal();
         setModal({
           isTransparent: false,
           closable: true,
-          data: <TransactionSubmittedContent chainId={PRIVATE_TOKEN_CURRENCY_TYPE.ETH} hash={tx.txHash} />,
+          data: <TransactionSubmittedContent chainId={PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO} hash={tx.txHash} />,
         });
       } catch (e) {
         dispatch(actionSetErrorMsg(typeof e === 'string' ? e : ''));
@@ -254,11 +273,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     seaportSellOrder && (
       <div className="price">
         <p className="price-coin">
-          {format.amountVer2({
-            originalAmount: new BigNumber(seaportSellOrder.currentPrice || 0).toNumber(),
-            decimals: childToken?.decimals || 18,
-          })}{' '}
-          {selectedToken?.symbol}
+          {buyPriceAmount} {selectedToken?.symbol}
         </p>
       </div>
     );

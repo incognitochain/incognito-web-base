@@ -183,6 +183,22 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
       }
     }
 
+    if (tx.sellTokenID === undefined && tx.buyTokenID) {
+      const buyToken: SelectedPrivacy = getPrivacyDataByTokenIDSelector(state.getState())(tx.buyTokenID);
+      const buyStr = `${format.amountVer2({ originalAmount: tx.buyAmountText, decimals: 0 })} ${buyToken.symbol}`;
+      if (buyToken.symbol) {
+        const buyNetwork = buyToken.network;
+        tx = {
+          ...tx,
+          buyStr,
+          swapStr: buyStr,
+          buyNetwork,
+        };
+      } else {
+        return [...prev];
+      }
+    }
+
     // inc_request_tx_status
     // -> bsc_swap_tx_status
     // -> bsc_swap_outcome

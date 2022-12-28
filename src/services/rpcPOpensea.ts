@@ -40,6 +40,12 @@ class RpcPOpensea {
       FeeRefundOTA: feeRefundOTA,
     });
   }
+
+  getStatusTx = (txList: string[]) => {
+    return this.http.post('papps/opensea/buystatus', {
+      TxList: txList,
+    });
+  };
 }
 
 const rpcPOpensea = new RpcPOpensea();
@@ -75,11 +81,17 @@ const postEstimateFee = async (
   return response;
 };
 
+const getPOpenseaStatusTxs = async (txList: string[]): Promise<any> => {
+  const response = await rpcPOpensea.getStatusTx(txList);
+  return response;
+};
+
 export {
   getPOpeanseaCollectionDetail,
   getPOpeanseaCollections,
   getPOpeanseaNFTDetail,
   getPOpeanseaNFTs,
+  getPOpenseaStatusTxs,
   postEstimateFee,
 };
 export default rpcPOpensea;
