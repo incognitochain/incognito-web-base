@@ -5,7 +5,9 @@ const enhanceSlippage = (WrappedComponent: any) => {
   const FormUnshieldComp = (props: any) => {
     const { onChangeField } = props;
     React.useEffect(() => {
-      onChangeField('0.5', FORM_CONFIGS.slippage);
+      setTimeout(() => {
+        onChangeField('0.5', FORM_CONFIGS.slippage);
+      }, 200);
     }, []);
     return <WrappedComponent {...{ ...props }} />;
   };

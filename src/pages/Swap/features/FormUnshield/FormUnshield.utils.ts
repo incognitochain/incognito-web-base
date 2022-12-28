@@ -105,6 +105,7 @@ export interface IUnshieldData {
   minUnshieldText: string;
 
   isSubmitting: boolean;
+  vaults: any;
 }
 
 const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any): string => {
@@ -502,8 +503,11 @@ const getUnshieldData = ({
       decimals: _sellToken.pDecimals,
     });
 
-    tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
-
+    if (exchangeSelectedData && exchangeSelectedData.appName === SwapExchange.PDEX) {
+      tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
+    } else {
+      tradePath = exchangeSelectedData?.tradePathStr || '';
+    }
     let tradeFeeText = '';
     if (isUseTokenFee) {
       tradeFeeText = `${
@@ -688,6 +692,8 @@ const getUnshieldData = ({
     minUnshieldText,
 
     isSubmitting: submitting,
+
+    vaults,
   };
 };
 
@@ -751,7 +757,7 @@ const parseExchangeDataModelResponse = (
     appName: data?.AppName,
     exchangeName: `${getExchangeName(data?.AppName)} (${networkName})`,
     fees: parseFeeDataModelResponse(data?.Fee || []) || [],
-    routes: data?.Paths || [],
+    routes: data?.Paths || data?.PathsContract || [],
     incTokenID: incTokenID || '',
     feeAddress: data?.FeeAddress || '',
     callContract: data?.CallContract,
@@ -762,6 +768,7 @@ const parseExchangeDataModelResponse = (
     expectedAmount: data?.AmountOutPreSlippage || '0',
     rate: data?.Rate || '1',
     impactAmount: data?.ImpactAmount ? Number(data?.ImpactAmount || 0) : null,
+    tradePathStr: data.Paths || '',
   };
   return exchangeData;
 };

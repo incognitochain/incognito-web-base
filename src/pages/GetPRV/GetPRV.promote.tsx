@@ -42,7 +42,7 @@ const Promote = () => {
     {
       icon: PaymentSVG,
       title: 'Utility',
-      desc: 'PRV is accepted as utility token for paying the network fee to participate in privacy markets and use your favorite apps privately.',
+      desc: "PRV is Incognito's utility token for paying the network fee to participate in privacy markets and use your favorite apps privately.",
     },
     {
       icon: GovernanceSVG,

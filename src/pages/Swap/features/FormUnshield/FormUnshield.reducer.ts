@@ -116,6 +116,11 @@ export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
         swapNetwork,
       };
     }
+    case FormUnshieldActionType.FREE_SWAP_FORM: {
+      return {
+        ...initialState,
+      };
+    }
     default:
       return state;
   }

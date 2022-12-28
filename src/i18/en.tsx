@@ -24,7 +24,7 @@ const language: ILanguage = {
     bridgedBlockchains: 'Bridges supported',
   },
   peggingApp: {
-    mainTitle: 'Use your favorite\ncrypto apps privately.',
+    mainTitle: 'The dapps you love. With privacy.',
     howWork: 'How it works',
     private: 'Private',
     privateSub: 'Trade, lend, borrow, invest, etc. – confidentially.',
@@ -49,7 +49,7 @@ const language: ILanguage = {
     privacyByDesignMore: 'More on privacy techniques',
     privacyForEvery: 'Privacy for every blockchain',
     privacyForEveryDesc:
-      'You don’t have to sacrifice privacy to hold and trade your favorite coins. 11 major blockchains use Incognito bridges to interact privately. To date, they have anonymized and swapped over $500M in currencies like BTC, ETH, BNB, and many more.',
+      'You don’t have to sacrifice privacy to hold and trade your favorite coins. 16 major blockchains use Incognito bridges to interact privately. To date, they have anonymized and swapped over $500M in currencies like BTC, ETH, BNB, and many more.',
     privacyForEveryMore: 'More on cross-chain privacy',
     privacyAtScale: 'Privacy at scale',
     privacyAtScaleDesc:

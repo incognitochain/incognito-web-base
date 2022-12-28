@@ -149,7 +149,7 @@ const IncognitoWallet = () => {
   const isConnected = walletState !== CONNECT_WALLET && walletState !== INSTALL_WALLET;
 
   return (
-    <>
+    <div className="wrap-inc-waller">
       <Wrapper isConnected={isConnected} onClick={buttonClickAction}>
         {isConnected && <Image iconUrl={ROOT_NETWORK_IMG[PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]} />}
         <Text>{walletState}</Text>
@@ -157,7 +157,7 @@ const IncognitoWallet = () => {
       <Modal isOpen={showModal} onDismiss={() => setShowModal(false)}>
         <AccountInfoList />
       </Modal>
-    </>
+    </div>
   );
 };
 

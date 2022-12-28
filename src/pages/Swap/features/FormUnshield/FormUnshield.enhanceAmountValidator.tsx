@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js';
 import { validator } from 'components/Core/ReduxForm';
 import debounce from 'lodash/debounce';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
@@ -54,9 +53,10 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
           ...state,
           maxAmountValidator: validator.maxValue(
             maxAmountNum,
-            new BigNumber(maxAmountNum).toNumber() > 0
-              ? `Max amount you can swap is ${maxAmountText} ${selectedPrivacy?.symbol}.`
-              : 'Your balance is insufficient.'
+            'Your balance is insufficient.'
+            // new BigNumber(maxAmountNum).toNumber() > 0
+            //   ? `Max amount you can swap is ${maxAmountText} ${selectedPrivacy?.symbol}.`
+            //   : 'Your balance is insufficient.'
           ),
         };
       }

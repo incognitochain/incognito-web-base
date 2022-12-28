@@ -183,6 +183,11 @@ const BIG_COINS = {
       ? '9624c2357d9be1cb0136e2743d891382e754cc82b53bc249a22fb890e62cf3a6'
       : '9624c2357d9be1cb0136e2743d891382e754cc82b53bc249a22fb890e62cf3a6',
   },
+  USDC_FTM: {
+    tokenID: isMainnet
+      ? '92dd7f24165decadb4764d0b29972e51c317ef9f8510447e1bab5b142ca94804'
+      : '92dd7f24165decadb4764d0b29972e51c317ef9f8510447e1bab5b142ca94804',
+  },
 };
 
 const PRIVATE_TOKEN_TYPE = {

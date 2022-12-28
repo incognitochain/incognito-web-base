@@ -18,7 +18,7 @@ export const MAP_TOKEN_BY_PAPPS: any = {
   [SwapExchange.PANCAKE_SWAP]: { tokenID1: BIG_COINS.USDC_UNIFIED.tokenID, tokenID2: BIG_COINS.BNB.tokenID },
   [SwapExchange.UNISWAP]: { tokenID1: BIG_COINS.USDC_UNIFIED.tokenID, tokenID2: BIG_COINS.ETH_UNIFIED.tokenID },
   [SwapExchange.CURVE]: { tokenID1: BIG_COINS.USDC_UNIFIED.tokenID, tokenID2: BIG_COINS.USDT_UNIFIED.tokenID },
-  [SwapExchange.SPOOKY]: { tokenID1: BIG_COINS.USDC_UNIFIED.tokenID, tokenID2: BIG_COINS.FTM.tokenID },
+  [SwapExchange.SPOOKY]: { tokenID1: BIG_COINS.USDC_FTM.tokenID, tokenID2: BIG_COINS.FTM.tokenID },
   [SwapExchange.JOE]: { tokenID1: BIG_COINS.USDC_AVAX.tokenID, tokenID2: BIG_COINS.AVAX.tokenID },
 };
 
@@ -49,4 +49,16 @@ export const GROUP_SUPPORTED_NETWORK_BY_PAPPS: any = {
   [SwapExchange.SPOOKY]: [MAIN_NETWORK_NAME.INCOGNITO, MAIN_NETWORK_NAME.FANTOM],
 
   [SwapExchange.JOE]: [MAIN_NETWORK_NAME.INCOGNITO, MAIN_NETWORK_NAME.AVALANCHE],
+};
+
+export const GROUP_NETWORK_ID_BY_EXCHANGE: any = {
+  [SwapExchange.UNISWAP]: [1, 3],
+
+  [SwapExchange.PANCAKE_SWAP]: [2],
+
+  [SwapExchange.CURVE]: [3],
+
+  [SwapExchange.SPOOKY]: [4],
+
+  [SwapExchange.JOE]: [6],
 };

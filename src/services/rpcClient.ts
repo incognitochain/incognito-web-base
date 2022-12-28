@@ -1,8 +1,9 @@
 import { AxiosInstance } from 'axios';
-import { API_COIN_SERVICE, API_SERVICE } from 'config';
+import { API_COIN_SERVICE, API_DAO, API_SERVICE } from 'config';
 import PTokenModel from 'models/model/pTokenModel';
 import { getSwapTxs, ISwapTxStorage } from 'pages/Swap/Swap.storage';
 import createAxiosInstance from 'services/axios';
+import { CreateProposalParams, SubmitVoteRequestAPIParam } from 'state/dao/types';
 
 import { PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from '../constants';
 import { unshieldFeeBuilder } from '../models/unshield.utils';
@@ -377,6 +378,50 @@ const getPools = async (): Promise<any> => {
   return data?.Result;
 };
 
+const fetchProposals = async (): Promise<any> => {
+  const response = await fetch(`${API_DAO}/pdao/proposal/list`);
+  const data = await response.json();
+  return data?.Result;
+};
+
+const fetchProposalFee = async (): Promise<any> => {
+  const response = await fetch(`${API_DAO}/pdao/proposal/estimatefee`);
+  const data = await response.json();
+  return data?.Result;
+};
+
+const fetchProposalDetail = async (proposalId: any): Promise<any> => {
+  const response = await fetch(`${API_DAO}/pdao/proposal/detail/${proposalId}`);
+  const data = await response.json();
+  return data?.Result;
+};
+
+const submitCreateProposal = async (proposalData: CreateProposalParams): Promise<any> => {
+  const response = await fetch(`${API_DAO}/pdao/proposal/create`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(proposalData),
+  });
+  const data = await response.json();
+  return data?.Result;
+};
+
+const submitVote = async (params: SubmitVoteRequestAPIParam): Promise<any> => {
+  const response = await fetch(`${API_DAO}/pdao/proposal/vote`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params),
+  });
+  const data = await response.json();
+  return data?.Result;
+};
+
 const getVaults = async (): Promise<any> => {
   const vaults = await rpcClient.getVaults();
   return vaults;
@@ -412,5 +457,16 @@ const genDepositAddress = async ({
   });
 };
 
-export { genDepositAddress, getPools, getTokenListNoCache, getVaults, submitDepositTx };
+export {
+  fetchProposalDetail,
+  fetchProposalFee,
+  fetchProposals,
+  genDepositAddress,
+  getPools,
+  getTokenListNoCache,
+  getVaults,
+  submitCreateProposal,
+  submitDepositTx,
+  submitVote,
+};
 export default rpcClient;
