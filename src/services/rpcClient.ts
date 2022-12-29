@@ -384,8 +384,9 @@ const fetchProposals = async (): Promise<any> => {
   return data?.Result;
 };
 
-const fetchProposalFee = async (): Promise<any> => {
-  const response = await fetch(`${API_DAO}/pdao/proposal/estimatefee`);
+const fetchProposalFee = async (type: 1 | 2): Promise<any> => {
+  // type = 1 => get fee create proposal, type = 2 => get fee vote proposal
+  const response = await fetch(`${API_DAO}/pdao/proposal/estimatefee?type=${type}`);
   const data = await response.json();
   return data?.Result;
 };

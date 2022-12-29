@@ -66,7 +66,7 @@ const getStatusText = (status: ProposalStatus | undefined): string => {
 };
 
 interface ProposalStatusProps {
-  status?: ProposalStatus;
+  status?: ProposalStatus | undefined;
 }
 
 const ProposalStatusBox: React.FC<ProposalStatusProps> = (props) => {
