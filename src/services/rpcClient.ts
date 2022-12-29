@@ -1,12 +1,12 @@
 import { AxiosInstance } from 'axios';
 import { API_COIN_SERVICE, API_SERVICE } from 'config';
+import { PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import PTokenModel from 'models/model/pTokenModel';
+import { unshieldFeeBuilder } from 'models/unshield.utils';
+import { IRespEstSwap } from 'pages/Swap/features/FormUnshield/FormUnshield.inteface';
+import { combineSwapTxs } from 'pages/Swap/features/SwapTxs/SwapTxs.utils';
 import { getSwapTxs, ISwapTxStorage } from 'pages/Swap/Swap.storage';
 import createAxiosInstance from 'services/axios';
-
-import { PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from '../constants';
-import { unshieldFeeBuilder } from '../models/unshield.utils';
-import { combineSwapTxs } from '../pages/Swap/features/SwapTxs/SwapTxs.utils';
 
 interface ISummitEtherHash {
   hash: string;
@@ -194,7 +194,7 @@ class RpcClient {
     return unshieldFeeBuilder(mappingData);
   }
 
-  async estimateSwapFee({ network, amount, fromToken, toToken, slippage }: ISwapFeePayload): Promise<any> {
+  async estimateSwapFee({ network, amount, fromToken, toToken, slippage }: ISwapFeePayload): Promise<IRespEstSwap> {
     const data: any = await this.http.post('papps/estimateswapfee', {
       Network: network,
       Amount: amount,
@@ -202,8 +202,7 @@ class RpcClient {
       ToToken: toToken,
       Slippage: slippage,
     });
-    const exchangeSupports = data?.Networks;
-    return exchangeSupports;
+    return data?.Networks;
   }
 
   submitUnshieldTx(payload: { txID: string; paymentAddr: string }) {
@@ -308,6 +307,55 @@ class RpcClient {
       // TxHash: txHash,
       TxRaw: txRaw,
       FeeRefundOTA: feeRefundOTA,
+    });
+  }
+
+  submitInterSwapTx({
+    txRaw,
+    txHash,
+    sellTokenID,
+    midTokenID,
+    buyTokenID,
+    amountOutRaw,
+    slippage,
+    pAppName,
+    pAppNetwork,
+    refundFeeOTA,
+    refundOTA,
+    sellTokenOTA,
+    buyTokenOTA,
+    inputAddress,
+  }: {
+    txRaw: string;
+    txHash: string;
+    sellTokenID: string;
+    midTokenID: string;
+    buyTokenID: string;
+    amountOutRaw: number;
+    slippage: string;
+    pAppName: string;
+    pAppNetwork: string;
+    refundFeeOTA: string;
+    refundOTA: string;
+    sellTokenOTA: string;
+    buyTokenOTA: string;
+    inputAddress?: string;
+  }) {
+    return this.http.post('papps/submitinterswaptx', {
+      TxHash: txHash,
+      TxRaw: txRaw,
+      FromToken: sellTokenID,
+      MidToken: midTokenID,
+      ToToken: buyTokenID,
+      FinalMinExpectedAmt: amountOutRaw,
+      Slippage: slippage,
+      PAppName: pAppName,
+      PAppNetwork: pAppNetwork,
+      OTARefundFee: refundFeeOTA,
+      OTARefund: refundOTA,
+      OTAFromToken: sellTokenOTA,
+      OTAToToken: buyTokenOTA,
+      WithdrawAddress: inputAddress,
     });
   }
 

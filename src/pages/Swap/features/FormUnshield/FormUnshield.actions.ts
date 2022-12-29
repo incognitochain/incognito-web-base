@@ -13,6 +13,7 @@ import { getAcronymNetwork } from 'utils/token';
 
 import { GROUP_NETWORK_ID_BY_EXCHANGE } from './FormUnshield.constants';
 import { unshieldDataSelector } from './FormUnshield.selectors';
+import { combineExchange } from './FormUnshield.swapEstBuilder';
 import {
   FormTypes,
   FormUnshieldActionType,
@@ -26,7 +27,7 @@ import {
   UnshieldSetUserFeeAction,
   UnshieldSetUserFeePayLoad,
 } from './FormUnshield.types';
-import { getINCTokenWithNetworkName, parseExchangeDataModelResponse } from './FormUnshield.utils';
+import { getINCTokenWithNetworkName } from './FormUnshield.utils';
 
 export const actionSetToken = (payload: UnshieldSetTokenPayLoad): UnshieldSetTokenAction => ({
   type: FormUnshieldActionType.SET_TOKEN,
@@ -349,38 +350,6 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
   }
 };
 
-const combineExchange = ({
-  data,
-  token,
-  network,
-  networkText,
-  networkID,
-  checkUnified = true,
-}: {
-  data: any;
-  token: SelectedPrivacy;
-  network: NetworkTypePayload;
-  networkText: string;
-  networkID: number;
-  checkUnified?: boolean;
-}) => {
-  let exchange: ISwapExchangeData[] = [];
-  if (data?.hasOwnProperty(network)) {
-    let incTokenID = token.tokenID;
-    if (token?.isUnified && checkUnified) {
-      const childToken = token?.listUnifiedToken?.find((token: any) => token?.networkID === networkID);
-      incTokenID = childToken?.tokenID || '';
-    }
-    const exchanges = data[network];
-    if (Array.isArray(exchanges)) {
-      exchange = exchanges.map((exchange: any) =>
-        parseExchangeDataModelResponse(exchange, networkText, networkID, incTokenID)
-      );
-    }
-  }
-  return exchange || [];
-};
-
 export const actionEstimateSwapFee =
   ({ isResetForm = false }: { isResetForm: boolean }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
@@ -408,19 +377,28 @@ export const actionEstimateSwapFee =
         return;
       }
       dispatch(actionSetFetchingFee({ isFetchingFee: true, isResetForm }));
-      let network: NetworkTypePayload = NetworkTypePayload.INCOGNITO;
-      if (buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM) {
-        network = NetworkTypePayload.ETHEREUM;
-      } else if (buyNetworkName === MAIN_NETWORK_NAME.BSC) {
-        network = NetworkTypePayload.BINANCE_SMART_CHAIN;
-      } else if (buyNetworkName === MAIN_NETWORK_NAME.POLYGON) {
-        network = NetworkTypePayload.POLYGON;
-      } else if (buyNetworkName === MAIN_NETWORK_NAME.FANTOM) {
-        network = NetworkTypePayload.FANTOM;
-      } else if (buyNetworkName === MAIN_NETWORK_NAME.AVALANCHE) {
-        network = NetworkTypePayload.AVALANCHE;
-      } else if (buyNetworkName === MAIN_NETWORK_NAME.AURORA) {
-        network = NetworkTypePayload.AURORA;
+      let network: NetworkTypePayload;
+      switch (buyNetworkName) {
+        case MAIN_NETWORK_NAME.ETHEREUM:
+          network = NetworkTypePayload.ETHEREUM;
+          break;
+        case MAIN_NETWORK_NAME.BSC:
+          network = NetworkTypePayload.BINANCE_SMART_CHAIN;
+          break;
+        case MAIN_NETWORK_NAME.POLYGON:
+          network = NetworkTypePayload.POLYGON;
+          break;
+        case MAIN_NETWORK_NAME.FANTOM:
+          network = NetworkTypePayload.FANTOM;
+          break;
+        case MAIN_NETWORK_NAME.AVALANCHE:
+          network = NetworkTypePayload.AVALANCHE;
+          break;
+        case MAIN_NETWORK_NAME.AURORA:
+          network = NetworkTypePayload.AURORA;
+          break;
+        default:
+          network = NetworkTypePayload.INCOGNITO;
       }
 
       const payload = {
@@ -434,56 +412,58 @@ export const actionEstimateSwapFee =
       // Call api estimate swap fee
       const data = await rpcClient.estimateSwapFee(payload);
       if (!data) throw new Error('Can not estimate trade');
+
+      // mapping exchange
       const pdexExchanges = combineExchange({
-        checkUnified: false,
         data,
         network: NetworkTypePayload.INCOGNITO,
-        networkID: 0,
         networkText: 'PDex',
         token: sellToken,
       });
       const ethExchanges = combineExchange({
         data,
         network: NetworkTypePayload.ETHEREUM,
-        networkID: 1,
         networkText: 'Ethereum',
         token: sellToken,
       });
       const bscExchanges = combineExchange({
         data,
         network: NetworkTypePayload.BINANCE_SMART_CHAIN,
-        networkID: 2,
         networkText: 'BNB Chain',
         token: sellToken,
       });
       const plgExchanges = combineExchange({
         data,
         network: NetworkTypePayload.POLYGON,
-        networkID: 3,
         networkText: 'Polygon',
         token: sellToken,
       });
       const ftmExchanges = combineExchange({
         data,
         network: NetworkTypePayload.FANTOM,
-        networkID: 4,
         networkText: 'Fantom',
         token: sellToken,
       });
       const auroraExchanges = combineExchange({
         data,
         network: NetworkTypePayload.AURORA,
-        networkID: 5,
         networkText: 'Aurora',
         token: sellToken,
       });
       const avaxExchanges = combineExchange({
         data,
         network: NetworkTypePayload.AVALANCHE,
-        networkID: 6,
         networkText: 'Avalanche',
         token: sellToken,
       });
+
+      const interExchanges = combineExchange({
+        data,
+        network: NetworkTypePayload.INTER_SWAP,
+        networkText: 'Inter Swap',
+        token: sellToken,
+      });
+
       let exchangeSupports = [
         ...ethExchanges,
         ...ftmExchanges,
@@ -492,6 +472,7 @@ export const actionEstimateSwapFee =
         ...avaxExchanges,
         ...auroraExchanges,
         ...pdexExchanges,
+        ...interExchanges,
       ];
 
       const queryPAppName = getQueryPAppName();

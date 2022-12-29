@@ -8,7 +8,7 @@ import { useAppSelector } from 'state/hooks';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 
 import { unshieldDataSelector } from './FormUnshield.selectors';
-import { FormTypes, SwapExchange } from './FormUnshield.types';
+import { FormTypes, ISwapExchangeData, SwapExchange } from './FormUnshield.types';
 import { IFee } from './FormUnshield.utils';
 
 export interface IUnshield {
@@ -61,7 +61,7 @@ export interface IUnshield {
 
   // Swap data
   exchangeSelected: SwapExchange | null;
-  exchangeSelectedData: any;
+  exchangeSelectedData: ISwapExchangeData;
   exchangeSupports: any[];
   swapFee: any;
   tradePath: string;
