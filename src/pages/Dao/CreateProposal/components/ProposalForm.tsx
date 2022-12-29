@@ -42,6 +42,15 @@ const Container = styled.div`
     margin-bottom: 16px;
   }
 
+  .markdown hr {
+    width: 100%;
+    height: 1px;
+    background-color: #757575;
+    border: none;
+    margin-top: 32px;
+    margin-bottom: 32px;
+  }
+
   .markdown li {
     margin-left: 24px;
     line-height: 140%;
