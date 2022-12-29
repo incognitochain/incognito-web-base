@@ -195,11 +195,12 @@ export const Spinner = styled.div`
   border-bottom: 1px solid transparent;
   border-left: 2px solid ${({ theme }) => theme.text1};
   background: transparent;
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   position: relative;
   transition: 250ms ease border-color;
   left: 3px;
   top: 3px;
+  bottom: 3px;
 `;

@@ -312,10 +312,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
           </div>
           <div className="price-indicator" />
           <div className="balance-container">
-            <div>
-              {renderUserBalance()}
-              {renderError()}
-            </div>
+            <div>{renderUserBalance()}</div>
             {renderSelectTokenList()}
           </div>
           <ReciptientAddress />
@@ -326,6 +323,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
               <p className="current-price">Current price</p>
               {renderCurrentPrice()}
               {renderFee()}
+              {renderError()}
             </div>
 
             <button className="btn-buy" onClick={!incAccount ? showPopup : onClickBuy}>
