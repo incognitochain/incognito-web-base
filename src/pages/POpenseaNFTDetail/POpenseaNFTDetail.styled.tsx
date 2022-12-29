@@ -199,46 +199,6 @@ export const WrapperContent = styled.div`
       text-align: center;
     }
 
-    .child-desc {
-      margin-top: 16px;
-    }
-
-    .child-desc-title {
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 140%;
-
-      color: ${({ theme }) => theme.text2};
-    }
-
-    .child-detail {
-      display: flex;
-      flex-direction: column;
-      margin-top: 16px;
-    }
-
-    .child-detail-item {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 8px;
-    }
-
-    .child-detail-title {
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 140%;
-      color: ${({ theme }) => theme.content2};
-    }
-
-    .child-detail-value {
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 140%;
-      text-align: right;
-    }
-
     .select-tokens-list {
       height: 56px;
       background: #252525;
@@ -291,39 +251,6 @@ export const WrapperContent = styled.div`
     }
 
   `}
-`;
-
-export const TextInputStyled = styled.input`
-  display: flex;
-  flex: 1;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 140%;
-  height: 48px;
-  background: #252525;
-  border-radius: 8px;
-  color: white;
-  padding-left: 16px;
-  padding-right: 16px;
-
-  :hover {
-    border: 1px solid ${({ theme }) => theme.border5};
-  }
-
-  :focus {
-    border: 1px solid ${({ theme }) => theme.border5};
-    color: ${({ theme }) => theme.primary5};
-  }
-
-  ::placeholder {
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 140%;
-    color: ${({ theme }) => theme.primary7};
-  }
 `;
 
 export const ArrowDown = styled(ChevronDown)<{ open?: boolean }>`

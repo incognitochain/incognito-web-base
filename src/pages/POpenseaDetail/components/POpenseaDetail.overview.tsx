@@ -174,7 +174,7 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
           {renderTitleItem('Chain', 'Etherum')}
         </div>
         <div className="info-container">
-          {stats && renderVolumnItem(`${stats?.totalVolume?.toFixed(0)} ETH`, 'total volume')}
+          {stats && renderVolumnItem(`${collection?.getTotalVolumnFormatAmount()} ETH`, 'total volume')}
           {stats && renderVolumnItem(`${stats?.floorPrice?.toFixed(3)} ETH`, 'floor price')}
           {stats && renderVolumnItem(`${stats?.numOwners}`, 'owners')}
           {stats &&

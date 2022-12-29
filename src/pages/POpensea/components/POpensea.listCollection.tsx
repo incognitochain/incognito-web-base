@@ -228,7 +228,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       showSorterTooltip: false,
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText">
-          {record.stats?.totalVolume?.toFixed(0)} ETH
+          {record.getTotalVolumnFormatAmount()} ETH
         </p>
       ),
       sorter: (a, b) => (a.stats?.totalVolume || 0) - (b.stats?.totalVolume || 0),
