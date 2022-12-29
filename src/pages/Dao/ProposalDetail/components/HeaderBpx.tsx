@@ -41,7 +41,7 @@ const HeaderBox = (props: HeaderProps) => {
   return (
     <div style={{ marginBottom: 40, width: '100%', flexDirection: 'row', alignItems: 'center' }}>
       <ProposalTitle>{title}</ProposalTitle>
-      <div style={{ maxWidth: 200 }}>
+      <div style={{ maxWidth: 140, marginTop: 8 }}>
         <ProposalStatusBox status={proposal?.status} />
       </div>
     </div>
