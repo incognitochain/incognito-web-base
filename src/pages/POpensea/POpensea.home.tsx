@@ -50,7 +50,7 @@ const Home = () => {
           onChange={(key) => setCurrentKeyTab(key)}
           items={[
             {
-              label: renderLabel('1', 'Trending'),
+              label: renderLabel('1', 'Top'),
               key: '1',
               children: (
                 <POpenseaListCollection
@@ -60,17 +60,17 @@ const Home = () => {
                 />
               ),
             },
-            {
-              label: renderLabel('2', 'Top'),
-              key: '2',
-              children: (
-                <POpenseaListCollection
-                  isFetching={isFetching}
-                  collections={collections}
-                  onClickItem={onClickCollectionItem}
-                />
-              ),
-            },
+            // {
+            //   label: renderLabel('2', 'Top'),
+            //   key: '2',
+            //   children: (
+            //     <POpenseaListCollection
+            //       isFetching={isFetching}
+            //       collections={collections}
+            //       onClickItem={onClickCollectionItem}
+            //     />
+            //   ),
+            // },
           ]}
         />
       </WrapperContent>
