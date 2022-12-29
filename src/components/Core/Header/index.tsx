@@ -14,7 +14,7 @@ import { useInternetConnnection } from 'components/Core/InternetConnection';
 import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useTheme from 'hooks/useTheme';
-import { routeMarket, routePeggingApps, routeStructure } from 'pages';
+import { routeMarket, routePeggingApps } from 'pages';
 import React from 'react';
 import { useSelector } from 'react-redux';
 // import Web3Status from 'components/Core/Web3Status';
@@ -59,7 +59,7 @@ const menuItem: MenuItemProps[] = [
   },
   {
     name: 'Mine',
-    path: routeStructure,
+    path: 'mine/validator',
     metric: METRIC_TYPE.HEADER_MINE,
     uniqMetric: METRIC_UNIQ.HEADER_MINE_UNIQ,
   },
