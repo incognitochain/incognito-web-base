@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { updateMetric } from 'services/rpcMetric';
 import { useAppDispatch } from 'state/hooks';
 
+import { SwapExchange } from '../../../Swap/features/FormUnshield/FormUnshield.types';
 import { IFactory } from './Apps.list';
 import { WrapAppItem } from './Apps.styled';
 
@@ -24,6 +25,9 @@ const AppItem = React.memo(({ data }: { data: IFactory }) => {
           dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
           if (data.metric && data.metricUniq) {
             updateMetric({ metric: data.metric, uniqMetric: data.metricUniq });
+          }
+          if (SwapExchange.PDEX === data.exchange) {
+            return history.push('swap', { appName: data.name });
           }
           history.push(`papps/${data.exchange}`, { appName: data.name });
         }}
