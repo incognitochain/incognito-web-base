@@ -1,4 +1,5 @@
 import { Skeleton } from 'antd';
+import ProposalStatusBox from 'pages/Dao/Governance/components/ProposalStatus';
 import { Proposal } from 'state/dao/types';
 import styled from 'styled-components/macro';
 
@@ -12,6 +13,7 @@ const ProposalTitle = styled.p`
   font-size: 34px;
   line-height: 140%;
   color: #ffffff;
+  margin-left: 16px;
 `;
 
 const ProposalAuthorText = styled.p`
@@ -37,8 +39,11 @@ const HeaderBox = (props: HeaderProps) => {
   }
 
   return (
-    <div style={{ marginBottom: 40, width: '100%' }}>
+    <div style={{ marginBottom: 40, width: '100%', flexDirection: 'row', alignItems: 'center' }}>
       <ProposalTitle>{title}</ProposalTitle>
+      <div style={{ maxWidth: 200 }}>
+        <ProposalStatusBox status={proposal?.status} />
+      </div>
     </div>
   );
 };
