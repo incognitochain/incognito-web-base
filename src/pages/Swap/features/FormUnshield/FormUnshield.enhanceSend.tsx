@@ -498,7 +498,7 @@ const enhanceSend = (WrappedComponent: any) => {
                 // first batch is PDEX
                 metadata = getSwapPDexMetadata({ otaReceivers: [otaReceiver, midOTA] });
               } else {
-                metadata = getSwapPAppMetadata({ otaReceiver: midToken });
+                metadata = getSwapPAppMetadata({ otaReceiver: midOTA });
               }
             } else {
               metadata = getSwapPAppMetadata({ otaReceiver });
