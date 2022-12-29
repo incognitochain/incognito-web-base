@@ -3,6 +3,7 @@
 import { notification } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+import { PRV } from 'constants/token';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -10,6 +11,7 @@ import { fetchProposalFee } from 'services/rpcClient';
 import { getProposalDetail, vote } from 'state/dao/operations';
 import { Fee, Proposal, ProposalStatus } from 'state/dao/types';
 import styled, { DefaultTheme } from 'styled-components/macro';
+import format from 'utils/format';
 
 import HeaderBox from './components/HeaderBpx';
 import InfoBox from './components/InfoBox';
@@ -82,13 +84,18 @@ const ProposalDetail = () => {
 
   const [api, contextHolder] = notification.useNotification();
 
-  const handleSubmitVote = async () => {
+  const prvVote = format.amountVer2({
+    originalAmount: proposalDetail?.quorumVotes || 0,
+    decimals: PRV.pDecimals,
+  });
+
+  const handleSubmitVote = async (prvBurnAmount: number) => {
     try {
       await dispatch(
         vote(
           {
             title: proposalDetail?.title || '',
-            prvBurnAmount: 20000000000,
+            prvBurnAmount,
             fee,
             requestSignTransaction,
             proposalId: proposalDetail?.proposalId || '',
@@ -152,10 +159,10 @@ const ProposalDetail = () => {
             isLoading={isFetchingProposalDetail}
             leftTitle="Threshold"
             rightTitle="Current Quorum"
-            rightValue={`${proposalDetail?.quorumVotes} votes`}
+            rightValue={`${prvVote} votes`}
           />
           <div style={{ width: 24 }} />
-          <InfoBox isLoading={isFetchingProposalDetail} leftTitle="Ends" rightTitle={proposalDetail?.endBlock} />
+          <InfoBox isLoading={isFetchingProposalDetail} leftTitle="Ends" rightValue={proposalDetail?.endBlock} />
           <div style={{ width: 24 }} />
           <InfoBox
             isLoading={isFetchingProposalDetail}
@@ -169,11 +176,12 @@ const ProposalDetail = () => {
         </DescriptionBox>
         <ModalVote
           isOpen={modalConfirmVisible}
+          fee={fee}
           onCancel={() => setModalConfirmVisible(false)}
           onChooseVoteOption={handleChooseVoteOption}
-          onSubmitVote={() => {
+          onSubmitVote={(prvBurnAmount: number) => {
             setModalConfirmVisible(false);
-            handleSubmitVote();
+            handleSubmitVote(prvBurnAmount);
           }}
           selectedVote={selectedVote}
         />

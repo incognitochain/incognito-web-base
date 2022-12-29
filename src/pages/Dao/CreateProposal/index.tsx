@@ -98,12 +98,12 @@ const CreateProposal = () => {
 
   const dispatch = useDispatch();
 
-  const createProposalRequest = () => {
+  const createProposalRequest = (prvBurnAmount: number) => {
     try {
       dispatch(
         createProposal(
           {
-            prvBurnAmount: 20000000000,
+            prvBurnAmount,
             fee,
             description: descriptionValue,
             requestSignTransaction,
@@ -154,8 +154,8 @@ const CreateProposal = () => {
         </FormContainer>
       </div>
       <ModalConfirm
-        onRequestCreateProposal={() => {
-          createProposalRequest();
+        onRequestCreateProposal={(prvBurnAmount: number) => {
+          createProposalRequest(prvBurnAmount);
           setIsVisibleModalConfirm(false);
         }}
         fee={fee}

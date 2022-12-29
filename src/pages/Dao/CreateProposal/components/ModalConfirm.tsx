@@ -1,15 +1,14 @@
-import { Input, Modal } from 'antd';
+import { Modal } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { PRV } from 'constants/token';
 import React from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
 import { Fee } from 'state/dao/types';
+import { getMinimumPRVBalanceRequire, MINIMUM_PRV_REQUIRE_TO_BURN, NETWORK_FEE } from 'state/dao/utils';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import format from 'utils/format';
-
-const { TextArea } = Input;
 
 const ModalWrapper = styled(Modal)`
   .ant-modal {
@@ -63,50 +62,74 @@ interface ModalConfirmProps {
   fee?: Fee;
   isOpen?: boolean;
   onCancel: (isOpen: boolean) => void;
-  onRequestCreateProposal: () => void;
+  onRequestCreateProposal: (prvBurnAmount: number) => void;
 }
 
 export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmProps) => {
   const { fee, isOpen, onCancel, onRequestCreateProposal } = props;
   const prvTokenInfo = useSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
   const tokenToPayFeeInfo = useSelector(getPrivacyDataByTokenIDSelector)(fee?.tokenid || '');
+  const minimumPRVBalanceRequire = getMinimumPRVBalanceRequire(prvTokenInfo?.amount || 0, fee?.feeAmount || 0);
 
   const getPrvBalanceToBurn = () => {
     const prvBalance: number = prvTokenInfo?.amount || 0;
-    const prvBalanceToBurn = (prvBalance * 99) / 100;
-    if (prvBalanceToBurn > 1000) {
-      return prvBalanceToBurn;
+    let prvToBurn = MINIMUM_PRV_REQUIRE_TO_BURN;
+    if (prvBalance >= minimumPRVBalanceRequire) {
+      prvToBurn = (prvBalance * 90) / 100 - (fee?.feeAmount || 0) - NETWORK_FEE;
     }
-    return 1000;
+    return prvToBurn;
   };
+
+  const prvBalanceToBurn = getPrvBalanceToBurn();
 
   const checkPrvBalance = () => {
     const prvBalance: number = Number(prvTokenInfo?.amount) || 0;
-    if (prvBalance > 10000) {
+    if (prvBalance >= minimumPRVBalanceRequire) {
       return true;
     }
     return false;
   };
 
-  const checkFee = () => {
-    const tokenToPayFeeBalance: number = tokenToPayFeeInfo?.amount || 0;
-    const feeRequired: number = fee?.feeAmount || 0;
-    if (tokenToPayFeeBalance > feeRequired) {
-      return true;
-    }
-    return false;
-  };
+  const isDisabledButton = !checkPrvBalance();
 
-  const checkDisabledButton = () => {
-    const isEnoughPRVBalance = checkPrvBalance();
-    const isEnoughFee = checkFee();
-    if (isEnoughPRVBalance && isEnoughFee) {
-      return false;
+  const renderContent = () => {
+    if (checkPrvBalance()) {
+      return (
+        <div>
+          <LabelText>
+            PRV burn:{' '}
+            {format.amountVer2({
+              originalAmount: Number(prvBalanceToBurn || 0),
+              decimals: PRV.pDecimals,
+            })}{' '}
+            PRV
+          </LabelText>
+          <LabelText style={{ marginTop: 24 }}>
+            Fee:{' '}
+            {format.amountVer2({
+              originalAmount: Number(fee?.feeAmount || 0),
+              decimals: tokenToPayFeeInfo.pDecimals,
+            })}{' '}
+            {tokenToPayFeeInfo.symbol}
+          </LabelText>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <ErrorText>Your PRV balance is insufficien</ErrorText>
+          <ErrorText>
+            Your can minimum{' '}
+            {format.amountVer2({
+              originalAmount: Number(minimumPRVBalanceRequire || 0),
+              decimals: tokenToPayFeeInfo.pDecimals,
+            })}{' '}
+            {tokenToPayFeeInfo?.symbol} to create transaction
+          </ErrorText>
+        </div>
+      );
     }
-    return true;
   };
-
-  const isDisabledButton = checkDisabledButton();
 
   return (
     <ModalWrapper
@@ -125,26 +148,17 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmPro
           <div />
         </ModalHeader>
         <ModalBody>
-          <LabelText>
-            PRV burn:{' '}
-            {format.amountVer2({
-              originalAmount: Number(getPrvBalanceToBurn() || 0),
-              decimals: PRV.pDecimals,
-            })}
-          </LabelText>
-          {!checkPrvBalance() && <ErrorText>You PRV balance is insufficien</ErrorText>}
-          <LabelText style={{ marginTop: 24 }}>
-            Fee:{' '}
-            {format.amountVer2({
-              originalAmount: Number(fee?.feeAmount || 0),
-              decimals: tokenToPayFeeInfo.pDecimals,
-            })}{' '}
-            {tokenToPayFeeInfo.symbol}
-          </LabelText>
-          {!checkFee() && <ErrorText>You {tokenToPayFeeInfo.symbol} balance is insufficien</ErrorText>}
+          <div style={{ width: '100%', padding: 16, borderRadius: 16, border: '1px solid #757575' }}>
+            {renderContent()}
+          </div>
         </ModalBody>
-
-        <ButtonConfirmed onClick={onRequestCreateProposal} height={'50px'} type="submit" style={{ marginTop: 24 }}>
+        <ButtonConfirmed
+          disabled={isDisabledButton}
+          onClick={() => onRequestCreateProposal(prvBalanceToBurn)}
+          height={'50px'}
+          type="submit"
+          style={{ marginTop: 24 }}
+        >
           Ok
         </ButtonConfirmed>
       </ModalContainer>

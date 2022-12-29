@@ -133,14 +133,21 @@ const getProposalDetail = (proposalId: any, callback?: (data: any) => void) => {
   return async (dispatch: Dispatch<any>): Promise<any> => {
     try {
       const proposalDetailResponse: ProposalAPIResponse = await fetchProposalDetail(proposalId);
-      const proposalViaChainInfo = await getProposalInfoViaChain(proposalDetailResponse?.ProposalID);
-      const proposalStatus = await getProposalStatus(proposalDetailResponse?.ProposalID);
-      const votingDelay = await getVotingDelay();
-
-      const quorumVotes =
-        parseInt(proposalViaChainInfo?.againstVotes?.toString() ?? '0') +
-        parseInt(proposalViaChainInfo?.forVotes?.toString() ?? '0') +
-        parseInt(proposalViaChainInfo?.abstainVotes?.toString() ?? '0');
+      let proposalViaChainInfo: any = {};
+      let proposalStatus: any = proposalDetailResponse?.Status;
+      let quorumVotes = 0;
+      if (proposalStatus === ProposalStatusBackEnd.outchain_success) {
+        proposalViaChainInfo = await getProposalInfoViaChain(proposalDetailResponse?.ProposalID);
+        proposalStatus = await getProposalStatus(proposalDetailResponse?.ProposalID);
+        quorumVotes =
+          parseInt(proposalViaChainInfo?.againstVotes?.toString() ?? '0') +
+          parseInt(proposalViaChainInfo?.forVotes?.toString() ?? '0') +
+          parseInt(proposalViaChainInfo?.abstainVotes?.toString() ?? '0');
+      } else if (proposalStatus === ProposalStatusBackEnd.submit_failed) {
+        proposalStatus = ProposalStatus.CANCELLED;
+      } else {
+        proposalStatus = ProposalStatus.PENDING;
+      }
       const proposalDetail: Proposal = {
         id: proposalDetailResponse?.id.toString(),
         proposalId: proposalDetailResponse?.ProposalID.toString(),
