@@ -14,7 +14,7 @@ import { useInternetConnnection } from 'components/Core/InternetConnection';
 import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useTheme from 'hooks/useTheme';
-import { routeMarket, routePeggingApps } from 'pages';
+import { routePeggingApps } from 'pages';
 import React from 'react';
 import { useSelector } from 'react-redux';
 // import Web3Status from 'components/Core/Web3Status';
@@ -52,10 +52,10 @@ const menuItem: MenuItemProps[] = [
   //   path: routeHome,
   // },
   {
-    name: 'Swap',
-    path: routeMarket,
-    metric: METRIC_TYPE.HEADER_SWAP,
-    uniqMetric: METRIC_UNIQ.HEADER_SWAP_UNIQ,
+    name: 'PRV',
+    path: '/get-prv',
+    metric: METRIC_TYPE.HEADER_PRV,
+    uniqMetric: METRIC_UNIQ.HEADER_PRV_UNIQ,
   },
   {
     name: 'Mine',
