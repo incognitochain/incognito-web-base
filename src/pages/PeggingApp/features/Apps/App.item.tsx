@@ -20,6 +20,9 @@ const AppItem = React.memo(({ data }: { data: IFactory }) => {
       <div
         className="box"
         onClick={() => {
+          if (data?.name === 'pDAO') {
+            return history.push('/vote');
+          }
           if (!canClick) return;
           dispatch(actionSetSwapNetwork(MAIN_NETWORK_NAME.INCOGNITO));
           if (data.metric && data.metricUniq) {

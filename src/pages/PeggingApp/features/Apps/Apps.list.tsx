@@ -113,6 +113,18 @@ const Factory: IFactory[] = [
     network: [MAIN_NETWORK_NAME.AVALANCHE],
   },
   {
+    img: joeImg,
+    name: 'pDAO',
+    status: 'SHIPPED',
+    nameDesc: 'Private DAO',
+    chain: ['Avalanche', 'DEX'],
+    desc: 'Trade confidentially on Trader Joe. Faster privacy swap is enabled by fast transaction finality on Avalanche.',
+    exchange: SwapExchange.JOE,
+    metric: METRIC_TYPE.PAPP_TRADER_JOE,
+    metricUniq: METRIC_UNIQ.PAPP_TRADER_JOE_UNIQ,
+    network: [MAIN_NETWORK_NAME.AVALANCHE],
+  },
+  {
     img: trisolarisImg,
     name: 'pTrisolaris',
     status: 'COMING SOON',
