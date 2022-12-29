@@ -55,7 +55,7 @@ const ProposalDetail = () => {
   const getFee = async () => {
     try {
       setIsFetchingFee(true);
-      const feeResponse: Fee = await fetchProposalFee();
+      const feeResponse: Fee = await fetchProposalFee(2);
       setIsFetchingFee(false);
       setFee(feeResponse);
       setModalConfirmVisible(true);
@@ -141,7 +141,7 @@ const ProposalDetail = () => {
             marginTop: 24,
           }}
         >
-          <p>Switch to delegate view</p>
+          <p></p>
           <ButtonConfirmed
             disabled={isDisabledButtonVote}
             onClick={() => getFee()}

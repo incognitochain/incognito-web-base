@@ -74,7 +74,7 @@ const CreateProposal = () => {
   const getFee = async () => {
     try {
       setIsFetchingFee(true);
-      const feeResponse: Fee = await fetchProposalFee();
+      const feeResponse: Fee = await fetchProposalFee(1);
       setIsFetchingFee(false);
       setFee(feeResponse);
       setIsVisibleModalConfirm(true);

@@ -5,13 +5,7 @@ import { PRV } from 'constants/token';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
 // eslint-disable-next-line no-restricted-imports
 import { Dispatch } from 'redux';
-import {
-  fetchProposalDetail,
-  fetchProposalFee,
-  fetchProposals,
-  submitCreateProposal,
-  submitVote,
-} from 'services/rpcClient';
+import { fetchProposalDetail, fetchProposals, submitCreateProposal, submitVote } from 'services/rpcClient';
 import Web3 from 'web3';
 
 import { getProposalsFailure, getProposalsRequest, getProposalsSuccess } from './actions';
@@ -401,16 +395,8 @@ const vote = (
   };
 };
 
-const getFee = (): any => {
-  return async (dispatch: Dispatch<any>): Promise<any> => {
-    const feeResponse: Fee = await fetchProposalFee();
-    console.log(feeResponse);
-  };
-};
-
 type Operations = {
   getProposals: () => void;
-  getFee: () => void;
   getProposalDetail: (proposalId: any, callback?: (data: any) => void) => void;
   burnPRVToken: ({
     transactionType,
@@ -465,12 +451,11 @@ type Operations = {
 
 const operations: Operations = {
   getProposals,
-  getFee,
   getProposalDetail,
   burnPRVToken,
   createProposal,
   vote,
 };
 
-export { burnPRVToken, createProposal, getFee, getProposalDetail, getProposals, operations, vote };
+export { burnPRVToken, createProposal, getProposalDetail, getProposals, operations, vote };
 export type { Operations };
