@@ -1,8 +1,9 @@
 import { MdArrowBack } from 'react-icons/md';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 
 interface IProps {
-  onBack: () => void;
+  onBack?: () => void;
 }
 
 const Styled = styled.button`
@@ -21,9 +22,14 @@ const Styled = styled.button`
 `;
 
 // eslint-disable-next-line react/display-name
-const BackButton = (props: IProps) => {
+export const BackButton: React.FC<IProps> = (props: IProps) => {
+  const history = useHistory();
   return (
-    <Styled onClick={() => props?.onBack?.()}>
+    <Styled
+      onClick={() => {
+        props?.onBack?.() || history.goBack();
+      }}
+    >
       <MdArrowBack size={24} color="white" />
     </Styled>
   );
