@@ -2,7 +2,6 @@
 import { Skeleton } from 'antd';
 import BackButton from 'components/BackButton';
 import ProposalStatusBox from 'pages/Dao/Governance/components/ProposalStatus';
-import { useHistory } from 'react-router-dom';
 import { Proposal } from 'state/dao/types';
 import styled from 'styled-components/macro';
 
@@ -22,9 +21,7 @@ const ProposalTitle = styled.p`
 const HeaderBox: React.FC<HeaderProps> = (props) => {
   // eslint-disable-next-line react/prop-types
   const { proposal, isLoading } = props;
-  const { title, proposer } = proposal || {};
-
-  const history = useHistory();
+  const { title } = proposal || {};
 
   if (isLoading) {
     return (
@@ -40,7 +37,7 @@ const HeaderBox: React.FC<HeaderProps> = (props) => {
     <div style={{ marginBottom: 40, width: '100%', flexDirection: 'row', alignItems: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <div>
-          <BackButton onBack={() => history.goBack()} />
+          <BackButton />
         </div>
         <div style={{ maxWidth: 140 }}>
           <ProposalStatusBox status={proposal?.status} />

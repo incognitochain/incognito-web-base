@@ -1,5 +1,6 @@
 /* eslint-disable react/no-children-prop */
 import { notification } from 'antd';
+import BackButton from 'components/BackButton';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -27,6 +28,7 @@ const DescriptionContainer = styled.div`
   border: 1px solid #363636;
   border-radius: 16px;
   padding: 24px;
+  margin-top: 24px;
 `;
 
 const DescriptionText = styled.p`
@@ -44,6 +46,14 @@ const FormContainer = styled.div`
   align-self: center;
   margin-bottom: 40px;
   width: 100%;
+`;
+
+const HeaderTitle = styled.div`
+  font-weight: 500;
+  font-size: 34px;
+  line-height: 140%;
+  color: #ffffff;
+  margin-left: 16px;
 `;
 
 const CreateProposal = () => {
@@ -127,10 +137,11 @@ const CreateProposal = () => {
   return (
     <Styled>
       {contextHolder}
-      <div
-        className="default-max-width"
-        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
-      >
+      <div className="default-max-width" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <BackButton />
+          <HeaderTitle>Create Proposal</HeaderTitle>
+        </div>
         <DescriptionContainer>
           <DescriptionText>
             Tip: Add one or more proposal actions and describe your proposal for the community. The proposal cannot be
