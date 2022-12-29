@@ -63,7 +63,11 @@ const Collections = () => {
           openLink({ link: '/get-prv' });
         }}
       >
-        {renderHeader({ title: 'PRV', desc: 'Trade 100+ cryptocurrencies anonymously.', showIcon: !isMobile })}
+        {renderHeader({
+          title: 'PRV',
+          desc: 'Native cryptocurrency of Incognito, power all privacy activities.',
+          showIcon: !isMobile,
+        })}
         <img className="swap-image" src={GetPRVImg} alt="image" />
         {/*<SwapAnimation />*/}
       </CollectionItem>
