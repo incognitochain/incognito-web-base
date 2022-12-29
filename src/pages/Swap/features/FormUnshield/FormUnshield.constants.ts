@@ -115,9 +115,9 @@ export const GROUP_NETWORK_ID_BY_EXCHANGE: any = {
 
   [SwapExchange.SPOOKY]: [4],
 
-  [SwapExchange.JOE]: [6],
+  [SwapExchange.TRISOLARIS]: [5],
 
-  [SwapExchange.TRISOLARIS]: [7],
+  [SwapExchange.JOE]: [6],
 
   [SwapExchange.PDEX]: [],
 };
