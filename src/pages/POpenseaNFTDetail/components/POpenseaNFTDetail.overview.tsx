@@ -6,16 +6,25 @@
 // import icView from 'assets/svg/ic-view.svg';
 import { POpenseaNft } from 'models/model/POpenseaNFT';
 import React, { memo } from 'react';
+import { useHistory } from 'react-router-dom';
 
 interface POpenseaNFTDetailOverviewProps {
   selectedNFT: POpenseaNft;
+  contract: string;
 }
 const POpenseaNFTDetailOverview = (props: POpenseaNFTDetailOverviewProps) => {
   const { selectedNFT } = props;
+  const history = useHistory();
   return (
     <React.Fragment>
-      <div className="artis-container">
-        <a className="artis">{selectedNFT.collection?.name}</a>
+      <div className="collection-container">
+        <button
+          onClick={() => {
+            history.push(`/popensea/detail/${props.contract}`);
+          }}
+        >
+          <p className="collection-name">{selectedNFT.collection?.name}</p>
+        </button>
         {/* <img src={icVerify} /> */}
       </div>
 

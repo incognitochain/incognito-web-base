@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { pOpenseaTranslateSelector } from 'config/Configs.selector';
+import { Tabs } from 'antd';
 import { POpenseaCollection } from 'models/model/POpenseaCollection';
 import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,7 +19,6 @@ const Home = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const pOpenseaStr = useSelector(pOpenseaTranslateSelector);
   const collections = useSelector(pOpenseaCollectionsSelectors);
   const isFetching = useSelector(isFetchingPOpenseaSelectors);
 
@@ -34,14 +33,28 @@ const Home = () => {
     }
   };
 
+  const renderLabel = (title: string) => <h3>{title}</h3>;
+
   return (
     <Styled className="default-max-width">
       <WrapperContent>
         <POpenseaSubRoute />
-        <h3 className="fw-bold" style={{ textAlign: 'left' }}>
-          {pOpenseaStr.mainTitle}
-        </h3>
-        <POpenseaListCollection isFetching={isFetching} collections={collections} onClickItem={onClickCollectionItem} />
+        <Tabs
+          defaultActiveKey="1"
+          items={[
+            {
+              label: renderLabel('Top'),
+              key: '1',
+              children: (
+                <POpenseaListCollection
+                  isFetching={isFetching}
+                  collections={collections}
+                  onClickItem={onClickCollectionItem}
+                />
+              ),
+            },
+          ]}
+        />
       </WrapperContent>
     </Styled>
   );

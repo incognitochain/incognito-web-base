@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 // To parse this data:
 //
 //   import { Convert, POpenseaNft } from "./file";
@@ -62,11 +63,15 @@ export class POpenseaNft {
     if (this.name && this.name.includes('#')) {
       return `${this.name}`;
     }
-    return `${this.name ? this.name + ' #' : ''}${this.tokenId}`;
+    return `${this.name ? this.name + ' #' : ''}${this.tokenId ? this.tokenId : ''}`;
   }
 
   getSeaportSellOrder() {
     return this.seaportSellOrders && this.seaportSellOrders.length > 0 ? this.seaportSellOrders[0] : undefined;
+  }
+
+  getImageUrl(size: number = 1000) {
+    return this.imageUrl ? this.imageUrl.replace('?w=500', `?w=${size}`) : undefined;
   }
 }
 
@@ -83,7 +88,7 @@ export class POpenseaBuyFee {
     tokenid: string;
   };
 
-  getFeeAmountStr(pDecimals: number) {
+  getFeeFormatAmount(pDecimals: number) {
     return format.amountVer2({
       originalAmount: new BigNumber(this.fee && this.fee.feeAmount ? this.fee.feeAmount : 0).toNumber(),
       decimals: pDecimals,
@@ -257,11 +262,15 @@ export class SeaportSellOrders {
     return this.currentPrice ? this.currentPrice : '0';
   }
 
-  getPricingAmountStr(decimals: number) {
+  getPricingFormatAmount(decimals: number) {
     return format.amountVer2({
       originalAmount: new BigNumber(this.currentPrice || 0).toNumber(),
       decimals,
     });
+  }
+
+  getPricingAmount() {
+    return new BigNumber(this.currentPrice || 0).toNumber();
   }
 
   getBurnOriginalAmount(decimals: number, pDecimals: number) {
@@ -277,7 +286,7 @@ export class SeaportSellOrders {
   }
 
   getSaleEnd() {
-    return moment(this.closingDate).format('MMMM DD, YYYY [at] hh:mm AZ');
+    return moment(this.closingDate).format('MMMM DD, YYYY [at] hh:mm A [GMT]Z');
   }
 }
 

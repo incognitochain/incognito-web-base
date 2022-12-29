@@ -1,28 +1,119 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { List } from 'antd';
 import icDesciption from 'assets/svg/ic-description.svg';
 import icInfo from 'assets/svg/ic-info.svg';
+import icProperties from 'assets/svg/ic-properties.svg';
 import Expandable from 'components/Expandable';
 import { POpenseaNft } from 'models/model/POpenseaNFT';
 import React, { memo } from 'react';
-import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { actionGetPOpenseaNFTDetail } from 'state/pOpensea';
-import { shortenString } from 'utils';
+import styled from 'styled-components/macro';
+import { shortenPrefixString, shortenString } from 'utils';
+
+export const Styled = styled.div`
+  margin-top: 8px;
+
+  .child-desc {
+    margin-top: 24px;
+  }
+
+  .child-desc-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+    margin-top: 16px;
+  }
+
+  .child-desc-name {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+
+    color: ${({ theme }) => theme.white};
+    margin-right: 6px;
+  }
+
+  .child-desc-title {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 140%;
+
+    color: ${({ theme }) => theme.text2};
+    margin-right: 6px;
+  }
+
+  .child-detail {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+  }
+
+  .child-detail-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .child-detail-title {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 140%;
+    color: ${({ theme }) => theme.content2};
+  }
+
+  .child-detail-value {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 140%;
+    text-align: right;
+  }
+
+  .list-properties {
+    margin-top: 16px;
+  }
+
+  .properties-item {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: ${({ theme }) => theme.bg1};
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    height: 78px;
+  }
+
+  .properties-trait-type {
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${({ theme }) => theme.color_blue};
+    text-align: center;
+  }
+
+  .properties-trait-value {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 140%;
+    margin-top: 2px;
+    text-align: center;
+  }
+`;
 
 interface POpenseaNFTDetailInfoProps {
   selectedNFT: POpenseaNft;
 }
 
 const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
-  const dispatch = useDispatch();
-  const { contract, tokenId }: any = useParams();
-
   const { selectedNFT } = props;
-
-  React.useEffect(() => {
-    contract && tokenId && dispatch(actionGetPOpenseaNFTDetail(contract, tokenId));
-  }, [contract, tokenId]);
 
   const renderDetailItem = (title: string, value?: string) => (
     <div className="child-detail-item">
@@ -43,7 +134,7 @@ const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
         title: 'Contract Address',
         value: assetContract && assetContract.address ? shortenString(assetContract.address) : '',
       },
-      { title: 'Token ID', value: selectedNFT.tokenId },
+      { title: 'Token ID', value: selectedNFT.tokenId ? shortenPrefixString(`${selectedNFT.tokenId}`) : '' },
       { title: 'Token Standard', value: assetContract ? assetContract.schemaName : '' },
       { title: 'Chain', value: 'Etherum' },
       { title: 'Creator Fee', value: creatorFee },
@@ -53,15 +144,47 @@ const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
 
   const renderDesciptionChild = () => (
     <div className="child-desc">
+      <div className="child-desc-content">
+        <p className="child-desc-title">By</p>
+        <p className="child-desc-name">{selectedNFT.collection?.name}</p>
+      </div>
       <p className="child-desc-title">{selectedNFT.description}</p>
     </div>
   );
 
+  const renderPropertiesChild = () => (
+    <List
+      className="list-properties"
+      grid={{
+        gutter: 8,
+        xs: 1,
+        sm: 2,
+        md: 2,
+        lg: 2,
+        xl: 3,
+        xxl: 3,
+      }}
+      dataSource={selectedNFT.traits || []}
+      renderItem={(trait, index: number) => {
+        return (
+          <List.Item key={index.toString()}>
+            <div key={index.toString()} className="properties-item">
+              <p className="properties-trait-type">{trait.traitType}</p>
+              <p className="properties-trait-value">{trait.value}</p>
+              <p></p>
+            </div>
+          </List.Item>
+        );
+      }}
+    />
+  );
+
   return (
-    <React.Fragment>
-      <Expandable icon={icInfo} expand title="Details" child={renderDetailsChild()} />
+    <Styled>
       <Expandable icon={icDesciption} expand title="Desciption" child={renderDesciptionChild()} />
-    </React.Fragment>
+      <Expandable icon={icInfo} title="Details" child={renderDetailsChild()} />
+      <Expandable icon={icProperties} title="Properties" child={renderPropertiesChild()} />
+    </Styled>
   );
 };
 

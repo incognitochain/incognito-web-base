@@ -228,7 +228,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       showSorterTooltip: false,
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText">
-          {record.stats?.totalVolume?.toFixed(1)} ETH
+          {record.getTotalVolumnFormatAmount()} ETH
         </p>
       ),
       sorter: (a, b) => (a.stats?.totalVolume || 0) - (b.stats?.totalVolume || 0),
@@ -238,7 +238,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
         const sortedColumn = sortColumns?.find(({ column }) => column.key === 'volumn');
         return (
           <div className="headerTitle" style={{ justifyContent: 'center' }}>
-            Volumn
+            Total volumn
             {sortedColumn ? (
               sortedColumn.order === 'ascend' ? (
                 <img alt="" src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
@@ -262,7 +262,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       showSorterTooltip: false,
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText">
-          {record.stats?.floorPrice?.toFixed(1)} ETH
+          {record.stats?.floorPrice?.toFixed(2)} ETH
         </p>
       ),
       sorter: (a, b) => (a.stats?.floorPrice || 0) - (b.stats?.floorPrice || 0),
@@ -375,7 +375,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
         columns={columns}
         dataSource={collections}
         size="large"
-        // loading={isFetching}
+        // loading={isFetching && collections.length === 0}
         pagination={false}
         rowClassName="tableRow"
         onRow={(collection) => ({
