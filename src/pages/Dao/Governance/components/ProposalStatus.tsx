@@ -43,9 +43,9 @@ const getStatusColor = (status: ProposalStatus | undefined): string => {
 const getStatusText = (status: ProposalStatus | undefined): string => {
   switch (status) {
     case ProposalStatus.PENDING:
-      return 'Pending';
-    case ProposalStatus.ACTIVE:
       return 'Active';
+    case ProposalStatus.ACTIVE:
+      return 'Voting';
     case ProposalStatus.SUCCEEDED:
       return 'Succeeded';
     case ProposalStatus.EXECUTED:

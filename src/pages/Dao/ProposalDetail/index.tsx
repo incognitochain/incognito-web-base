@@ -1,7 +1,6 @@
 /* eslint-disable react/no-children-prop */
 
 import { notification } from 'antd';
-import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { PRV } from 'constants/token';
 import { useEffect, useState } from 'react';
@@ -130,30 +129,12 @@ const ProposalDetail = () => {
     <div className="default-max-width" style={{ width: '100%' }}>
       <>
         {contextHolder}
-        <HeaderBox proposal={proposalDetail} isLoading={isFetchingProposalDetail} />
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 24,
-            marginTop: 24,
-          }}
-        >
-          <p></p>
-          <ButtonConfirmed
-            disabled={isDisabledButtonVote}
-            onClick={() => getFee()}
-            height={'40px'}
-            type="submit"
-            backgroundColor={'#9C9C9C'}
-            style={{ width: 145 }}
-          >
-            Submit vote
-          </ButtonConfirmed>
-        </div>
-
+        <HeaderBox
+          proposal={proposalDetail}
+          isDisabledButtonVote={isDisabledButtonVote}
+          isLoading={isFetchingProposalDetail}
+          onClickVoteButton={getFee}
+        />
         <InfoBoxContainer>
           <InfoBox
             isLoading={isFetchingProposalDetail}
