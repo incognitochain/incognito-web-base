@@ -188,6 +188,16 @@ const BIG_COINS = {
       ? '92dd7f24165decadb4764d0b29972e51c317ef9f8510447e1bab5b142ca94804'
       : '92dd7f24165decadb4764d0b29972e51c317ef9f8510447e1bab5b142ca94804',
   },
+  ETH_AURORA: {
+    tokenID: isMainnet
+      ? 'a189f306574f75733e93a260b168d8a335ba3243899254b3a4bf5f4de69a8e71'
+      : 'a189f306574f75733e93a260b168d8a335ba3243899254b3a4bf5f4de69a8e71',
+  },
+  NEAR_AURORA: {
+    tokenID: isMainnet
+      ? '6c4bcb53a6d1ba2925c98ea15d13de2cdc446fc406aeefd870f03c25eba955a5'
+      : '6c4bcb53a6d1ba2925c98ea15d13de2cdc446fc406aeefd870f03c25eba955a5',
+  },
 };
 
 const PRIVATE_TOKEN_TYPE = {
