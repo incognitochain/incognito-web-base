@@ -493,7 +493,7 @@ const enhanceSend = (WrappedComponent: any) => {
             let metadata;
             const { interSwapData } = exchangeSelectedData;
             if (interSwapData && interSwapData?.midToken) {
-              const { midToken, midOTA } = interSwapData;
+              const { midOTA } = interSwapData;
               if (interSwapData.isInterFistBatchPDex) {
                 // first batch is PDEX
                 metadata = getSwapPDexMetadata({ otaReceivers: [otaReceiver, midOTA] });
