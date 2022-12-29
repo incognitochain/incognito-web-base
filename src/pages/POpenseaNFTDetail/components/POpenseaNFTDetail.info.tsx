@@ -11,8 +11,27 @@ import styled from 'styled-components/macro';
 import { shortenPrefixString, shortenString } from 'utils';
 
 export const Styled = styled.div`
+  margin-top: 8px;
+
   .child-desc {
+    margin-top: 24px;
+  }
+
+  .child-desc-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
     margin-top: 16px;
+  }
+
+  .child-desc-name {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+
+    color: ${({ theme }) => theme.white};
+    margin-right: 6px;
   }
 
   .child-desc-title {
@@ -21,6 +40,7 @@ export const Styled = styled.div`
     line-height: 140%;
 
     color: ${({ theme }) => theme.text2};
+    margin-right: 6px;
   }
 
   .child-detail {
@@ -72,17 +92,19 @@ export const Styled = styled.div`
 
   .properties-trait-type {
     font-weight: 500;
-    font-size: 14px;
+    font-size: 13px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: ${({ theme }) => theme.color_blue};
+    text-align: center;
   }
 
   .properties-trait-value {
     font-weight: 400;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 140%;
     margin-top: 2px;
+    text-align: center;
   }
 `;
 
@@ -122,6 +144,10 @@ const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
 
   const renderDesciptionChild = () => (
     <div className="child-desc">
+      <div className="child-desc-content">
+        <p className="child-desc-title">By</p>
+        <p className="child-desc-name">{selectedNFT.collection?.name}</p>
+      </div>
       <p className="child-desc-title">{selectedNFT.description}</p>
     </div>
   );
@@ -155,8 +181,8 @@ const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
 
   return (
     <Styled>
-      <Expandable icon={icInfo} expand title="Details" child={renderDetailsChild()} />
-      <Expandable icon={icDesciption} title="Desciption" child={renderDesciptionChild()} />
+      <Expandable icon={icDesciption} expand title="Desciption" child={renderDesciptionChild()} />
+      <Expandable icon={icInfo} title="Details" child={renderDetailsChild()} />
       <Expandable icon={icProperties} title="Properties" child={renderPropertiesChild()} />
     </Styled>
   );

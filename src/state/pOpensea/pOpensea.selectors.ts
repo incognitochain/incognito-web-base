@@ -52,7 +52,7 @@ export const pOpenseaFilterNFTsSelectors = createSelector(
       return 0;
     });
     return search
-      ? sortedNfts.filter((nft) => `${nft.name?.toLowerCase()} ${nft.id?.toString()}`.includes(search.toLowerCase()))
+      ? sortedNfts.filter((nft) => `${nft.name?.toLowerCase()}`.includes(search.toLowerCase()))
       : sortedNfts;
   }
 );

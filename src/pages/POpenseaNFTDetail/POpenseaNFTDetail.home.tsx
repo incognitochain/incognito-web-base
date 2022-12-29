@@ -1,14 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import ImagePlaceholder from 'components/ImagePlaceholder';
-import React from 'react';
+import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { reduxForm } from 'redux-form';
 import { actionGetPOpenseaNFTDetail, selectedpOpenseaNFTSelector } from 'state/pOpensea';
 
 import POpenseaNFTDetailBuy from './components/POpenseaNFTDetail.buy';
-import { FORM_NAME } from './components/POpenseaNFTDetail.buy.form';
 import POpenseaNFTDetailInfo from './components/POpenseaNFTDetail.info';
 import POpenseaNFTDetailOverview from './components/POpenseaNFTDetail.overview';
 import POpenseaNFTDetailSubRoute from './components/POpenseaNFTDetail.subRoute';
@@ -37,11 +35,11 @@ const Home = () => {
             <div className="content-1">
               <ImagePlaceholder className="img-nft" src={selectedNFT.getImageUrl()} />
             </div>
+            <POpenseaNFTDetailInfo selectedNFT={selectedNFT} />
           </div>
           <div className="section-2">
             <POpenseaNFTDetailOverview contract={contract} selectedNFT={selectedNFT} />
             <POpenseaNFTDetailBuy selectedNFT={selectedNFT} />
-            <POpenseaNFTDetailInfo selectedNFT={selectedNFT} />
           </div>
         </div>
       </WrapperContent>
@@ -49,7 +47,4 @@ const Home = () => {
   );
 };
 
-export default reduxForm({
-  form: FORM_NAME,
-  destroyOnUnmount: false,
-})(Home);
+export default memo(Home);

@@ -1114,4 +1114,17 @@ export const ThemedGlobalStyle = createGlobalStyle`
         background-color: transparent;
       }
     }
+  
+  .ant-tabs-ink-bar  {
+    background-color: transparent;
+
+  }
+
+  .ant-tabs-ink-bar-animated {
+    background-color: ${({ theme }) => theme.white};
+  }
+
+  .ant-tabs-nav-wrap {
+    border-bottom: 1px solid ${({ theme }) => theme.color_grey4};
+  }
 `;

@@ -23,8 +23,8 @@ import { networkFeePOpenseaSelectors } from 'state/pOpensea';
 import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/token';
 
 import store from '../../../state';
-import { ArrowDown } from '../POpenseaNFTDetail.styled';
 import ReciptientAddress, { FIELD_NAME, FORM_NAME } from './POpenseaNFTDetail.buy.form';
+import { ArrowDown, Spinner, Styled } from './POpenseaNFTDetail.buy.styled';
 
 interface POpenseaNFTDetailBuyProps {
   selectedNFT: POpenseaNft;
@@ -39,6 +39,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
 
   const [selectedToken, setSelectedToken] = useState<PToken | undefined>();
   const [buyFee, setBuyFee] = useState<POpenseaBuyFee | undefined>();
+  const [loadingFee, setLoadingFee] = useState<boolean>(false);
 
   const incAccount = useSelector(incognitoWalletAccountSelector);
   const networkFee = useSelector(networkFeePOpenseaSelectors);
@@ -85,10 +86,10 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   }, [tokens]);
 
   useEffect(() => {
-    if (isValidReciptientAddress && reciptientAddress && selectedToken) {
+    if (isValidReciptientAddress && selectedToken) {
       estimateFee();
     }
-  }, [selectedToken, reciptientAddress, isValidReciptientAddress]);
+  }, [selectedToken, isValidReciptientAddress]);
 
   const estimateFee = async () => {
     const tokenId = selectedNFT.tokenId;
@@ -101,6 +102,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
       assetContract.address &&
       seaportSellOrder
     ) {
+      setLoadingFee(true);
       const contract = assetContract.address;
       try {
         const res = await postEstimateFee(
@@ -114,7 +116,10 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
           const fee = Convert.toPOpenseaBuyFee(res);
           setBuyFee(fee);
         }
-      } catch (error) {}
+      } catch (error) {
+      } finally {
+        setLoadingFee(false);
+      }
     }
   };
 
@@ -280,20 +285,25 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
       </div>
     );
 
-  const renderFee = () =>
-    buyFee && (
-      <p className="current-price">
-        {buyFeeFormatAmount} {selectedToken?.symbol} = {buyFee.getFeeUsdStr()} $
-      </p>
-    );
+  const renderFee = () => (
+    <div>
+      {!loadingFee && buyFee && (
+        <p className="current-fee">
+          {buyFeeFormatAmount} {selectedToken?.symbol} = {buyFee.getFeeUsdStr()} $
+        </p>
+      )}
+      {loadingFee && <Spinner />}
+    </div>
+  );
 
   const renderUserBalance = () => <p className="current-balance">Balance: {userBalanceFormatedText}</p>;
+
   const renderError = () => (
     <p className="current-error">{!isCanBuy && incAccount && 'Your balance is insufficient.'}</p>
   );
 
   return (
-    <React.Fragment>
+    <Styled>
       {seaportSellOrder && seaportSellOrder.currentPrice && (
         <div className="price-container">
           <div className="view-content">
@@ -301,18 +311,21 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
             <p className="time-sale">{`Sale ends ${seaportSellOrder.getSaleEnd()}`}</p>
           </div>
           <div className="price-indicator" />
-          <div className="reciptient-container">
-            <ReciptientAddress />
+          <div className="balance-container">
+            <div>
+              {renderUserBalance()}
+              {renderError()}
+            </div>
             {renderSelectTokenList()}
           </div>
+          <ReciptientAddress />
+
           <div className="price-indicator" />
           <div className="buy-container">
             <div className="price-view">
               <p className="current-price">Current price</p>
               {renderCurrentPrice()}
               {renderFee()}
-              {renderUserBalance()}
-              {renderError()}
             </div>
 
             <button className="btn-buy" onClick={!incAccount ? showPopup : onClickBuy}>
@@ -323,7 +336,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
           </div>
         </div>
       )}
-    </React.Fragment>
+    </Styled>
   );
 };
 
