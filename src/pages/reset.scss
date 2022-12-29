@@ -49,6 +49,9 @@ center,
 dl,
 dt,
 dd,
+ol,
+ul,
+li,
 fieldset,
 form,
 label,
@@ -108,6 +111,11 @@ section {
   display: block;
 }
 
+ol,
+ul {
+  list-style: none;
+}
+
 blockquote,
 q {
   quotes: none;
@@ -138,6 +146,7 @@ input {
   background: none;
   display: block;
   outline: none;
+
   :focus {
     outline: none;
   }
