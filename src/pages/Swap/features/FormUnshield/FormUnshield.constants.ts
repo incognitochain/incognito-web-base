@@ -20,8 +20,8 @@ export const MAP_TOKEN_BY_PAPPS: any = {
   [SwapExchange.CURVE]: { tokenID1: BIG_COINS.USDC_UNIFIED.tokenID, tokenID2: BIG_COINS.USDT_UNIFIED.tokenID },
   [SwapExchange.SPOOKY]: { tokenID1: BIG_COINS.USDC_FTM.tokenID, tokenID2: BIG_COINS.FTM.tokenID },
   [SwapExchange.JOE]: { tokenID1: BIG_COINS.USDC_AVAX.tokenID, tokenID2: BIG_COINS.AVAX.tokenID },
+  [SwapExchange.TRISOLARIS]: { tokenID1: BIG_COINS.AURORA.tokenID, tokenID2: BIG_COINS.USDC_AURORA.tokenID },
   [SwapExchange.PDEX]: { tokenID1: BIG_COINS.USDT_UNIFIED.tokenID, tokenID2: BIG_COINS.PRV.tokenID },
-  [SwapExchange.TRISOLARIS]: { tokenID1: BIG_COINS.ETH_AURORA.tokenID, tokenID2: BIG_COINS.NEAR_AURORA.tokenID },
 };
 
 export const GROUP_CURRENCY_TYPE_BY_PAPP_NAME: any = {
