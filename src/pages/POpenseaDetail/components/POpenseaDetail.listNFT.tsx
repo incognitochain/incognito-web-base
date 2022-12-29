@@ -96,20 +96,19 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
         }}
         dataSource={nfts}
         renderItem={(item: POpenseaNft, index: number) => {
-          const seaportSellOrder =
-            item.seaportSellOrders && item.seaportSellOrders.length > 0 ? item.seaportSellOrders[0] : undefined;
+          const seaportSellOrder = item.getSeaportSellOrder();
           const lastSale = item.lastSale;
           return (
             <List.Item key={index.toString()} onClick={() => props.onClickNFTItem(item)}>
               <div className="card">
-                <ImagePlaceholder className="item-img" src={item.imageUrl} />
+                <ImagePlaceholder className="item-img" src={item.getImageUrl()} />
                 <div className="item-info">
                   <div className="item-name-container">
                     <p className="item-name">{item.getOriginalName()}</p>
                   </div>
                   {seaportSellOrder && (
                     <p className="item-price">
-                      {seaportSellOrder.getPricingAmountStr(18)}
+                      {seaportSellOrder.getPricingFormatAmount(18)}
                       {' ETH'}
                     </p>
                   )}

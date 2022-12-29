@@ -38,7 +38,7 @@ export const pOpenseaFilterNFTsSelectors = createSelector(
         return a.lastSale && a.lastSale.totalPrice ? -1 : b.lastSale && b.lastSale.totalPrice ? 1 : 0;
       } else {
         const aSeaportSell = a.getSeaportSellOrder();
-        const bSeaportSell = a.getSeaportSellOrder();
+        const bSeaportSell = b.getSeaportSellOrder();
         if (aSeaportSell && bSeaportSell) {
           const priceA = aSeaportSell.getCurrentPrice();
           const priceB = bSeaportSell.getCurrentPrice();

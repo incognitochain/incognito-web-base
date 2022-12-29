@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { get } from 'lodash';
 import moment from 'moment';
 
@@ -41,8 +42,18 @@ export class POpenseaCollection {
   isNsfw?: boolean;
   isRarityEnabled?: boolean;
 
+  getAssetContract() {
+    return this.primaryAssetContracts && this.primaryAssetContracts.length > 0
+      ? this.primaryAssetContracts[0]
+      : undefined;
+  }
+
   getCreatedDateWith(format?: string) {
     return this.createdDate ? moment(new Date(this.createdDate)).format(format) : '';
+  }
+
+  getBannerUrl(size: number = 2800) {
+    return this.bannerImageUrl ? this.bannerImageUrl.replace('?w=500', `?w=${size}`) : undefined;
   }
 }
 

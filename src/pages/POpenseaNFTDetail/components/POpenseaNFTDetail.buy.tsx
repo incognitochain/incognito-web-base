@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import icClock from 'assets/svg/ic-clock.svg';
+import BigNumber from 'bignumber.js';
 import { getIncognitoInject, useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { TransactionSubmittedContent } from 'components/Core/TransactionConfirmationModal';
 import { useModal } from 'components/Modal';
@@ -15,16 +16,18 @@ import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.
 import { setSwapTx } from 'pages/Swap/Swap.storage';
 import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { formValueSelector, isValid } from 'redux-form';
 import rpcPOpensea, { postEstimateFee } from 'services/rpcPOpensea';
+import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { networkFeePOpenseaSelectors } from 'state/pOpensea';
-import { unshieldableTokens } from 'state/token';
+import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/token';
 
-import { ArrowDown, TextInputStyled } from '../POpenseaNFTDetail.styled';
+import store from '../../../state';
+import { ArrowDown } from '../POpenseaNFTDetail.styled';
+import ReciptientAddress, { FIELD_NAME, FORM_NAME } from './POpenseaNFTDetail.buy.form';
 
 interface POpenseaNFTDetailBuyProps {
   selectedNFT: POpenseaNft;
-  onEstimateFee?: () => void;
-  onClickBuy?: () => void;
 }
 
 const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
@@ -32,16 +35,23 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
 
   const dispatch = useDispatch();
   const { setModal, clearAllModal } = useModal();
-  const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
+  const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount, showPopup } = useIncognitoWallet();
 
-  const [reciptientAddress, setReciptientAddress] = useState('');
   const [selectedToken, setSelectedToken] = useState<PToken | undefined>();
   const [buyFee, setBuyFee] = useState<POpenseaBuyFee | undefined>();
 
+  const incAccount = useSelector(incognitoWalletAccountSelector);
   const networkFee = useSelector(networkFeePOpenseaSelectors);
   const tokens = useSelector(unshieldableTokens).filter(
     (token) => token.isMainETH || token.tokenID === BIG_COINS.ETH_UNIFIED.tokenID
   );
+  const selectedTokenPrivacy = useSelector(getPrivacyByTokenIdentifySelectors)(
+    selectedToken ? selectedToken.identify : ''
+  );
+
+  const formSelector = formValueSelector(FORM_NAME);
+  const isValidReciptientAddress = isValid(FORM_NAME)(store.getState());
+  const reciptientAddress = formSelector(store.getState(), FIELD_NAME);
 
   const seaportSellOrder = selectedNFT.getSeaportSellOrder();
   const assetContract = selectedNFT.assetContract;
@@ -51,21 +61,34 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
       ? selectedToken?.listUnifiedToken.find((token) => token.networkID === 1)
       : undefined;
 
-  const buyPriceAmount = seaportSellOrder ? seaportSellOrder.getPricingAmountStr(childToken?.decimals || 18) : '0';
+  const buyPriceFormatAmount = seaportSellOrder
+    ? seaportSellOrder.getPricingFormatAmount(childToken?.decimals || 18)
+    : '0';
+  const buyFeeFormatAmount = buyFee ? buyFee.getFeeFormatAmount(childToken?.pDecimals || 9) : '0';
+  const totalBuyAmount = new BigNumber(buyPriceFormatAmount).toNumber() + new BigNumber(buyFeeFormatAmount).toNumber();
 
   const burnOriginalAmount = seaportSellOrder
     ? seaportSellOrder.getBurnOriginalAmount(childToken?.decimals || 18, childToken?.pDecimals || 0)
     : undefined;
+
+  const userBalanceFormatedText = selectedTokenPrivacy
+    ? `${selectedTokenPrivacy.formatAmount || 0} ${selectedTokenPrivacy.symbol || ''}`
+    : '';
+
+  const isCanBuy =
+    selectedTokenPrivacy &&
+    selectedTokenPrivacy.formatAmount &&
+    new BigNumber(selectedTokenPrivacy.formatAmount).toNumber() >= totalBuyAmount;
 
   useEffect(() => {
     tokens.length > 0 && selectedToken === undefined && setSelectedToken(tokens[0]);
   }, [tokens]);
 
   useEffect(() => {
-    if (reciptientAddress && selectedToken) {
+    if (isValidReciptientAddress && reciptientAddress && selectedToken) {
       estimateFee();
     }
-  }, [selectedToken, reciptientAddress]);
+  }, [selectedToken, reciptientAddress, isValidReciptientAddress]);
 
   const estimateFee = async () => {
     const tokenId = selectedNFT.tokenId;
@@ -174,7 +197,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     if (!isIncognitoInstalled()) {
       return requestIncognitoAccount();
     }
-    if (buyFee && selectedToken) {
+    if (buyFee && selectedToken && isCanBuy) {
       setModal({
         isTransparent: false,
         closable: true,
@@ -208,7 +231,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
             time: new Date().getTime(),
             appName: 'opensea',
             buyTokenID: selectedToken.tokenID,
-            buyAmountText: buyPriceAmount,
+            buyAmountText: buyPriceFormatAmount,
           });
         }
 
@@ -240,10 +263,6 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     });
   };
 
-  const onChangeReciptientAddress = (e: any) => {
-    setReciptientAddress(e.target.value);
-  };
-
   const renderSelectTokenList = () => (
     <div className="select-tokens-list" onClick={showTokensList}>
       {selectedToken && <img className="selected-token-icon" src={selectedToken.iconUrl} />}
@@ -256,7 +275,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     seaportSellOrder && (
       <div className="price">
         <p className="price-coin">
-          {buyPriceAmount} {selectedToken?.symbol}
+          {buyPriceFormatAmount} {selectedToken?.symbol}
         </p>
       </div>
     );
@@ -264,9 +283,14 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const renderFee = () =>
     buyFee && (
       <p className="current-price">
-        {buyFee.getFeeAmountStr(childToken?.pDecimals || 9)} {selectedToken?.symbol} = {buyFee.getFeeUsdStr()} $
+        {buyFeeFormatAmount} {selectedToken?.symbol} = {buyFee.getFeeUsdStr()} $
       </p>
     );
+
+  const renderUserBalance = () => <p className="current-balance">Balance: {userBalanceFormatedText}</p>;
+  const renderError = () => (
+    <p className="current-error">{!isCanBuy && incAccount && 'Your balance is insufficient.'}</p>
+  );
 
   return (
     <React.Fragment>
@@ -277,14 +301,8 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
             <p className="time-sale">{`Sale ends ${seaportSellOrder.getSaleEnd()}`}</p>
           </div>
           <div className="price-indicator" />
-          <div className="buy-container">
-            <TextInputStyled
-              placeholder={'Reciptient Address'}
-              type={'text'}
-              onChange={onChangeReciptientAddress}
-              value={reciptientAddress}
-              autoFocus={false}
-            />
+          <div className="reciptient-container">
+            <ReciptientAddress />
             {renderSelectTokenList()}
           </div>
           <div className="price-indicator" />
@@ -293,10 +311,14 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
               <p className="current-price">Current price</p>
               {renderCurrentPrice()}
               {renderFee()}
+              {renderUserBalance()}
+              {renderError()}
             </div>
 
-            <button className="btn-buy" onClick={onClickBuy}>
-              <p className="text-buy">Buy</p>
+            <button className="btn-buy" onClick={!incAccount ? showPopup : onClickBuy}>
+              <p className="text-buy">
+                {!incAccount ? (isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet') : 'Buy'}
+              </p>
             </button>
           </div>
         </div>

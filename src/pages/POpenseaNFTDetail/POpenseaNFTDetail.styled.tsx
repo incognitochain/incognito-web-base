@@ -16,8 +16,9 @@ export const WrapperContent = styled.div`
   }
   .section-1 {
     display: flex;
-    flex: 0.45;
+    flex: 0.48;
     margin-right: 32px;
+    flex-direction: column;
 
     .content-1 {
       width: 100%;
@@ -38,17 +39,18 @@ export const WrapperContent = styled.div`
     display: flex;
     flex-direction: column;
 
-    .artis-container {
+    .collection-container {
       display: flex;
       flex-direction: row;
       align-items: center;
     }
-    .artis {
+    .collection-name {
       font-weight: 400;
       font-size: 16px;
       line-height: 140%;
       color: ${({ theme }) => theme.color_blue};
       margin-right: 8px;
+      cursor: pointer;
     }
 
     .name {
@@ -87,7 +89,7 @@ export const WrapperContent = styled.div`
     }
 
     .price-container {
-      margin-top: 40px;
+      margin-top: 24px;
       border: 1px solid ${({ theme }) => theme.border1};
       border-radius: 12px;
       padding: 16px;
@@ -106,10 +108,17 @@ export const WrapperContent = styled.div`
       background-color: ${({ theme }) => theme.border1};
     }
 
-    .buy-container {
+    .reciptient-container {
       display: flex;
       flex-direction: row;
       align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+    }
+
+    .buy-container {
+      display: flex;
+      flex-direction: row;
       justify-content: space-between;
       margin-top: 16px;
     }
@@ -119,6 +128,22 @@ export const WrapperContent = styled.div`
       font-size: 14px;
       line-height: 140%;
       color: ${({ theme }) => theme.color_grey};
+    }
+
+    .current-balance {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 140%;
+      color: ${({ theme }) => theme.color_grey};
+      margin-top: 14px;
+    }
+
+    .current-error {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 140%;
+      color: ${({ theme }) => theme.content4};
+      margin-top: 2px;
     }
 
     .price-view {
@@ -215,7 +240,7 @@ export const WrapperContent = styled.div`
     }
 
     .select-tokens-list {
-      height: 48px;
+      height: 56px;
       background: #252525;
       border-radius: 8px;
       display: flex;
@@ -226,7 +251,10 @@ export const WrapperContent = styled.div`
       padding-left: 16px;
       padding-right: 16px;
       margin-left: 16px;
+      margin-top: 2px;
+
       cursor: pointer;
+      border: 1px solid ${({ theme }) => theme.border1};
 
       :hover {
         border: 1px solid ${({ theme }) => theme.border5};

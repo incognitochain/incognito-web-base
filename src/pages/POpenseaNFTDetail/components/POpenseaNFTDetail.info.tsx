@@ -8,7 +8,7 @@ import React, { memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { actionGetPOpenseaNFTDetail } from 'state/pOpensea';
-import { shortenString } from 'utils';
+import { shortenPrefixString, shortenString } from 'utils';
 
 interface POpenseaNFTDetailInfoProps {
   selectedNFT: POpenseaNft;
@@ -43,7 +43,7 @@ const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
         title: 'Contract Address',
         value: assetContract && assetContract.address ? shortenString(assetContract.address) : '',
       },
-      { title: 'Token ID', value: selectedNFT.tokenId },
+      { title: 'Token ID', value: selectedNFT.tokenId ? shortenPrefixString(`${selectedNFT.tokenId}`) : '' },
       { title: 'Token Standard', value: assetContract ? assetContract.schemaName : '' },
       { title: 'Chain', value: 'Etherum' },
       { title: 'Creator Fee', value: creatorFee },
