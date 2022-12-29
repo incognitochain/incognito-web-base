@@ -59,7 +59,7 @@ const menuItem: MenuItemProps[] = [
   },
   {
     name: 'Mine',
-    path: 'mine/validator',
+    path: '/mine/validator',
     metric: METRIC_TYPE.HEADER_MINE,
     uniqMetric: METRIC_UNIQ.HEADER_MINE_UNIQ,
   },
