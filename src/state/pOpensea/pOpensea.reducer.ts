@@ -7,6 +7,7 @@ const { ACCOUNT_CONSTANT } = require('incognito-chain-web-js/build/wallet');
 
 export interface IPOpenseaReducer {
   isFetching: boolean;
+  isFetchingNfts: boolean;
   collections: POpenseaCollection[];
   selectedCollection?: POpenseaCollection;
   nfts: POpenseaNft[];
@@ -17,6 +18,7 @@ export interface IPOpenseaReducer {
 
 const initialState: IPOpenseaReducer = {
   isFetching: false,
+  isFetchingNfts: false,
   collections: [],
   selectedCollection: undefined,
   nfts: [],
@@ -39,6 +41,13 @@ export const reducer: Reducer<IPOpenseaReducer, any> = (state = initialState, ac
       return {
         ...state,
         isFetching,
+      };
+    }
+    case POpenseaActionType.FETCHING_NFTS: {
+      const isFetchingNfts = action.payload;
+      return {
+        ...state,
+        isFetchingNfts,
       };
     }
     case POpenseaActionType.SET_SELECTED_COLLECTION: {
