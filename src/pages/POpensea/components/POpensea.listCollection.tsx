@@ -9,6 +9,8 @@ import React from 'react';
 import { isMobile } from 'react-device-detect';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
+import POpenseaListCollectionLoader from './POpensea.listCollection.loader';
+
 const Styled = styled.div`
   margin-top: 24px;
 
@@ -371,20 +373,24 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
 
   return (
     <Styled>
-      <Table
-        columns={columns}
-        dataSource={collections}
-        size="large"
-        // loading={isFetching && collections.length === 0}
-        pagination={false}
-        rowClassName="tableRow"
-        onRow={(collection) => ({
-          onClick: () => {
-            if (isMobile) return;
-            onClickItem(collection);
-          },
-        })}
-      />
+      {isFetching && collections.length <= 0 ? (
+        <POpenseaListCollectionLoader />
+      ) : (
+        <Table
+          columns={columns}
+          dataSource={collections}
+          size="large"
+          // loading={isFetching && collections.length === 0}
+          pagination={false}
+          rowClassName="tableRow"
+          onRow={(collection) => ({
+            onClick: () => {
+              if (isMobile) return;
+              onClickItem(collection);
+            },
+          })}
+        />
+      )}
     </Styled>
   );
 };

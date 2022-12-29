@@ -41,7 +41,7 @@ export const Styled = styled.div`
   .balance-container {
     display: flex;
     flex-direction: row;
-    /* align-items: center; */
+    align-items: center;
     justify-content: space-between;
     margin-top: 16px;
   }
@@ -73,7 +73,6 @@ export const Styled = styled.div`
     font-size: 16px;
     line-height: 140%;
     color: ${({ theme }) => theme.color_grey};
-    margin-top: 4px;
   }
 
   .current-error {
@@ -138,8 +137,8 @@ export const Styled = styled.div`
     justify-content: center;
     align-items: center;
 
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 28px;
+    padding-right: 28px;
     margin-left: 16px;
     margin-top: 2px;
 

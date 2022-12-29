@@ -11,6 +11,8 @@ export const pOpenseaSelectors = createSelector(
 
 export const isFetchingPOpenseaSelectors = createSelector(pOpenseaSelectors, (pOpensea) => pOpensea.isFetching);
 
+export const isFetchingPOpenseaNFTsSelector = createSelector(pOpenseaSelectors, (pOpensea) => pOpensea.isFetchingNfts);
+
 export const networkFeePOpenseaSelectors = createSelector(pOpenseaSelectors, (pOpensea) => pOpensea.networkFee);
 
 export const pOpenseaCollectionsSelectors = createSelector(pOpenseaSelectors, (pOpensea) => pOpensea.collections);

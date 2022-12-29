@@ -11,8 +11,6 @@ import styled from 'styled-components/macro';
 import { shortenPrefixString, shortenString } from 'utils';
 
 export const Styled = styled.div`
-  margin-top: 8px;
-
   .child-desc {
     margin-top: 24px;
   }

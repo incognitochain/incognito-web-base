@@ -15,12 +15,16 @@ import POpenseaListCollection from './components/POpensea.listCollection';
 import POpenseaSubRoute from './components/POpensea.subRoute';
 import { Styled, WrapperContent } from './POpensea.styled';
 
+const defaultActiveKey = '1';
+
 const Home = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
   const collections = useSelector(pOpenseaCollectionsSelectors);
   const isFetching = useSelector(isFetchingPOpenseaSelectors);
+
+  const [currentKeyTab, setCurrentKeyTab] = React.useState(defaultActiveKey);
 
   React.useEffect(() => {
     dispatch(actionGetPOpenseaCollections());
@@ -33,17 +37,20 @@ const Home = () => {
     }
   };
 
-  const renderLabel = (title: string) => <h3>{title}</h3>;
+  const renderLabel = (key: string, title: string) => (
+    <h3 style={{ color: currentKeyTab === key ? 'white' : '#757575' }}>{title}</h3>
+  );
 
   return (
     <Styled className="default-max-width">
       <WrapperContent>
         <POpenseaSubRoute />
         <Tabs
-          defaultActiveKey="1"
+          defaultActiveKey={defaultActiveKey}
+          onChange={(key) => setCurrentKeyTab(key)}
           items={[
             {
-              label: renderLabel('Top'),
+              label: renderLabel('1', 'Top'),
               key: '1',
               children: (
                 <POpenseaListCollection
@@ -53,6 +60,17 @@ const Home = () => {
                 />
               ),
             },
+            // {
+            //   label: renderLabel('2', 'Top'),
+            //   key: '2',
+            //   children: (
+            //     <POpenseaListCollection
+            //       isFetching={isFetching}
+            //       collections={collections}
+            //       onClickItem={onClickCollectionItem}
+            //     />
+            //   ),
+            // },
           ]}
         />
       </WrapperContent>

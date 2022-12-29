@@ -2,6 +2,11 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 export const Styled = styled.div`
   padding-bottom: 40px;
   width: 100%;
+
+  .header-title {
+    color: red;
+  }
+
   .section-1 {
     display: flex;
     flex-direction: row;
