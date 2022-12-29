@@ -33,11 +33,30 @@ const Container = styled.div`
     color: #757575;
   }
 
+  .markdown ul {
+    list-style: disc inside;
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
+  .markdown ol {
+    list-style: decimal inside;
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
+  .markdown li {
+    margin-left: 24px;
+    line-height: 140%;
+    display: list-item;
+  }
+
   .markdown h1 {
     font-weight: 500;
     font-size: 34px;
     margin-top: 24px;
     color: #ffffff;
+    line-height: 140%;
   }
 
   .markdown h2 {
@@ -46,6 +65,7 @@ const Container = styled.div`
     margin-top: 16px;
     font-weight: bold;
     color: #ffffff;
+    line-height: 140%;
   }
 
   .markdown h3 {
@@ -53,6 +73,7 @@ const Container = styled.div`
     margin-top: 16px;
     font-weight: 500;
     color: #ffffff;
+    line-height: 140%;
   }
 
   .markdown img {

@@ -17,38 +17,60 @@ const { TextArea } = Input;
 
 const Container = styled.div`
   width: 100%;
-
+  word-wrap: break-word;
   .markdown {
     font-weight: 400;
     font-size: 16px;
     line-height: 140%;
-    color: #9c9c9c;
+    color: #757575;
   }
 
   .markdown p {
     font-size: 16px;
-    color: #9c9c9c;
+    color: #757575;
+  }
+
+  .markdown ul {
+    list-style: disc inside;
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
+  .markdown ol {
+    list-style: decimal inside;
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
+  .markdown li {
+    margin-left: 24px;
+    line-height: 140%;
+    display: list-item;
   }
 
   .markdown h1 {
-    font-size: 28px;
-    margin-top: 16px;
-    font-weight: bold;
+    font-weight: 500;
+    font-size: 34px;
+    margin-top: 24px;
     color: #ffffff;
+    line-height: 140%;
   }
 
   .markdown h2 {
+    font-weight: 500;
     font-size: 24px;
     margin-top: 16px;
     font-weight: bold;
     color: #ffffff;
+    line-height: 140%;
   }
 
   .markdown h3 {
     font-size: 20px;
     margin-top: 16px;
-    font-weight: bold;
+    font-weight: 500;
     color: #ffffff;
+    line-height: 140%;
   }
 
   .markdown img {
