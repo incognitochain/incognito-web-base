@@ -79,10 +79,6 @@ const menuItem: MenuItemProps[] = [
   //   name: 'Earning',
   //   path: routeEarnings,
   // },
-  {
-    name: 'DAO',
-    path: '/vote',
-  },
 ];
 
 const moreItem = [
