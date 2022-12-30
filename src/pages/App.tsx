@@ -24,9 +24,12 @@ import { GetPRV } from './GetPRV';
 import Home from './Home';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
-import PageNotFound from './PageNotFound/PageNotFound';
+import Page404 from './Page404';
 import PeggingApp from './PeggingApp';
 import Policy from './Policy';
+import POpensea from './POpensea';
+import POpenseaDetail from './POpenseaDetail';
+import POpenseaNFTDetail from './POpenseaNFTDetail';
 import Structure from './Structure';
 import DepositPage from './Swap/features/DepositPage';
 import SwapExchange from './Swap/features/SwapExchange';
@@ -105,26 +108,25 @@ const App = () => {
   const renderContent = () => {
     return (
       <Switch>
-        <>
-          {/* <Route exact path="/swap/:outputCurrency" component={RedirectToSwap} /> */}
-          <Route exact path="/page-not-found" component={PageNotFound} />
-          <Route exact path="/internet-disconnected" component={InternetDisconnected} />
-          {/*<Route exact path="/" component={Market} />*/}
-          <Route exact path="/" component={Home} />
-          <Route exact path="/mine.html" component={Structure} />
-          <Route exact path="/mine" component={Structure} />
-          <Route exact path="/swap" component={Market} />
-          <Route exact path="/papps/:id" component={SwapExchange} />
-          <Route exact path="/papps" component={PeggingApp} />
-          <Route exact path="/mine" component={Structure} />
-          <Route exact path="/earnings" component={Earnings} />
-          <Route exact path="/privacy-policy" component={Policy} />
-          <Route exact path="/term-of-service" component={TermOfService} />
-          <Route exact path="/mine/validator" component={Validators} />
-          <Route exact path="/get-prv" component={GetPRV} />
-          <Route exact path="/buy-node" component={BuyNode} />
-          <Route exact path="/deposit" component={DepositPage} />
-        </>
+        <Route exact path="/internet-disconnected" component={InternetDisconnected} />
+        <Route exact path="/" component={Home} />
+        <Route exact path={['/wallet', '/mine', '/wallet.html']} component={Structure} />
+        <Route exact path="/swap" component={Market} />
+        <Route exact path="/papps/:id" component={SwapExchange} />
+        <Route exact path="/papps" component={PeggingApp} />
+        <Route exact path="/earnings" component={Earnings} />
+        <Route exact path="/privacy-policy" component={Policy} />
+        <Route exact path="/term-of-service" component={TermOfService} />
+        <Route exact path="/mine/validator" component={Validators} />
+        <Route exact path="/get-prv" component={GetPRV} />
+        <Route exact path="/buy-node" component={BuyNode} />
+        <Route exact path="/deposit" component={DepositPage} />
+        <Route exact path="/popensea" component={POpensea} />
+        <Route exact path="/popensea/detail/:contract" component={POpenseaDetail} />
+        <Route exact path="/popensea/nft-detail/:contract/:tokenId" component={POpenseaNFTDetail} />
+        <Route exact path="/buy-node" component={BuyNode} />
+        <Route exact path="/deposit" component={DepositPage} />
+        <Route component={Page404} />
       </Switch>
     );
   };

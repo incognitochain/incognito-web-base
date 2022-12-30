@@ -5,12 +5,12 @@ const KEY = 'INC-SWAP-EXCHANGE-TXS-1';
 
 export interface ISwapTxStorage {
   txHash: string;
-  incAddress: string;
+  incAddress?: string;
   time: number;
   appName: string;
-  sellTokenID: string;
+  sellTokenID?: string; // If sellTokenID is undefine, it is Opeasea Tx
   buyTokenID: string;
-  sellAmountText: string;
+  sellAmountText?: string;
   buyAmountText: string;
 }
 

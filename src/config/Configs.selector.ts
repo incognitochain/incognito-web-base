@@ -24,3 +24,5 @@ export const structureTranslateSelector = createSelector(
   translateSelector,
   (translate): IStructure => translate.structure
 );
+
+export const pOpenseaTranslateSelector = createSelector(translateSelector, (translate) => translate?.pOpensea);

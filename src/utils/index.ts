@@ -62,6 +62,13 @@ export function shortenString(address: string, chars = 6): string {
   return `${address.substring(0, chars)}...${address.substring(address.length - chars)}`;
 }
 
+export function shortenPrefixString(address: string, chars = 16): string {
+  if (address.length <= chars) {
+    return address;
+  }
+  return `${address.substring(0, chars)}...`;
+}
+
 interface IEllipsis {
   str: string;
   limit?: number;

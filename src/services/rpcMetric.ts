@@ -46,6 +46,7 @@ export enum METRIC_TYPE {
   PAPP_SPOOKY = 416,
   PAPP_TRADER_JOE = 417,
   PAPP_TRISOLARIS = 418,
+  PAPP_OPENSEA = 419,
 }
 
 export enum METRIC_UNIQ {
@@ -83,6 +84,7 @@ export enum METRIC_UNIQ {
   PAPP_SPOOKY_UNIQ = 516,
   PAPP_TRADER_JOE_UNIQ = 517,
   PAPP_TRISOLARIS = 518,
+  PAPP_OPENSEA_UNIQ = 519,
 }
 
 class RpcMetric {

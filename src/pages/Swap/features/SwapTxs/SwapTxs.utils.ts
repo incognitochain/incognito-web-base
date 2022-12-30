@@ -183,11 +183,27 @@ const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swa
       }
     }
 
+    if (tx.sellTokenID === undefined && tx.buyTokenID) {
+      const buyToken: SelectedPrivacy = getPrivacyDataByTokenIDSelector(state.getState())(tx.buyTokenID);
+      const buyStr = `${format.amountVer2({ originalAmount: tx.buyAmountText, decimals: 0 })} ${buyToken.symbol}`;
+      if (buyToken.symbol) {
+        const buyNetwork = buyToken.network;
+        tx = {
+          ...tx,
+          buyStr,
+          swapStr: buyStr,
+          buyNetwork,
+        };
+      } else {
+        return [...prev];
+      }
+    }
+
     // inc_request_tx_status
     // -> bsc_swap_tx_status
     // -> bsc_swap_outcome
     // -> is_redeposit === true bsc_redeposit_status
-    /** to many cases, please blame @lam */
+    /** much case, please blame @lam */
     let swapStatus = Status.processing;
     const { burnTxStatus, outchainTxStatus, swapExchangeStatus, isRedeposit, redepositStatus, appName } = tx;
     switch (burnTxStatus) {
