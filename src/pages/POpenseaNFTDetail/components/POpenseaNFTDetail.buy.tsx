@@ -9,7 +9,7 @@ import { useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
 import LoadingTransaction from 'components/Modal/Modal.transaction';
 import { BIG_COINS, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
-import { Convert, POpenseaBuyFee, POpenseaNft } from 'models/model/POpenseaNFT';
+import { POpenseaBuyFee, POpenseaNft } from 'models/model/POpenseaNFT';
 import PToken from 'models/model/pTokenModel';
 import { actionSetErrorMsg } from 'pages/Swap/features/FormUnshield/FormUnshield.actions';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
@@ -17,12 +17,13 @@ import { setSwapTx } from 'pages/Swap/Swap.storage';
 import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { formValueSelector, isValid } from 'redux-form';
-import rpcPOpensea, { postEstimateFee } from 'services/rpcPOpensea';
+import rpcPOpensea from 'services/rpcPOpensea';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { networkFeePOpenseaSelectors } from 'state/pOpensea';
 import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/token';
 
 import store from '../../../state';
+import { IPOpenseaNFTDetailBuyAction, POpenseaNFTDetailBuyAction } from './POpenseaNFTDetail.buy.action';
 import ReciptientAddress, { FIELD_NAME, FORM_NAME } from './POpenseaNFTDetail.buy.form';
 import { ArrowDown, Spinner, Styled } from './POpenseaNFTDetail.buy.styled';
 
@@ -41,6 +42,14 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const [buyFee, setBuyFee] = useState<POpenseaBuyFee | undefined>();
   const [loadingFee, setLoadingFee] = useState<boolean>(false);
 
+  const buyActions: IPOpenseaNFTDetailBuyAction = new POpenseaNFTDetailBuyAction({
+    component: {
+      setBuyFee,
+      setLoadingFee,
+    },
+    dispatch,
+  });
+
   const incAccount = useSelector(incognitoWalletAccountSelector);
   const networkFee = useSelector(networkFeePOpenseaSelectors);
   const tokens = useSelector(unshieldableTokens).filter(
@@ -55,7 +64,6 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const reciptientAddress = formSelector(store.getState(), FIELD_NAME);
 
   const seaportSellOrder = selectedNFT.getSeaportSellOrder();
-  const assetContract = selectedNFT.assetContract;
 
   const childToken =
     selectedToken && selectedToken.isUnified
@@ -87,41 +95,9 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
 
   useEffect(() => {
     if (isValidReciptientAddress && selectedToken) {
-      estimateFee();
+      buyActions.estimateFee(selectedToken, reciptientAddress, selectedNFT);
     }
   }, [selectedToken, isValidReciptientAddress]);
-
-  const estimateFee = async () => {
-    const tokenId = selectedNFT.tokenId;
-    if (
-      reciptientAddress &&
-      selectedToken &&
-      selectedNFT &&
-      tokenId &&
-      assetContract &&
-      assetContract.address &&
-      seaportSellOrder
-    ) {
-      setLoadingFee(true);
-      const contract = assetContract.address;
-      try {
-        const res = await postEstimateFee(
-          contract,
-          tokenId,
-          selectedToken.tokenID,
-          seaportSellOrder.getCurrentPrice(),
-          reciptientAddress
-        );
-        if (res && res.Calldata) {
-          const fee = Convert.toPOpenseaBuyFee(res);
-          setBuyFee(fee);
-        }
-      } catch (error) {
-      } finally {
-        setLoadingFee(false);
-      }
-    }
-  };
 
   const getBurnPayments = async (): Promise<any> => {
     try {

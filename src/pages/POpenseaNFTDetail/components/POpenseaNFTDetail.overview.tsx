@@ -7,7 +7,43 @@
 import { POpenseaNft } from 'models/model/POpenseaNFT';
 import React, { memo } from 'react';
 import { useHistory } from 'react-router-dom';
+import styled from 'styled-components/macro';
 
+const Styled = styled.div`
+  .collection-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .collection-name {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 140%;
+    color: ${({ theme }) => theme.color_blue};
+    margin-right: 8px;
+    cursor: pointer;
+  }
+
+  .name {
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 140%;
+    margin-top: 8px;
+  }
+
+  .owner-by {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 140%;
+    margin-top: 4px;
+  }
+
+  .view-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 24px;
+  }
+`;
 interface POpenseaNFTDetailOverviewProps {
   selectedNFT: POpenseaNft;
   contract: string;
@@ -16,7 +52,7 @@ const POpenseaNFTDetailOverview = (props: POpenseaNFTDetailOverviewProps) => {
   const { selectedNFT } = props;
   const history = useHistory();
   return (
-    <React.Fragment>
+    <Styled>
       <div className="collection-container">
         <button
           onClick={() => {
@@ -32,21 +68,7 @@ const POpenseaNFTDetailOverview = (props: POpenseaNFTDetailOverviewProps) => {
       {/* <p className="owner-by">
         Owner by <a>{assetContract ? assetContract.owner : ''}</a>
       </p> */}
-      {/* <div className="view-container">
-        <div className="view-content">
-          <img src={icView} />
-          <p className="view-title">10 views</p>
-        </div>
-        <div className="view-content">
-          <img src={icStar} />
-          <p className="view-title">10 favorites</p>
-        </div>
-        <div className="view-content">
-          <img src={icGaming} />
-          <p className="view-title">Gaming</p>
-        </div>
-      </div> */}
-    </React.Fragment>
+    </Styled>
   );
 };
 
