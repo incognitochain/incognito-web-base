@@ -11,12 +11,14 @@ import { POpenseaBuyFee, POpenseaNft } from 'models/model/POpenseaNFT';
 import PToken from 'models/model/pTokenModel';
 import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { formValueSelector, isValid } from 'redux-form';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { networkFeePOpenseaSelectors } from 'state/pOpensea';
 import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/token';
 
 import store from '../../../state';
+import { actionSetToken } from '../../Swap/features/FormDeposit/FormDeposit.actions';
 import { IPOpenseaNFTDetailBuyAction, POpenseaNFTDetailBuyAction } from './POpenseaNFTDetail.buy.action';
 import ReciptientAddress, { FIELD_NAME, FORM_NAME } from './POpenseaNFTDetail.buy.form';
 import { ArrowDown, Spinner, Styled } from './POpenseaNFTDetail.buy.styled';
@@ -29,6 +31,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const { selectedNFT } = props;
 
   const dispatch = useDispatch();
+  const history = useHistory();
   const { setModal, clearAllModal } = useModal();
   const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount, showPopup } = useIncognitoWallet();
 
@@ -164,7 +167,25 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   };
 
   const renderError = () => (
-    <p className="current-error">{!isCanBuy && incAccount && 'Your balance is insufficient.'}</p>
+    <p className="current-error">
+      {!isCanBuy && incAccount && 'Your balance is insufficient.'}{' '}
+      {!isCanBuy && incAccount && (
+        <span
+          onClick={() => {
+            history.push('/deposit');
+            const token: any = selectedToken?.isUnified
+              ? selectedToken.listUnifiedToken.find((token) => token.currencyType === 1)
+              : selectedToken;
+            if (token) {
+              dispatch(actionSetToken({ sellToken: token }));
+            }
+          }}
+          style={{ textDecoration: 'underline', cursor: 'pointer' }}
+        >
+          deposit now
+        </span>
+      )}
+    </p>
   );
 
   return (
