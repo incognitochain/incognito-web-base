@@ -114,7 +114,7 @@ const CollectionWrapper = styled(Row)`
   justify-content: space-around;
   grid-template-columns: repeat(auto-fill, 390px);
   ${({ theme }) => theme.mediaWidth.upToMedium`
-    grid-template-columns: repeat(auto-fill, calc((100vw / 2) - 80px));
+    grid-template-columns: repeat(auto-fill, calc((100vw / 2) - 60px));
   `}
   ${({ theme }) => theme.mediaWidth.upToSmall`
     grid-template-columns: repeat(auto-fill, calc(100vw - 30px));
