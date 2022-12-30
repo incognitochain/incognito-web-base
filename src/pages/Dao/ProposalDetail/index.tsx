@@ -71,12 +71,12 @@ const ProposalDetail = () => {
   const timestamp = Date.now();
 
   const startDate =
-    proposalDetail && timestamp && currentBlock
+    proposalDetail && proposalDetail.status && timestamp && currentBlock
       ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (proposalDetail.startBlock - currentBlock), 'seconds')
       : undefined;
 
   const endDate =
-    proposalDetail && timestamp && currentBlock
+    proposalDetail && proposalDetail.status && timestamp && currentBlock
       ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (proposalDetail.endBlock - currentBlock), 'seconds')
       : undefined;
   const now = dayjs();
@@ -100,15 +100,18 @@ const ProposalDetail = () => {
     return endDate;
   };
 
-  const rightTitleDate = i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZoneName: 'short',
-  });
-
-  const rightTitleDateValue = i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
-    dateStyle: 'long',
-  });
+  let rightTitleDate = '';
+  let rightTitleDateValue = '';
+  if (proposalDetail?.status) {
+    rightTitleDate = i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
+    rightTitleDateValue = i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+      dateStyle: 'long',
+    });
+  }
 
   const getFee = async () => {
     try {
@@ -214,7 +217,7 @@ const ProposalDetail = () => {
             isLoading={isFetchingProposalDetail}
             leftTitle={titleDate}
             rightTitle={rightTitleDate}
-            rightValue={rightTitleDateValue || 'test'}
+            rightValue={rightTitleDateValue}
           />
           <div style={{ width: 24 }} />
           <InfoBox

@@ -59,8 +59,8 @@ const InfoBox = (props: InfoBoxProps) => {
         </div>
       ) : (
         <div>
-          <RightLabel>{rightTitle}</RightLabel>
-          <RightLabelValue>{rightValue}</RightLabelValue>
+          <RightLabel>{rightTitle && rightTitle}</RightLabel>
+          <RightLabelValue>{rightValue && rightValue}</RightLabelValue>
         </div>
       )}
     </Box2Container>
