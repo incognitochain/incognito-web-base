@@ -106,7 +106,7 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
             return (
               <List.Item key={index.toString()} onClick={() => props.onClickNFTItem(item)}>
                 <div className="card">
-                  <ImagePlaceholder className="item-img" src={item.getImageUrl()} />
+                  <ImagePlaceholder className="item-img" src={item.getImageUrl()} animationUrl={item.animationUrl} />
                   <div className="item-info">
                     <div className="item-name-container">
                       <p className="item-name">{item.getOriginalName()}</p>

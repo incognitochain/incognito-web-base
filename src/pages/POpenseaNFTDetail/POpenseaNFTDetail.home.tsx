@@ -33,13 +33,21 @@ const Home = () => {
         <div className="content">
           <div className="section-1">
             <div className="content-1">
-              <ImagePlaceholder className="img-nft-1" src={selectedNFT.getImageUrl()} />
+              <ImagePlaceholder
+                className="img-nft-1"
+                src={selectedNFT.getImageUrl()}
+                animationUrl={selectedNFT.animationUrl}
+              />
             </div>
             <POpenseaNFTDetailInfo selectedNFT={selectedNFT} />
           </div>
           <div className="section-2">
             <div className="content-2">
-              <ImagePlaceholder className="img-nft-2" src={selectedNFT.getImageUrl()} />
+              <ImagePlaceholder
+                className="img-nft-2"
+                src={selectedNFT.getImageUrl()}
+                animationUrl={selectedNFT.animationUrl}
+              />
             </div>
             <POpenseaNFTDetailOverview contract={contract} selectedNFT={selectedNFT} />
             <POpenseaNFTDetailBuy selectedNFT={selectedNFT} />
