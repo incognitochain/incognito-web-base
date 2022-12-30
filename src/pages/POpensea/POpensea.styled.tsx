@@ -120,7 +120,7 @@ export const Styled = styled.div`
     display: flex;
     position: absolute;
     right: 0px;
-    top: -78px;
+    top: -86px;
   }
 `;
 

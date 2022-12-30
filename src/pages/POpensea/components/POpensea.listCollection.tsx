@@ -11,7 +11,7 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 import POpenseaListCollectionLoader from './POpensea.listCollection.loader';
 
 const Styled = styled.div`
-  margin-top: 0px;
+  margin-top: 8px;
 
   tr {
     height: 80px !important;
