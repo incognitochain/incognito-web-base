@@ -110,6 +110,8 @@ const parseExchangeDataModelResponse = (
   let poolPairs = data?.PoolPairs || [];
   let feeAddress = data?.FeeAddress || '';
 
+  const tradePathStr = typeof data.Paths === 'string' ? data.Paths : '';
+
   // handle case INTER SWAP
   const appName = data?.AppName;
   const isInterSwap = appName.toLowerCase().includes(SwapExchange.INTER_SWAP);
@@ -193,11 +195,10 @@ const parseExchangeDataModelResponse = (
     rate: data?.Rate || '1',
     impactAmount: data?.ImpactAmount ? Number(data?.ImpactAmount || 0) : null,
 
-    // routes: data?.Paths || [],
-    routes: [],
+    routes: data?.Paths || [],
 
-    // tradePathStr: data.Paths || '',
-    tradePathStr: '',
+    tradePathStr,
+
     groupPaths: [],
     interSwapData,
   };

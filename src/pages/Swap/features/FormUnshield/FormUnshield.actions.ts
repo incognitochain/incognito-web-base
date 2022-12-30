@@ -11,6 +11,7 @@ import convert from 'utils/convert';
 import format from 'utils/format';
 import { getAcronymNetwork } from 'utils/token';
 
+import { getShardIDByAddress } from '../../../../state/incognitoWallet';
 import { GROUP_NETWORK_ID_BY_EXCHANGE } from './FormUnshield.constants';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import { combineExchange } from './FormUnshield.swapEstBuilder';
@@ -351,7 +352,7 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
 };
 
 export const actionEstimateSwapFee =
-  ({ isResetForm = false }: { isResetForm: boolean }) =>
+  ({ isResetForm = false, incAddress = '' }: { isResetForm: boolean; incAddress?: string }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
       const {
@@ -401,12 +402,15 @@ export const actionEstimateSwapFee =
           network = NetworkTypePayload.INCOGNITO;
       }
 
+      const shardIDStr = incAddress ? getShardIDByAddress({ incAddress }).toString() : '';
+
       const payload = {
         network,
         amount: inputAmount,
         fromToken: sellToken.tokenID,
         toToken: buyParentToken.tokenID,
         slippage,
+        shardIDStr,
       };
 
       // Call api estimate swap fee

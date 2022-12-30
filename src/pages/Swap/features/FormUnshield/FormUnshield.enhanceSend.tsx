@@ -582,6 +582,8 @@ const enhanceSend = (WrappedComponent: any) => {
                   buyTokenID: buyToken.tokenID,
                   sellAmountText: inputAmount,
                   buyAmountText: `${expectedReceiveAmount || 0}`,
+                  interPAppName: exchangeSelectedData?.interSwapData?.pAppName || '',
+                  interPAppNetwork: exchangeSelectedData?.interSwapData?.pAppNetwork || '',
                 });
               }
             } else if (!sellToken.isBTC) {

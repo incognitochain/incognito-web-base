@@ -28,6 +28,9 @@ export const Styled = styled.div`
   }
   ${({ theme }) => theme.mediaWidth.upToMedium`
     gap: 30px;
+    grid-template-columns: auto auto;
+  `}
+  ${({ theme }) => theme.mediaWidth.upToSmall`
     grid-template-columns: auto;
   `}
 `;

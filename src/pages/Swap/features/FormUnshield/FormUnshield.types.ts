@@ -81,7 +81,7 @@ export interface ISwapExchangeData {
   appName: SwapExchange;
   exchangeName: string;
   fees: ISwapFee[];
-  routes: any[];
+  routes: string | string[];
   incTokenID: string;
   feeAddress: string;
   callContract: string;

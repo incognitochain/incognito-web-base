@@ -522,11 +522,11 @@ const getUnshieldData = ({
       decimals: _sellToken.pDecimals,
     });
 
-    if (exchangeSelectedData && exchangeSelectedData.appName === SwapExchange.PDEX) {
-      tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
-    } else {
-      tradePath = exchangeSelectedData?.tradePathStr || '';
-    }
+    tradePath =
+      typeof exchangeSelectedData?.routes === 'string'
+        ? exchangeSelectedData?.routes
+        : getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
+
     let tradeFeeText = '';
     if (isUseTokenFee) {
       tradeFeeText = `${

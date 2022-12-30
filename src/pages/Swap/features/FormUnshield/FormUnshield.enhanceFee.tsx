@@ -13,6 +13,7 @@ export interface TInner {
 
 export interface IEstimate {
   isResetForm: boolean;
+  incAddress?: string;
 }
 
 let UPDATED_METRIC = false;
@@ -52,12 +53,12 @@ const enhanceFee = (WrappedComponent: any) => {
       return dispatch(actionEstimateFee());
     };
 
-    const onEstimateSwapFee = async ({ isResetForm = true }: IEstimate) => {
+    const onEstimateSwapFee = async ({ isResetForm = true, incAddress = '' }: IEstimate) => {
       isResetForm && onResetFee();
-      await dispatch(actionEstimateSwapFee({ isResetForm }));
+      await dispatch(actionEstimateSwapFee({ isResetForm, incAddress }));
     };
 
-    const handleEstimateFee = async ({ isResetForm = true }: IEstimate) => {
+    const handleEstimateFee = async ({ isResetForm = true, incAddress = '' }: IEstimate) => {
       let func: any = null;
       if (formType === FormTypes.SWAP) {
         // Case estimate fee for swapped transactions
@@ -68,23 +69,24 @@ const enhanceFee = (WrappedComponent: any) => {
       }
 
       if (func && typeof func === 'function') {
-        await func({ isResetForm });
+        await func({ isResetForm, incAddress });
       }
     };
 
     const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.ESTIMATE_SWAP });
 
-    const onEstimate = async () => {
+    const onEstimate = async ({ incAddress }: { incAddress: string }) => {
       if (!UPDATED_METRIC) {
         updateMetric().then();
         UPDATED_METRIC = true;
       }
-      await handleEstimateFee({ isResetForm: true });
+
+      await handleEstimateFee({ isResetForm: true, incAddress });
       // if (intervalRef && !intervalRef.current && formType === FormTypes.SWAP) {
       //   // @ts-ignore
       //   intervalRef.current = setInterval(async () => {
       //     await handleEstimateFee({ isResetForm: false });
-      //   }, 15000);
+      //   }, 30000);
       // }
     };
 
@@ -102,7 +104,7 @@ const enhanceFee = (WrappedComponent: any) => {
         return;
       }
       onClearInterval();
-      debounceEstimateFee();
+      debounceEstimateFee({ incAddress });
       return () => {
         onClearInterval();
       };
