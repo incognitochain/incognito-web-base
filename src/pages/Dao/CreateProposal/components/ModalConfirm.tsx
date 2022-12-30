@@ -97,7 +97,7 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmPro
       return (
         <div>
           <LabelText>
-            PRV burn:{' '}
+            Snapshot Amount:{' '}
             {format.amountVer2({
               originalAmount: Number(prvBalanceToBurn || 0),
               decimals: PRV.pDecimals,
