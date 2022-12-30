@@ -4,7 +4,7 @@ import TreasuryBox from './components/TreasuryBox';
 
 const Governance = () => {
   return (
-    <div className="default-max-width" style={{ width: '100%' }}>
+    <div className="default-max-width-2" style={{ width: '100%' }}>
       <TopView />
       <TreasuryBox />
       <ListProposal />
