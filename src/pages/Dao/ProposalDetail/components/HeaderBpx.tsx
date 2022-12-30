@@ -81,7 +81,7 @@ const HeaderBox: React.FC<HeaderProps> = (props) => {
         <div>
           <BackButton />
         </div>
-        <ProposalIdText>Proposal 63ac61007a2bf687f0a611cf</ProposalIdText>
+        <ProposalIdText>Proposal #{proposal?.id}</ProposalIdText>
         <div style={{ maxWidth: 140 }}>
           <ProposalStatusBox status={proposal?.status} />
         </div>

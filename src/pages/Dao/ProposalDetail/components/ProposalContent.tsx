@@ -24,7 +24,7 @@ const Container = styled.div`
   .markdown {
     font-weight: 400;
     font-size: 16px;
-    line-height: 140%;
+    line-height: 160%;
     color: #757575;
   }
 
