@@ -88,6 +88,8 @@ const Container = styled.div`
   .markdown img {
     max-width: 100%;
     height: auto;
+    margin-top: 16px;
+    margin-bottom: 16px;
   }
 `;
 
