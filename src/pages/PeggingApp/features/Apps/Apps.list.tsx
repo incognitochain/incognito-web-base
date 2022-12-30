@@ -9,6 +9,7 @@ import spookyImg from 'assets/images/spooky-icon.png';
 import trisolarisImg from 'assets/images/trisolaris-icon.png';
 import uniImg from 'assets/images/uni-icon.png';
 import unknowImg from 'assets/images/unknow-icon.png';
+import voteImg from 'assets/images/vote.svg';
 import { MAIN_NETWORK_NAME } from 'constants/token';
 import { SELECTION_NETWORKS } from 'pages/Swap/features/FormUnshield/FormUnshield.constants';
 import { SwapExchange } from 'pages/Swap/features/FormUnshield/FormUnshield.types';
@@ -113,12 +114,12 @@ const Factory: IFactory[] = [
     network: [MAIN_NETWORK_NAME.AVALANCHE],
   },
   {
-    img: joeImg,
+    img: voteImg,
     name: 'pDAO',
     status: 'SHIPPED',
     nameDesc: 'Private DAO',
-    chain: ['Avalanche', 'DEX'],
-    desc: 'Trade confidentially on Trader Joe. Faster privacy swap is enabled by fast transaction finality on Avalanche.',
+    chain: ['Ethereum'],
+    desc: "Join to vote for particular proposals created by the project developers or directly create their own proposals for the ecosystem's MdSelfImprovement.",
     exchange: SwapExchange.JOE,
     metric: METRIC_TYPE.PAPP_TRADER_JOE,
     metricUniq: METRIC_UNIQ.PAPP_TRADER_JOE_UNIQ,
