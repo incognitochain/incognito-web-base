@@ -9,6 +9,7 @@ import { actionGetPOpenseaNFTDetail, selectedpOpenseaNFTSelector } from 'state/p
 import POpenseaNFTDetailBuy from './components/POpenseaNFTDetail.buy';
 import POpenseaNFTDetailInfo from './components/POpenseaNFTDetail.info';
 import POpenseaNFTDetailOverview from './components/POpenseaNFTDetail.overview';
+// import POpenseaNFTDetailQuestions from './components/POpenseaNFTDetail.questions';
 import POpenseaNFTDetailSubRoute from './components/POpenseaNFTDetail.subRoute';
 import { Styled, WrapperContent } from './POpenseaNFTDetail.styled';
 
@@ -33,18 +34,31 @@ const Home = () => {
         <div className="content">
           <div className="section-1">
             <div className="content-1">
-              <ImagePlaceholder className="img-nft-1" src={selectedNFT.getImageUrl()} />
+              <ImagePlaceholder
+                rootClassName="root-img-nft-1"
+                className="img-nft-1"
+                src={selectedNFT.getImageUrl()}
+                animationUrl={selectedNFT.animationUrl}
+                linkOpensea={selectedNFT.permalink}
+              />
             </div>
             <POpenseaNFTDetailInfo selectedNFT={selectedNFT} />
           </div>
           <div className="section-2">
             <div className="content-2">
-              <ImagePlaceholder className="img-nft-2" src={selectedNFT.getImageUrl()} />
+              <ImagePlaceholder
+                rootClassName="root-img-nft-2"
+                className="img-nft-2"
+                src={selectedNFT.getImageUrl()}
+                animationUrl={selectedNFT.animationUrl}
+                linkOpensea={selectedNFT.permalink}
+              />
             </div>
             <POpenseaNFTDetailOverview contract={contract} selectedNFT={selectedNFT} />
             <POpenseaNFTDetailBuy selectedNFT={selectedNFT} />
           </div>
         </div>
+        {/* <POpenseaNFTDetailQuestions /> */}
       </WrapperContent>
     </Styled>
   );

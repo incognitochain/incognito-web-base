@@ -7,10 +7,12 @@ import icProperties from 'assets/svg/ic-properties.svg';
 import Expandable from 'components/Expandable';
 import { POpenseaNft } from 'models/model/POpenseaNFT';
 import React, { memo } from 'react';
-import styled from 'styled-components/macro';
+import styled, { DefaultTheme } from 'styled-components/macro';
 import { shortenPrefixString, shortenString } from 'utils';
 
 export const Styled = styled.div`
+  margin-top: 16px;
+
   .child-desc {
     margin-top: 24px;
   }
@@ -70,7 +72,7 @@ export const Styled = styled.div`
   }
 
   .list-properties {
-    margin-top: 16px;
+    margin-top: 24px;
   }
 
   .properties-item {
@@ -104,6 +106,10 @@ export const Styled = styled.div`
     margin-top: 2px;
     text-align: center;
   }
+
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+    margin-top: 0px;
+  `}
 `;
 
 interface POpenseaNFTDetailInfoProps {
@@ -180,8 +186,8 @@ const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
   return (
     <Styled>
       <Expandable icon={icDesciption} expand title="Desciption" child={renderDesciptionChild()} />
-      <Expandable icon={icInfo} title="Details" child={renderDetailsChild()} />
       <Expandable icon={icProperties} title="Properties" child={renderPropertiesChild()} />
+      <Expandable icon={icInfo} title="Details" child={renderDetailsChild()} />
     </Styled>
   );
 };

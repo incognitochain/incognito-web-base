@@ -28,12 +28,6 @@ const Styled = styled.div`
     font-size: 16px;
     line-height: 140%;
   }
-  .greenBoldText {
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 140%;
-    color: #0ecb81;
-  }
   .smallText {
     font-size: 12px;
     line-height: 16px;
@@ -141,10 +135,6 @@ const Styled = styled.div`
       line-height: 140%;
       color: #ffffff;
     }
-    .greenBoldText {
-      font-weight: 700;
-      font-size: 16px;
-    }
     .ant-table-thead > tr > th {
       height: 56px;
     }
@@ -229,17 +219,66 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       showSorterTooltip: false,
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText">
-          {record.getTotalVolumnFormatAmount()} ETH
+          {record.getOndayVolumnFormatAmount()} ETH
         </p>
       ),
-      sorter: (a, b) => (a.stats?.totalVolume || 0) - (b.stats?.totalVolume || 0),
+      sorter: (a, b) => (a.stats?.oneDayVolume || 0) - (b.stats?.oneDayVolume || 0),
       // eslint-disable-next-line react/prop-types
       title: ({ sortColumns }) => {
         // eslint-disable-next-line react/prop-types
         const sortedColumn = sortColumns?.find(({ column }) => column.key === 'volumn');
         return (
           <div className="headerTitle" style={{ justifyContent: 'center' }}>
-            Total volumn
+            Volume
+            {sortedColumn ? (
+              sortedColumn.order === 'ascend' ? (
+                <img alt="" src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              ) : sortedColumn?.order === 'descend' ? (
+                <img alt="" src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
+              ) : (
+                <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+              )
+            ) : (
+              <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      dataIndex: 'Change',
+      key: 'Change',
+      responsive: ['md'],
+      align: 'center',
+      showSorterTooltip: false,
+      render: (text, record, index) => {
+        const isPositive = record.stats && record.stats.oneDayDifference && record.stats.oneDayDifference > 0;
+        return (
+          <p
+            key={index.toString()}
+            className="baseText"
+            style={{
+              color:
+                record.stats && record.stats.oneDayDifference
+                  ? record.stats.oneDayDifference > 0
+                    ? '#0ECB81'
+                    : '#FD4040'
+                  : 'gray',
+            }}
+          >
+            {isPositive && '+'}
+            {(record.stats?.oneDayDifference || 0).toFixed(0)}%
+          </p>
+        );
+      },
+      sorter: (a, b) => (a.stats?.oneDayDifference || 0) - (b.stats?.oneDayDifference || 0),
+      // eslint-disable-next-line react/prop-types
+      title: ({ sortColumns }) => {
+        // eslint-disable-next-line react/prop-types
+        const sortedColumn = sortColumns?.find(({ column }) => column.key === 'volumn');
+        return (
+          <div className="headerTitle" style={{ justifyContent: 'center' }}>
+            % Change
             {sortedColumn ? (
               sortedColumn.order === 'ascend' ? (
                 <img alt="" src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
@@ -323,51 +362,51 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
         );
       },
     },
-    {
-      dataIndex: 'Unique Owners',
-      key: 'unique_owners',
-      responsive: ['md'],
-      align: 'center',
-      showSorterTooltip: false,
-      render: (text, record, index) => {
-        const stats = record.stats;
-        return (
-          <div>
-            <p key={index.toString()} className="baseText">
-              {Math.round(
-                stats && stats.totalSupply && stats.numOwners ? (stats.numOwners / stats.totalSupply) * 100 : 0
-              )}
-              %
-            </p>
-            <p className="text-owner">{stats?.numOwners} owners</p>
-          </div>
-        );
-      },
-      sorter: (a, b) =>
-        (((a.stats?.numOwners || 0) / (a.stats?.totalSupply || 1)) * 100 || 0) -
-        (((b.stats?.numOwners || 0) / (b.stats?.totalSupply || 1)) * 100 || 0),
-      // eslint-disable-next-line react/prop-types
-      title: ({ sortColumns }) => {
-        // eslint-disable-next-line react/prop-types
-        const sortedColumn = sortColumns?.find(({ column }) => column.key === 'unique_owners');
-        return (
-          <div className="headerTitle" style={{ justifyContent: 'center' }}>
-            % Unique Owners
-            {sortedColumn ? (
-              sortedColumn.order === 'ascend' ? (
-                <img alt="" src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
-              ) : sortedColumn?.order === 'descend' ? (
-                <img alt="" src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
-              ) : (
-                <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
-              )
-            ) : (
-              <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
-            )}
-          </div>
-        );
-      },
-    },
+    // {
+    //   dataIndex: 'Unique Owners',
+    //   key: 'unique_owners',
+    //   responsive: ['md'],
+    //   align: 'center',
+    //   showSorterTooltip: false,
+    //   render: (text, record, index) => {
+    //     const stats = record.stats;
+    //     return (
+    //       <div>
+    //         <p key={index.toString()} className="baseText">
+    //           {Math.round(
+    //             stats && stats.totalSupply && stats.numOwners ? (stats.numOwners / stats.totalSupply) * 100 : 0
+    //           )}
+    //           %
+    //         </p>
+    //         <p className="text-owner">{stats?.numOwners} owners</p>
+    //       </div>
+    //     );
+    //   },
+    //   sorter: (a, b) =>
+    //     (((a.stats?.numOwners || 0) / (a.stats?.totalSupply || 1)) * 100 || 0) -
+    //     (((b.stats?.numOwners || 0) / (b.stats?.totalSupply || 1)) * 100 || 0),
+    //   // eslint-disable-next-line react/prop-types
+    //   title: ({ sortColumns }) => {
+    //     // eslint-disable-next-line react/prop-types
+    //     const sortedColumn = sortColumns?.find(({ column }) => column.key === 'unique_owners');
+    //     return (
+    //       <div className="headerTitle" style={{ justifyContent: 'center' }}>
+    //         % Unique Owners
+    //         {sortedColumn ? (
+    //           sortedColumn.order === 'ascend' ? (
+    //             <img alt="" src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
+    //           ) : sortedColumn?.order === 'descend' ? (
+    //             <img alt="" src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
+    //           ) : (
+    //             <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+    //           )
+    //         ) : (
+    //           <img alt="" src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    // },
   ];
 
   return (

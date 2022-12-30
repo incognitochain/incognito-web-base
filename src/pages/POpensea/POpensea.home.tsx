@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Tabs } from 'antd';
+import SearchSVG from 'assets/svg/search-icon.svg';
 import { POpenseaCollection } from 'models/model/POpenseaCollection';
 import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +13,7 @@ import {
 } from 'state/pOpensea';
 
 import POpenseaListCollection from './components/POpensea.listCollection';
-import POpenseaSubRoute from './components/POpensea.subRoute';
+// import POpenseaSubRoute from './components/POpensea.subRoute';
 import { Styled, TextInputStyled, WrapperContent } from './POpensea.styled';
 
 const defaultActiveKey = '1';
@@ -27,13 +28,17 @@ const Home = () => {
   const collections = useSelector(pOpenseaCollectionsSearchSelectors)(keySearch);
   const isFetching = useSelector(isFetchingPOpenseaSelectors);
 
+  React.useEffect(() => {
+    dispatch(actionGetPOpenseaCollections());
+  }, []);
+
   const onChange = (e: any) => {
     setKeySearch(e.target.value);
   };
 
-  React.useEffect(() => {
-    dispatch(actionGetPOpenseaCollections());
-  }, []);
+  const onChangeTab = (key: string) => {
+    setCurrentKeyTab(key);
+  };
 
   const onClickCollectionItem = (item: POpenseaCollection) => {
     if (item.primaryAssetContracts && item.primaryAssetContracts.length > 0) {
@@ -49,10 +54,10 @@ const Home = () => {
   return (
     <Styled className="default-max-width">
       <WrapperContent>
-        <POpenseaSubRoute />
+        {/* <POpenseaSubRoute /> */}
         <Tabs
           defaultActiveKey={defaultActiveKey}
-          onChange={(key) => setCurrentKeyTab(key)}
+          onChange={onChangeTab}
           items={[
             {
               label: renderLabel('1', 'Top'),
@@ -60,6 +65,7 @@ const Home = () => {
               children: (
                 <div>
                   <div className="input-container">
+                    <img className="search-ic" src={SearchSVG} />
                     <TextInputStyled
                       placeholder={'Search collections'}
                       type={'text'}

@@ -2,6 +2,7 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 export const Styled = styled.div`
   padding-bottom: 40px;
   width: 100%;
+  min-height: 1000px;
 
   .header-title {
     color: red;
@@ -121,6 +122,39 @@ export const Styled = styled.div`
     position: absolute;
     right: 0px;
     top: -86px;
+    height: 50px;
+    border-radius: 8px;
+    border-width: 1px;
+    padding-left: 16px;
+    padding-right: 50px;
+    background-color: ${({ theme }) => theme.bg3};
+    caret-color: ${({ theme }) => theme.primary5};
+
+    :hover {
+      border: 1px solid ${({ theme }) => theme.border5};
+    }
+
+    :focus {
+      border: 1px solid ${({ theme }) => theme.border5};
+      color: ${({ theme }) => theme.primary5};
+    }
+
+    ::placeholder {
+      flex: none;
+      order: 0;
+      flex-grow: 0;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 140%;
+      color: ${({ theme }) => theme.primary7};
+    }
+  }
+
+  .search-ic {
+    width: 16px;
+    height: 16px;
+    margin-right: 16px;
+    margin-top: 17px;
   }
 `;
 
@@ -188,30 +222,4 @@ export const TextInputStyled = styled.input`
   font-size: 16px;
   line-height: 140%;
   color: white;
-  height: 50px;
-  border-radius: 8px;
-  border-width: 1px;
-  padding-left: 16px;
-  padding-right: 50px;
-  background-color: ${({ theme }) => theme.bg3};
-  caret-color: ${({ theme }) => theme.primary5};
-
-  :hover {
-    border: 1px solid ${({ theme }) => theme.border5};
-  }
-
-  :focus {
-    border: 1px solid ${({ theme }) => theme.border5};
-    color: ${({ theme }) => theme.primary5};
-  }
-
-  ::placeholder {
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 140%;
-    color: ${({ theme }) => theme.primary7};
-  }
 `;

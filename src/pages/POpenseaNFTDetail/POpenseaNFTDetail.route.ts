@@ -1,7 +1,7 @@
 import { IRouteProps } from 'pages';
 import { lazy } from 'react';
 
-export const route = '/popensea/detail/nft-detail';
+export const route = '/popensea/detail/detail';
 
 const POpenseaDetailAppRoute: IRouteProps = {
   path: route,
