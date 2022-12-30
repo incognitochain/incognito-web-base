@@ -137,10 +137,7 @@ const CreateProposal = () => {
   return (
     <Styled>
       {contextHolder}
-      <div
-        className="default-max-width-2"
-        style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
-      >
+      <div className="default-max-width" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <BackButton />
           <HeaderTitle>Create Proposal</HeaderTitle>
