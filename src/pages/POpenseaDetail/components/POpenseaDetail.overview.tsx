@@ -26,6 +26,10 @@ const Styled = styled.div`
     flex-direction: column;
   }
 
+  .root-avatar {
+    align-self: center;
+  }
+
   .avatar {
     width: 140px;
     height: 140px;
@@ -43,15 +47,6 @@ const Styled = styled.div`
     text-align: center;
     margin-top: 16px;
     margin-bottom: 16px;
-  }
-
-  .artis-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding-left: 16px;
-    padding-right: 16px;
   }
 
   .title {
@@ -78,7 +73,24 @@ const Styled = styled.div`
     margin-top: 24px;
   }
 
+  .info-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
   .volumn-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+  }
+
+  .volumn-content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -114,15 +126,19 @@ const Styled = styled.div`
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
-    .artis-container {
+    .info-content {
       padding-left: 8px;
       padding-right: 8px;
       flex-direction: column;
     }
 
-    .volumn-container {
+    .volumn-content {
       padding-left: 8px;
       padding-right: 8px;
+    }
+
+    .info-container {
+      margin-top: 0px;
     }
   `}
 `;
@@ -139,7 +155,7 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
 
   const renderTitleItem = (title?: string, subTitle?: string) => {
     return (
-      <div className="artis-container">
+      <div className="info-content">
         <p className="title">{title}</p>
         <p className="sub-title">{subTitle}</p>
       </div>
@@ -148,7 +164,7 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
 
   const renderVolumnItem = (title?: string, subTitle?: string) => {
     return (
-      <div className="volumn-container">
+      <div className="volumn-content">
         <p className="volumn">{title}</p>
         <p className="sub-volumn">{subTitle}</p>
       </div>
@@ -160,7 +176,7 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
       <div className="banner-container">
         <ImagePlaceholder className="banner" src={collection.getBannerUrl()} />
         <div className="avatar-container">
-          <ImagePlaceholder className="avatar" src={collection.imageUrl} />
+          <ImagePlaceholder className="avatar" rootClassName="root-avatar" src={collection.imageUrl} />
           <p className="collection-name">{collection.name}</p>
         </div>
         <div className="info-container">
@@ -173,7 +189,7 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
             )}
           {renderTitleItem('Chain', 'Etherum')}
         </div>
-        <div className="info-container">
+        <div className="volumn-container">
           {stats && renderVolumnItem(`${collection?.getTotalVolumnFormatAmount()} ETH`, 'total volume')}
           {stats && renderVolumnItem(`${stats?.floorPrice?.toFixed(3)} ETH`, 'floor price')}
           {stats && renderVolumnItem(`${stats?.numOwners}`, 'owners')}

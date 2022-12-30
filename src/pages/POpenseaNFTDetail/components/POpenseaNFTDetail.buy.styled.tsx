@@ -166,7 +166,9 @@ export const Styled = styled.div`
         font-size: 18px;
       }
 
-
+      .price-container {
+          margin-top: 16px;
+      }
   `}
 `;
 
