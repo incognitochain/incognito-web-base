@@ -94,7 +94,7 @@ const getProposals = () => {
         } else if (proposalStatus === ProposalStatusBackEnd.submit_failed) {
           proposalStatus = ProposalStatus.CANCELLED;
         } else {
-          proposalStatus = ProposalStatus.PENDING;
+          proposalStatus = null;
         }
 
         return {
@@ -140,7 +140,7 @@ const getProposalDetail = (proposalId: any, callback?: (data: any) => void) => {
       } else if (proposalStatus === ProposalStatusBackEnd.submit_failed) {
         proposalStatus = ProposalStatus.CANCELLED;
       } else {
-        proposalStatus = ProposalStatus.PENDING;
+        proposalStatus = null;
       }
       const proposalDetail: Proposal = {
         id: proposalDetailResponse?.id.toString(),
