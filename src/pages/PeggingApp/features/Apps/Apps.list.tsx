@@ -55,6 +55,18 @@ const Factory: IFactory[] = [
     network: [MAIN_NETWORK_NAME.INCOGNITO],
   },
   {
+    img: openseaImg,
+    name: 'pOpensea',
+    nameDesc: 'Private Opensea',
+    status: 'SHIPPED',
+    chain: ['Ethereum', 'Marketplace', 'NFT'],
+    desc: 'Purchase and hoard rare digital items and collectibles without anyone knowing about it.',
+    metric: METRIC_TYPE.PAPP_OPENSEA,
+    metricUniq: METRIC_UNIQ.PAPP_OPENSEA_UNIQ,
+    network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],
+    route: '/popensea',
+  },
+  {
     img: cakeImg,
     name: 'pPancake',
     nameDesc: 'Private Pancake Swap',
@@ -78,18 +90,7 @@ const Factory: IFactory[] = [
     metricUniq: METRIC_UNIQ.PAPP_UNISWAP_UNIQ,
     network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],
   },
-  {
-    img: openseaImg,
-    name: 'pOpensea',
-    nameDesc: 'Private Opensea',
-    status: 'SHIPPED',
-    chain: ['Ethereum', 'Marketplace', 'NFT'],
-    desc: 'Purchase and hoard rare digital items and collectibles without anyone knowing about it.',
-    metric: METRIC_TYPE.PAPP_OPENSEA,
-    metricUniq: METRIC_UNIQ.PAPP_OPENSEA_UNIQ,
-    network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],
-    route: '/popensea',
-  },
+
   {
     img: curveImg,
     name: 'pCurve',

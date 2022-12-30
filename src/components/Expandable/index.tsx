@@ -6,7 +6,7 @@ const Styled = styled.div<{ isExpand?: boolean }>`
   border: 1px solid ${({ theme }) => theme.border1};
   border-radius: 12px;
   padding: 24px;
-  margin-top: 16px;
+  margin-bottom: 16px;
   cursor: pointer;
 
   .container-expand {

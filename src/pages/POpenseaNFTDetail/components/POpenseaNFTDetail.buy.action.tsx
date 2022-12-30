@@ -64,7 +64,7 @@ export class POpenseaNFTDetailBuyAction implements IPOpenseaNFTDetailBuyAction {
             this.component.setBuyFee(fee);
           }
         } catch (error) {
-          console.log('ESTIMATE FEE ERROR: ', ErrorEvent);
+          console.log('ESTIMATE FEE ERROR: ', error);
         } finally {
           this.component.setLoadingFee(false);
         }

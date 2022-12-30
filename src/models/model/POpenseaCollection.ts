@@ -66,6 +66,15 @@ export class POpenseaCollection {
       decimals: 0,
     });
   }
+
+  getOndayVolumnFormatAmount() {
+    return format.amountVer2({
+      originalAmount: new BigNumber(
+        this.stats && this.stats.oneDayVolume ? this.stats.oneDayVolume.toFixed(0) : 0
+      ).toNumber(),
+      decimals: 0,
+    });
+  }
 }
 
 export interface PaymentToken {

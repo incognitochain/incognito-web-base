@@ -2,7 +2,7 @@ import { AxiosInstance } from 'axios';
 import { API_SERVICE } from 'config';
 import createAxiosInstance from 'services/axios';
 
-const DEFAULT_LIMIT = 100;
+const DEFAULT_LIMIT = 1000;
 
 class RpcPOpensea {
   http: AxiosInstance;

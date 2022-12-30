@@ -35,6 +35,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const [selectedToken, setSelectedToken] = useState<PToken | undefined>();
   const [buyFee, setBuyFee] = useState<POpenseaBuyFee | undefined>();
   const [loadingFee, setLoadingFee] = useState<boolean>(false);
+  const [isCanBuy, setIsCanBuy] = useState<boolean>(true);
 
   const buyActions: IPOpenseaNFTDetailBuyAction = new POpenseaNFTDetailBuyAction({
     component: {
@@ -70,14 +71,8 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const buyPriceFormatAmount = seaportSellOrder
     ? seaportSellOrder.getPricingFormatAmount(childToken?.decimals || 18)
     : '0';
+
   const buyFeeFormatAmount = buyFee ? buyFee.getFeeFormatAmount(childToken?.pDecimals || 9) : '0';
-
-  const totalBuyAmount = new BigNumber(buyPriceFormatAmount).toNumber() + new BigNumber(buyFeeFormatAmount).toNumber();
-
-  const isCanBuy =
-    selectedTokenPrivacy &&
-    selectedTokenPrivacy.formatAmount &&
-    new BigNumber(selectedTokenPrivacy.formatAmount).toNumber() >= totalBuyAmount;
 
   useEffect(() => {
     tokens.length > 0 && selectedToken === undefined && setSelectedToken(tokens[0]);
@@ -93,7 +88,19 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     if (!isIncognitoInstalled()) {
       return requestIncognitoAccount();
     }
-    if (isCanBuy) {
+
+    const totalBuyAmount =
+      new BigNumber(buyPriceFormatAmount).toNumber() + new BigNumber(buyFeeFormatAmount).toNumber();
+    const _isCanBuy =
+      selectedTokenPrivacy &&
+      selectedTokenPrivacy.formatAmount &&
+      new BigNumber(selectedTokenPrivacy.formatAmount).toNumber() >= totalBuyAmount
+        ? true
+        : false;
+
+    setIsCanBuy(_isCanBuy);
+
+    if (_isCanBuy) {
       buyActions.buyNFT(
         reciptientAddress,
         networkFee,

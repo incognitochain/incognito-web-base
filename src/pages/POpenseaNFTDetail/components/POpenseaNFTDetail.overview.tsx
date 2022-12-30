@@ -28,7 +28,7 @@ const Styled = styled.div`
     font-weight: 700;
     font-size: 34px;
     line-height: 140%;
-    margin-top: 8px;
+    /* margin-top: 8px; */
   }
 
   .owner-by {

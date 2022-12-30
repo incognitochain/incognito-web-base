@@ -25,6 +25,10 @@ export const WrapperContent = styled.div`
       margin-bottom: 8px;
     }
 
+    .root-img-nft-1 {
+      display: flex;
+    }
+
     .img-nft-1 {
       width: 100%;
       aspect-ratio: 1 / 1;
@@ -41,6 +45,10 @@ export const WrapperContent = styled.div`
 
     .content-2 {
       width: 0%;
+    }
+
+    .root-img-nft-2 {
+      display: none;
     }
 
     .img-nft-2 {
@@ -65,6 +73,11 @@ export const WrapperContent = styled.div`
         width: 0%;
         margin-bottom: 0px;
       }
+
+
+      .root-img-nft-1 {
+        display: none;
+      }
     }
 
     .section-2 {
@@ -74,6 +87,11 @@ export const WrapperContent = styled.div`
         width: 100%;
         margin-bottom: 24px;
 
+      }
+
+
+    .root-img-nft-2 {
+        display: flex;
       }
     }
 
