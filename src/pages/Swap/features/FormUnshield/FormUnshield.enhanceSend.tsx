@@ -12,6 +12,7 @@ import { change, focus, untouch } from 'redux-form';
 import { rpcClient } from 'services';
 import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
 import { useAppDispatch, useAppSelector } from 'state/hooks';
+import { getShardIDByAddress } from 'state/incognitoWallet';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 
 import { actionEstimateFee, actionSetErrorMsg } from './FormUnshield.actions';
@@ -543,6 +544,7 @@ const enhanceSend = (WrappedComponent: any) => {
                 if (interSwapData && interSwapData.midToken) {
                   const { otaReceiver: sellTokenOTA, feeRefundOTA: refundFeeOTA } = await getKeySetINC();
                   const { otaReceiver: buyTokenOTA, feeRefundOTA: refundOTA } = await getKeySetINC();
+                  const shardID = getShardIDByAddress({ incAddress });
                   await rpcClient.submitInterSwapTx({
                     txHash: tx.txHash,
                     txRaw: tx.rawData,
@@ -558,6 +560,7 @@ const enhanceSend = (WrappedComponent: any) => {
                     sellTokenOTA,
                     buyTokenOTA,
                     inputAddress: buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? '' : remoteAddress,
+                    shardID,
                   });
                 } else {
                   /** Submit tx swap PApps to backend after burned */

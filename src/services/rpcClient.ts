@@ -325,6 +325,7 @@ class RpcClient {
     sellTokenOTA,
     buyTokenOTA,
     inputAddress,
+    shardID,
   }: {
     txRaw: string;
     txHash: string;
@@ -340,6 +341,7 @@ class RpcClient {
     sellTokenOTA: string;
     buyTokenOTA: string;
     inputAddress?: string;
+    shardID: number;
   }) {
     return this.http.post('papps/submitinterswaptx', {
       TxHash: txHash,
@@ -356,6 +358,7 @@ class RpcClient {
       OTAFromToken: sellTokenOTA,
       OTAToToken: buyTokenOTA,
       WithdrawAddress: inputAddress,
+      ShardID: shardID,
     });
   }
 
