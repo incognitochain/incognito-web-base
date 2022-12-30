@@ -43,6 +43,10 @@ const Styled = styled.div`
     }
   }
 
+  .col-2 {
+    margin-left: 40px;
+  }
+
   .leftView {
     display: flex;
     flex: 0.5;
@@ -88,17 +92,26 @@ const Styled = styled.div`
   
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
     flex-direction: column;
-      .leftView {
-        padding: 24px;
-        .descriptionContainer {
-          margin-top: 16px;
-        }
+    .col-2 {
+      margin-left: auto;
+    }
+    .leftView {
+      padding: 24px;
+      .descriptionContainer {
+        margin-top: 16px;
       }
-      .rightView {
-        margin-left: 20px;
-        margin-bottom: 20px;
-        margin-top: 25px;
-      }
+    }
+    .rightView {
+      margin-left: 20px;
+      margin-bottom: 20px;
+      margin-top: 25px;
+    }
+    h3 {
+      text-align: center;
+    }
+    .btn-buy {
+      width: 100%;  
+    }
   `}
 `;
 
@@ -171,7 +184,7 @@ const ValidatorsJoinNetwork = () => {
               <h3 className="h3_1">{formatPrice({ price: dataChart.estimatedAPR })}%</h3>
             </div>
           </Col>
-          <Col style={{ marginLeft: 40 }}>
+          <Col className="col-2">
             <p className="description2">Total validators:</p>
             <div className="rowTableView">
               <h5 className="h3_1">{formatPrice({ price: dataChart.totalValidator })}</h5>

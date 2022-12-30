@@ -179,10 +179,18 @@ export const WrapperContent = styled.div`
       font-size: 14px;
     }
   }
-    ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-        .sub-header-text {
-          margin-bottom: 20px;
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+      .sub-header-text {
+        margin-bottom: 20px;
+      }
+  `}
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+      .header-menu {
+        div {
+          padding: 2px 4px;
+          font-size: 12px;
         }
-    `}
+      }
+  `}
   }
 `;
