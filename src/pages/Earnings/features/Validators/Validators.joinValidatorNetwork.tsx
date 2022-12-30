@@ -1,16 +1,30 @@
+import { Col, Row } from 'antd';
 import validator from 'assets/images/validator.png';
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from 'services/rpcMetric';
 import styled, { DefaultTheme } from 'styled-components/macro';
+import { convertISOtoMMYYYY } from 'utils/timeUtils';
 
-import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from '../../../../services/rpcMetric';
+import { ChartData, ChartDataInit, ChartDataItem } from './Validators.rewardEstimation';
+import { formatPrice } from './Validators.utils';
 
 const Styled = styled.div`
   display: flex;
   margin-top: 40px;
   flex-direction: row;
+  justify-content: space-between;
   width: 100%;
   border-radius: 24px;
   background-color: ${({ theme }: { theme: DefaultTheme }) => theme.color_grey2};
+  .description2 {
+    margin-top: 40px;
+    color: ${({ theme }) => theme.color_grey};
+    font-size: 18px;
+  }
+  .h3_1 {
+    font-weight: 700;
+    margin-top: 4px;
+  }
   .btn-buy {
     display: flex;
     flex-direction: row;
@@ -31,7 +45,7 @@ const Styled = styled.div`
 
   .leftView {
     display: flex;
-    flex: 1;
+    flex: 0.5;
     padding: 40px;
     justify-content: center;
     flex-direction: column;
@@ -41,7 +55,7 @@ const Styled = styled.div`
   }
 
   .rightView {
-    flex: 1;
+    flex: 0.4;
     padding: 20px;
     .img {
       width: 100%;
@@ -89,6 +103,41 @@ const Styled = styled.div`
 `;
 
 const ValidatorsJoinNetwork = () => {
+  // const history = useHistory();
+  const [dataChart, setDataChart] = useState<ChartData>(ChartDataInit);
+  const [drawDataChart, setDrawDataChart] = useState<any[]>([]);
+
+  const getData = async () => {
+    try {
+      fetch('https://api-explorer.incognito.org/api/v1/explorer/landing-validator-data')
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setDataChart(data?.data);
+          convertData(data?.data?.activeValidatorChartData || []);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const convertData = (listData: ChartDataItem[]) => {
+    const activeValidatorChartData: ChartDataItem[] = listData;
+    const result = activeValidatorChartData.map((item, index) => ({
+      time: convertISOtoMMYYYY(item.startOfMonth),
+      // APR: formatPrice({ price: item.averageAPR }),
+      'Active Validator': item.activeValidator,
+    }));
+    setDrawDataChart(result);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <Styled>
       <div className="leftView">
@@ -115,6 +164,20 @@ const ValidatorsJoinNetwork = () => {
             How to stake
           </div>
         </div>
+        <Row>
+          <Col>
+            <p className="description2">Estimated APR:</p>
+            <div className="rowTableView">
+              <h3 className="h3_1">{formatPrice({ price: dataChart.estimatedAPR })}%</h3>
+            </div>
+          </Col>
+          <Col style={{ marginLeft: 40 }}>
+            <p className="description2">Total validators:</p>
+            <div className="rowTableView">
+              <h5 className="h3_1">{formatPrice({ price: dataChart.totalValidator })}</h5>
+            </div>
+          </Col>
+        </Row>
       </div>
       <div className="rightView center">
         <img className="img" src={validator} alt="phone-incognito-validator" />

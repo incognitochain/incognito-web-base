@@ -4,6 +4,7 @@ import joe from 'assets/images/dex/joe.svg';
 import pancake from 'assets/images/dex/pancake.svg';
 import spooky from 'assets/images/dex/spooky.svg';
 import uni from 'assets/images/dex/uni.svg';
+import trisolaris from 'assets/images/trisolaris-icon.png';
 import { InputContainer } from 'components/Core/ReduxForm/InputField/InputField.styled';
 import Row from 'components/Core/Row';
 import { ExchangeModal, useModal } from 'components/Modal';
@@ -49,7 +50,7 @@ export const getExchangeLogo = (exchangeSelected: string) => {
   } else if (_exchangeSelected.includes(SwapExchange.JOE)) {
     return joe;
   } else if (_exchangeSelected.includes(SwapExchange.TRISOLARIS)) {
-    return joe;
+    return trisolaris;
   } else {
     return incognito;
   }
