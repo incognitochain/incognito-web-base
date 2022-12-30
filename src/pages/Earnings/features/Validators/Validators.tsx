@@ -7,7 +7,6 @@ import ValidatorsJoinNetwork from './Validators.joinValidatorNetwork';
 import ValidatorAskedQuestion from './Validators.requentlyAskQuestion';
 import ValidatorRewardEstimation from './Validators.rewardEstimation';
 import { Styled } from './Validators.styled';
-import ValidatorsSubRoute from './Validators.subRoute';
 import ValidatorTutorial from './Validators.tutorial';
 
 const Validators = () => {
@@ -16,7 +15,7 @@ const Validators = () => {
     <div style={{ width: '100%' }}>
       <HeaderNode />
       <Styled className="default-max-width default-margin-bottom">
-        <ValidatorsSubRoute />
+        {/*<ValidatorsSubRoute />*/}
         <ValidatorsJoinNetwork />
         <ValidatorRewardEstimation />
         {/* <ValidatorStackingOptions /> */}

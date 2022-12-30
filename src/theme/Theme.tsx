@@ -962,21 +962,6 @@ export const ThemedGlobalStyle = createGlobalStyle`
       font-size: 34px;
       font-weight: 500;
       line-height: 140%;
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
-        font-size: 34px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-        font-size: 28px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-        font-size: 20px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
     }
 
 
@@ -1114,4 +1099,17 @@ export const ThemedGlobalStyle = createGlobalStyle`
         background-color: transparent;
       }
     }
+  
+  .ant-tabs-ink-bar  {
+    background-color: transparent;
+
+  }
+
+  .ant-tabs-ink-bar-animated {
+    background-color: ${({ theme }) => theme.white};
+  }
+
+  .ant-tabs-nav-wrap {
+    border-bottom: 1px solid ${({ theme }) => theme.color_grey4};
+  }
 `;

@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
+import { BigNumber } from 'bignumber.js';
 import { get } from 'lodash';
 import moment from 'moment';
+import format from 'utils/format';
 
 export class POpenseaCollection {
   primaryAssetContracts?: PrimaryAssetContract[];
@@ -41,8 +44,27 @@ export class POpenseaCollection {
   isNsfw?: boolean;
   isRarityEnabled?: boolean;
 
+  getAssetContract() {
+    return this.primaryAssetContracts && this.primaryAssetContracts.length > 0
+      ? this.primaryAssetContracts[0]
+      : undefined;
+  }
+
   getCreatedDateWith(format?: string) {
     return this.createdDate ? moment(new Date(this.createdDate)).format(format) : '';
+  }
+
+  getBannerUrl(size: number = 2800) {
+    return this.bannerImageUrl ? this.bannerImageUrl.replace('?w=500', `?w=${size}`) : undefined;
+  }
+
+  getTotalVolumnFormatAmount() {
+    return format.amountVer2({
+      originalAmount: new BigNumber(
+        this.stats && this.stats.totalVolume ? this.stats.totalVolume.toFixed(0) : 0
+      ).toNumber(),
+      decimals: 0,
+    });
   }
 }
 

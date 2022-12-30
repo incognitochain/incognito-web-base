@@ -27,19 +27,22 @@ const Home = () => {
       <WrapperContent>
         <POpenseaNFTDetailSubRoute
           collectionName={selectedNFT.collection ? selectedNFT.collection.name || '' : ''}
-          nftName={selectedNFT.name || ''}
+          nftName={selectedNFT.getOriginalName()}
           contract={contract}
         />
         <div className="content">
           <div className="section-1">
             <div className="content-1">
-              <ImagePlaceholder className="img-nft" src={selectedNFT.imageUrl} />
+              <ImagePlaceholder className="img-nft-1" src={selectedNFT.getImageUrl()} />
             </div>
+            <POpenseaNFTDetailInfo selectedNFT={selectedNFT} />
           </div>
           <div className="section-2">
-            <POpenseaNFTDetailOverview selectedNFT={selectedNFT} />
+            <div className="content-2">
+              <ImagePlaceholder className="img-nft-2" src={selectedNFT.getImageUrl()} />
+            </div>
+            <POpenseaNFTDetailOverview contract={contract} selectedNFT={selectedNFT} />
             <POpenseaNFTDetailBuy selectedNFT={selectedNFT} />
-            <POpenseaNFTDetailInfo selectedNFT={selectedNFT} />
           </div>
         </div>
       </WrapperContent>

@@ -6,11 +6,12 @@ import arrowTopActive from 'assets/svg/arrow-top-active.svg';
 import ImagePlaceholder from 'components/ImagePlaceholder';
 import { POpenseaCollection } from 'models/model/POpenseaCollection';
 import React from 'react';
-import { isMobile } from 'react-device-detect';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
+import POpenseaListCollectionLoader from './POpensea.listCollection.loader';
+
 const Styled = styled.div`
-  margin-top: 24px;
+  margin-top: 8px;
 
   tr {
     height: 80px !important;
@@ -228,7 +229,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       showSorterTooltip: false,
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText">
-          {record.stats?.totalVolume?.toFixed(1)} ETH
+          {record.getTotalVolumnFormatAmount()} ETH
         </p>
       ),
       sorter: (a, b) => (a.stats?.totalVolume || 0) - (b.stats?.totalVolume || 0),
@@ -238,7 +239,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
         const sortedColumn = sortColumns?.find(({ column }) => column.key === 'volumn');
         return (
           <div className="headerTitle" style={{ justifyContent: 'center' }}>
-            Volumn
+            Total volumn
             {sortedColumn ? (
               sortedColumn.order === 'ascend' ? (
                 <img alt="" src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
@@ -262,7 +263,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       showSorterTooltip: false,
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText">
-          {record.stats?.floorPrice?.toFixed(1)} ETH
+          {record.stats?.floorPrice?.toFixed(2)} ETH
         </p>
       ),
       sorter: (a, b) => (a.stats?.floorPrice || 0) - (b.stats?.floorPrice || 0),
@@ -371,20 +372,23 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
 
   return (
     <Styled>
-      <Table
-        columns={columns}
-        dataSource={collections}
-        size="large"
-        // loading={isFetching}
-        pagination={false}
-        rowClassName="tableRow"
-        onRow={(collection) => ({
-          onClick: () => {
-            if (isMobile) return;
-            onClickItem(collection);
-          },
-        })}
-      />
+      {isFetching && collections.length <= 0 ? (
+        <POpenseaListCollectionLoader />
+      ) : (
+        <Table
+          columns={columns}
+          dataSource={collections}
+          size="large"
+          // loading={isFetching && collections.length === 0}
+          pagination={false}
+          rowClassName="tableRow"
+          onRow={(collection) => ({
+            onClick: () => {
+              onClickItem(collection);
+            },
+          })}
+        />
+      )}
     </Styled>
   );
 };

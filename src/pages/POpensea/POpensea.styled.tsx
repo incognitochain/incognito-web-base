@@ -2,6 +2,11 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 export const Styled = styled.div`
   padding-bottom: 40px;
   width: 100%;
+
+  .header-title {
+    color: red;
+  }
+
   .section-1 {
     display: flex;
     flex-direction: row;
@@ -110,6 +115,13 @@ export const Styled = styled.div`
         }
     `}
   }
+
+  .input-container {
+    display: flex;
+    position: absolute;
+    right: 0px;
+    top: -86px;
+  }
 `;
 
 export const WrapperContent = styled.div`
@@ -166,5 +178,40 @@ export const WrapperContent = styled.div`
       font-weight: 400;
       font-size: 14px;
     }
+  }
+`;
+
+export const TextInputStyled = styled.input`
+  display: flex;
+  flex: 1;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 140%;
+  color: white;
+  height: 50px;
+  border-radius: 8px;
+  border-width: 1px;
+  padding-left: 16px;
+  padding-right: 50px;
+  background-color: ${({ theme }) => theme.bg3};
+  caret-color: ${({ theme }) => theme.primary5};
+
+  :hover {
+    border: 1px solid ${({ theme }) => theme.border5};
+  }
+
+  :focus {
+    border: 1px solid ${({ theme }) => theme.border5};
+    color: ${({ theme }) => theme.primary5};
+  }
+
+  ::placeholder {
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 140%;
+    color: ${({ theme }) => theme.primary7};
   }
 `;

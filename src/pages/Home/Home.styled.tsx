@@ -142,8 +142,8 @@ const CollectionItem = styled.div`
     font-weight: 700;
   }
   .swap-image {
-    align-self: end;
-    max-width: 75%;
+    //align-self: end;
+    max-width: 100%;
     max-height: 100%;
     margin-right: auto;
     margin-left: auto;

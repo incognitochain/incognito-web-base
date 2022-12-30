@@ -9,14 +9,14 @@ import { formatPrice } from './Validators.utils';
 
 const MAX_ACTIVE_VALIDATOR = 5000;
 const MAX_APR = 180;
-interface ChartDataItem {
+export interface ChartDataItem {
   PRVRewardInMonth: number;
   activeValidator: number;
   averageAPR: number;
   beaconHeight: number;
   startOfMonth: string;
 }
-interface ChartData {
+export interface ChartData {
   activeValidatorChartData: ChartDataItem[];
   circulatingSupply: number;
   estimatedAPR: number;
@@ -24,7 +24,7 @@ interface ChartData {
   totalValidator: number;
 }
 
-const ChartDataInit: ChartData = {
+export const ChartDataInit: ChartData = {
   activeValidatorChartData: [],
   circulatingSupply: 0,
   estimatedAPR: 0,

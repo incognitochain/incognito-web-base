@@ -113,7 +113,7 @@ const Styled = styled.div`
     color: ${({ theme }: { theme: DefaultTheme }) => theme.text1};
   }
 
-  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
     .artis-container {
       padding-left: 8px;
       padding-right: 8px;
@@ -158,7 +158,7 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
   return (
     <Styled>
       <div className="banner-container">
-        <ImagePlaceholder className="banner" src={collection.bannerImageUrl} />
+        <ImagePlaceholder className="banner" src={collection.getBannerUrl()} />
         <div className="avatar-container">
           <ImagePlaceholder className="avatar" src={collection.imageUrl} />
           <p className="collection-name">{collection.name}</p>
@@ -167,13 +167,15 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
           {renderTitleItem('Items', `${total}`)}
           {renderTitleItem('Created', collection.getCreatedDateWith('ll'))}
           {collection &&
-            collection.openseaSellerFeeBasisPoints &&
-            renderTitleItem('Creator fee', `${Math.round(parseInt(collection.openseaSellerFeeBasisPoints) / 100)}%`)}
+            renderTitleItem(
+              'Creator fee',
+              `${parseInt(collection.devSellerFeeBasisPoints || collection.openseaSellerFeeBasisPoints || '0') / 100}%`
+            )}
           {renderTitleItem('Chain', 'Etherum')}
         </div>
         <div className="info-container">
-          {stats && renderVolumnItem(`${stats?.totalVolume?.toFixed(1)} ETH`, 'total volume')}
-          {stats && renderVolumnItem(`${stats?.floorPrice?.toFixed(1)} ETH`, 'floor price')}
+          {stats && renderVolumnItem(`${collection?.getTotalVolumnFormatAmount()} ETH`, 'total volume')}
+          {stats && renderVolumnItem(`${stats?.floorPrice?.toFixed(3)} ETH`, 'floor price')}
           {stats && renderVolumnItem(`${stats?.numOwners}`, 'owners')}
           {stats &&
             renderVolumnItem(

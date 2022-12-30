@@ -17,6 +17,11 @@ const actionFetchingCollections = (payload: boolean) => ({
   payload,
 });
 
+const actionFetchingNFTs = (payload: boolean) => ({
+  type: POpenseaActionType.FETCHING_NFTS,
+  payload,
+});
+
 const actionSetCollections = (payload: POpenseaCollection[]) => ({
   type: POpenseaActionType.SET_COLLECTIONS,
   payload,
@@ -69,6 +74,7 @@ export const actionGetPOpenseaCollectionDetail =
 
 export const actionGetPOpenseaNFTs = (contract: string) => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {
+    dispatch(actionFetchingNFTs(true));
     let nfts: POpenseaNft[] = [];
     const data = await getPOpeanseaNFTs(contract);
     if (data && data.length > 0) {
@@ -78,6 +84,7 @@ export const actionGetPOpenseaNFTs = (contract: string) => async (dispatch: AppD
   } catch (e) {
     console.log('GET POPENSEA NFTS WITH ERROR: ', e);
   } finally {
+    dispatch(actionFetchingNFTs(false));
   }
 };
 

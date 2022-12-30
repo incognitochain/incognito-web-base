@@ -3,7 +3,6 @@ import { FOOTER_ID } from 'pages/App';
 import { route as PolicyRoute } from 'pages/Policy/Policy.route';
 import { route as TermRoute } from 'pages/TermOfService/TermOfService.route';
 import React, { memo } from 'react';
-import { isMobile } from 'react-device-detect';
 
 import { Styled } from './Footer.styled';
 import BookSVG from './images/book.svg';
@@ -126,7 +125,7 @@ const Footer = () => {
       <Col className="wrap-branch">
         <p className="normal-label">© 2022 Incognito</p>
       </Col>
-      <Row className={`wrap-term ${isMobile ? '' : 'center-view-desktop'}`}>
+      <Row className={`wrap-term`}>
         <button
           className="normal-label button-text"
           onClick={() => {
@@ -144,7 +143,7 @@ const Footer = () => {
           Privacy Policy
         </button>
       </Row>
-      <Col>{renderSocial1()}</Col>
+      {/*<Col>{renderSocial1()}</Col>*/}
     </Styled>
   );
 };

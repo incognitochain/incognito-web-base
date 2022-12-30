@@ -129,11 +129,14 @@ const Factory: IFactory[] = [
   {
     img: trisolarisImg,
     name: 'pTrisolaris',
-    status: 'COMING SOON',
+    status: 'SHIPPED',
     nameDesc: 'Private Trisolaris',
+    exchange: SwapExchange.TRISOLARIS,
     chain: ['Aurora', 'DEX'],
     desc: 'Privacy Swap comes to Aurora ecosystem for the first time. Multiple AMMs for best-in-class execution, now with privacy.',
-    network: [],
+    metric: METRIC_TYPE.PAPP_TRISOLARIS,
+    metricUniq: METRIC_UNIQ.PAPP_TRISOLARIS,
+    network: [MAIN_NETWORK_NAME.AURORA],
   },
   {
     img: raydiumImg,

@@ -11,9 +11,22 @@ export const pOpenseaSelectors = createSelector(
 
 export const isFetchingPOpenseaSelectors = createSelector(pOpenseaSelectors, (pOpensea) => pOpensea.isFetching);
 
+export const isFetchingPOpenseaNFTsSelector = createSelector(pOpenseaSelectors, (pOpensea) => pOpensea.isFetchingNfts);
+
 export const networkFeePOpenseaSelectors = createSelector(pOpenseaSelectors, (pOpensea) => pOpensea.networkFee);
 
-export const pOpenseaCollectionsSelectors = createSelector(pOpenseaSelectors, (pOpensea) => pOpensea.collections);
+export const pOpenseaCollectionsSelectors = createSelector(pOpenseaSelectors, (pOpensea) =>
+  pOpensea.collections.sort((a, b) => (b.stats?.totalVolume || 0) - (a.stats?.totalVolume || 0))
+);
+
+export const pOpenseaCollectionsSearchSelectors = createSelector(
+  pOpenseaCollectionsSelectors,
+  (collections) => (search?: string) => {
+    return search
+      ? collections.filter((collection) => `${collection.name?.toLowerCase()}`.includes(search.toLowerCase()))
+      : collections;
+  }
+);
 
 export const selectedpOpenseaCollectionSelector = createSelector(
   pOpenseaSelectors,
@@ -38,7 +51,7 @@ export const pOpenseaFilterNFTsSelectors = createSelector(
         return a.lastSale && a.lastSale.totalPrice ? -1 : b.lastSale && b.lastSale.totalPrice ? 1 : 0;
       } else {
         const aSeaportSell = a.getSeaportSellOrder();
-        const bSeaportSell = a.getSeaportSellOrder();
+        const bSeaportSell = b.getSeaportSellOrder();
         if (aSeaportSell && bSeaportSell) {
           const priceA = aSeaportSell.getCurrentPrice();
           const priceB = bSeaportSell.getCurrentPrice();
@@ -52,7 +65,7 @@ export const pOpenseaFilterNFTsSelectors = createSelector(
       return 0;
     });
     return search
-      ? sortedNfts.filter((nft) => `${nft.name?.toLowerCase()} ${nft.id?.toString()}`.includes(search.toLowerCase()))
+      ? sortedNfts.filter((nft) => `${nft.name?.toLowerCase()}`.includes(search.toLowerCase()))
       : sortedNfts;
   }
 );

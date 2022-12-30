@@ -6,8 +6,9 @@ import ImagePlaceholder from 'components/ImagePlaceholder';
 import { POpenseaNft } from 'models/model/POpenseaNFT';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { pOpenseaFilterNFTsSelectors } from 'state/pOpensea';
+import { isFetchingPOpenseaNFTsSelector, pOpenseaFilterNFTsSelectors } from 'state/pOpensea';
 
+import POpenseaDetailListNFTLoader from './POpenseaDetail.listNFT.loader';
 import { SortSelect, Styled, TextInputStyled } from './POpenseaDetail.listNFT.styled';
 
 export enum SortNftType {
@@ -27,6 +28,7 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
   const [currentSortType, setCurrentSortType] = React.useState<SortNftType>(SortNftType.PriceLowToHigh);
 
   const nfts = useSelector(pOpenseaFilterNFTsSelectors)(currentSortType, keySearch);
+  const isFetching = useSelector(isFetchingPOpenseaNFTsSelector);
 
   const onChange = (e: any) => {
     setKeySearch(e.target.value);
@@ -83,43 +85,46 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
   return (
     <Styled>
       {renderFilterComponent()}
-      <List
-        className="list"
-        grid={{
-          gutter: 30,
-          xs: 1,
-          sm: 2,
-          md: 2,
-          lg: 3,
-          xl: 4,
-          xxl: 4,
-        }}
-        dataSource={nfts}
-        renderItem={(item: POpenseaNft, index: number) => {
-          const seaportSellOrder =
-            item.seaportSellOrders && item.seaportSellOrders.length > 0 ? item.seaportSellOrders[0] : undefined;
-          const lastSale = item.lastSale;
-          return (
-            <List.Item key={index.toString()} onClick={() => props.onClickNFTItem(item)}>
-              <div className="card">
-                <ImagePlaceholder className="item-img" src={item.imageUrl} />
-                <div className="item-info">
-                  <div className="item-name-container">
-                    <p className="item-name">{item.getOriginalName()}</p>
+      {isFetching ? (
+        <POpenseaDetailListNFTLoader />
+      ) : (
+        <List
+          className="list"
+          grid={{
+            gutter: 30,
+            xs: 1,
+            sm: 2,
+            md: 2,
+            lg: 3,
+            xl: 4,
+            xxl: 4,
+          }}
+          dataSource={nfts}
+          renderItem={(item: POpenseaNft, index: number) => {
+            const seaportSellOrder = item.getSeaportSellOrder();
+            const lastSale = item.lastSale;
+            return (
+              <List.Item key={index.toString()} onClick={() => props.onClickNFTItem(item)}>
+                <div className="card">
+                  <ImagePlaceholder className="item-img" src={item.getImageUrl()} />
+                  <div className="item-info">
+                    <div className="item-name-container">
+                      <p className="item-name">{item.getOriginalName()}</p>
+                    </div>
+                    {seaportSellOrder && (
+                      <p className="item-price">
+                        {seaportSellOrder.getPricingFormatAmount(18)}
+                        {' ETH'}
+                      </p>
+                    )}
+                    <p className="item-last-sale">{lastSale?.getLastSaleStr()}</p>
                   </div>
-                  {seaportSellOrder && (
-                    <p className="item-price">
-                      {seaportSellOrder.getPricingAmountStr(18)}
-                      {' ETH'}
-                    </p>
-                  )}
-                  <p className="item-last-sale">{lastSale?.getLastSaleStr()}</p>
                 </div>
-              </div>
-            </List.Item>
-          );
-        }}
-      />
+              </List.Item>
+            );
+          }}
+        />
+      )}
     </Styled>
   );
 };
