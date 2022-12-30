@@ -1,9 +1,11 @@
 /* eslint-disable react/no-children-prop */
 
+import { i18n } from '@lingui/core';
 import { notification } from 'antd';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { PRV } from 'constants/token';
-import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchProposalFee } from 'services/rpcClient';
@@ -11,6 +13,7 @@ import { getProposalDetail, vote } from 'state/dao/operations';
 import { Fee, Proposal, ProposalStatus } from 'state/dao/types';
 import styled, { DefaultTheme } from 'styled-components/macro';
 import format from 'utils/format';
+import Web3 from 'web3';
 
 import HeaderBox from './components/HeaderBpx';
 import InfoBox from './components/InfoBox';
@@ -39,17 +42,73 @@ const ProposalDetail = () => {
   const [modalConfirmVisible, setModalConfirmVisible] = useState<boolean>(false);
   const [isFetchingProposalDetail, setIsFetchingProposalDetail] = useState<boolean>(false);
   const [proposalDetail, setProposalDetail] = useState<Proposal>();
+  const [currentBlock, setCurrentBlock] = useState<any>(0);
 
   const [selectedVote, setSelectedVote] = useState<1 | 2>(1);
 
   const [isFetchingFee, setIsFetchingFee] = useState<boolean>(false);
   const [fee, setFee] = useState<Fee>();
 
+  const [amount, setAmount] = useState();
+
   const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
 
   let { id }: any = useParams();
 
   const dispatch = useDispatch();
+
+  const getBlockNumber = async () => {
+    try {
+      const web3 = new Web3('https://goerli.infura.io/v3/827ed2f82fb3442da6d516c8b5e5bd16');
+      const block = await web3.eth.getBlockNumber();
+      setCurrentBlock(block);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const AVERAGE_BLOCK_TIME_IN_SECS = 12;
+  const timestamp = Date.now();
+
+  const startDate =
+    proposalDetail && timestamp && currentBlock
+      ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (proposalDetail.startBlock - currentBlock), 'seconds')
+      : undefined;
+
+  const endDate =
+    proposalDetail && timestamp && currentBlock
+      ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (proposalDetail.endBlock - currentBlock), 'seconds')
+      : undefined;
+  const now = dayjs();
+
+  const startOrEndTimeCopy = () => {
+    if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
+      return 'Ends';
+    }
+    if (endDate?.isBefore(now)) {
+      return 'Ended';
+    }
+    return 'Starts';
+  };
+
+  const titleDate = startOrEndTimeCopy();
+
+  const startOrEndTimeTime = () => {
+    if (!startDate?.isBefore(now)) {
+      return startDate;
+    }
+    return endDate;
+  };
+
+  const rightTitleDate = i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZoneName: 'short',
+  });
+
+  const rightTitleDateValue = i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+    dateStyle: 'long',
+  });
 
   const getFee = async () => {
     try {
@@ -119,8 +178,16 @@ const ProposalDetail = () => {
     });
   };
 
+  const handleChangeAmount = useCallback(
+    (amount: any) => {
+      setAmount(amount);
+    },
+    [setAmount]
+  );
+
   useEffect(() => {
     fetchProposalDetail();
+    getBlockNumber();
   }, []);
 
   const isDisabledButtonVote: boolean = isFetchingProposalDetail || proposalDetail?.status !== ProposalStatus.PENDING;
@@ -143,7 +210,12 @@ const ProposalDetail = () => {
             rightValue={`${prvVote} votes`}
           />
           <div style={{ width: 24 }} />
-          <InfoBox isLoading={isFetchingProposalDetail} leftTitle="Ends" rightValue={proposalDetail?.endBlock} />
+          <InfoBox
+            isLoading={isFetchingProposalDetail}
+            leftTitle={titleDate}
+            rightTitle={rightTitleDate}
+            rightValue={rightTitleDateValue || 'test'}
+          />
           <div style={{ width: 24 }} />
           <InfoBox
             isLoading={isFetchingProposalDetail}
@@ -158,6 +230,8 @@ const ProposalDetail = () => {
         <ModalVote
           isOpen={modalConfirmVisible}
           fee={fee}
+          amount={amount}
+          onChangeAmount={handleChangeAmount}
           onCancel={() => setModalConfirmVisible(false)}
           onChooseVoteOption={handleChooseVoteOption}
           onSubmitVote={(prvBurnAmount: number) => {

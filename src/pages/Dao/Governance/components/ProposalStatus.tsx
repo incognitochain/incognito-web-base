@@ -45,7 +45,7 @@ const getStatusText = (status: ProposalStatus | undefined): string => {
     case ProposalStatus.PENDING:
       return 'Active';
     case ProposalStatus.ACTIVE:
-      return 'Voting';
+      return 'Submitting';
     case ProposalStatus.SUCCEEDED:
       return 'Succeeded';
     case ProposalStatus.EXECUTED:
@@ -61,7 +61,7 @@ const getStatusText = (status: ProposalStatus | undefined): string => {
     case ProposalStatus.EXPIRED:
       return 'Expired';
     default:
-      return 'Undetermined';
+      return 'Pending';
   }
 };
 

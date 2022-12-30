@@ -1,4 +1,5 @@
-import { Modal } from 'antd';
+import { Input, Modal } from 'antd';
+import BigNumber from 'bignumber.js';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { PRV } from 'constants/token';
 import React from 'react';
@@ -9,6 +10,7 @@ import { Fee } from 'state/dao/types';
 import { getMinimumPRVBalanceRequire, MINIMUM_PRV_REQUIRE_TO_BURN, NETWORK_FEE } from 'state/dao/utils';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
+import convert from 'utils/convert';
 import format from 'utils/format';
 
 const ModalWrapper = styled(Modal)`
@@ -78,8 +80,37 @@ const LabelText = styled.p`
 const ErrorText = styled.p`
   font-size: 14px;
   color: red;
+  margin-top: 8px;
 `;
 
+const InputField = styled(Input)`
+  background-color: #252525;
+  color: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  border-width: 0px;
+  border: none;
+  margin-top: 8px;
+
+  ::placeholder {
+    color: #757575;
+    opacity: 1;
+  }
+
+  :-ms-input-placeholder {
+    color: #757575;
+  }
+
+  ::-ms-input-placeholder {
+    color: #757575;
+  }
+`;
+
+const LabelField = styled.p`
+  font-size: 16px;
+  font-weight: 500,
+  color: white;
+`;
 interface ModalVoteProps {
   isOpen?: boolean;
   fee?: Fee;
@@ -87,10 +118,12 @@ interface ModalVoteProps {
   onChooseVoteOption: (voteOption: 1 | 2) => void;
   onSubmitVote: (prvBurnAmount: number) => void;
   selectedVote: 1 | 2;
+  amount: any;
+  onChangeAmount: (amount: any) => void;
 }
 
 export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
-  const { isOpen, onCancel, onChooseVoteOption, onSubmitVote, selectedVote, fee } = props;
+  const { isOpen, onCancel, onChooseVoteOption, onSubmitVote, selectedVote, fee, amount, onChangeAmount } = props;
   const reasons: any = [
     {
       id: 1,
@@ -115,7 +148,11 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
     return prvToBurn;
   };
 
-  const prvBalanceToBurn = getPrvBalanceToBurn();
+  const prvBalanceToBurn = convert.toOriginalAmount({
+    humanAmount: amount,
+    decimals: PRV.pDecimals,
+    round: false,
+  });
 
   const checkPrvBalance = () => {
     const prvBalance: number = Number(prvTokenInfo?.amount) || 0;
@@ -125,7 +162,55 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
     return false;
   };
 
-  const isDisabledButton = !checkPrvBalance();
+  const validateAmount = (): {
+    isValidate: boolean;
+    errorMessage: string;
+  } => {
+    const prvBalance: number = Number(prvTokenInfo?.amount) || 0;
+
+    const originalAmount = convert.toOriginalAmount({
+      humanAmount: amount,
+      decimals: PRV.pDecimals,
+      round: false,
+    });
+    const minOriginalAmount = MINIMUM_PRV_REQUIRE_TO_BURN;
+
+    const bn = new BigNumber(amount);
+    if (bn.isNaN()) {
+      return {
+        isValidate: false,
+        errorMessage: 'Must be a number',
+      };
+    }
+
+    if (originalAmount < minOriginalAmount) {
+      return {
+        isValidate: false,
+        errorMessage: 'Please enter at least 10 PRV',
+      };
+    }
+
+    if (
+      originalAmount >= MINIMUM_PRV_REQUIRE_TO_BURN &&
+      originalAmount < prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE
+    ) {
+      return {
+        isValidate: true,
+        errorMessage: '',
+      };
+    }
+
+    return {
+      isValidate: false,
+      errorMessage: 'Your PRV balance is insufficien',
+    };
+  };
+
+  // const validateAmount = () => {
+  //   const prvBalance: number = Number(prvTokenInfo?.amount) || 0;
+  //   const maxAmount = (prvBalance * 99) / 100;
+  //   if(prvBalance > maxAmount)
+  // };
 
   const renderReasonOption = (reason: any) => {
     return (
@@ -141,43 +226,22 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
   };
 
   const renderContent = () => {
-    if (checkPrvBalance()) {
-      return (
-        <div>
-          <LabelText>
-            PRV burn:{' '}
-            {format.amountVer2({
-              originalAmount: Number(prvBalanceToBurn || 0),
-              decimals: PRV.pDecimals,
-            })}{' '}
-            PRV
-          </LabelText>
-          <LabelText style={{ marginTop: 24 }}>
-            Fee:{' '}
-            {format.amountVer2({
-              originalAmount: Number(fee?.feeAmount || 0),
-              decimals: tokenToPayFeeInfo.pDecimals,
-            })}{' '}
-            {tokenToPayFeeInfo.symbol}
-          </LabelText>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <ErrorText>Your PRV balance is insufficien</ErrorText>
-          <ErrorText>
-            Your can minimum{' '}
-            {format.amountVer2({
-              originalAmount: Number(minimumPRVBalanceRequire || 0),
-              decimals: tokenToPayFeeInfo.pDecimals,
-            })}{' '}
-            {tokenToPayFeeInfo?.symbol} to create transaction
-          </ErrorText>
-        </div>
-      );
-    }
+    return (
+      <div>
+        <LabelText>Snapshot Amount: {amount || 0}PRV</LabelText>
+        <LabelText style={{ marginTop: 8 }}>
+          Fee:{' '}
+          {format.amountVer2({
+            originalAmount: Number(fee?.feeAmount || 0),
+            decimals: tokenToPayFeeInfo.pDecimals,
+          })}{' '}
+          {tokenToPayFeeInfo.symbol}
+        </LabelText>
+      </div>
+    );
   };
+
+  const isDisabledButton = validateAmount().isValidate === false || !amount;
 
   return (
     <ModalWrapper
@@ -196,7 +260,15 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
           <div />
         </ModalHeader>
         <ReasonContainer>{reasons?.map((item: any, i: any) => renderReasonOption(item))}</ReasonContainer>
-        <div style={{ width: '100%', padding: 16, borderRadius: 16, border: '1px solid #757575' }}>
+        <LabelField>Amount</LabelField>
+        <InputField
+          value={amount}
+          onChange={(e) => onChangeAmount?.(e.target.value)}
+          maxLength={250}
+          placeholder="Enter Amount"
+        />
+        {amount && validateAmount()?.errorMessage && <ErrorText>{validateAmount()?.errorMessage}</ErrorText>}
+        <div style={{ width: '100%', padding: 16, borderRadius: 16, border: '1px solid #757575', marginTop: 16 }}>
           {renderContent()}
         </div>
         <ButtonConfirmed
