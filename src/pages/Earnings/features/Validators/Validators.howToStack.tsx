@@ -178,16 +178,23 @@ const Styled = styled.div`
     margin-top: 40px;
     .topView {
       .topRight {
+        width: 100%;
         flex-direction: column;
         justify-content: center;
         button {
           margin-top: 10px;
+          margin-right: 0px;
           cursor: pointer;
         }
         .prvButton {
           margin-top: 30px;
           margin-left: 0px;
+          width: 80%;
         }
+      }
+      .topLeft {
+        margin-top: 20px;
+        margin-bottom: 0;
       }
     }
 

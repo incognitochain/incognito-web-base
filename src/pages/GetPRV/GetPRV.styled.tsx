@@ -125,6 +125,9 @@ const WrapChart = styled.div`
     .reward-img {
       max-width: 98%;
     }
+    .pie-img {
+      max-width: 100%;
+    }
   `}
 `;
 

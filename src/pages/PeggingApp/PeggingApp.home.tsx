@@ -9,7 +9,7 @@ const renderSectionBottom = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const peggingTrs = useSelector(peggingAppTranslateSelector);
   return (
-    <WrapperContent className="default-padding-horizontal">
+    <WrapperContent>
       <div className="header-menu">
         <div>Anonymous</div>
         <div>Permissionless</div>

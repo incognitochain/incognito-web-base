@@ -21,7 +21,7 @@ const AppItem = React.memo(({ data }: { data: IFactory }) => {
       <div
         className="box"
         onClick={() => {
-          if (!canClick) return;
+          if (!canClick || isMobile) return;
           if (data.route) {
             history.push(data.route);
             return;
@@ -38,7 +38,7 @@ const AppItem = React.memo(({ data }: { data: IFactory }) => {
       >
         <Row justify="space-between">
           <img src={data?.img} className="exchange-logo" alt="exchange-logo" />
-          {canClick && <LinkIcon className="vector-link-icon" />}
+          {canClick && !isMobile && <LinkIcon className="vector-link-icon" />}
         </Row>
         <Col>
           <Row className="wrap-status">

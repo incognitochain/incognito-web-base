@@ -73,7 +73,7 @@ export const WrapAppItem = styled.div<{ isMobile: boolean; canClick: boolean }>`
     padding: 32px;
     background-color: ${({ theme }) => theme.primary14};
     border-radius: 16px;
-    height: 273px !important;
+    min-height: 273px;
     :hover {
       opacity: ${({ canClick, isMobile }) => (canClick && !isMobile ? 0.8 : 1)};
       cursor: ${({ canClick }) => (canClick ? 'pointer' : 'unset')};

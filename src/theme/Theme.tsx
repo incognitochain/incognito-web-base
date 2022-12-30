@@ -955,6 +955,9 @@ export const ThemedGlobalStyle = createGlobalStyle`
       font-size: 40px;
       font-weight: 700;
       line-height: 140%;
+      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+          font-size: 34px;
+      `}
     }
 
     .h3_1 {

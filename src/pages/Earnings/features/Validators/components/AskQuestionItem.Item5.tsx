@@ -1,3 +1,4 @@
+import { Image } from 'antd';
 import LifeCycleNode from 'assets/images/lifecycle-node.png';
 import styled from 'styled-components/macro';
 
@@ -14,7 +15,7 @@ const Styled = styled.div`
 const AskQuestionItem5 = () => {
   return (
     <Styled>
-      <img src={LifeCycleNode} alt="life-cycle-node" />
+      <Image src={LifeCycleNode} alt="life-cycle-node" />
     </Styled>
   );
 };
