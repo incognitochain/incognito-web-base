@@ -83,14 +83,14 @@ const enhanceSend = (WrappedComponent: any) => {
       return isDecentralized;
     }, [sellToken.identify, buyNetworkName]);
 
-    const getKeySetINC = async () => {
+    const getKeySetINC = async (shardID?: number) => {
       const incognito = getIncognitoInject();
 
       // Get OTA Receiver and Burner address
-      const shardID = (exchangeSelectedData || fee || {}).feeAddressShardID;
+      const _shardID = shardID ? shardID : (exchangeSelectedData || fee || {}).feeAddressShardID;
       const { result }: { result: any } = await incognito.request({
         method: 'wallet_requestAccounts',
-        params: { senderShardID: shardID },
+        params: { senderShardID: _shardID },
       });
       const otaReceiver = result?.otaReceiver;
       const burnerAddress = result?.burnerAddress;
@@ -542,9 +542,10 @@ const enhanceSend = (WrappedComponent: any) => {
               } else {
                 const { interSwapData } = exchangeSelectedData;
                 if (interSwapData && interSwapData.midToken) {
-                  const { otaReceiver: sellTokenOTA, feeRefundOTA: refundFeeOTA } = await getKeySetINC();
-                  const { otaReceiver: buyTokenOTA, feeRefundOTA: refundOTA } = await getKeySetINC();
+                  /** Submit tx swap InterSwap to backend */
                   const shardID = getShardIDByAddress({ incAddress });
+                  const { otaReceiver: sellTokenOTA, feeRefundOTA: refundFeeOTA } = await getKeySetINC();
+                  const { otaReceiver: buyTokenOTA, feeRefundOTA: refundOTA } = await getKeySetINC(shardID);
                   await rpcClient.submitInterSwapTx({
                     txHash: tx.txHash,
                     txRaw: tx.rawData,
@@ -563,7 +564,7 @@ const enhanceSend = (WrappedComponent: any) => {
                     shardID,
                   });
                 } else {
-                  /** Submit tx swap PApps to backend after burned */
+                  /** Submit tx swap PApps to backend */
                   await rpcClient.submitSwapTx({
                     // txHash: tx.txHash,
                     txRaw: tx.rawData,
