@@ -187,8 +187,9 @@ export const WrapperContent = styled.div`
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
       .header-menu {
         div {
-          padding: 2px 4px;
+          padding: 2px 6px;
           font-size: 12px;
+          font-weight: 500;
         }
       }
   `}
