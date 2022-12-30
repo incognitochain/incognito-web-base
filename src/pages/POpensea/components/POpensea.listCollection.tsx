@@ -6,13 +6,12 @@ import arrowTopActive from 'assets/svg/arrow-top-active.svg';
 import ImagePlaceholder from 'components/ImagePlaceholder';
 import { POpenseaCollection } from 'models/model/POpenseaCollection';
 import React from 'react';
-import { isMobile } from 'react-device-detect';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 import POpenseaListCollectionLoader from './POpensea.listCollection.loader';
 
 const Styled = styled.div`
-  margin-top: 24px;
+  margin-top: 8px;
 
   tr {
     height: 80px !important;
@@ -385,7 +384,6 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
           rowClassName="tableRow"
           onRow={(collection) => ({
             onClick: () => {
-              if (isMobile) return;
               onClickItem(collection);
             },
           })}

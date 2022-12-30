@@ -8,12 +8,12 @@ import {
   actionGetPOpenseaCollections,
   actionSetSelectedCollection,
   isFetchingPOpenseaSelectors,
-  pOpenseaCollectionsSelectors,
+  pOpenseaCollectionsSearchSelectors,
 } from 'state/pOpensea';
 
 import POpenseaListCollection from './components/POpensea.listCollection';
 import POpenseaSubRoute from './components/POpensea.subRoute';
-import { Styled, WrapperContent } from './POpensea.styled';
+import { Styled, TextInputStyled, WrapperContent } from './POpensea.styled';
 
 const defaultActiveKey = '1';
 
@@ -21,10 +21,15 @@ const Home = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const collections = useSelector(pOpenseaCollectionsSelectors);
+  const [keySearch, setKeySearch] = React.useState<string | undefined>();
+  const [currentKeyTab, setCurrentKeyTab] = React.useState(defaultActiveKey);
+
+  const collections = useSelector(pOpenseaCollectionsSearchSelectors)(keySearch);
   const isFetching = useSelector(isFetchingPOpenseaSelectors);
 
-  const [currentKeyTab, setCurrentKeyTab] = React.useState(defaultActiveKey);
+  const onChange = (e: any) => {
+    setKeySearch(e.target.value);
+  };
 
   React.useEffect(() => {
     dispatch(actionGetPOpenseaCollections());
@@ -53,11 +58,22 @@ const Home = () => {
               label: renderLabel('1', 'Top'),
               key: '1',
               children: (
-                <POpenseaListCollection
-                  isFetching={isFetching}
-                  collections={collections}
-                  onClickItem={onClickCollectionItem}
-                />
+                <div>
+                  <div className="input-container">
+                    <TextInputStyled
+                      placeholder={'Search collections'}
+                      type={'text'}
+                      onChange={onChange}
+                      value={keySearch}
+                      autoFocus={false}
+                    />
+                  </div>
+                  <POpenseaListCollection
+                    isFetching={isFetching}
+                    collections={collections}
+                    onClickItem={onClickCollectionItem}
+                  />
+                </div>
               ),
             },
             // {
