@@ -123,7 +123,7 @@ const App = () => {
         <Route exact path="/deposit" component={DepositPage} />
         <Route exact path="/popensea" component={POpensea} />
         <Route exact path="/popensea/detail/:contract" component={POpenseaDetail} />
-        <Route exact path="/popensea/nft-detail/:contract/:tokenId" component={POpenseaNFTDetail} />
+        <Route exact path="/popensea/detail/:contract/:tokenId" component={POpenseaNFTDetail} />
         <Route exact path="/buy-node" component={BuyNode} />
         <Route exact path="/deposit" component={DepositPage} />
         <Route component={Page404} />

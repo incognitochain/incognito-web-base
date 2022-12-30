@@ -3,26 +3,23 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import icClock from 'assets/svg/ic-clock.svg';
 import BigNumber from 'bignumber.js';
-import { getIncognitoInject, useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
-import { TransactionSubmittedContent } from 'components/Core/TransactionConfirmationModal';
+import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
-import LoadingTransaction from 'components/Modal/Modal.transaction';
-import { BIG_COINS, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
-import { Convert, POpenseaBuyFee, POpenseaNft } from 'models/model/POpenseaNFT';
+import { BIG_COINS } from 'constants/token';
+import { POpenseaBuyFee, POpenseaNft } from 'models/model/POpenseaNFT';
 import PToken from 'models/model/pTokenModel';
-import { actionSetErrorMsg } from 'pages/Swap/features/FormUnshield/FormUnshield.actions';
-import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
-import { setSwapTx } from 'pages/Swap/Swap.storage';
 import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { formValueSelector, isValid } from 'redux-form';
-import rpcPOpensea, { postEstimateFee } from 'services/rpcPOpensea';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { networkFeePOpenseaSelectors } from 'state/pOpensea';
 import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/token';
 
 import store from '../../../state';
+import { actionSetToken } from '../../Swap/features/FormDeposit/FormDeposit.actions';
+import { IPOpenseaNFTDetailBuyAction, POpenseaNFTDetailBuyAction } from './POpenseaNFTDetail.buy.action';
 import ReciptientAddress, { FIELD_NAME, FORM_NAME } from './POpenseaNFTDetail.buy.form';
 import { ArrowDown, Spinner, Styled } from './POpenseaNFTDetail.buy.styled';
 
@@ -34,12 +31,25 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const { selectedNFT } = props;
 
   const dispatch = useDispatch();
+  const history = useHistory();
   const { setModal, clearAllModal } = useModal();
   const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount, showPopup } = useIncognitoWallet();
 
   const [selectedToken, setSelectedToken] = useState<PToken | undefined>();
   const [buyFee, setBuyFee] = useState<POpenseaBuyFee | undefined>();
   const [loadingFee, setLoadingFee] = useState<boolean>(false);
+  const [isCanBuy, setIsCanBuy] = useState<boolean>(true);
+
+  const buyActions: IPOpenseaNFTDetailBuyAction = new POpenseaNFTDetailBuyAction({
+    component: {
+      setBuyFee,
+      setLoadingFee,
+      setModal,
+      clearAllModal,
+      requestSignTransaction,
+    },
+    dispatch,
+  });
 
   const incAccount = useSelector(incognitoWalletAccountSelector);
   const networkFee = useSelector(networkFeePOpenseaSelectors);
@@ -55,7 +65,6 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const reciptientAddress = formSelector(store.getState(), FIELD_NAME);
 
   const seaportSellOrder = selectedNFT.getSeaportSellOrder();
-  const assetContract = selectedNFT.assetContract;
 
   const childToken =
     selectedToken && selectedToken.isUnified
@@ -65,21 +74,8 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const buyPriceFormatAmount = seaportSellOrder
     ? seaportSellOrder.getPricingFormatAmount(childToken?.decimals || 18)
     : '0';
+
   const buyFeeFormatAmount = buyFee ? buyFee.getFeeFormatAmount(childToken?.pDecimals || 9) : '0';
-  const totalBuyAmount = new BigNumber(buyPriceFormatAmount).toNumber() + new BigNumber(buyFeeFormatAmount).toNumber();
-
-  const burnOriginalAmount = seaportSellOrder
-    ? seaportSellOrder.getBurnOriginalAmount(childToken?.decimals || 18, childToken?.pDecimals || 0)
-    : undefined;
-
-  const userBalanceFormatedText = selectedTokenPrivacy
-    ? `${selectedTokenPrivacy.formatAmount || 0} ${selectedTokenPrivacy.symbol || ''}`
-    : '';
-
-  const isCanBuy =
-    selectedTokenPrivacy &&
-    selectedTokenPrivacy.formatAmount &&
-    new BigNumber(selectedTokenPrivacy.formatAmount).toNumber() >= totalBuyAmount;
 
   useEffect(() => {
     tokens.length > 0 && selectedToken === undefined && setSelectedToken(tokens[0]);
@@ -87,169 +83,36 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
 
   useEffect(() => {
     if (isValidReciptientAddress && selectedToken) {
-      estimateFee();
+      buyActions.estimateFee(selectedToken, reciptientAddress, selectedNFT);
     }
   }, [selectedToken, isValidReciptientAddress]);
-
-  const estimateFee = async () => {
-    const tokenId = selectedNFT.tokenId;
-    if (
-      reciptientAddress &&
-      selectedToken &&
-      selectedNFT &&
-      tokenId &&
-      assetContract &&
-      assetContract.address &&
-      seaportSellOrder
-    ) {
-      setLoadingFee(true);
-      const contract = assetContract.address;
-      try {
-        const res = await postEstimateFee(
-          contract,
-          tokenId,
-          selectedToken.tokenID,
-          seaportSellOrder.getCurrentPrice(),
-          reciptientAddress
-        );
-        if (res && res.Calldata) {
-          const fee = Convert.toPOpenseaBuyFee(res);
-          setBuyFee(fee);
-        }
-      } catch (error) {
-      } finally {
-        setLoadingFee(false);
-      }
-    }
-  };
-
-  const getBurnPayments = async (): Promise<any> => {
-    try {
-      let prvPayments: any[] = [];
-      let tokenPayments: any[] = [];
-
-      tokenPayments = await getTokenPayments({
-        data: [
-          {
-            paymentAddress: buyFee?.fee?.feeAddress,
-            amount: buyFee?.getFeeAmout(),
-          },
-        ],
-        burnAmount: burnOriginalAmount,
-      });
-      return {
-        prvPayments,
-        tokenPayments,
-      };
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const getMetadata = async (): Promise<any> => {
-    if (buyFee && selectedToken && seaportSellOrder) {
-      try {
-        const incognito = getIncognitoInject();
-
-        // Get OTA Receiver and Burner address
-        const shardID = buyFee.getFeeAddressShardID();
-        const { result }: { result: any } = await incognito.request({
-          method: 'wallet_requestAccounts',
-          params: { senderShardID: shardID },
-        });
-        const otaReceiver = result?.otaReceiver;
-
-        // get child token with burn network
-        const incTokenID = childToken?.tokenID;
-
-        let callContract = buyFee.callContract;
-        if (callContract.startsWith('0x')) {
-          callContract = callContract.slice(2);
-        }
-
-        let withdrawAddress = reciptientAddress;
-        if (withdrawAddress.startsWith('0x')) {
-          withdrawAddress = withdrawAddress.slice(2);
-        }
-
-        const metadata = {
-          Data: [
-            {
-              IncTokenID: incTokenID,
-              RedepositReceiver: otaReceiver,
-              BurningAmount: burnOriginalAmount,
-              ExternalNetworkID: 1,
-              ExternalCalldata: buyFee.calldata,
-              ExternalCallAddress: callContract,
-              ReceiveToken: buyFee.receiveToken,
-              WithdrawAddress: withdrawAddress,
-            },
-          ],
-          BurnTokenID: selectedToken.tokenID,
-          Type: 348,
-        };
-        return {
-          metadata,
-          feeRefundOTA: result.otaReceiverWithCfg,
-        };
-      } catch (error) {
-        throw error;
-      }
-    }
-  };
 
   const onClickBuy = async () => {
     if (!isIncognitoInstalled()) {
       return requestIncognitoAccount();
     }
-    if (buyFee && selectedToken && isCanBuy) {
-      setModal({
-        isTransparent: false,
-        closable: true,
-        data: <LoadingTransaction pendingText="Waiting For Confirmation" />,
-      });
-      const { metadata, feeRefundOTA } = await getMetadata();
-      const { prvPayments, tokenPayments } = await getBurnPayments();
 
-      const payload = {
-        metadata,
-        info: '',
+    const totalBuyAmount =
+      new BigNumber(buyPriceFormatAmount).toNumber() + new BigNumber(buyFeeFormatAmount).toNumber();
+    const _isCanBuy =
+      selectedTokenPrivacy &&
+      selectedTokenPrivacy.formatAmount &&
+      new BigNumber(selectedTokenPrivacy.formatAmount).toNumber() >= totalBuyAmount
+        ? true
+        : false;
+
+    setIsCanBuy(_isCanBuy);
+
+    if (_isCanBuy) {
+      buyActions.buyNFT(
+        reciptientAddress,
         networkFee,
-        prvPayments,
-        tokenPayments,
-        tokenID: selectedToken.tokenID,
-        txType: 7,
-        receiverAddress: reciptientAddress,
-        isSignAndSendTransaction: false,
-      };
-
-      try {
-        const tx = await requestSignTransaction(payload);
-        await rpcPOpensea.submitBuyTx({
-          txRaw: tx.rawData,
-          feeRefundOTA,
-        });
-
-        if (tx.txHash) {
-          setSwapTx({
-            txHash: tx.txHash,
-            time: new Date().getTime(),
-            appName: 'opensea',
-            buyTokenID: selectedToken.tokenID,
-            buyAmountText: buyPriceFormatAmount,
-          });
-        }
-
-        clearAllModal();
-        setModal({
-          isTransparent: false,
-          closable: true,
-          data: <TransactionSubmittedContent chainId={PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO} hash={tx.txHash} />,
-        });
-      } catch (e) {
-        dispatch(actionSetErrorMsg(typeof e === 'string' ? e : ''));
-        clearAllModal();
-      }
+        buyPriceFormatAmount,
+        selectedToken,
+        childToken,
+        buyFee,
+        seaportSellOrder
+      );
     }
   };
 
@@ -296,10 +159,33 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     </div>
   );
 
-  const renderUserBalance = () => <p className="current-balance">Balance: {userBalanceFormatedText}</p>;
+  const renderUserBalance = () => {
+    const userBalanceFormatedText = selectedTokenPrivacy
+      ? `${selectedTokenPrivacy.formatAmount || 0} ${selectedTokenPrivacy.symbol || ''}`
+      : '';
+    return <p className="current-balance">Balance: {userBalanceFormatedText}</p>;
+  };
 
   const renderError = () => (
-    <p className="current-error">{!isCanBuy && incAccount && 'Your balance is insufficient.'}</p>
+    <p className="current-error">
+      {!isCanBuy && incAccount && 'Your balance is insufficient.'}{' '}
+      {!isCanBuy && incAccount && (
+        <span
+          onClick={() => {
+            history.push('/deposit');
+            const token: any = selectedToken?.isUnified
+              ? selectedToken.listUnifiedToken.find((token) => token.currencyType === 1)
+              : selectedToken;
+            if (token) {
+              dispatch(actionSetToken({ sellToken: token }));
+            }
+          }}
+          style={{ textDecoration: 'underline', cursor: 'pointer' }}
+        >
+          deposit now
+        </span>
+      )}
+    </p>
   );
 
   return (

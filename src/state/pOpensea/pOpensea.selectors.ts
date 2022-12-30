@@ -16,7 +16,7 @@ export const isFetchingPOpenseaNFTsSelector = createSelector(pOpenseaSelectors, 
 export const networkFeePOpenseaSelectors = createSelector(pOpenseaSelectors, (pOpensea) => pOpensea.networkFee);
 
 export const pOpenseaCollectionsSelectors = createSelector(pOpenseaSelectors, (pOpensea) =>
-  pOpensea.collections.sort((a, b) => (b.stats?.totalVolume || 0) - (a.stats?.totalVolume || 0))
+  pOpensea.collections.sort((a, b) => (b.stats?.oneDayVolume || 0) - (a.stats?.oneDayVolume || 0))
 );
 
 export const pOpenseaCollectionsSearchSelectors = createSelector(
@@ -65,7 +65,7 @@ export const pOpenseaFilterNFTsSelectors = createSelector(
       return 0;
     });
     return search
-      ? sortedNfts.filter((nft) => `${nft.name?.toLowerCase()}`.includes(search.toLowerCase()))
+      ? sortedNfts.filter((nft) => `${nft.name ? nft.name?.toLowerCase() : `${nft.id}`}`.includes(search.toLowerCase()))
       : sortedNfts;
   }
 );

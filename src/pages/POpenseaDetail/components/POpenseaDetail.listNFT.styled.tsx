@@ -184,7 +184,7 @@ export const Styled = styled.div`
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
-      margin-top: 24px;
+      margin-top: 16px;
       .filter-container {
         flex-direction: column;
         justify-content: left;
@@ -202,12 +202,11 @@ export const Styled = styled.div`
     `}
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToExtraSmall`
-      margin-top: 16px;
+      margin-top: 0px;
 
       .search-container {
-        flex-direction: column;
+        flex-direction: column-reverse;
         align-items: center;
-
       }
 
       .input-container {
@@ -215,7 +214,8 @@ export const Styled = styled.div`
       }
 
       .sort-button {
-        width: 100%;
+        margin-top: 16px;
+        width: auto;
       }
 
     `}
