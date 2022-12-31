@@ -196,7 +196,7 @@ const ProposalDetail = () => {
   const isDisabledButtonVote: boolean = isFetchingProposalDetail || proposalDetail?.status !== ProposalStatus.PENDING;
 
   return (
-    <div className="default-max-width-2" style={{ width: '100%' }}>
+    <div className="default-max-width-2" style={{ width: '100%', paddingBottom: 40 }}>
       <>
         {contextHolder}
         <HeaderBox

@@ -131,6 +131,7 @@ const Factory: IFactory[] = [
   {
     img: voteImg,
     name: 'pDAO',
+    route: '/vote',
     status: 'SHIPPED',
     nameDesc: 'Private DAO',
     chain: ['Ethereum'],
