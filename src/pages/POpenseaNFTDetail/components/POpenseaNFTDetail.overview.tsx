@@ -56,7 +56,7 @@ const POpenseaNFTDetailOverview = (props: POpenseaNFTDetailOverviewProps) => {
       <div className="collection-container">
         <button
           onClick={() => {
-            history.push(`/popensea/detail/${props.contract}`);
+            history.push(`/papps/popensea/detail/${props.contract}`);
           }}
         >
           <p className="collection-name">{selectedNFT.collection?.name}</p>
