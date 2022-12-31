@@ -3,6 +3,7 @@ import cakeImg from 'assets/images/cake-icon.png';
 import curveImg from 'assets/images/curve-icon.png';
 import incImg from 'assets/images/inc_logo.svg';
 import joeImg from 'assets/images/joe-icon.png';
+import openseaImg from 'assets/images/opensea-icon.png';
 import raydiumImg from 'assets/images/raydium-logo.png';
 import solendImg from 'assets/images/solend-logo.png';
 import spookyImg from 'assets/images/spooky-icon.png';
@@ -36,6 +37,7 @@ export interface IFactory {
 
   link?: string;
   linkPath?: string;
+  route?: string;
 
   network: MAIN_NETWORK_NAME[];
 }
@@ -52,6 +54,18 @@ const Factory: IFactory[] = [
     metric: METRIC_TYPE.PAPP_PANCAKE,
     metricUniq: METRIC_UNIQ.PAPP_PANCAKE_UNIQ,
     network: [MAIN_NETWORK_NAME.INCOGNITO],
+  },
+  {
+    img: openseaImg,
+    name: 'pOpensea',
+    nameDesc: 'Private Opensea',
+    status: 'SHIPPED',
+    chain: ['Ethereum', 'Marketplace', 'NFT'],
+    desc: 'Purchase NFTs and crypto collectibles on the largest web3 marketplace - Opensea - with full privacy on Incognito.',
+    metric: METRIC_TYPE.PAPP_OPENSEA,
+    metricUniq: METRIC_UNIQ.PAPP_OPENSEA_UNIQ,
+    network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],
+    route: '/popensea',
   },
   {
     img: cakeImg,
@@ -77,6 +91,7 @@ const Factory: IFactory[] = [
     metricUniq: METRIC_UNIQ.PAPP_UNISWAP_UNIQ,
     network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],
   },
+
   {
     img: curveImg,
     name: 'pCurve',
@@ -128,11 +143,14 @@ const Factory: IFactory[] = [
   {
     img: trisolarisImg,
     name: 'pTrisolaris',
-    status: 'COMING SOON',
+    status: 'SHIPPED',
     nameDesc: 'Private Trisolaris',
+    exchange: SwapExchange.TRISOLARIS,
     chain: ['Aurora', 'DEX'],
     desc: 'Privacy Swap comes to Aurora ecosystem for the first time. Multiple AMMs for best-in-class execution, now with privacy.',
-    network: [],
+    metric: METRIC_TYPE.PAPP_TRISOLARIS,
+    metricUniq: METRIC_UNIQ.PAPP_TRISOLARIS,
+    network: [MAIN_NETWORK_NAME.AURORA],
   },
   {
     img: raydiumImg,

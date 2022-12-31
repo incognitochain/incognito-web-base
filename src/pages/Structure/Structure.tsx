@@ -17,12 +17,12 @@ export const HeaderNode = () => {
   const history = useHistory();
   const Factory = [
     {
-      icon: OverviewIcon,
-      desc: 'Overview',
-      path: '/mine',
+      icon: VNodeIcon,
+      desc: 'Virtual Node',
+      path: '/mine/validator',
       func: () => {
-        updateMetric({ metric: METRIC_TYPE.MINE_OVERVIEW, uniqMetric: METRIC_UNIQ.MINE_OVERVIEW_UNIQ });
-        history.replace('/mine');
+        updateMetric({ metric: METRIC_TYPE.MINE_VNODE, uniqMetric: METRIC_UNIQ.MINE_VNODE_UNIQ });
+        history.replace('/mine/validator');
       },
     },
     {
@@ -34,12 +34,12 @@ export const HeaderNode = () => {
       },
     },
     {
-      icon: VNodeIcon,
-      desc: 'Virtual Node',
-      path: '/mine/validator',
+      icon: OverviewIcon,
+      desc: 'Overview',
+      path: '/mine',
       func: () => {
-        updateMetric({ metric: METRIC_TYPE.MINE_VNODE, uniqMetric: METRIC_UNIQ.MINE_VNODE_UNIQ });
-        history.replace('/mine/validator');
+        updateMetric({ metric: METRIC_TYPE.MINE_OVERVIEW, uniqMetric: METRIC_UNIQ.MINE_OVERVIEW_UNIQ });
+        history.replace('/mine');
       },
     },
     {

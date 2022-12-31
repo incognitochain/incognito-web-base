@@ -6,9 +6,10 @@ import React, { memo } from 'react';
 import { isMobile } from 'react-device-detect';
 import Lottie from 'react-lottie';
 import { useHistory } from 'react-router-dom';
+import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from 'services/rpcMetric';
 
-import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from '../../services/rpcMetric';
 import { CollectionItem, CollectionWrapper } from './Home.styled';
+import GetPRVImg from './images/GetPRV.png';
 import PNodeImg from './images/pnode.png';
 
 const SwapAnimation = () => {
@@ -58,13 +59,17 @@ const Collections = () => {
     <CollectionWrapper className="default-max-width">
       <CollectionItem
         onClick={() => {
-          updateMetric({ metric: METRIC_TYPE.HOME_SWAP, uniqMetric: METRIC_UNIQ.HOME_SWAP_UNIQ });
-          openLink({ link: '/swap' });
+          updateMetric({ metric: METRIC_TYPE.HOME_APP_GET_PRV, uniqMetric: METRIC_UNIQ.HOME_APP_GET_PRV_UNIQ });
+          openLink({ link: '/get-prv' });
         }}
       >
-        {renderHeader({ title: 'Swap', desc: 'Trade 100+ cryptocurrencies anonymously.', showIcon: !isMobile })}
-        {/*<img className="swap-image" src={SwapImg} alt="image" />*/}
-        <SwapAnimation />
+        {renderHeader({
+          title: 'PRV',
+          desc: 'Native cryptocurrency of Incognito, power all privacy activities.',
+          showIcon: !isMobile,
+        })}
+        <img className="swap-image" src={GetPRVImg} alt="image" />
+        {/*<SwapAnimation />*/}
       </CollectionItem>
       <CollectionItem
         onClick={() => {

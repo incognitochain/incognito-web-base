@@ -60,6 +60,9 @@ const language: ILanguage = {
       'Privacy (PRV) is the native cryptocurrency of Incognito. Use it to participate in privacy markets, use your favorite apps privately, and stake it to earn block rewards. PRV is minted for every new block mined, and has a fixed maximum supply of 100M.',
     privacyFuelMore: 'More on PRV economics',
   },
+  pOpensea: {
+    mainTitle: 'pOpensea',
+  },
 };
 
 export default language;

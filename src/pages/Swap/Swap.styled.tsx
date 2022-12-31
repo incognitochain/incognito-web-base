@@ -59,6 +59,12 @@ const LeftColumn = styled.div`
     }
   }
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 550px;
+    .ant-row {
+      justify-content: center;
+    }
     h3 {
       text-align: center;
     }

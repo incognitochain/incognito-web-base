@@ -15,6 +15,7 @@ export const Styled = styled.div`
   align-items: center;
   flex: 1;
   z-index: 1;
+  min-height: 96vh;
 
   .button {
     all: unset;
@@ -22,8 +23,10 @@ export const Styled = styled.div`
     position: relative;
     align-items: center;
     justify-content: center;
-    padding: 10px 25px;
+    padding: 12px 25px;
     gap: 8px;
+    min-width: 120px;
+    color: ${({ theme }) => theme.text1};
 
     background-color: ${({ theme }) => theme.primary2};
     border-radius: 8px;

@@ -113,6 +113,9 @@ const CollectionWrapper = styled(Row)`
   margin-right: auto;
   justify-content: space-around;
   grid-template-columns: repeat(auto-fill, 390px);
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    grid-template-columns: repeat(auto-fill, calc((100vw / 2) - 60px));
+  `}
   ${({ theme }) => theme.mediaWidth.upToSmall`
     grid-template-columns: repeat(auto-fill, calc(100vw - 30px));
   `}
@@ -142,8 +145,8 @@ const CollectionItem = styled.div`
     font-weight: 700;
   }
   .swap-image {
-    align-self: end;
-    max-width: 75%;
+    //align-self: end;
+    max-width: 100%;
     max-height: 100%;
     margin-right: auto;
     margin-left: auto;

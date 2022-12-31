@@ -313,15 +313,23 @@ class RpcClient {
   }
 
   async apiGetSwapTxs() {
-    const swapTxs: ISwapTxStorage[] = (getSwapTxs() || []).reverse().slice(0, 20);
-    let txIDs = [];
-    if (!swapTxs || swapTxs.length === 0) return [];
-    txIDs = swapTxs.map((tx) => tx.txHash);
-    const txs =
+    const localTxs: ISwapTxStorage[] = (getSwapTxs() || []).reverse().slice(0, 20);
+    if (!localTxs || localTxs.length === 0) return [];
+
+    let swapTxIDs = [];
+    swapTxIDs = localTxs.filter((tx) => tx.sellTokenID).map((tx) => tx.txHash);
+    let openseaIDs = [];
+    openseaIDs = localTxs.filter((tx) => tx.sellTokenID === undefined).map((tx) => tx.txHash);
+
+    const [swapTxs, openseaTxs] = await Promise.all([
       (await this.http.post('papps/swapstatus', {
-        TxList: txIDs,
-      })) || [];
-    return combineSwapTxs({ localTxs: swapTxs, swapTxs: txs });
+        TxList: swapTxIDs,
+      })) || [],
+      (await this.http.post('papps/opensea/buystatus', {
+        TxList: openseaIDs,
+      })) || [],
+    ]);
+    return combineSwapTxs({ localTxs, swapTxs: { ...swapTxs, ...openseaTxs } });
   }
 
   async genDepositAddress({

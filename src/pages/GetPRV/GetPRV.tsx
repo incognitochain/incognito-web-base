@@ -52,7 +52,7 @@ const GetPRV = () => {
             {/*</p>*/}
             <h3>What is PRV?</h3>
             <p className="sub-header h7">
-              Privacy (PRV) is used it to participate in privacy markets, use your favorite apps privately, stake it to
+              Privacy (PRV) is used to participate in privacy markets, use your favorite apps privately, stake it to
               earn block rewards, and govern the network.
               {/*<a*/}
               {/*  href="https://we.incognito.org/t/network-incentive-privacy-prv-mining-distribution/172"*/}

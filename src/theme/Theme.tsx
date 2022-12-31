@@ -961,6 +961,9 @@ export const ThemedGlobalStyle = createGlobalStyle`
       font-size: 40px;
       font-weight: 700;
       line-height: 140%;
+      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+          font-size: 34px;
+      `}
     }
 
     .h3_1 {
@@ -968,21 +971,6 @@ export const ThemedGlobalStyle = createGlobalStyle`
       font-size: 34px;
       font-weight: 500;
       line-height: 140%;
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
-        font-size: 34px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-        font-size: 28px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
-      ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-        font-size: 20px;
-        font-weight: 500;
-        line-height: 140%;
-      `}
     }
 
 
@@ -1097,4 +1085,40 @@ export const ThemedGlobalStyle = createGlobalStyle`
       white-space: pre-wrap;
       text-align: center;
     }
+
+    .ant-dropdown-menu {
+      background-color: ${({ theme }) => theme.bg3};
+      cursor: pointer;
+      border-radius: 8px;
+
+      button {
+        color: ${({ theme }) => theme.text1};
+        font-size: 16px;
+        font-weight: 600;
+        height: 38px;
+        padding-left: 8px;
+        cursor: pointer;
+      }
+      .ant-dropdown-menu-item :hover {
+        background-color: transparent;
+        color: ${({ theme }) => theme.primary9}
+      }
+
+      .ant-dropdown-menu-item.ant-dropdown-menu-item-active {
+        background-color: transparent;
+      }
+    }
+  
+  .ant-tabs-ink-bar  {
+    background-color: transparent;
+
+  }
+
+  .ant-tabs-ink-bar-animated {
+    background-color: ${({ theme }) => theme.white};
+  }
+
+  .ant-tabs-nav-wrap {
+    border-bottom: 1px solid ${({ theme }) => theme.color_grey4};
+  }
 `;
