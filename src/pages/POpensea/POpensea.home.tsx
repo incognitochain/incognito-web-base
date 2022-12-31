@@ -43,7 +43,7 @@ const Home = () => {
   const onClickCollectionItem = (item: POpenseaCollection) => {
     if (item.primaryAssetContracts && item.primaryAssetContracts.length > 0) {
       dispatch(actionSetSelectedCollection(item));
-      history.push(`/popensea/detail/${item.primaryAssetContracts[0].address}`);
+      history.push(`/papps/popensea/detail/${item.primaryAssetContracts[0].address}`);
     }
   };
 

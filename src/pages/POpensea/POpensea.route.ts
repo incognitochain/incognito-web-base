@@ -1,7 +1,7 @@
 import { IRouteProps } from 'pages';
 import { lazy } from 'react';
 
-export const route = '/popensea';
+export const route = '/papps/popensea';
 
 const POpenseaAppRoute: IRouteProps = {
   path: route,

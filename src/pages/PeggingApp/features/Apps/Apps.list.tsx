@@ -64,7 +64,7 @@ const Factory: IFactory[] = [
     metric: METRIC_TYPE.PAPP_OPENSEA,
     metricUniq: METRIC_UNIQ.PAPP_OPENSEA_UNIQ,
     network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],
-    route: '/popensea',
+    route: '/papps/popensea',
   },
   {
     img: cakeImg,
