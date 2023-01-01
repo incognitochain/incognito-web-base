@@ -38,7 +38,7 @@ const SwapTxs = React.memo(() => {
   const [txBurnID, setTxBurnID] = React.useState<string | undefined>(undefined);
 
   const factories: IItemDetail[] = React.useMemo(() => {
-    const _txDetail = state.txs.find((tx) => tx.requestBurnTxInc === txBurnID);
+    const _txDetail: any = state.txs.find((tx) => tx.requestBurnTxInc === txBurnID);
     if (!_txDetail) return [];
     const chainId = getChainIDByAcronymNetwork(_txDetail.network);
     return [
@@ -85,16 +85,30 @@ const SwapTxs = React.memo(() => {
         link: `${getExplorerLink(chainId || 0, _txDetail.outchainTx || '', ExplorerDataType.TRANSACTION)}`,
         disabled: !_txDetail.outchainTx,
       },
-      // {
-      //   title: 'OutChain status:',
-      //   desc: txDetail.outchainTxStatus,
-      //   // descColor: txDetail.outchainColor,
-      //   disabled: !txDetail.outchainTxStatus,
-      // },
+      {
+        title: 'pApp Tx:',
+        desc: !!_txDetail.pAppTxID ? shortenString(_txDetail.pAppTxID || '', 10) : '',
+        disabled: !_txDetail.pAppTxID,
+      },
+      {
+        title: 'pDex Tx:',
+        desc: !!_txDetail.pDexTxID ? shortenString(_txDetail.pDexTxID || '', 10) : '',
+        disabled: !_txDetail.pDexTxID,
+      },
       {
         title: 'Swap status:',
         desc: _txDetail.swapExchangeStatus,
         disabled: !_txDetail.swapExchangeStatus,
+      },
+      {
+        title: 'Refund Tx:',
+        desc: !!_txDetail.refundTxID ? shortenString(_txDetail.refundTxID || '', 10) : '',
+        disabled: !_txDetail.refundTxID,
+      },
+      {
+        title: 'Refund:',
+        desc: _txDetail.refundStr,
+        disabled: !_txDetail.refundStr,
       },
       {
         title: 'RedepositTx:',

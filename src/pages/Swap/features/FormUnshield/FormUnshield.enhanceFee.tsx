@@ -82,12 +82,12 @@ const enhanceFee = (WrappedComponent: any) => {
       }
 
       await handleEstimateFee({ isResetForm: true, incAddress });
-      // if (intervalRef && !intervalRef.current && formType === FormTypes.SWAP) {
-      //   // @ts-ignore
-      //   intervalRef.current = setInterval(async () => {
-      //     await handleEstimateFee({ isResetForm: false });
-      //   }, 30000);
-      // }
+      if (intervalRef && !intervalRef.current && formType === FormTypes.SWAP) {
+        // @ts-ignore
+        intervalRef.current = setInterval(async () => {
+          await handleEstimateFee({ isResetForm: false, incAddress });
+        }, 40000);
+      }
     };
 
     const debounceEstimateFee = React.useCallback(debounce(onEstimate, 700), [

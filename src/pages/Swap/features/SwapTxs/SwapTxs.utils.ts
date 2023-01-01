@@ -6,7 +6,7 @@ import format from 'utils/format';
 import SelectedPrivacy from '../../../../models/model/SelectedPrivacyModel';
 import state from '../../../../state';
 import { getPrivacyDataByTokenIDSelector } from '../../../../state/token';
-import { SwapExchange } from '../FormUnshield/FormUnshield.types';
+import { NetworkTypePayload, SwapExchange } from '../FormUnshield/FormUnshield.types';
 
 interface InterswapStatus {
   Status: string;
@@ -302,10 +302,9 @@ const combineSwapPAppAndOpenSea = ({ swapTxs, curr }: { swapTxs: any; curr: any 
   return data;
 };
 
-const combineSwapInter = ({ swapTxs, curr, prev }: { swapTxs: any; curr: any; prev: any }) => {
-  const apiResp: any = swapTxs[curr.txHash];
+const combineSwapInter = ({ swapTxs, curr }: { swapTxs: any; curr: any; prev: any }) => {
+  const apiResp: InterswapStatus = swapTxs[curr.txHash];
   if (!apiResp || isEmpty(apiResp)) return undefined;
-  const tx: InterswapStatus = curr;
   const defaultStatus = new Date().getTime() - curr.time > 60000 ? TxStatus.submitFail : TxStatus.pending;
   const appName = curr.appName.charAt(0).toUpperCase() + curr.appName.slice(1);
   const status = apiResp?.Status || defaultStatus;
@@ -316,27 +315,55 @@ const combineSwapInter = ({ swapTxs, curr, prev }: { swapTxs: any; curr: any; pr
   // ToAmount: number;
   // ToToken: string;
   // ResponseTxID: string;
-  // RefundAmount: number;
-  // RefundToken: string;
-  // RefundTxID: string;
 
   if (!curr.sellTokenID || !curr.buyTokenID) return null;
 
-  const sellAmountStr = curr.sellAmountText;
-  const buyAmountStr = curr.buyAmountText;
+  const sellAmountText = curr.sellAmountText;
+  const buyAmountText = curr.buyAmountText;
 
   const sellToken: SelectedPrivacy = getPrivacyDataByTokenIDSelector(state.getState())(curr.sellTokenID);
   const buyToken: SelectedPrivacy = getPrivacyDataByTokenIDSelector(state.getState())(curr.buyTokenID);
-  // const buyToken: SelectedPrivacy = getPrivacyDataByTokenIDSelector(state.getState())(curr.buyTokenID);
-  // const buyStr = `${format.amountVer2({ originalAmount: tx.buyAmountText, decimals: 0 })} ${buyToken.symbol}`;
 
+  const sellStr = `${format.amountVer2({ originalAmount: sellAmountText, decimals: 0 })} ${sellToken.symbol}`;
+  const buyStr = `${format.amountVer2({ originalAmount: buyAmountText, decimals: 0 })} ${buyToken.symbol}`;
+
+  const swapStr = `${sellStr} = ${buyStr}`;
+
+  const rateStr = `1 ${sellToken.symbol} = ${format.amountVer2({
+    originalAmount: new BigNumber(buyAmountText).div(sellAmountText).toNumber(),
+    decimals: 0,
+  })} ${buyToken.symbol}`;
+
+  const buyNetwork = buyToken.network;
+  const sellNetwork = sellToken.network;
+
+  let pDexTxID = apiResp.PdexTxID;
+  let pAppTxID = apiResp.PappTxID;
+  if (pDexTxID && pDexTxID === curr.txHash) {
+    pDexTxID = '';
+  }
+
+  if (pAppTxID && pAppTxID === curr.txHash) {
+    pAppTxID = '';
+  }
+
+  let refundStr, refundTxID;
+  if (apiResp?.RefundTxID && apiResp?.RefundToken) {
+    const refundToken = getPrivacyDataByTokenIDSelector(state.getState())(curr.RefundToken);
+    if (refundToken.symbol) {
+      refundTxID = apiResp?.RefundTxID;
+      refundStr = `${format.amountVer2({ originalAmount: apiResp?.RefundAmount || 0, decimals: 0 })} ${
+        refundToken.symbol
+      }`;
+    }
+  }
   const data: any = {
     status,
 
-    pAppTxID: tx.PappTxID,
-    pDexTxID: tx.PdexTxID,
+    pAppTxID,
+    pDexTxID,
 
-    pAppName: SwapExchange.UNISWAP,
+    pAppNameNetwork: curr?.interPAppNetwork || NetworkTypePayload.ETHEREUM,
 
     color,
 
@@ -344,6 +371,22 @@ const combineSwapInter = ({ swapTxs, curr, prev }: { swapTxs: any; curr: any; pr
     time: format.formatDateTime({ dateTime: curr.time || new Date().getTime() }),
 
     requestBurnTxInc: curr.txHash,
+
+    sellAmountText,
+    buyAmountText,
+
+    sellStr,
+    buyStr,
+
+    swapStr,
+
+    rateStr,
+
+    buyNetwork,
+    sellNetwork,
+
+    refundTxID,
+    refundStr,
   };
   return data;
 };
