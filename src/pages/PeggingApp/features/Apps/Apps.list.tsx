@@ -60,11 +60,11 @@ const Factory: IFactory[] = [
     nameDesc: 'Private Opensea',
     status: 'SHIPPED',
     chain: ['Ethereum', 'Marketplace', 'NFT'],
-    desc: 'Purchase and hoard rare digital items and collectibles without anyone knowing about it.',
+    desc: 'Purchase NFTs and crypto collectibles on the largest web3 marketplace - Opensea - with full privacy on Incognito.',
     metric: METRIC_TYPE.PAPP_OPENSEA,
     metricUniq: METRIC_UNIQ.PAPP_OPENSEA_UNIQ,
     network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],
-    route: '/popensea',
+    route: '/papps/popensea',
   },
   {
     img: cakeImg,

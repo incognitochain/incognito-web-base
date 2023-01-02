@@ -142,16 +142,18 @@ const AskQuestionItem = (props: AskQuestionItemProps) => {
         <>
           <div className="childrenView">{subItem}</div>
           {subsAnswers &&
-            subsAnswers.map(({ title, subs }: { title: string; subs: string[] }) => (
-              <div key={title}>
-                <p className="h8 childrenView">{title}</p>
-                {subs.map((sub) => (
-                  <p style={{ marginLeft: '16px' }} className="h8 childrenView" key={sub}>
-                    {sub}
-                  </p>
-                ))}
-              </div>
-            ))}
+            subsAnswers.map(
+              ({ title, subs, titleElement }: { title: string; subs: string[]; titleElement?: React.ReactNode }) => (
+                <div key={title}>
+                  {titleElement ? titleElement : <p className="h8 childrenView">{title}</p>}
+                  {subs.map((sub) => (
+                    <p style={{ marginLeft: '16px' }} className="h8 childrenView" key={sub}>
+                      {sub}
+                    </p>
+                  ))}
+                </div>
+              )
+            )}
         </>
       )}
     </MenuItemStyled>

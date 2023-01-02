@@ -5,39 +5,66 @@ import AskQuestionItem from '../../Market/features/AskQuestionItem';
 
 const questions: any = [
   {
-    title: 'What is Incognito wallet extension?',
-    answer:
-      'Incognito wallet extension is a crypto wallet compatible with Incognito blockchain. It allows users to manage their keychains in a variety of ways while isolating them from the site context. With Incognito wallet extension, you can easily store, send and receive funds on the Incognito blockchain. Additionally, you can also use the wallet extension for signing a transaction requesting from privacy app websites.',
-  },
-  {
-    title: 'Why must I install Incognito wallet extension in order to use swap function from the Incognito website?',
-    answer:
-      'Incognito wallet extension is used for signing a swap transaction requesting from the Incognito website then submitting the signed transaction to an Incognito fullnode for executing the swap. The swapped coins will then be populated in the wallet extension so that you can manage or send the coins over Incognito blockchain.',
-  },
-  {
-    title: 'Where does liquidity come from?',
-    answer:
-      'Incognito exchange’s liquidity comes from two sources:\n\n1. Native privacy DEX (pDEX) for pools containing coins from non smart contract blockchains such as PRV, BTC, XMR, ZEC, LTC and DASH.\n\n2. Integrated external DEXes such as Uniswap, Curve, PancakeSwap and SpookSwap.',
-  },
-  {
-    title: 'What are swap fees?',
-    answer: 'The swap fee will depend on what liquidity pool a swap is executed with.',
+    title: 'How it works?',
     subsAnswers: [
       {
-        title: '• If you are swapping with an AMM DEX on an external blockchain then the fees will be the total of:',
-        subs: [
-          '1. Transaction fee: Incognito collects a small network fee of 0.0000001 PRV to pay the validators who help power the network.',
-          '2. External blockchain’s gas fee: A swap request needs to be sent and executed against a DEX (say Uniswap) on an external blockchain (say Ethereum) and users need to pay for the gas cost.',
-          '3. AMM swap fee: the fee varies per asset per route per exchange that the swap is executed on (e.g., 0.3% for Uniswap, 0.25% for PancakeSwap, …). Liquidity providers of the AMM pools take the fee.',
-          '4. Privacy fee: Incognito takes a fee (0.3%) for operating the privacy exchange.',
-        ],
+        title: '• Shield ETH into Incognito wallet to have privacy ETH (pETH) on Incognito network.',
+        subs: [],
       },
       {
-        title: '• If you are swapping with Incognito pDEX then the fees will be the total of:',
-        subs: [
-          '1. Transaction fee: Incognito collects a small network fee of 0.0000001 PRV to pay the validators who help power the network.',
-          '2. AMM swap fee: the fee varies per asset per route that the swap is executed on. If a route has multiple pools, it would charge 0.25% per pool. Liquidity providers of the pDEX pools take the fee.',
-        ],
+        title: '',
+        titleElement: (
+          <p className="h8 childrenView">
+            • ETH shielded is locked in a{' '}
+            <a href="https://etherscan.io/tokenholdings?a=0x43D037A562099A4C2c95b1E2120cc43054450629">smart contract</a>{' '}
+            on Ethereum
+          </p>
+        ),
+        subs: [],
+      },
+      {
+        title:
+          '• pETH will be burned on the Incognito chain to unlock ETH in the smart contract on Ethereum when you buy a NFT on OpenSea.',
+        subs: [],
+      },
+      {
+        title: '• The NFT will be sent to your designated address on Ethereum once the purchase is done.',
+        subs: [],
+      },
+      {
+        title:
+          '• It is highly recommended to use a completely new address whenever you buy NFT with pOpenSea to keep your history private.',
+        subs: [],
+      },
+    ],
+  },
+  {
+    title: 'How does pOpenSea provide anonymity for users’ NFT purchases?',
+    subsAnswers: [
+      {
+        title: '',
+        titleElement: (
+          <p className="h8 childrenView">
+            • Users’ ETH shielded will be locked in a{' '}
+            <a href="https://etherscan.io/tokenholdings?a=0x43D037A562099A4C2c95b1E2120cc43054450629">smart contract</a>{' '}
+            on Ethereum altogether as a pool to convert it into pETH on the Incognito chain.
+          </p>
+        ),
+        subs: [],
+      },
+      {
+        title:
+          '• When a user buys a NFT on OpenSea, their pETH will be burned on Incognito chain to unlock ETH from smart contract on Ethereum.',
+        subs: [],
+      },
+      {
+        title:
+          '• This burn transaction is privacy-guaranteed by zero-knowledge proofs. Hence, it is impossible to track the input of ETH or the purchaser.',
+        subs: [],
+      },
+      {
+        title: '• In other words, the buyer is completely anonymous.',
+        subs: [],
       },
     ],
   },
@@ -126,18 +153,14 @@ const POpenseaNFTDetailQuestion = () => {
     <Styled>
       <div className="titleView">
         <div className="title-container">
-          <h3 className="title-custom">What is pOpensea?</h3>
+          <h3 className="title-custom">What is pOpenSea?</h3>
         </div>
         <div className="title-container">
           <p className="h8 description-custom" style={{ color: '#9C9C9C' }}>
-            Incognito exchange is a one-stop-shop that facilitates anonymous swap for all coins across many popular
-            blockchains such as Bitcoin, Monero, Ethereum, BNB Chain, Avalanche, etc.
-            <br />
-            <br />
-            While every existing DEX has its own drawback: sufficient liquidity but no privacy or privacy supported but
-            shortage liquidity, Incognito exchange takes a novel approach to achieve both by implementing privacy via
-            zero-knowledge proofs, inter-blockchain trading with huge liquidity via interoperable dApps (a.k.a DEXs such
-            as Uniswap, Curve, PancakeSwap and SpookySwap).
+            pOpenSea is a DApp that allows you to purchase NFTs and crypto collectibles on the largest web3 marketplace
+            - Opensea - with full privacy on Incognito.
+            {/* <br />
+            <br /> */}
           </p>
         </div>
       </div>
@@ -148,7 +171,7 @@ const POpenseaNFTDetailQuestion = () => {
             itemOnClick={itemOnClick}
             title={question?.title}
             isActive={question?.title === activeText}
-            subItem={<AnswerItem answer={question?.answer} />}
+            // subItem={<AnswerItem answer={question?.answer} />}
             subsAnswers={question?.subsAnswers}
           />
         ))}

@@ -9,7 +9,7 @@ import { actionGetPOpenseaNFTDetail, selectedpOpenseaNFTSelector } from 'state/p
 import POpenseaNFTDetailBuy from './components/POpenseaNFTDetail.buy';
 import POpenseaNFTDetailInfo from './components/POpenseaNFTDetail.info';
 import POpenseaNFTDetailOverview from './components/POpenseaNFTDetail.overview';
-// import POpenseaNFTDetailQuestions from './components/POpenseaNFTDetail.questions';
+import POpenseaNFTDetailQuestions from './components/POpenseaNFTDetail.questions';
 import POpenseaNFTDetailSubRoute from './components/POpenseaNFTDetail.subRoute';
 import { Styled, WrapperContent } from './POpenseaNFTDetail.styled';
 
@@ -58,7 +58,7 @@ const Home = () => {
             <POpenseaNFTDetailBuy selectedNFT={selectedNFT} />
           </div>
         </div>
-        {/* <POpenseaNFTDetailQuestions /> */}
+        <POpenseaNFTDetailQuestions />
       </WrapperContent>
     </Styled>
   );

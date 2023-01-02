@@ -27,7 +27,6 @@ import Market from './Market';
 import Page404 from './Page404';
 import PeggingApp from './PeggingApp';
 import Policy from './Policy';
-import POpensea from './POpensea';
 import POpenseaDetail from './POpenseaDetail';
 import POpenseaNFTDetail from './POpenseaNFTDetail';
 import Structure from './Structure';
@@ -121,9 +120,8 @@ const App = () => {
         <Route exact path="/get-prv" component={GetPRV} />
         <Route exact path="/buy-node" component={BuyNode} />
         <Route exact path="/deposit" component={DepositPage} />
-        <Route exact path="/popensea" component={POpensea} />
-        <Route exact path="/popensea/detail/:contract" component={POpenseaDetail} />
-        <Route exact path="/popensea/detail/:contract/:tokenId" component={POpenseaNFTDetail} />
+        <Route exact path="/papps/popensea/detail/:contract" component={POpenseaDetail} />
+        <Route exact path="/papps/popensea/detail/:contract/:tokenId" component={POpenseaNFTDetail} />
         <Route exact path="/buy-node" component={BuyNode} />
         <Route exact path="/deposit" component={DepositPage} />
         <Route component={Page404} />
