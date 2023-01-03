@@ -12,6 +12,7 @@ import {
   pOpenseaCollectionsSearchSelectors,
 } from 'state/pOpensea';
 
+import POpenseaInfo from './components/POpensea.info';
 import POpenseaListCollection from './components/POpensea.listCollection';
 // import POpenseaSubRoute from './components/POpensea.subRoute';
 import { Styled, TextInputStyled, WrapperContent } from './POpensea.styled';
@@ -43,7 +44,7 @@ const Home = () => {
   const onClickCollectionItem = (item: POpenseaCollection) => {
     if (item.primaryAssetContracts && item.primaryAssetContracts.length > 0) {
       dispatch(actionSetSelectedCollection(item));
-      history.push(`/popensea/detail/${item.primaryAssetContracts[0].address}`);
+      history.push(`/papps/popensea/detail/${item.primaryAssetContracts[0].address}`);
     }
   };
 
@@ -54,6 +55,7 @@ const Home = () => {
   return (
     <Styled className="default-max-width">
       <WrapperContent>
+        <POpenseaInfo />
         {/* <POpenseaSubRoute /> */}
         <Tabs
           defaultActiveKey={defaultActiveKey}

@@ -36,7 +36,7 @@ const POpenseaDetail = () => {
       dispatch(actionSetSelectedNFT(item));
       const contractAddress = selectedCollection.primaryAssetContracts[0].address;
       const tokenId = item.tokenId;
-      history.push(`/popensea/detail/${contractAddress}/${tokenId || 0}`);
+      history.push(`/papps/popensea/detail/${contractAddress}/${tokenId || 0}`);
     }
   };
 

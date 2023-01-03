@@ -153,16 +153,14 @@ const POpenseaNFTDetailQuestion = () => {
     <Styled>
       <div className="titleView">
         <div className="title-container">
-          <h3 className="title-custom">What is pOpenSea?</h3>
+          <h3 className="title-custom">FAQs</h3>
         </div>
-        <div className="title-container">
+        {/* <div className="title-container">
           <p className="h8 description-custom" style={{ color: '#9C9C9C' }}>
             pOpenSea is a DApp that allows you to purchase NFTs and crypto collectibles on the largest web3 marketplace
             - Opensea - with full privacy on Incognito.
-            {/* <br />
-            <br /> */}
           </p>
-        </div>
+        </div> */}
       </div>
       <div className="questionView">
         {questions?.map((question: any, i: number) => (
