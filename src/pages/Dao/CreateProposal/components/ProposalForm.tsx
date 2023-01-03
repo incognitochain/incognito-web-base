@@ -22,12 +22,12 @@ const Container = styled.div`
     font-weight: 400;
     font-size: 16px;
     line-height: 160%;
-    color: #757575;
+    color: ${({ theme }) => theme.text2};
   }
 
   .markdown p {
     font-size: 16px;
-    color: #757575;
+    color: ${({ theme }) => theme.text2};
   }
 
   .markdown ul {
@@ -45,7 +45,7 @@ const Container = styled.div`
   .markdown hr {
     width: 100%;
     height: 1px;
-    background-color: #757575;
+    background-color: ${({ theme }) => theme.text2};
     border: none;
     margin-top: 32px;
     margin-bottom: 32px;
