@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // import icGaming from 'assets/svg/ic-gaming.svg';
 // import icStar from 'assets/svg/ic-star.svg';
-// import icVerify from 'assets/svg/ic-verify.svg';
+import icVerify from 'assets/svg/ic-verify.svg';
 // import icView from 'assets/svg/ic-view.svg';
 import { POpenseaNft } from 'models/model/POpenseaNFT';
 import React, { memo } from 'react';
@@ -61,7 +61,7 @@ const POpenseaNFTDetailOverview = (props: POpenseaNFTDetailOverviewProps) => {
         >
           <p className="collection-name">{selectedNFT.collection?.name}</p>
         </button>
-        {/* <img src={icVerify} /> */}
+        {selectedNFT.collection && selectedNFT.collection.getIsVerify() && <img src={icVerify} />}
       </div>
 
       <p className="name">{selectedNFT.getOriginalName()}</p>
