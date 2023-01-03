@@ -104,7 +104,7 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmPro
             })}{' '}
             PRV
           </LabelText>
-          <LabelText style={{ marginTop: 24 }}>
+          <LabelText style={{ marginTop: 8 }}>
             Fee:{' '}
             {format.amountVer2({
               originalAmount: Number(fee?.feeAmount || 0),

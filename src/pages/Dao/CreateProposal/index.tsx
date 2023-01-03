@@ -4,6 +4,7 @@ import BackButton from 'components/BackButton';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { fetchProposalFee } from 'services/rpcDao';
 import { createProposal } from 'state/dao/operations';
 import { Fee, TransactionType } from 'state/dao/types';
@@ -64,6 +65,8 @@ const CreateProposal = () => {
 
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState<boolean>(false);
 
+  const history = useHistory();
+
   const { requestSignTransaction } = useIncognitoWallet();
 
   const handleChangeTitle = useCallback(
@@ -122,6 +125,7 @@ const CreateProposal = () => {
           (data) => {
             if (data) {
               showSubmitVotePopupMessage('success', 'Success', 'Proposal Created!');
+              history.push(`vote/${data?.pid}`);
             }
           }
         )
