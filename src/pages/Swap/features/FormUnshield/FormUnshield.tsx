@@ -1,4 +1,5 @@
 import { Tooltip } from 'antd';
+import { ReactComponent as Info } from 'assets/images/info.svg';
 import SwapIcon from 'assets/svg/swap.svg';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
@@ -10,6 +11,7 @@ import { TAB_LIST } from 'components/Core/Tabs';
 import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
 import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
+import { getQueryPAppName } from 'pages/Swap/Swap.hooks';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -20,8 +22,6 @@ import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
-import { ReactComponent as Info } from '../../../../assets/images/info.svg';
-import { getQueryPAppName } from '../../Swap.hooks';
 import { EstReceive } from '../EstReceive';
 import { actionSetToken } from '../FormDeposit/FormDeposit.actions';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
@@ -370,9 +370,22 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           </ErrorMsgContainer>
         ) : exchangeSelectedData?.interSwapData?.midToken ? (
           <InterSwapMsg>
-            <ThemedText.SmallLabel>lorem ipsum</ThemedText.SmallLabel>
-            <Tooltip title="lorem ipsum">
-              <Info style={{ marginLeft: 5 }} />
+            <ThemedText.SmallLabel>
+              Interswap supports users to swap using cross exchange liquidity pools seamlessly.
+            </ThemedText.SmallLabel>
+            <Tooltip
+              overlayInnerStyle={{ width: '400px' }}
+              title={
+                <p>
+                  Example:
+                  <br /> Step 1: MATIC &gt; USDT (Uniswap Exchange)
+                  <br /> Step 2: USDT &gt; XMR (Incognito Exchange)
+                  <br /> - If the second step executes unsuccessfully you will receive USDT value corresponding to the
+                  amount of tokens you sell.
+                </p>
+              }
+            >
+              <Info style={{ marginLeft: 25 }} />
             </Tooltip>
           </InterSwapMsg>
         ) : null}
