@@ -86,7 +86,7 @@ const getProposals = () => {
         }
 
         return {
-          id: proposal?.id.toString(),
+          id: proposal?.PID,
           proposalId: proposalInfoViaChain?.id?.toString(),
           title: proposal?.Title || '',
           description: proposal?.Description ?? 'No description.',
@@ -132,7 +132,7 @@ const getProposalDetail = (proposalId: any, callback?: (data: any) => void) => {
         proposalStatusViaChain = null;
       }
       const proposalDetail: Proposal = {
-        id: proposalDetailResponse?.id.toString(),
+        id: proposalDetailResponse?.PID,
         proposalId: proposalDetailResponse?.ProposalID.toString(),
         title: proposalDetailResponse.Title || '',
         description: proposalDetailResponse.Description ?? 'No description.',

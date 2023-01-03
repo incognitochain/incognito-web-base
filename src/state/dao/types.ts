@@ -43,6 +43,7 @@ interface ProposalCallResult {
 
 interface ProposalAPIResponse {
   id: string;
+  PID: number;
   created_at: string;
   updated_at: string;
   SubmitBurnTx: string;
