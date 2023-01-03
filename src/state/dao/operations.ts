@@ -1,6 +1,7 @@
 //@ts-nocheck
 import INC_DAO_ABI from 'abis/inc-dao.json';
 import { getIncognitoInject } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+import { isMainnet } from 'config';
 import { PRV } from 'constants/token';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
 // eslint-disable-next-line no-restricted-imports
@@ -24,11 +25,7 @@ const NETWORK_FEE = ACCOUNT_CONSTANT.MAX_FEE_PER_TX;
 const CONTRACT_ABI = INC_DAO_ABI as any;
 const { BurningPRVRequestMeta } = require('incognito-chain-web-js/build/web/wallet');
 
-// const chainId = isMainnet ? SupportedChainId.MAINNET : SupportedChainId.GOERLI_ETH;
-const chainId = 5;
-
-// const web3 = getWeb3({ chainId });
-const web3 = new Web3('https://goerli.infura.io/v3/827ed2f82fb3442da6d516c8b5e5bd16');
+const web3 = new Web3(isMainnet ? 'https://eth-fullnode.incognito.org' : 'https://eth-goerli.public.blastapi.io');
 
 const getProposalInfoViaChain = async (proposalId: any) => {
   try {

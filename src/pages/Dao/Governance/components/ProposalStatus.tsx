@@ -57,7 +57,7 @@ const getStatusText = (status: ProposalStatus | undefined): string => {
     case ProposalStatus.CANCELLED:
       return 'Cancelled';
     case ProposalStatus.VETOED:
-      return 'Voted';
+      return 'Vetoed';
     case ProposalStatus.EXPIRED:
       return 'Expired';
     default:
