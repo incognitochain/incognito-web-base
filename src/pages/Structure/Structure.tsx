@@ -35,7 +35,7 @@ export const HeaderNode = () => {
     },
     {
       icon: OverviewIcon,
-      desc: 'Overview',
+      desc: 'Network',
       path: '/mine',
       func: () => {
         updateMetric({ metric: METRIC_TYPE.MINE_OVERVIEW, uniqMetric: METRIC_UNIQ.MINE_OVERVIEW_UNIQ });
