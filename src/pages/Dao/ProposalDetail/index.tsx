@@ -217,14 +217,14 @@ const ProposalDetail = () => {
             isLoading={isFetchingProposalDetail}
             leftTitle={titleDate}
             rightTitle={rightTitleDate}
-            rightValue={rightTitleDateValue}
+            rightValue={rightTitleDateValue || 'Updating'}
           />
           <div style={{ width: 24 }} />
           <InfoBox
             isLoading={isFetchingProposalDetail}
             leftTitle="Snapshot"
             rightTitle="Taken at block"
-            rightValue={proposalDetail?.startBlock || ''}
+            rightValue={proposalDetail?.startBlock || 'Updating'}
           />
         </InfoBoxContainer>
         <DescriptionBox>
