@@ -125,7 +125,9 @@ const CreateProposal = () => {
           (data) => {
             if (data) {
               showSubmitVotePopupMessage('success', 'Success', 'Proposal Created!');
-              history.replace(`vote/${data?.pid}`);
+              setTimeout(() => {
+                history.replace(`vote/${data?.pid}`);
+              }, 1000);
             }
           }
         )
