@@ -7,14 +7,19 @@ const Styled = styled.div`
     display: flex;
     flex-direction: column;
     .title-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       .title-custom {
         text-align: center;
+        align-self: center;
         font-weight: 700;
       }
       .description-custom {
-        width: 100%;
+        width: 60%;
         margin-top: 24px;
         text-align: center;
+        align-self: center;
       }
     }
   }
