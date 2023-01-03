@@ -345,7 +345,6 @@ const combineSwapInter = ({ swapTxs, curr }: { swapTxs: any; curr: any; prev: an
   let refundStr, refundTxID;
   if (apiResp?.RefundTxID && apiResp?.RefundToken) {
     const refundToken = getPrivacyDataByTokenIDSelector(state.getState())(apiResp.RefundToken);
-    console.log('SANG TEST: ', { refundToken, token: apiResp.RefundToken });
     if (refundToken.symbol) {
       refundTxID = apiResp?.RefundTxID;
       refundStr = `${format.amountVer2({
