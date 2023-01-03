@@ -7,7 +7,7 @@ export const NETWORK_FEE = ACCOUNT_CONSTANT.MAX_FEE_PER_TX;
 export const MINIMUM_PRV_REQUIRE_TO_BURN = 10000000000;
 
 export const INC_CONTRACT_ADDRESS = isMainnet
-  ? '0x01f6549BeF494C8b0B00C2790577AcC1A3Fa0Bd0'
+  ? '0x6D82713dE1FBB2bAa0d9d2A81Fca1244b87808eC'
   : '0x01f6549BeF494C8b0B00C2790577AcC1A3Fa0Bd0';
 
 export const removeBold = (text: string | null): string | null => (text ? text.replace(/\*\*/g, '') : text);
