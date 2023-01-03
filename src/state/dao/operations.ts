@@ -1,12 +1,12 @@
 //@ts-nocheck
 import INC_DAO_ABI from 'abis/inc-dao.json';
 import { getIncognitoInject } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
-import { getWeb3 } from 'constants/infura';
 import { PRV } from 'constants/token';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
 // eslint-disable-next-line no-restricted-imports
 import { Dispatch } from 'redux';
 import { fetchProposalDetail, fetchProposals, submitCreateProposal, submitVote } from 'services/rpcDao';
+import Web3 from 'web3';
 
 import { getProposalsFailure, getProposalsRequest, getProposalsSuccess } from './actions';
 import {
@@ -27,7 +27,8 @@ const { BurningPRVRequestMeta } = require('incognito-chain-web-js/build/web/wall
 // const chainId = isMainnet ? SupportedChainId.MAINNET : SupportedChainId.GOERLI_ETH;
 const chainId = 5;
 
-const web3 = getWeb3({ chainId });
+// const web3 = getWeb3({ chainId });
+const web3 = new Web3('https://goerli.infura.io/v3/827ed2f82fb3442da6d516c8b5e5bd16');
 
 const getProposalInfoViaChain = async (proposalId: any) => {
   try {
@@ -446,4 +447,3 @@ const operations: Operations = {
 
 export { burnPRVToken, createProposal, getProposalDetail, getProposals, operations, vote };
 export type { Operations };
-
