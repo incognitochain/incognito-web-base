@@ -1,3 +1,4 @@
+import icVerify from 'assets/svg/ic-verify.svg';
 import ImagePlaceholder from 'components/ImagePlaceholder';
 import { POpenseaCollection } from 'models/model/POpenseaCollection';
 import { memo } from 'react';
@@ -40,6 +41,13 @@ const Styled = styled.div`
     align-self: center;
   }
 
+  .container-collection-name {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+  }
+
   .collection-name {
     font-weight: 700;
     font-size: 28px;
@@ -47,6 +55,12 @@ const Styled = styled.div`
     text-align: center;
     margin-top: 16px;
     margin-bottom: 16px;
+  }
+
+  .collection-verify {
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
   }
 
   .title {
@@ -177,7 +191,10 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
         <ImagePlaceholder className="banner" src={collection.getBannerUrl()} />
         <div className="avatar-container">
           <ImagePlaceholder className="avatar" rootClassName="root-avatar" src={collection.imageUrl} />
-          <p className="collection-name">{collection.name}</p>
+          <div className="container-collection-name">
+            <p className="collection-name">{collection.name}</p>
+            {collection.getIsVerify() && <img className="collection-verify" src={icVerify} />}
+          </div>
         </div>
         <div className="info-container">
           {renderTitleItem('Items', `${total}`)}

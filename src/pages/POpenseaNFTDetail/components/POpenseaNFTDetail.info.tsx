@@ -4,6 +4,7 @@ import { List } from 'antd';
 import icDesciption from 'assets/svg/ic-description.svg';
 import icInfo from 'assets/svg/ic-info.svg';
 import icProperties from 'assets/svg/ic-properties.svg';
+import icVerify from 'assets/svg/ic-verify.svg';
 import Expandable from 'components/Expandable';
 import { POpenseaNft } from 'models/model/POpenseaNFT';
 import React, { memo } from 'react';
@@ -119,6 +120,8 @@ interface POpenseaNFTDetailInfoProps {
 const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
   const { selectedNFT } = props;
 
+  const collection = selectedNFT.collection;
+
   const renderDetailItem = (title: string, value?: string) => (
     <div className="child-detail-item">
       <p className="child-detail-title">{title}</p>
@@ -150,7 +153,8 @@ const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
     <div className="child-desc">
       <div className="child-desc-content">
         <p className="child-desc-title">By</p>
-        <p className="child-desc-name">{selectedNFT.collection?.name}</p>
+        <p className="child-desc-name">{collection?.name}</p>
+        {collection && collection.getIsVerify() && <img src={icVerify} />}
       </div>
       <p className="child-desc-title">{selectedNFT.description}</p>
     </div>
@@ -182,11 +186,17 @@ const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
       }}
     />
   );
+  const renderAboutChild = () => (
+    <div className="child-desc">
+      <p className="child-desc-title">{collection?.description}</p>
+    </div>
+  );
 
   return (
     <Styled>
       <Expandable icon={icDesciption} expand title="Desciption" child={renderDesciptionChild()} />
       <Expandable icon={icProperties} title="Properties" child={renderPropertiesChild()} />
+      <Expandable icon={icDesciption} title={`About ${collection?.name}`} child={renderAboutChild()} />
       <Expandable icon={icInfo} title="Details" child={renderDetailsChild()} />
     </Styled>
   );
