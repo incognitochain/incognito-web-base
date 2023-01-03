@@ -20,7 +20,7 @@ const Styled = styled.div`
     font-size: 16px;
     line-height: 140%;
     color: ${({ theme }) => theme.color_blue};
-    margin-right: 8px;
+    margin-right: 6px;
     cursor: pointer;
   }
 

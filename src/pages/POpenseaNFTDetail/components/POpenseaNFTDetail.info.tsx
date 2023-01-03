@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { List } from 'antd';
+import icAbout from 'assets/svg/ic-about.svg';
 import icDesciption from 'assets/svg/ic-description.svg';
 import icInfo from 'assets/svg/ic-info.svg';
 import icProperties from 'assets/svg/ic-properties.svg';
@@ -109,7 +110,6 @@ export const Styled = styled.div`
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
-    margin-top: 0px;
   `}
 `;
 
@@ -196,7 +196,7 @@ const POpenseaNFTDetailInfo = (props: POpenseaNFTDetailInfoProps) => {
     <Styled>
       <Expandable icon={icDesciption} expand title="Desciption" child={renderDesciptionChild()} />
       <Expandable icon={icProperties} title="Properties" child={renderPropertiesChild()} />
-      <Expandable icon={icDesciption} title={`About ${collection?.name}`} child={renderAboutChild()} />
+      <Expandable icon={icAbout} title={`About ${collection?.name}`} child={renderAboutChild()} />
       <Expandable icon={icInfo} title="Details" child={renderDetailsChild()} />
     </Styled>
   );
