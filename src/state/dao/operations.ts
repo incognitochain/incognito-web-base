@@ -1,7 +1,6 @@
 //@ts-nocheck
 import INC_DAO_ABI from 'abis/inc-dao.json';
 import { getIncognitoInject } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
-import { SupportedChainId } from 'constants/chains';
 import { getWeb3 } from 'constants/infura';
 import { PRV } from 'constants/token';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
@@ -9,7 +8,6 @@ import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.
 import { Dispatch } from 'redux';
 import { fetchProposalDetail, fetchProposals, submitCreateProposal, submitVote } from 'services/rpcDao';
 
-import { isMainnet } from './../../config/config.env';
 import { getProposalsFailure, getProposalsRequest, getProposalsSuccess } from './actions';
 import {
   Fee,
@@ -26,7 +24,8 @@ const NETWORK_FEE = ACCOUNT_CONSTANT.MAX_FEE_PER_TX;
 const CONTRACT_ABI = INC_DAO_ABI as any;
 const { BurningPRVRequestMeta } = require('incognito-chain-web-js/build/web/wallet');
 
-const chainId = isMainnet ? SupportedChainId.MAINNET : SupportedChainId.GOERLI_ETH;
+// const chainId = isMainnet ? SupportedChainId.MAINNET : SupportedChainId.GOERLI_ETH;
+const chainId = 5;
 
 const web3 = getWeb3({ chainId });
 
@@ -447,3 +446,4 @@ const operations: Operations = {
 
 export { burnPRVToken, createProposal, getProposalDetail, getProposals, operations, vote };
 export type { Operations };
+
