@@ -128,7 +128,7 @@ const EstReceive = React.memo(
           tradePathArrStr.push(tokenData?.symbol);
         }
       }
-      tradePathStr = tradePathArrStr?.join(' -> ');
+      tradePathStr = tradePathArrStr?.join(' > ');
       return tradePathStr;
     };
 
