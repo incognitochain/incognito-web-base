@@ -25,7 +25,6 @@
     "cypress:open": "cypress open --browser chrome --e2e",
     "cypress:run": "cypress run --browser chrome --e2e"
   },
-  "proxy": "http://app-devtest.incognito.org",
   "jest": {
     "collectCoverageFrom": [
       "src/components/**/*.ts*",
