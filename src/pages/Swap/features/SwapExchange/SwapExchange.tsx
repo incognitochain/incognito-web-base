@@ -7,6 +7,7 @@ import React from 'react';
 import { useAppSelector } from 'state/hooks';
 import { isFetchingSelectors as isFetchingTokenSelector } from 'state/token';
 
+import POpensea from '../../../POpensea';
 import { capitalizeFirstLetter } from '../ItemDetail/ItemDetail';
 import { getExchangeLogo } from '../Selection/SelectSwapExchange';
 import { Container, Content } from './SwapExchange.styled';
@@ -14,13 +15,18 @@ import { Container, Content } from './SwapExchange.styled';
 const SwapExchange = (props: any) => {
   const isFetching = useAppSelector(isFetchingTokenSelector);
 
+  const query = getQueryPAppName();
+  const name = query?.pAppName || '';
+
+  if (name === 'popensea') {
+    return <POpensea />;
+  }
+
   const renderForm = () => {
     return <FormUnshield {...props} />;
   };
 
   const renderContent = () => {
-    const query = getQueryPAppName();
-    const name = query?.pAppName || '';
     const appName = name === 'joe' ? 'TraderJoe' : name === 'pdex' ? 'Incognito DEX' : name;
     return (
       <>

@@ -49,7 +49,7 @@ const POpenseaNFTDetailSubRoute = (props: POpenseaDetailSubRouteProps) => {
       <button
         className="hover"
         onClick={() => {
-          history.push('/popensea');
+          history.push('/papps/popensea');
         }}
       >
         <p className="sub-title earnings-text">pOpensea</p>
@@ -57,7 +57,7 @@ const POpenseaNFTDetailSubRoute = (props: POpenseaDetailSubRouteProps) => {
       <p className="sub-title">/</p>
       <button
         onClick={() => {
-          history.push(`/popensea/detail/${props.contract}`);
+          history.push(`/papps/popensea/detail/${props.contract}`);
         }}
       >
         <p className="sub-title earnings-text">{props.collectionName}</p>

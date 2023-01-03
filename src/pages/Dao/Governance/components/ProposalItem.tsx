@@ -19,7 +19,7 @@ const Label = styled.p`
   font-size: 14px;
   line-height: 116%;
   text-align: center;
-  color: #757575;
+  color: ${({ theme }) => theme.text2};
 `;
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 12;
@@ -71,7 +71,7 @@ const ProposalTitle = styled.span`
   font-weight: 500;
   font-size: 18px;
   line-height: 140%;
-  color: #ffffff;
+  color: ${({ theme }) => theme.text1};
 `;
 
 const ProposalItem = (props: ProposalItemProps) => {
