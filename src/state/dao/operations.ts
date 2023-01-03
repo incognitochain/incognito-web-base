@@ -1,13 +1,15 @@
 //@ts-nocheck
 import INC_DAO_ABI from 'abis/inc-dao.json';
 import { getIncognitoInject } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+import { SupportedChainId } from 'constants/chains';
+import { getWeb3 } from 'constants/infura';
 import { PRV } from 'constants/token';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
 // eslint-disable-next-line no-restricted-imports
 import { Dispatch } from 'redux';
 import { fetchProposalDetail, fetchProposals, submitCreateProposal, submitVote } from 'services/rpcDao';
-import Web3 from 'web3';
 
+import { isMainnet } from './../../config/config.env';
 import { getProposalsFailure, getProposalsRequest, getProposalsSuccess } from './actions';
 import {
   Fee,
@@ -24,9 +26,12 @@ const NETWORK_FEE = ACCOUNT_CONSTANT.MAX_FEE_PER_TX;
 const CONTRACT_ABI = INC_DAO_ABI as any;
 const { BurningPRVRequestMeta } = require('incognito-chain-web-js/build/web/wallet');
 
+const chainId = isMainnet ? SupportedChainId.MAINNET : SupportedChainId.GOERLI_ETH;
+
+const web3 = getWeb3({ chainId });
+
 const getProposalInfoViaChain = async (proposalId: any) => {
   try {
-    const web3 = new Web3('https://goerli.infura.io/v3/827ed2f82fb3442da6d516c8b5e5bd16');
     const instance = new web3.eth.Contract(CONTRACT_ABI, INC_CONTRACT_ADDRESS);
     const proposalDetail: ProposalCallResult = await instance.methods.proposals(web3.utils.toBN(proposalId)).call();
     return proposalDetail;
@@ -37,8 +42,6 @@ const getProposalInfoViaChain = async (proposalId: any) => {
 
 const getProposalStatus = async (proposalId: any) => {
   try {
-    const web3 = new Web3('https://goerli.infura.io/v3/827ed2f82fb3442da6d516c8b5e5bd16');
-    const CONTRACT_ABI = INC_DAO_ABI as any;
     const instance = new web3.eth.Contract(CONTRACT_ABI, INC_CONTRACT_ADDRESS);
     const proposalStates = [
       ProposalStatus.PENDING,
@@ -237,7 +240,6 @@ const burnPRVToken = ({
 };
 
 const genProposalId = (payload: any) => {
-  const web3 = new Web3();
   let proposalId = web3.utils.keccak256(
     Buffer.from(
       web3.eth.abi
