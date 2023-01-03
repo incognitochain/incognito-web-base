@@ -354,11 +354,12 @@ const FormUnshield = React.memo((props: IMergeProps) => {
         {!prvToken.amount && !!inputAmount && isIncognitoInstalled() && incAccount ? (
           <ErrorMsgContainer>
             <ThemedText.Error error fontWeight={400}>
-              {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network. Get
-            some from the `}
-              <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
-                faucet
-              </a>
+              {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network.`}
+              {/*  {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network. Get*/}
+              {/*some from the `}*/}
+              {/*  <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">*/}
+              {/*    faucet*/}
+              {/*  </a>*/}
             </ThemedText.Error>
           </ErrorMsgContainer>
         ) : !!errorMsg ? (

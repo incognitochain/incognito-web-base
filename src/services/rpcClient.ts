@@ -4,11 +4,10 @@ import { PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import PTokenModel from 'models/model/pTokenModel';
 import { unshieldFeeBuilder } from 'models/unshield.utils';
 import { IRespEstSwap } from 'pages/Swap/features/FormUnshield/FormUnshield.inteface';
+import { SwapExchange } from 'pages/Swap/features/FormUnshield/FormUnshield.types';
+import { combineSwapTxs } from 'pages/Swap/features/SwapTxs/SwapTxs.utils';
 import { getSwapTxs, ISwapTxStorage } from 'pages/Swap/Swap.storage';
-import createAxiosInstance from 'services/axios';
-
-import { SwapExchange } from '../pages/Swap/features/FormUnshield/FormUnshield.types';
-import { combineSwapTxs } from '../pages/Swap/features/SwapTxs/SwapTxs.utils';
+import createAxiosInstance, { CANCEL_KEY } from 'services/axios';
 
 interface ISummitEtherHash {
   hash: string;
@@ -205,7 +204,7 @@ class RpcClient {
     slippage,
     shardIDStr,
   }: ISwapFeePayload): Promise<IRespEstSwap> {
-    const data: any = await this.http.post('papps/estimateswapfee', {
+    const data: any = await this.http.post(`papps/estimateswapfee?${CANCEL_KEY}`, {
       Network: network,
       Amount: amount,
       FromToken: fromToken,

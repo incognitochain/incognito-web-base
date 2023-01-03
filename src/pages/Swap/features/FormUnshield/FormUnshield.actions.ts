@@ -5,13 +5,14 @@ import PToken, { getTokenIdentify, ITokenNetwork } from 'models/model/pTokenMode
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { getQueryPAppName } from 'pages/Swap/Swap.hooks';
 import { rpcClient } from 'services';
+import { CANCEL_MESSAGE } from 'services/axios';
 import { AppDispatch, AppState } from 'state';
+import { getShardIDByAddress } from 'state/incognitoWallet/incognitoWallet.utils';
 import { getPrivacyByTokenIdentifySelectors } from 'state/token';
 import convert from 'utils/convert';
 import format from 'utils/format';
 import { getAcronymNetwork } from 'utils/token';
 
-import { getShardIDByAddress } from '../../../../state/incognitoWallet';
 import { GROUP_NETWORK_ID_BY_EXCHANGE } from './FormUnshield.constants';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import { combineExchange } from './FormUnshield.swapEstBuilder';
@@ -354,6 +355,7 @@ export const actionEstimateFee = () => async (dispatch: AppDispatch, getState: A
 export const actionEstimateSwapFee =
   ({ isResetForm = false, incAddress = '' }: { isResetForm: boolean; incAddress?: string }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
+    let isCancelMsg = false;
     try {
       const {
         inputAmount,
@@ -542,11 +544,18 @@ export const actionEstimateSwapFee =
 
       dispatch(actionSetSwapExchangeSupports(exchangeSupports));
     } catch (error) {
-      dispatch(actionSetErrorMsg(typeof error === 'string' ? error : error?.message || ''));
+      if (error?.message === CANCEL_MESSAGE) {
+        isCancelMsg = true;
+      }
+      if (!isCancelMsg) {
+        dispatch(actionSetErrorMsg(typeof error === 'string' ? error : error?.message || ''));
+      }
     } finally {
-      setTimeout(() => {
-        dispatch(actionSetFetchingFee({ isFetchingFee: false }));
-      }, 200);
+      if (!isCancelMsg) {
+        setTimeout(() => {
+          dispatch(actionSetFetchingFee({ isFetchingFee: false }));
+        }, 200);
+      }
     }
   };
 
