@@ -92,12 +92,12 @@ const LabelText = styled.p`
   font-weight: 400;
   font-size: 14px;
   line-height: 140%;
-  color: #ffffff;
+  color: ${({ theme }) => theme.text1};
 `;
 
 const InputField = styled(Input)`
-  background-color: #252525;
-  color: #ffffff;
+  background-color: ${({ theme }) => theme.primary14};
+  background-color: ${({ theme }) => theme.text1};
   padding: 16px;
   border-radius: 8px;
   border-width: 0px;
@@ -105,22 +105,22 @@ const InputField = styled(Input)`
   margin-top: 8px;
 
   ::placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
     opacity: 1;
   }
 
   :-ms-input-placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
   }
 
   ::-ms-input-placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
   }
 `;
 
 const TextAreaField = styled(TextArea)`
-  background-color: #252525;
-  color: #ffffff;
+  background-color: ${({ theme }) => theme.primary14};
+  color: ${({ theme }) => theme.text1};
   padding: 16px;
   border-radius: 8px;
   margin-top: 8px;
@@ -129,16 +129,16 @@ const TextAreaField = styled(TextArea)`
   scroll-padding: 16px;
 
   ::placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
     opacity: 1;
   }
 
   :-ms-input-placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
   }
 
   ::-ms-input-placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
   }
 `;
 
@@ -147,7 +147,7 @@ const Space = styled.div`
 `;
 
 const PreviewContainer = styled.div`
-  background-color: #252525;
+  background-color: ${({ theme }) => theme.primary14};
   margin-top: 24px;
   border-radius: 8px;
   padding: 16px;
@@ -157,7 +157,7 @@ const TitlePreview = styled.p`
   font-weight: 500;
   font-size: 34px;
   line-height: 140%;
-  color: #ffffff;
+  color: ${({ theme }) => theme.text1};
 `;
 
 const ProposalForm = (props: ProposalFormProps) => {

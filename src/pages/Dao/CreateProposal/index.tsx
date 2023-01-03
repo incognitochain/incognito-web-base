@@ -4,7 +4,7 @@ import BackButton from 'components/BackButton';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchProposalFee } from 'services/rpcClient';
+import { fetchProposalFee } from 'services/rpcDao';
 import { createProposal } from 'state/dao/operations';
 import { Fee, TransactionType } from 'state/dao/types';
 import styled from 'styled-components/macro';
@@ -12,8 +12,6 @@ import styled from 'styled-components/macro';
 import CreateProposalButton from './components/CreateProposalButton';
 import { ModalConfirm } from './components/ModalConfirm';
 import ProposalForm from './components/ProposalForm';
-
-const MINIMUM_PRV_BALANCE_TO_CREATE_PROPOSAL = 1000;
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -57,6 +55,7 @@ const HeaderTitle = styled.div`
 `;
 
 const CreateProposal = () => {
+  // Form value
   const [titleValue, setTitleValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
 
@@ -65,7 +64,7 @@ const CreateProposal = () => {
 
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState<boolean>(false);
 
-  const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
+  const { requestSignTransaction } = useIncognitoWallet();
 
   const handleChangeTitle = useCallback(
     (title: string) => {
@@ -75,8 +74,8 @@ const CreateProposal = () => {
   );
 
   const handleChangeDescription = useCallback(
-    (body: string) => {
-      setDescriptionValue(body);
+    (desc: string) => {
+      setDescriptionValue(desc);
     },
     [setDescriptionValue]
   );
@@ -122,13 +121,13 @@ const CreateProposal = () => {
           },
           (data) => {
             if (data) {
-              showSubmitVotePopupMessage('success', 'Success', 'Create proposal success');
+              showSubmitVotePopupMessage('success', 'Success', 'Proposal Created!');
             }
           }
         )
       );
     } catch (error) {
-      showSubmitVotePopupMessage('error', 'Failed', 'Create proposal failed');
+      showSubmitVotePopupMessage('error', 'Transaction Failed', 'Create proposal failed');
     }
   };
 

@@ -5,7 +5,7 @@ import { PRV } from 'constants/token';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
 // eslint-disable-next-line no-restricted-imports
 import { Dispatch } from 'redux';
-import { fetchProposalDetail, fetchProposals, submitCreateProposal, submitVote } from 'services/rpcClient';
+import { fetchProposalDetail, fetchProposals, submitCreateProposal, submitVote } from 'services/rpcDao';
 import Web3 from 'web3';
 
 import { getProposalsFailure, getProposalsRequest, getProposalsSuccess } from './actions';
@@ -18,32 +18,18 @@ import {
   ProposalStatusBackEnd,
   TransactionType,
 } from './types';
+import { INC_CONTRACT_ADDRESS } from './utils';
 const { ACCOUNT_CONSTANT } = require('incognito-chain-web-js/build/wallet');
-
 const NETWORK_FEE = ACCOUNT_CONSTANT.MAX_FEE_PER_TX;
-const INC_CONTRACT_ADDRESS = '0x01f6549BeF494C8b0B00C2790577AcC1A3Fa0Bd0';
-
+const CONTRACT_ABI = INC_DAO_ABI as any;
 const { BurningPRVRequestMeta } = require('incognito-chain-web-js/build/web/wallet');
 
 const getProposalInfoViaChain = async (proposalId: any) => {
   try {
     const web3 = new Web3('https://goerli.infura.io/v3/827ed2f82fb3442da6d516c8b5e5bd16');
-    const CONTRACT_ABI = INC_DAO_ABI as any;
     const instance = new web3.eth.Contract(CONTRACT_ABI, INC_CONTRACT_ADDRESS);
     const proposalDetail: ProposalCallResult = await instance.methods.proposals(web3.utils.toBN(proposalId)).call();
     return proposalDetail;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const getVotingDelay = async () => {
-  try {
-    const web3 = new Web3('https://goerli.infura.io/v3/827ed2f82fb3442da6d516c8b5e5bd16');
-    const CONTRACT_ABI = INC_DAO_ABI as any;
-    const instance = new web3.eth.Contract(CONTRACT_ABI, INC_CONTRACT_ADDRESS);
-    const blockDelay = await instance.methods.votingDelay().call();
-    return web3.utils.toBN(blockDelay).toNumber();
   } catch (error) {
     console.log(error);
   }
@@ -76,40 +62,39 @@ const getProposals = () => {
   return async (dispatch: Dispatch<any>): Promise<any> => {
     try {
       dispatch(getProposalsRequest());
-      const proposals: ProposalAPIResponse[] = await fetchProposals();
-      const promises = proposals.map(async (proposal) => {
-        let proposalDetail: any = {};
-        let proposalStatus: any = proposal?.Status;
+      const proposalsResponse: ProposalAPIResponse[] = await fetchProposals();
+      const promises = proposalsResponse.map(async (proposal) => {
+        const proposalStatusBackend: ProposalStatusBackEnd = proposal?.Status;
+        let proposalInfoViaChain: any = {};
+        let proposalStatusViaChain: any = null;
         let quorumVotes = 0;
-        let votingDelay: any = '';
 
-        if (proposalStatus === ProposalStatusBackEnd.outchain_success) {
-          proposalDetail = await getProposalInfoViaChain(proposal?.ProposalID);
-          proposalStatus = await getProposalStatus(proposal?.ProposalID);
-          votingDelay = await getVotingDelay();
+        if (proposalStatusBackend === ProposalStatusBackEnd.outchain_success) {
+          proposalInfoViaChain = await getProposalInfoViaChain(proposal?.ProposalID);
+          proposalStatusViaChain = await getProposalStatus(proposal?.ProposalID);
           quorumVotes =
-            parseInt(proposalDetail?.againstVotes?.toString() ?? '0') +
-            parseInt(proposalDetail?.forVotes?.toString() ?? '0') +
-            parseInt(proposalDetail?.abstainVotes?.toString() ?? '0');
-        } else if (proposalStatus === ProposalStatusBackEnd.submit_failed) {
-          proposalStatus = ProposalStatus.CANCELLED;
+            parseInt(proposalInfoViaChain?.againstVotes?.toString() ?? '0') +
+            parseInt(proposalInfoViaChain?.forVotes?.toString() ?? '0') +
+            parseInt(proposalInfoViaChain?.abstainVotes?.toString() ?? '0');
+        } else if (proposalStatusBackend === ProposalStatusBackEnd.submit_failed) {
+          proposalStatusViaChain = ProposalStatus.CANCELLED;
         } else {
-          proposalStatus = null;
+          proposalStatusViaChain = null;
         }
 
         return {
           id: proposal?.id.toString(),
-          proposalId: proposalDetail?.id?.toString(),
+          proposalId: proposalInfoViaChain?.id?.toString(),
           title: proposal?.Title || '',
           description: proposal?.Description ?? 'No description.',
-          proposer: proposalDetail?.proposer || '',
-          status: proposalStatus,
-          forCount: parseInt(proposalDetail?.forVotes?.toString() ?? '0'),
-          againstCount: parseInt(proposalDetail?.againstVotes?.toString() ?? '0'),
-          abstainCount: parseInt(proposalDetail?.abstainVotes?.toString() ?? '0'),
+          proposer: proposalInfoViaChain?.proposer || '',
+          status: proposalStatusViaChain,
+          forCount: parseInt(proposalInfoViaChain?.forVotes?.toString() ?? '0'),
+          againstCount: parseInt(proposalInfoViaChain?.againstVotes?.toString() ?? '0'),
+          abstainCount: parseInt(proposalInfoViaChain?.abstainVotes?.toString() ?? '0'),
           createdBlock: 0,
-          startBlock: parseInt(proposalDetail?.startBlock?.toString() ?? ''),
-          endBlock: parseInt(proposalDetail?.endBlock?.toString() ?? ''),
+          startBlock: parseInt(proposalInfoViaChain?.startBlock?.toString() ?? ''),
+          endBlock: parseInt(proposalInfoViaChain?.endBlock?.toString() ?? ''),
           quorumVotes,
         };
       });
@@ -127,20 +112,21 @@ const getProposalDetail = (proposalId: any, callback?: (data: any) => void) => {
   return async (dispatch: Dispatch<any>): Promise<any> => {
     try {
       const proposalDetailResponse: ProposalAPIResponse = await fetchProposalDetail(proposalId);
+      const proposalStatusBackEnd: ProposalStatusBackEnd = proposalDetailResponse?.Status;
       let proposalViaChainInfo: any = {};
-      let proposalStatus: any = proposalDetailResponse?.Status;
+      let proposalStatusViaChain: any = null;
       let quorumVotes = 0;
-      if (proposalStatus === ProposalStatusBackEnd.outchain_success) {
+      if (proposalStatusBackEnd === ProposalStatusBackEnd.outchain_success) {
         proposalViaChainInfo = await getProposalInfoViaChain(proposalDetailResponse?.ProposalID);
-        proposalStatus = await getProposalStatus(proposalDetailResponse?.ProposalID);
+        proposalStatusViaChain = await getProposalStatus(proposalDetailResponse?.ProposalID);
         quorumVotes =
           parseInt(proposalViaChainInfo?.againstVotes?.toString() ?? '0') +
           parseInt(proposalViaChainInfo?.forVotes?.toString() ?? '0') +
           parseInt(proposalViaChainInfo?.abstainVotes?.toString() ?? '0');
-      } else if (proposalStatus === ProposalStatusBackEnd.submit_failed) {
-        proposalStatus = ProposalStatus.CANCELLED;
+      } else if (proposalStatusBackEnd === ProposalStatusBackEnd.submit_failed) {
+        proposalStatusViaChain = ProposalStatus.CANCELLED;
       } else {
-        proposalStatus = null;
+        proposalStatusViaChain = null;
       }
       const proposalDetail: Proposal = {
         id: proposalDetailResponse?.id.toString(),
@@ -148,7 +134,7 @@ const getProposalDetail = (proposalId: any, callback?: (data: any) => void) => {
         title: proposalDetailResponse.Title || '',
         description: proposalDetailResponse.Description ?? 'No description.',
         proposer: proposalViaChainInfo?.proposer,
-        status: proposalStatus,
+        status: proposalStatusViaChain,
         forCount: parseInt(proposalViaChainInfo?.forVotes?.toString() ?? '0'),
         againstCount: parseInt(proposalViaChainInfo?.againstVotes?.toString() ?? '0'),
         abstainCount: parseInt(proposalViaChainInfo?.abstainVotes?.toString() ?? '0'),
@@ -157,7 +143,8 @@ const getProposalDetail = (proposalId: any, callback?: (data: any) => void) => {
         endBlock: parseInt(proposalViaChainInfo?.endBlock?.toString() ?? ''),
         quorumVotes,
       };
-      if (callback) return callback(proposalDetail);
+      if (callback) callback(proposalDetail);
+      return proposalDetail;
     } catch (error) {
       console.log(error);
     }
@@ -180,11 +167,11 @@ const burnPRVToken = ({
   return async (dispatch: Dispatch<any>): Promise<any> => {
     try {
       if (fee?.tokenid !== PRV.id) return;
-      const feeAmount = fee?.feeAmount;
+      const { feeAddress, feeAmount } = fee;
       let prvPayments: { PaymentAddress: any; Amount: string; Message: string }[] = await getTokenPayments({
         data: [
           {
-            paymentAddress: fee?.feeAddress,
+            paymentAddress: feeAddress,
             amount: feeAmount,
           },
         ],
@@ -240,7 +227,6 @@ const burnPRVToken = ({
           description: title,
         };
       }
-      console.log('=============', payload);
       const tx = await requestSignTransaction(payload);
       console.log(tx);
       return tx;
