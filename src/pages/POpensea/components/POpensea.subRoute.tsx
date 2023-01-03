@@ -41,7 +41,7 @@ const POpenseaSubRoute = () => {
       <p className="sub-title">/</p>
       <button
         onClick={() => {
-          history.push('/popensea');
+          history.push('/papps/popensea');
         }}
       >
         <p className="sub-title">pOpensea</p>
