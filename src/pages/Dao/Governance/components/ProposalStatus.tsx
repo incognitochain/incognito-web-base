@@ -36,7 +36,7 @@ const getStatusColor = (status: ProposalStatus | undefined): string => {
     case ProposalStatus.EXPIRED:
       return '#757575';
     default:
-      return '#757575';
+      return '#03A66D';
   }
 };
 
