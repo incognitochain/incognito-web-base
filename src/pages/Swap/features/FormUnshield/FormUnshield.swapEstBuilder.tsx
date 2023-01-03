@@ -2,6 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { NETWORK_ID_BY_EXCHANGE_SHOR_NETWORK_TYPE } from 'constants/networkID';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 
+import { getExchangeLogo } from '../Selection/SelectSwapExchange';
 import { IReqEstSwapFee, IRespEstSwapEachExchange } from './FormUnshield.inteface';
 import { ISwapExchangeData, ISwapFee, NetworkTypePayload, SwapExchange } from './FormUnshield.types';
 
@@ -30,7 +31,7 @@ const getExchangeName = (exchange: SwapExchange) => {
   }
 
   if (exchange === SwapExchange.INTER_SWAP) {
-    return 'Inter Swap';
+    return 'Interswap';
   }
 
   return exchange;
@@ -115,10 +116,10 @@ const parseExchangeDataModelResponse = (
   // handle case INTER SWAP
   const appName = data?.AppName;
   const isInterSwap = appName.toLowerCase().includes(SwapExchange.INTER_SWAP);
-  const tradePaths: string[][] = [];
   let isInterFistBatchPDex = false;
   let interSwapData = undefined;
   if (isInterSwap) {
+    let path: any = [];
     exchangeName = getExchangeName(data?.AppName);
     // format batch Inter Swap
     const respDetails: IRespEstSwapEachExchange[] = data?.Details;
@@ -130,7 +131,11 @@ const parseExchangeDataModelResponse = (
       isInterFistBatchPDex = firstBatch.AppName.toLowerCase().includes(SwapExchange.PDEX);
       respDetails.forEach((trade) => {
         if (trade.Paths) {
-          tradePaths.push(typeof trade.Paths === 'string' ? [trade.Paths] : trade.Paths);
+          const logoIcon = getExchangeLogo(trade.AppName);
+          path.push({
+            logoIcon,
+            tradePath: trade.Paths,
+          });
         }
       });
 
@@ -162,6 +167,7 @@ const parseExchangeDataModelResponse = (
         pdexMinAcceptableAmount: new BigNumber(firstBatch?.AmountOutRaw || 0).toString(),
         pAppName,
         pAppNetwork,
+        path,
       };
     }
   }
@@ -199,7 +205,6 @@ const parseExchangeDataModelResponse = (
 
     tradePathStr,
 
-    groupPaths: [],
     interSwapData,
   };
   return exchangeData;

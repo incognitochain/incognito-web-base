@@ -93,6 +93,20 @@ const ErrorMsgContainer = styled.div`
   border: 1px solid #f6465d;
   border-radius: 8px;
   margin-top: 4px;
+  div {
+    margin-top: 0 !important;
+  }
+`;
+
+const InterSwapMsg = styled.div`
+  padding: 12px 16px;
+  border: 1px solid ${({ theme }) => theme.border2};
+  border-radius: 8px;
+  margin-top: 4px;
+  div {
+    margin-top: 0 !important;
+    color: ${({ theme }) => theme.text1};
+  }
 `;
 
 const FormUnshield = React.memo((props: any) => {
@@ -229,6 +243,8 @@ const FormUnshield = React.memo((props: any) => {
     }
   }, [sellToken.tokenID, buyToken.tokenID, buyNetworkName]);
 
+  console.log('SANG TEST: ', exchangeSelectedData);
+
   return (
     <Styled>
       <form onSubmit={handleSubmit(onSend)}>
@@ -314,6 +330,10 @@ const FormUnshield = React.memo((props: any) => {
               {errorMsg}
             </ThemedText.Error>
           </ErrorMsgContainer>
+        ) : exchangeSelectedData?.interSwapData?.midToken ? (
+          <InterSwapMsg>
+            <ThemedText.SmallLabel style={{ marginTop: '4px' }}>lorem ipsum</ThemedText.SmallLabel>
+          </InterSwapMsg>
         ) : null}
         {visibleAddress && (
           <Field
@@ -349,6 +369,7 @@ const FormUnshield = React.memo((props: any) => {
           inputAmount={inputAmount}
           impactAmount={exchangeSelectedData?.impactAmount}
           errorMsg={errorMsg}
+          interPath={exchangeSelectedData?.interSwapData?.path}
         />
         <VerticalSpace />
         {button.isConnected ? (

@@ -41,7 +41,7 @@ enum TxStatus {
   success = 'success',
   refund = 'refunded',
   refunding = 'refunding',
-  submitFail = 'submit failed',
+  submitFail = 'failed',
 }
 
 enum Status {
@@ -357,13 +357,27 @@ const combineSwapInter = ({ swapTxs, curr }: { swapTxs: any; curr: any; prev: an
       }`;
     }
   }
+
+  switch (curr?.interPAppNetwork) {
+    case NetworkTypePayload.AVALANCHE:
+  }
+
+  // let pAppTxIDURL = '';
+  // if (pAppTxID) {
+  //   const pAppNetwork = curr?.interPAppNetwork;
+  //   const chainId = getChainIDByAcronymNetwork(pAppNetwork);
+  //   pAppTxIDURL = `${getExplorerLink(chainId, pAppTxID, ExplorerDataType.TRANSACTION)}`;
+  //   console.log('SANG TEST: ', pAppTxIDURL);
+  // }
+
   const data: any = {
     status,
 
     pAppTxID,
     pDexTxID,
 
-    pAppNameNetwork: curr?.interPAppNetwork || NetworkTypePayload.ETHEREUM,
+    pAppNetwork: curr?.interPAppNetwork || NetworkTypePayload.ETHEREUM,
+    pAppName: curr?.interPAppName,
 
     color,
 

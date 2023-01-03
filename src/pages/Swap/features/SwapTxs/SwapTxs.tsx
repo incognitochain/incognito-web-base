@@ -86,14 +86,26 @@ const SwapTxs = React.memo(() => {
         disabled: !_txDetail.outchainTx,
       },
       {
-        title: 'pApp Tx:',
+        title: 'pAppTx:',
         desc: !!_txDetail.pAppTxID ? shortenString(_txDetail.pAppTxID || '', 10) : '',
         disabled: !_txDetail.pAppTxID,
+        copyData: _txDetail.pAppTxID,
+        link: `${getExplorerLink(
+          PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
+          _txDetail.pAppTxID,
+          ExplorerDataType.TRANSACTION
+        )}`,
       },
       {
-        title: 'pDex Tx:',
+        title: 'pDexTx:',
         desc: !!_txDetail.pDexTxID ? shortenString(_txDetail.pDexTxID || '', 10) : '',
         disabled: !_txDetail.pDexTxID,
+        copyData: _txDetail.pDexTxID,
+        link: `${getExplorerLink(
+          PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
+          _txDetail.pDexTxID,
+          ExplorerDataType.TRANSACTION
+        )}`,
       },
       {
         title: 'Swap status:',

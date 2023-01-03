@@ -464,7 +464,7 @@ export const actionEstimateSwapFee =
       const interExchanges = combineExchange({
         data,
         network: NetworkTypePayload.INTER_SWAP,
-        networkText: 'Inter Swap',
+        networkText: 'Interswap',
         token: sellToken,
       });
 

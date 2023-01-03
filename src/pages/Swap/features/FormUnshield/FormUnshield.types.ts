@@ -102,6 +102,10 @@ export interface ISwapExchangeData {
     pdexMinAcceptableAmount: string;
     pAppName: string;
     pAppNetwork: string;
+    path: {
+      logoIcon: string;
+      tradePath: string | string[];
+    }[];
   };
 }
 

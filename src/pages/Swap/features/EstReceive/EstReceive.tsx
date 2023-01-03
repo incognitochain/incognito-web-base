@@ -9,6 +9,8 @@ import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
 import { ChevronDown } from 'react-feather';
 import { Field } from 'redux-form';
+import { useAppSelector } from 'state/hooks';
+import { unshieldableTokens } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 import format from 'utils/format';
@@ -82,6 +84,8 @@ interface IProps extends ISelectSwapExchange {
   inputAmount: string;
   impactAmount?: number;
   errorMsg?: string;
+
+  interPath: any;
 }
 
 const EstReceive = React.memo(
@@ -104,9 +108,29 @@ const EstReceive = React.memo(
     inputAmount,
     impactAmount,
     errorMsg,
+    interPath,
   }: IProps) => {
     const [isOpen, setOpen] = React.useState(false);
     const [isRateSellToBuy, setIsRateSellToBuy] = React.useState(true);
+
+    const tokens = useAppSelector(unshieldableTokens);
+
+    const getTradePath = (paths: string[]) => {
+      let tradePathStr = '';
+      const tradePathArrStr: any = [];
+      for (let i = 0; i < paths.length; i++) {
+        const tokenData = tokens?.find(
+          (token: any) =>
+            token?.contractID?.toLowerCase() === paths[i]?.toLowerCase() ||
+            token?.tokenID?.toLowerCase() === paths[i]?.toLowerCase()
+        );
+        if (tokenData) {
+          tradePathArrStr.push(tokenData?.symbol);
+        }
+      }
+      tradePathStr = tradePathArrStr?.join(' -> ');
+      return tradePathStr;
+    };
 
     const getRateText = () => {
       if (isRateSellToBuy) {
@@ -264,6 +288,31 @@ const EstReceive = React.memo(
                   Trade path
                 </ThemedText.SmallLabel>
                 <ThemedText.SmallLabel fontWeight={400}>{tradePath}</ThemedText.SmallLabel>
+              </RowBetween>
+            )}
+            {interPath && interPath.length > 1 && (
+              <RowBetween style={{ marginTop: 12 }}>
+                <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                  Trade path
+                </ThemedText.SmallLabel>
+                <Column>
+                  <Row style={{ justifyContent: 'flex-end' }}>
+                    <img src={interPath[0].logoIcon} style={{ marginRight: 8, width: 22, height: 22 }} />
+                    <ThemedText.SmallLabel fontWeight={400}>{`${
+                      typeof interPath[0].tradePath === 'string'
+                        ? interPath[0].tradePath
+                        : getTradePath(interPath[0].tradePath)
+                    }`}</ThemedText.SmallLabel>
+                  </Row>
+                  <Row style={{ marginTop: 6, justifyContent: 'flex-end' }}>
+                    <img src={interPath[1].logoIcon} style={{ marginRight: 8, width: 22, height: 22 }} />
+                    <ThemedText.SmallLabel fontWeight={400}>{`${
+                      typeof interPath[1].tradePath === 'string'
+                        ? interPath[1].tradePath
+                        : getTradePath(interPath[1].tradePath)
+                    }`}</ThemedText.SmallLabel>
+                  </Row>
+                </Column>
               </RowBetween>
             )}
           </Column>
