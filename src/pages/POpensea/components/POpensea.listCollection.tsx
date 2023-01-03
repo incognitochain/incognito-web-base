@@ -3,6 +3,7 @@ import type { ColumnsType } from 'antd/es/table';
 import arrowBottomActive from 'assets/svg/arrow-bottom-active.svg';
 import arrowDisable from 'assets/svg/arrow-disable.svg';
 import arrowTopActive from 'assets/svg/arrow-top-active.svg';
+import icVerify from 'assets/svg/ic-verify.svg';
 import ImagePlaceholder from 'components/ImagePlaceholder';
 import { POpenseaCollection } from 'models/model/POpenseaCollection';
 import React from 'react';
@@ -202,6 +203,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
             <p className="baseText" style={{ marginLeft: 24 }}>
               {record.name}
             </p>
+            {record.getIsVerify() && <img style={{ marginLeft: 8 }} alt="verify" src={icVerify} />}
           </div>
         </div>
       ),

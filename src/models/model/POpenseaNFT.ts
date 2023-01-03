@@ -286,7 +286,9 @@ export class SeaportSellOrders {
   }
 
   getSaleEnd() {
-    return moment(this.closingDate).format('MMMM DD, YYYY [at] hh:mm A [GMT]Z');
+    const closingDate = moment.utc(this.closingDate);
+    const localDate = moment(closingDate).local();
+    return localDate.format('MMMM DD, YYYY [at] hh:mm A [GMT]Z');
   }
 }
 

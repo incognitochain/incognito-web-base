@@ -75,6 +75,10 @@ export class POpenseaCollection {
       decimals: 0,
     });
   }
+
+  getIsVerify() {
+    return this.safelistRequestStatus && this.safelistRequestStatus === 'verified';
+  }
 }
 
 export interface PaymentToken {
