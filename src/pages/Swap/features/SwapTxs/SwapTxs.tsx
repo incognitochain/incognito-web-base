@@ -91,7 +91,7 @@ const SwapTxs = React.memo(() => {
         disabled: !_txDetail.outchainTx,
       },
       {
-        title: 'pApp Tx:',
+        title: 'PApp Tx:',
         desc: !!_txDetail.pAppTxID ? shortenString(_txDetail.pAppTxID || '', 10) : '',
         disabled: !_txDetail.pAppTxID,
         copyData: _txDetail.pAppTxID,
@@ -102,7 +102,7 @@ const SwapTxs = React.memo(() => {
         )}`,
       },
       {
-        title: 'pDex Tx:',
+        title: 'PDex Tx:',
         desc: !!_txDetail.pDexTxID ? shortenString(_txDetail.pDexTxID || '', 10) : '',
         disabled: !_txDetail.pDexTxID,
         copyData: _txDetail.pDexTxID,
