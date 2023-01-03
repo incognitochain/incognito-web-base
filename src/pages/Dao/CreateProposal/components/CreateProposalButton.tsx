@@ -6,7 +6,6 @@ import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import styled from 'styled-components/macro';
 
 interface CreateProposalButtonProps {
-  title?: string;
   disabled?: boolean;
   isLoading?: boolean;
   handleCreateProposal?: () => void;
@@ -37,7 +36,7 @@ const ButtonCreate = styled(Button)`
 
 const CreateProposalButton: React.FC<CreateProposalButtonProps> = (props) => {
   // eslint-disable-next-line react/prop-types
-  const { title, disabled, isLoading, handleCreateProposal } = props;
+  const { disabled, isLoading, handleCreateProposal } = props;
 
   const incAccount = useSelector(incognitoWalletAccountSelector);
   const { isIncognitoInstalled, showPopup } = useIncognitoWallet();

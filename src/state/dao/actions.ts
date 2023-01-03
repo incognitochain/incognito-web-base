@@ -1,18 +1,5 @@
 import Types, { Proposal } from './types';
 
-// Modify the return types for each action
-const create = (): any => {
-  return {
-    type: Types.CREATE,
-  };
-};
-
-const createSuccess = (): any => {
-  return {
-    type: Types.CREATE_SUCCESS,
-  };
-};
-
 const getProposalsRequest = (): any => {
   return {
     type: Types.GET_PROPOSALS_REQUEST,
@@ -32,4 +19,4 @@ const getProposalsFailure = (): any => {
   };
 };
 
-export { create, createSuccess, getProposalsFailure, getProposalsRequest, getProposalsSuccess };
+export { getProposalsFailure, getProposalsRequest, getProposalsSuccess };

@@ -28,7 +28,6 @@ export const poolsSelectors = createSelector(
 );
 export const explorerSelectors = createSelector(poolSelectors, (pool) => {
   const prvPrice = pool.explores.find((item: any) => item['metricType'] === 'PRV_PRICE')?.value || 0;
-  console.log('SANG TEST: ', prvPrice);
   const price = convert.toNumber({
     text: format.amountVer2({
       originalAmount: new BigNumber(prvPrice).toNumber(),

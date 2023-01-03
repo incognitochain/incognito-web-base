@@ -16,6 +16,7 @@ export const Header = styled.div`
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin-top: 0px;
     border-radius: 8px;
+    margin-bottom: 50px;
   `}
 `;
 

@@ -1,9 +1,8 @@
 import { AxiosInstance } from 'axios';
-import { API_COIN_SERVICE, API_DAO, API_SERVICE } from 'config';
+import { API_COIN_SERVICE, API_SERVICE } from 'config';
 import PTokenModel from 'models/model/pTokenModel';
 import { getSwapTxs, ISwapTxStorage } from 'pages/Swap/Swap.storage';
 import createAxiosInstance from 'services/axios';
-import { CreateProposalParams, SubmitVoteRequestAPIParam } from 'state/dao/types';
 
 import { PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from '../constants';
 import { unshieldFeeBuilder } from '../models/unshield.utils';
@@ -313,15 +312,23 @@ class RpcClient {
   }
 
   async apiGetSwapTxs() {
-    const swapTxs: ISwapTxStorage[] = (getSwapTxs() || []).reverse().slice(0, 20);
-    let txIDs = [];
-    if (!swapTxs || swapTxs.length === 0) return [];
-    txIDs = swapTxs.map((tx) => tx.txHash);
-    const txs =
+    const localTxs: ISwapTxStorage[] = (getSwapTxs() || []).reverse().slice(0, 20);
+    if (!localTxs || localTxs.length === 0) return [];
+
+    let swapTxIDs = [];
+    swapTxIDs = localTxs.filter((tx) => tx.sellTokenID).map((tx) => tx.txHash);
+    let openseaIDs = [];
+    openseaIDs = localTxs.filter((tx) => tx.sellTokenID === undefined).map((tx) => tx.txHash);
+
+    const [swapTxs, openseaTxs] = await Promise.all([
       (await this.http.post('papps/swapstatus', {
-        TxList: txIDs,
-      })) || [];
-    return combineSwapTxs({ localTxs: swapTxs, swapTxs: txs });
+        TxList: swapTxIDs,
+      })) || [],
+      (await this.http.post('papps/opensea/buystatus', {
+        TxList: openseaIDs,
+      })) || [],
+    ]);
+    return combineSwapTxs({ localTxs, swapTxs: { ...swapTxs, ...openseaTxs } });
   }
 
   async genDepositAddress({
@@ -378,51 +385,6 @@ const getPools = async (): Promise<any> => {
   return data?.Result;
 };
 
-const fetchProposals = async (): Promise<any> => {
-  const response = await fetch(`${API_DAO}/pdao/proposal/list`);
-  const data = await response.json();
-  return data?.Result;
-};
-
-const fetchProposalFee = async (type: 1 | 2): Promise<any> => {
-  // type = 1 => get fee create proposal, type = 2 => get fee vote proposal
-  const response = await fetch(`${API_DAO}/pdao/proposal/estimatefee?type=${type}`);
-  const data = await response.json();
-  return data?.Result;
-};
-
-const fetchProposalDetail = async (proposalId: any): Promise<any> => {
-  const response = await fetch(`${API_DAO}/pdao/proposal/detail/${proposalId}`);
-  const data = await response.json();
-  return data?.Result;
-};
-
-const submitCreateProposal = async (proposalData: CreateProposalParams): Promise<any> => {
-  const response = await fetch(`${API_DAO}/pdao/proposal/create`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(proposalData),
-  });
-  const data = await response.json();
-  return data?.Result;
-};
-
-const submitVote = async (params: SubmitVoteRequestAPIParam): Promise<any> => {
-  const response = await fetch(`${API_DAO}/pdao/proposal/vote`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(params),
-  });
-  const data = await response.json();
-  return data?.Result;
-};
-
 const getVaults = async (): Promise<any> => {
   const vaults = await rpcClient.getVaults();
   return vaults;
@@ -458,16 +420,5 @@ const genDepositAddress = async ({
   });
 };
 
-export {
-  fetchProposalDetail,
-  fetchProposalFee,
-  fetchProposals,
-  genDepositAddress,
-  getPools,
-  getTokenListNoCache,
-  getVaults,
-  submitCreateProposal,
-  submitDepositTx,
-  submitVote,
-};
+export { genDepositAddress, getPools, getTokenListNoCache, getVaults, submitDepositTx };
 export default rpcClient;

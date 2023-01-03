@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchProposalFee } from 'services/rpcClient';
+import { fetchProposalFee } from 'services/rpcDao';
 import { getProposalDetail, vote } from 'state/dao/operations';
 import { Fee, Proposal, ProposalStatus } from 'state/dao/types';
 import styled, { DefaultTheme } from 'styled-components/macro';
@@ -196,7 +196,7 @@ const ProposalDetail = () => {
   const isDisabledButtonVote: boolean = isFetchingProposalDetail || proposalDetail?.status !== ProposalStatus.PENDING;
 
   return (
-    <div className="default-max-width-2" style={{ width: '100%' }}>
+    <div className="default-max-width-2" style={{ width: '100%', paddingBottom: 40 }}>
       <>
         {contextHolder}
         <HeaderBox

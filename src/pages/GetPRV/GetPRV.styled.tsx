@@ -60,6 +60,25 @@ const Header = styled.div`
       }
       .btn-get-prv {
         margin-top: 30px;
+        max-width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .sub-header {
+        margin-right: 0;
+        text-align: center;
+        max-width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+  `}
+
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    .btn-get-prv {
+      max-width: 100%;
+    }
+    .sub-header {
+        max-width: 100%;
       }
   `}
 `;
@@ -124,6 +143,9 @@ const WrapChart = styled.div`
   ${({ theme }) => theme.mediaWidth.upToSmall`
     .reward-img {
       max-width: 98%;
+    }
+    .pie-img {
+      max-width: 100%;
     }
   `}
 `;

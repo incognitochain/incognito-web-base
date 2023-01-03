@@ -14,6 +14,7 @@ import incognitoWallet from './incognitoWallet/incognitoWallet.reducer';
 import lists from './lists/reducer';
 import logs from './logs/slice';
 import pool from './pools/pool.reducer';
+import pOpensea from './pOpensea/pOpensea.reducer';
 import { routingApi } from './routing/slice';
 // import swap from './swap/reducer';
 import token from './token/token.reducer';
@@ -40,6 +41,7 @@ const store = configureStore({
     tabs,
     form,
     incognitoWallet,
+    pOpensea,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
