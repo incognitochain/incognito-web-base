@@ -1,5 +1,3 @@
-import { Tooltip } from 'antd';
-import { ReactComponent as Info } from 'assets/images/info.svg';
 import SwapIcon from 'assets/svg/swap.svg';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
@@ -371,9 +369,9 @@ const FormUnshield = React.memo((props: IMergeProps) => {
         ) : exchangeSelectedData?.interSwapData?.midToken ? (
           <InterSwapMsg>
             <ThemedText.SmallLabel>
-              Interswap supports users to swap using cross exchange liquidity pools seamlessly.
+              Cross exchange supports users to swap using cross exchange liquidity pools seamlessly.
             </ThemedText.SmallLabel>
-            <Tooltip
+            {/* <Tooltip
               overlayInnerStyle={{ width: '400px' }}
               title={
                 <p>
@@ -386,7 +384,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
               }
             >
               <Info style={{ marginLeft: 25 }} />
-            </Tooltip>
+            </Tooltip>*/}
           </InterSwapMsg>
         ) : null}
         {visibleAddress && (

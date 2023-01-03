@@ -31,7 +31,7 @@ const getExchangeName = (exchange: SwapExchange) => {
   }
 
   if (exchange === SwapExchange.INTER_SWAP) {
-    return 'Interswap';
+    return 'Cross Exchange';
   }
 
   return exchange;
