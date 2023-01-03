@@ -1,12 +1,13 @@
 import { BigNumber } from 'bignumber.js';
 import isEmpty from 'lodash/isEmpty';
+import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
+import { NetworkTypePayload, SwapExchange } from 'pages/Swap/features/FormUnshield/FormUnshield.types';
 import { ISwapTxStorage } from 'pages/Swap/Swap.storage';
+import state from 'state';
+import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import format from 'utils/format';
-
-import SelectedPrivacy from '../../../../models/model/SelectedPrivacyModel';
-import state from '../../../../state';
-import { getPrivacyDataByTokenIDSelector } from '../../../../state/token';
-import { NetworkTypePayload, SwapExchange } from '../FormUnshield/FormUnshield.types';
+import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
+import { getChainIDByAcronymNetwork } from 'utils/token';
 
 interface InterswapStatus {
   Status: string;
@@ -310,12 +311,6 @@ const combineSwapInter = ({ swapTxs, curr }: { swapTxs: any; curr: any; prev: an
   const status = apiResp?.Status || defaultStatus;
   const color = getStatusColor(status);
 
-  // FromAmount: number;
-  // FromToken: string;
-  // ToAmount: number;
-  // ToToken: string;
-  // ResponseTxID: string;
-
   if (!curr.sellTokenID || !curr.buyTokenID) return null;
 
   const sellAmountText = curr.sellAmountText;
@@ -358,16 +353,18 @@ const combineSwapInter = ({ swapTxs, curr }: { swapTxs: any; curr: any; prev: an
     }
   }
 
-  switch (curr?.interPAppNetwork) {
-    case NetworkTypePayload.AVALANCHE:
+  let outchainTxID, outchainTxIDUrl;
+  if (apiResp?.TxIDOutchain) {
+    const pAppNetwork = curr?.interPAppNetwork;
+    const chainId = getChainIDByAcronymNetwork(pAppNetwork);
+    outchainTxID = apiResp?.TxIDOutchain;
+    outchainTxIDUrl = `${getExplorerLink(chainId, pAppTxID, ExplorerDataType.TRANSACTION)}`;
   }
 
-  // let pAppTxIDURL = '';
-  // if (pAppTxID) {
-  //   const pAppNetwork = curr?.interPAppNetwork;
-  //   const chainId = getChainIDByAcronymNetwork(pAppNetwork);
-  //   pAppTxIDURL = `${getExplorerLink(chainId, pAppTxID, ExplorerDataType.TRANSACTION)}`;
-  // }
+  let responseTx;
+  if (apiResp?.ResponseTxID) {
+    responseTx = apiResp?.ResponseTxID;
+  }
 
   const data: any = {
     status,
@@ -400,6 +397,11 @@ const combineSwapInter = ({ swapTxs, curr }: { swapTxs: any; curr: any; prev: an
 
     refundTxID,
     refundStr,
+
+    outchainTxID,
+    outchainTxIDUrl,
+
+    responseTx,
   };
   return data;
 };

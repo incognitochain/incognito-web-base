@@ -69,6 +69,11 @@ const SwapTxs = React.memo(() => {
         descColor: _txDetail.color,
       },
       {
+        title: 'Time:',
+        desc: _txDetail.time || '',
+        disabled: !_txDetail.time,
+      },
+      {
         title: 'Sell:',
         desc: `${_txDetail.sellStr} (${_txDetail.sellNetwork})`,
         disabled: !_txDetail.sellStr,
@@ -86,7 +91,7 @@ const SwapTxs = React.memo(() => {
         disabled: !_txDetail.outchainTx,
       },
       {
-        title: 'pAppTx:',
+        title: 'pApp Tx:',
         desc: !!_txDetail.pAppTxID ? shortenString(_txDetail.pAppTxID || '', 10) : '',
         disabled: !_txDetail.pAppTxID,
         copyData: _txDetail.pAppTxID,
@@ -97,7 +102,7 @@ const SwapTxs = React.memo(() => {
         )}`,
       },
       {
-        title: 'pDexTx:',
+        title: 'pDex Tx:',
         desc: !!_txDetail.pDexTxID ? shortenString(_txDetail.pDexTxID || '', 10) : '',
         disabled: !_txDetail.pDexTxID,
         copyData: _txDetail.pDexTxID,
@@ -113,7 +118,7 @@ const SwapTxs = React.memo(() => {
         disabled: !_txDetail.swapExchangeStatus,
       },
       {
-        title: 'RefundTx:',
+        title: 'Refund Tx:',
         desc: !!_txDetail.refundTxID ? shortenString(_txDetail.refundTxID || '', 10) : '',
         disabled: !_txDetail.refundTxID,
         copyData: _txDetail.refundTxID,
@@ -129,7 +134,7 @@ const SwapTxs = React.memo(() => {
         disabled: !_txDetail.refundStr,
       },
       {
-        title: 'RedepositTx:',
+        title: 'Redeposit Tx:',
         desc: !!_txDetail.redepositTxInc ? shortenString(_txDetail.redepositTxInc || '', 10) : '',
         copyData: _txDetail.redepositTxInc,
         link: !!_txDetail.redepositTxInc
@@ -142,10 +147,28 @@ const SwapTxs = React.memo(() => {
         disabled: !_txDetail.redepositTxInc,
       },
       {
+        title: 'Outchain Tx:',
+        desc: !!_txDetail.outchainTxID ? shortenString(_txDetail.outchainTxID || '', 10) : '',
+        copyData: _txDetail.outchainTxID,
+        link: _txDetail.outchainTxIDUrl,
+        disabled: !_txDetail.outchainTxID,
+      },
+      {
         title: 'Redeposit status:',
         desc: _txDetail.redepositStatus,
         // descColor: txDetail.redepositColor,
         disabled: !_txDetail.redepositStatus,
+      },
+      {
+        title: 'Response Tx:',
+        desc: !!_txDetail.responseTx ? shortenString(_txDetail.responseTx || '', 10) : '',
+        disabled: !_txDetail.responseTx,
+        copyData: _txDetail.responseTx,
+        link: `${getExplorerLink(
+          PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
+          _txDetail.responseTx,
+          ExplorerDataType.TRANSACTION
+        )}`,
       },
     ];
   }, [txBurnID]);
