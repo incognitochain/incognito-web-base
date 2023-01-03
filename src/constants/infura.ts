@@ -16,7 +16,7 @@ export const MAINNET_PROVIDER = new JsonRpcProvider('https://eth-fullnode.incogn
 export const INFURA_NETWORK_URLS: { [key in SupportedChainId]: string } = {
   [SupportedChainId.MAINNET]: `https://eth-fullnode.incognito.org`,
   [SupportedChainId.KOVAN]: `https://kovan.infura.io/v3/8c1ae0e623704f288eab73928a9243f5`,
-  [SupportedChainId.GOERLI_ETH]: 'https://goerli.infura.io/v3/',
+  [SupportedChainId.GOERLI_ETH]: `https://goerli.infura.io/v3/${INFURA_KEY}`,
 
   [SupportedChainId.OPTIMISM]: `https://optimism-mainnet.infura.io/v3/${INFURA_KEY}`,
   [SupportedChainId.OPTIMISTIC_KOVAN]: `https://optimism-kovan.infura.io/v3/${INFURA_KEY}`,

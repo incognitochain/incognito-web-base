@@ -97,7 +97,7 @@ const LabelText = styled.p`
 
 const InputField = styled(Input)`
   background-color: ${({ theme }) => theme.primary14};
-  background-color: ${({ theme }) => theme.text1};
+  color: ${({ theme }) => theme.text1};
   padding: 16px;
   border-radius: 8px;
   border-width: 0px;
