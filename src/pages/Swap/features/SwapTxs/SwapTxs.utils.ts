@@ -344,12 +344,14 @@ const combineSwapInter = ({ swapTxs, curr }: { swapTxs: any; curr: any; prev: an
 
   let refundStr, refundTxID;
   if (apiResp?.RefundTxID && apiResp?.RefundToken) {
-    const refundToken = getPrivacyDataByTokenIDSelector(state.getState())(curr.RefundToken);
+    const refundToken = getPrivacyDataByTokenIDSelector(state.getState())(apiResp.RefundToken);
+    console.log('SANG TEST: ', { refundToken, token: apiResp.RefundToken });
     if (refundToken.symbol) {
       refundTxID = apiResp?.RefundTxID;
-      refundStr = `${format.amountVer2({ originalAmount: apiResp?.RefundAmount || 0, decimals: 0 })} ${
-        refundToken.symbol
-      }`;
+      refundStr = `${format.amountVer2({
+        originalAmount: apiResp?.RefundAmount || 0,
+        decimals: refundToken.pDecimals || 0,
+      })} ${refundToken.symbol}`;
     }
   }
 
