@@ -1,3 +1,4 @@
+import { Tooltip } from 'antd';
 import SwapIcon from 'assets/svg/swap.svg';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
@@ -19,6 +20,7 @@ import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
+import { ReactComponent as Info } from '../../../../assets/images/info.svg';
 import { getQueryPAppName } from '../../Swap.hooks';
 import { EstReceive } from '../EstReceive';
 import { actionSetToken } from '../FormDeposit/FormDeposit.actions';
@@ -100,12 +102,15 @@ const ErrorMsgContainer = styled.div`
 
 const InterSwapMsg = styled.div`
   padding: 12px 16px;
-  border: 1px solid ${({ theme }) => theme.border2};
+  background-color: ${({ theme }) => theme.primary14};
   border-radius: 8px;
   margin-top: 4px;
+  display: flex;
+  align-items: center;
   div {
     margin-top: 0 !important;
     color: ${({ theme }) => theme.text1};
+    width: fit-content;
   }
 `;
 
@@ -243,8 +248,6 @@ const FormUnshield = React.memo((props: any) => {
     }
   }, [sellToken.tokenID, buyToken.tokenID, buyNetworkName]);
 
-  console.log('SANG TEST: ', exchangeSelectedData);
-
   return (
     <Styled>
       <form onSubmit={handleSubmit(onSend)}>
@@ -332,7 +335,10 @@ const FormUnshield = React.memo((props: any) => {
           </ErrorMsgContainer>
         ) : exchangeSelectedData?.interSwapData?.midToken ? (
           <InterSwapMsg>
-            <ThemedText.SmallLabel style={{ marginTop: '4px' }}>lorem ipsum</ThemedText.SmallLabel>
+            <ThemedText.SmallLabel>lorem ipsum</ThemedText.SmallLabel>
+            <Tooltip title="lorem ipsum">
+              <Info style={{ marginLeft: 5 }} />
+            </Tooltip>
           </InterSwapMsg>
         ) : null}
         {visibleAddress && (

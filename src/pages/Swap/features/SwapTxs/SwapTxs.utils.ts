@@ -367,7 +367,6 @@ const combineSwapInter = ({ swapTxs, curr }: { swapTxs: any; curr: any; prev: an
   //   const pAppNetwork = curr?.interPAppNetwork;
   //   const chainId = getChainIDByAcronymNetwork(pAppNetwork);
   //   pAppTxIDURL = `${getExplorerLink(chainId, pAppTxID, ExplorerDataType.TRANSACTION)}`;
-  //   console.log('SANG TEST: ', pAppTxIDURL);
   // }
 
   const data: any = {

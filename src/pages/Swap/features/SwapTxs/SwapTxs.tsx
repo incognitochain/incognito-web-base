@@ -113,9 +113,15 @@ const SwapTxs = React.memo(() => {
         disabled: !_txDetail.swapExchangeStatus,
       },
       {
-        title: 'Refund Tx:',
+        title: 'RefundTx:',
         desc: !!_txDetail.refundTxID ? shortenString(_txDetail.refundTxID || '', 10) : '',
         disabled: !_txDetail.refundTxID,
+        copyData: _txDetail.refundTxID,
+        link: `${getExplorerLink(
+          PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
+          _txDetail.refundTxID,
+          ExplorerDataType.TRANSACTION
+        )}`,
       },
       {
         title: 'Refund:',

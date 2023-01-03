@@ -134,7 +134,7 @@ const EstReceive = React.memo(
 
     const getRateText = () => {
       if (isRateSellToBuy) {
-        return ` 1 ${sellToken.symbol} = ${format.amountVer2({
+        return `1 ${sellToken.symbol} = ${format.amountVer2({
           originalAmount: new BigNumber(rate || 0).toNumber(),
           decimals: 0,
         })} ${buyToken.symbol}`;
@@ -269,12 +269,14 @@ const EstReceive = React.memo(
               </>
             )}
 
-            <RowBetween style={{ marginTop: 12 }}>
-              <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                Estimate time
-              </ThemedText.SmallLabel>
-              <ThemedText.SmallLabel fontWeight={400}>{`${time}`}</ThemedText.SmallLabel>
-            </RowBetween>
+            {!!time && (
+              <RowBetween style={{ marginTop: 12 }}>
+                <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                  Estimate time
+                </ThemedText.SmallLabel>
+                <ThemedText.SmallLabel fontWeight={400}>{`${time}`}</ThemedText.SmallLabel>
+              </RowBetween>
+            )}
             {!!desc && (
               <ThemedText.SmallLabel
                 color="primary8"
@@ -290,7 +292,7 @@ const EstReceive = React.memo(
                 <ThemedText.SmallLabel fontWeight={400}>{tradePath}</ThemedText.SmallLabel>
               </RowBetween>
             )}
-            {interPath && interPath.length > 1 && (
+            {!!interPath && interPath.length > 1 && (
               <RowBetween style={{ marginTop: 12 }}>
                 <ThemedText.SmallLabel fontWeight={400} color="primary8">
                   Trade path
