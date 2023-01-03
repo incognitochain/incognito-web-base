@@ -128,7 +128,7 @@ const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any):
 
 const checkSwapableToken = ({ sellToken, token }: { sellToken: SelectedPrivacy; token: SelectedPrivacy }) => {
   if (token.movedUnifiedToken) return false; // not supported moved unified token
-  if (token.poolPair) return true; // swapable on PDEX
+  if (sellToken.poolPair || token.poolPair) return true; // swapable on PDEX
 
   // list supported network by sellToken
   const sellChildNetworks = sellToken.isUnified
