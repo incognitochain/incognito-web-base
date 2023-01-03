@@ -128,7 +128,7 @@ const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any):
 
 const checkSwapableToken = ({ sellToken, token }: { sellToken: SelectedPrivacy; token: SelectedPrivacy }) => {
   if (token.movedUnifiedToken) return false; // not supported moved unified token
-  if (sellToken.poolPair && token.poolPair) return true; // swapable on PDEX
+  if (token.poolPair) return true; // swapable on PDEX
 
   // list supported network by sellToken
   const sellChildNetworks = sellToken.isUnified
@@ -258,10 +258,16 @@ const getUnshieldData = ({
         return checkSwapableToken({ sellToken: _sellToken, token });
       });
     } else {
+      // Swap PApps
       _buyTokenList = _buyTokenList.filter((token: SelectedPrivacy) => {
         const _swapNetwork = token.networkName;
         // remove all unified tokens
         if (!_swapNetwork || token.hasChild) return false;
+
+        // support filter tokens interswap
+        if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
+          return token.networkName === swapNetwork || !!token.poolPair;
+        }
 
         // case un-unified tokens
         return token.networkName === swapNetwork;
