@@ -369,7 +369,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
         ) : exchangeSelectedData?.interSwapData?.midToken ? (
           <InterSwapMsg>
             <ThemedText.SmallLabel>
-              Cross exchange supports users to swap using cross exchange liquidity pools seamlessly.
+              Cross Exchange supports users to swap using cross exchange liquidity pools seamlessly.
             </ThemedText.SmallLabel>
             {/* <Tooltip
               overlayInnerStyle={{ width: '400px' }}
