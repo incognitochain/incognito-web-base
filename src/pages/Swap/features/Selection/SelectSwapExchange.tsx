@@ -58,17 +58,10 @@ export const getExchangeLogo = (exchangeSelected: string) => {
 
 export const formatExchangeName = (exchangeSelected: string) => {
   const _exchangeSelected = exchangeSelected.toLowerCase();
-  if (
-    _exchangeSelected.includes(SwapExchange.PANCAKE_SWAP) ||
-    _exchangeSelected.includes(SwapExchange.UNISWAP) ||
-    _exchangeSelected.includes(SwapExchange.CURVE) ||
-    _exchangeSelected.includes(SwapExchange.JOE) ||
-    _exchangeSelected.includes(SwapExchange.TRISOLARIS) ||
-    _exchangeSelected.includes(SwapExchange.SPOOKY)
-  ) {
-    return exchangeSelected;
-  } else {
+  if (_exchangeSelected.includes(SwapExchange.PDEX)) {
     return 'Incognito Exchange';
+  } else {
+    return exchangeSelected;
   }
 };
 

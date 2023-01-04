@@ -11,7 +11,9 @@ import { batch } from 'react-redux';
 import { change, focus, untouch } from 'redux-form';
 import { rpcClient } from 'services';
 import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
-import { useAppDispatch } from 'state/hooks';
+import { useAppDispatch, useAppSelector } from 'state/hooks';
+import { getShardIDByAddress } from 'state/incognitoWallet';
+import { getPrivacyDataByTokenIDSelector } from 'state/token';
 
 import { actionEstimateFee, actionSetErrorMsg } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
@@ -43,11 +45,13 @@ const enhanceSend = (WrappedComponent: any) => {
       isUseTokenFee,
       expectedReceiveAmount,
       inputAmount,
+      slippage,
     } = props;
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
     const { setModal, clearAllModal } = useModal();
     const updateMetric = ({ type }: { type: METRIC_TYPE }) => rpcMetric.updateMetric({ type });
+    const getPrivacyDataByTokenID = useAppSelector(getPrivacyDataByTokenIDSelector);
 
     const remoteAddress = React.useMemo(() => {
       let remoteAddress: string = inputAddress || '';
@@ -79,14 +83,14 @@ const enhanceSend = (WrappedComponent: any) => {
       return isDecentralized;
     }, [sellToken.identify, buyNetworkName]);
 
-    const getKeySetINC = async () => {
+    const getKeySetINC = async (shardID?: number) => {
       const incognito = getIncognitoInject();
 
       // Get OTA Receiver and Burner address
-      const shardID = (exchangeSelectedData || fee || {}).feeAddressShardID;
+      const _shardID = shardID ? shardID : (exchangeSelectedData || fee || {}).feeAddressShardID;
       const { result }: { result: any } = await incognito.request({
         method: 'wallet_requestAccounts',
-        params: { senderShardID: shardID },
+        params: { senderShardID: _shardID },
       });
       const otaReceiver = result?.otaReceiver;
       const burnerAddress = result?.burnerAddress;
@@ -268,6 +272,14 @@ const enhanceSend = (WrappedComponent: any) => {
         /** Unshield BITCOIN */
         const { tokenPayments: _tokenPayments } = await getPaymentsUnshieldBTC();
         tokenPayments = _tokenPayments;
+      } else if (exchangeSelectedData?.isInterSwap && exchangeSelectedData?.interSwapData) {
+        /** Swap INTER */
+        const { interSwapData } = exchangeSelectedData;
+        const { prvPayments: _prvPayments, tokenPayments: _tokenPayments } = interSwapData?.isInterFistBatchPDex
+          ? await getPaymentsSwapPDEX()
+          : await getPaymentsUnshieldDecentralizedAndPApps();
+        prvPayments = _prvPayments;
+        tokenPayments = _tokenPayments;
       } else if (formType === FormTypes.SWAP && exchangeSelectedData.appName === SwapExchange.PDEX) {
         /** Swap PDEX */
         const { prvPayments: _prvPayments, tokenPayments: _tokenPayments } = await getPaymentsSwapPDEX();
@@ -337,8 +349,13 @@ const enhanceSend = (WrappedComponent: any) => {
       }
 
       let buyTokenContract: string = buyParentToken.contractID;
-      if (buyParentToken?.isUnified) {
-        const childBuyToken = buyParentToken?.listUnifiedToken?.find(
+      let _buyParentToken = buyParentToken;
+      if (exchangeSelectedData?.interSwapData?.midToken) {
+        _buyParentToken = getPrivacyDataByTokenID(exchangeSelectedData?.interSwapData?.midToken);
+      }
+
+      if (_buyParentToken?.isUnified) {
+        const childBuyToken = _buyParentToken?.listUnifiedToken?.find(
           (token: any) => token?.networkID === exchangeSelectedData?.networkID
         );
         buyTokenContract = childBuyToken?.contractIDSwap;
@@ -348,10 +365,12 @@ const enhanceSend = (WrappedComponent: any) => {
         buyTokenContract = buyTokenContract.slice(2);
       }
 
+      // redeposit to Incognito withdrawAddress = 0000000000000000000000000000000000000000
+      // go out Incognito withdrawAddress = user input address
       const withdrawAddress: string =
         buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? '0000000000000000000000000000000000000000' : remoteAddress;
 
-      const metadata = {
+      return {
         Data: [
           {
             IncTokenID: exchangeSelectedData?.incTokenID,
@@ -367,9 +386,16 @@ const enhanceSend = (WrappedComponent: any) => {
         BurnTokenID: sellToken?.tokenID,
         Type: 348,
       };
-      return metadata;
     };
+
     const getSwapPDexMetadata = ({ otaReceivers }: { otaReceivers: string[] }) => {
+      let _buyToken = buyToken;
+      let minAcceptableAmount = `${exchangeSelectedData.amountOutRaw}`;
+      const { interSwapData } = exchangeSelectedData;
+      if (interSwapData && interSwapData?.midToken) {
+        _buyToken = getPrivacyDataByTokenID(interSwapData?.midToken);
+        minAcceptableAmount = interSwapData.pdexMinAcceptableAmount;
+      }
       const metadata = {
         TradePath: exchangeSelectedData.poolPairs,
         TokenToSell: sellToken.tokenID,
@@ -377,12 +403,12 @@ const enhanceSend = (WrappedComponent: any) => {
         TradingFee: feeBurnCombine.amount,
         Receiver: {
           [sellToken.tokenID]: otaReceivers[0],
-          [buyToken.tokenID]: otaReceivers[1],
+          [_buyToken.tokenID]: otaReceivers[1], // InterSwap, buyToken is MidToken
         },
         Type: 285,
-        MinAcceptableAmount: `${exchangeSelectedData.amountOutRaw}`,
+        MinAcceptableAmount: minAcceptableAmount,
         FeeToken: isUseTokenFee ? sellToken.tokenID : PRV.id,
-        TokenToBuy: buyToken.tokenID,
+        TokenToBuy: _buyToken.tokenID,
       };
       return metadata;
     };
@@ -465,7 +491,20 @@ const enhanceSend = (WrappedComponent: any) => {
             if (!feeRefundOTA) {
               throw new Error('Cant get OTA receiver');
             }
-            const metadata = getSwapPAppMetadata({ otaReceiver });
+            let metadata;
+            const { interSwapData } = exchangeSelectedData;
+            if (interSwapData && interSwapData?.midToken) {
+              const { midOTA } = interSwapData;
+              if (interSwapData.isInterFistBatchPDex) {
+                // first batch is PDEX
+                metadata = getSwapPDexMetadata({ otaReceivers: [otaReceiver, midOTA] });
+              } else {
+                metadata = getSwapPAppMetadata({ otaReceiver: midOTA });
+              }
+            } else {
+              metadata = getSwapPAppMetadata({ otaReceiver });
+            }
+
             isSignAndSendTransaction = false;
             payload = {
               metadata,
@@ -501,12 +540,37 @@ const enhanceSend = (WrappedComponent: any) => {
                   txHash: tx.txHash,
                 });
               } else {
-                /** Submit tx swap PApps to backend after burned */
-                await rpcClient.submitSwapTx({
-                  // txHash: tx.txHash,
-                  txRaw: tx.rawData,
-                  feeRefundOTA,
-                });
+                const { interSwapData } = exchangeSelectedData;
+                if (interSwapData && interSwapData.midToken) {
+                  /** Submit tx swap InterSwap to backend */
+                  const shardID = getShardIDByAddress({ incAddress });
+                  const { otaReceiver: sellTokenOTA, feeRefundOTA: refundFeeOTA } = await getKeySetINC();
+                  const { otaReceiver: buyTokenOTA, feeRefundOTA: refundOTA } = await getKeySetINC(shardID);
+                  await rpcClient.submitInterSwapTx({
+                    txHash: tx.txHash,
+                    txRaw: tx.rawData,
+                    sellTokenID: sellToken.tokenID,
+                    midTokenID: interSwapData.midToken,
+                    buyTokenID: buyToken.tokenID,
+                    amountOutRaw: new BigNumber(exchangeSelectedData?.amountOutRaw || 0).toNumber(),
+                    slippage: slippage || '0',
+                    pAppNetwork: interSwapData.pAppNetwork,
+                    pAppName: interSwapData.pAppName,
+                    refundOTA,
+                    refundFeeOTA,
+                    sellTokenOTA,
+                    buyTokenOTA,
+                    inputAddress: buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO ? '' : remoteAddress,
+                    shardID,
+                  });
+                } else {
+                  /** Submit tx swap PApps to backend */
+                  await rpcClient.submitSwapTx({
+                    // txHash: tx.txHash,
+                    txRaw: tx.rawData,
+                    feeRefundOTA,
+                  });
+                }
               }
               if (tx.txHash) {
                 setSwapTx({
@@ -518,6 +582,8 @@ const enhanceSend = (WrappedComponent: any) => {
                   buyTokenID: buyToken.tokenID,
                   sellAmountText: inputAmount,
                   buyAmountText: `${expectedReceiveAmount || 0}`,
+                  interPAppName: exchangeSelectedData?.interSwapData?.pAppName || '',
+                  interPAppNetwork: exchangeSelectedData?.interSwapData?.pAppNetwork || '',
                 });
               }
             } else if (!sellToken.isBTC) {

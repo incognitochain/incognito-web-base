@@ -128,7 +128,7 @@ const getTradePath = (exchange?: SwapExchange, routes?: any[], tokenList?: any):
 
 const checkSwapableToken = ({ sellToken, token }: { sellToken: SelectedPrivacy; token: SelectedPrivacy }) => {
   if (token.movedUnifiedToken) return false; // not supported moved unified token
-  if (sellToken.poolPair && token.poolPair) return true; // swapable on PDEX
+  if (sellToken.poolPair || token.poolPair) return true; // swapable on PDEX
 
   // list supported network by sellToken
   const sellChildNetworks = sellToken.isUnified
@@ -258,10 +258,16 @@ const getUnshieldData = ({
         return checkSwapableToken({ sellToken: _sellToken, token });
       });
     } else {
+      // Swap PApps
       _buyTokenList = _buyTokenList.filter((token: SelectedPrivacy) => {
         const _swapNetwork = token.networkName;
         // remove all unified tokens
         if (!_swapNetwork || token.hasChild) return false;
+
+        // support filter tokens interswap
+        if (buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO) {
+          return token.networkName === swapNetwork || !!token.poolPair;
+        }
 
         // case un-unified tokens
         return token.networkName === swapNetwork;
@@ -522,11 +528,11 @@ const getUnshieldData = ({
       decimals: _sellToken.pDecimals,
     });
 
-    if (exchangeSelectedData && exchangeSelectedData.appName === SwapExchange.PDEX) {
-      tradePath = getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
-    } else {
-      tradePath = exchangeSelectedData?.tradePathStr || '';
-    }
+    tradePath =
+      typeof exchangeSelectedData?.routes === 'string'
+        ? exchangeSelectedData?.routes
+        : getTradePath(exchangeSelectedData?.appName, exchangeSelectedData?.routes, unshieldAbleTokens);
+
     let tradeFeeText = '';
     if (isUseTokenFee) {
       tradeFeeText = `${
@@ -716,82 +722,6 @@ const getUnshieldData = ({
   };
 };
 
-const getExchangeName = (exchange: SwapExchange) => {
-  if (exchange === SwapExchange.PANCAKE_SWAP) {
-    return 'PancakeSwap';
-  }
-  if (exchange === SwapExchange.UNISWAP) {
-    return 'Uniswap';
-  }
-  if (exchange === SwapExchange.CURVE) {
-    return 'Curve';
-  }
-  if (exchange === SwapExchange.PDEX) {
-    return 'Incognito';
-  }
-  if (exchange === SwapExchange.SPOOKY) {
-    return 'Spooky';
-  }
-  if (exchange === SwapExchange.JOE) {
-    return 'Trader JOE';
-  }
-
-  if (exchange === SwapExchange.TRISOLARIS) {
-    return 'Trisolaris';
-  }
-
-  return exchange;
-};
-
-// Parse fee data from api estimate swap fee
-const parseFeeDataModelResponse = (fees: any[]) => {
-  const data: ISwapFee[] = [];
-  if (!fees?.length) return [];
-  for (let i = 0; i < fees?.length; i++) {
-    data.push({
-      amount: fees[i]?.amount || 0,
-      tokenId: fees[i]?.tokenid || '',
-      amountInBuyToken: fees[i]?.amountInBuyToken || '0',
-    });
-  }
-  return data;
-};
-
-// Parse data from api estimate swap fee
-const parseExchangeDataModelResponse = (
-  // Data response from api estimate swap fee
-  data: any,
-  // Swap network name
-  networkName: string,
-  // Swap networkID
-  networkID: number,
-  // Child buy tokenId
-  incTokenID?: string
-) => {
-  const exchangeData: ISwapExchangeData = {
-    amountIn: parseFloat(data?.AmountIn || 0),
-    amountInRaw: parseFloat(data?.AmountInRaw || 0),
-    amountOut: parseFloat(data?.AmountOut || 0),
-    amountOutRaw: parseFloat(data?.AmountOutRaw || 0),
-    appName: data?.AppName,
-    exchangeName: `${getExchangeName(data?.AppName)} (${networkName})`,
-    fees: parseFeeDataModelResponse(data?.Fee || []) || [],
-    routes: data?.Paths || data?.PathsContract || [],
-    incTokenID: incTokenID || '',
-    feeAddress: data?.FeeAddress || '',
-    callContract: data?.CallContract,
-    callData: data?.Calldata,
-    feeAddressShardID: data.FeeAddressShardID,
-    poolPairs: data.PoolPairs || [],
-    networkID,
-    expectedAmount: data?.AmountOutPreSlippage || '0',
-    rate: data?.Rate || '1',
-    impactAmount: data?.ImpactAmount ? Number(data?.ImpactAmount || 0) : null,
-    tradePathStr: data.Paths || '',
-  };
-  return exchangeData;
-};
-
 const getBurningMetaDataTypeForUnshield = (sellToken: SelectedPrivacy) => {
   if (sellToken?.isUnified) return 345;
   if (sellToken?.isBep20Token || sellToken.isMainBSC) return BurningPBSCRequestMeta;
@@ -871,10 +801,8 @@ const getINCTokenWithNetworkName = ({
 
 export {
   getBurningMetaDataTypeForUnshield,
-  getExchangeName,
   getINCTokenWithNetworkName,
   getPrvPayments,
   getTokenPayments,
   getUnshieldData,
-  parseExchangeDataModelResponse,
 };

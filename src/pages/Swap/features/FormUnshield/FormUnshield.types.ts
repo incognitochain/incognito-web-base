@@ -29,6 +29,7 @@ export enum SwapExchange {
   SPOOKY = 'spooky',
   JOE = 'joe',
   TRISOLARIS = 'trisolaris',
+  INTER_SWAP = 'interswap',
 }
 
 export enum NetworkTypePayload {
@@ -41,6 +42,7 @@ export enum NetworkTypePayload {
   AURORA = 'aurora',
   NEAR = 'near',
   CENTRALIZED = 'centralized',
+  INTER_SWAP = 'interswap',
 }
 
 export interface ISwapExchange {
@@ -71,15 +73,15 @@ export interface ISwapFee {
   tokenId: string;
   amountInBuyToken: string;
 }
+
 export interface ISwapExchangeData {
   amountIn: number;
-  amountInRaw: number;
   amountOut: number;
   amountOutRaw: number;
   appName: SwapExchange;
   exchangeName: string;
   fees: ISwapFee[];
-  routes: any[];
+  routes: string | string[];
   incTokenID: string;
   feeAddress: string;
   callContract: string;
@@ -91,6 +93,20 @@ export interface ISwapExchangeData {
   rate: string;
   impactAmount: number | null;
   tradePathStr: string;
+  groupPaths?: ISwapExchangeData[];
+  isInterSwap: boolean;
+  interSwapData?: {
+    midOTA: string;
+    midToken: string;
+    isInterFistBatchPDex: boolean;
+    pdexMinAcceptableAmount: string;
+    pAppName: string;
+    pAppNetwork: string;
+    path: {
+      logoIcon: string;
+      tradePath: string | string[];
+    }[];
+  };
 }
 
 export interface UnshieldSetTokenPayLoad {
