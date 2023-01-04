@@ -176,15 +176,15 @@ const SwapTxs = React.memo(() => {
   const getSwapTxs = async ({ showLoading = false }: { showLoading: boolean }) => {
     try {
       if (showLoading) {
-        setState((value) => ({ ...value, loading: true }));
+        setState((value: any) => ({ ...value, loading: true }));
       }
       const txs = await rpcClient.apiGetSwapTxs();
       if (showLoading) {
-        setState((value) => ({ ...value, loading: false, txs }));
+        setState((value: any) => ({ ...value, loading: false, txs }));
       }
     } catch (e) {
       if (showLoading) {
-        setState((value) => ({ ...value, loading: false, txs: [] }));
+        setState((value: any) => ({ ...value, loading: false, txs: [] }));
       }
     }
   };
