@@ -371,21 +371,23 @@ const FormUnshield = React.memo((props: IMergeProps) => {
         ) : exchangeSelectedData?.interSwapData?.midToken ? (
           <InterSwapMsg>
             <ThemedText.SmallLabel>
-              Cross Exchange enables seamless swaps of tokens across many blockchains via a stablecoin (e.g. USDT) with
-              a single click.{' '}
-              <Tooltip
-                overlayInnerStyle={{ width: '300px', borderRadius: 8 }}
-                title={
-                  <p>
-                    For example: Users can swap ETH ={'>'} XRM via USDT:
-                    <br /> &#8226; pUniswap: ETH ={'>'} USDT
-                    <br /> &#8226; pDEX: USDT ={'>'} XMR
-                  </p>
-                }
-              >
-                <Info style={{ marginRight: 4 }} />
-              </Tooltip>
-              If the swap fails for any reason, the stablecoin will be returned to your wallet.
+              <p>
+                Cross Exchange enables seamless swaps of tokens across many blockchains via a stablecoin (e.g. USDT)
+                with a single click.
+                <Tooltip
+                  overlayInnerStyle={{ width: '300px', borderRadius: 8 }}
+                  title={
+                    <p>
+                      For example: Users can swap ETH ={'>'} XRM via USDT:
+                      <br /> &#8226; pUniswap: ETH ={'>'} USDT
+                      <br /> &#8226; pDEX: USDT ={'>'} XMR
+                    </p>
+                  }
+                >
+                  <Info style={{ marginLeft: 4, position: 'absolute', cursor: 'pointer' }} />
+                </Tooltip>
+              </p>
+              <p>If the swap fails for any reason, the stablecoin will be returned to your wallet.</p>
             </ThemedText.SmallLabel>
           </InterSwapMsg>
         ) : null}
