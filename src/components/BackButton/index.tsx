@@ -27,7 +27,11 @@ export const BackButton: React.FC<IProps> = (props: IProps) => {
   return (
     <Styled
       onClick={() => {
-        props?.onBack?.() || history.goBack();
+        if (typeof props?.onBack === 'function') {
+          props?.onBack?.();
+        } else {
+          history.goBack();
+        }
       }}
     >
       <MdArrowBack size={24} color="white" />
