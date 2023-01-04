@@ -74,7 +74,7 @@ const Collections = () => {
       <CollectionItem
         onClick={() => {
           updateMetric({ metric: METRIC_TYPE.HOME_MINE, uniqMetric: METRIC_UNIQ.HOME_MINE_UNIQ });
-          openLink({ link: '/mine' });
+          openLink({ link: '/mine/validator' });
         }}
       >
         {renderHeader({ title: 'Mine', desc: 'Power privacy with a beautiful device.' })}
