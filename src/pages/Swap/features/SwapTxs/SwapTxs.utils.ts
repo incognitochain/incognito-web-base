@@ -94,6 +94,7 @@ export interface ISwapTxStatus {
 
 const getStatusColor = (status: string) => {
   let color = '#FFC043';
+  if (!status) return '#FFC043';
   switch (status.toLowerCase()) {
     case Status.fail:
     case TxStatus.submit_failed:
@@ -408,21 +409,26 @@ const combineSwapInter = ({ swapTxs, curr }: { swapTxs: any; curr: any; prev: an
 };
 
 const combineSwapTxs = ({ localTxs, swapTxs }: { localTxs: ISwapTxStorage[]; swapTxs: any }) => {
-  // @ts-ignore
-  const txs: ISwapTxStatus[] = localTxs.reduce((prev, curr) => {
-    const payload = {
-      swapTxs,
-      curr,
-      prev,
-    };
-    const txMapper =
-      curr.appName === SwapExchange.INTER_SWAP ? combineSwapInter(payload) : combineSwapPAppAndOpenSea(payload);
-    if (txMapper) {
-      return [...prev, txMapper];
-    }
-    return prev;
-  }, []);
-  return txs.filter((tx) => !!tx);
+  try {
+    // @ts-ignore
+    const txs: ISwapTxStatus[] = localTxs.reduce((prev, curr) => {
+      const payload = {
+        swapTxs,
+        curr,
+        prev,
+      };
+      const txMapper =
+        curr.appName === SwapExchange.INTER_SWAP ? combineSwapInter(payload) : combineSwapPAppAndOpenSea(payload);
+      if (txMapper) {
+        return [...prev, txMapper];
+      }
+      return prev;
+    }, []);
+    return txs.filter((tx) => !!tx);
+  } catch (e) {
+    console.log('CombineSwapTxs error: ', e);
+    return [];
+  }
 };
 
 export { combineSwapTxs };
