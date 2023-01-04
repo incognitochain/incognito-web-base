@@ -6,7 +6,7 @@ import React from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { useSelector } from 'react-redux';
-import { Fee } from 'state/dao/types';
+import { Fee, Proposal } from 'state/dao/types';
 import { getMinimumPRVBalanceRequire, MINIMUM_PRV_REQUIRE_TO_BURN, NETWORK_FEE } from 'state/dao/utils';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
@@ -114,24 +114,26 @@ const LabelField = styled.p`
 interface ModalVoteProps {
   isOpen?: boolean;
   fee?: Fee;
+  proposal?: Proposal;
   onCancel: (isOpen: boolean) => void;
-  onChooseVoteOption: (voteOption: 1 | 2) => void;
+  onChooseVoteOption: (voteOption: 0 | 1) => void;
   onSubmitVote: (prvBurnAmount: number) => void;
-  selectedVote: 1 | 2;
+  selectedVote: 0 | 1;
   amount: any;
   onChangeAmount: (amount: any) => void;
 }
 
 export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
-  const { isOpen, onCancel, onChooseVoteOption, onSubmitVote, selectedVote, fee, amount, onChangeAmount } = props;
+  const { isOpen, onCancel, onChooseVoteOption, onSubmitVote, selectedVote, fee, amount, onChangeAmount, proposal } =
+    props;
   const reasons: any = [
     {
       id: 1,
-      title: 'Cast 1 vote for Prop 12',
+      title: `Cast ${proposal?.startBlock} vote for Prop ${proposal?.id}`,
     },
     {
-      id: 2,
-      title: 'Abstain from voting on Prop 12',
+      id: 0,
+      title: `Cast ${proposal?.startBlock} vote against Prop ${proposal?.id}`,
     },
   ];
 
