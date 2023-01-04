@@ -38,7 +38,7 @@ const SwapTxs = React.memo(() => {
   const [txBurnID, setTxBurnID] = React.useState<string | undefined>(undefined);
 
   const factories: IItemDetail[] = React.useMemo(() => {
-    const _txDetail = state.txs.find((tx) => tx.requestBurnTxInc === txBurnID);
+    const _txDetail: any = state.txs.find((tx) => tx.requestBurnTxInc === txBurnID);
     if (!_txDetail) return [];
     const chainId = getChainIDByAcronymNetwork(_txDetail.network);
     return [
@@ -69,6 +69,11 @@ const SwapTxs = React.memo(() => {
         descColor: _txDetail.color,
       },
       {
+        title: 'Time:',
+        desc: _txDetail.time || '',
+        disabled: !_txDetail.time,
+      },
+      {
         title: 'Sell:',
         desc: `${_txDetail.sellStr} (${_txDetail.sellNetwork})`,
         disabled: !_txDetail.sellStr,
@@ -85,19 +90,51 @@ const SwapTxs = React.memo(() => {
         link: `${getExplorerLink(chainId || 0, _txDetail.outchainTx || '', ExplorerDataType.TRANSACTION)}`,
         disabled: !_txDetail.outchainTx,
       },
-      // {
-      //   title: 'OutChain status:',
-      //   desc: txDetail.outchainTxStatus,
-      //   // descColor: txDetail.outchainColor,
-      //   disabled: !txDetail.outchainTxStatus,
-      // },
+      {
+        title: 'PApp Tx:',
+        desc: !!_txDetail.pAppTxID ? shortenString(_txDetail.pAppTxID || '', 10) : '',
+        disabled: !_txDetail.pAppTxID,
+        copyData: _txDetail.pAppTxID,
+        link: `${getExplorerLink(
+          PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
+          _txDetail.pAppTxID,
+          ExplorerDataType.TRANSACTION
+        )}`,
+      },
+      {
+        title: 'PDex Tx:',
+        desc: !!_txDetail.pDexTxID ? shortenString(_txDetail.pDexTxID || '', 10) : '',
+        disabled: !_txDetail.pDexTxID,
+        copyData: _txDetail.pDexTxID,
+        link: `${getExplorerLink(
+          PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
+          _txDetail.pDexTxID,
+          ExplorerDataType.TRANSACTION
+        )}`,
+      },
       {
         title: 'Swap status:',
         desc: _txDetail.swapExchangeStatus,
         disabled: !_txDetail.swapExchangeStatus,
       },
       {
-        title: 'RedepositTx:',
+        title: 'Refund Tx:',
+        desc: !!_txDetail.refundTxID ? shortenString(_txDetail.refundTxID || '', 10) : '',
+        disabled: !_txDetail.refundTxID,
+        copyData: _txDetail.refundTxID,
+        link: `${getExplorerLink(
+          PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
+          _txDetail.refundTxID,
+          ExplorerDataType.TRANSACTION
+        )}`,
+      },
+      {
+        title: 'Refund:',
+        desc: _txDetail.refundStr,
+        disabled: !_txDetail.refundStr,
+      },
+      {
+        title: 'Redeposit Tx:',
         desc: !!_txDetail.redepositTxInc ? shortenString(_txDetail.redepositTxInc || '', 10) : '',
         copyData: _txDetail.redepositTxInc,
         link: !!_txDetail.redepositTxInc
@@ -110,10 +147,28 @@ const SwapTxs = React.memo(() => {
         disabled: !_txDetail.redepositTxInc,
       },
       {
+        title: 'Outchain Tx:',
+        desc: !!_txDetail.outchainTxID ? shortenString(_txDetail.outchainTxID || '', 10) : '',
+        copyData: _txDetail.outchainTxID,
+        link: _txDetail.outchainTxIDUrl,
+        disabled: !_txDetail.outchainTxID,
+      },
+      {
         title: 'Redeposit status:',
         desc: _txDetail.redepositStatus,
         // descColor: txDetail.redepositColor,
         disabled: !_txDetail.redepositStatus,
+      },
+      {
+        title: 'Response Tx:',
+        desc: !!_txDetail.responseTx ? shortenString(_txDetail.responseTx || '', 10) : '',
+        disabled: !_txDetail.responseTx,
+        copyData: _txDetail.responseTx,
+        link: `${getExplorerLink(
+          PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO,
+          _txDetail.responseTx,
+          ExplorerDataType.TRANSACTION
+        )}`,
       },
     ];
   }, [txBurnID]);
@@ -121,15 +176,15 @@ const SwapTxs = React.memo(() => {
   const getSwapTxs = async ({ showLoading = false }: { showLoading: boolean }) => {
     try {
       if (showLoading) {
-        setState((value) => ({ ...value, loading: true }));
+        setState((value: any) => ({ ...value, loading: true }));
       }
       const txs = await rpcClient.apiGetSwapTxs();
       if (showLoading) {
-        setState((value) => ({ ...value, loading: false, txs }));
+        setState((value: any) => ({ ...value, loading: false, txs }));
       }
     } catch (e) {
       if (showLoading) {
-        setState((value) => ({ ...value, loading: false, txs: [] }));
+        setState((value: any) => ({ ...value, loading: false, txs: [] }));
       }
     }
   };

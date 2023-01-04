@@ -1,4 +1,5 @@
 import Row from 'components/Core/Row';
+import { MAIN_NETWORK_NAME } from 'constants/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
@@ -34,11 +35,38 @@ const Styled = styled.div`
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ShieldFeeEstimateProps {
   value?: string | number;
-  symbol?: string;
+  sellNetworkName: MAIN_NETWORK_NAME | string;
 }
 
 const ShieldFeeEstimate = (props: ShieldFeeEstimateProps) => {
-  const { value = '0.0005 ETH' || '', symbol } = props;
+  const { value = '0.0005 ETH' || '', sellNetworkName } = props;
+  const getEstimateTime = () => {
+    let time = 0;
+    let desc = '';
+    switch (sellNetworkName) {
+      case MAIN_NETWORK_NAME.ETHEREUM:
+        time = 7;
+        break;
+      case MAIN_NETWORK_NAME.BSC:
+        time = 4;
+        break;
+      case MAIN_NETWORK_NAME.POLYGON:
+        time = 8;
+        break;
+      case MAIN_NETWORK_NAME.FANTOM:
+      case MAIN_NETWORK_NAME.AVALANCHE:
+      case MAIN_NETWORK_NAME.AURORA:
+      case MAIN_NETWORK_NAME.NEAR:
+        time = 3;
+        break;
+      case MAIN_NETWORK_NAME.BTC:
+        time = 60;
+        break;
+      default:
+        time = 6;
+    }
+    return time + ' mins';
+  };
   return (
     <Styled>
       {value && (
@@ -75,7 +103,7 @@ const ShieldFeeEstimate = (props: ShieldFeeEstimateProps) => {
         </Row>
 
         <ThemedText.SmallLabel fontWeight={400} color="primary5">
-          10 mins
+          {getEstimateTime()}
         </ThemedText.SmallLabel>
       </Row>
     </Styled>

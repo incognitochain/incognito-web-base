@@ -124,6 +124,8 @@ export class POpenseaNFTDetailBuyAction implements IPOpenseaNFTDetailBuyAction {
         if (tx.txHash) {
           //Save local history TX
           setSwapTx({
+            interPAppName: '',
+            interPAppNetwork: '',
             txHash: tx.txHash,
             time: new Date().getTime(),
             appName: 'opensea',

@@ -12,6 +12,8 @@ export interface ISwapTxStorage {
   buyTokenID: string;
   sellAmountText?: string;
   buyAmountText: string;
+  interPAppName: string;
+  interPAppNetwork: string;
 }
 
 const getSwapTxs = (): ISwapTxStorage[] => {
@@ -29,9 +31,22 @@ const setSwapTx = ({
   buyAmountText,
   sellTokenID,
   buyTokenID,
+  interPAppName,
+  interPAppNetwork,
 }: ISwapTxStorage) => {
   let swapTxs: ISwapTxStorage[] = Storage.getItem(KEY) || [];
-  swapTxs.push({ txHash, incAddress, time, appName, sellAmountText, buyAmountText, sellTokenID, buyTokenID });
+  swapTxs.push({
+    txHash,
+    incAddress,
+    time,
+    appName,
+    sellAmountText,
+    buyAmountText,
+    sellTokenID,
+    buyTokenID,
+    interPAppName,
+    interPAppNetwork,
+  });
   swapTxs = uniqueBy(swapTxs, 'txHash');
   Storage.setItem(KEY, swapTxs);
 };
