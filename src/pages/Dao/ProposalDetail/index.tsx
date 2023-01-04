@@ -44,7 +44,7 @@ const ProposalDetail = () => {
   const [proposalDetail, setProposalDetail] = useState<Proposal>();
   const [currentBlock, setCurrentBlock] = useState<any>(0);
 
-  const [selectedVote, setSelectedVote] = useState<1 | 2>(1);
+  const [selectedVote, setSelectedVote] = useState<0 | 1>(1);
 
   const [isFetchingFee, setIsFetchingFee] = useState<boolean>(false);
   const [fee, setFee] = useState<Fee>();
@@ -139,7 +139,7 @@ const ProposalDetail = () => {
     }
   };
 
-  const handleChooseVoteOption = (option: 1 | 2) => {
+  const handleChooseVoteOption = (option: 0 | 1) => {
     setSelectedVote(option);
   };
 
@@ -233,6 +233,7 @@ const ProposalDetail = () => {
         <ModalVote
           isOpen={modalConfirmVisible}
           fee={fee}
+          proposal={proposalDetail}
           amount={amount}
           onChangeAmount={handleChangeAmount}
           onCancel={() => setModalConfirmVisible(false)}
