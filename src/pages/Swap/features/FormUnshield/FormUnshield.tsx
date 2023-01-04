@@ -1,3 +1,5 @@
+import { Tooltip } from 'antd';
+import { ReactComponent as Info } from 'assets/images/info.svg';
 import SwapIcon from 'assets/svg/swap.svg';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
@@ -369,22 +371,22 @@ const FormUnshield = React.memo((props: IMergeProps) => {
         ) : exchangeSelectedData?.interSwapData?.midToken ? (
           <InterSwapMsg>
             <ThemedText.SmallLabel>
-              Cross Exchange supports users to swap using cross exchange liquidity pools seamlessly.
+              Cross Exchange enables seamless swaps of tokens across many blockchains via a stablecoin (e.g. USDT) with
+              a single click.{' '}
+              <Tooltip
+                overlayInnerStyle={{ width: '300px', borderRadius: 8 }}
+                title={
+                  <p>
+                    For example: Users can swap ETH ={'>'} XRM via USDT:
+                    <br /> &#8226; pUniswap: ETH ={'>'} USDT
+                    <br /> &#8226; pDEX: USDT ={'>'} XMR
+                  </p>
+                }
+              >
+                <Info style={{ marginRight: 4 }} />
+              </Tooltip>
+              If the swap fails for any reason, the stablecoin will be returned to your wallet.
             </ThemedText.SmallLabel>
-            {/* <Tooltip
-              overlayInnerStyle={{ width: '400px' }}
-              title={
-                <p>
-                  Example:
-                  <br /> Step 1: MATIC &gt; USDT (Uniswap Exchange)
-                  <br /> Step 2: USDT &gt; XMR (Incognito Exchange)
-                  <br /> - If the second step executes unsuccessfully you will receive USDT value corresponding to the
-                  amount of tokens you sell.
-                </p>
-              }
-            >
-              <Info style={{ marginLeft: 25 }} />
-            </Tooltip>*/}
           </InterSwapMsg>
         ) : null}
         {visibleAddress && (
