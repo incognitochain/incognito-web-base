@@ -6,6 +6,7 @@ interface IENVS {
   REACT_APP_SITE_KEY: string;
   REACT_APP_EXPLORER_SERVICE_URL: string;
   REACT_APP_API_COIN_SERVICE: string;
+  REACT_APP_API_DAO: string;
 }
 
 const defaultEnvs = {
@@ -13,6 +14,7 @@ const defaultEnvs = {
   REACT_APP_API_SERVICE: '',
   REACT_APP_EXPLORER_SERVICE_URL: '',
   REACT_APP_API_COIN_SERVICE: '',
+  REACT_APP_API_DAO: '',
 };
 
 export const getEnvs = () => {
@@ -47,3 +49,5 @@ export const SITE_KEY: string = ENVS.REACT_APP_SITE_KEY;
 export const API_SERVICE: string = ENVS.REACT_APP_API_SERVICE;
 
 export const API_COIN_SERVICE: string = ENVS.REACT_APP_API_COIN_SERVICE;
+
+export const API_DAO: string = ENVS.REACT_APP_API_DAO;
