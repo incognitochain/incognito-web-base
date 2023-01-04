@@ -228,7 +228,7 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
   const renderContent = () => {
     return (
       <div>
-        <LabelText>Snapshot Amount: {amount || 0}PRV</LabelText>
+        <LabelText>Snapshot Amount: {amount || 0} PRV</LabelText>
         <LabelText style={{ marginTop: 8 }}>
           Fee:{' '}
           {format.amountVer2({
