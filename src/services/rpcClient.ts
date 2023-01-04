@@ -1,12 +1,13 @@
 import { AxiosInstance } from 'axios';
 import { API_COIN_SERVICE, API_SERVICE } from 'config';
+import { PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import PTokenModel from 'models/model/pTokenModel';
+import { unshieldFeeBuilder } from 'models/unshield.utils';
+import { IRespEstSwap } from 'pages/Swap/features/FormUnshield/FormUnshield.inteface';
+import { SwapExchange } from 'pages/Swap/features/FormUnshield/FormUnshield.types';
+import { combineSwapTxs } from 'pages/Swap/features/SwapTxs/SwapTxs.utils';
 import { getSwapTxs, ISwapTxStorage } from 'pages/Swap/Swap.storage';
-import createAxiosInstance from 'services/axios';
-
-import { PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from '../constants';
-import { unshieldFeeBuilder } from '../models/unshield.utils';
-import { combineSwapTxs } from '../pages/Swap/features/SwapTxs/SwapTxs.utils';
+import createAxiosInstance, { CANCEL_KEY } from 'services/axios';
 
 interface ISummitEtherHash {
   hash: string;
@@ -31,6 +32,7 @@ interface ISwapFeePayload {
   fromToken: string;
   toToken: string;
   slippage: string;
+  shardIDStr: string;
 }
 
 export interface IFee {
@@ -194,16 +196,23 @@ class RpcClient {
     return unshieldFeeBuilder(mappingData);
   }
 
-  async estimateSwapFee({ network, amount, fromToken, toToken, slippage }: ISwapFeePayload): Promise<any> {
-    const data: any = await this.http.post('papps/estimateswapfee', {
+  async estimateSwapFee({
+    network,
+    amount,
+    fromToken,
+    toToken,
+    slippage,
+    shardIDStr,
+  }: ISwapFeePayload): Promise<IRespEstSwap> {
+    const data: any = await this.http.post(`papps/estimateswapfee?${CANCEL_KEY}`, {
       Network: network,
       Amount: amount,
       FromToken: fromToken,
       ToToken: toToken,
       Slippage: slippage,
+      ShardID: shardIDStr,
     });
-    const exchangeSupports = data?.Networks;
-    return exchangeSupports;
+    return data?.Networks;
   }
 
   submitUnshieldTx(payload: { txID: string; paymentAddr: string }) {
@@ -311,24 +320,90 @@ class RpcClient {
     });
   }
 
+  submitInterSwapTx({
+    txRaw,
+    txHash,
+    sellTokenID,
+    midTokenID,
+    buyTokenID,
+    amountOutRaw,
+    slippage,
+    pAppName,
+    pAppNetwork,
+    refundFeeOTA,
+    refundOTA,
+    sellTokenOTA,
+    buyTokenOTA,
+    inputAddress,
+    shardID,
+  }: {
+    txRaw: string;
+    txHash: string;
+    sellTokenID: string;
+    midTokenID: string;
+    buyTokenID: string;
+    amountOutRaw: number;
+    slippage: string;
+    pAppName: string;
+    pAppNetwork: string;
+    refundFeeOTA: string;
+    refundOTA: string;
+    sellTokenOTA: string;
+    buyTokenOTA: string;
+    inputAddress?: string;
+    shardID: number;
+  }) {
+    return this.http.post('papps/submitinterswaptx', {
+      TxHash: txHash,
+      TxRaw: txRaw,
+      FromToken: sellTokenID,
+      MidToken: midTokenID,
+      ToToken: buyTokenID,
+      FinalMinExpectedAmt: amountOutRaw,
+      Slippage: slippage,
+      PAppName: pAppName,
+      PAppNetwork: pAppNetwork,
+      OTARefundFee: refundFeeOTA,
+      OTARefund: refundOTA,
+      OTAFromToken: sellTokenOTA,
+      OTAToToken: buyTokenOTA,
+      WithdrawAddress: inputAddress,
+      ShardID: `${shardID}`,
+    });
+  }
+
   async apiGetSwapTxs() {
     const localTxs: ISwapTxStorage[] = (getSwapTxs() || []).reverse().slice(0, 20);
     if (!localTxs || localTxs.length === 0) return [];
 
-    let swapTxIDs = [];
-    swapTxIDs = localTxs.filter((tx) => tx.sellTokenID).map((tx) => tx.txHash);
-    let openseaIDs = [];
-    openseaIDs = localTxs.filter((tx) => tx.sellTokenID === undefined).map((tx) => tx.txHash);
+    // swapTxID backend swap service
+    const swapTxIDs: string[] = [];
+    const swapInterTxIDs = [];
+    for (const localTx of localTxs) {
+      const isInter = localTx?.appName === SwapExchange.INTER_SWAP;
+      if (localTx.txHash) {
+        if (isInter) {
+          swapInterTxIDs.push(localTx.txHash);
+        } else {
+          swapTxIDs.push(localTx.txHash);
+        }
+      }
+    }
 
-    const [swapTxs, openseaTxs] = await Promise.all([
+    const openseaIDs = localTxs.filter((tx) => tx.sellTokenID === undefined).map((tx) => tx.txHash);
+
+    const [swapTxs, swapInterTxs, openseaTxs] = await Promise.all([
       (await this.http.post('papps/swapstatus', {
         TxList: swapTxIDs,
+      })) || [],
+      (await this.http.post('papps/interswapstatus', {
+        TxList: swapInterTxIDs,
       })) || [],
       (await this.http.post('papps/opensea/buystatus', {
         TxList: openseaIDs,
       })) || [],
     ]);
-    return combineSwapTxs({ localTxs, swapTxs: { ...swapTxs, ...openseaTxs } });
+    return combineSwapTxs({ localTxs, swapTxs: { ...swapTxs, ...openseaTxs, ...swapInterTxs } });
   }
 
   async genDepositAddress({

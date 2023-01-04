@@ -33,5 +33,8 @@ export const Styled = styled.div<{ isMobile: boolean }>`
         padding-top: 20px;
         padding-bottom: 40px;
       }
-    `}
+      .fade-in-section {
+        margin-top: 50px;
+      }
+  `}
 `;

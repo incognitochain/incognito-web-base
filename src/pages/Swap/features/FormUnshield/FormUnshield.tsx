@@ -1,3 +1,5 @@
+import { Tooltip } from 'antd';
+import { ReactComponent as Info } from 'assets/images/info.svg';
 import SwapIcon from 'assets/svg/swap.svg';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
@@ -9,6 +11,7 @@ import { TAB_LIST } from 'components/Core/Tabs';
 import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
 import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
+import { getQueryPAppName } from 'pages/Swap/Swap.hooks';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -19,12 +22,11 @@ import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
-import { getQueryPAppName } from '../../Swap.hooks';
 import { EstReceive } from '../EstReceive';
 import { actionSetToken } from '../FormDeposit/FormDeposit.actions';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
-import enhance from './FormUnshield.enhance';
-import { FormTypes, SwapExchange } from './FormUnshield.types';
+import enhance, { IMergeProps } from './FormUnshield.enhance';
+import { FormTypes, NetworkTypePayload, SwapExchange } from './FormUnshield.types';
 
 const Styled = styled.div`
   .buy-section-style {
@@ -90,12 +92,29 @@ const WrapSwapIcon = styled.div`
 
 const ErrorMsgContainer = styled.div`
   padding: 15px 16px 15px 16px;
-  border: 1px solid #f6465d;
+  border: 1px solid ${({ theme }) => theme.content4};
   border-radius: 8px;
   margin-top: 4px;
+  div {
+    margin-top: 0 !important;
+  }
 `;
 
-const FormUnshield = React.memo((props: any) => {
+const InterSwapMsg = styled.div`
+  padding: 12px 16px;
+  background-color: ${({ theme }) => theme.primary14};
+  border-radius: 8px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  div {
+    margin-top: 0 !important;
+    color: ${({ theme }) => theme.text1};
+    width: fit-content;
+  }
+`;
+
+const FormUnshield = React.memo((props: IMergeProps) => {
   const {
     handleSubmit,
     sellToken,
@@ -159,7 +178,7 @@ const FormUnshield = React.memo((props: any) => {
   );
 
   const onTopUpCoins = () => {
-    let _sellToken = sellToken;
+    let _sellToken = sellToken as any;
     if (_sellToken.isUnified || _sellToken.isPRV) {
       if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
         _sellToken = (_sellToken.listUnifiedToken || []).find((token: any) => token.networkName === buyNetworkName);
@@ -194,32 +213,66 @@ const FormUnshield = React.memo((props: any) => {
 
   const rightLabelAddress = visibleAddress ? '- Send to' : '+ Send to';
 
+  const getTimeNumb = ({
+    appName,
+    isReShield,
+    exchangeName,
+    networkName,
+  }: {
+    appName: string;
+    isReShield: boolean;
+    exchangeName?: string;
+    networkName?: string;
+  }) => {
+    let timeNumb = 0;
+    if (appName === SwapExchange.PANCAKE_SWAP) {
+      timeNumb = isReShield ? 2 : 1;
+    } else if (
+      appName === SwapExchange.CURVE ||
+      (appName === SwapExchange.UNISWAP &&
+        ((exchangeName && exchangeName.includes(MAIN_NETWORK_NAME.POLYGON)) ||
+          (networkName && networkName.includes(NetworkTypePayload.POLYGON))))
+    ) {
+      timeNumb = isReShield ? 6 : 1;
+    } else {
+      timeNumb = isReShield ? 5 : 1;
+    }
+    return timeNumb;
+  };
+
   const getEstimateTime = () => {
-    let time = '';
+    let time = 0;
+    let timeStr = '';
     let desc = '';
     if (formType === FormTypes.UNSHIELD) {
-      time = fee.extraFee ? '6 hours' : '1 min';
+      time = fee.extraFee ? 6 : 1;
       if (fee.extraFee) {
         desc = "Due to unified tokens' nature, the unshielding could take up to 6 hours.";
       }
     } else if (exchangeSelectedData?.appName) {
       const isReShield = buyNetworkName === MAIN_NETWORK_NAME.INCOGNITO;
-      const { appName, exchangeName } = exchangeSelectedData;
-      if (appName === SwapExchange.PANCAKE_SWAP) {
-        time = isReShield ? '2 mins' : '1 min';
-      } else if (
-        appName === SwapExchange.CURVE ||
-        (appName === SwapExchange.UNISWAP && exchangeName.includes(MAIN_NETWORK_NAME.POLYGON))
-      ) {
-        time = isReShield ? '6 mins' : '1 min';
+      if (exchangeSelectedData?.interSwapData?.midOTA) {
+        const { pAppName, pAppNetwork } = exchangeSelectedData?.interSwapData;
+        time = 1 + getTimeNumb({ appName: pAppName, networkName: pAppNetwork, isReShield });
       } else {
-        time = isReShield ? '5 mins' : '1 min';
+        const { appName, exchangeName } = exchangeSelectedData;
+        time = getTimeNumb({ appName, exchangeName, isReShield });
       }
     }
-    return { time, desc };
+    if (time === 0) {
+      timeStr = '';
+    } else if (time === 1) {
+      timeStr = `${time} min`;
+    } else {
+      timeStr = `${time} mins`;
+    }
+    return {
+      timeStr,
+      desc,
+    };
   };
 
-  const { time, desc } = getEstimateTime();
+  const { timeStr, desc } = getEstimateTime();
 
   useEffect(() => {
     if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
@@ -301,11 +354,12 @@ const FormUnshield = React.memo((props: any) => {
         {!prvToken.amount && !!inputAmount && isIncognitoInstalled() && incAccount ? (
           <ErrorMsgContainer>
             <ThemedText.Error error fontWeight={400}>
-              {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network. Get
-            some from the `}
-              <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">
-                faucet
-              </a>
+              {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network.`}
+              {/*  {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network. Get*/}
+              {/*some from the `}*/}
+              {/*  <a className="link" href="https://faucet.incognito.org/" target="_blank" rel="noreferrer">*/}
+              {/*    faucet*/}
+              {/*  </a>*/}
             </ThemedText.Error>
           </ErrorMsgContainer>
         ) : !!errorMsg ? (
@@ -314,6 +368,28 @@ const FormUnshield = React.memo((props: any) => {
               {errorMsg}
             </ThemedText.Error>
           </ErrorMsgContainer>
+        ) : exchangeSelectedData?.interSwapData?.midToken ? (
+          <InterSwapMsg>
+            <ThemedText.SmallLabel>
+              <p>
+                Cross Exchange enables seamless swaps of tokens across many blockchains via a stablecoin (e.g. USDT)
+                with a single click.
+                <Tooltip
+                  overlayInnerStyle={{ width: '300px', borderRadius: 8 }}
+                  title={
+                    <p>
+                      For example: Users can swap ETH ={'>'} XRM via USDT:
+                      <br /> &#8226; pUniswap: ETH ={'>'} USDT
+                      <br /> &#8226; pDEX: USDT ={'>'} XMR
+                    </p>
+                  }
+                >
+                  <Info style={{ marginLeft: 4, position: 'absolute', cursor: 'pointer' }} />
+                </Tooltip>
+              </p>
+              <p>If the swap fails for any reason, the stablecoin will be returned to your wallet.</p>
+            </ThemedText.SmallLabel>
+          </InterSwapMsg>
         ) : null}
         {visibleAddress && (
           <Field
@@ -334,10 +410,10 @@ const FormUnshield = React.memo((props: any) => {
           buyToken={buyToken}
           sellToken={sellToken}
           rate={rate}
-          minReceiveAmount={formType === FormTypes.SWAP ? estReceiveAmount || '0' : inputAmount}
+          minReceiveAmount={formType === FormTypes.SWAP ? `${estReceiveAmount || '0'}` : inputAmount}
           networkFee={networkFeeText}
           burnFeeText={burnFeeText}
-          time={time}
+          time={timeStr}
           desc={desc}
           exchanges={exchangeSupports}
           exchangeSelected={exchangeSelected}
@@ -347,8 +423,9 @@ const FormUnshield = React.memo((props: any) => {
           swapFee={swapFee}
           isFetchingFee={isFetching}
           inputAmount={inputAmount}
-          impactAmount={exchangeSelectedData?.impactAmount}
-          errorMsg={errorMsg}
+          impactAmount={exchangeSelectedData?.impactAmount || undefined}
+          errorMsg={errorMsg || undefined}
+          interPath={exchangeSelectedData?.interSwapData?.path}
         />
         <VerticalSpace />
         {button.isConnected ? (
