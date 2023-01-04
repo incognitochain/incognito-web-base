@@ -147,7 +147,7 @@ const CreateProposal = () => {
         style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
       >
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          <BackButton />
+          <BackButton onBack={() => history.push('/vote')} />
           <HeaderTitle>Create Proposal</HeaderTitle>
         </div>
         <DescriptionContainer>
