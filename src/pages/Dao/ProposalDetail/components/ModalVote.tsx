@@ -258,7 +258,7 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
       <ModalContainer>
         <ModalHeader>
           <div />
-          <ModalTitle>Vote proposal</ModalTitle>
+          <ModalTitle>Vote proposal {proposal?.id}</ModalTitle>
           <div />
         </ModalHeader>
         <ReasonContainer>{reasons?.map((item: any, i: any) => renderReasonOption(item))}</ReasonContainer>
