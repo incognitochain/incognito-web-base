@@ -27,7 +27,7 @@ const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
 
 const AnimatedDialogContent = animated(DialogContent);
 
-const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...rest }) => (
+const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, maxWidth, ...rest }) => (
   <AnimatedDialogContent {...rest} />
 )).attrs({
   'aria-label': 'dialog',
@@ -46,7 +46,6 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...r
 
     align-self: ${({ mobile }) => (mobile ? 'flex-end' : 'center')};
 
-    max-width: 420px;
     ${({ maxHeight }) =>
       maxHeight &&
       css`
@@ -57,6 +56,14 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...r
       css`
         min-height: ${minHeight}vh;
       `}
+      ${({ maxWidth }) =>
+      maxWidth
+        ? css`
+            max-width: ${maxWidth};
+          `
+        : css`
+            max-width: 420px;
+          `}
     display: flex;
     flex-direction: column;
     border-radius: 20px;
@@ -84,6 +91,7 @@ interface ModalProps {
   closeModal: () => void;
   minHeight?: number | false;
   maxHeight?: number;
+  maxWidth?: string;
   initialFocusRef?: React.RefObject<any>;
   children?: React.ReactNode;
   modalState: SetModalProps[];
@@ -105,7 +113,7 @@ export function Modal({
   });
 
   const lastModal = last(modalState);
-  const { data: modalData, title, isTransparent, closable, isSearchTokenModal } = lastModal || {};
+  const { data: modalData, title, isTransparent, closable, isSearchTokenModal, maxWidth } = lastModal || {};
 
   const [{ y }, set] = useSpring(() => ({ y: 0, config: { mass: 1, tension: 210, friction: 20 } }));
   const bind = useGesture({
@@ -141,6 +149,7 @@ export function Modal({
                 aria-label="dialog content"
                 minHeight={minHeight}
                 maxHeight={maxHeight}
+                maxWidth={maxWidth}
                 mobile={isMobile}
               >
                 {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
@@ -165,6 +174,7 @@ interface SetModalProps {
   rightHeader?: React.ReactNode;
   isTransparent: boolean;
   closable?: boolean;
+  maxWidth?: string;
 }
 interface LoadingContextType {
   setModal: (_: SetModalProps) => void;

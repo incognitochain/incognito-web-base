@@ -55,7 +55,7 @@ const Home = () => {
               />
             </div>
             <POpenseaNFTDetailOverview contract={contract} selectedNFT={selectedNFT} />
-            <POpenseaNFTDetailBuy selectedNFT={selectedNFT} />
+            <POpenseaNFTDetailBuy contract={contract} selectedNFT={selectedNFT} />
           </div>
         </div>
         <POpenseaNFTDetailQuestions />

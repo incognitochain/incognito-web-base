@@ -2,11 +2,9 @@
 import { InputField, validator } from 'components/Core/ReduxForm';
 import React, { memo } from 'react';
 import { Field, reduxForm } from 'redux-form';
-// import { useAppDispatch } from 'state/hooks';
 import styled from 'styled-components/macro';
 
-export const FORM_NAME = 'Reciptient';
-export const FIELD_NAME = 'ReciptientAddress';
+import { FORM_BUY_POPENSEA } from '../POpenseaNFTDetail.constant';
 
 export const Styled = styled.div`
   margin-top: 8px;
@@ -20,12 +18,6 @@ export const Styled = styled.div`
 `;
 
 const ReciptientAddress = () => {
-  // const dispatch = useAppDispatch();
-
-  // React.useEffect(() => {
-  //   dispatch(change(FORM_NAME, FIELD_NAME, ''));
-  // }, []);
-
   const getAddressValidator = React.useCallback(() => {
     return validator.combinedEtherAddress;
   }, []);
@@ -40,8 +32,7 @@ const ReciptientAddress = () => {
       >
         <Field
           component={InputField}
-          name={FIELD_NAME}
-          inputType={FIELD_NAME}
+          name={FORM_BUY_POPENSEA.recipitentAddress}
           componentProps={{
             placeholder: 'Recipient Address',
           }}
@@ -57,6 +48,6 @@ const ReciptientAddress = () => {
 };
 
 export default reduxForm({
-  form: FORM_NAME,
+  form: FORM_BUY_POPENSEA.formName,
   destroyOnUnmount: false,
 })(memo(ReciptientAddress));

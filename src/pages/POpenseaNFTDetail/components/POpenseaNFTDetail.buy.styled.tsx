@@ -1,4 +1,3 @@
-import { ChevronDown } from 'react-feather';
 import styled, { DefaultTheme, keyframes } from 'styled-components/macro';
 
 export const Styled = styled.div`
@@ -80,7 +79,7 @@ export const Styled = styled.div`
     font-size: 14px;
     line-height: 140%;
     color: ${({ theme }) => theme.content4};
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
   .price-view {
@@ -105,8 +104,8 @@ export const Styled = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 35%;
-    height: 50px;
+    width: 49%;
+    height: 54px;
 
     background-color: ${({ theme }) => theme.color_blue};
     border-radius: 8px;
@@ -122,28 +121,23 @@ export const Styled = styled.div`
   }
 
   .text-buy {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 16px;
     line-height: 140%;
     text-align: center;
   }
 
-  .select-tokens-list {
-    height: 56px;
-    background: #252525;
-    border-radius: 8px;
+  .btn-offer {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
-
-    padding-left: 28px;
-    padding-right: 28px;
-    margin-left: 16px;
-    margin-top: 2px;
-
-    cursor: pointer;
+    justify-content: center;
+    width: 49%;
+    height: 54px;
     border: 1px solid ${({ theme }) => theme.border1};
+
+    background-color: transparent;
+    border-radius: 8px;
+    cursor: pointer;
 
     :hover {
       border: 1px solid ${({ theme }) => theme.border5};
@@ -155,10 +149,12 @@ export const Styled = styled.div`
     }
   }
 
-  .selected-token-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 8px;
+  .text-offer {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+    text-align: center;
+    color: ${({ theme }) => theme.color_blue};
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
@@ -170,13 +166,6 @@ export const Styled = styled.div`
           margin-top: 16px;
       }
   `}
-`;
-
-export const ArrowDown = styled(ChevronDown)<{ open?: boolean }>`
-  color: ${({ theme }) => theme.white};
-  width: 16px;
-  height: 20px;
-  margin-left: 4px;
 `;
 
 const rotate360 = keyframes`

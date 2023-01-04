@@ -1,4 +1,4 @@
-import { Dropdown } from 'antd';
+import { Dropdown, Menu } from 'antd';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled.div`
@@ -221,11 +221,47 @@ export const Styled = styled.div`
     `}
 `;
 
-export const SortSelect = styled(Dropdown)`
+export const SortDropdown = styled(Dropdown)`
   cursor: pointer;
+`;
 
-  .ant-dropdown-selection {
-    background-color: transparent;
+export const SortMenu = styled(Menu)`
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.bg3};
+  border-radius: 8px;
+  padding: 12px 6px;
+
+  .menu-item-container {
+    display: flex;
+    align-items: center;
+    height: 52px;
+    width: 100%;
+    cursor: pointer;
+    padding-left: 16px;
+
+    .menu-item-label {
+      color: ${({ theme }) => theme.text1};
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    :hover {
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+      background-color: ${({ theme }) => theme.bg4};
+
+      .menu-item-label {
+        color: ${({ theme }) => theme.primary9};
+      }
+    }
+  }
+
+  .ant-dropdown-menu-item.ant-dropdown-menu-item-only-child {
+    padding: 0px;
+    :hover {
+      background-color: transparent;
+    }
   }
 `;
 

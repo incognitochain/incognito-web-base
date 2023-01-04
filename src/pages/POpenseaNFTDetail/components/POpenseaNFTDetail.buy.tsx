@@ -5,26 +5,29 @@ import icClock from 'assets/svg/ic-clock.svg';
 import BigNumber from 'bignumber.js';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { useModal } from 'components/Modal';
-import ModalTokens from 'components/Modal/Modal.tokens';
 import { BIG_COINS } from 'constants/token';
 import { POpenseaBuyFee, POpenseaNft } from 'models/model/POpenseaNFT';
 import PToken from 'models/model/pTokenModel';
 import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { formValueSelector, isValid } from 'redux-form';
+import { formValueSelector, isValid, reduxForm } from 'redux-form';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { networkFeePOpenseaSelectors } from 'state/pOpensea';
 import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/token';
 
 import store from '../../../state';
 import { actionSetToken } from '../../Swap/features/FormDeposit/FormDeposit.actions';
+import { FORM_BUY_POPENSEA, FORM_OFFER_POPENSEA } from '../POpenseaNFTDetail.constant';
+import POpenseaSelectTokenDropdown from './DropdownSelectToken/POpenseaSelectToken.dropdown';
+import POpenseaMakeOfferModal from './ModalMakeOffer/POpenseaMakeOffer.modal';
 import { IPOpenseaNFTDetailBuyAction, POpenseaNFTDetailBuyAction } from './POpenseaNFTDetail.buy.action';
-import ReciptientAddress, { FIELD_NAME, FORM_NAME } from './POpenseaNFTDetail.buy.form';
-import { ArrowDown, Spinner, Styled } from './POpenseaNFTDetail.buy.styled';
+import ReciptientAddress from './POpenseaNFTDetail.buy.form';
+import { Spinner, Styled } from './POpenseaNFTDetail.buy.styled';
 
 interface POpenseaNFTDetailBuyProps {
   selectedNFT: POpenseaNft;
+  contract: string;
 }
 
 const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
@@ -60,9 +63,10 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     selectedToken ? selectedToken.identify : ''
   );
 
-  const formSelector = formValueSelector(FORM_NAME);
-  const isValidReciptientAddress = isValid(FORM_NAME)(store.getState());
-  const reciptientAddress = formSelector(store.getState(), FIELD_NAME);
+  const formSelector = formValueSelector(FORM_BUY_POPENSEA.formName);
+
+  const isValidForm = isValid(FORM_BUY_POPENSEA.formName)(store.getState());
+  const reciptientAddress = formSelector(store.getState(), FORM_BUY_POPENSEA.recipitentAddress);
 
   const seaportSellOrder = selectedNFT.getSeaportSellOrder();
 
@@ -82,10 +86,10 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   }, [tokens]);
 
   useEffect(() => {
-    if (isValidReciptientAddress && selectedToken) {
+    if (isValidForm && selectedToken) {
       buyActions.estimateFee(selectedToken, reciptientAddress, selectedNFT);
     }
-  }, [selectedToken, isValidReciptientAddress]);
+  }, [selectedToken, isValidForm]);
 
   const onClickBuy = async () => {
     if (!isIncognitoInstalled()) {
@@ -116,28 +120,36 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     }
   };
 
-  const onSelectToken = ({ token }: { token: PToken }) => {
-    setSelectedToken(token);
+  const onDeposit = () => {
+    clearAllModal();
+    history.push('/deposit');
+    const token: any = selectedToken?.isUnified
+      ? selectedToken.listUnifiedToken.find((token) => token.currencyType === 1)
+      : selectedToken;
+    if (token) {
+      dispatch(actionSetToken({ sellToken: token }));
+    }
   };
 
-  const showTokensList = () => {
+  const onClickOffer = () => {
+    const POpenseaMakeOffer = reduxForm({
+      form: FORM_OFFER_POPENSEA.formName,
+      destroyOnUnmount: true,
+    })(() => <POpenseaMakeOfferModal selectedNFT={selectedNFT} contract={props.contract} onDeposit={onDeposit} />);
+
     setModal({
       closable: true,
-      data: <ModalTokens tokens={tokens} onSelect={onSelectToken} showNetwork={true} />,
+      data: <POpenseaMakeOffer />,
       isTransparent: false,
       rightHeader: undefined,
-      title: 'Select a Token',
-      isSearchTokenModal: true,
+      title: 'Make an offer',
+      maxWidth: '590px',
     });
   };
 
-  const renderSelectTokenList = () => (
-    <div className="select-tokens-list" onClick={showTokensList}>
-      {selectedToken && <img className="selected-token-icon" src={selectedToken.iconUrl} />}
-      {selectedToken && <p>{selectedToken.symbol}</p>}
-      <ArrowDown />
-    </div>
-  );
+  const onSelectToken = (token: PToken) => {
+    setSelectedToken(token);
+  };
 
   const renderCurrentPrice = () =>
     seaportSellOrder && (
@@ -170,18 +182,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     <p className="current-error">
       {!isCanBuy && incAccount && 'Your balance is insufficient.'}{' '}
       {!isCanBuy && incAccount && (
-        <span
-          onClick={() => {
-            history.push('/deposit');
-            const token: any = selectedToken?.isUnified
-              ? selectedToken.listUnifiedToken.find((token) => token.currencyType === 1)
-              : selectedToken;
-            if (token) {
-              dispatch(actionSetToken({ sellToken: token }));
-            }
-          }}
-          style={{ textDecoration: 'underline', cursor: 'pointer' }}
-        >
+        <span onClick={onDeposit} style={{ textDecoration: 'underline', cursor: 'pointer' }}>
           deposit now
         </span>
       )}
@@ -198,8 +199,8 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
           </div>
           <div className="price-indicator" />
           <div className="balance-container">
-            <div>{renderUserBalance()}</div>
-            {renderSelectTokenList()}
+            {renderUserBalance()}
+            <POpenseaSelectTokenDropdown selectedToken={selectedToken} tokens={tokens} onSelectToken={onSelectToken} />
           </div>
           <ReciptientAddress />
 
@@ -211,12 +212,18 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
               {renderFee()}
               {renderError()}
             </div>
-
+          </div>
+          <div className="buy-container">
             <button className="btn-buy" onClick={!incAccount ? showPopup : onClickBuy}>
               <p className="text-buy">
                 {!incAccount ? (isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet') : 'Buy'}
               </p>
             </button>
+            {incAccount && (
+              <button className="btn-offer" onClick={onClickOffer}>
+                <p className="text-buy">{'Make offer'}</p>
+              </button>
+            )}
           </div>
         </div>
       )}

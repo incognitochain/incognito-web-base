@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { List, Menu } from 'antd';
+import { List } from 'antd';
 import ArrowDownSVG from 'assets/images/arrow-down-white.svg';
 import SearchSVG from 'assets/svg/search-icon.svg';
 import ImagePlaceholder from 'components/ImagePlaceholder';
@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { isFetchingPOpenseaNFTsSelector, pOpenseaFilterNFTsSelectors } from 'state/pOpensea';
 
 import POpenseaDetailListNFTLoader from './POpenseaDetail.listNFT.loader';
-import { SortSelect, Styled, TextInputStyled } from './POpenseaDetail.listNFT.styled';
+import { SortDropdown, SortMenu, Styled, TextInputStyled } from './POpenseaDetail.listNFT.styled';
 
 export enum SortNftType {
   PriceLowToHigh = 'Price low to high',
@@ -36,12 +36,14 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
   };
 
   const renderFilterComponent = () => {
-    const renderSortItem = (key: any, label: string) => {
+    const renderSortItem = (key: any, label: string, isLast: boolean) => {
       const typedString: keyof typeof SortNftType = key;
       return (
-        <button onClick={() => setCurrentSortType(SortNftType[typedString])}>
-          <p>{label}</p>
-        </button>
+        <div className={`menu-item-container ${!isLast && 'border-bottom'}`}>
+          <button onClick={() => setCurrentSortType(SortNftType[typedString])}>
+            <p className="menu-item-label">{label}</p>
+          </button>
+        </div>
       );
     };
 
@@ -62,13 +64,12 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
               autoFocus={false}
             />
           </div>
-          <SortSelect
+          <SortDropdown
             overlay={
-              <Menu
-                rootClassName="sort-menu"
-                items={Object.entries(SortNftType).map(([key, value]) => ({
+              <SortMenu
+                items={Object.entries(SortNftType).map(([key, value], index) => ({
                   key: value,
-                  label: renderSortItem(key, value),
+                  label: renderSortItem(key, value, index === Object.entries(SortNftType).length - 1),
                 }))}
               />
             }
@@ -77,7 +78,7 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
               <p className="sort-text">{currentSortType.toString()}</p>
               <img src={ArrowDownSVG} />
             </button>
-          </SortSelect>
+          </SortDropdown>
         </div>
       </div>
     );
