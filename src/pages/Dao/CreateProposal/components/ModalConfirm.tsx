@@ -73,9 +73,12 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmPro
 
   const getPrvBalanceToBurn = () => {
     const prvBalance: number = prvTokenInfo?.amount || 0;
-    let prvToBurn = MINIMUM_PRV_REQUIRE_TO_BURN;
+    let prvToBurn = 0;
     if (prvBalance >= minimumPRVBalanceRequire) {
       prvToBurn = (prvBalance * 90) / 100 - (fee?.feeAmount || 0) - NETWORK_FEE;
+    }
+    if (prvToBurn < MINIMUM_PRV_REQUIRE_TO_BURN) {
+      prvToBurn = MINIMUM_PRV_REQUIRE_TO_BURN;
     }
     return prvToBurn;
   };
