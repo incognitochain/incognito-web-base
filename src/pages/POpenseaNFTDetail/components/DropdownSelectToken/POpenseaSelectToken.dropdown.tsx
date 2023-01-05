@@ -49,13 +49,14 @@ const SortDropdown = styled(Dropdown)`
   cursor: pointer;
 `;
 
-const SortMenu = styled(Menu)`
+const SortMenu = styled(Menu)<{ backgroundColor?: string }>`
   cursor: pointer;
   background-color: ${({ theme }) => theme.bg3};
   border-radius: 8px;
   padding: 16px 8px;
   display: flex;
   flex-direction: column;
+  background-color: ${({ backgroundColor }) => backgroundColor};
 
   .menu-item-container {
     display: flex;
@@ -102,6 +103,7 @@ const ArrowDown = styled(ChevronDown)<{ open?: boolean }>`
 `;
 
 interface POpenseaSelectTokenDropDownProps {
+  backgroundColor?: string;
   selectedToken?: PToken;
   tokens: PToken[];
   onSelectToken: (token: PToken) => void;
@@ -139,6 +141,7 @@ const POpenseaSelectTokenDropDown = (props: POpenseaSelectTokenDropDownProps) =>
         // placement="bottomRight"
         overlay={
           <SortMenu
+            backgroundColor={props.backgroundColor}
             items={tokens.map((item) => ({
               key: item.identify,
               label: renderItem(item),

@@ -64,6 +64,7 @@ const SortMenu = styled(Menu)`
   padding: 16px 8px;
   display: flex;
   flex-direction: column;
+  background: #252525;
 
   .menu-item-container {
     display: flex;

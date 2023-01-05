@@ -39,6 +39,10 @@ export const Styled = styled.div`
     }
   }
 
+  .duration-dropdown {
+    background-color: #252525;
+  }
+
   .input-price-container {
     display: flex;
     flex-direction: row;
@@ -110,7 +114,12 @@ const ModalOfferForm = (props: ModalOfferFormProps) => {
               validate={validator.combinedAmount}
             />
           </div>
-          <POpenseaSelectTokenDropdown selectedToken={selectedToken} tokens={tokens} onSelectToken={onSelectToken} />
+          <POpenseaSelectTokenDropdown
+            backgroundColor="#252525"
+            selectedToken={selectedToken}
+            tokens={tokens}
+            onSelectToken={onSelectToken}
+          />
         </div>
         {renderError()}
       </form>

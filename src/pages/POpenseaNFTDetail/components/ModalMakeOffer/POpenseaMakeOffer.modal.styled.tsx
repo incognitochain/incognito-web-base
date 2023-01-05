@@ -156,7 +156,7 @@ export const Styled = styled.div`
           margin-bottom: 6px;
           .react-calendar {
             cursor: pointer;
-            /* background-color: ${({ theme }) => theme.bg3}; */
+            background-color: #252525;
             border-radius: 8px;
             border: none;
 
@@ -164,23 +164,13 @@ export const Styled = styled.div`
 
             .react-calendar__navigation {
               .react-calendar__navigation__arrow {
-                /* color: white; */
-
+                color: white;
                 :hover {
                   background-color: transparent;
                 }
               }
               .react-calendar__navigation button {
-                /* color: white; */
-              }
-
-              .react-calendar__viewContainer {
-                .react-calendar__month-view {
-                  .react-calendar__month-view__weekdays {
-                    /* color: white; */
-                    font-weight: 700;
-                  }
-                }
+                color: white;
               }
 
               .react-calendar__navigation__prev2-button {
@@ -190,9 +180,18 @@ export const Styled = styled.div`
               }
 
               .react-calendar__navigation__prev-button {
+                background-color: transparent !important;
+                font-size: 20px;
+                font-weight: 500;
                 :disabled {
                   opacity: 0;
                 }
+              }
+
+              .react-calendar__navigation__next-button {
+                background-color: transparent !important;
+                font-size: 20px;
+                font-weight: 500;
               }
 
               .react-calendar__navigation__next2-button {
@@ -209,27 +208,46 @@ export const Styled = styled.div`
               }
 
               .react-calendar__navigation__label__labelText {
-                /* color: white; */
+                color: white;
                 font-weight: 700;
                 font-size: 16px;
               }
             }
 
+            .react-calendar__viewContainer {
+              .react-calendar__month-view {
+                .react-calendar__month-view__weekdays {
+                  margin-bottom: 16px;
+
+                  .react-calendar__month-view__weekdays__weekday abbr {
+                    text-decoration: none !important;
+                    font-weight: 600;
+                    font-size: 14px;
+                    color: white;
+                    cursor: pointer;
+                    text-transform: capitalize;
+                  }
+                }
+              }
+            }
+
             .react-calendar__tile {
-              color: ${({ theme }) => theme.black};
-              font-weight: 500;
+              color: white;
+              font-weight: 400;
               font-size: 14px;
               height: 44px;
 
               :hover {
                 border-radius: 8px;
-                background-color: ${({ theme }) => theme.white};
+                /* background-color: ${({ theme }) => theme.white};
+                box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); */
                 box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+                background-color: ${({ theme }) => theme.bg4};
               }
             }
 
             .react-calendar__tile:disabled {
-              color: #a0a1a3 !important;
+              color: ${({ theme }) => theme.color_grey4} !important;
               background-color: transparent;
               font-weight: 400;
               font-size: 13px;
@@ -247,6 +265,13 @@ export const Styled = styled.div`
             .react-calendar__tile--active {
               background-color: ${({ theme }) => theme.primary10};
               border-radius: 8px;
+              font-weight: 700;
+              color: ${({ theme }) => theme.black};
+
+              :hover {
+                background-color: ${({ theme }) => theme.primary10};
+                box-shadow: none;
+              }
             }
           }
         }
@@ -255,7 +280,7 @@ export const Styled = styled.div`
           box-sizing: none;
           border: none;
           width: 100%;
-          padding-left: 8px;
+          padding-left: 16px;
           padding-right: 16px;
           .react-datetime-picker__inputGroup {
             display: flex;
@@ -287,11 +312,10 @@ export const Styled = styled.div`
 
             .react-datetime-picker__inputGroup__hour {
               width: 20px !important;
-              text-align: right;
             }
 
             .react-datetime-picker__inputGroup__minute {
-              width: 20px !important;
+              width: 19px !important;
             }
           }
         }
