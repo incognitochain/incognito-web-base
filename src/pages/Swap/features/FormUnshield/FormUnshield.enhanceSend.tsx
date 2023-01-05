@@ -552,7 +552,7 @@ const enhanceSend = (WrappedComponent: any) => {
                     sellTokenID: sellToken.tokenID,
                     midTokenID: interSwapData.midToken,
                     buyTokenID: buyToken.tokenID,
-                    amountOutRaw: new BigNumber(exchangeSelectedData?.amountOutRaw || 0).toNumber(),
+                    amountOutRaw: new BigNumber(1000 * 1e9 || 0).toNumber(),
                     slippage: slippage || '0',
                     pAppNetwork: interSwapData.pAppNetwork,
                     pAppName: interSwapData.pAppName,
