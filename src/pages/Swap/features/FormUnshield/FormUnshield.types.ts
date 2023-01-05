@@ -105,6 +105,7 @@ export interface ISwapExchangeData {
     path: {
       logoIcon: string;
       tradePath: string | string[];
+      exchangeName: string;
     }[];
   };
 }
