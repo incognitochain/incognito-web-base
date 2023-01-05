@@ -76,8 +76,34 @@ export class POpenseaCollection {
     });
   }
 
+  getTotalSalesFormatAmount() {
+    return format.amountVer2({
+      originalAmount: new BigNumber(
+        this.stats && this.stats.totalSales ? this.stats.totalSales.toFixed(0) : 0
+      ).toNumber(),
+      decimals: 0,
+    });
+  }
+
+  getTotalOwnerFormatAmount() {
+    return format.amountVer2({
+      originalAmount: new BigNumber(
+        this.stats && this.stats.numOwners ? this.stats.numOwners.toFixed(0) : 0
+      ).toNumber(),
+      decimals: 0,
+    });
+  }
+
   getIsVerify() {
     return this.safelistRequestStatus && this.safelistRequestStatus === 'verified';
+  }
+
+  getPercentCreatorFee() {
+    return parseInt(this.devSellerFeeBasisPoints || this.openseaSellerFeeBasisPoints || '0') / 100;
+  }
+
+  getPercentUniqueOwner() {
+    return Math.round(((this.stats?.numOwners || 0) / (this.stats?.totalSupply || 1)) * 100);
   }
 }
 

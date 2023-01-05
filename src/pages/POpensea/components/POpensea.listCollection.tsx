@@ -254,24 +254,32 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       align: 'center',
       showSorterTooltip: false,
       render: (text, record, index) => {
-        const isPositive = record.stats && record.stats.oneDayDifference && record.stats.oneDayDifference > 0;
-        return (
-          <p
-            key={index.toString()}
-            className="baseText"
-            style={{
-              color:
-                record.stats && record.stats.oneDayDifference
-                  ? record.stats.oneDayDifference > 0
-                    ? '#0ECB81'
-                    : '#FD4040'
-                  : 'gray',
-            }}
-          >
-            {isPositive && '+'}
-            {(record.stats?.oneDayDifference || 0).toFixed(0)}%
-          </p>
-        );
+        if (record.stats && record.stats.oneDayDifference) {
+          const isPositive = record.stats && record.stats.oneDayDifference && record.stats.oneDayDifference > 0;
+          return (
+            <p
+              key={index.toString()}
+              className="baseText"
+              style={{
+                color:
+                  record.stats && record.stats.oneDayDifference
+                    ? record.stats.oneDayDifference > 0
+                      ? '#0ECB81'
+                      : '#FD4040'
+                    : 'gray',
+              }}
+            >
+              {isPositive && '+'}
+              {(record.stats?.oneDayDifference || 0).toFixed(0)}%
+            </p>
+          );
+        } else {
+          return (
+            <p key={index.toString()} className="baseText">
+              -
+            </p>
+          );
+        }
       },
       sorter: (a, b) => (a.stats?.oneDayDifference || 0) - (b.stats?.oneDayDifference || 0),
       // eslint-disable-next-line react/prop-types
@@ -338,7 +346,7 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
       showSorterTooltip: false,
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText">
-          {record.stats?.totalSales}
+          {record.getTotalSalesFormatAmount()}
         </p>
       ),
       sorter: (a, b) => (a.stats?.totalSales || 0) - (b.stats?.totalSales || 0),

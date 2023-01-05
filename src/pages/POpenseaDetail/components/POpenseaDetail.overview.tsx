@@ -193,28 +193,20 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
           <ImagePlaceholder className="avatar" rootClassName="root-avatar" src={collection.imageUrl} />
           <div className="container-collection-name">
             <p className="collection-name">{collection.name}</p>
-            {collection.getIsVerify() && <img className="collection-verify" src={icVerify} />}
+            {collection.getIsVerify() && <img alt="" className="collection-verify" src={icVerify} />}
           </div>
         </div>
         <div className="info-container">
           {renderTitleItem('Items', `${total}`)}
           {renderTitleItem('Created', collection.getCreatedDateWith('ll'))}
-          {collection &&
-            renderTitleItem(
-              'Creator fee',
-              `${parseInt(collection.devSellerFeeBasisPoints || collection.openseaSellerFeeBasisPoints || '0') / 100}%`
-            )}
+          {collection && renderTitleItem('Creator fee', `${collection.getPercentCreatorFee()}%`)}
           {renderTitleItem('Chain', 'Etherum')}
         </div>
         <div className="volumn-container">
-          {stats && renderVolumnItem(`${collection?.getTotalVolumnFormatAmount()} ETH`, 'total volume')}
+          {collection && renderVolumnItem(`${collection.getTotalVolumnFormatAmount()} ETH`, 'total volume')}
           {stats && renderVolumnItem(`${stats?.floorPrice?.toFixed(3)} ETH`, 'floor price')}
-          {stats && renderVolumnItem(`${stats?.numOwners}`, 'owners')}
-          {stats &&
-            renderVolumnItem(
-              `${Math.round(((stats.numOwners || 0) / (stats.totalSupply || 1)) * 100)}%`,
-              'unique owners'
-            )}
+          {collection && renderVolumnItem(`${collection.getTotalOwnerFormatAmount()}`, 'owners')}
+          {collection && renderVolumnItem(`${collection.getPercentUniqueOwner()}%`, 'unique owners')}
         </div>
       </div>
     </Styled>
