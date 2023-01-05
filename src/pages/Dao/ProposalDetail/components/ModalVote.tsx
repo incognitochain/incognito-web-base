@@ -129,11 +129,11 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
   const reasons: any = [
     {
       id: 1,
-      title: `Cast ${proposal?.startBlock} vote for Prop ${proposal?.id}`,
+      title: `Vote for Prop ${proposal?.id}`,
     },
     {
       id: 0,
-      title: `Cast ${proposal?.startBlock} vote against Prop ${proposal?.id}`,
+      title: `Vote against Prop ${proposal?.id}`,
     },
   ];
 
@@ -175,7 +175,7 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
       decimals: PRV.pDecimals,
       round: false,
     });
-    const minOriginalAmount = MINIMUM_PRV_REQUIRE_TO_BURN;
+    const minOriginalAmount = 1e9;
 
     const bn = new BigNumber(amount);
     if (bn.isNaN()) {
@@ -188,14 +188,11 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
     if (originalAmount < minOriginalAmount) {
       return {
         isValidate: false,
-        errorMessage: 'Please enter at least 10 PRV',
+        errorMessage: 'Amount must be larger than 0.000000001 PRV',
       };
     }
 
-    if (
-      originalAmount >= MINIMUM_PRV_REQUIRE_TO_BURN &&
-      originalAmount < prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE
-    ) {
+    if (originalAmount >= minOriginalAmount && originalAmount < prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE) {
       return {
         isValidate: true,
         errorMessage: '',
@@ -231,7 +228,7 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
     return (
       <div>
         <LabelText>Snapshot Amount: {amount || 0} PRV</LabelText>
-        <LabelText style={{ marginTop: 8 }}>
+        <LabelText>
           Fee:{' '}
           {format.amountVer2({
             originalAmount: Number(fee?.feeAmount || 0),
