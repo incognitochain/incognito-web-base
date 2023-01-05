@@ -8,6 +8,7 @@ import logger from 'redux-logger';
 
 import { isMainnet } from '../config';
 import application from './application/reducer';
+import dao from './dao';
 import { updateVersion } from './global/actions';
 import incognitoWallet from './incognitoWallet/incognitoWallet.reducer';
 import lists from './lists/reducer';
@@ -35,6 +36,7 @@ const store = configureStore({
     logs,
     token,
     pool,
+    dao,
     [routingApi.reducerPath]: routingApi.reducer,
     tabs,
     form,
