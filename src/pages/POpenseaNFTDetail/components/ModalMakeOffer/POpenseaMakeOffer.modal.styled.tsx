@@ -217,13 +217,14 @@ export const Styled = styled.div`
             .react-calendar__viewContainer {
               .react-calendar__month-view {
                 .react-calendar__month-view__weekdays {
+                  margin-top: 8px;
                   margin-bottom: 16px;
 
                   .react-calendar__month-view__weekdays__weekday abbr {
                     text-decoration: none !important;
                     font-weight: 600;
                     font-size: 14px;
-                    color: white;
+                    color: ${({ theme }) => theme.primary11};
                     cursor: pointer;
                     text-transform: capitalize;
                   }
@@ -232,7 +233,7 @@ export const Styled = styled.div`
             }
 
             .react-calendar__tile {
-              color: white;
+              color: ${({ theme }) => theme.primary10};
               font-weight: 400;
               font-size: 14px;
               height: 44px;
@@ -312,10 +313,12 @@ export const Styled = styled.div`
 
             .react-datetime-picker__inputGroup__hour {
               width: 20px !important;
+              margin-left: 16px;
             }
 
             .react-datetime-picker__inputGroup__minute {
               width: 19px !important;
+              margin-right: -10px;
             }
           }
         }
