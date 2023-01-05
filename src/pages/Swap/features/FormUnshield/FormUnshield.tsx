@@ -1,5 +1,3 @@
-import { Tooltip } from 'antd';
-import { ReactComponent as Info } from 'assets/images/info.svg';
 import SwapIcon from 'assets/svg/swap.svg';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
@@ -18,11 +16,12 @@ import { useHistory } from 'react-router-dom';
 import { Field } from 'redux-form';
 import { useAppSelector } from 'state/hooks';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
-import { getPrivacyDataByTokenIDSelector } from 'state/token';
+import { getPrivacyDataByTokenIDSelector, unshieldableTokens } from 'state/token';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
 
 import { EstReceive } from '../EstReceive';
+import { getTradePath } from '../EstReceive/EstReceive';
 import { actionSetToken } from '../FormDeposit/FormDeposit.actions';
 import { actionSetExchangeSelected } from './FormUnshield.actions';
 import enhance, { IMergeProps } from './FormUnshield.enhance';
@@ -101,8 +100,8 @@ const ErrorMsgContainer = styled.div`
 `;
 
 const InterSwapMsg = styled.div`
-  padding: 12px 16px;
-  background-color: ${({ theme }) => theme.primary14};
+  padding: 12px 0;
+  //background-color: ${({ theme }) => theme.primary14};
   border-radius: 8px;
   margin-top: 4px;
   display: flex;
@@ -111,6 +110,8 @@ const InterSwapMsg = styled.div`
     margin-top: 0 !important;
     color: ${({ theme }) => theme.text1};
     width: fit-content;
+    line-height: 140%;
+    opacity: 0.9;
   }
 `;
 
@@ -160,6 +161,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
   const { isIncognitoInstalled } = useIncognitoWallet();
   const incAccount = useAppSelector(incognitoWalletAccountSelector);
   const history = useHistory();
+  const tokens = useAppSelector(unshieldableTokens);
 
   const { showPopup } = useIncognitoWallet();
   const [changing, setChanging] = React.useState(false);
@@ -274,6 +276,37 @@ const FormUnshield = React.memo((props: IMergeProps) => {
 
   const { timeStr, desc } = getEstimateTime();
 
+  const renderInterSwapMsg = () => {
+    const { interSwapData } = exchangeSelectedData;
+    if (!interSwapData || !interSwapData.midToken || interSwapData.path.length < 2) return null;
+    const path1 = interSwapData?.path[0];
+    const path2 = interSwapData?.path[1];
+    return (
+      <ThemedText.SmallLabel>
+        The swap is performed among liquidity pools (
+        {typeof path1.tradePath === 'string' ? path1.tradePath : getTradePath(path1.tradePath, tokens)}
+        {` `}
+        with {path1.exchangeName} then{' '}
+        {typeof path2.tradePath === 'string' ? path2.tradePath : getTradePath(path2.tradePath, tokens)} with{' '}
+        {path2.exchangeName}).
+        <br />
+        USDT will be returned to your wallet if the swap fails for any reason.
+        {/*<Tooltip*/}
+        {/*  overlayInnerStyle={{ width: '300px', borderRadius: 8 }}*/}
+        {/*  title={*/}
+        {/*    <p>*/}
+        {/*      For example: Users can swap ETH ={'>'} XRM via USDT:*/}
+        {/*      <br /> &#8226; pUniswap: ETH ={'>'} USDT*/}
+        {/*      <br /> &#8226; pDEX: USDT ={'>'} XMR*/}
+        {/*    </p>*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  <Info style={{ marginLeft: 4, position: 'absolute', cursor: 'pointer' }} />*/}
+        {/*</Tooltip>*/}
+      </ThemedText.SmallLabel>
+    );
+  };
+
   useEffect(() => {
     if (buyNetworkName !== MAIN_NETWORK_NAME.INCOGNITO) {
       setVisibleAddress(true);
@@ -370,25 +403,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           </ErrorMsgContainer>
         ) : exchangeSelectedData?.interSwapData?.midToken ? (
           <InterSwapMsg>
-            <ThemedText.SmallLabel>
-              <p>
-                Cross Exchange enables seamless swaps of tokens across many blockchains via a stablecoin (e.g. USDT)
-                with a single click.
-                <Tooltip
-                  overlayInnerStyle={{ width: '300px', borderRadius: 8 }}
-                  title={
-                    <p>
-                      For example: Users can swap ETH ={'>'} XRM via USDT:
-                      <br /> &#8226; pUniswap: ETH ={'>'} USDT
-                      <br /> &#8226; pDEX: USDT ={'>'} XMR
-                    </p>
-                  }
-                >
-                  <Info style={{ marginLeft: 4, position: 'absolute', cursor: 'pointer' }} />
-                </Tooltip>
-              </p>
-              <p>If the swap fails for any reason, the stablecoin will be returned to your wallet.</p>
-            </ThemedText.SmallLabel>
+            <ThemedText.SmallLabel>{renderInterSwapMsg()}</ThemedText.SmallLabel>
           </InterSwapMsg>
         ) : null}
         {visibleAddress && (
