@@ -159,6 +159,7 @@ export const Styled = styled.div`
             background-color: #252525;
             border-radius: 8px;
             border: none;
+            padding: 8px 16px;
 
             box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
 
@@ -233,10 +234,12 @@ export const Styled = styled.div`
             }
 
             .react-calendar__tile {
-              color: ${({ theme }) => theme.primary10};
+              /* color: ${({ theme }) => theme.primary10}; */
+              color: white;
               font-weight: 400;
               font-size: 14px;
               height: 44px;
+              margin-bottom: 8px;
 
               :hover {
                 border-radius: 8px;
@@ -252,6 +255,9 @@ export const Styled = styled.div`
               background-color: transparent;
               font-weight: 400;
               font-size: 13px;
+              font-family: 'Inter';
+              font-style: normal;
+              cursor: not-allowed;
 
               :hover {
                 background-color: transparent;
@@ -314,11 +320,12 @@ export const Styled = styled.div`
             .react-datetime-picker__inputGroup__hour {
               width: 20px !important;
               margin-left: 16px;
+              text-align: right;
             }
 
             .react-datetime-picker__inputGroup__minute {
               width: 19px !important;
-              margin-right: -10px;
+              margin-right: -4px;
             }
           }
         }

@@ -67,7 +67,7 @@ const Home = () => {
               children: (
                 <div>
                   <div className="input-container">
-                    <img className="search-ic" src={SearchSVG} />
+                    <img alt="search" className="search-ic" src={SearchSVG} />
                     <TextInputStyled
                       placeholder={'Search collections'}
                       type={'text'}
@@ -84,17 +84,6 @@ const Home = () => {
                 </div>
               ),
             },
-            // {
-            //   label: renderLabel('2', 'Top'),
-            //   key: '2',
-            //   children: (
-            //     <POpenseaListCollection
-            //       isFetching={isFetching}
-            //       collections={collections}
-            //       onClickItem={onClickCollectionItem}
-            //     />
-            //   ),
-            // },
           ]}
         />
       </WrapperContent>

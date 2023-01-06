@@ -15,6 +15,9 @@ export const Styled = styled.div`
     border-radius: 16px;
     margin-top: 14px;
     cursor: pointer;
+    :hover {
+      transform: scale(1.05);
+    }
   }
 
   .item-img {

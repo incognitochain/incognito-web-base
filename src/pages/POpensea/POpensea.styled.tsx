@@ -121,7 +121,7 @@ export const Styled = styled.div`
     display: flex;
     position: absolute;
     right: 0px;
-    top: -86px;
+    top: -84px;
     height: 50px;
     border-radius: 8px;
     border-width: 1px;
@@ -156,6 +156,12 @@ export const Styled = styled.div`
     margin-right: 16px;
     margin-top: 17px;
   }
+
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+      .input-container {
+        width: 220px;
+      }
+  `}
 `;
 
 export const WrapperContent = styled.div`

@@ -11,7 +11,6 @@ export interface IPOpenseaReducer {
   collections: POpenseaCollection[];
   selectedCollection?: POpenseaCollection;
   nfts: POpenseaNft[];
-  filterNfts: POpenseaNft[];
   seletedNFT?: POpenseaNft;
   networkFee: number;
 }
@@ -22,7 +21,6 @@ const initialState: IPOpenseaReducer = {
   collections: [],
   selectedCollection: undefined,
   nfts: [],
-  filterNfts: [],
   seletedNFT: undefined,
   networkFee: ACCOUNT_CONSTANT.MAX_FEE_PER_TX,
 };

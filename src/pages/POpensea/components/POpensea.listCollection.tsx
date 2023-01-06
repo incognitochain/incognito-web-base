@@ -421,23 +421,20 @@ const POpenseaListCollection = (props: POpenseaListCollectionProps) => {
 
   return (
     <Styled>
-      {isFetching && collections.length <= 0 ? (
-        <POpenseaListCollectionLoader />
-      ) : (
-        <Table
-          columns={columns}
-          dataSource={collections}
-          size="large"
-          // loading={isFetching && collections.length === 0}
-          pagination={false}
-          rowClassName="tableRow"
-          onRow={(collection) => ({
-            onClick: () => {
-              onClickItem(collection);
-            },
-          })}
-        />
-      )}
+      {isFetching && collections.length <= 0 && <POpenseaListCollectionLoader />}
+      <Table
+        style={{ opacity: isFetching && collections.length <= 0 ? 0 : 1 }}
+        columns={columns}
+        dataSource={collections}
+        size="large"
+        pagination={false}
+        rowClassName="tableRow"
+        onRow={(collection) => ({
+          onClick: () => {
+            onClickItem(collection);
+          },
+        })}
+      />
     </Styled>
   );
 };

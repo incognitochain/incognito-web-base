@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import styled from 'styled-components/macro';
+import styled, { DefaultTheme } from 'styled-components/macro';
 
 const Styled = styled.div`
   margin-bottom: 24px;
@@ -23,6 +23,26 @@ const Styled = styled.div`
       }
     }
   }
+
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
+      .titleView {
+        .title-container {
+          .description-custom {
+            width: 80%;
+          }
+        }
+      }
+  `}
+
+  ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+      .titleView {
+        .title-container {
+          .description-custom {
+            width: 96%;
+          }
+        }
+      }
+  `}
 `;
 
 const POpenseaInfo = () => {

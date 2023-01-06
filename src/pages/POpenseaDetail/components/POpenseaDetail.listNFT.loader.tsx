@@ -8,7 +8,7 @@ const POpenseaDetailListNFTLoader = ({ repeat = 10 }: { repeat?: number }) => (
     {[...Array(repeat).keys()].map((index) => (
       <ContentLoader
         key={index.toString()}
-        style={{ marginTop: '32px' }}
+        style={{ marginTop: index === 0 ? '8px' : '32px' }}
         height={390}
         width={1400}
         speed={1}

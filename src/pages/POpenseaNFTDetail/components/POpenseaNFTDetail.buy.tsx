@@ -43,6 +43,8 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const [loadingFee, setLoadingFee] = useState<boolean>(false);
   const [isCanBuy, setIsCanBuy] = useState<boolean>(true);
 
+  const canMakeOffer = false; // Wait for api
+
   const buyActions: IPOpenseaNFTDetailBuyAction = new POpenseaNFTDetailBuyAction({
     component: {
       setBuyFee,
@@ -212,19 +214,28 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
               {renderFee()}
               {renderError()}
             </div>
-          </div>
-          <div className="buy-container">
-            <button className="btn-buy" onClick={!incAccount ? showPopup : onClickBuy}>
-              <p className="text-buy">
-                {!incAccount ? (isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet') : 'Buy'}
-              </p>
-            </button>
-            {incAccount && (
-              <button className="btn-offer" onClick={onClickOffer}>
-                <p className="text-buy">{'Make offer'}</p>
+            {!canMakeOffer && (
+              <button className="btn-buy" onClick={!incAccount ? showPopup : onClickBuy}>
+                <p className="text-buy">
+                  {!incAccount ? (isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet') : 'Buy'}
+                </p>
               </button>
             )}
           </div>
+          {canMakeOffer && (
+            <div className="buy-container">
+              <button className="btn-buy" onClick={!incAccount ? showPopup : onClickBuy}>
+                <p className="text-buy">
+                  {!incAccount ? (isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet') : 'Buy'}
+                </p>
+              </button>
+              {incAccount && (
+                <button className="btn-offer" onClick={onClickOffer}>
+                  <p className="text-buy">{'Make offer'}</p>
+                </button>
+              )}
+            </div>
+          )}
         </div>
       )}
     </Styled>

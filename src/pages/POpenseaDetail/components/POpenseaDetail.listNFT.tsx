@@ -86,46 +86,43 @@ const POpenseaDetailListNFT = (props: POpenseaDetailListNFTProps) => {
   return (
     <Styled>
       {renderFilterComponent()}
-      {isFetching ? (
-        <POpenseaDetailListNFTLoader />
-      ) : (
-        <List
-          className="list"
-          grid={{
-            gutter: 30,
-            xs: 1,
-            sm: 2,
-            md: 2,
-            lg: 3,
-            xl: 4,
-            xxl: 4,
-          }}
-          dataSource={nfts}
-          renderItem={(item: POpenseaNft, index: number) => {
-            const seaportSellOrder = item.getSeaportSellOrder();
-            const lastSale = item.lastSale;
-            return (
-              <List.Item key={index.toString()} onClick={() => props.onClickNFTItem(item)}>
-                <div className="card">
-                  <ImagePlaceholder className="item-img" src={item.getImageUrl(256)} animationUrl={item.animationUrl} />
-                  <div className="item-info">
-                    <div className="item-name-container">
-                      <p className="item-name">{item.getOriginalName()}</p>
-                    </div>
-                    {seaportSellOrder && (
-                      <p className="item-price">
-                        {seaportSellOrder.getPricingFormatAmount(18)}
-                        {' ETH'}
-                      </p>
-                    )}
-                    <p className="item-last-sale">{lastSale?.getLastSaleStr()}</p>
+      <List
+        className="list"
+        grid={{
+          gutter: 30,
+          xs: 1,
+          sm: 2,
+          md: 2,
+          lg: 3,
+          xl: 4,
+          xxl: 4,
+        }}
+        dataSource={nfts}
+        header={isFetching ? <POpenseaDetailListNFTLoader /> : null}
+        renderItem={(item: POpenseaNft, index: number) => {
+          const seaportSellOrder = item.getSeaportSellOrder();
+          const lastSale = item.lastSale;
+          return (
+            <List.Item key={index.toString()} onClick={() => props.onClickNFTItem(item)}>
+              <div className="card">
+                <ImagePlaceholder className="item-img" src={item.getImageUrl(256)} animationUrl={item.animationUrl} />
+                <div className="item-info">
+                  <div className="item-name-container">
+                    <p className="item-name">{item.getOriginalName()}</p>
                   </div>
+                  {seaportSellOrder && (
+                    <p className="item-price">
+                      {seaportSellOrder.getPricingFormatAmount(18)}
+                      {' ETH'}
+                    </p>
+                  )}
+                  <p className="item-last-sale">{lastSale?.getLastSaleStr()}</p>
                 </div>
-              </List.Item>
-            );
-          }}
-        />
-      )}
+              </div>
+            </List.Item>
+          );
+        }}
+      />
     </Styled>
   );
 };
