@@ -62,7 +62,10 @@ const getProposals = () => {
   return async (dispatch: Dispatch<any>): Promise<any> => {
     try {
       dispatch(getProposalsRequest());
-      const proposalsResponse: ProposalAPIResponse[] = await fetchProposals();
+      let proposalsResponse: ProposalAPIResponse[] = await fetchProposals();
+      proposalsResponse = proposalsResponse?.filter(
+        (proposal: ProposalAPIResponse) => proposal?.Status !== ProposalStatusBackEnd.submit_failed
+      );
       const promises = proposalsResponse.map(async (proposal) => {
         const proposalStatusBackend: ProposalStatusBackEnd = proposal?.Status;
         let proposalInfoViaChain: any = {};
@@ -76,8 +79,6 @@ const getProposals = () => {
             parseInt(proposalInfoViaChain?.againstVotes?.toString() ?? '0') +
             parseInt(proposalInfoViaChain?.forVotes?.toString() ?? '0') +
             parseInt(proposalInfoViaChain?.abstainVotes?.toString() ?? '0');
-        } else if (proposalStatusBackend === ProposalStatusBackEnd.submit_failed) {
-          proposalStatusViaChain = ProposalStatus.CANCELLED;
         } else {
           proposalStatusViaChain = null;
         }
@@ -123,8 +124,6 @@ const getProposalDetail = (proposalId: any, callback?: (data: any) => void) => {
           parseInt(proposalViaChainInfo?.againstVotes?.toString() ?? '0') +
           parseInt(proposalViaChainInfo?.forVotes?.toString() ?? '0') +
           parseInt(proposalViaChainInfo?.abstainVotes?.toString() ?? '0');
-      } else if (proposalStatusBackEnd === ProposalStatusBackEnd.submit_failed) {
-        proposalStatusViaChain = ProposalStatus.CANCELLED;
       } else {
         proposalStatusViaChain = null;
       }

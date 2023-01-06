@@ -22,6 +22,26 @@ const Label = styled.p`
   color: ${({ theme }) => theme.text2};
 `;
 
+const LeftItemContainer = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const ProposalIdContainer = styled.div`
+  width: 80px;
+  justify-content: center;
+`;
+
+const TextId = styled.p`
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 140%;
+  color: #757575;
+  text-align: left;
+`;
+
 const AVERAGE_BLOCK_TIME_IN_SECS = 12;
 
 const getCountdownCopy = (proposal: Proposal, currentBlock?: number) => {
@@ -67,7 +87,7 @@ const ProposalContainer = styled.div`
 `;
 
 const ProposalTitle = styled.span`
-  width: 80%;
+  flex: 1;
   font-weight: 500;
   font-size: 18px;
   line-height: 140%;
@@ -86,7 +106,13 @@ const ProposalItem = (props: ProposalItemProps) => {
 
   return (
     <ProposalContainer onClick={goToDetail}>
-      <ProposalTitle>{title}</ProposalTitle>
+      <LeftItemContainer>
+        <ProposalIdContainer>
+          <TextId>{id}</TextId>
+        </ProposalIdContainer>
+        <ProposalTitle>{title}</ProposalTitle>
+      </LeftItemContainer>
+
       {/* {getCountdownCopy(props?.proposal, 10)} */}
       <div>
         <ProposalStatusBox status={status} />
@@ -98,9 +124,11 @@ const ProposalItem = (props: ProposalItemProps) => {
 export const ProposalItemLoading = () => {
   return (
     <ProposalContainer>
-      <ProposalTitle>
-        <Skeleton.Input active={true} size={'small'} />
-      </ProposalTitle>
+      <LeftItemContainer>
+        <ProposalTitle>
+          <Skeleton.Input active={true} size={'small'} />
+        </ProposalTitle>
+      </LeftItemContainer>
       <Skeleton.Input active={true} size={'small'} />
       <div>
         <Skeleton.Button active={true} size={'small'} />
