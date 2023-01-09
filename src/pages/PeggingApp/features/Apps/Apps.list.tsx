@@ -1,4 +1,5 @@
 import avveImg from 'assets/images/avve-logo.png';
+import blurImg from 'assets/images/blur-icon.png';
 import cakeImg from 'assets/images/cake-icon.png';
 import curveImg from 'assets/images/curve-icon.png';
 import incImg from 'assets/images/inc_logo.svg';
@@ -12,6 +13,7 @@ import uniImg from 'assets/images/uni-icon.png';
 import unknowImg from 'assets/images/unknow-icon.png';
 import voteImg from 'assets/images/vote.svg';
 import { MAIN_NETWORK_NAME } from 'constants/token';
+import { BlurCollectionsRoute } from 'pages/Blur';
 import { SELECTION_NETWORKS } from 'pages/Swap/features/FormUnshield/FormUnshield.constants';
 import { SwapExchange } from 'pages/Swap/features/FormUnshield/FormUnshield.types';
 import React from 'react';
@@ -54,6 +56,18 @@ const Factory: IFactory[] = [
     metric: METRIC_TYPE.PAPP_PANCAKE,
     metricUniq: METRIC_UNIQ.PAPP_PANCAKE_UNIQ,
     network: [MAIN_NETWORK_NAME.INCOGNITO],
+  },
+  {
+    img: blurImg,
+    name: 'pBlur',
+    nameDesc: 'Private Blur',
+    status: 'SHIPPED',
+    chain: ['Ethereum', 'Marketplace', 'NFT'],
+    desc: 'Purchase NFTs and crypto collectibles on the largest web3 marketplace - Blur - with full privacy on Incognito.',
+    metric: METRIC_TYPE.PAPP_OPENSEA,
+    metricUniq: METRIC_UNIQ.PAPP_OPENSEA_UNIQ,
+    network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],
+    route: BlurCollectionsRoute.path,
   },
   {
     img: openseaImg,

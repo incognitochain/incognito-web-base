@@ -1,5 +1,7 @@
 import { Row } from 'antd';
 import Loader from 'components/Core/Loader';
+import Blur, { appName as blurAppName } from 'pages/Blur';
+import POpensea from 'pages/POpensea';
 import { FormUnshield } from 'pages/Swap/features/FormUnshield';
 import enhance from 'pages/Swap/Swap.enhance';
 import { getQueryPAppName } from 'pages/Swap/Swap.hooks';
@@ -7,7 +9,6 @@ import React from 'react';
 import { useAppSelector } from 'state/hooks';
 import { isFetchingSelectors as isFetchingTokenSelector } from 'state/token';
 
-import POpensea from '../../../POpensea';
 import { capitalizeFirstLetter } from '../ItemDetail/ItemDetail';
 import { getExchangeLogo } from '../Selection/SelectSwapExchange';
 import { Container, Content } from './SwapExchange.styled';
@@ -20,6 +21,10 @@ const SwapExchange = (props: any) => {
 
   if (name === 'popensea') {
     return <POpensea />;
+  }
+
+  if (name === blurAppName) {
+    return <Blur />;
   }
 
   const renderForm = () => {

@@ -9,6 +9,7 @@ import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWa
 import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
+import { BlurCollectionsRoute } from 'pages/Blur';
 import React, { Suspense, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Route, Switch, useHistory } from 'react-router-dom';
@@ -121,6 +122,7 @@ const App = () => {
         <Route exact path="/papps/popensea/detail/:contract/:tokenId" component={POpenseaNFTDetail} />
         <Route exact path="/buy-node" component={BuyNode} />
         <Route exact path="/deposit" component={DepositPage} />
+        <Route exact path={BlurCollectionsRoute.path} component={BlurCollectionsRoute.component} />
         {!isMobile && (
           <>
             <Route exact path="/vote" component={Governance} />
