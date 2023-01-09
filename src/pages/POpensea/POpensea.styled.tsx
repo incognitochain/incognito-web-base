@@ -117,50 +117,77 @@ export const Styled = styled.div`
     `}
   }
 
-  .input-container {
+  .search-container {
     display: flex;
     position: absolute;
     right: 0px;
     top: -84px;
-    height: 50px;
-    border-radius: 8px;
-    border-width: 1px;
-    padding-left: 16px;
-    padding-right: 50px;
-    background-color: ${({ theme }) => theme.bg3};
-    caret-color: ${({ theme }) => theme.primary5};
 
-    :hover {
-      border: 1px solid ${({ theme }) => theme.border5};
+    .history-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-right: 24px;
+      cursor: pointer;
+
+      .history-ic {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+      }
+
+      .history-txt {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 140%;
+      }
     }
 
-    :focus {
-      border: 1px solid ${({ theme }) => theme.border5};
-      color: ${({ theme }) => theme.primary5};
-    }
+    .input-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: 50px;
+      border-radius: 8px;
+      border-width: 1px;
+      padding-left: 16px;
+      padding-right: 50px;
+      background-color: ${({ theme }) => theme.bg3};
+      caret-color: ${({ theme }) => theme.primary5};
 
-    ::placeholder {
-      flex: none;
-      order: 0;
-      flex-grow: 0;
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 140%;
-      color: ${({ theme }) => theme.primary7};
-    }
-  }
+      :hover {
+        border: 1px solid ${({ theme }) => theme.border5};
+      }
 
-  .search-ic {
-    width: 16px;
-    height: 16px;
-    margin-right: 16px;
-    margin-top: 17px;
+      :focus {
+        border: 1px solid ${({ theme }) => theme.border5};
+        color: ${({ theme }) => theme.primary5};
+      }
+
+      ::placeholder {
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 140%;
+        color: ${({ theme }) => theme.primary7};
+      }
+
+      .search-ic {
+        width: 16px;
+        height: 16px;
+        margin-right: 16px;
+      }
+    }
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
+    .search-container {
       .input-container {
-        width: 220px;
+        width: 200px;
       }
+    }
   `}
 `;
 

@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Tabs } from 'antd';
+import HistorySVG from 'assets/svg/history-icon.svg';
 import SearchSVG from 'assets/svg/search-icon.svg';
 import { POpenseaCollection } from 'models/model/POpenseaCollection';
-import React, { memo } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
@@ -52,6 +53,29 @@ const Home = () => {
     <h3 style={{ color: currentKeyTab === key ? 'white' : '#757575' }}>{title}</h3>
   );
 
+  const onClickHistory = () => {
+    history.push('/papps/popensea/history');
+  };
+
+  const renderSearch = () => (
+    <div className="search-container">
+      <div className="history-container" onClick={onClickHistory}>
+        <img alt="history" className="history-ic" src={HistorySVG} />
+        <p className="history-txt">History</p>
+      </div>
+      <div className="input-container">
+        <img alt="search" className="search-ic" src={SearchSVG} />
+        <TextInputStyled
+          placeholder={'Search collections'}
+          type={'text'}
+          onChange={onChange}
+          value={keySearch}
+          autoFocus={false}
+        />
+      </div>
+    </div>
+  );
+
   return (
     <Styled className="default-max-width">
       <WrapperContent>
@@ -66,16 +90,7 @@ const Home = () => {
               key: '1',
               children: (
                 <div>
-                  <div className="input-container">
-                    <img alt="search" className="search-ic" src={SearchSVG} />
-                    <TextInputStyled
-                      placeholder={'Search collections'}
-                      type={'text'}
-                      onChange={onChange}
-                      value={keySearch}
-                      autoFocus={false}
-                    />
-                  </div>
+                  {renderSearch()}
                   <POpenseaListCollection
                     isFetching={isFetching}
                     collections={collections}
@@ -91,4 +106,4 @@ const Home = () => {
   );
 };
 
-export default memo(Home);
+export default React.memo(Home);

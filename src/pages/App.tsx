@@ -29,6 +29,7 @@ import PeggingApp from './PeggingApp';
 import Policy from './Policy';
 import POpensea from './POpensea';
 import POpenseaDetail from './POpenseaDetail';
+import POpenseaHistory from './POpenseaHistory';
 import POpenseaNFTDetail from './POpenseaNFTDetail';
 import Structure from './Structure';
 import DepositPage from './Swap/features/DepositPage';
@@ -124,6 +125,7 @@ const App = () => {
         <Route exact path="/popensea" component={POpensea} />
         <Route exact path="/papps/popensea/detail/:contract" component={POpenseaDetail} />
         <Route exact path="/papps/popensea/detail/:contract/:tokenId" component={POpenseaNFTDetail} />
+        <Route exact path="/papps/popensea/history" component={POpenseaHistory} />
         <Route exact path="/buy-node" component={BuyNode} />
         <Route exact path="/deposit" component={DepositPage} />
         <Route component={Page404} />
