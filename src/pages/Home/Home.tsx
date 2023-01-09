@@ -2,6 +2,7 @@ import { useWindowSize } from 'hooks/useWindowSize';
 import { FOOTER_ID, HEADER_ID } from 'pages/App';
 import React, { memo } from 'react';
 
+import rpcPBlur from '../../services/rpcPBlur';
 import Analytics from './Home.analytics';
 import Collections from './Home.colections';
 import GroupButtons from './Home.groupBtn';
@@ -28,6 +29,8 @@ const Home = () => {
 
   React.useEffect(() => {
     getContentSize();
+
+    rpcPBlur.getCollections().then();
   }, [width, height]);
 
   return (
