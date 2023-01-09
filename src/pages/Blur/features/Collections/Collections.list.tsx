@@ -3,6 +3,7 @@ import React, { memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
+import enhance from './Collection.enhance';
 import { ListStyled } from './Collection.styled';
 import SearchInput from './Collections.input';
 
@@ -44,4 +45,4 @@ const CollectionsList = () => {
   );
 };
 
-export default memo(CollectionsList);
+export default enhance(memo(CollectionsList));

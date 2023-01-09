@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { reducer as tabs } from 'components/Core/Tabs';
 import multicall from 'lib/state/multicall';
+import { reducer as pBlur } from 'pages/Blur';
 import swap from 'pages/Swap/Swap.reducer';
 import { reducer as form } from 'redux-form';
 import { load, save } from 'redux-localstorage-simple';
@@ -42,6 +43,7 @@ const store = configureStore({
     form,
     incognitoWallet,
     pOpensea,
+    pBlur,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
