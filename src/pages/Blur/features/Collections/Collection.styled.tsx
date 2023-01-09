@@ -95,8 +95,8 @@ const ListStyled = styled.div`
     font-weight: 500;
     font-size: 18px;
     line-height: 140%;
-    color: #757575;
-    padding: 0px 32px;
+    color: ${({ theme }) => theme.color_grey4};
+    padding: 0 4px;
     height: 64px;
   }
 
@@ -104,7 +104,7 @@ const ListStyled = styled.div`
     font-weight: 500;
     font-size: 14px;
     line-height: 140%;
-    color: #9c9c9c;
+    color: ${({ theme }) => theme.color_grey};
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -122,14 +122,18 @@ const ListStyled = styled.div`
     border-top-right-radius: 16px;
   }
   .ant-table-tbody > tr > td {
-    padding: 0px 32px;
+    padding: 0 8px;
+    p {
+      font-size: 16px;
+      font-weight: 500;
+    }
   }
 
   .ant-table-tbody > tr.ant-table-placeholder:hover > td {
     background-color: ${({ theme }) => theme.background1};
   }
 
-  .poolContainer {
+  .name-container {
     display: flex;
     width: fit-content;
     align-items: center;
@@ -139,7 +143,7 @@ const ListStyled = styled.div`
     font-weight: 400;
     font-size: 14px;
     line-height: 140%;
-    color: #9c9c9c;
+    color: ${({ theme }) => theme.color_grey};
     text-align: center;
   }
 

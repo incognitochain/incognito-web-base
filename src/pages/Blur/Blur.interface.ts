@@ -1,5 +1,6 @@
 export interface IAmount {
   amount: string;
+  amountNum: number;
   amountFormated: string;
   unit: string;
 }
@@ -12,6 +13,12 @@ export interface ICollection {
 
   totalSupply: number;
   totalSupplyFormated: string;
+
+  dayChange: string;
+  dayChangeNumb: number;
+
+  weekChange: string;
+  weekChangeNumb: number;
 
   numberOwners: number;
   numberOwnersFormated: string;
