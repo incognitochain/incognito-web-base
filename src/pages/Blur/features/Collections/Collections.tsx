@@ -1,12 +1,12 @@
 import { Container } from './Collection.styled';
+import Content from './Collections.content';
 import BlurInfo from './Collections.info';
-import CollectionsList from './Collections.list';
 
 const Collections = () => {
   return (
     <Container className="default-max-width">
       <BlurInfo />
-      <CollectionsList />
+      <Content />
     </Container>
   );
 };

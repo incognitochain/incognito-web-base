@@ -132,7 +132,7 @@ const IncognitoWallet = () => {
         setWalletState(INSTALL_WALLET);
       }
     };
-    setTimeout(() => getInfo(), 1000);
+    setTimeout(() => getInfo(), 5000);
   }, []);
 
   useEffect(() => {

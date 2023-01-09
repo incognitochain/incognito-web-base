@@ -1,35 +1,6 @@
-export interface FloorPrice {
+export interface IAmount {
   amount: string;
-  unit: string;
-}
-
-export interface FloorPriceOneDay {
-  amount: string;
-  unit: string;
-}
-
-export interface FloorPriceOneWeek {
-  amount: string;
-  unit: string;
-}
-
-export interface VolumeOneDay {
-  amount: string;
-  unit: string;
-}
-
-export interface VolumeOneWeek {
-  amount: string;
-  unit: string;
-}
-
-export interface BestCollectionBid {
-  amount: string;
-  unit: string;
-}
-
-export interface TotalCollectionBidValue {
-  amount: string;
+  amountFormated: string;
   unit: string;
 }
 
@@ -38,13 +9,18 @@ export interface ICollection {
   name: string;
   collectionSlug: string;
   imageUrl: string;
+
   totalSupply: number;
+  totalSupplyFormated: string;
+
   numberOwners: number;
-  floorPrice: FloorPrice;
-  floorPriceOneDay: FloorPriceOneDay;
-  floorPriceOneWeek: FloorPriceOneWeek;
-  volumeOneDay: VolumeOneDay;
-  volumeOneWeek: VolumeOneWeek;
-  bestCollectionBid: BestCollectionBid;
-  totalCollectionBidValue: TotalCollectionBidValue;
+  numberOwnersFormated: string;
+
+  floorPrice: IAmount;
+  floorPriceOneDay: IAmount;
+  floorPriceOneWeek: IAmount;
+  volumeOneDay: IAmount;
+  volumeOneWeek: IAmount;
+  bestCollectionBid: IAmount;
+  totalCollectionBidValue: IAmount;
 }

@@ -1,7 +1,6 @@
 import { AxiosInstance } from 'axios';
-import createAxiosInstance from 'services/axios';
-
-const DEFAULT_LIMIT = 1000;
+import { ICollection, mapperCollections } from 'pages/Blur';
+import createAxiosInstance, { CANCEL_KEY } from 'services/axios';
 
 class RpcPBlur {
   http: AxiosInstance;
@@ -10,13 +9,8 @@ class RpcPBlur {
     this.http = createAxiosInstance({ baseURL: 'https://core-api.prod.blur.io/' });
   }
 
-  async getCollections() {
-    try {
-      const data = await this.http.get('v1/collections');
-      console.log('SANG TEST: ', data);
-    } catch (e) {
-      console.log('SANG TEST: ERROR: ', e);
-    }
+  async getCollections(): Promise<ICollection[]> {
+    return this.http.get(`v1/collections?${CANCEL_KEY}`).then((resp: any) => mapperCollections(resp.collections));
   }
 }
 

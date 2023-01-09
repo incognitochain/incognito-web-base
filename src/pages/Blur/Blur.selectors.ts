@@ -6,4 +6,6 @@ const blurSelector = createSelector(
   (pBlur) => pBlur
 );
 
-export { blurSelector };
+const collectionsSelector = createSelector(blurSelector, (pBlur) => pBlur.collections);
+
+export { blurSelector, collectionsSelector };
