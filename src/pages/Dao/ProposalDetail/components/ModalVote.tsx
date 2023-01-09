@@ -7,7 +7,7 @@ import { IoCloseOutline } from 'react-icons/io5';
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { Fee, Proposal } from 'state/dao/types';
-import { getMinimumPRVBalanceRequire, MINIMUM_PRV_REQUIRE_TO_BURN, NETWORK_FEE } from 'state/dao/utils';
+import { NETWORK_FEE } from 'state/dao/utils';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import convert from 'utils/convert';
@@ -139,30 +139,12 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
 
   const prvTokenInfo = useSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
   const tokenToPayFeeInfo = useSelector(getPrivacyDataByTokenIDSelector)(fee?.tokenid || '');
-  const minimumPRVBalanceRequire = getMinimumPRVBalanceRequire(prvTokenInfo?.amount || 0, fee?.feeAmount || 0);
-
-  const getPrvBalanceToBurn = () => {
-    const prvBalance: number = prvTokenInfo?.amount || 0;
-    let prvToBurn = MINIMUM_PRV_REQUIRE_TO_BURN;
-    if (prvBalance >= minimumPRVBalanceRequire) {
-      prvToBurn = (prvBalance * 90) / 100 - (fee?.feeAmount || 0) - NETWORK_FEE;
-    }
-    return prvToBurn;
-  };
 
   const prvBalanceToBurn = convert.toOriginalAmount({
     humanAmount: amount,
     decimals: PRV.pDecimals,
     round: false,
   });
-
-  const checkPrvBalance = () => {
-    const prvBalance: number = Number(prvTokenInfo?.amount) || 0;
-    if (prvBalance >= minimumPRVBalanceRequire) {
-      return true;
-    }
-    return false;
-  };
 
   const validateAmount = (): {
     isValidate: boolean;
@@ -204,12 +186,6 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
       errorMessage: 'Your PRV balance is insufficien',
     };
   };
-
-  // const validateAmount = () => {
-  //   const prvBalance: number = Number(prvTokenInfo?.amount) || 0;
-  //   const maxAmount = (prvBalance * 99) / 100;
-  //   if(prvBalance > maxAmount)
-  // };
 
   const renderReasonOption = (reason: any) => {
     return (
