@@ -54,13 +54,13 @@ const List = (props: IListProps) => {
     {
       key: 'index',
       render: (text, record, index) => (
-        <p key={index.toString()} className="baseText" style={{ width: 30 }}>
+        <p key={index.toString()} className="baseText">
           {index + 1}
         </p>
       ),
       responsive: ['md'],
       title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center', width: 30 }}>
+        <div className="headerTitle" style={{ justifyContent: 'left' }}>
           #
         </div>
       ),
@@ -150,8 +150,9 @@ const List = (props: IListProps) => {
       responsive: ['md'],
       align: 'center',
       showSorterTooltip: false,
-      render: (text, record, index) => {
-        return <p>{`${record.volumeOneDay.amountFormated}%`}</p>;
+      render: (_, record, index) => {
+        const text = record.volumeFifteenMinutes.amountNum ? record.volumeFifteenMinutes.amountFormated : '-';
+        return <p>{`${text}`}</p>;
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
@@ -160,13 +161,14 @@ const List = (props: IListProps) => {
       ),
     },
     {
-      dataIndex: '15mvolume',
-      key: '15mvolume',
+      dataIndex: '1dvolume',
+      key: '1dvolume',
       responsive: ['md'],
       align: 'center',
       showSorterTooltip: false,
-      render: (text, record, index) => {
-        return <p>{`${record.volumeOneDay.amountFormated}%`}</p>;
+      render: (_, record, index) => {
+        const text = record.volumeOneDay.amountNum ? record.volumeOneDay.amountFormated : '-';
+        return <p>{`${text}`}</p>;
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
@@ -175,13 +177,14 @@ const List = (props: IListProps) => {
       ),
     },
     {
-      dataIndex: '15mvolume',
-      key: '15mvolume',
+      dataIndex: '7dvolume',
+      key: '7dvolume',
       responsive: ['md'],
       align: 'center',
       showSorterTooltip: false,
-      render: (text, record, index) => {
-        return <p>{`${record.volumeOneWeek.amountFormated}%`}</p>;
+      render: (_, record, index) => {
+        const text = record.volumeOneWeek.amountNum ? record.volumeOneWeek.amountFormated : '-';
+        return <p>{`${text}`}</p>;
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>

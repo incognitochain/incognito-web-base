@@ -34,6 +34,7 @@ const mapperCollections = (resp: any): ICollection[] => {
       floorPriceOneDay,
       floorPriceOneWeek,
 
+      volumeFifteenMinutes,
       volumeOneDay,
       volumeOneWeek,
 
@@ -82,6 +83,7 @@ const mapperCollections = (resp: any): ICollection[] => {
       floorPriceOneDay: _floorPriceOneDay,
       floorPriceOneWeek: _floorPriceOneWeek,
 
+      volumeFifteenMinutes: convertToAmount(volumeFifteenMinutes),
       volumeOneDay: convertToAmount(volumeOneDay),
       volumeOneWeek: convertToAmount(volumeOneWeek),
 

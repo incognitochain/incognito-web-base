@@ -41,16 +41,8 @@ const ListStyled = styled.div`
     object-fit: cover;
   }
   .baseText {
-    color: #ffffff;
-    font-weight: 600;
     font-size: 16px;
     line-height: 140%;
-  }
-  .smallText {
-    font-size: 12px;
-    line-height: 16px;
-    letter-spacing: -0.02em;
-    color: #757575;
   }
   table {
   }
@@ -60,16 +52,16 @@ const ListStyled = styled.div`
 
   .ant-table-column-title {
     font-weight: 500;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 140%;
-    color: #757575;
+    color: ${({ theme }) => theme.color_grey4};
   }
 
   td.ant-table-column-sort {
     background: transparent;
   }
 
-  ant-spin-blur {
+  .ant-spin-blur {
     border-radius: 16px;
     opacity: 1;
   }
@@ -111,7 +103,7 @@ const ListStyled = styled.div`
   }
 
   .ant-table-tbody > tr > td {
-    border-bottom: 0px;
+    border-bottom: 0;
   }
 
   .ant-table-container .ant-table-content table .ant-table-thead tr th:first-child {
@@ -122,7 +114,7 @@ const ListStyled = styled.div`
     border-top-right-radius: 16px;
   }
   .ant-table-tbody > tr > td {
-    padding: 0 8px;
+    padding: 0 4px;
     p {
       font-size: 16px;
       font-weight: 500;
@@ -159,28 +151,6 @@ const ListStyled = styled.div`
     }
     .ant-table-thead > tr > th {
       height: 56px;
-    }
-  `}
-
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    .poolContainer {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .tableRow {
-      height: 72px;
-    }
-  `}
-
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    .ant-table-tbody > tr > td {
-      border-bottom: 1px solid #363636;
-    }
-    .ant-table-thead > tr > th {
-      font-weight: 500;
-      font-size: 16px;
-      height: 40px;
     }
   `}
 `;

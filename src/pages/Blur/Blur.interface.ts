@@ -26,8 +26,11 @@ export interface ICollection {
   floorPrice: IAmount;
   floorPriceOneDay: IAmount;
   floorPriceOneWeek: IAmount;
+
+  volumeFifteenMinutes: IAmount;
   volumeOneDay: IAmount;
   volumeOneWeek: IAmount;
+
   bestCollectionBid: IAmount;
   totalCollectionBidValue: IAmount;
 }
