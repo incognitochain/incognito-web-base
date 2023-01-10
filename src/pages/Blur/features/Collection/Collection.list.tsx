@@ -35,7 +35,7 @@ const List = (props: IListProps) => {
   const renderSortableTitle = ({ sortColumns, title, key }: ITbHeader) => {
     const sortedColumn = sortColumns?.find(({ column }: any) => column.key === key);
     return (
-      <div className="headerTitle" style={{ justifyContent: 'center' }}>
+      <div className="headerTitle" style={{ justifyContent: 'center', cursor: 'pointer' }}>
         {title}
         {sortedColumn ? (
           sortedColumn.order === 'ascend' ? (
@@ -107,7 +107,7 @@ const List = (props: IListProps) => {
           </Row>
         );
       },
-      sorter: (a, b) => (a.floorPrice.amountNum || 0) - (b.floorPrice.amountNum || 0),
+      // sorter: (a, b) => (a.floorPrice.amountNum || 0) - (b.floorPrice.amountNum || 0),
       title: ({ sortColumns }: ColumnTitleProps<ICollection>) => {
         return renderSortableTitle({ sortColumns, title: 'Floor Price', key: 'floorprice' });
       },

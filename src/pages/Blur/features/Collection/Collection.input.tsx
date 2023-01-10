@@ -1,67 +1,156 @@
-import SearchSVG from 'assets/svg/search-icon.svg';
+import { Select } from 'antd';
+import ImagePlaceholder from 'components/ImagePlaceholder';
+import debounce from 'lodash/debounce';
+import { ICollection } from 'pages/Blur/Blur.interface';
 import React from 'react';
+import { rpcPBlur } from 'services';
 import styled from 'styled-components/macro';
 
 const Container = styled.div`
   display: flex;
-  position: absolute;
-  right: 0;
-  top: -86px;
-  height: 50px;
-  border-radius: 8px;
-  border-width: 1px;
-  padding-left: 16px;
-  padding-right: 50px;
+  width: 300px;
   background-color: ${({ theme }) => theme.bg3};
-  caret-color: ${({ theme }) => theme.primary5};
+  border-radius: 8px;
 
-  :hover {
-    border: 1px solid ${({ theme }) => theme.border5};
+  .ant-select-selector {
+    background-color: transparent !important;
+    height: 55px !important;
+    border-radius: 8px !important;
+    overflow: hidden;
+    //padding-left: 34px;
   }
 
-  :focus {
-    border: 1px solid ${({ theme }) => theme.border5};
-    color: ${({ theme }) => theme.primary5};
+  ..ant-select-dropdown {
+    background-color: red !important;
+  }
+  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border-color: ${({ theme }) => theme.btn1} !important;
+  }
+  .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border: 1px solid ${({ theme }) => theme.border1};
+  }
+  .ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+    border-color: ${({ theme }) => theme.btn1} !important;
+    border-right-width: 1px;
   }
 
-  ::placeholder {
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 140%;
-    color: ${({ theme }) => theme.primary7};
+  span {
+    color: ${({ theme }) => theme.text1};
+    line-height: 55px !important;
+    font-size: 18px;
+    //margin-left: 34px;
   }
 
-  .search-ic {
-    width: 16px;
-    height: 16px;
-    margin-right: 16px;
-    margin-top: 17px;
+  input {
+    color: ${({ theme }) => theme.text1};
+    height: 55px !important;
+    font-size: 18px;
+
+    //margin-left: 34px;
+  }
+
+  .ant-select-selection-placeholder {
+    color: ${({ theme }) => theme.text1};
+    opacity: 0.8;
+  }
+  &.dropdown-container {
+    padding: 12px;
+    border-radius: 8px;
   }
 `;
 
-export const TextInput = styled.input`
-  display: flex;
+const Search = styled(Select)`
   flex: 1;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 140%;
-  color: white;
+  background-color: transparent;
+  caret-color: ${({ theme }) => theme.primary5};
 `;
 
-const SearchInput = ({
-  value,
-  onChange,
-}: {
-  value: string | ReadonlyArray<string> | number | undefined;
-  onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
-}) => {
+const DropdownContainer = styled.div`
+  padding: 8px;
+  border-radius: 8px;
+  max-height: 500px;
+  overflow-y: scroll;
+`;
+
+const DropdownItem = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: 12px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  align-items: center;
+  :hover {
+    background-color: ${({ theme }) => theme.bg4};
+    opacity: 0.9;
+  }
+  .logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+  }
+  .collection-name {
+    font-size: 16px;
+    margin-left: 12px;
+  }
+`;
+
+const SearchInput = () => {
+  const [collections, setCollections] = React.useState<ICollection[]>([]);
+  const mockupData = [
+    {
+      value: 'selection',
+      text: 'selection',
+    },
+  ];
+
+  const handleSearch = async (newValue: string) => {
+    if (newValue) {
+      const collections = await rpcPBlur.getCollections();
+      setCollections(collections.slice(0, 10));
+    } else {
+      setCollections([]);
+    }
+  };
+
+  const debounceSearch = debounce(handleSearch, 500);
+
+  const renderItem = (collection: ICollection) => {
+    return (
+      <DropdownItem>
+        <ImagePlaceholder className="logo" src={collection.imageUrl} />
+        <p className="collection-name">{collection.name}</p>
+      </DropdownItem>
+    );
+  };
+
   return (
     <Container>
-      <img className="search-ic" src={SearchSVG} alt="search" />
-      <TextInput placeholder={'Search collections'} type={'text'} onChange={onChange} value={value} autoFocus={false} />
+      <Search
+        showSearch
+        defaultActiveFirstOption={false}
+        showArrow={false}
+        filterOption={false}
+        placeholder="Search collections"
+        onSearch={debounceSearch}
+        onKeyDown={(event: any) => {
+          if (event.keyCode === 13) {
+            event.preventDefault();
+          }
+        }}
+        notFoundContent={null}
+        options={(mockupData || []).map((d) => ({
+          value: d.value,
+          label: d.text,
+        }))}
+        dropdownStyle={{
+          background: !collections || collections.length === 0 ? 'transparent' : '#303030',
+          borderRadius: 4,
+        }}
+        dropdownRender={() => {
+          if (!collections || collections.length === 0) return <div />;
+          return <DropdownContainer>{collections.map(renderItem)}</DropdownContainer>;
+        }}
+      />
     </Container>
   );
 };

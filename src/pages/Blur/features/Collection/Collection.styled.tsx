@@ -27,6 +27,11 @@ const InfoStyled = styled.div`
 
 const ContentStyled = styled.div`
   min-height: 90vh;
+  text-decoration: underline;
+  .header-row {
+    padding: 20px 0;
+    border-bottom: 1px solid ${({ theme }) => theme.color_grey4};
+  }
 `;
 
 const ListStyled = styled.div<{ showLoader: boolean }>`

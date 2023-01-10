@@ -112,12 +112,12 @@ const CollectionWrapper = styled(Row)`
   margin-left: auto;
   margin-right: auto;
   justify-content: space-around;
-  grid-template-columns: repeat(auto-fill, 390px);
+  grid-template-columns: repeat(auto-fill, calc((100% / 3) - 30px));
   ${({ theme }) => theme.mediaWidth.upToMedium`
-    grid-template-columns: repeat(auto-fill, calc((100vw / 2) - 60px));
+    grid-template-columns: repeat(auto-fill, calc((100% / 2) - 30px));
   `}
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    grid-template-columns: repeat(auto-fill, calc(100vw - 30px));
+    grid-template-columns: repeat(auto-fill, calc(100% - 30px));
   `}
 `;
 
