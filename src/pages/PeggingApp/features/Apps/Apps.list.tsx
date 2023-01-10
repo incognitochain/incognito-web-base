@@ -135,7 +135,7 @@ const Factory: IFactory[] = [
     status: 'SHIPPED',
     nameDesc: 'Private DAO',
     chain: ['Ethereum'],
-    desc: "Join to vote for particular proposals created by the project developers or directly create their own proposals for the ecosystem's MdSelfImprovement.",
+    desc: 'Anonymously create a new proposal or vote for existing proposals for striving the Incognito ecosystem.',
     exchange: SwapExchange.JOE,
     metric: METRIC_TYPE.PAPP_TRADER_JOE,
     metricUniq: METRIC_UNIQ.PAPP_TRADER_JOE_UNIQ,
