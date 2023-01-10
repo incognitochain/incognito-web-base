@@ -174,7 +174,11 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
       };
     }
 
-    if (originalAmount >= minOriginalAmount && originalAmount < prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE) {
+    if (
+      prvBalance >= minOriginalAmount + (fee?.feeAmount || 0) + 2 * NETWORK_FEE &&
+      originalAmount >= minOriginalAmount &&
+      originalAmount <= prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE
+    ) {
       return {
         isValidate: true,
         errorMessage: '',
