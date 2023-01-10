@@ -34,3 +34,49 @@ export interface ICollection {
   bestCollectionBid: IAmount;
   totalCollectionBidValue: IAmount;
 }
+
+export interface ICost {
+  amount: string;
+  amountFormated: string;
+  unit: string;
+  listAt: string;
+}
+
+export enum IMarketPlaceType {
+  BLUR = 'BLUR',
+  OPENSEA = 'OPENSEA',
+  LOOKSRARE = 'LOOKSRARE',
+  X2Y2 = 'X2Y2',
+}
+export interface IPrice extends ICost {
+  marketplace: string;
+}
+
+export interface IOwner {
+  name: string;
+  address: string;
+}
+export interface IToken {
+  isLoading: boolean;
+
+  tokenId: string;
+  highestBid?: ICost;
+  imageUrl: string;
+  isSuspicious: boolean;
+  lastCostBasis: ICost;
+  lastSale: ICost;
+  name: string;
+  numberOwnedByOwner: number;
+  owner: IOwner;
+  price: IPrice;
+  rarityRank: number;
+  rarityScore: number;
+  traits: { [key: string]: string };
+}
+
+export interface IResToken {
+  contractAddress: string;
+  success: boolean;
+  tokens: IToken[];
+  totalCount: number;
+}

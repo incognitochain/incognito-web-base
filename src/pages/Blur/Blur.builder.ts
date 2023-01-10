@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import format from 'utils/format';
 
-import { IAmount, ICollection } from './Blur.interface';
+import { IAmount, ICollection, ICost, IMarketPlaceType, IPrice, IResToken, IToken } from './Blur.interface';
 
 const convertToFormatAmount = (value: string | number) => {
   return format.amountVer2({
@@ -93,4 +93,68 @@ const mapperCollections = (resp: any): ICollection[] => {
   });
 };
 
-export { mapperCollections };
+const convertToCost = (data: any): ICost => {
+  const amount = data?.amount || '0';
+  return {
+    amountFormated: convertToFormatAmount(amount),
+    amount,
+    unit: data?.unit || 'ETH',
+    listAt: data?.listedAt || '',
+  };
+};
+
+const convertToPrice = (data: any): IPrice => {
+  return {
+    ...convertToCost(data),
+    marketplace: data.marketplace ? IMarketPlaceType[data.marketplace as keyof typeof IMarketPlaceType] : '',
+  };
+};
+
+const mapperTokens = (resp: any): IToken[] => {
+  if (!Array.isArray(resp)) return [];
+  return resp.map((data: IToken): IToken => {
+    const {
+      tokenId,
+      highestBid,
+      imageUrl,
+      isSuspicious,
+      lastCostBasis,
+      lastSale,
+      name,
+      numberOwnedByOwner,
+      owner,
+      price,
+      rarityRank,
+      rarityScore,
+      traits,
+    } = data;
+
+    return {
+      isLoading: false,
+      tokenId,
+      highestBid,
+      imageUrl,
+      isSuspicious,
+      lastCostBasis: convertToCost(lastCostBasis),
+      lastSale: convertToCost(lastSale),
+      name,
+      numberOwnedByOwner,
+      owner,
+      price: convertToPrice(price),
+      rarityRank,
+      rarityScore,
+      traits,
+    };
+  });
+};
+
+const mapperResToken = (resp: any): IResToken => {
+  return {
+    contractAddress: resp.contractAddress,
+    tokens: resp.tokens ? mapperTokens(resp.tokens) : [],
+    success: resp.success,
+    totalCount: resp.totalCount,
+  };
+};
+
+export { mapperCollections, mapperResToken };

@@ -5,6 +5,7 @@ import { BlurActions, BlurActionType, IBlurReducer } from './Blur.types';
 const initialState: IBlurReducer = {
   isFetching: false,
   collections: [],
+  resToken: undefined,
 };
 
 export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
@@ -16,6 +17,40 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
       return {
         ...state,
         collections: action.payload,
+      };
+    }
+    case BlurActionType.SET_RES_TOKEN: {
+      return {
+        ...state,
+        resToken: action.payload,
+      };
+    }
+    case BlurActionType.SET_MORE_TOKENS: {
+      if (state.resToken) {
+        return {
+          ...state,
+          resToken: {
+            ...state.resToken,
+            tokens: [...state.resToken.tokens.filter((token) => !token.isLoading), ...action.payload],
+          },
+        };
+      }
+      return state;
+    }
+    case BlurActionType.SET_MORE_LOADING_TOKENS: {
+      return {
+        ...state,
+        resToken: state.resToken
+          ? {
+              ...state.resToken,
+              tokens: [...state.resToken.tokens, ...action.payload],
+            }
+          : {
+              contractAddress: '',
+              success: false,
+              totalCount: 0,
+              tokens: action.payload,
+            },
       };
     }
     default:
