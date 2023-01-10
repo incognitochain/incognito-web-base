@@ -3,6 +3,8 @@ export interface IAmount {
   amountNum: number;
   amountFormated: string;
   unit: string;
+  displayText: string;
+  color: string;
 }
 
 export interface ICollection {
@@ -22,6 +24,7 @@ export interface ICollection {
 
   numberOwners: number;
   numberOwnersFormated: string;
+  numberOwnersPercent: string;
 
   floorPrice: IAmount;
   floorPriceOneDay: IAmount;

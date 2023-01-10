@@ -6,11 +6,11 @@ class RpcPBlur {
   http: AxiosInstance;
 
   constructor() {
-    this.http = createAxiosInstance({ baseURL: 'https://core-api.prod.blur.io/' });
+    this.http = createAxiosInstance({ baseURL: 'http://51.161.117.193:7898/' });
   }
 
   async getCollections(): Promise<ICollection[]> {
-    return this.http.get(`v1/collections?${CANCEL_KEY}`).then((resp: any) => mapperCollections(resp.collections));
+    return this.http.get(`papps/pblur/collections?${CANCEL_KEY}`).then((resp: any) => mapperCollections(resp));
   }
 
   async getCollectionTokens(collectionName: string, cursor?: any): Promise<IResToken> {

@@ -29,6 +29,7 @@ interface ITbHeader {
 
 const List = (props: IListProps) => {
   const { isFetching, collections, onClickItem } = props;
+  const showLoader = isFetching || collections.length <= 0;
 
   const renderSortableTitle = ({ sortColumns, title, key }: ITbHeader) => {
     const sortedColumn = sortColumns?.find(({ column }: any) => column.key === key);
@@ -49,7 +50,11 @@ const List = (props: IListProps) => {
       </div>
     );
   };
-
+  const getColor = ({ numb, value, suffix }: { numb: number; value: string; suffix?: string }) => {
+    const text = Number.isFinite(numb) ? `${value}${suffix || ''}` : '-';
+    const color = !Number.isFinite(numb) ? 'white' : numb < 0 ? '#FD4040' : '#0ECB81';
+    return { text, color };
+  };
   const columns: ColumnsType<ICollection> = [
     {
       key: 'index',
@@ -72,9 +77,7 @@ const List = (props: IListProps) => {
         <div key={index.toString()} className="name-container">
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <ImagePlaceholder className="logo" src={record.imageUrl} />
-            <p className="baseText" style={{ marginLeft: 12 }}>
-              {record.name}
-            </p>
+            <p className="baseText name-text">{record.name}</p>
           </div>
         </div>
       ),
@@ -91,7 +94,7 @@ const List = (props: IListProps) => {
       align: 'center',
       showSorterTooltip: false,
       render: (text, record, index) => {
-        return <p>{`${record.floorPrice.amountFormated}`}</p>;
+        return <p className="baseText">{`${record.floorPrice.amountFormated}`}</p>;
       },
       sorter: (a, b) => (a.floorPrice.amountNum || 0) - (b.floorPrice.amountNum || 0),
       title: ({ sortColumns }: ColumnTitleProps<ICollection>) => {
@@ -104,7 +107,7 @@ const List = (props: IListProps) => {
       responsive: ['md'],
       align: 'center',
       render: (text, record, index) => {
-        return <p>{`${record.bestCollectionBid.amountFormated}`}</p>;
+        return <p className="baseText">{`${record.bestCollectionBid.amountFormated}`}</p>;
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
@@ -119,8 +122,8 @@ const List = (props: IListProps) => {
       align: 'center',
       showSorterTooltip: false,
       render: (_, record, index) => {
-        const text = Number.isFinite(record.dayChangeNumb) ? `${record.dayChange}%` : '-';
-        return <p>{text}</p>;
+        const { text, color } = getColor({ numb: record.dayChangeNumb, value: record.dayChange, suffix: '%' });
+        return <p style={{ color }}>{text}</p>;
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
@@ -135,8 +138,12 @@ const List = (props: IListProps) => {
       align: 'center',
       showSorterTooltip: false,
       render: (_, record, index) => {
-        const text = Number.isFinite(record.weekChangeNumb) ? `${record.weekChange}%` : '-';
-        return <p>{text}</p>;
+        const { text, color } = getColor({ numb: record.weekChangeNumb, value: record.weekChange, suffix: '%' });
+        return (
+          <p className="baseText" style={{ color }}>
+            {text}
+          </p>
+        );
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
@@ -152,7 +159,7 @@ const List = (props: IListProps) => {
       showSorterTooltip: false,
       render: (_, record, index) => {
         const text = record.volumeFifteenMinutes.amountNum ? record.volumeFifteenMinutes.amountFormated : '-';
-        return <p>{`${text}`}</p>;
+        return <p className="baseText">{`${text}`}</p>;
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
@@ -168,7 +175,7 @@ const List = (props: IListProps) => {
       showSorterTooltip: false,
       render: (_, record, index) => {
         const text = record.volumeOneDay.amountNum ? record.volumeOneDay.amountFormated : '-';
-        return <p>{`${text}`}</p>;
+        return <p className="baseText">{`${text}`}</p>;
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
@@ -184,7 +191,7 @@ const List = (props: IListProps) => {
       showSorterTooltip: false,
       render: (_, record, index) => {
         const text = record.volumeOneWeek.amountNum ? record.volumeOneWeek.amountFormated : '-';
-        return <p>{`${text}`}</p>;
+        return <p className="baseText">{`${text}`}</p>;
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
@@ -192,18 +199,47 @@ const List = (props: IListProps) => {
         </div>
       ),
     },
+    {
+      dataIndex: 'owner',
+      key: 'owner',
+      responsive: ['md'],
+      align: 'center',
+      showSorterTooltip: false,
+      render: (_, record, index) => {
+        return <p className="baseText">{`${record.numberOwnersFormated} (${record.numberOwnersPercent}%)`}</p>;
+      },
+      title: () => (
+        <div className="headerTitle" style={{ justifyContent: 'center' }}>
+          Owner
+        </div>
+      ),
+    },
+    {
+      dataIndex: 'supply',
+      key: 'supply',
+      responsive: ['md'],
+      align: 'center',
+      showSorterTooltip: false,
+      render: (_, record, index) => {
+        return <p className="baseText">{`${record.totalSupplyFormated}`}</p>;
+      },
+      title: () => (
+        <div className="headerTitle" style={{ justifyContent: 'center' }}>
+          Supply
+        </div>
+      ),
+    },
   ];
 
   return (
     <ListStyled>
-      {isFetching && collections.length <= 0 ? (
+      {showLoader ? (
         <CollectionLoader />
       ) : (
         <Table
           columns={columns}
           dataSource={collections}
           size="large"
-          // loading={isFetching && collections.length === 0}
           pagination={false}
           rowClassName="tableRow"
           onRow={(collection) => ({

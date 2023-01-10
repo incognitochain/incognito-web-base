@@ -6,7 +6,7 @@ const blurSelector = createSelector(
   (pBlur) => pBlur
 );
 
-const collectionsSelector = createSelector(blurSelector, (pBlur) => pBlur.collections);
+const collectionsSelector = createSelector(blurSelector, (pBlur) => pBlur.collection);
 
 const resTokenSelector = createSelector(blurSelector, (pBlur) => pBlur.resToken);
 

@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js';
+import { camelCaseKeys } from 'utils/camelcase';
 import format from 'utils/format';
 
 import { IAmount, ICollection, ICost, IMarketPlaceType, IPrice, IResToken, IToken } from './Blur.interface';
@@ -10,19 +11,24 @@ const convertToFormatAmount = (value: string | number) => {
   });
 };
 
-const convertToAmount = (data: any): IAmount => {
-  const amount = data?.amount || '0';
+const convertToAmount = (amount: string): IAmount => {
+  amount = amount || '0';
+  const amountNum = new BigNumber(amount).toNumber();
+  const amountFormated = convertToFormatAmount(amount);
+  const text = amountNum && Number.isFinite(amountNum) ? amountFormated : '-';
   return {
-    amountFormated: convertToFormatAmount(amount).replace(',', ''),
+    amountFormated,
     amount,
-    unit: data?.unit || 'ETH',
-    amountNum: new BigNumber(amount).toNumber(),
+    unit: 'ETH',
+    amountNum,
+    displayText: text,
+    color: '',
   };
 };
 
-const mapperCollections = (resp: any): ICollection[] => {
+const mapperCollections = (resp: any[]): ICollection[] => {
   if (!Array.isArray(resp)) return [];
-  return resp.map((data: ICollection): ICollection => {
+  return resp.map((data: any): ICollection => {
     const {
       contractAddress,
       name,
@@ -40,7 +46,7 @@ const mapperCollections = (resp: any): ICollection[] => {
 
       bestCollectionBid,
       totalCollectionBidValue,
-    } = data;
+    } = camelCaseKeys(data);
 
     const _floorPrice = convertToAmount(floorPrice);
 
@@ -60,6 +66,10 @@ const mapperCollections = (resp: any): ICollection[] => {
       .multipliedBy(100);
     const weekChange = weekChangeNumb.toFormat(2);
 
+    const numberOwnersPercent = Math.floor(
+      new BigNumber(numberOwners).div(totalSupply).multipliedBy(100).toNumber()
+    ).toString();
+
     return {
       contractAddress,
       name,
@@ -77,6 +87,7 @@ const mapperCollections = (resp: any): ICollection[] => {
 
       numberOwners,
       numberOwnersFormated: convertToFormatAmount(numberOwners),
+      numberOwnersPercent,
 
       floorPrice: _floorPrice,
 

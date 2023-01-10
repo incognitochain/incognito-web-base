@@ -13,7 +13,7 @@ const DEFAULT_ACTIVE_KEY = '1';
 const Content = () => {
   const [keySearch, setKeySearch] = React.useState<string | undefined>();
   const [currentKeyTab, setCurrentKeyTab] = React.useState(DEFAULT_ACTIVE_KEY);
-  const collections = useAppSelector(collectionsSelector);
+  const { list: collections, isFetching } = useAppSelector(collectionsSelector);
 
   const onChange = (e: any) => {
     setKeySearch(e.target.value);
@@ -40,7 +40,7 @@ const Content = () => {
               <>
                 <SearchInput value={keySearch} onChange={onChange} />
                 <List
-                  isFetching={false}
+                  isFetching={isFetching}
                   collections={collections}
                   onClickItem={() => {
                     return null;

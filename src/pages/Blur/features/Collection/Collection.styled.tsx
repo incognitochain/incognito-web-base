@@ -35,16 +35,10 @@ const ListStyled = styled.div`
     height: 80px !important;
   }
   .logo {
-    width: 64px;
-    height: 64px;
+    width: 55px;
+    height: 55px;
     border-radius: 8px;
     object-fit: cover;
-  }
-  .baseText {
-    font-size: 16px;
-    line-height: 140%;
-  }
-  table {
   }
   .ant-table-column-sorter {
     display: none;
@@ -52,7 +46,6 @@ const ListStyled = styled.div`
 
   .ant-table-column-title {
     font-weight: 500;
-    font-size: 16px;
     line-height: 140%;
     color: ${({ theme }) => theme.color_grey4};
   }
@@ -88,8 +81,13 @@ const ListStyled = styled.div`
     font-size: 18px;
     line-height: 140%;
     color: ${({ theme }) => theme.color_grey4};
-    padding: 0 4px;
+    padding: 0 6px;
     height: 64px;
+  }
+
+  .baseText {
+    font-size: 16px;
+    line-height: 140%;
   }
 
   .headerTitle {
@@ -100,6 +98,11 @@ const ListStyled = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+  }
+
+  .name-text {
+    margin-left: 12px;
+    max-width: 200px;
   }
 
   .ant-table-tbody > tr > td {
@@ -114,11 +117,7 @@ const ListStyled = styled.div`
     border-top-right-radius: 16px;
   }
   .ant-table-tbody > tr > td {
-    padding: 0 4px;
-    p {
-      font-size: 16px;
-      font-weight: 500;
-    }
+    padding: 0 6px;
   }
 
   .ant-table-tbody > tr.ant-table-placeholder:hover > td {
@@ -142,12 +141,6 @@ const ListStyled = styled.div`
   ${({ theme }) => theme.mediaWidth.upToLarge`
     .tableRow {
       height: 56px;
-    }
-    .baseText {
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 140%;
-      color: #ffffff;
     }
     .ant-table-thead > tr > th {
       height: 56px;

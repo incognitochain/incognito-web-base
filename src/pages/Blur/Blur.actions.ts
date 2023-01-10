@@ -5,12 +5,18 @@ import { ICollection, IResToken, IToken } from './Blur.interface';
 import {
   BlurActionType,
   SetCollectionsAction,
+  SetFetchingCollections,
   SetMoreLoadingTokensAction,
   SetMoreTokensAction,
   SetResTokenAction,
 } from './Blur.types';
 
 export const LOADING_COUNT = 100;
+
+const actionFetchingCollections = (payload: { isFetching: boolean }): SetFetchingCollections => ({
+  type: BlurActionType.SET_FETCHING_COLLECTION,
+  payload,
+});
 
 const actionSetCollections = (payload: ICollection[]): SetCollectionsAction => ({
   type: BlurActionType.SET_COLLECTIONS,
@@ -34,11 +40,14 @@ const actionSetMoreLoadingTokens = (payload: IToken[]): SetMoreLoadingTokensActi
 
 const actionFetchCollections = () => async (dispatch: AppDispatch, getState: AppState & any) => {
   try {
+    dispatch(actionFetchingCollections({ isFetching: true }));
     const collections = await rpcPBlur.getCollections();
     dispatch(actionSetCollections(collections));
     console.log('LOGS actionFetchCollections ', collections);
   } catch (error) {
     console.log('ACTION FETCH COLLECTIONS ERROR: ', error);
+  } finally {
+    dispatch(actionFetchingCollections({ isFetching: false }));
   }
 };
 

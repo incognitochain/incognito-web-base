@@ -4,7 +4,10 @@ import { BlurActions, BlurActionType, IBlurReducer } from './Blur.types';
 
 const initialState: IBlurReducer = {
   isFetching: false,
-  collections: [],
+  collection: {
+    list: [],
+    isFetching: false,
+  },
   resToken: undefined,
 };
 
@@ -13,10 +16,23 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
   action: BlurActions
 ): IBlurReducer => {
   switch (action.type) {
+    case BlurActionType.SET_FETCHING_COLLECTION: {
+      const { isFetching } = action.payload;
+      return {
+        ...state,
+        collection: {
+          ...state.collection,
+          isFetching,
+        },
+      };
+    }
     case BlurActionType.SET_COLLECTIONS: {
       return {
         ...state,
-        collections: action.payload,
+        collection: {
+          list: action.payload,
+          isFetching: false,
+        },
       };
     }
     case BlurActionType.SET_RES_TOKEN: {
