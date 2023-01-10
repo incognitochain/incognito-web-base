@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Row, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { ColumnTitleProps, ColumnType, SortOrder } from 'antd/es/table/interface';
 import arrowBottomActive from 'assets/svg/arrow-bottom-active.svg';
@@ -6,6 +6,7 @@ import arrowDisable from 'assets/svg/arrow-disable.svg';
 import arrowTopActive from 'assets/svg/arrow-top-active.svg';
 import ImagePlaceholder from 'components/ImagePlaceholder';
 import { ICollection } from 'pages/Blur';
+import EthereumLogo from 'pages/Blur/images/ether.svg';
 import React from 'react';
 
 import CollectionLoader from './Collection.loader';
@@ -52,9 +53,14 @@ const List = (props: IListProps) => {
   };
   const getColor = ({ numb, value, suffix }: { numb: number; value: string; suffix?: string }) => {
     const text = Number.isFinite(numb) ? `${value}${suffix || ''}` : '-';
-    const color = !Number.isFinite(numb) ? 'white' : numb < 0 ? '#FD4040' : '#0ECB81';
+    const color = !Number.isFinite(numb) ? '#9C9C9C' : numb < 0 ? '#FD4040' : '#0ECB81';
     return { text, color };
   };
+
+  const CurrencyIcon = React.useMemo(() => {
+    return <img className="currency-logo" src={EthereumLogo} alt="currency-logo" />;
+  }, []);
+
   const columns: ColumnsType<ICollection> = [
     {
       key: 'index',
@@ -65,7 +71,7 @@ const List = (props: IListProps) => {
       ),
       responsive: ['md'],
       title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'left' }}>
+        <div className="headerTitle" style={{ justifyContent: 'start' }}>
           #
         </div>
       ),
@@ -82,9 +88,9 @@ const List = (props: IListProps) => {
         </div>
       ),
       title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'left' }}>
+        <p className="headerTitle" style={{ justifyContent: 'left' }}>
           Collection
-        </div>
+        </p>
       ),
     },
     {
@@ -94,7 +100,12 @@ const List = (props: IListProps) => {
       align: 'center',
       showSorterTooltip: false,
       render: (text, record, index) => {
-        return <p className="baseText">{`${record.floorPrice.amountFormated}`}</p>;
+        return (
+          <Row justify="end">
+            <p className="baseText">{`${record.floorPrice.amountFormated}`}</p>
+            {CurrencyIcon && CurrencyIcon}
+          </Row>
+        );
       },
       sorter: (a, b) => (a.floorPrice.amountNum || 0) - (b.floorPrice.amountNum || 0),
       title: ({ sortColumns }: ColumnTitleProps<ICollection>) => {
@@ -106,8 +117,19 @@ const List = (props: IListProps) => {
       key: 'topbid',
       responsive: ['md'],
       align: 'center',
-      render: (text, record, index) => {
-        return <p className="baseText">{`${record.bestCollectionBid.amountFormated}`}</p>;
+      render: (_, record, index) => {
+        let text = record.bestCollectionBid.amountFormated;
+        let icon: any = CurrencyIcon;
+        if (!text || text === '0') {
+          text = '-';
+          icon = undefined;
+        }
+        return (
+          <Row justify="end">
+            <p className={`baseText ${!icon ? 'shadow-text' : ''}`}>{`${text}`}</p>
+            {icon && icon}
+          </Row>
+        );
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
@@ -158,8 +180,17 @@ const List = (props: IListProps) => {
       align: 'center',
       showSorterTooltip: false,
       render: (_, record, index) => {
-        const text = record.volumeFifteenMinutes.amountNum ? record.volumeFifteenMinutes.amountFormated : '-';
-        return <p className="baseText">{`${text}`}</p>;
+        let text = record.volumeFifteenMinutes.amountNum ? record.volumeFifteenMinutes.amountFormated : '-';
+        let icon: any = CurrencyIcon;
+        if (!text || text === '-') {
+          icon = undefined;
+        }
+        return (
+          <Row justify="end">
+            <p className={`baseText ${!icon ? 'shadow-text' : ''}`}>{`${text}`}</p>
+            {icon && icon}
+          </Row>
+        );
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
@@ -174,8 +205,17 @@ const List = (props: IListProps) => {
       align: 'center',
       showSorterTooltip: false,
       render: (_, record, index) => {
-        const text = record.volumeOneDay.amountNum ? record.volumeOneDay.amountFormated : '-';
-        return <p className="baseText">{`${text}`}</p>;
+        let text = record.volumeOneDay.amountNum ? record.volumeOneDay.amountFormated : '-';
+        let icon: any = CurrencyIcon;
+        if (!text || text === '-') {
+          icon = undefined;
+        }
+        return (
+          <Row justify="end">
+            <p className={`baseText ${!icon ? 'shadow-text' : ''}`}>{`${text}`}</p>
+            {icon && icon}
+          </Row>
+        );
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
@@ -190,8 +230,17 @@ const List = (props: IListProps) => {
       align: 'center',
       showSorterTooltip: false,
       render: (_, record, index) => {
-        const text = record.volumeOneWeek.amountNum ? record.volumeOneWeek.amountFormated : '-';
-        return <p className="baseText">{`${text}`}</p>;
+        let text = record.volumeOneWeek.amountNum ? record.volumeOneWeek.amountFormated : '-';
+        let icon: any = CurrencyIcon;
+        if (!text || text === '-') {
+          icon = undefined;
+        }
+        return (
+          <Row justify="end">
+            <p className={`baseText ${!icon ? 'shadow-text' : ''}`}>{`${text}`}</p>
+            {icon && icon}
+          </Row>
+        );
       },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>

@@ -89,8 +89,16 @@ const ListStyled = styled.div`
     font-size: 16px;
     line-height: 140%;
   }
+  .currency-logo {
+    width: 24px;
+  }
+  .shadow-text {
+    color: ${({ theme }) => theme.color_grey};
+    padding-right: 16px;
+  }
 
   .headerTitle {
+    flex: 1;
     font-weight: 500;
     font-size: 14px;
     line-height: 140%;
@@ -98,6 +106,7 @@ const ListStyled = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    text-align: center;
   }
 
   .name-text {
