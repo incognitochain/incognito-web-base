@@ -281,23 +281,21 @@ const List = (props: IListProps) => {
   ];
 
   return (
-    <ListStyled>
-      {showLoader ? (
-        <CollectionLoader />
-      ) : (
-        <Table
-          columns={columns}
-          dataSource={collections}
-          size="large"
-          pagination={false}
-          rowClassName="tableRow"
-          onRow={(collection) => ({
-            onClick: () => {
-              onClickItem(collection);
-            },
-          })}
-        />
-      )}
+    <ListStyled showLoader={showLoader}>
+      {showLoader && <CollectionLoader />}
+      <Table
+        className="table"
+        columns={columns}
+        dataSource={collections}
+        size="large"
+        pagination={false}
+        rowClassName="tableRow"
+        onRow={(collection) => ({
+          onClick: () => {
+            onClickItem(collection);
+          },
+        })}
+      />
     </ListStyled>
   );
 };

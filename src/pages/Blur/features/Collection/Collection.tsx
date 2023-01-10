@@ -4,7 +4,7 @@ import { Container } from './Collection.styled';
 
 const Collection = () => {
   return (
-    <Container className="default-max-width">
+    <Container>
       <BlurInfo />
       <Content />
     </Container>

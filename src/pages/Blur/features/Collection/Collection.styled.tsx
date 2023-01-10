@@ -29,8 +29,12 @@ const ContentStyled = styled.div`
   min-height: 90vh;
 `;
 
-const ListStyled = styled.div`
+const ListStyled = styled.div<{ showLoader: boolean }>`
   margin-top: 8px;
+  .table {
+    opacity: ${({ showLoader }) => (showLoader ? 0 : 1)};
+    transition: all 800ms ease-in-out;
+  }
   tr {
     height: 80px !important;
   }
@@ -161,6 +165,15 @@ const Container = styled.div`
   padding-bottom: 40px;
   width: 100%;
   min-height: 1000px;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    .default-max-width {
+      max-width: 95%;
+    }
+  `}
 `;
 
 export { Container, ContentStyled, InfoStyled, ListStyled };

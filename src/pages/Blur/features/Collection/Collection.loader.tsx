@@ -20,6 +20,8 @@ const CollectionLoader = ({ repeat = 20 }: { repeat?: number }) => (
         <rect x="820" y="10" rx="4" ry="4" width="70" height="16" />
         <rect x="990" y="10" rx="4" ry="4" width="70" height="16" />
         <rect x="1160" y="10" rx="4" ry="4" width="70" height="16" />
+        <rect x="1330" y="10" rx="4" ry="4" width="70" height="16" />
+        <rect x="1500" y="10" rx="4" ry="4" width="70" height="16" />
       </ContentLoader>
     ))}
   </React.Fragment>
