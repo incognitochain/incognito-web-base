@@ -10,6 +10,7 @@ import spookyImg from 'assets/images/spooky-icon.png';
 import trisolarisImg from 'assets/images/trisolaris-icon.png';
 import uniImg from 'assets/images/uni-icon.png';
 import unknowImg from 'assets/images/unknow-icon.png';
+import voteImg from 'assets/images/vote.svg';
 import { MAIN_NETWORK_NAME } from 'constants/token';
 import { SELECTION_NETWORKS } from 'pages/Swap/features/FormUnshield/FormUnshield.constants';
 import { SwapExchange } from 'pages/Swap/features/FormUnshield/FormUnshield.types';
@@ -53,6 +54,16 @@ const Factory: IFactory[] = [
     metric: METRIC_TYPE.PAPP_PANCAKE,
     metricUniq: METRIC_UNIQ.PAPP_PANCAKE_UNIQ,
     network: [MAIN_NETWORK_NAME.INCOGNITO],
+  },
+  {
+    img: voteImg,
+    name: 'pDAO',
+    route: '/vote',
+    status: 'SHIPPED',
+    nameDesc: 'Private DAO',
+    chain: ['Ethereum'],
+    desc: 'Anonymously create proposals or vote on existing ones to empower the Incognito ecosystem to succeed.',
+    network: [MAIN_NETWORK_NAME.ETHEREUM],
   },
   {
     img: openseaImg,
