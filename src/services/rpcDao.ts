@@ -1,12 +1,12 @@
 import { AxiosInstance } from 'axios';
-import { API_DAO } from 'config';
+import { API_SERVICE } from 'config';
 import createAxiosInstance from 'services/axios';
 import { CreateProposalParams, SubmitVoteRequestAPIParam } from 'state/dao/types';
 
 class RpcDao {
   http: AxiosInstance;
   constructor() {
-    this.http = createAxiosInstance({ baseURL: API_DAO });
+    this.http = createAxiosInstance({ baseURL: API_SERVICE });
   }
 
   fetchProposals() {
