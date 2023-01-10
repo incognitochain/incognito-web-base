@@ -1,7 +1,7 @@
-import Collections from './features/Collections';
+import Collection from './features/Collection';
 
-const BlurHome = () => {
-  return <Collections />;
+const Home = () => {
+  return <Collection />;
 };
 
-export default BlurHome;
+export default Home;

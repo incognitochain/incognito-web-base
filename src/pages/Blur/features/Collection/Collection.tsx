@@ -1,8 +1,8 @@
+import Content from './Collection.content';
+import BlurInfo from './Collection.info';
 import { Container } from './Collection.styled';
-import Content from './Collections.content';
-import BlurInfo from './Collections.info';
 
-const Collections = () => {
+const Collection = () => {
   return (
     <Container className="default-max-width">
       <BlurInfo />
@@ -11,4 +11,4 @@ const Collections = () => {
   );
 };
 
-export default Collections;
+export default Collection;

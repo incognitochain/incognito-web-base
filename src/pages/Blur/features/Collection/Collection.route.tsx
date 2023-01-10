@@ -4,12 +4,12 @@ import { lazy } from 'react';
 export const appName = 'pblur';
 export const route = `papps/${appName}`;
 
-const CollectionsRoute: IRouteProps = {
+const CollectionRoute: IRouteProps = {
   path: route,
   exact: true,
-  component: lazy(() => import('./Collections')),
+  component: lazy(() => import('./Collection')),
   name: 'Blur',
   to: route,
 };
 
-export default CollectionsRoute;
+export default CollectionRoute;

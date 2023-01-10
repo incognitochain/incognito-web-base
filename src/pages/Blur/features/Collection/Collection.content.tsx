@@ -4,9 +4,9 @@ import React, { memo } from 'react';
 import { useAppSelector } from 'state/hooks';
 
 import enhance from './Collection.enhance';
+import SearchInput from './Collection.input';
+import List from './Collection.list';
 import { ContentStyled } from './Collection.styled';
-import SearchInput from './Collections.input';
-import List from './Collections.list';
 
 const DEFAULT_ACTIVE_KEY = '1';
 
