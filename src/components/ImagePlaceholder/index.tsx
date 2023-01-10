@@ -34,7 +34,7 @@ function ImagePlacholder({
   return (
     <Styled className={rootClassName}>
       {animationUrl ? (
-        <iframe title="" src={animationUrl || Placeholder} allowFullScreen className={className} />
+        <iframe title="" src={animationUrl || Placeholder} allowFullScreen className={className} loading="lazy" />
       ) : (
         <img src={src || Placeholder} className={className} alt="" loading="lazy" />
       )}
