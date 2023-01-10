@@ -70,7 +70,7 @@ export class POpenseaNft {
     return this.seaportSellOrders && this.seaportSellOrders.length > 0 ? this.seaportSellOrders[0] : undefined;
   }
 
-  getImageUrl(size: number = 1000) {
+  getImageUrl(size: number = 1024) {
     return this.imageUrl ? this.imageUrl.replace('?w=500', `?w=${size}`) : undefined;
   }
 }

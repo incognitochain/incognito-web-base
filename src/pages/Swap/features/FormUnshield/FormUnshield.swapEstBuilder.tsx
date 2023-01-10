@@ -31,7 +31,7 @@ const getExchangeName = (exchange: SwapExchange) => {
   }
 
   if (exchange === SwapExchange.INTER_SWAP) {
-    return 'Cross Exchange';
+    return 'Inter-liquidity pools';
   }
 
   return exchange;
@@ -132,8 +132,10 @@ const parseExchangeDataModelResponse = (
       respDetails.forEach((trade) => {
         if (trade.Paths) {
           const logoIcon = getExchangeLogo(trade.AppName);
+          const exchangeName = getExchangeName(trade?.AppName);
           path.push({
             logoIcon,
+            exchangeName,
             tradePath: trade.Paths,
           });
         }
