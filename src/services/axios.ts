@@ -19,7 +19,6 @@ const createAxiosInstance = ({ baseURL = '' }: { baseURL: string }) => {
     baseURL,
     timeout: TIMEOUT,
     headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRBZGRyZXNzIjoiMHgxYzZhMWZlY2M0NDQ5ZjBmN2M5MDQ3MTlhNjU0MDhmYWQ3ZmUzOTJhIiwic2lnbmF0dXJlIjoiMHg3ZDM4MTUwMjY5ZGRhMDM0ZmQ0OGVmZTY0YjI3Mjc1YTNiMWNlYTRhOTY5ODU5ZjBjYTQ1MjJjMzFlNjMzYzdhNjRlNzRlNDJjOTNjZGYzZGJiYTMwNjJiNmQ5NGUwMjkzODkyOTJkOWYxMTQzZWIzODM0NDUwOGEzZjQxNjBiYTFjIiwiaWF0IjoxNjcyOTk2MjU1LCJleHAiOjE2NzU1ODgyNTV9.7cxDRHBslEJoqYC5raVv8lid66mjrmHpTCutAbBVkb4`,
       ...HEADERS,
     },
   });
