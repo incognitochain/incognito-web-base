@@ -88,6 +88,23 @@ interface IProps extends ISelectSwapExchange {
   interPath: any;
 }
 
+export const getTradePath = (paths: string[], tokens: SelectedPrivacy[]) => {
+  let tradePathStr = '';
+  const tradePathArrStr: any = [];
+  for (let i = 0; i < paths.length; i++) {
+    const tokenData = tokens?.find(
+      (token: any) =>
+        token?.contractID?.toLowerCase() === paths[i]?.toLowerCase() ||
+        token?.tokenID?.toLowerCase() === paths[i]?.toLowerCase()
+    );
+    if (tokenData) {
+      tradePathArrStr.push(tokenData?.symbol);
+    }
+  }
+  tradePathStr = tradePathArrStr?.join(' > ');
+  return tradePathStr;
+};
+
 const EstReceive = React.memo(
   ({
     minReceiveAmount,
@@ -112,25 +129,7 @@ const EstReceive = React.memo(
   }: IProps) => {
     const [isOpen, setOpen] = React.useState(false);
     const [isRateSellToBuy, setIsRateSellToBuy] = React.useState(true);
-
     const tokens = useAppSelector(unshieldableTokens);
-
-    const getTradePath = (paths: string[]) => {
-      let tradePathStr = '';
-      const tradePathArrStr: any = [];
-      for (let i = 0; i < paths.length; i++) {
-        const tokenData = tokens?.find(
-          (token: any) =>
-            token?.contractID?.toLowerCase() === paths[i]?.toLowerCase() ||
-            token?.tokenID?.toLowerCase() === paths[i]?.toLowerCase()
-        );
-        if (tokenData) {
-          tradePathArrStr.push(tokenData?.symbol);
-        }
-      }
-      tradePathStr = tradePathArrStr?.join(' > ');
-      return tradePathStr;
-    };
 
     const getRateText = () => {
       if (isRateSellToBuy) {
@@ -303,7 +302,7 @@ const EstReceive = React.memo(
                     <ThemedText.SmallLabel fontWeight={400}>{`${
                       typeof interPath[0].tradePath === 'string'
                         ? interPath[0].tradePath
-                        : getTradePath(interPath[0].tradePath)
+                        : getTradePath(interPath[0].tradePath, tokens)
                     }`}</ThemedText.SmallLabel>
                   </Row>
                   <Row style={{ marginTop: 6, justifyContent: 'flex-end' }}>
@@ -311,7 +310,7 @@ const EstReceive = React.memo(
                     <ThemedText.SmallLabel fontWeight={400}>{`${
                       typeof interPath[1].tradePath === 'string'
                         ? interPath[1].tradePath
-                        : getTradePath(interPath[1].tradePath)
+                        : getTradePath(interPath[1].tradePath, tokens)
                     }`}</ThemedText.SmallLabel>
                   </Row>
                 </Column>

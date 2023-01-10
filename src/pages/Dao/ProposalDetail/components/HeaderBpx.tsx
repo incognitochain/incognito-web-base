@@ -3,6 +3,7 @@ import { Skeleton } from 'antd';
 import BackButton from 'components/BackButton';
 import { ButtonConfirmed } from 'components/Core/Button';
 import ProposalStatusBox from 'pages/Dao/Governance/components/ProposalStatus';
+import { useHistory } from 'react-router-dom';
 import { Proposal } from 'state/dao/types';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
@@ -75,11 +76,14 @@ const HeaderBox: React.FC<HeaderProps> = (props) => {
     );
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const history = useHistory();
+
   return (
     <div style={{ marginBottom: 40, width: '100%' }}>
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <div>
-          <BackButton />
+          <BackButton onBack={() => history.push('/vote')} />
         </div>
         <ProposalIdText>Proposal #{proposal?.id}</ProposalIdText>
         <div style={{ maxWidth: 140 }}>

@@ -75,7 +75,7 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmPro
     const prvBalance: number = prvTokenInfo?.amount || 0;
     let prvToBurn = MINIMUM_PRV_REQUIRE_TO_BURN;
     if (prvBalance >= minimumPRVBalanceRequire) {
-      prvToBurn = (prvBalance * 90) / 100 - (fee?.feeAmount || 0) - NETWORK_FEE;
+      prvToBurn = prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE;
     }
     return prvToBurn;
   };
@@ -104,7 +104,7 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmPro
             })}{' '}
             PRV
           </LabelText>
-          <LabelText style={{ marginTop: 8 }}>
+          <LabelText>
             Fee:{' '}
             {format.amountVer2({
               originalAmount: Number(fee?.feeAmount || 0),
@@ -117,14 +117,13 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmPro
     } else {
       return (
         <div>
-          <ErrorText>Your PRV balance is insufficien</ErrorText>
           <ErrorText>
-            Your can minimum{' '}
+            Your PRV balance is insufficient, you need at least{' '}
             {format.amountVer2({
               originalAmount: Number(minimumPRVBalanceRequire || 0),
               decimals: tokenToPayFeeInfo.pDecimals,
             })}{' '}
-            {tokenToPayFeeInfo?.symbol} to create transaction
+            {tokenToPayFeeInfo?.symbol} to create the proposal.
           </ErrorText>
         </div>
       );

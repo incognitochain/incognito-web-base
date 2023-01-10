@@ -6,8 +6,8 @@ import React from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { useSelector } from 'react-redux';
-import { Fee } from 'state/dao/types';
-import { getMinimumPRVBalanceRequire, MINIMUM_PRV_REQUIRE_TO_BURN, NETWORK_FEE } from 'state/dao/utils';
+import { Fee, Proposal } from 'state/dao/types';
+import { NETWORK_FEE } from 'state/dao/utils';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import convert from 'utils/convert';
@@ -114,53 +114,37 @@ const LabelField = styled.p`
 interface ModalVoteProps {
   isOpen?: boolean;
   fee?: Fee;
+  proposal?: Proposal;
   onCancel: (isOpen: boolean) => void;
-  onChooseVoteOption: (voteOption: 1 | 2) => void;
+  onChooseVoteOption: (voteOption: 0 | 1) => void;
   onSubmitVote: (prvBurnAmount: number) => void;
-  selectedVote: 1 | 2;
+  selectedVote: 0 | 1;
   amount: any;
   onChangeAmount: (amount: any) => void;
 }
 
 export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
-  const { isOpen, onCancel, onChooseVoteOption, onSubmitVote, selectedVote, fee, amount, onChangeAmount } = props;
+  const { isOpen, onCancel, onChooseVoteOption, onSubmitVote, selectedVote, fee, amount, onChangeAmount, proposal } =
+    props;
   const reasons: any = [
     {
       id: 1,
-      title: 'Cast 1 vote for Prop 12',
+      title: `Vote for Prop ${proposal?.id}`,
     },
     {
-      id: 2,
-      title: 'Abstain from voting on Prop 12',
+      id: 0,
+      title: `Vote against Prop ${proposal?.id}`,
     },
   ];
 
   const prvTokenInfo = useSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
   const tokenToPayFeeInfo = useSelector(getPrivacyDataByTokenIDSelector)(fee?.tokenid || '');
-  const minimumPRVBalanceRequire = getMinimumPRVBalanceRequire(prvTokenInfo?.amount || 0, fee?.feeAmount || 0);
-
-  const getPrvBalanceToBurn = () => {
-    const prvBalance: number = prvTokenInfo?.amount || 0;
-    let prvToBurn = MINIMUM_PRV_REQUIRE_TO_BURN;
-    if (prvBalance >= minimumPRVBalanceRequire) {
-      prvToBurn = (prvBalance * 90) / 100 - (fee?.feeAmount || 0) - NETWORK_FEE;
-    }
-    return prvToBurn;
-  };
 
   const prvBalanceToBurn = convert.toOriginalAmount({
     humanAmount: amount,
     decimals: PRV.pDecimals,
     round: false,
   });
-
-  const checkPrvBalance = () => {
-    const prvBalance: number = Number(prvTokenInfo?.amount) || 0;
-    if (prvBalance >= minimumPRVBalanceRequire) {
-      return true;
-    }
-    return false;
-  };
 
   const validateAmount = (): {
     isValidate: boolean;
@@ -173,7 +157,7 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
       decimals: PRV.pDecimals,
       round: false,
     });
-    const minOriginalAmount = MINIMUM_PRV_REQUIRE_TO_BURN;
+    const minOriginalAmount = 1e9;
 
     const bn = new BigNumber(amount);
     if (bn.isNaN()) {
@@ -186,13 +170,14 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
     if (originalAmount < minOriginalAmount) {
       return {
         isValidate: false,
-        errorMessage: 'Please enter at least 10 PRV',
+        errorMessage: 'Amount must be larger than 0.000000001 PRV',
       };
     }
 
     if (
-      originalAmount >= MINIMUM_PRV_REQUIRE_TO_BURN &&
-      originalAmount < prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE
+      prvBalance >= minOriginalAmount + (fee?.feeAmount || 0) + 2 * NETWORK_FEE &&
+      originalAmount >= minOriginalAmount &&
+      originalAmount <= prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE
     ) {
       return {
         isValidate: true,
@@ -205,12 +190,6 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
       errorMessage: 'Your PRV balance is insufficien',
     };
   };
-
-  // const validateAmount = () => {
-  //   const prvBalance: number = Number(prvTokenInfo?.amount) || 0;
-  //   const maxAmount = (prvBalance * 99) / 100;
-  //   if(prvBalance > maxAmount)
-  // };
 
   const renderReasonOption = (reason: any) => {
     return (
@@ -229,7 +208,7 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
     return (
       <div>
         <LabelText>Snapshot Amount: {amount || 0} PRV</LabelText>
-        <LabelText style={{ marginTop: 8 }}>
+        <LabelText>
           Fee:{' '}
           {format.amountVer2({
             originalAmount: Number(fee?.feeAmount || 0),
@@ -256,7 +235,7 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
       <ModalContainer>
         <ModalHeader>
           <div />
-          <ModalTitle>Vote proposal</ModalTitle>
+          <ModalTitle>Vote proposal {proposal?.id}</ModalTitle>
           <div />
         </ModalHeader>
         <ReasonContainer>{reasons?.map((item: any, i: any) => renderReasonOption(item))}</ReasonContainer>
