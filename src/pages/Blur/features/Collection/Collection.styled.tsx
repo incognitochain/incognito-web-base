@@ -38,7 +38,7 @@ const ListStyled = styled.div<{ showLoader: boolean }>`
   margin-top: 8px;
   .table {
     opacity: ${({ showLoader }) => (showLoader ? 0 : 1)};
-    transition: all 800ms ease-in-out;
+    transition: all 600ms ease-in-out;
   }
   tr {
     height: 80px !important;

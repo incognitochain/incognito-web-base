@@ -9,7 +9,7 @@ class RpcPBlur {
     this.http = createAxiosInstance({ baseURL: 'http://51.161.117.193:7898/' });
   }
 
-  async getCollections(): Promise<ICollection[]> {
+  async getCollections({ searchURL }: { searchURL?: string } = {}): Promise<ICollection[]> {
     return this.http.get(`papps/pblur/collections?${CANCEL_KEY}`).then((resp: any) => mapperCollections(resp));
   }
 
