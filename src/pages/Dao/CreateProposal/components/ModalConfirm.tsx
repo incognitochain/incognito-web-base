@@ -117,14 +117,13 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmPro
     } else {
       return (
         <div>
-          <ErrorText>Your PRV balance is insufficien</ErrorText>
           <ErrorText>
-            Your can minimum{' '}
+            Your PRV balance is insufficient, you need at least{' '}
             {format.amountVer2({
               originalAmount: Number(minimumPRVBalanceRequire || 0),
               decimals: tokenToPayFeeInfo.pDecimals,
             })}{' '}
-            {tokenToPayFeeInfo?.symbol} to create transaction
+            {tokenToPayFeeInfo?.symbol} to create the proposal.
           </ErrorText>
         </div>
       );
