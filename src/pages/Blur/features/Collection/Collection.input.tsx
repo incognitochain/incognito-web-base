@@ -3,6 +3,7 @@ import ImagePlaceholder from 'components/ImagePlaceholder';
 import debounce from 'lodash/debounce';
 import { ICollection } from 'pages/Blur/Blur.interface';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { rpcPBlur } from 'services';
 import styled from 'styled-components/macro';
 
@@ -20,9 +21,6 @@ const Container = styled.div`
     //padding-left: 34px;
   }
 
-  ..ant-select-dropdown {
-    background-color: red !important;
-  }
   .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
     border-color: ${({ theme }) => theme.btn1} !important;
   }
@@ -96,6 +94,7 @@ const DropdownItem = styled.div`
 
 const SearchInput = () => {
   const [collections, setCollections] = React.useState<ICollection[]>([]);
+  const history = useHistory();
   const mockupData = [
     {
       value: 'selection',
@@ -116,7 +115,7 @@ const SearchInput = () => {
 
   const renderItem = (collection: ICollection) => {
     return (
-      <DropdownItem>
+      <DropdownItem key={collection.name} onClick={() => history.push(`/papps/pblur/${collection.contractAddress}`)}>
         <ImagePlaceholder className="logo" src={collection.imageUrl} />
         <p className="collection-name">{collection.name}</p>
       </DropdownItem>
@@ -130,6 +129,8 @@ const SearchInput = () => {
         defaultActiveFirstOption={false}
         showArrow={false}
         filterOption={false}
+        autoClearSearchValue={false}
+        allowClear={false}
         placeholder="Search collections"
         onSearch={debounceSearch}
         onKeyDown={(event: any) => {

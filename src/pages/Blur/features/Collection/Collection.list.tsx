@@ -8,6 +8,7 @@ import ImagePlaceholder from 'components/ImagePlaceholder';
 import { ICollection } from 'pages/Blur';
 import EthereumLogo from 'pages/Blur/images/ether.svg';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import CollectionLoader from './Collection.loader';
 import { ListStyled } from './Collection.styled';
@@ -29,8 +30,9 @@ interface ITbHeader {
 }
 
 const List = (props: IListProps) => {
-  const { isFetching, collections, onClickItem } = props;
-  const showLoader = isFetching || collections.length <= 0;
+  const { isFetching, collections } = props;
+  const history = useHistory();
+  const showLoader = isFetching && collections.length <= 0;
 
   const renderSortableTitle = ({ sortColumns, title, key }: ITbHeader) => {
     const sortedColumn = sortColumns?.find(({ column }: any) => column.key === key);
@@ -292,7 +294,7 @@ const List = (props: IListProps) => {
         rowClassName="tableRow"
         onRow={(collection) => ({
           onClick: () => {
-            onClickItem(collection);
+            history.push(`/papps/pblur/${collection.contractAddress}`);
           },
         })}
       />
