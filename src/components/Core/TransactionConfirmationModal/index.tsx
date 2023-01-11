@@ -87,6 +87,8 @@ export function TransactionSubmittedContent({
   currencyToAdd,
   inline,
   message,
+  closeComponent,
+  extraComponent,
 }: {
   onDismiss?: () => void;
   hash: string | undefined;
@@ -94,6 +96,8 @@ export function TransactionSubmittedContent({
   currencyToAdd?: Currency | undefined;
   inline?: boolean; // not in modal
   message?: string;
+  closeComponent?: () => React.ReactNode;
+  extraComponent?: () => React.ReactNode;
 }) {
   const theme = useContext(ThemeContext);
 
@@ -126,6 +130,7 @@ export function TransactionSubmittedContent({
         {/*    <CloseIcon onClick={onDismiss} />*/}
         {/*  </RowBetween>*/}
         {/*)}*/}
+        {closeComponent && closeComponent()}
         <ConfirmedIcon inline={inline}>
           <img src={submittedSVG} alt="submitted-svg" />
           {/*<ArrowUpCircle strokeWidth={0.5} size={inline ? '40px' : '90px'} color={theme.primary1} />*/}
@@ -146,6 +151,7 @@ export function TransactionSubmittedContent({
               </Text>
             </ExternalLink>
           )}
+          {extraComponent && extraComponent()}
           {/*{currencyToAdd && connector.watchAsset && (*/}
           {/*  <ButtonLight mt="12px" padding="6px 12px" width="fit-content" onClick={addToken}>*/}
           {/*    {!success ? (*/}

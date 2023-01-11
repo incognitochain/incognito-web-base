@@ -5,7 +5,7 @@ import './reset.scss';
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Footer from 'components/Core/Footer';
 import Header from 'components/Core/Header';
-import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+// import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
@@ -136,44 +136,44 @@ const App = () => {
   return (
     <ErrorBoundary>
       <Route component={DarkModeQueryParamReader} />
-      <IncognitoWalletProvider>
-        <AppWrapper>
-          <HeaderWrapper id={HEADER_ID}>
-            <Header />
-          </HeaderWrapper>
-          <BodyWrapper>
-            <Popups />
-            <Suspense fallback={<Loader />}>{renderContent()}</Suspense>
-            <Footer />
-            {/*{!isMobile && (*/}
-            {/*  <div*/}
-            {/*    style={{*/}
-            {/*      position: 'fixed',*/}
-            {/*      bottom: 24,*/}
-            {/*      right: 24,*/}
-            {/*      display: 'flex',*/}
-            {/*      flexDirection: 'column',*/}
-            {/*      zIndex: 3,*/}
-            {/*    }}*/}
-            {/*  >*/}
-            {/*    <SupportIcon*/}
-            {/*      onClick={() => {*/}
-            {/*        window.open('https://we.incognito.org/g/Support', '_blank');*/}
-            {/*      }}*/}
-            {/*      src={messageIcon}*/}
-            {/*    />*/}
-            {/*    <div style={{ height: 16 }} />*/}
-            {/*    <SupportIcon*/}
-            {/*      onClick={() => {*/}
-            {/*        window.open('https://t.me/incognitochain', '_blank');*/}
-            {/*      }}*/}
-            {/*      src={supportIcon}*/}
-            {/*    />*/}
-            {/*  </div>*/}
-            {/*)}*/}
-          </BodyWrapper>
-        </AppWrapper>
-      </IncognitoWalletProvider>
+      {/* <IncognitoWalletProvider> */}
+      <AppWrapper>
+        <HeaderWrapper id={HEADER_ID}>
+          <Header />
+        </HeaderWrapper>
+        <BodyWrapper>
+          <Popups />
+          <Suspense fallback={<Loader />}>{renderContent()}</Suspense>
+          <Footer />
+          {/*{!isMobile && (*/}
+          {/*  <div*/}
+          {/*    style={{*/}
+          {/*      position: 'fixed',*/}
+          {/*      bottom: 24,*/}
+          {/*      right: 24,*/}
+          {/*      display: 'flex',*/}
+          {/*      flexDirection: 'column',*/}
+          {/*      zIndex: 3,*/}
+          {/*    }}*/}
+          {/*  >*/}
+          {/*    <SupportIcon*/}
+          {/*      onClick={() => {*/}
+          {/*        window.open('https://we.incognito.org/g/Support', '_blank');*/}
+          {/*      }}*/}
+          {/*      src={messageIcon}*/}
+          {/*    />*/}
+          {/*    <div style={{ height: 16 }} />*/}
+          {/*    <SupportIcon*/}
+          {/*      onClick={() => {*/}
+          {/*        window.open('https://t.me/incognitochain', '_blank');*/}
+          {/*      }}*/}
+          {/*      src={supportIcon}*/}
+          {/*    />*/}
+          {/*  </div>*/}
+          {/*)}*/}
+        </BodyWrapper>
+      </AppWrapper>
+      {/* </IncognitoWalletProvider> */}
       <ToastContainer
         position="bottom-center"
         toastClassName="white-color"

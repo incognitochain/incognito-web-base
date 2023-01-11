@@ -3,8 +3,13 @@ import type { ColumnsType } from 'antd/es/table';
 import ImagePlaceholder from 'components/ImagePlaceholder';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
-import React from 'react';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
+import { IOffersMadeAction, OffersMadeAction } from './OffersMade.action';
+import { IPOpenseaOfferMade } from './OffersMade.interface';
+import POpenseaListOfferLoader from './OffersMade.list.loader';
 // import POpenseaOffersMadeLoader from './OffersMade.list.loader';
 import { Styled } from './OffersMade.list.styled';
 
@@ -15,9 +20,24 @@ const timeAgo = new TimeAgo('en-US');
 interface POpenseaOffersMadeProps {}
 
 const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
-  const {} = props;
+  const dispatch = useDispatch();
 
-  const columns: ColumnsType<any> = [
+  const [isFetching, setIsFetching] = useState(false);
+  const [offersMade, setOffersMade] = useState<IPOpenseaOfferMade[]>([]);
+
+  const offerMadesActions: IOffersMadeAction = new OffersMadeAction({
+    component: {
+      setIsFetching,
+      setOffersMade,
+    },
+    dispatch,
+  });
+
+  useEffect(() => {
+    offerMadesActions.getOffersMade();
+  }, []);
+
+  const columns: ColumnsType<IPOpenseaOfferMade> = [
     {
       key: 'index',
       render: (text, record, index) => (
@@ -37,9 +57,9 @@ const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
       render: (text, record, index) => (
         <div key={index.toString()} className="offer-container">
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <ImagePlaceholder className="logo" src={''} />
+            <ImagePlaceholder className="logo" src={record.nftImg} animationUrl={record.nftAnimationUrl} />
             <p className="baseText" style={{ marginLeft: 24 }}>
-              NFT Name
+              {record.nftName}
             </p>
           </div>
         </div>
@@ -54,7 +74,7 @@ const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
       key: 'unit-price',
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText text-align-center">
-          340 ETH
+          {record.offerAmountText}
         </p>
       ),
       title: () => (
@@ -64,25 +84,34 @@ const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
       ),
     },
     {
-      key: 'floor-difference',
+      key: 'floor-price',
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText text-align-center">
-          100$ below
+          {record.offerFloorPrice}
         </p>
       ),
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
-          Floor Difference
+          Floor Price
         </div>
       ),
     },
     {
       key: 'expiration',
-      render: (text, record, index) => (
-        <p key={index.toString()} className="baseText text-align-center">
-          3 days
-        </p>
-      ),
+      render: (text, record, index) => {
+        let diffText = '';
+        const diffDays = Math.round(moment(record.offerTime).diff(moment(record.createTime), 'days', true));
+        if (diffDays > 0) {
+          diffText = diffDays + (diffDays === 1 ? ' day' : ' days');
+        } else {
+          diffText = Math.round(moment(record.offerTime).diff(moment(record.createTime), 'hours', true)) + ' hours';
+        }
+        return (
+          <p key={index.toString()} className="baseText text-align-center">
+            {diffText}
+          </p>
+        );
+      },
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
           Expiration
@@ -93,7 +122,7 @@ const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
       key: 'made',
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText text-align-center">
-          {timeAgo.format(Date.now() - 1.5 * 60 * 1000, 'round')}
+          {timeAgo.format(record.createTime, 'round')}
         </p>
       ),
       title: () => (
@@ -106,7 +135,7 @@ const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
       key: 'status',
       render: (text, record, index) => (
         <p key={index.toString()} className="baseText text-align-center">
-          Valid
+          {record.status}
         </p>
       ),
       title: () => (
@@ -132,11 +161,11 @@ const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
 
   return (
     <Styled>
-      {/* {<POpenseaOffersMadeLoader />} */}
+      {isFetching && <POpenseaListOfferLoader />}
       <Table
-        // style={{ opacity: isFetching && collections.length <= 0 ? 0 : 1 }}
+        style={{ opacity: isFetching && offersMade.length <= 0 ? 0 : 1 }}
         columns={columns}
-        dataSource={[1]}
+        dataSource={offersMade}
         size="large"
         pagination={false}
         rowClassName="tableRow"

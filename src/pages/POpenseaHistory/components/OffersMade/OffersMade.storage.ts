@@ -5,30 +5,33 @@ const KEY = 'INC-POPENSEA-OFFERS-MADE-1';
 
 export interface IPOpenseaOfferStorage {
   txHash: string;
-  incAddress?: string;
-  time: number;
+  signerAddress: string;
+  createTime: number;
   appName: string;
+
   offerTokenID: string;
   offerAmountText: string;
-  offerTime: string;
+  offerTime: number;
+  offerFloorPrice: string;
 
   nftTokenId: string;
   nftContract: string;
   nftName: string;
   nftImg: string;
+  nftAnimationUrl?: string;
 }
 
-const getPOpenseaOffers = (): IPOpenseaOfferStorage[] => {
+const getLocalPOpenseaOffers = (): IPOpenseaOfferStorage[] => {
   const offers = Storage.getItem(KEY);
   if (!offers) return [];
   return offers;
 };
 
-const setPOpenseaOffers = (props: IPOpenseaOfferStorage) => {
+const setLocalPOpenseaOffers = (props: IPOpenseaOfferStorage) => {
   let offers: IPOpenseaOfferStorage[] = Storage.getItem(KEY) || [];
   offers.push(props);
   offers = uniqueBy(offers, 'txHash');
   Storage.setItem(KEY, offers);
 };
 
-export { getPOpenseaOffers, setPOpenseaOffers };
+export { getLocalPOpenseaOffers, setLocalPOpenseaOffers };

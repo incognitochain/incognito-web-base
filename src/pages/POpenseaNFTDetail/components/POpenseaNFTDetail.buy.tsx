@@ -43,8 +43,6 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const [loadingFee, setLoadingFee] = useState<boolean>(false);
   const [isCanBuy, setIsCanBuy] = useState<boolean>(true);
 
-  const canMakeOffer = false; // Wait for api
-
   const buyActions: IPOpenseaNFTDetailBuyAction = new POpenseaNFTDetailBuyAction({
     component: {
       setBuyFee,
@@ -75,7 +73,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
   const childToken =
     selectedToken && selectedToken.isUnified
       ? selectedToken?.listUnifiedToken.find((token) => token.networkID === 1)
-      : undefined;
+      : selectedToken;
 
   const buyPriceFormatAmount = seaportSellOrder
     ? seaportSellOrder.getPricingFormatAmount(childToken?.decimals || 18)
@@ -133,7 +131,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
     }
   };
 
-  const onClickOffer = () => {
+  const onClickMakeOffer = () => {
     const POpenseaMakeOffer = reduxForm({
       form: FORM_OFFER_POPENSEA.formName,
       destroyOnUnmount: true,
@@ -214,30 +212,24 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
               {renderFee()}
               {renderError()}
             </div>
-            {!canMakeOffer && (
-              <button className="btn-buy" onClick={!incAccount ? showPopup : onClickBuy}>
-                <p className="text-buy">
-                  {!incAccount ? (isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet') : 'Buy'}
-                </p>
+          </div>
+          <div className="buy-container">
+            <button className="btn-buy" onClick={!incAccount ? showPopup : onClickBuy}>
+              <p className="text-buy">
+                {!incAccount ? (isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet') : 'Buy'}
+              </p>
+            </button>
+            {incAccount && (
+              <button className="btn-offer" onClick={onClickMakeOffer}>
+                <p className="text-buy">{'Make offer'}</p>
               </button>
             )}
           </div>
-          {canMakeOffer && (
-            <div className="buy-container">
-              <button className="btn-buy" onClick={!incAccount ? showPopup : onClickBuy}>
-                <p className="text-buy">
-                  {!incAccount ? (isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet') : 'Buy'}
-                </p>
-              </button>
-              {incAccount && (
-                <button className="btn-offer" onClick={onClickOffer}>
-                  <p className="text-buy">{'Make offer'}</p>
-                </button>
-              )}
-            </div>
-          )}
         </div>
       )}
+      <button className="btn-offer" onClick={onClickMakeOffer}>
+        <p className="text-buy">{'Make offer'}</p>
+      </button>
     </Styled>
   );
 };

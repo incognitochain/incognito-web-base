@@ -113,6 +113,8 @@ export class POpenseaBuyFee {
   }
 }
 
+export class POpenseaOfferFee extends POpenseaBuyFee {}
+
 export class LastSale {
   asset?: Asset;
   assetBundle?: string;

@@ -3,7 +3,7 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
 
-const POpenseaListCollectionLoader = ({ repeat = 2 }: { repeat?: number }) => (
+const POpenseaListOfferLoader = ({ repeat = 20 }: { repeat?: number }) => (
   <React.Fragment>
     {[...Array(repeat).keys()].map((index) => (
       <ContentLoader
@@ -29,4 +29,4 @@ const POpenseaListCollectionLoader = ({ repeat = 2 }: { repeat?: number }) => (
   </React.Fragment>
 );
 
-export default POpenseaListCollectionLoader;
+export default POpenseaListOfferLoader;

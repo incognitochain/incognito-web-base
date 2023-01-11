@@ -30,13 +30,6 @@ export const Styled = styled.div`
       line-height: 140%;
       color: ${({ theme }) => theme.content4};
     }
-
-    .total-offer {
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 140%;
-      color: ${({ theme }) => theme.color_grey};
-    }
   }
 
   .duration-dropdown {
@@ -59,31 +52,28 @@ export const Styled = styled.div`
 `;
 
 interface ModalOfferFormProps {
-  isValidPrice: boolean;
+  isValidBalance: boolean;
   incAccount?: any;
   onDeposit: () => void;
   selectedToken?: PToken;
   tokens: PToken[];
   onSelectToken: (token: PToken) => void;
+  priceOffer?: string;
 }
 
 const ModalOfferForm = (props: ModalOfferFormProps) => {
-  const { isValidPrice, incAccount, selectedToken, tokens, onSelectToken } = props;
+  const { isValidBalance, incAccount, selectedToken, tokens, onSelectToken } = props;
 
   const renderError = () => (
-    <div className="error-container">
-      <p className="current-error">
-        {!isValidPrice && incAccount && 'Your balance is insufficient.'}{' '}
-        {!isValidPrice && incAccount && (
-          <span onClick={props.onDeposit} style={{ textDecoration: 'underline', cursor: 'pointer' }}>
-            deposit now
-          </span>
-        )}
-      </p>
-      <p className="total-offer">{isValidPrice ? `Total offer amount: 0 ETH` : ''}</p>
-    </div>
+    <p className="current-error">
+      {!isValidBalance && incAccount && 'Your balance is insufficient.'}{' '}
+      {!isValidBalance && incAccount && (
+        <span onClick={props.onDeposit} style={{ textDecoration: 'underline', cursor: 'pointer' }}>
+          deposit now
+        </span>
+      )}
+    </p>
   );
-
   return (
     <Styled>
       <form
@@ -112,6 +102,7 @@ const ModalOfferForm = (props: ModalOfferFormProps) => {
                 placeholder: 'Price',
               }}
               validate={validator.combinedAmount}
+              type="number"
             />
           </div>
           <POpenseaSelectTokenDropdown
@@ -121,7 +112,10 @@ const ModalOfferForm = (props: ModalOfferFormProps) => {
             onSelectToken={onSelectToken}
           />
         </div>
-        {renderError()}
+        <div className="error-container">
+          {props.priceOffer && renderError()}
+          {/* {renderPrice()} */}
+        </div>
       </form>
     </Styled>
   );

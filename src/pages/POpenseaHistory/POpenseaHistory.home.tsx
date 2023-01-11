@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Tabs } from 'antd';
 import React, { memo } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
 import OffersMadeList from './components/OffersMade/OffersMade.list';
 import { Styled, WrapperContent } from './POpenseaHistory.styled';
@@ -11,9 +9,6 @@ import POpenseaHistorySubRoute from './POpenseaHistory.subRoute';
 const defaultActiveKey = '1';
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const history = useHistory();
-
   const [currentKeyTab, setCurrentKeyTab] = React.useState(defaultActiveKey);
 
   const onChangeTab = (key: string) => {
@@ -34,7 +29,7 @@ const Home = () => {
           onChange={onChangeTab}
           items={[
             {
-              label: renderLabel('1', 'Offers'),
+              label: renderLabel('1', 'Offers made'),
               key: '1',
               children: <OffersMadeList />,
             },

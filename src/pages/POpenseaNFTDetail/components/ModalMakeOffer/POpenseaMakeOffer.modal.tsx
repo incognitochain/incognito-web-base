@@ -6,22 +6,29 @@ import { BigNumber } from 'bignumber.js';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { useModal } from 'components/Modal';
 import { BIG_COINS } from 'constants/token';
-import { POpenseaNft } from 'models/model/POpenseaNFT';
+import { POpenseaNft, POpenseaOfferFee } from 'models/model/POpenseaNFT';
 import PToken from 'models/model/pTokenModel';
 import moment from 'moment';
 import { FORM_OFFER_POPENSEA } from 'pages/POpenseaNFTDetail/POpenseaNFTDetail.constant';
 import React, { memo, useEffect, useState } from 'react';
 import DateTimePicker from 'react-datetime-picker';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { formValueSelector, isValid } from 'redux-form';
+import { formValueSelector } from 'redux-form';
+import store from 'state';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
+import {
+  actionGetPOpenseaCollectionDetail,
+  networkFeePOpenseaSelectors,
+  selectedpOpenseaCollectionSelector,
+} from 'state/pOpensea';
 import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/token';
+import format from 'utils/format';
 
-import store from '../../../../state';
 import POpenseaSelectDurationDropdown from '../DropdownSelectDuration/POpenseaSelectDuration.dropdown';
+import { IPOpenseaMakeOfferAction, POpenseaMakeOfferAction } from './POpenseaMakeOffer.modal.action';
 import ModalOfferForm from './POpenseaMakeOffer.modal.form';
-import { Styled } from './POpenseaMakeOffer.modal.styled';
+import { Spinner, Styled } from './POpenseaMakeOffer.modal.styled';
 
 interface POpenseaModalOfferProps {
   selectedNFT: POpenseaNft;
@@ -32,15 +39,23 @@ interface POpenseaModalOfferProps {
 const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
   const { selectedNFT } = props;
 
+  const selectedCollection = useSelector(selectedpOpenseaCollectionSelector);
+
   const history = useHistory();
-  const { clearAllModal } = useModal();
-  const { isIncognitoInstalled, showPopup } = useIncognitoWallet();
+  const dispatch = useDispatch();
+
+  const { clearAllModal, setModal } = useModal();
+  const { isIncognitoInstalled, showPopup, requestSignTransaction } = useIncognitoWallet();
 
   const [selectedToken, setSelectedToken] = useState<PToken | undefined>();
   const [duration, setDuration] = useState<number | undefined>(24 * 3); // Default 3 day
   const [offerDate, setOfferDate] = useState(moment().add(duration, 'h').toDate());
+  const [isValidBalance, setIsValidBalance] = useState<boolean>(false);
 
-  const [isValidPrice, setIsValidPrice] = useState<boolean>(true);
+  const [offerFee, setOfferFee] = useState<POpenseaOfferFee | undefined>();
+  const [loadingFee, setLoadingFee] = useState<boolean>(false);
+  const [isCanOffer, setIsCanOffer] = useState<boolean>(false);
+  const [overlayContent, setOverlayContent] = useState<React.ReactNode | undefined>();
 
   const incAccount = useSelector(incognitoWalletAccountSelector);
   const tokens = useSelector(unshieldableTokens).filter(
@@ -49,43 +64,75 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
   const selectedTokenPrivacy = useSelector(getPrivacyByTokenIdentifySelectors)(
     selectedToken ? selectedToken.identify : ''
   );
-
-  const userBalanceFormatedText = selectedTokenPrivacy
-    ? `${selectedTokenPrivacy.formatAmount || 0} ${selectedTokenPrivacy.symbol || ''}`
-    : '';
+  const networkFee = useSelector(networkFeePOpenseaSelectors);
 
   const formSelector = formValueSelector(FORM_OFFER_POPENSEA.formName);
-  const isValidForm = isValid(FORM_OFFER_POPENSEA.formName)(store.getState());
   const reciptientAddress = formSelector(store.getState(), FORM_OFFER_POPENSEA.recipitentAddress);
   const priceOffer = formSelector(store.getState(), FORM_OFFER_POPENSEA.offerPriceAddress);
-
-  const seaportSellOrder = selectedNFT.getSeaportSellOrder();
 
   const childToken =
     selectedToken && selectedToken.isUnified
       ? selectedToken?.listUnifiedToken.find((token) => token.networkID === 1)
-      : undefined;
+      : selectedToken;
+
+  const userBalanceFormatedText = selectedTokenPrivacy
+    ? `${selectedTokenPrivacy.formatAmount || 0} ${selectedTokenPrivacy.symbol || ''}`
+    : '';
+  const offerFeeFormatAmount = offerFee ? offerFee.getFeeFormatAmount(childToken?.pDecimals || 9) : '0';
+  const priceOfferFormatAmount = priceOffer
+    ? format.amountVer2({ originalAmount: new BigNumber(priceOffer).toNumber(), decimals: 0 })
+    : '0';
+
+  const offerActions: IPOpenseaMakeOfferAction = React.useRef(
+    new POpenseaMakeOfferAction({
+      component: {
+        setLoadingFee,
+        setModal,
+        clearAllModal,
+        setOfferFee,
+        setOverlayContent,
+      },
+      dispatch,
+    })
+  ).current;
 
   useEffect(() => {
     tokens.length > 0 && selectedToken === undefined && setSelectedToken(tokens[0]);
   }, [tokens]);
 
   useEffect(() => {
-    if (priceOffer && selectedToken) {
-      const totalOfferAmount = new BigNumber(priceOffer).toNumber();
-      const _isValidPrice =
-        selectedTokenPrivacy &&
-        selectedTokenPrivacy.formatAmount &&
-        new BigNumber(selectedTokenPrivacy.formatAmount).toNumber() >= totalOfferAmount
-          ? true
-          : false;
-      setIsValidPrice(_isValidPrice);
-    } else {
-      setIsValidPrice(true);
-    }
-  }, [selectedToken, priceOffer]);
+    !selectedCollection.name && dispatch(actionGetPOpenseaCollectionDetail(props.contract));
+  }, [selectedCollection]);
 
-  const onClickOffer = () => {};
+  useEffect(() => {
+    if (priceOffer && selectedToken) {
+      const priceOfferAmount = new BigNumber(priceOfferFormatAmount).toNumber();
+      const currBalance =
+        selectedTokenPrivacy && selectedTokenPrivacy.formatAmount
+          ? new BigNumber(selectedTokenPrivacy.formatAmount).toNumber()
+          : 0;
+      setIsValidBalance(currBalance >= priceOfferAmount);
+      if (offerFee) {
+        const totalOfferAmount = priceOfferAmount + new BigNumber(offerFeeFormatAmount).toNumber();
+        setIsCanOffer(currBalance >= totalOfferAmount);
+      }
+    } else {
+      setIsValidBalance(false);
+    }
+  }, [selectedToken, priceOffer, offerFee]);
+
+  useEffect(() => {
+    if (reciptientAddress && priceOffer && isValidBalance && selectedToken && offerDate) {
+      offerActions.estimateOfferFee(
+        props.contract,
+        offerDate.getTime(),
+        selectedToken,
+        priceOffer,
+        reciptientAddress,
+        selectedNFT
+      );
+    }
+  }, [priceOffer, isValidBalance, offerDate]);
 
   const onChangeTimePicker = (date: Date) => {
     setDuration(undefined);
@@ -101,19 +148,41 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
     setSelectedToken(token);
   };
 
+  const onClickCollection = () => {
+    clearAllModal();
+    history.push(`/papps/popensea/detail/${props.contract}`);
+  };
+
+  const onViewHistory = () => {
+    history.push('/papps/popensea/history');
+  };
+
+  const onClickOffer = () => {
+    if (isCanOffer) {
+      offerActions.offerNFT(
+        requestSignTransaction,
+        reciptientAddress,
+        networkFee,
+        offerDate.getTime(),
+        props.contract,
+        onViewHistory,
+        selectedNFT,
+        priceOffer,
+        selectedToken,
+        childToken,
+        offerFee,
+        selectedCollection.stats?.floorPrice || 0
+      );
+    }
+  };
+
   const renderOverviewCollection = () => (
     <div className="collection-container">
       <img className="collection-img" src={selectedNFT.collection?.imageUrl} />
       <div>
         <p className="collection-nft-name">{selectedNFT.getOriginalName()}</p>
         <div className="collection-name-container">
-          <p
-            className="collection-name"
-            onClick={() => {
-              clearAllModal();
-              history.push(`/papps/popensea/detail/${props.contract}`);
-            }}
-          >
+          <p className="collection-name" onClick={onClickCollection}>
             {selectedNFT.collection?.name}
           </p>
           {selectedNFT.collection && selectedNFT.collection.getIsVerify() && <img src={icVerify} />}
@@ -131,15 +200,32 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
         </div>
         <div className="floor-price-content margin-top-8">
           <p className="floor-price-title">Floor price</p>
-          <p className="floor-price-unit">0 ETH</p>
-        </div>
-        <div className="floor-price-content margin-top-8">
-          <p className="floor-price-title">Best offer</p>
-          <p className="floor-price-unit">0 ETH</p>
+          <p className="floor-price-unit">{selectedCollection?.getFloorPriceFormatAmount()} ETH</p>
         </div>
       </div>
     </div>
   );
+
+  const renderPrice = () => {
+    const totalOfferAmount =
+      new BigNumber(priceOfferFormatAmount).toNumber() + new BigNumber(offerFeeFormatAmount).toNumber();
+
+    return (
+      <div className="container-price">
+        {isValidBalance && !loadingFee && offerFee && (
+          <p className="current-fee">
+            {offerFeeFormatAmount} {selectedToken?.symbol} = {offerFee.getFeeUsdStr()} $
+          </p>
+        )}
+        {loadingFee && <Spinner className="spinner" />}
+        <p className="total-offer">
+          {isValidBalance && offerFee
+            ? `Total offer amount: ${totalOfferAmount} ${selectedToken ? selectedToken?.symbol : ''}`
+            : ''}
+        </p>
+      </div>
+    );
+  };
 
   return (
     <Styled>
@@ -147,13 +233,15 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
       {renderFloorPrice()}
       <div>
         <ModalOfferForm
-          isValidPrice={isValidPrice}
+          isValidBalance={isValidBalance}
           incAccount={incAccount}
           onDeposit={props.onDeposit}
           selectedToken={selectedToken}
           tokens={tokens}
           onSelectToken={onSelectToken}
+          priceOffer={priceOffer}
         />
+        {renderPrice()}
         <div className="duration-container">
           <p className="duration-title">Duration</p>
           <div className="duration-content">
@@ -171,12 +259,21 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
             />
           </div>
         </div>
-        <button className="btn-offer" onClick={!incAccount ? showPopup : onClickOffer}>
+        <button
+          className="btn-offer"
+          disabled={!isCanOffer || !offerFee}
+          onClick={!incAccount ? showPopup : onClickOffer}
+        >
           <p className="text-offer">
             {!incAccount ? (isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet') : 'Make offer'}
           </p>
         </button>
       </div>
+      {overlayContent && (
+        <div className="loading-container">
+          <div className="loading-content">{overlayContent}</div>
+        </div>
+      )}
     </Styled>
   );
 };

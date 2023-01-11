@@ -198,6 +198,11 @@ const BIG_COINS = {
       ? '96de12b4e6ede8795e1938b47fc12da2c5983722e731d2ada185641dd494cd78'
       : '96de12b4e6ede8795e1938b47fc12da2c5983722e731d2ada185641dd494cd78',
   },
+  WETH: {
+    tokenID: isMainnet
+      ? 'e5713ed10df564bc35dfa3f813cfcc25f265cf65cac4124fc3080e2e3c304381'
+      : '50e259020c59cf019657f979cfa62af8a32bd5964add70cb2b52f666d53ea98d',
+  },
 };
 
 const PRIVATE_TOKEN_TYPE = {

@@ -105,6 +105,22 @@ export class POpenseaCollection {
   getPercentUniqueOwner() {
     return Math.round(((this.stats?.numOwners || 0) / (this.stats?.totalSupply || 1)) * 100);
   }
+
+  getFloorPriceFormatAmount() {
+    return format.amountVer2({
+      originalAmount: new BigNumber(
+        this.stats && this.stats.floorPrice ? this.stats.floorPrice.toFixed(2) : 0
+      ).toNumber(),
+      decimals: 0,
+    });
+  }
+
+  getCountFormatAmount() {
+    return format.amountVer2({
+      originalAmount: new BigNumber(this.stats && this.stats.count ? this.stats.count.toFixed(0) : 0).toNumber(),
+      decimals: 0,
+    });
+  }
 }
 
 export interface PaymentToken {

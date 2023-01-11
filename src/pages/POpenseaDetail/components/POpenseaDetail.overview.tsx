@@ -197,14 +197,14 @@ const POpenseaDetailOverview = (props: POpenseaDetailOverviewProps) => {
           </div>
         </div>
         <div className="info-container">
-          {renderTitleItem('Items', `${total}`)}
+          {renderTitleItem('Items', `${collection.getCountFormatAmount()}`)}
           {renderTitleItem('Created', collection.getCreatedDateWith('ll'))}
           {collection && renderTitleItem('Creator fee', `${collection.getPercentCreatorFee()}%`)}
           {renderTitleItem('Chain', 'Etherum')}
         </div>
         <div className="volumn-container">
           {collection && renderVolumnItem(`${collection.getTotalVolumnFormatAmount()} ETH`, 'total volume')}
-          {stats && renderVolumnItem(`${stats?.floorPrice?.toFixed(3)} ETH`, 'floor price')}
+          {collection && renderVolumnItem(`${collection.getFloorPriceFormatAmount()} ETH`, 'floor price')}
           {collection && renderVolumnItem(`${collection.getTotalOwnerFormatAmount()}`, 'owners')}
           {collection && renderVolumnItem(`${collection.getPercentUniqueOwner()}%`, 'unique owners')}
         </div>

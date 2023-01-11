@@ -1,6 +1,38 @@
+import { transparentize } from 'polished';
+import { X } from 'react-feather';
 import styled, { keyframes } from 'styled-components/macro';
 
 export const Styled = styled.div`
+  .loading-container {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 2;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: ${({ theme }) => theme.modalBG};
+
+    .loading-content {
+      background-color: ${({ theme }) => theme.bg3};
+      border: 1px solid ${({ theme }) => theme.border1};
+      box-shadow: 0 4px 8px 0 ${({ theme }) => transparentize(0.95, theme.shadow1)};
+      max-width: 50vw;
+      border-radius: 16px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 24px;
+      align-self: center;
+    }
+  }
+
   .collection-container {
     margin-top: 16px;
     display: flex;
@@ -317,6 +349,10 @@ export const Styled = styled.div`
               font-size: 16px;
             }
 
+            .react-datetime-picker__inputGroup__day {
+              width: 19px !important;
+            }
+
             .react-datetime-picker__inputGroup__hour {
               width: 20px !important;
               margin-left: 16px;
@@ -324,7 +360,7 @@ export const Styled = styled.div`
             }
 
             .react-datetime-picker__inputGroup__minute {
-              width: 19px !important;
+              width: 20px !important;
               margin-right: -4px;
             }
           }
@@ -353,6 +389,40 @@ export const Styled = styled.div`
     :focus {
       background-color: ${({ theme }) => theme.primary1};
     }
+
+    :disabled {
+      background-color: ${({ theme }) => theme.color_grey};
+    }
+  }
+
+  .container-price {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top: 4px;
+  }
+
+  .spinner {
+    margin-right: 16px;
+    align-self: flex-end;
+    margin-bottom: 2px;
+  }
+
+  .current-fee {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 140%;
+    text-align: right;
+    color: ${({ theme }) => theme.color_grey};
+  }
+
+  .total-offer {
+    margin-top: 2px;
+    text-align: right;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 140%;
+    color: ${({ theme }) => theme.color_grey};
   }
 
   .text-offer {
@@ -388,4 +458,15 @@ export const Spinner = styled.div`
   left: 3px;
   top: 3px;
   bottom: 3px;
+`;
+
+export const CloseIcon = styled(X)<{ onClick: () => void }>`
+  cursor: pointer;
+  color: white;
+  margin-top: -20px;
+  margin-right: -16px;
+`;
+
+export const ViewHistory = styled.div`
+  cursor: pointer;
 `;

@@ -46,6 +46,53 @@ class RpcPOpensea {
       TxList: txList,
     });
   };
+
+  generateOffer = (
+    amount: string,
+    recipient: string,
+    nftid: string,
+    contract: string,
+    endtime: number
+  ): Promise<any> => {
+    return this.http.post('papps/opensea/generateoffer', {
+      amount,
+      recipient,
+      nftid,
+      contract,
+      endtime: Math.floor(endtime / 1000),
+      startime: Math.floor(new Date().getTime() / 1000),
+    });
+  };
+
+  estimateOfferFee = (offer: string, signature: string, burntoken: string, ota: string): Promise<any> => {
+    return this.http.post('papps/opensea/estimateofferfee', {
+      offer,
+      signature,
+      burntoken,
+      ota,
+    });
+  };
+
+  submitOfferTx({ txRaw, feeRefundOTA, offer }: { txRaw: string; feeRefundOTA: string; offer: string }): Promise<any> {
+    return this.http.post('papps/opensea/submitoffertx', {
+      TxRaw: txRaw,
+      FeeRefundOTA: feeRefundOTA,
+      Offer: offer,
+    });
+  }
+
+  submitCancelOfferTx({ txRaw, feeRefundOTA }: { txRaw: string; feeRefundOTA: string }): Promise<any> {
+    return this.http.post('papps/opensea/submitcanceltx', {
+      TxRaw: txRaw,
+      FeeRefundOTA: feeRefundOTA,
+    });
+  }
+
+  getOfferStatusTx = (txList: string[]): Promise<any> => {
+    return this.http.post('papps/opensea/offerstatus', {
+      TxList: txList,
+    });
+  };
 }
 
 const rpcPOpensea = new RpcPOpensea();

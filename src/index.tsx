@@ -2,6 +2,7 @@ import '@reach/dialog/styles.css';
 import 'inter-ui';
 import 'polyfills';
 
+import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import Web3Provider from 'components/Core/Web3Provider';
 import { ModalProvider } from 'components/Modal';
 import { BlockNumberProvider } from 'lib/hooks/useBlockNumber';
@@ -49,9 +50,11 @@ ReactDOM.render(
               <Updaters />
               <ThemeProvider>
                 <ThemedGlobalStyle />
-                <ModalProvider>
-                  <App />
-                </ModalProvider>
+                <IncognitoWalletProvider>
+                  <ModalProvider>
+                    <App />
+                  </ModalProvider>
+                </IncognitoWalletProvider>
               </ThemeProvider>
             </BlockNumberProvider>
           </Web3Provider>
