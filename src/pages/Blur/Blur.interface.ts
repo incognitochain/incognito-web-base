@@ -8,6 +8,7 @@ export interface IAmount {
 }
 
 export interface ICollection {
+  id: string;
   contractAddress: string;
   name: string;
   collectionSlug: string;

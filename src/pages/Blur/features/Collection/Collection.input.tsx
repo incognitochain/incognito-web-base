@@ -7,6 +7,8 @@ import { useHistory } from 'react-router-dom';
 import { rpcPBlur } from 'services';
 import styled from 'styled-components/macro';
 
+import { getSearchURL } from '../CollectionDetail';
+
 const Container = styled.div`
   display: flex;
   width: 300px;
@@ -103,19 +105,22 @@ const SearchInput = () => {
   ];
 
   const handleSearch = async (newValue: string) => {
-    if (newValue) {
-      const collections = await rpcPBlur.getCollections();
-      setCollections(collections.slice(0, 10));
+    if (newValue && newValue.length >= 3) {
+      const collections = await rpcPBlur.getCollections({ page: 1, query: newValue });
+      setCollections(collections);
     } else {
       setCollections([]);
     }
   };
 
-  const debounceSearch = debounce(handleSearch, 500);
+  const debounceSearch = debounce(handleSearch, 300);
 
   const renderItem = (collection: ICollection) => {
     return (
-      <DropdownItem key={collection.name} onClick={() => history.push(`/papps/pblur/${collection.collectionSlug}`)}>
+      <DropdownItem
+        key={collection.name}
+        onClick={() => history.push(getSearchURL({ slug: collection.collectionSlug }))}
+      >
         <ImagePlaceholder className="logo" src={collection.imageUrl} />
         <p className="collection-name">{collection.name}</p>
       </DropdownItem>

@@ -1,6 +1,23 @@
 import { AxiosInstance } from 'axios';
 import { ICollection, IResToken, mapperCollections, mapperResToken } from 'pages/Blur';
-import createAxiosInstance, { CANCEL_KEY } from 'services/axios';
+import createAxiosInstance from 'services/axios';
+
+type CollectionSortType =
+  | 'floor_price'
+  | 'volume_fifteen_minutes'
+  | 'volume_one_day'
+  | 'volume_one_week'
+  | 'number_owners'
+  | 'total_supply';
+
+type CollectionOrderType = 'desc' | 'asc';
+
+interface ICollectionQuery {
+  page?: number;
+  sort?: CollectionSortType;
+  order?: CollectionOrderType;
+  query?: string;
+}
 
 class RpcPBlur {
   http: AxiosInstance;
@@ -9,8 +26,17 @@ class RpcPBlur {
     this.http = createAxiosInstance({ baseURL: 'http://51.161.117.193:7898/' });
   }
 
-  async getCollections({ searchURL }: { searchURL?: string } = {}): Promise<ICollection[]> {
-    return this.http.get(`papps/pblur/collections?${CANCEL_KEY}`).then((resp: any) => mapperCollections(resp));
+  async getCollections({ page = 0, sort, order, query = '' }: ICollectionQuery): Promise<ICollection[]> {
+    const params = {
+      page,
+      sort: sort || '',
+      order: order || '',
+      query,
+    };
+    const paramString = JSON.stringify(params);
+    return this.http
+      .get(`papps/pblur/collections?filters=${encodeURIComponent(paramString)}`)
+      .then((resp: any) => mapperCollections(resp));
   }
 
   async getCollectionTokens(collectionName: string, cursor?: any): Promise<IResToken> {

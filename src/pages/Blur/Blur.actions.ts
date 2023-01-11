@@ -38,18 +38,21 @@ const actionSetMoreLoadingTokens = (payload: IToken[]): SetMoreLoadingTokensActi
   payload,
 });
 
-const actionFetchCollections = () => async (dispatch: AppDispatch, getState: AppState & any) => {
-  try {
-    dispatch(actionFetchingCollections({ isFetching: true }));
-    const collections = await rpcPBlur.getCollections();
-    dispatch(actionSetCollections(collections));
-    console.log('LOGS actionFetchCollections ', collections);
-  } catch (error) {
-    console.log('ACTION FETCH COLLECTIONS ERROR: ', error);
-  } finally {
-    dispatch(actionFetchingCollections({ isFetching: false }));
-  }
-};
+const actionFetchCollections =
+  ({ page }: { page: number }) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      if (!page) return;
+      dispatch(actionFetchingCollections({ isFetching: true }));
+      const collections = await rpcPBlur.getCollections({ page });
+      dispatch(actionSetCollections(collections));
+      console.log('LOGS actionFetchCollections ', collections);
+    } catch (error) {
+      console.log('ACTION FETCH COLLECTIONS ERROR: ', error);
+    } finally {
+      dispatch(actionFetchingCollections({ isFetching: false }));
+    }
+  };
 
 const actionFetchCollectionTokens =
   (collectionName: string) => async (dispatch: AppDispatch, getState: AppState & any) => {

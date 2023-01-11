@@ -1,23 +1,28 @@
-import { Row, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import { ColumnTitleProps, ColumnType, SortOrder } from 'antd/es/table/interface';
+import { ColumnType, SortOrder } from 'antd/es/table/interface';
 import arrowBottomActive from 'assets/svg/arrow-bottom-active.svg';
 import arrowDisable from 'assets/svg/arrow-disable.svg';
 import arrowTopActive from 'assets/svg/arrow-top-active.svg';
 import ImagePlaceholder from 'components/ImagePlaceholder';
+import debounce from 'lodash/debounce';
 import { ICollection } from 'pages/Blur';
 import EthereumLogo from 'pages/Blur/images/ether.svg';
 import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useHistory } from 'react-router-dom';
 
+import { getSearchURL } from '../CollectionDetail';
 import CollectionLoader from './Collection.loader';
-import { ListStyled } from './Collection.styled';
+import { CollectionItem, ContainerListStyled, ListStyled } from './Collection.styled';
 
 interface IListProps {
   isFetching: boolean;
   collections: ICollection[];
-  onClickItem: (item: ICollection) => void;
-  onEndReach?: () => void;
+  fetchCollections: ({ page }: { page: number }) => void;
+}
+interface ILabel {
+  text: string;
+  numb: number;
+  className?: string;
 }
 
 interface ITbHeader {
@@ -29,8 +34,20 @@ interface ITbHeader {
   key?: string;
 }
 
+const HEADER_LIST = [
+  { text: 'Floor price' },
+  { text: 'Top Bid', className: 'medium-hide' },
+  { text: '1D Change' },
+  { text: '7D Change' },
+  { text: '15M Volume', className: 'medium-hide' },
+  { text: '1D Volume' },
+  { text: '7D Volume' },
+  { text: 'Owners', className: 'medium-hide' },
+  { text: 'Supply', className: 'medium-hide' },
+];
+
 const List = (props: IListProps) => {
-  const { isFetching, collections } = props;
+  const { isFetching, collections, fetchCollections } = props;
   const history = useHistory();
   const showLoader = isFetching && collections.length <= 0;
 
@@ -53,6 +70,7 @@ const List = (props: IListProps) => {
       </div>
     );
   };
+
   const getColor = ({ numb, value, suffix }: { numb: number; value: string; suffix?: string }) => {
     const text = Number.isFinite(numb) ? `${value}${suffix || ''}` : '-';
     const color = !Number.isFinite(numb) ? '#9C9C9C' : numb < 0 ? '#FD4040' : '#0ECB81';
@@ -63,241 +81,149 @@ const List = (props: IListProps) => {
     return <img className="currency-logo" src={EthereumLogo} alt="currency-logo" />;
   }, []);
 
-  const columns: ColumnsType<ICollection> = [
-    {
-      key: 'index',
-      render: (text, record, index) => (
-        <p key={index.toString()} className="baseText">
-          {index + 1}
+  const renderLabelWithIcon = ({ text, numb, className }: ILabel) => {
+    text = numb ? text : '-';
+    let icon: any = CurrencyIcon;
+    if (!text || text === '0' || text === '-') {
+      text = '-';
+      icon = undefined;
+    }
+    return (
+      <div className={`wrap-item align-end ${className || ''}`}>
+        <p className={`content-label ${!icon ? 'shadow-text' : ''}`}>{`${text}`}</p>
+        {icon && icon}
+      </div>
+    );
+  };
+
+  const renderLabelWithColor = ({ numb, text, className }: { numb: number; text: string; className?: string }) => {
+    const { text: value, color } = getColor({ numb, value: text, suffix: '%' });
+    return (
+      <div className={`wrap-item align-end ${className}`}>
+        <p className="content-label" style={{ color }}>
+          {value}
         </p>
-      ),
-      responsive: ['md'],
-      title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'start' }}>
-          #
+      </div>
+    );
+  };
+
+  const renderLabelNormal = ({ value, className }: { value: string; className?: string }) => {
+    return (
+      <div className={`wrap-item align-end ${className || ''}`}>
+        <p className="content-label">{value}</p>
+      </div>
+    );
+  };
+
+  const renderNormalHeader = ({ text, className }: { text: string; className?: string }) => {
+    return (
+      <div className={`wrap-header ${className || ''}`} key={text}>
+        <p className="header-label">{text}</p>
+      </div>
+    );
+  };
+
+  const renderHeader = () => {
+    return (
+      <CollectionItem>
+        <div className="wrap-index">
+          <p className="header-index-label">#</p>
         </div>
-      ),
-    },
-    {
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record: ICollection, index) => (
-        <div key={index.toString()} className="name-container">
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <ImagePlaceholder className="logo" src={record.imageUrl} />
-            <p className="baseText name-text">{record.name}</p>
-          </div>
+        <div className="wrap-name" style={{ marginRight: 75 }}>
+          <p className="content-label header-name">Collection</p>
         </div>
-      ),
-      title: () => (
-        <p className="headerTitle" style={{ justifyContent: 'left' }}>
-          Collection
-        </p>
-      ),
-    },
-    {
-      dataIndex: 'floorprice',
-      key: 'floorprice',
-      responsive: ['md'],
-      align: 'center',
-      showSorterTooltip: false,
-      render: (text, record, index) => {
-        return (
-          <Row justify="end">
-            <p className="baseText">{`${record.floorPrice.amountFormated}`}</p>
-            {CurrencyIcon && CurrencyIcon}
-          </Row>
-        );
-      },
-      // sorter: (a, b) => (a.floorPrice.amountNum || 0) - (b.floorPrice.amountNum || 0),
-      title: ({ sortColumns }: ColumnTitleProps<ICollection>) => {
-        return renderSortableTitle({ sortColumns, title: 'Floor Price', key: 'floorprice' });
-      },
-    },
-    {
-      dataIndex: 'topbid',
-      key: 'topbid',
-      responsive: ['md'],
-      align: 'center',
-      render: (_, record, index) => {
-        let text = record.bestCollectionBid.amountFormated;
-        let icon: any = CurrencyIcon;
-        if (!text || text === '0') {
-          text = '-';
-          icon = undefined;
-        }
-        return (
-          <Row justify="end">
-            <p className={`baseText ${!icon ? 'shadow-text' : ''}`}>{`${text}`}</p>
-            {icon && icon}
-          </Row>
-        );
-      },
-      title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center' }}>
-          Top BID
-        </div>
-      ),
-    },
-    {
-      dataIndex: '1dchange',
-      key: '1dchange',
-      responsive: ['md'],
-      align: 'center',
-      showSorterTooltip: false,
-      render: (_, record, index) => {
-        const { text, color } = getColor({ numb: record.dayChangeNumb, value: record.dayChange, suffix: '%' });
-        return <p style={{ color }}>{text}</p>;
-      },
-      title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center' }}>
-          1D Change
-        </div>
-      ),
-    },
-    {
-      dataIndex: '7dchange',
-      key: '7dchange',
-      responsive: ['md'],
-      align: 'center',
-      showSorterTooltip: false,
-      render: (_, record, index) => {
-        const { text, color } = getColor({ numb: record.weekChangeNumb, value: record.weekChange, suffix: '%' });
-        return (
-          <p className="baseText" style={{ color }}>
-            {text}
+        {HEADER_LIST.map(renderNormalHeader)}
+      </CollectionItem>
+    );
+  };
+
+  const renderItem = (collection: ICollection, index: number) => {
+    return (
+      <CollectionItem
+        key={collection.id}
+        onClick={() => history.push(getSearchURL({ slug: collection.collectionSlug }))}
+      >
+        <div className="wrap-index">
+          <p key={index.toString()} className="content-label">
+            {index + 1}
           </p>
-        );
-      },
-      title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center' }}>
-          7D Change
         </div>
-      ),
-    },
-    {
-      dataIndex: '15mvolume',
-      key: '15mvolume',
-      responsive: ['md'],
-      align: 'center',
-      showSorterTooltip: false,
-      render: (_, record, index) => {
-        let text = record.volumeFifteenMinutes.amountNum ? record.volumeFifteenMinutes.amountFormated : '-';
-        let icon: any = CurrencyIcon;
-        if (!text || text === '-') {
-          icon = undefined;
-        }
-        return (
-          <Row justify="end">
-            <p className={`baseText ${!icon ? 'shadow-text' : ''}`}>{`${text}`}</p>
-            {icon && icon}
-          </Row>
-        );
-      },
-      title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center' }}>
-          15M Volume
+        <div className="wrap-name">
+          <ImagePlaceholder className="logo" src={collection.imageUrl} />
+          <p key={index.toString()} className="content-label name">
+            {collection.name}
+          </p>
         </div>
-      ),
-    },
-    {
-      dataIndex: '1dvolume',
-      key: '1dvolume',
-      responsive: ['md'],
-      align: 'center',
-      showSorterTooltip: false,
-      render: (_, record, index) => {
-        let text = record.volumeOneDay.amountNum ? record.volumeOneDay.amountFormated : '-';
-        let icon: any = CurrencyIcon;
-        if (!text || text === '-') {
-          icon = undefined;
-        }
-        return (
-          <Row justify="end">
-            <p className={`baseText ${!icon ? 'shadow-text' : ''}`}>{`${text}`}</p>
-            {icon && icon}
-          </Row>
-        );
-      },
-      title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center' }}>
-          1D Volume
-        </div>
-      ),
-    },
-    {
-      dataIndex: '7dvolume',
-      key: '7dvolume',
-      responsive: ['md'],
-      align: 'center',
-      showSorterTooltip: false,
-      render: (_, record, index) => {
-        let text = record.volumeOneWeek.amountNum ? record.volumeOneWeek.amountFormated : '-';
-        let icon: any = CurrencyIcon;
-        if (!text || text === '-') {
-          icon = undefined;
-        }
-        return (
-          <Row justify="end">
-            <p className={`baseText ${!icon ? 'shadow-text' : ''}`}>{`${text}`}</p>
-            {icon && icon}
-          </Row>
-        );
-      },
-      title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center' }}>
-          7D Volume
-        </div>
-      ),
-    },
-    {
-      dataIndex: 'owner',
-      key: 'owner',
-      responsive: ['md'],
-      align: 'center',
-      showSorterTooltip: false,
-      render: (_, record, index) => {
-        return <p className="baseText">{`${record.numberOwnersFormated} (${record.numberOwnersPercent}%)`}</p>;
-      },
-      title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center' }}>
-          Owner
-        </div>
-      ),
-    },
-    {
-      dataIndex: 'supply',
-      key: 'supply',
-      responsive: ['md'],
-      align: 'center',
-      showSorterTooltip: false,
-      render: (_, record, index) => {
-        return <p className="baseText">{`${record.totalSupplyFormated}`}</p>;
-      },
-      title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center' }}>
-          Supply
-        </div>
-      ),
-    },
-  ];
+        {renderLabelWithIcon({
+          text: collection.floorPrice.amountFormated,
+          numb: collection.floorPrice.amountNum,
+        })}
+        {renderLabelWithIcon({
+          text: collection.bestCollectionBid.amountFormated,
+          numb: collection.bestCollectionBid.amountNum,
+          className: 'medium-hide',
+        })}
+        {renderLabelWithColor({
+          numb: collection.dayChangeNumb,
+          text: collection.dayChange,
+        })}
+        {renderLabelWithColor({
+          numb: collection.weekChangeNumb,
+          text: collection.weekChange,
+        })}
+        {renderLabelWithIcon({
+          text: collection.volumeFifteenMinutes.amountFormated,
+          numb: collection.volumeFifteenMinutes.amountNum,
+          className: 'medium-hide',
+        })}
+        {renderLabelWithIcon({
+          text: collection.volumeOneDay.amountFormated,
+          numb: collection.volumeOneDay.amountNum,
+        })}
+        {renderLabelWithIcon({
+          text: collection.volumeOneWeek.amountFormated,
+          numb: collection.volumeOneWeek.amountNum,
+        })}
+        {renderLabelNormal({
+          value: `${collection.numberOwnersFormated} (${collection.numberOwnersPercent}%)`,
+          className: 'medium-hide',
+        })}
+        {renderLabelNormal({
+          value: collection.totalSupplyFormated,
+          className: 'medium-hide',
+        })}
+      </CollectionItem>
+    );
+  };
+
+  const onLoadMoreCollections = () => {
+    if (isFetching || typeof fetchCollections !== 'function') return;
+    const nextPage = Math.floor(collections.length / 100) + 1;
+    fetchCollections({ page: nextPage });
+  };
+
+  const debounceLoadMore = debounce(onLoadMoreCollections, 300);
 
   return (
-    <ListStyled showLoader={showLoader}>
+    <ContainerListStyled>
       {showLoader && <CollectionLoader />}
-      <Table
-        className="table"
-        columns={columns}
-        dataSource={collections}
-        size="large"
-        rowClassName="tableRow"
-        onRow={(collection) => ({
-          onClick: () => {
-            history.push(`/papps/pblur/${collection.collectionSlug}`);
-          },
-        })}
-      />
-    </ListStyled>
+      <ListStyled showLoader={showLoader}>
+        {renderHeader()}
+        <InfiniteScroll
+          dataLength={collections.length}
+          next={debounceLoadMore}
+          hasMore={true}
+          loader={<div />}
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+        >
+          {collections.map(renderItem)}
+        </InfiniteScroll>
+      </ListStyled>
+    </ContainerListStyled>
   );
 };
 

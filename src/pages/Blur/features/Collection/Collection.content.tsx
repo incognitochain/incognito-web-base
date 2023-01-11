@@ -8,29 +8,22 @@ import SearchInput from './Collection.input';
 import List from './Collection.list';
 import { ContentStyled } from './Collection.styled';
 
-const DEFAULT_ACTIVE_KEY = '1';
+interface IProps {
+  onFetchCollections: ({ page }: { page: number }) => void;
+}
 
-const Content = () => {
-  const [currentKeyTab, setCurrentKeyTab] = React.useState(DEFAULT_ACTIVE_KEY);
+const Content = ({ onFetchCollections }: IProps) => {
   const { list: collections, isFetching } = useAppSelector(collectionsSelector);
 
-  const renderLabel = (key: string, title: string) => (
-    <h3 style={{ color: currentKeyTab === key ? 'white' : '#757575' }}>{title}</h3>
-  );
+  const renderLabel = (title: string) => <h3 style={{ color: 'white' }}>{title}</h3>;
 
   return (
     <ContentStyled>
       <Row className="header-row" justify="space-between">
-        {renderLabel('1', 'Top')}
+        {renderLabel('Top')}
         <SearchInput />
       </Row>
-      <List
-        isFetching={isFetching}
-        collections={collections}
-        onClickItem={() => {
-          return null;
-        }}
-      />
+      <List isFetching={isFetching} collections={collections} fetchCollections={onFetchCollections} />
     </ContentStyled>
   );
 };

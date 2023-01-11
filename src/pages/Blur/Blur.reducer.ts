@@ -1,3 +1,4 @@
+import uniqBy from 'lodash/uniqBy';
 import { Reducer } from 'redux';
 
 import { BlurActions, BlurActionType, IBlurReducer } from './Blur.types';
@@ -27,10 +28,18 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
       };
     }
     case BlurActionType.SET_COLLECTIONS: {
+      const newCollections = action.payload;
+      const oldCollections = state.collection.list;
+      const newList = uniqBy([...oldCollections, ...newCollections], 'id');
+      console.log('LOGS SET_COLLECTIONS: ', {
+        newCollections: newCollections.length,
+        oldCollections: oldCollections.length,
+        newList: newList.length,
+      });
       return {
         ...state,
         collection: {
-          list: action.payload,
+          list: newList,
           isFetching: false,
         },
       };

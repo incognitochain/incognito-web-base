@@ -30,6 +30,8 @@ const mapperCollections = (resp: any[]): ICollection[] => {
   if (!Array.isArray(resp)) return [];
   return resp.map((data: any): ICollection => {
     const {
+      id,
+
       contractAddress,
       name,
       collectionSlug,
@@ -71,6 +73,7 @@ const mapperCollections = (resp: any[]): ICollection[] => {
     ).toString();
 
     return {
+      id,
       contractAddress,
       name,
       collectionSlug,
