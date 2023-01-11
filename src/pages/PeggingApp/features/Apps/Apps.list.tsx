@@ -61,7 +61,7 @@ const Factory: IFactory[] = [
     route: '/vote',
     status: 'SHIPPED',
     nameDesc: 'Private DAO',
-    chain: ['Ethereum'],
+    chain: ['Ethereum', 'Governance'],
     desc: 'Anonymously create proposals or vote on existing ones to empower the Incognito ecosystem to succeed.',
     network: [MAIN_NETWORK_NAME.ETHEREUM],
   },
