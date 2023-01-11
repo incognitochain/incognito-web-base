@@ -6,10 +6,13 @@ import { BlurActions, BlurActionType, IBlurReducer } from './Blur.types';
 const initialState: IBlurReducer = {
   isFetching: false,
   collection: {
+    hasError: false,
     list: [],
     isFetching: false,
   },
-  resToken: undefined,
+  token: {
+    list: [],
+  },
 };
 
 export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
@@ -41,22 +44,25 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
         collection: {
           list: newList,
           isFetching: false,
+          hasError: false,
         },
       };
     }
-    case BlurActionType.SET_RES_TOKEN: {
+    case BlurActionType.SET_TOKENS: {
       return {
         ...state,
-        resToken: action.payload,
+        token: {
+          list: action.payload,
+        },
       };
     }
     case BlurActionType.SET_MORE_TOKENS: {
-      if (state.resToken) {
+      if (state.token) {
         return {
           ...state,
-          resToken: {
-            ...state.resToken,
-            tokens: [...state.resToken.tokens.filter((token) => !token.isLoading), ...action.payload],
+          token: {
+            ...state.token,
+            list: [...state.token.list.filter((token) => !token.isLoading), ...action.payload],
           },
         };
       }
@@ -65,16 +71,12 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
     case BlurActionType.SET_MORE_LOADING_TOKENS: {
       return {
         ...state,
-        resToken: state.resToken
+        token: state.token
           ? {
-              ...state.resToken,
-              tokens: [...state.resToken.tokens, ...action.payload],
+              list: [...state.token.list, ...action.payload],
             }
           : {
-              contractAddress: '',
-              success: false,
-              totalCount: 0,
-              tokens: action.payload,
+              list: action.payload,
             },
       };
     }

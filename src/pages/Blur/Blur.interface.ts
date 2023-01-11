@@ -60,9 +60,7 @@ export interface IOwner {
   name: string;
   address: string;
 }
-export interface IToken {
-  isLoading: boolean;
-
+export interface ITokenDetail {
   tokenId: string;
   highestBid?: ICost;
   imageUrl: string;
@@ -78,9 +76,9 @@ export interface IToken {
   traits: { [key: string]: string };
 }
 
-export interface IResToken {
+export interface IToken {
+  isLoading: boolean;
   contractAddress: string;
-  success: boolean;
-  tokens: IToken[];
-  totalCount: number;
+  id: string;
+  detail: ITokenDetail;
 }

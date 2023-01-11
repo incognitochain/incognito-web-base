@@ -4,11 +4,11 @@ import CollectionDetailListNFT from './CollectionDetail.listNFT';
 import { Container } from './CollectionDetail.styled';
 
 const CollectionDetail = () => {
-  const { contract }: any = useParams();
+  const { slug }: any = useParams();
 
   return (
     <Container className="default-max-width">
-      <CollectionDetailListNFT contract={contract} />
+      <CollectionDetailListNFT slug={slug} />
     </Container>
   );
 };

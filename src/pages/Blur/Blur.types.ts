@@ -1,13 +1,12 @@
 import { Action } from 'redux';
 
 import { ICollection, IToken } from './Blur.interface';
-import { IResToken } from './Blur.interface';
 
 export enum BlurActionType {
   SET_FETCHING_COLLECTION = 'BLUR/SET_FETCHING_COLLECTION',
   SET_COLLECTIONS = 'BLUR/SET_COLLECTIONS',
 
-  SET_RES_TOKEN = 'BLUR/SET_RES_TOKEN',
+  SET_TOKENS = 'BLUR/SET_TOKENS',
   SET_MORE_TOKENS = 'BLUR/SET_MORE_TOKENS',
   SET_MORE_LOADING_TOKENS = 'BLUR/SET_MORE_LOADING_TOKENS',
 }
@@ -17,8 +16,11 @@ export interface IBlurReducer {
   collection: {
     list: ICollection[];
     isFetching: boolean;
+    hasError: boolean;
   };
-  resToken?: IResToken;
+  token: {
+    list: IToken[];
+  };
 }
 
 export interface SetFetchingCollections extends Action {
@@ -32,8 +34,8 @@ export interface SetCollectionsAction extends Action {
 }
 
 export interface SetResTokenAction extends Action {
-  type: BlurActionType.SET_RES_TOKEN;
-  payload: IResToken;
+  type: BlurActionType.SET_TOKENS;
+  payload: IToken[];
 }
 
 export interface SetMoreTokensAction extends Action {
