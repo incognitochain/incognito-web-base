@@ -7,8 +7,9 @@ export enum BlurActionType {
   SET_COLLECTIONS = 'BLUR/SET_COLLECTIONS',
 
   SET_TOKENS = 'BLUR/SET_TOKENS',
-  SET_MORE_TOKENS = 'BLUR/SET_MORE_TOKENS',
-  SET_MORE_LOADING_TOKENS = 'BLUR/SET_MORE_LOADING_TOKENS',
+  APPEND_TOKENS = 'BLUR/APPEND_TOKENS',
+  APPEND_LOADING_TOKENS = 'BLUR/SET_MORE_LOADING_TOKENS',
+  UPDATE_TOKEN = 'BLUR/UPDATE_TOKEN',
 }
 
 export interface IBlurReducer {
@@ -33,24 +34,30 @@ export interface SetCollectionsAction extends Action {
   payload: ICollection[];
 }
 
-export interface SetResTokenAction extends Action {
+export interface SetTokensAction extends Action {
   type: BlurActionType.SET_TOKENS;
   payload: IToken[];
 }
 
-export interface SetMoreTokensAction extends Action {
-  type: BlurActionType.SET_MORE_TOKENS;
+export interface AppendTokensAction extends Action {
+  type: BlurActionType.APPEND_TOKENS;
   payload: IToken[];
 }
 
-export interface SetMoreLoadingTokensAction extends Action {
-  type: BlurActionType.SET_MORE_LOADING_TOKENS;
+export interface AppendLoadingTokensAction extends Action {
+  type: BlurActionType.APPEND_LOADING_TOKENS;
   payload: IToken[];
+}
+
+export interface UpdateTokenAction extends Action {
+  type: BlurActionType.UPDATE_TOKEN;
+  payload: IToken;
 }
 
 export type BlurActions =
   | SetFetchingCollections
   | SetCollectionsAction
-  | SetResTokenAction
-  | SetMoreTokensAction
-  | SetMoreLoadingTokensAction;
+  | SetTokensAction
+  | AppendTokensAction
+  | AppendLoadingTokensAction
+  | UpdateTokenAction;

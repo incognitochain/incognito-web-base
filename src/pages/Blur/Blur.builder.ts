@@ -145,8 +145,10 @@ const mapperTokens = (resp: any): IToken[] => {
 
     return {
       isLoading: false,
+      isSelected: false,
       contractAddress: data.ContractAddress,
       id: data.id,
+      tokenId: data.TokenID,
       detail: {
         tokenId,
         highestBid,
