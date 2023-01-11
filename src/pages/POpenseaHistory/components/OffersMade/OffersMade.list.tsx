@@ -100,11 +100,11 @@ const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
       key: 'expiration',
       render: (text, record, index) => {
         let diffText = '';
-        const diffDays = Math.round(moment(record.offerTime).diff(moment(record.createTime), 'days', true));
-        if (diffDays > 0) {
-          diffText = diffDays + (diffDays === 1 ? ' day' : ' days');
+        const diffHours = Math.round(moment(record.offerTime).diff(moment(record.createTime), 'hours', true));
+        if (diffHours < 24) {
+          diffText = diffHours + ' hours';
         } else {
-          diffText = Math.round(moment(record.offerTime).diff(moment(record.createTime), 'hours', true)) + ' hours';
+          diffText = Math.round(moment(record.offerTime).diff(moment(record.createTime), 'days', true)) + ' days';
         }
         return (
           <p key={index.toString()} className="baseText text-align-center">

@@ -60,7 +60,7 @@ class RpcPOpensea {
       nftid,
       contract,
       endtime: Math.floor(endtime / 1000),
-      startime: Math.floor(new Date().getTime() / 1000),
+      starttime: Math.floor(new Date().getTime() / 1000),
     });
   };
 

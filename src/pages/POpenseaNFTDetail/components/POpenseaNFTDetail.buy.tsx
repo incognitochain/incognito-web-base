@@ -227,9 +227,6 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
           </div>
         </div>
       )}
-      <button className="btn-offer" onClick={onClickMakeOffer}>
-        <p className="text-buy">{'Make offer'}</p>
-      </button>
     </Styled>
   );
 };

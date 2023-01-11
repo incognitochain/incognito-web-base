@@ -30,6 +30,7 @@ export interface IPOpenseaMakeOfferAction {
     contract: string,
     endtime: number,
     selectedToken: PToken,
+    childToken?: PToken,
     price?: string,
     reciptientAddress?: string | undefined,
     selectedNFT?: POpenseaNft | undefined
@@ -68,6 +69,7 @@ export class POpenseaMakeOfferAction implements IPOpenseaMakeOfferAction {
     contract: string,
     endtime: number,
     selectedToken: PToken,
+    childToken?: PToken,
     price?: string,
     reciptientAddress?: string | undefined,
     selectedNFT?: POpenseaNft | undefined
@@ -79,7 +81,7 @@ export class POpenseaMakeOfferAction implements IPOpenseaMakeOfferAction {
         const res = await rpcPOpensea.generateOffer(
           `${convert.toOriginalAmount({
             humanAmount: price,
-            decimals: selectedToken?.pDecimals || 9,
+            decimals: childToken?.decimals || 18,
             round: true,
           })}`,
           reciptientAddress,
@@ -224,7 +226,7 @@ export class POpenseaMakeOfferAction implements IPOpenseaMakeOfferAction {
                   }}
                 >
                   <Text fontWeight={500} fontSize={14} color={'#1C55B8'}>
-                    <Trans>View history</Trans>
+                    <Trans>View offers made</Trans>
                   </Text>
                 </ViewHistory>
               )}

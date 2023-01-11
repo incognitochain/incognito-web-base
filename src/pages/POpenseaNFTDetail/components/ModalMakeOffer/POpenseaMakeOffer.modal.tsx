@@ -127,6 +127,7 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
         props.contract,
         offerDate.getTime(),
         selectedToken,
+        childToken,
         priceOffer,
         reciptientAddress,
         selectedNFT
@@ -207,8 +208,10 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
   );
 
   const renderPrice = () => {
-    const totalOfferAmount =
-      new BigNumber(priceOfferFormatAmount).toNumber() + new BigNumber(offerFeeFormatAmount).toNumber();
+    const totalOfferAmount = format.amountVer2({
+      originalAmount: new BigNumber(priceOfferFormatAmount).toNumber() + new BigNumber(offerFeeFormatAmount).toNumber(),
+      decimals: 0,
+    });
 
     return (
       <div className="container-price">
