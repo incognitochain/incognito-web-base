@@ -41,7 +41,7 @@ const NFTItem = (props: NFTItemProps) => {
               </div>
               <div>
                 <p className="item-last-sale text-align-right">Last sale</p>
-                <p className="ope text-align-right">
+                <p className="item-price text-align-right">
                   {detail.lastSale.amountFormated}
                   {` ${detail.lastSale.unit}`}
                 </p>
