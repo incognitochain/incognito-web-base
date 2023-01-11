@@ -8,13 +8,12 @@ const blurSelector = createSelector(
 
 const collectionsSelector = createSelector(blurSelector, (pBlur) => pBlur.collection);
 
-const resTokenSelector = createSelector(blurSelector, (pBlur) => pBlur.resToken);
+const tokenSelector = createSelector(blurSelector, (pBlur) => pBlur.token);
 
-const tokensSelector = createSelector(resTokenSelector, (resToken) => (resToken ? resToken.tokens : []));
-const totalAmoutTokenSelector = createSelector(resTokenSelector, (resToken) => (resToken ? resToken.totalCount : 0));
+const tokensSelector = createSelector(tokenSelector, (token) => token.list);
 
 const lastTokenSelector = createSelector(tokensSelector, (tokens) =>
   tokens && tokens.length > 0 ? tokens[tokens.length - 1] : undefined
 );
 
-export { blurSelector, collectionsSelector, lastTokenSelector, tokensSelector, totalAmoutTokenSelector };
+export { blurSelector, collectionsSelector, lastTokenSelector, tokensSelector };

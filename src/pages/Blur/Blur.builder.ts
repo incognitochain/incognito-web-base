@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { camelCaseKeys } from 'utils/camelcase';
 import format from 'utils/format';
 
-import { IAmount, ICollection, ICost, IMarketPlaceType, IPrice, IResToken, IToken } from './Blur.interface';
+import { IAmount, ICollection, ICost, IMarketPlaceType, IPrice, IToken } from './Blur.interface';
 
 const convertToFormatAmount = (value: string | number) => {
   return format.amountVer2({
@@ -123,7 +123,7 @@ const convertToPrice = (data: any): IPrice => {
 
 const mapperTokens = (resp: any): IToken[] => {
   if (!Array.isArray(resp)) return [];
-  return resp.map((data: IToken): IToken => {
+  return resp.map((data: any): IToken => {
     const {
       tokenId,
       highestBid,
@@ -138,34 +138,29 @@ const mapperTokens = (resp: any): IToken[] => {
       rarityRank,
       rarityScore,
       traits,
-    } = camelCaseKeys(data);
+    } = camelCaseKeys(data.Detail);
 
     return {
       isLoading: false,
-      tokenId,
-      highestBid,
-      imageUrl,
-      isSuspicious,
-      lastCostBasis: convertToCost(lastCostBasis),
-      lastSale: convertToCost(lastSale),
-      name,
-      numberOwnedByOwner,
-      owner,
-      price: convertToPrice(price),
-      rarityRank,
-      rarityScore,
-      traits,
+      contractAddress: data.ContractAddress,
+      id: data.id,
+      detail: {
+        tokenId,
+        highestBid,
+        imageUrl,
+        isSuspicious,
+        lastCostBasis: convertToCost(lastCostBasis),
+        lastSale: convertToCost(lastSale),
+        name,
+        numberOwnedByOwner,
+        owner,
+        price: convertToPrice(price),
+        rarityRank,
+        rarityScore,
+        traits,
+      },
     };
   });
 };
 
-const mapperResToken = (resp: any): IResToken => {
-  return {
-    contractAddress: resp.contractAddress,
-    tokens: resp.tokens ? mapperTokens(resp.tokens) : [],
-    success: resp.success,
-    totalCount: resp.totalCount,
-  };
-};
-
-export { mapperCollections, mapperResToken };
+export { mapperCollections, mapperTokens };

@@ -7,7 +7,6 @@ import {
   IToken,
   lastTokenSelector,
   tokensSelector,
-  totalAmoutTokenSelector,
 } from 'pages/Blur';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -17,24 +16,23 @@ import { Styled } from './CollectionDetail.listNFT.styled';
 import CollectionDetailNFTLoader from './CollectionDetail.NFT.loader';
 
 interface CollectionDetailListNFTProps {
-  contract: string;
+  slug: string;
 }
 
 const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
-  const { contract } = props;
+  const { slug } = props;
 
   const tokens = useSelector(tokensSelector);
-  const totalAmount = useSelector(totalAmoutTokenSelector);
   const lastToken = useSelector(lastTokenSelector);
 
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
-    dispatch(actionFetchCollectionTokens(contract));
+    dispatch(actionFetchCollectionTokens(slug));
   }, []);
 
   const onLoadMore = () => {
-    lastToken && dispatch(actionFetchMoreCollectionTokens(contract, lastToken));
+    lastToken && dispatch(actionFetchMoreCollectionTokens(slug, lastToken));
   };
 
   const loadMore = (
@@ -55,7 +53,7 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
       <div className="filter-container">
         <div className="total-container">
           <p className="total-items">Items</p>
-          <p className="total-number">{`(${totalAmount} items)`}</p>
+          <p className="total-number">{`(${tokens.length} items)`}</p>
         </div>
       </div>
       <List
@@ -72,25 +70,26 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
         dataSource={tokens}
         loadMore={loadMore}
         renderItem={(item: IToken, index: number) => {
+          const { detail } = item;
           return (
             <List.Item key={index.toString()} onClick={() => {}}>
               {item.isLoading ? (
                 <CollectionDetailNFTLoader />
               ) : (
                 <div className="card">
-                  <ImagePlaceholder className="item-img" src={item.imageUrl} />
+                  <ImagePlaceholder className="item-img" src={detail.imageUrl} />
                   <div className="item-info">
                     <div className="item-name-container">
-                      <p className="item-name">{item.name}</p>
+                      <p className="item-name">{detail.name}</p>
                     </div>
                     <p className="item-price">
-                      {item.price.amountFormated}
-                      {` ${item.price.unit}`}
+                      {detail.price.amountFormated}
+                      {` ${detail.price.unit}`}
                     </p>
 
                     <p className="item-last-sale">
-                      Last sale: {item.lastSale.amountFormated}
-                      {` ${item.lastSale.unit}`}
+                      Last sale: {detail.lastSale.amountFormated}
+                      {` ${detail.lastSale.unit}`}
                     </p>
                   </div>
                 </div>

@@ -1,7 +1,7 @@
 import { rpcPBlur } from 'services';
 import { AppDispatch, AppState } from 'state';
 
-import { ICollection, IResToken, IToken } from './Blur.interface';
+import { ICollection, IToken } from './Blur.interface';
 import {
   BlurActionType,
   SetCollectionsAction,
@@ -23,8 +23,8 @@ const actionSetCollections = (payload: ICollection[]): SetCollectionsAction => (
   payload,
 });
 
-const actionSetBlurRespToken = (payload: IResToken): SetResTokenAction => ({
-  type: BlurActionType.SET_RES_TOKEN,
+const actionSetBlurRespToken = (payload: IToken[]): SetResTokenAction => ({
+  type: BlurActionType.SET_TOKENS,
   payload,
 });
 
@@ -51,31 +51,31 @@ const actionFetchCollections = () => async (dispatch: AppDispatch, getState: App
   }
 };
 
-const actionFetchCollectionTokens =
-  (collectionName: string) => async (dispatch: AppDispatch, getState: AppState & any) => {
-    try {
-      dispatch(
-        actionSetMoreLoadingTokens([...new Array(LOADING_COUNT)].map(() => ({ isLoading: true } as unknown as IToken)))
-      );
-      const res = await rpcPBlur.getCollectionTokens(collectionName);
-      dispatch(actionSetBlurRespToken(res));
-    } catch (error) {
-      console.log('ACTION FETCH COLLECTION TOKENS ERROR: ', error);
-    }
-  };
+const actionFetchCollectionTokens = (slug: string) => async (dispatch: AppDispatch, getState: AppState & any) => {
+  try {
+    dispatch(
+      actionSetMoreLoadingTokens([...new Array(LOADING_COUNT)].map(() => ({ isLoading: true } as unknown as IToken)))
+    );
+    const res = await rpcPBlur.getCollectionTokens(slug);
+    dispatch(actionSetBlurRespToken(res));
+  } catch (error) {
+    console.log('ACTION FETCH COLLECTION TOKENS ERROR: ', error);
+  }
+};
 
 const actionFetchMoreCollectionTokens =
-  (collectionName: string, lastToken: IToken) => async (dispatch: AppDispatch, getState: AppState & any) => {
+  (slug: string, lastToken: IToken) => async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
       dispatch(
         actionSetMoreLoadingTokens([...new Array(LOADING_COUNT)].map(() => ({ isLoading: true } as unknown as IToken)))
       );
+      const { detail } = lastToken;
       const cursor = {
-        price: { unit: lastToken.price.unit, time: lastToken.price.listAt, amount: lastToken.price.amount },
-        tokenId: lastToken.tokenId,
+        price: { unit: detail.price.unit, time: detail.price.listAt, amount: detail.price.amount },
+        tokenId: detail.tokenId,
       };
-      const res = await rpcPBlur.getCollectionTokens(collectionName, cursor);
-      dispatch(actionSetMoreTokens(res.tokens));
+      const res = await rpcPBlur.getCollectionTokens(slug, cursor);
+      dispatch(actionSetMoreTokens(res));
     } catch (error) {
       console.log('ACTION FETCH MORE TOKENS ERROR: ', error);
     }
