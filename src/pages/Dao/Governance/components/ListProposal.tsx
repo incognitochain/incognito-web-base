@@ -69,7 +69,7 @@ const ListProposal: React.FC = () => {
   const isDisabledButton = !incAccount;
 
   return (
-    <Container style={{ width: '100%', marginTop: 40 }}>
+    <Container style={{ width: '100%', marginTop: 48 }}>
       <div
         style={{
           display: 'flex',

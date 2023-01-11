@@ -21,7 +21,7 @@ const GovernanceBox = styled.div`
 const Desc = styled.p`
   font-size: 16px;
   font-weight: 500;
-  margin-top: 24px;
+  margin-top: 16px;
   line-height: 140%;
   text-align: center;
 `;
@@ -31,8 +31,8 @@ const ListProposal: React.FC = () => (
     <GovernanceBox>
       <p>Governance</p>
     </GovernanceBox>
-    <h1>Incognito DAO</h1>
-    <Desc>
+    <h3>Incognito DAO</h3>
+    <Desc className="h7">
       PRV holders can now join to vote for particular proposals created by others or directly create their own proposals
       for the ecosystem improvement. A minimum of 62,500 PRV is required to submit proposals.
     </Desc>
