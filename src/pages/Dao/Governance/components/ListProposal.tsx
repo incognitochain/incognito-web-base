@@ -12,6 +12,18 @@ import styled from 'styled-components/macro';
 
 import ProposalItem, { ProposalItemLoading } from './ProposalItem';
 
+const Container = styled.div`
+  .ant-empty-description {
+    color: white;
+  }
+  .ant-spin-container {
+    min-height: 80vh;
+  }
+  .ant-list-empty-text {
+    padding: 48px;
+  }
+`;
+
 const Title = styled.p`
   font-weight: 500;
   font-size: 34px;
@@ -57,7 +69,7 @@ const ListProposal: React.FC = () => {
   const isDisabledButton = !incAccount;
 
   return (
-    <div style={{ width: '100%', marginTop: 40 }}>
+    <Container style={{ width: '100%', marginTop: 40 }}>
       <div
         style={{
           display: 'flex',
@@ -78,12 +90,12 @@ const ListProposal: React.FC = () => {
             backgroundColor={'#9C9C9C'}
             style={{ minWidth: 150 }}
           >
-            Add Proposal
+            Create Proposal
           </ButtonConfirmed>
         </div>
       </div>
       {!proposals?.length && isFetchingProposals ? renderLoading() : renderListProposal()}
-    </div>
+    </Container>
   );
 };
 
