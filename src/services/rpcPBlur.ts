@@ -22,7 +22,7 @@ class RpcPBlur {
     const paramString = JSON.stringify(params);
 
     return this.http
-      .get(`v1/collections/${collectionName}/tokens?filters=${encodeURIComponent(paramString)}`)
+      .get(`papps/pblur/collections/${collectionName}/tokens?filters=${encodeURIComponent(paramString)}`)
       .then((resp: any) => mapperResToken(resp));
   }
 }

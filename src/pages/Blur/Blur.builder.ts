@@ -138,7 +138,7 @@ const mapperTokens = (resp: any): IToken[] => {
       rarityRank,
       rarityScore,
       traits,
-    } = data;
+    } = camelCaseKeys(data);
 
     return {
       isLoading: false,

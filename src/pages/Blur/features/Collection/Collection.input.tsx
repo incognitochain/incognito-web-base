@@ -115,7 +115,7 @@ const SearchInput = () => {
 
   const renderItem = (collection: ICollection) => {
     return (
-      <DropdownItem key={collection.name} onClick={() => history.push(`/papps/pblur/${collection.contractAddress}`)}>
+      <DropdownItem key={collection.name} onClick={() => history.push(`/papps/pblur/${collection.collectionSlug}`)}>
         <ImagePlaceholder className="logo" src={collection.imageUrl} />
         <p className="collection-name">{collection.name}</p>
       </DropdownItem>

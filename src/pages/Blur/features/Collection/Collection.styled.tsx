@@ -156,6 +156,30 @@ const ListStyled = styled.div<{ showLoader: boolean }>`
     text-align: center;
   }
 
+  .ant-pagination-item-active {
+    border-color: ${({ theme }) => theme.border1};
+    a {
+      color: ${({ theme }) => theme.btn1} !important;
+    }
+  }
+
+  .ant-pagination-item {
+    background-color: ${({ theme }) => theme.bg3};
+    border-color: ${({ theme }) => theme.border1};
+    a {
+      color: ${({ theme }) => theme.text1};
+      text-decoration: none;
+    }
+  }
+
+  .ant-pagination-disabled {
+    background-color: red !important;
+  }
+
+  .ant-pagination-item-active a {
+    color: ${({ theme }) => theme.btn1};
+  }
+
   ${({ theme }) => theme.mediaWidth.upToLarge`
     .tableRow {
       height: 56px;

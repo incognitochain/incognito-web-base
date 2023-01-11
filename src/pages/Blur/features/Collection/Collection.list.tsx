@@ -290,11 +290,10 @@ const List = (props: IListProps) => {
         columns={columns}
         dataSource={collections}
         size="large"
-        pagination={false}
         rowClassName="tableRow"
         onRow={(collection) => ({
           onClick: () => {
-            history.push(`/papps/pblur/${collection.contractAddress}`);
+            history.push(`/papps/pblur/${collection.collectionSlug}`);
           },
         })}
       />
