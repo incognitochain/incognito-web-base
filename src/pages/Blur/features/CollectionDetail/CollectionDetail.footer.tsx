@@ -8,24 +8,24 @@ import ModalTokens from 'components/Modal/Modal.tokens';
 import { BIG_COINS } from 'constants/token';
 import PToken from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
-import { selectedTokensSelector } from 'pages/Blur/Blur.selectors';
+import { buyCollectionSelector, selectedTokensSelector } from 'pages/Blur/Blur.selectors';
+import { actionSetToken } from 'pages/Swap/features/FormDeposit/FormDeposit.actions';
 import React, { memo, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { compose } from 'redux';
-import { Field, reduxForm } from 'redux-form';
+import { blur, Field, reduxForm } from 'redux-form';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/token';
 import convert from 'utils/convert';
 import format from 'utils/format';
 
-import { actionSetToken } from '../../../Swap/features/FormDeposit/FormDeposit.actions';
 import { FORM_CONFIGS } from './CollectionDetail.constant';
 import enhance from './CollectionDetail.enhanceFooter';
 import { ButtonBuy, Container, SelectionToken } from './CollectionDetail.footer.styled';
 
-const Address = () => {
+const Address = ({ showNote }: { showNote: boolean }) => {
   const getAddressValidator = React.useCallback(() => {
     return validator.combinedEtherAddress;
   }, []);
@@ -46,10 +46,12 @@ const Address = () => {
         }}
         validate={validateAddress}
       />
-      {/*<p className="note">*/}
-      {/*  (*) this is an Ethereum address that the buying NFT will be sent to, we recommend using a fresh address here to*/}
-      {/*  maximize your anonymity.*/}
-      {/*</p>*/}
+      {showNote && (
+        <p className="note">
+          (*) this is an Ethereum address that the buying NFT will be sent to, we recommend using a fresh address here
+          to maximize your anonymity.
+        </p>
+      )}
     </form>
   );
 };
@@ -114,6 +116,7 @@ const StickyFooter = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isCanBuy, setIsCanBuy] = React.useState<boolean>(true);
+  const { valid: isValidForm, inputAddress } = useSelector(buyCollectionSelector);
   const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount, showPopup } = useIncognitoWallet();
 
   const tokens = useSelector(unshieldableTokens).filter(
@@ -166,10 +169,16 @@ const StickyFooter = () => {
   );
 
   const onClickBuy = async () => {
-    const isValidAmount =
-      !!buyAmount.originalAmount && new BigNumber(buyAmount.originalAmount).lt(selectedTokenPrivacy.amount || 0);
+    // check valid address
+    if (!isValidForm) {
+      return dispatch(blur(FORM_CONFIGS.formName, FORM_CONFIGS.address, inputAddress, true));
+    }
+
+    // check valid amount
+    const { originalAmount } = buyAmount;
+    const isValidAmount = !!originalAmount && new BigNumber(originalAmount).lt(selectedTokenPrivacy.amount || 0);
     if (!isValidAmount) {
-      setIsCanBuy(false);
+      return setIsCanBuy(false);
     }
   };
 
@@ -180,9 +189,9 @@ const StickyFooter = () => {
   if (isMobile) return null;
 
   return (
-    <Container>
+    <Container hidden={!selectedItems.length}>
       <Row className="default-max-width">
-        <Address />
+        <Address showNote={!isValidForm && !!inputAddress} />
         <SelectToken tokens={tokens} selectedToken={selectedToken} onSelectToken={setSelectedToken} />
         <Balance selectedToken={selectedTokenPrivacy} />
         <div className="spacing" />

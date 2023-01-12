@@ -6,11 +6,30 @@ const Container = styled.div`
   bottom: 0;
   background-color: ${({ theme }) => theme.bg3};
   width: 100vw;
-  padding: 18px;
+  padding-top: 9px;
+  padding-bottom: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   z-index: 1000;
+
+  @keyframes MoveUp {
+    0% {
+      bottom: -100px;
+    }
+    50% {
+      bottom: -50px;
+    }
+    80% {
+      bottom: -20px;
+    }
+    100% {
+      bottom: 0;
+    }
+  }
+
+  animation: MoveUp 250ms ease-in alternate;
+
   .current-error {
     font-weight: 500;
     font-size: 14px;
@@ -21,13 +40,12 @@ const Container = styled.div`
   }
 
   .form {
-    justify-content: flex-start;
-    width: 100%;
   }
   .note {
-    margin-top: 8px;
+    margin-top: 4px;
     font-size: 12px;
     line-height: 120%;
+    color: ${({ theme }) => theme.color_grey};
   }
   .address-group {
     width: 45%;
@@ -42,7 +60,7 @@ const Container = styled.div`
   .wrap-balance {
     margin-left: 32px;
     justify-content: space-between;
-    height: 56px;
+    height: 48px;
     display: flex;
     flex-direction: column;
     .header {
@@ -57,10 +75,14 @@ const Container = styled.div`
       line-height: 140%;
     }
   }
+
+  .input-container {
+    height: 48px;
+  }
 `;
 
 const SelectionToken = styled.div<{ hidden: boolean }>`
-  height: 56px;
+  height: 48px;
   display: flex;
   width: fit-content;
   border-radius: 8px;
@@ -90,7 +112,7 @@ const ButtonBuy = styled.button`
   min-width: 200px;
   padding-left: 24px;
   padding-right: 24px;
-  height: 56px;
+  height: 48px;
   .text-buy {
     font-weight: 500;
     font-size: 16px;
