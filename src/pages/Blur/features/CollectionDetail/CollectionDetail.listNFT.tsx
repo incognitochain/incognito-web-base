@@ -1,6 +1,13 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { List } from 'antd';
-import { actionFetchCollectionTokens, IToken, tokensSelector } from 'pages/Blur';
+import {
+  actionFetchCollectionTokens,
+  clearSelectedTokens,
+  IToken,
+  selectedTokensSelector,
+  selectMaxBuyTokens,
+  tokensSelector,
+} from 'pages/Blur';
 import { actionUpdateToken } from 'pages/Blur/Blur.actions';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -19,17 +26,22 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
   const dispatch = useAppDispatch();
 
   const tokens = useSelector(tokensSelector);
+  const selectedTokens = useSelector(selectedTokensSelector);
 
   const [keySearch, setKeySearch] = React.useState<string | undefined>();
   const [currentSortType, setCurrentSortType] = React.useState<SortBlurNftType>(SortBlurNftType.PriceLowToHigh);
+
+  React.useEffect(() => {
+    dispatch(actionFetchCollectionTokens(slug));
+  }, []);
 
   const onChangeSearch = (e: any) => {
     setKeySearch(e.target.value);
   };
 
-  React.useEffect(() => {
-    dispatch(actionFetchCollectionTokens(slug));
-  }, []);
+  const onCheckManyItems = () => {
+    dispatch(selectedTokens.length > 0 ? clearSelectedTokens() : selectMaxBuyTokens());
+  };
 
   const onClickTokenItem = (token: IToken) => {
     let newToken = token;
@@ -40,11 +52,13 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
   return (
     <Styled>
       <CollectionDetailFilter
-        total={tokens.length}
+        totalToken={tokens.length}
+        totalSelectedToken={selectedTokens.length}
         keySearch={keySearch}
         onSearchChange={onChangeSearch}
         sortBlurNftType={currentSortType}
         onChangeBlurNftType={(type) => setCurrentSortType(type)}
+        onCheckManyItems={onCheckManyItems}
       />
       <List
         className="list"

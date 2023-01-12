@@ -16,6 +16,8 @@ const initialState: IBlurReducer = {
   },
 };
 
+export const MAX_ITEM_BUY = 10;
+
 export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
   state = initialState,
   action: BlurActions
@@ -85,6 +87,24 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
         token: {
           ...state.token,
           list: ArrayHelper.update('id', action.payload, state.token.list),
+        },
+      };
+    }
+    case BlurActionType.CLEAR_SELECTED_TOKENS: {
+      return {
+        ...state,
+        token: {
+          ...state.token,
+          list: state.token.list.map((item) => ({ ...item, isSelected: false })),
+        },
+      };
+    }
+    case BlurActionType.SELECT_MAX_BUY_TOKENS: {
+      return {
+        ...state,
+        token: {
+          ...state.token,
+          list: state.token.list.map((item, index) => ({ ...item, isSelected: index < MAX_ITEM_BUY })),
         },
       };
     }

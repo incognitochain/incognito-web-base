@@ -2,6 +2,8 @@
 import { Dropdown, Menu } from 'antd';
 import ArrowDownSVG from 'assets/images/arrow-down-white.svg';
 import SearchSVG from 'assets/svg/search-icon.svg';
+import Checkbox from 'pages/Blur/images/checkbox.svg';
+import CheckboxActive from 'pages/Blur/images/checkbox-active.svg';
 import React from 'react';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
@@ -31,12 +33,19 @@ const Styled = styled.div`
   .total-container {
     display: flex;
     flex-direction: row;
+    align-items: center;
   }
 
-  .total-items {
-    font-weight: 700;
-    font-size: 28px;
+  .total-item {
+    font-weight: 600;
+    font-size: 18px;
     line-height: 140%;
+  }
+
+  .checkbox {
+    width: 24px;
+    height: 24px;
+    margin-right: 16px;
   }
 
   .total-number {
@@ -181,16 +190,18 @@ export enum SortBlurNftType {
 }
 
 interface CollectionDetailFilterProps {
-  total: number;
+  totalToken: number;
+  totalSelectedToken: number;
   keySearch?: string;
   onSearchChange: (key: string) => void;
 
   sortBlurNftType: SortBlurNftType;
   onChangeBlurNftType: (data: SortBlurNftType) => void;
+  onCheckManyItems: () => void;
 }
 
 const CollectionDetailFilter = (props: CollectionDetailFilterProps) => {
-  const { total, keySearch, sortBlurNftType, onChangeBlurNftType } = props;
+  const { totalToken, totalSelectedToken, keySearch, sortBlurNftType, onChangeBlurNftType } = props;
 
   const onChange = (e: any) => {
     props.onSearchChange(e.target.value);
@@ -208,8 +219,15 @@ const CollectionDetailFilter = (props: CollectionDetailFilterProps) => {
   return (
     <Styled>
       <div className="total-container">
-        <p className="total-items">Items</p>
-        <p className="total-number">{`(${total} items)`}</p>
+        <img
+          className="checkbox"
+          src={totalSelectedToken > 0 ? CheckboxActive : Checkbox}
+          alt="checkbox-logo"
+          onClick={props.onCheckManyItems}
+        />
+        <p className="total-item">
+          {totalSelectedToken > 0 ? `${totalSelectedToken} / ${totalToken} Selected` : `${totalToken} Listed`}
+        </p>
       </div>
       <div className="search-container">
         <div className="input-container">

@@ -6,6 +6,8 @@ import {
   AppendLoadingTokensAction,
   AppendTokensAction,
   BlurActionType,
+  ClearSelectedTokensAction,
+  SelectMaxBuyTokensAction,
   SetCollectionsAction,
   SetFetchingCollections,
   SetTokensAction,
@@ -42,6 +44,14 @@ const actionSetMoreLoadingTokens = (payload: IToken[]): AppendLoadingTokensActio
 export const actionUpdateToken = (payload: IToken): UpdateTokenAction => ({
   type: BlurActionType.UPDATE_TOKEN,
   payload,
+});
+
+export const clearSelectedTokens = (): ClearSelectedTokensAction => ({
+  type: BlurActionType.CLEAR_SELECTED_TOKENS,
+});
+
+export const selectMaxBuyTokens = (): SelectMaxBuyTokensAction => ({
+  type: BlurActionType.SELECT_MAX_BUY_TOKENS,
 });
 
 const actionFetchCollections =

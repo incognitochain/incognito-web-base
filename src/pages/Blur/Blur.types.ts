@@ -10,6 +10,8 @@ export enum BlurActionType {
   APPEND_TOKENS = 'BLUR/APPEND_TOKENS',
   APPEND_LOADING_TOKENS = 'BLUR/SET_MORE_LOADING_TOKENS',
   UPDATE_TOKEN = 'BLUR/UPDATE_TOKEN',
+  CLEAR_SELECTED_TOKENS = 'BLUR/CLEAR_SELECTED_TOKENS',
+  SELECT_MAX_BUY_TOKENS = 'BLUR/SELECT_MAX_BUY_TOKENS',
 }
 
 export interface IBlurReducer {
@@ -54,10 +56,20 @@ export interface UpdateTokenAction extends Action {
   payload: IToken;
 }
 
+export interface ClearSelectedTokensAction extends Action {
+  type: BlurActionType.CLEAR_SELECTED_TOKENS;
+}
+
+export interface SelectMaxBuyTokensAction extends Action {
+  type: BlurActionType.SELECT_MAX_BUY_TOKENS;
+}
+
 export type BlurActions =
   | SetFetchingCollections
   | SetCollectionsAction
   | SetTokensAction
   | AppendTokensAction
   | AppendLoadingTokensAction
+  | ClearSelectedTokensAction
+  | SelectMaxBuyTokensAction
   | UpdateTokenAction;
