@@ -1,8 +1,6 @@
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled.div`
-  margin-top: 32px;
-
   .list {
     margin-top: 32px;
   }

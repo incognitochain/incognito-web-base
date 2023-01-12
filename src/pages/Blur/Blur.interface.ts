@@ -84,3 +84,8 @@ export interface IToken {
   tokenId: string;
   detail: ITokenDetail;
 }
+
+export interface IBuyCollection {
+  valid: boolean;
+  inputAddress: string;
+}
