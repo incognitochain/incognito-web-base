@@ -7,7 +7,7 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 
 const SortSelect = styled(Dropdown)`
   cursor: pointer;
-
+  border: 1px solid transparent;
   .ant-dropdown-selection {
     background-color: transparent;
   }
@@ -61,8 +61,8 @@ const Styled = styled.div`
     display: flex;
     align-items: center;
     border-radius: 8px;
-    border-width: 1px;
     width: 60%;
+    border: 1px solid transparent;
 
     padding-left: 16px;
     padding-right: 50px;

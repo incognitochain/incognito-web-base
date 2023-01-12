@@ -80,7 +80,7 @@ export const Styled = styled.div`
     font-size: 14px;
     line-height: 140%;
     color: ${({ theme }) => theme.content4};
-    margin-top: 2px;
+    margin-top: 8px;
   }
 
   .price-view {

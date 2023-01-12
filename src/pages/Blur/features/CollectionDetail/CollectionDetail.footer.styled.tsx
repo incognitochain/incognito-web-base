@@ -6,12 +6,19 @@ const Container = styled.div`
   bottom: 0;
   background-color: ${({ theme }) => theme.bg3};
   width: 100vw;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding: 18px;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
+  z-index: 1000;
+  .current-error {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 140%;
+    color: ${({ theme }) => theme.content4};
+    margin-top: 4px;
+    text-align: end;
+  }
 
   .form {
     justify-content: flex-start;
@@ -23,7 +30,14 @@ const Container = styled.div`
     line-height: 120%;
   }
   .address-group {
-    width: 50%;
+    width: 45%;
+  }
+  .default-max-width {
+    width: 100%;
+  }
+  .spacing {
+    flex: 1;
+    min-width: 24px;
   }
   .wrap-balance {
     margin-left: 32px;
@@ -73,8 +87,16 @@ const ButtonBuy = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 50px;
+  min-width: 200px;
+  padding-left: 24px;
+  padding-right: 24px;
+  height: 56px;
+  .text-buy {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 140%;
+    text-align: center;
+  }
 
   background-color: ${({ theme }) => theme.color_blue};
   border-radius: 8px;

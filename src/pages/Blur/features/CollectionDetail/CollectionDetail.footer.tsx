@@ -1,26 +1,42 @@
 import { Col, Row } from 'antd';
+import { BigNumber } from 'bignumber.js';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
-import { InputField } from 'components/Core/ReduxForm';
+import { InputField, validator } from 'components/Core/ReduxForm';
 import { ArrowDown } from 'components/Core/ReduxForm/SelectionField/SelectionField.styled';
 import { useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
 import { BIG_COINS } from 'constants/token';
 import PToken from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
+import { selectedTokensSelector } from 'pages/Blur/Blur.selectors';
 import React, { memo, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { isMobile } from 'react-device-detect';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { Field, reduxForm } from 'redux-form';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/token';
+import convert from 'utils/convert';
+import format from 'utils/format';
 
+import { actionSetToken } from '../../../Swap/features/FormDeposit/FormDeposit.actions';
 import { FORM_CONFIGS } from './CollectionDetail.constant';
 import enhance from './CollectionDetail.enhanceFooter';
 import { ButtonBuy, Container, SelectionToken } from './CollectionDetail.footer.styled';
 
 const Address = () => {
+  const getAddressValidator = React.useCallback(() => {
+    return validator.combinedEtherAddress;
+  }, []);
+  const validateAddress = getAddressValidator();
   return (
-    <Col className="address-group">
+    <form
+      className="form address-group"
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
       <Field
         component={InputField}
         name={FORM_CONFIGS.address}
@@ -28,13 +44,13 @@ const Address = () => {
         componentProps={{
           placeholder: 'Recipient Address',
         }}
-        // validate={validateAddress}
+        validate={validateAddress}
       />
-      <p className="note">
-        (*) this is an Ethereum address that the buying NFT will be sent to, we recommend using a fresh address here to
-        maximize your anonymity.
-      </p>
-    </Col>
+      {/*<p className="note">*/}
+      {/*  (*) this is an Ethereum address that the buying NFT will be sent to, we recommend using a fresh address here to*/}
+      {/*  maximize your anonymity.*/}
+      {/*</p>*/}
+    </form>
   );
 };
 
@@ -94,6 +110,10 @@ const Balance = memo(({ selectedToken }: { selectedToken: SelectedPrivacy | unde
 const StickyFooter = () => {
   const [selectedToken, setSelectedToken] = React.useState<PToken | undefined>();
   const incAccount = useSelector(incognitoWalletAccountSelector);
+  const selectedItems = useSelector(selectedTokensSelector);
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const [isCanBuy, setIsCanBuy] = React.useState<boolean>(true);
   const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount, showPopup } = useIncognitoWallet();
 
   const tokens = useSelector(unshieldableTokens).filter(
@@ -104,26 +124,88 @@ const StickyFooter = () => {
     selectedToken ? selectedToken.identify : ''
   );
 
-  const onClickBuy = async () => {};
+  const buyAmount = React.useMemo(() => {
+    const amountNumb = (selectedItems || []).reduce((prev, curr) => {
+      return new BigNumber(prev).plus(curr.detail.price.amount || 0).toNumber();
+    }, 0);
+    const originalAmount = convert.toOriginalAmount({
+      humanAmount: amountNumb.toString(),
+      decimals: selectedToken?.pDecimals || 9,
+      round: true,
+    });
+    const amountStr = format.amountVer2({ originalAmount: amountNumb, decimals: 0 });
+    const visibleStr = `${amountStr} ${selectedTokenPrivacy?.symbol}`;
+    return {
+      amountStr,
+      amountNumb,
+      originalAmount,
+      visibleStr,
+    };
+  }, [selectedItems, selectedTokenPrivacy?.tokenID, selectedTokenPrivacy.amount]);
+
+  const renderError = () => (
+    <p className="current-error ">
+      {!isCanBuy && incAccount && 'Your balance is insufficient.'}{' '}
+      {!isCanBuy && incAccount && (
+        <span
+          onClick={() => {
+            history.push('/deposit');
+            const token: any = selectedToken?.isUnified
+              ? selectedToken.listUnifiedToken.find((token) => token.currencyType === 1)
+              : selectedToken;
+            if (token) {
+              dispatch(actionSetToken({ sellToken: token }));
+            }
+          }}
+          style={{ textDecoration: 'underline', cursor: 'pointer' }}
+        >
+          deposit now
+        </span>
+      )}
+    </p>
+  );
+
+  const onClickBuy = async () => {
+    const isValidAmount =
+      !!buyAmount.originalAmount && new BigNumber(buyAmount.originalAmount).lt(selectedTokenPrivacy.amount || 0);
+    if (!isValidAmount) {
+      setIsCanBuy(false);
+    }
+  };
 
   useEffect(() => {
     tokens.length > 0 && selectedToken === undefined && setSelectedToken(tokens[0]);
   }, [tokens]);
 
+  if (isMobile) return null;
+
   return (
     <Container>
-      <form className="default-max-width form">
-        <Row>
-          <Address />
-          <SelectToken tokens={tokens} selectedToken={selectedToken} onSelectToken={setSelectedToken} />
-          <Balance selectedToken={selectedTokenPrivacy} />
-          <ButtonBuy type="button" onClick={!incAccount ? showPopup : onClickBuy}>
-            <p className="text-buy">
-              {!incAccount ? (isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet') : 'Buy  |  2 items'}
-            </p>
+      <Row className="default-max-width">
+        <Address />
+        <SelectToken tokens={tokens} selectedToken={selectedToken} onSelectToken={setSelectedToken} />
+        <Balance selectedToken={selectedTokenPrivacy} />
+        <div className="spacing" />
+        {!incAccount && (
+          <ButtonBuy type="button" onClick={showPopup}>
+            <p className="text-buy">{isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet'}</p>
           </ButtonBuy>
-        </Row>
-      </form>
+        )}
+        {incAccount && !!selectedItems.length && (
+          <div style={{ display: 'flex', alignItems: 'flex-end', flexDirection: 'column' }}>
+            <ButtonBuy type="submit" onClick={onClickBuy}>
+              <p className="text-buy">
+                {selectedItems.length > 0
+                  ? `Buy ${selectedItems.length === 1 ? '1 item' : `${selectedItems.length} items`}`
+                  : 'Buy'}
+              </p>
+              {selectedItems.length > 0 && <p className="text-buy spacing">{`|`}</p>}
+              {selectedItems.length > 0 && <p className="text-buy">{buyAmount.visibleStr}</p>}
+            </ButtonBuy>
+            {renderError()}
+          </div>
+        )}
+      </Row>
     </Container>
   );
 };
