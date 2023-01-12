@@ -11,45 +11,77 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+
   .form {
     justify-content: flex-start;
     width: 100%;
   }
   .note {
     margin-top: 8px;
+    font-size: 12px;
+    line-height: 120%;
   }
-  .select-tokens-list {
+  .address-group {
+    width: 50%;
+  }
+  .wrap-balance {
+    margin-left: 32px;
+    justify-content: space-between;
     height: 56px;
-    background: #252525;
-    width: 100px;
-    border-radius: 8px;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-    padding-left: 28px;
-    padding-right: 28px;
-    margin-left: 16px;
-    margin-top: 2px;
-
-    cursor: pointer;
-    border: 1px solid ${({ theme }) => theme.border1};
-
-    :hover {
-      border: 1px solid ${({ theme }) => theme.border5};
+    flex-direction: column;
+    .header {
+      color: ${({ theme }) => theme.color_grey};
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 140%;
     }
-
-    :focus {
-      border: 1px solid ${({ theme }) => theme.border5};
-      color: ${({ theme }) => theme.primary5};
+    .amount {
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 140%;
     }
   }
-  .selected-token-icon {
+`;
+
+const SelectionToken = styled.div<{ hidden: boolean }>`
+  height: 56px;
+  display: flex;
+  width: fit-content;
+  border-radius: 8px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background: ${({ theme }) => theme.color_grey2};
+  border: 1px solid ${({ theme }) => theme.color_grey2};
+  padding: 0 16px;
+  margin: 4px 0 0 16px;
+  cursor: pointer;
+  opacity: ${({ hidden }) => (hidden ? 0 : 1)};
+  :hover {
+    border: 1px solid ${({ theme }) => theme.border5};
+  }
+  .token-icon {
     width: 24px;
     height: 24px;
     margin-right: 8px;
   }
 `;
 
-export { Container };
+const ButtonBuy = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 50px;
+
+  background-color: ${({ theme }) => theme.color_blue};
+  border-radius: 8px;
+  cursor: pointer;
+  :hover {
+    background-color: ${({ theme }) => theme.primary1};
+  }
+`;
+
+export { ButtonBuy, Container, SelectionToken };
