@@ -1,3 +1,4 @@
+import { ArrayHelper } from 'helpers/ArrayHelper';
 import uniqBy from 'lodash/uniqBy';
 import { Reducer } from 'redux';
 
@@ -52,11 +53,12 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
       return {
         ...state,
         token: {
+          ...state.token,
           list: action.payload,
         },
       };
     }
-    case BlurActionType.SET_MORE_TOKENS: {
+    case BlurActionType.APPEND_TOKENS: {
       if (state.token) {
         return {
           ...state,
@@ -68,16 +70,22 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
       }
       return state;
     }
-    case BlurActionType.SET_MORE_LOADING_TOKENS: {
+    case BlurActionType.APPEND_LOADING_TOKENS: {
       return {
         ...state,
-        token: state.token
-          ? {
-              list: [...state.token.list, ...action.payload],
-            }
-          : {
-              list: action.payload,
-            },
+        token: {
+          ...state.token,
+          list: [...state.token.list, ...action.payload],
+        },
+      };
+    }
+    case BlurActionType.UPDATE_TOKEN: {
+      return {
+        ...state,
+        token: {
+          ...state.token,
+          list: ArrayHelper.update('id', action.payload, state.token.list),
+        },
       };
     }
     default:

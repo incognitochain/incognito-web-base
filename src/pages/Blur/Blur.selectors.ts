@@ -16,4 +16,6 @@ const lastTokenSelector = createSelector(tokensSelector, (tokens) =>
   tokens && tokens.length > 0 ? tokens[tokens.length - 1] : undefined
 );
 
-export { blurSelector, collectionsSelector, lastTokenSelector, tokensSelector };
+const selectedTokensSelector = createSelector(tokensSelector, (tokens) => tokens.filter((token) => token.isSelected));
+
+export { blurSelector, collectionsSelector, lastTokenSelector, selectedTokensSelector, tokensSelector };
