@@ -31,6 +31,8 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
   const [keySearch, setKeySearch] = React.useState<string | undefined>();
   const [currentSortType, setCurrentSortType] = React.useState<SortBlurNftType>(SortBlurNftType.PriceLowToHigh);
 
+  const effectToken = selectedTokens && selectedTokens.length > 0;
+
   React.useEffect(() => {
     dispatch(actionFetchCollectionTokens(slug));
   }, []);
@@ -73,7 +75,7 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
         }}
         dataSource={tokens}
         renderItem={(item: IToken, index: number) => (
-          <NFTItem key={index.toString()} token={item} onClickTokenItem={onClickTokenItem} />
+          <NFTItem key={index.toString()} token={item} onClickTokenItem={onClickTokenItem} effectToken={effectToken} />
         )}
       />
     </Styled>

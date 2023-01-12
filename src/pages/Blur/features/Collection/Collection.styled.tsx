@@ -208,17 +208,17 @@ const ListStyled = styled.div<{ showLoader: boolean }>`
   flex-direction: column;
 `;
 
-const CollectionItem = styled.div`
+const CollectionItem = styled.div<{ effectHover: boolean }>`
   display: flex;
   flex-direction: row;
   padding-bottom: 16px;
   padding-top: 16px;
   box-sizing: border-box;
-  cursor: pointer;
+  cursor: ${({ effectHover }) => (effectHover ? 'pointer' : 'unset')};
   flex: 1;
   border-radius: 8px;
   :hover {
-    background-color: ${({ theme }) => theme.bg3};
+    background-color: ${({ theme, effectHover }) => (effectHover ? theme.bg3 : 'transparent')};
   }
   .wrap-index {
     display: flex;

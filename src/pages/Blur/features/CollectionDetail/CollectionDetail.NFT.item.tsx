@@ -14,10 +14,11 @@ interface NFTItemProps {
   key: string;
   token: IToken;
   onClickTokenItem: (item: IToken) => void;
+  effectToken: boolean;
 }
 
 const NFTItem = (props: NFTItemProps) => {
-  const { token, onClickTokenItem, key } = props;
+  const { token, onClickTokenItem, key, effectToken } = props;
   const { detail } = token;
 
   return (
@@ -25,7 +26,11 @@ const NFTItem = (props: NFTItemProps) => {
       {token.isLoading ? (
         <CollectionDetailNFTLoader />
       ) : (
-        <StyledCard isSelected={token.isSelected}>
+        <StyledCard
+          isSelected={token.isSelected}
+          effectToken={effectToken ? token.isSelected : false}
+          disableEffectToken={effectToken ? !token.isSelected : false}
+        >
           <ImagePlaceholder className="item-img" src={detail.imageUrl} />
           <div className="item-info">
             <div className="item-name-container">

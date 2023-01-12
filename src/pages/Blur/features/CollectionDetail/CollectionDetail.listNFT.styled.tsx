@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from 'styled-components/macro';
+import styled, { css, DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled.div`
   .list {
@@ -8,6 +8,7 @@ export const Styled = styled.div`
   .total-container {
     display: flex;
     flex-direction: row;
+    width: 25%;
   }
 
   .total-items {
@@ -35,19 +36,19 @@ export const Styled = styled.div`
   `}
 `;
 
-export const StyledCard = styled.div<{ isSelected: boolean }>`
+export const StyledCard = styled.div<{ isSelected: boolean; effectToken: boolean; disableEffectToken: boolean }>`
   width: 100%;
   height: auto;
   background-color: ${({ theme }) => theme.bg3};
   border-radius: 8px;
   cursor: pointer;
-
+  border: 2px solid transparent;
   /* border: ${({ isSelected, theme }) => (isSelected ? ` 6px solid ${theme.primary15}` : 'none')}; */
 
   /* :hover {
     border: 6px solid ${({ isSelected, theme }) => (isSelected ? theme.primary15 : theme.white)};
   } */
-
+  overflow: hidden;
   .item-img {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -56,6 +57,28 @@ export const StyledCard = styled.div<{ isSelected: boolean }>`
     background-color: ${({ theme }) => theme.bg4};
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+  }
+
+  ${({ effectToken }) =>
+    effectToken &&
+    css`
+      border-color: ${({ theme }) => theme.yellow3};
+    `}
+
+  ${({ disableEffectToken }) =>
+    disableEffectToken &&
+    css`
+      opacity: 0.95;
+    `}
+  
+  
+  transition: all 0.2s ease-in-out;
+
+  :hover {
+    .item-img {
+      transform: scale(1.05);
+      transition: all 0.2s ease-in-out;
+    }
   }
 
   .item-info {
