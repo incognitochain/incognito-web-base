@@ -5,6 +5,7 @@ import ImagePlaceholder from 'components/ImagePlaceholder';
 import { IToken } from 'pages/Blur';
 import Checkbox from 'pages/Blur/images/checkbox.svg';
 import CheckboxActive from 'pages/Blur/images/checkbox-active.svg';
+import IcInfo from 'pages/Blur/images/info.svg';
 import React from 'react';
 
 import { StyledCard } from './CollectionDetail.listNFT.styled';
@@ -15,10 +16,12 @@ interface NFTItemProps {
   token: IToken;
   onClickTokenItem: (item: IToken) => void;
   effectToken: boolean;
+  onMouseEnterIcInfo: (event: any, token: IToken) => void;
+  onMouseLeaveIcInfo: () => void;
 }
 
 const NFTItem = (props: NFTItemProps) => {
-  const { token, onClickTokenItem, key, effectToken } = props;
+  const { token, onClickTokenItem, key, effectToken, onMouseEnterIcInfo, onMouseLeaveIcInfo } = props;
   const { detail } = token;
 
   return (
@@ -54,6 +57,13 @@ const NFTItem = (props: NFTItemProps) => {
             </RowBetween>
           </div>
           <img className="checkbox" src={token.isSelected ? CheckboxActive : Checkbox} alt="checkbox-logo" />
+          <img
+            onMouseMove={(event) => onMouseEnterIcInfo(event, token)}
+            onMouseOut={onMouseLeaveIcInfo}
+            className="ic-info"
+            src={IcInfo}
+            alt="info-icon"
+          />
         </StyledCard>
       )}
     </List.Item>

@@ -15,6 +15,7 @@ import { useAppDispatch } from 'state/hooks';
 
 import CollectionDetailFilter, { SortBlurNftType } from './CollectionDetail.filter';
 import { Styled } from './CollectionDetail.listNFT.styled';
+import NFTInfoOverlay from './CollectionDetail.NFT.info';
 import NFTItem from './CollectionDetail.NFT.item';
 
 interface CollectionDetailListNFTProps {
@@ -27,6 +28,8 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
 
   const tokens = useSelector(tokensSelector);
   const selectedTokens = useSelector(selectedTokensSelector);
+
+  const [eventMouse, setEventMouse] = React.useState<{ event: any; token: IToken } | undefined>();
 
   const [keySearch, setKeySearch] = React.useState<string | undefined>();
   const [currentSortType, setCurrentSortType] = React.useState<SortBlurNftType>(SortBlurNftType.PriceLowToHigh);
@@ -51,6 +54,8 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
     dispatch(actionUpdateToken(newToken));
   };
 
+  console.log('EVENT MOUSE', eventMouse);
+
   return (
     <Styled>
       <CollectionDetailFilter
@@ -65,7 +70,7 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
       <List
         className="list"
         grid={{
-          gutter: 16,
+          gutter: 8,
           xs: 1,
           sm: 2,
           md: 3,
@@ -75,9 +80,17 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
         }}
         dataSource={tokens}
         renderItem={(item: IToken, index: number) => (
-          <NFTItem key={index.toString()} token={item} onClickTokenItem={onClickTokenItem} effectToken={effectToken} />
+          <NFTItem
+            key={index.toString()}
+            token={item}
+            effectToken={effectToken}
+            onClickTokenItem={onClickTokenItem}
+            onMouseEnterIcInfo={(event, token) => setEventMouse({ event, token })}
+            onMouseLeaveIcInfo={() => setEventMouse(undefined)}
+          />
         )}
       />
+      {eventMouse && <NFTInfoOverlay event={eventMouse.event} token={eventMouse.token} />}
     </Styled>
   );
 };

@@ -137,4 +137,12 @@ export const StyledCard = styled.div<{ isSelected: boolean; effectToken: boolean
     width: 24px;
     height: 24px;
   }
+
+  .ic-info {
+    position: absolute;
+    left: 20px;
+    top: 12px;
+    width: 24px;
+    height: 24px;
+  }
 `;
