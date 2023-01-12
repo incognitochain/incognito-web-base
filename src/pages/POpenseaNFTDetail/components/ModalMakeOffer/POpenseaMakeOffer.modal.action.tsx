@@ -84,7 +84,6 @@ export class POpenseaMakeOfferAction implements IPOpenseaMakeOfferAction {
             decimals: childToken?.decimals || 18,
             round: true,
           })}`,
-          reciptientAddress,
           selectedNFT.tokenId,
           contract,
           endtime
@@ -114,7 +113,8 @@ export class POpenseaMakeOfferAction implements IPOpenseaMakeOfferAction {
             res.offer,
             resultSignature.signature,
             selectedToken.tokenID,
-            resultAccount.otaReceiver
+            resultAccount.otaReceiver,
+            reciptientAddress
           );
 
           if (data && data.Calldata) {

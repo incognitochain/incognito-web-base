@@ -2,17 +2,17 @@ import { IPOpenseaOfferStorage } from './OffersMade.storage';
 
 export enum OfferStatus {
   submitting = 'submitting',
-  submit_failed = 'submit_failed',
+  reverted = 'reverted',
   pending = 'pending',
-  executing = 'executing',
-  rejected = 'rejected',
-  accepted = 'accepted',
-  success = 'success',
-  refund = 'refunded',
-  refunding = 'refunding',
-  submitFail = 'failed',
+  filled = 'filled',
+  claiming = 'claiming',
+  claimed = 'claimed',
+  cancelled = 'cancelled',
+  cancelling = 'cancelling',
 }
 
 export interface IPOpenseaOfferMade extends IPOpenseaOfferStorage {
   status?: OfferStatus;
+  offerIncTx?: string;
+  offerExternalTx?: string;
 }

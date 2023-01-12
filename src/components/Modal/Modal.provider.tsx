@@ -135,7 +135,7 @@ export function Modal({
             <StyledDialogOverlay
               key={key}
               style={props}
-              onDismiss={() => closeModal && closeModal()}
+              onDismiss={() => closable && closeModal && closeModal()}
               initialFocusRef={initialFocusRef}
               unstable_lockFocusAcrossFrames={false}
             >
@@ -156,7 +156,7 @@ export function Modal({
                 {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
                 <RowBetween className="header">
                   <ThemedText.AvgMediumLabel color="primary5">{title}</ThemedText.AvgMediumLabel>
-                  <CloseIcon onClick={() => closeModal && closeModal()} />
+                  {closeModal && closable && <CloseIcon onClick={() => closeModal()} />}
                 </RowBetween>
                 {modalData}
               </StyledDialogContent>

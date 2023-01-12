@@ -89,7 +89,7 @@ export class POpenseaNFTDetailBuyAction implements IPOpenseaNFTDetailBuyAction {
 
       this.component.setModal({
         isTransparent: false,
-        closable: true,
+        closable: false,
         data: <LoadingTransaction pendingText="Waiting For Confirmation" />,
       });
       const { metadata, feeRefundOTA } = await this.getMetadata(

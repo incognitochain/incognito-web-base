@@ -54,7 +54,6 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
 
   const [offerFee, setOfferFee] = useState<POpenseaOfferFee | undefined>();
   const [loadingFee, setLoadingFee] = useState<boolean>(false);
-  const [isCanOffer, setIsCanOffer] = useState<boolean>(false);
   const [overlayContent, setOverlayContent] = useState<React.ReactNode | undefined>();
 
   const incAccount = useSelector(incognitoWalletAccountSelector);
@@ -82,6 +81,11 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
   const priceOfferFormatAmount = priceOffer
     ? format.amountVer2({ originalAmount: new BigNumber(priceOffer).toNumber(), decimals: 0 })
     : '0';
+  const currBalance =
+    selectedTokenPrivacy && selectedTokenPrivacy.formatAmount
+      ? new BigNumber(selectedTokenPrivacy.formatAmount).toNumber()
+      : 0;
+  const priceOfferAmount = new BigNumber(priceOfferFormatAmount).toNumber();
 
   const offerActions: IPOpenseaMakeOfferAction = React.useRef(
     new POpenseaMakeOfferAction({
@@ -105,35 +109,34 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
   }, [selectedCollection]);
 
   useEffect(() => {
-    if (priceOffer && selectedToken) {
-      const priceOfferAmount = new BigNumber(priceOfferFormatAmount).toNumber();
-      const currBalance =
-        selectedTokenPrivacy && selectedTokenPrivacy.formatAmount
-          ? new BigNumber(selectedTokenPrivacy.formatAmount).toNumber()
-          : 0;
-      setIsValidBalance(currBalance >= priceOfferAmount);
-      if (offerFee) {
-        const totalOfferAmount = priceOfferAmount + new BigNumber(offerFeeFormatAmount).toNumber();
-        setIsCanOffer(currBalance >= totalOfferAmount);
+    if (priceOffer && selectedToken && reciptientAddress && offerDate) {
+      if (currBalance >= priceOfferAmount) {
+        offerActions.estimateOfferFee(
+          props.contract,
+          offerDate.getTime(),
+          selectedToken,
+          childToken,
+          priceOffer,
+          reciptientAddress,
+          selectedNFT
+        );
       }
     } else {
       setIsValidBalance(false);
     }
-  }, [selectedToken, priceOffer, offerFee]);
+  }, [selectedToken, priceOffer, reciptientAddress, offerDate]);
 
   useEffect(() => {
-    if (reciptientAddress && priceOffer && isValidBalance && selectedToken && offerDate) {
-      offerActions.estimateOfferFee(
-        props.contract,
-        offerDate.getTime(),
-        selectedToken,
-        childToken,
-        priceOffer,
-        reciptientAddress,
-        selectedNFT
-      );
+    if (priceOffer && selectedToken) {
+      let totalOfferAmount = priceOfferAmount;
+      if (offerFee) {
+        totalOfferAmount = priceOfferAmount + new BigNumber(offerFeeFormatAmount).toNumber();
+      }
+      setIsValidBalance(currBalance >= totalOfferAmount);
+    } else {
+      setIsValidBalance(false);
     }
-  }, [priceOffer, isValidBalance, offerDate]);
+  }, [offerFee, selectedToken, priceOffer]);
 
   const onChangeTimePicker = (date: Date) => {
     setDuration(undefined);
@@ -159,7 +162,7 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
   };
 
   const onClickOffer = () => {
-    if (isCanOffer) {
+    if (isValidBalance) {
       offerActions.offerNFT(
         requestSignTransaction,
         reciptientAddress,
@@ -215,16 +218,14 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
 
     return (
       <div className="container-price">
-        {isValidBalance && !loadingFee && offerFee && (
+        {!loadingFee && offerFee && (
           <p className="current-fee">
             {offerFeeFormatAmount} {selectedToken?.symbol} = {offerFee.getFeeUsdStr()} $
           </p>
         )}
         {loadingFee && <Spinner className="spinner" />}
         <p className="total-offer">
-          {isValidBalance && offerFee
-            ? `Total offer amount: ${totalOfferAmount} ${selectedToken ? selectedToken?.symbol : ''}`
-            : ''}
+          {offerFee ? `Total offer amount: ${totalOfferAmount} ${selectedToken ? selectedToken?.symbol : ''}` : ''}
         </p>
       </div>
     );
@@ -264,7 +265,7 @@ const POpenseaMakeOffer = (props: POpenseaModalOfferProps) => {
         </div>
         <button
           className="btn-offer"
-          disabled={!isCanOffer || !offerFee}
+          disabled={!isValidBalance || !offerFee}
           onClick={!incAccount ? showPopup : onClickOffer}
         >
           <p className="text-offer">

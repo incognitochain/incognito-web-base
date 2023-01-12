@@ -47,16 +47,9 @@ class RpcPOpensea {
     });
   };
 
-  generateOffer = (
-    amount: string,
-    recipient: string,
-    nftid: string,
-    contract: string,
-    endtime: number
-  ): Promise<any> => {
+  generateOffer = (amount: string, nftid: string, contract: string, endtime: number): Promise<any> => {
     return this.http.post('papps/opensea/generateoffer', {
       amount,
-      recipient,
       nftid,
       contract,
       endtime: Math.floor(endtime / 1000),
@@ -64,12 +57,19 @@ class RpcPOpensea {
     });
   };
 
-  estimateOfferFee = (offer: string, signature: string, burntoken: string, ota: string): Promise<any> => {
+  estimateOfferFee = (
+    offer: string,
+    signature: string,
+    burntoken: string,
+    ota: string,
+    recipient: string
+  ): Promise<any> => {
     return this.http.post('papps/opensea/estimateofferfee', {
       offer,
       signature,
       burntoken,
       ota,
+      recipient,
     });
   };
 

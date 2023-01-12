@@ -19,6 +19,16 @@ export const Styled = styled.div`
     line-height: 140%;
   }
 
+  .request-tx {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .status-text {
+    text-transform: capitalize;
+  }
+
   .text-align-center {
     text-align: center;
   }

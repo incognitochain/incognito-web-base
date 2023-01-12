@@ -1,3 +1,4 @@
+import Loading from 'components/Loading/Loading';
 import { isEmpty } from 'lodash';
 import rpcPOpensea from 'services/rpcPOpensea';
 
@@ -7,10 +8,13 @@ import { getLocalPOpenseaOffers, IPOpenseaOfferStorage } from './OffersMade.stor
 interface IComponent {
   setIsFetching: (data: boolean) => void;
   setOffersMade: (data: IPOpenseaOfferMade[]) => void;
+  setModal: (data: any) => void;
+  clearAllModal: () => void;
 }
 
 export interface IOffersMadeAction {
   getOffersMade: () => void;
+  cancelOffer: (offer: IPOpenseaOfferMade) => void;
 }
 
 export class OffersMadeAction implements IOffersMadeAction {
@@ -31,12 +35,24 @@ export class OffersMadeAction implements IOffersMadeAction {
       const offers = await rpcPOpensea.getOfferStatusTx(localOffers.map((localOffer) => localOffer.txHash));
 
       const combineOffers = this.combineOffersMade(localOffers, offers);
-      console.log('combineOffers: ', combineOffers);
 
       this.component.setOffersMade(combineOffers);
     } catch (error) {
     } finally {
       this.component.setIsFetching(false);
+    }
+  };
+
+  cancelOffer = async (offer: IPOpenseaOfferMade) => {
+    try {
+      this.component.setModal({
+        isTransparent: false,
+        closable: false,
+        data: <Loading text="Canceling" />,
+      });
+    } catch (error) {
+    } finally {
+      this.component.clearAllModal();
     }
   };
 
@@ -60,7 +76,9 @@ export class OffersMadeAction implements IOffersMadeAction {
     if (!apiResp || isEmpty(apiResp)) return undefined;
     const data: IPOpenseaOfferMade = {
       ...localOffer,
-      status: OfferStatus[apiResp.inc_request_tx_status as keyof typeof OfferStatus],
+      status: OfferStatus[apiResp.status as keyof typeof OfferStatus],
+      offerIncTx: apiResp.offer_inc_tx,
+      offerExternalTx: apiResp.offer_external_tx,
     };
     return data;
   };

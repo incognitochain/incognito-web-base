@@ -24,7 +24,7 @@ const Home = () => {
       <WrapperContent>
         <POpenseaHistorySubRoute />
         <Tabs
-          style={{ marginTop: 60 }}
+          style={{ marginTop: 40 }}
           defaultActiveKey={defaultActiveKey}
           onChange={onChangeTab}
           items={[

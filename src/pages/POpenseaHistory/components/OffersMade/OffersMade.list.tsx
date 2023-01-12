@@ -1,14 +1,22 @@
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import CopyIcon from 'components/Copy';
+import Row from 'components/Core/Row';
 import ImagePlaceholder from 'components/ImagePlaceholder';
+import { useModal } from 'components/Modal';
+import OpenLink from 'components/OpenLink';
+import { PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { ThemedText } from 'theme';
+import { ellipsisCenter } from 'utils';
+import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink';
 
 import { IOffersMadeAction, OffersMadeAction } from './OffersMade.action';
-import { IPOpenseaOfferMade } from './OffersMade.interface';
+import { IPOpenseaOfferMade, OfferStatus } from './OffersMade.interface';
 import POpenseaListOfferLoader from './OffersMade.list.loader';
 // import POpenseaOffersMadeLoader from './OffersMade.list.loader';
 import { Styled } from './OffersMade.list.styled';
@@ -21,6 +29,7 @@ interface POpenseaOffersMadeProps {}
 
 const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
   const dispatch = useDispatch();
+  const { setModal, clearAllModal } = useModal();
 
   const [isFetching, setIsFetching] = useState(false);
   const [offersMade, setOffersMade] = useState<IPOpenseaOfferMade[]>([]);
@@ -29,6 +38,8 @@ const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
     component: {
       setIsFetching,
       setOffersMade,
+      setModal,
+      clearAllModal,
     },
     dispatch,
   });
@@ -84,19 +95,6 @@ const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
       ),
     },
     {
-      key: 'floor-price',
-      render: (text, record, index) => (
-        <p key={index.toString()} className="baseText text-align-center">
-          {record.offerFloorPrice}
-        </p>
-      ),
-      title: () => (
-        <div className="headerTitle" style={{ justifyContent: 'center' }}>
-          Floor Price
-        </div>
-      ),
-    },
-    {
       key: 'expiration',
       render: (text, record, index) => {
         let diffText = '';
@@ -132,10 +130,35 @@ const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
       ),
     },
     {
+      key: 'request-tx',
+      render: (text, record, index) => {
+        const offerTx = record.offerIncTx;
+        const link = offerTx
+          ? `${getExplorerLink(PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO, offerTx, ExplorerDataType.TRANSACTION)}`
+          : undefined;
+        const handleOpenLink = () => window.open(link);
+        return (
+          <Row className="request-tx">
+            <ThemedText.SmallLabel className="baseText text-align-center">
+              {offerTx && ellipsisCenter({ str: offerTx, limit: 3 })}
+            </ThemedText.SmallLabel>
+
+            {!!offerTx && <CopyIcon text={offerTx} size={20} />}
+            {!!link && <OpenLink onClick={handleOpenLink} />}
+          </Row>
+        );
+      },
+      title: () => (
+        <div className="headerTitle" style={{ justifyContent: 'center' }}>
+          RequestTx
+        </div>
+      ),
+    },
+    {
       key: 'status',
       render: (text, record, index) => (
-        <p key={index.toString()} className="baseText text-align-center">
-          {record.status}
+        <p key={index.toString()} className="baseText status-text text-align-center">
+          {record.status ? record.status : 'invalid'}
         </p>
       ),
       title: () => (
@@ -146,11 +169,12 @@ const POpenseaListCollection = (props: POpenseaOffersMadeProps) => {
     },
     {
       key: 'action',
-      render: (text, record, index) => (
-        <div key={index.toString()} className="cancel-btn">
-          <p className="cancel-txt">Cancel</p>
-        </div>
-      ),
+      render: (text, record, index) =>
+        record.status === OfferStatus.pending && (
+          <div key={index.toString()} className="cancel-btn" onClick={() => offerMadesActions.cancelOffer(record)}>
+            <p className="cancel-txt">Cancel</p>
+          </div>
+        ),
       title: () => (
         <div className="headerTitle" style={{ justifyContent: 'center' }}>
           Action
