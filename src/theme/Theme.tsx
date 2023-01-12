@@ -512,6 +512,12 @@ export const ThemedGlobalStyle = createGlobalStyle`
       margin-right: auto;
     }
 
+    .default-max-width-2 {
+      max-width: 1080px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     .ant-btn-round.ant-btn-lg {
       height: 60px;
       font-size: 18px;
