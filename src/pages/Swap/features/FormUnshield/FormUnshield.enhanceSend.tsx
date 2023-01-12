@@ -47,11 +47,15 @@ const enhanceSend = (WrappedComponent: any) => {
       inputAmount,
       slippage,
     } = props;
+
     const dispatch = useAppDispatch();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
     const { setModal, clearAllModal } = useModal();
     const updateMetric = ({ type }: { type: METRIC_TYPE }) => rpcMetric.updateMetric({ type });
     const getPrivacyDataByTokenID = useAppSelector(getPrivacyDataByTokenIDSelector);
+
+    const isUnshieldWithoutAddress =
+      !sellToken.isCentralized && !sellToken.isBTC && !sellToken.isNearToken && !sellToken.isMainNEAR;
 
     const remoteAddress = React.useMemo(() => {
       let remoteAddress: string = inputAddress || '';
@@ -95,7 +99,7 @@ const enhanceSend = (WrappedComponent: any) => {
       const otaReceiver = result?.otaReceiver;
       const burnerAddress = result?.burnerAddress;
       let feeRefundOTA = '';
-      if (result?.otaReceiverWithCfg && formType === FormTypes.SWAP) {
+      if (result?.otaReceiverWithCfg && (formType === FormTypes.SWAP || isUnshieldWithoutAddress)) {
         feeRefundOTA = result?.otaReceiverWithCfg;
       }
       const newCoins = result.newCoins;
@@ -470,7 +474,8 @@ const enhanceSend = (WrappedComponent: any) => {
           } else {
             /** Case Unshield Decentralized */
             const metadata = getUnshieldDecentralizedMetadata({ otaReceiver, burnerAddress });
-            isSignAndSendTransaction = false;
+            // unshield via backend service isSignAndSendTransaction = false
+            isSignAndSendTransaction = !isUnshieldWithoutAddress;
             payload = {
               info: typeof id === 'number' ? String(id) : '',
               metadata,
@@ -612,8 +617,6 @@ const enhanceSend = (WrappedComponent: any) => {
                   ? buyToken.listUnifiedToken.find((token: any) => token.networkName === buyNetworkName)
                   : buyToken
               ).currencyType;
-              const isUnshieldWithoutAddress =
-                !sellToken.isCentralized && !sellToken.isBTC && !sellToken.isNearToken && !sellToken.isMainNEAR;
 
               console.log('LOGS PAYLOAD 111: ', {
                 unshieldCurrencyType,
