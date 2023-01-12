@@ -29,7 +29,7 @@ export class OffersMadeAction implements IOffersMadeAction {
   getOffersMade = async () => {
     try {
       this.component.setIsFetching(true);
-      const localOffers: IPOpenseaOfferStorage[] = (getLocalPOpenseaOffers() || []).reverse().slice(0, 20);
+      const localOffers: IPOpenseaOfferStorage[] = (getLocalPOpenseaOffers() || []).reverse().slice(0, 30);
       if (!localOffers || localOffers.length === 0) return [];
 
       const offers = await rpcPOpensea.getOfferStatusTx(localOffers.map((localOffer) => localOffer.txHash));

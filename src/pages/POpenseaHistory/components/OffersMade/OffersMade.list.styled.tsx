@@ -13,8 +13,8 @@ export const Styled = styled.div`
     object-fit: cover;
   }
   .baseText {
-    color: #ffffff;
-    font-weight: 600;
+    color: ${({ theme }) => theme.white};
+    font-weight: 500;
     font-size: 16px;
     line-height: 140%;
   }
