@@ -6,7 +6,8 @@ const Container = styled.div`
   bottom: 0;
   background-color: ${({ theme }) => theme.bg3};
   width: 100vw;
-  padding: 9px;
+  padding-top: 9px;
+  padding-bottom: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
