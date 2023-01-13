@@ -1,16 +1,18 @@
 /* eslint-disable jsx-a11y/alt-text */
+import { Table } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
 import { RowBetween } from 'components/Core/Row';
 import ImagePlaceholder from 'components/ImagePlaceholder';
+import useWindowDimensions from 'hooks/useWindowDimentions';
 import { IToken } from 'pages/Blur';
+import { ITrait } from 'pages/Blur/Blur.interface';
 import React from 'react';
 import styled from 'styled-components/macro';
 
-const INFO_WIDTH = 600;
-const INFO_HEIGHT = 340;
+const INFO_WIDTH = 594;
 
-const Styled = styled.div<{ x: number; y: number; width: number; height: number }>`
+const Styled = styled.div<{ x: number; y: number; width: number }>`
   width: ${({ width }) => width}px;
-  height: ${({ height }) => height}px;
   background: #303030;
   border-radius: 16px;
 
@@ -24,10 +26,127 @@ const Styled = styled.div<{ x: number; y: number; width: number; height: number 
     flex-direction: row;
     padding: 24px;
   }
+
+  .column-name {
+    width: 120px;
+  }
+
+  .column-floor {
+    width: 76px;
+  }
+
+  .column-qty {
+    width: 40px;
+  }
+
+  .baseText {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 140%;
+  }
+
+  .text-align-center {
+    text-align: center;
+  }
+
+  .smallText {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 148%;
+    color: #9c9c9c;
+  }
+  table {
+    width: max-content;
+    margin-top: -8px;
+  }
+  .ant-table-column-sorter {
+    display: none;
+  }
+
+  .ant-table-column-title {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 140%;
+    color: #757575;
+  }
+
+  td.ant-table-column-sort {
+    background: transparent;
+  }
+
+  ant-spin-blur {
+    border-radius: 16px;
+    opacity: 1;
+  }
+  .tableRow {
+    height: 54px;
+    border-bottom: 1px solid #363636;
+  }
+  .tableRow:hover td {
+    cursor: pointer;
+    background: #252525 !important;
+  }
+
+  .ant-table {
+    background: transparent;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .ant-table-wrapper {
+    border-radius: 33px;
+  }
+  .ant-table-thead > tr > th {
+    border-bottom: 0px;
+    background: transparent;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 140%;
+    color: #757575;
+    /* padding: 0px 32px; */
+    padding-right: 36px;
+    height: 54px;
+  }
+
+  .ant-table-thead {
+    .ant-table-cell {
+      height: 44px;
+      padding: 0px;
+      padding-right: 36px;
+      border-bottom: 1px solid #363636;
+    }
+  }
+
+  .headerTitle {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 140%;
+    color: #9c9c9c;
+  }
+
+  .ant-table-tbody > tr > td {
+    border-bottom: 0px;
+  }
+
+  .ant-table-container .ant-table-content table .ant-table-thead tr th:first-child {
+    border-top-left-radius: 16px !important;
+  }
+
+  .ant-table-container .ant-table-content table .ant-table-thead tr th:last-child {
+    border-top-right-radius: 16px;
+  }
+  .ant-table-tbody > tr > td {
+    padding: 0px 0px;
+    padding-right: 36px;
+  }
+
+  .ant-table-tbody > tr.ant-table-placeholder:hover > td {
+    background-color: ${({ theme }) => theme.background1};
+  }
 `;
 
 const StyledCard = styled.div`
   border-radius: 8px;
+  margin-right: 32px;
   cursor: pointer;
 
   .item-img {
@@ -93,15 +212,61 @@ interface NFTInfoProps {
 
 const NFTInfoOverlay = (props: NFTInfoProps) => {
   const { event, token } = props;
-
   const { detail } = token;
-  const { screenX, screenY, pageX, pageY } = event;
+  const { pageX, pageY } = event;
 
+  const { width: screenWidth } = useWindowDimensions();
+
+  const y = pageY + 16;
   let x = pageX;
-  let y = pageY + 16;
-  if (screenX / 1.75 < pageX + INFO_WIDTH) {
-    x = x - INFO_WIDTH;
+  const diffPageX = Math.abs(screenWidth - (pageX + INFO_WIDTH));
+  if (diffPageX > 0) {
+    if (pageX > screenWidth / 2) {
+      x = x - diffPageX - 16;
+    }
   }
+
+  const columns: ColumnsType<ITrait> = [
+    {
+      key: 'index',
+      render: (text, record, index) => (
+        <div key={index.toString()} className="column-name">
+          <p className="smallText">{record.key}</p>
+          <p className="baseText">{record.value}</p>
+        </div>
+      ),
+      responsive: ['md'],
+      title: () => <div className="headerTitle">Trait</div>,
+    },
+    {
+      key: 'floor',
+      render: (text, record, index) => (
+        <div key={index.toString()} className="column-floor">
+          <p className="baseText text-align-center">-</p>
+        </div>
+      ),
+      responsive: ['md'],
+      title: () => (
+        <div className="headerTitle" style={{ textAlign: 'center' }}>
+          Floor
+        </div>
+      ),
+    },
+    {
+      key: 'qty',
+      render: (text, record, index) => (
+        <div key={index.toString()} className="column-qty">
+          <p className="baseText text-align-center">-</p>
+        </div>
+      ),
+      responsive: ['md'],
+      title: () => (
+        <div className="headerTitle" style={{ textAlign: 'center' }}>
+          Qty
+        </div>
+      ),
+    },
+  ];
 
   const renderCardInfo = () => (
     <StyledCard>
@@ -131,11 +296,20 @@ const NFTInfoOverlay = (props: NFTInfoProps) => {
   );
 
   const renderTable = () => {
-    return <div></div>;
+    return (
+      <Table
+        columns={columns}
+        dataSource={detail.traits}
+        size="large"
+        pagination={false}
+        className="table"
+        rowClassName="tableRow"
+      />
+    );
   };
 
   return (
-    <Styled x={x} y={y} width={INFO_WIDTH} height={INFO_HEIGHT}>
+    <Styled x={x} y={y} width={INFO_WIDTH}>
       <div className="wrap-content">
         {renderCardInfo()}
         {renderTable()}

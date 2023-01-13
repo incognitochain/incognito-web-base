@@ -60,6 +60,11 @@ export interface IOwner {
   name: string;
   address: string;
 }
+
+export interface ITrait {
+  key: string;
+  value: string;
+}
 export interface ITokenDetail {
   tokenId: string;
   highestBid?: ICost;
@@ -73,7 +78,7 @@ export interface ITokenDetail {
   price: IPrice;
   rarityRank: number;
   rarityScore: number;
-  traits: { [key: string]: string };
+  traits: ITrait[];
 }
 
 export interface IToken {

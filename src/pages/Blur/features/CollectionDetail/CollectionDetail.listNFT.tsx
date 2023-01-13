@@ -54,8 +54,6 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
     dispatch(actionUpdateToken(newToken));
   };
 
-  console.log('EVENT MOUSE', eventMouse);
-
   return (
     <Styled>
       <CollectionDetailFilter
