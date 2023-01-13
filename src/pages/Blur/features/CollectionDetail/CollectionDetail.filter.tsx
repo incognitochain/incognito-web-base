@@ -34,6 +34,7 @@ const Styled = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    min-width: 150px;
   }
 
   .total-item {
@@ -59,7 +60,7 @@ const Styled = styled.div`
   .search-container {
     display: flex;
     justify-content: right;
-    flex: 0.6;
+    flex: 0.5;
     height: 50px;
   }
 
@@ -149,11 +150,10 @@ const Styled = styled.div`
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSmall`
-      flex-direction: column;
-      justify-content: left;
+      align-items: center;
 
       .input-container {
-        margin-top: 16px;
+        width: 70%;
       }
 
       .sort-button {
@@ -167,12 +167,11 @@ const Styled = styled.div`
       margin-top: 0px;
 
       .search-container {
-        flex-direction: column-reverse;
         align-items: center;
       }
 
       .input-container {
-        width: 100%;
+        width: 50%;
       }
 
       .sort-button {
