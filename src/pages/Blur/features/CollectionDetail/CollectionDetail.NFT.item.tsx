@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
 import { List } from 'antd';
 import { RowBetween } from 'components/Core/Row';
 import ImagePlaceholder from 'components/ImagePlaceholder';

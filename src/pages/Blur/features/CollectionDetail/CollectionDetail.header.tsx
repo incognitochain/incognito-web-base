@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 
-const Container = styled.div`
+const Container = styled.div<{ expand: boolean }>`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -11,6 +11,19 @@ const Container = styled.div`
   margin-bottom: 32px;
   padding-bottom: 12px;
   border-bottom: 1px solid ${({ theme }) => theme.bg3};
+
+  @keyframes ShowDown {
+    0% {
+      margin-top: -150px;
+      opacity: 0;
+    }
+    100% {
+      margin-top: -35px;
+      opacity: 1;
+    }
+  }
+  animation-duration: 1s;
+  animation-name: ${({ expand }) => (expand ? 'ShowDown' : '')};
 
   .wrap-item {
   }
@@ -38,9 +51,9 @@ const Header = () => {
   const history = useHistory();
   if (!collection) return <div />;
   return (
-    <Container>
-      {renderHeader({ removeIndex: true })}
-      {renderItem({ collection, index: 0, history, removeIndex: true })}
+    <Container expand={!!collection}>
+      {!!collection && renderHeader({ removeIndex: true })}
+      {!!collection && renderItem({ collection, index: 0, history, removeIndex: true })}
     </Container>
   );
 };
