@@ -1,7 +1,6 @@
 import { BigNumber } from 'bignumber.js';
+import convert from 'utils/convert';
 import format from 'utils/format';
-
-import convert from '../../utils/convert';
 
 export interface IAmount {
   amount: string;
@@ -10,6 +9,11 @@ export interface IAmount {
   unit: string;
   displayText: string;
   color: string;
+}
+
+export interface IMapTokens {
+  tokens: IToken[];
+  collection: ICollection | undefined;
 }
 
 export interface ICollection {

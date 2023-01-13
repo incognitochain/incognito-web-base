@@ -235,14 +235,14 @@ const CollectionItem = styled.div<{ effectHover: boolean }>`
     flex-direction: row;
     align-items: center;
     padding-left: 4px;
-    width: 12% !important;
+    width: calc(100% / 5) !important;
   }
   .wrap-header {
     display: flex;
     flex-direction: row;
     justify-content: center;
     padding-left: 4px;
-    width: 12% !important;
+    width: calc(100% / 5) !important;
   }
   .align-end {
     justify-content: center;

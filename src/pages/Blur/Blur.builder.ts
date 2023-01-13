@@ -3,7 +3,16 @@ import { get } from 'lodash';
 import { camelCaseKeys } from 'utils/camelcase';
 import format from 'utils/format';
 
-import { IAmount, ICollection, ICost, IMarketPlaceType, IPrice, IToken, PBlurBuyFee } from './Blur.interface';
+import {
+  IAmount,
+  ICollection,
+  ICost,
+  IMapTokens,
+  IMarketPlaceType,
+  IPrice,
+  IToken,
+  PBlurBuyFee,
+} from './Blur.interface';
 
 const convertToFormatAmount = (value: string | number) => {
   return format.amountVer2({
@@ -125,9 +134,12 @@ const convertToPrice = (data: any): IPrice => {
   };
 };
 
-const mapperTokens = (resp: any): IToken[] => {
-  if (!Array.isArray(resp)) return [];
-  return resp.map((data: any): IToken => {
+const mapperTokens = (resp: any): IMapTokens => {
+  const respTokens = get(resp, 'tokens') || [];
+  const respCollection = get(resp, 'collection');
+  if (!Array.isArray(respTokens) || !respCollection) return { tokens: [], collection: undefined };
+
+  const tokensMapper = respTokens.map((data: any): IToken => {
     const {
       tokenId,
       highestBid,
@@ -167,6 +179,11 @@ const mapperTokens = (resp: any): IToken[] => {
       },
     };
   });
+  const collectionMapper = respCollection ? mapperCollections([respCollection])[0] : undefined;
+  return {
+    tokens: tokensMapper,
+    collection: collectionMapper,
+  };
 };
 
 const convertBlurFee = (json: any) => {

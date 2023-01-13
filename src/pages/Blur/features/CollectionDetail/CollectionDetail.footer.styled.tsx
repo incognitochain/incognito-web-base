@@ -1,7 +1,7 @@
 import styled from 'styled-components/macro';
 
 const Container = styled.div`
-  position: fixed;
+  position: sticky;
   left: 0;
   bottom: 0;
   background-color: ${({ theme }) => theme.bg3};

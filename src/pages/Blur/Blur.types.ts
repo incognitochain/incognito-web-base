@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ICollection, IToken, PBlurBuyFee } from './Blur.interface';
+import { ICollection, IMapTokens, IToken, PBlurBuyFee } from './Blur.interface';
 
 export enum BlurActionType {
   SET_FETCHING_COLLECTION = 'BLUR/SET_FETCHING_COLLECTION',
@@ -28,6 +28,7 @@ export interface IBlurReducer {
     isEstimating: boolean;
     fee?: PBlurBuyFee;
     selectedTokenIds: string[];
+    collection: ICollection | undefined;
   };
 }
 
@@ -43,7 +44,7 @@ export interface SetCollectionsAction extends Action {
 
 export interface SetTokensAction extends Action {
   type: BlurActionType.SET_TOKENS;
-  payload: IToken[];
+  payload: IMapTokens;
 }
 
 export interface AppendTokensAction extends Action {

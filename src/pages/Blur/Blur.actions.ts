@@ -2,7 +2,7 @@ import { rpcPBlur } from 'services';
 import { AppDispatch, AppState } from 'state';
 
 import { convertBlurFee } from './Blur.builder';
-import { ICollection, IToken } from './Blur.interface';
+import { ICollection, IMapTokens, IToken } from './Blur.interface';
 import { MAX_GET_ITEM } from './Blur.reducer';
 import { buyCollectionSelector, selectedTokensSelector } from './Blur.selectors';
 import {
@@ -35,7 +35,7 @@ const actionSetCollections = (payload: ICollection[]): SetCollectionsAction => (
   payload,
 });
 
-const actionSetTokens = (payload: IToken[]): SetTokensAction => ({
+const actionSetTokens = (payload: IMapTokens): SetTokensAction => ({
   type: BlurActionType.SET_TOKENS,
   payload,
 });
@@ -90,8 +90,8 @@ const actionFetchCollectionTokens =
       dispatch(
         actionSetMoreLoadingTokens([...new Array(MAX_GET_ITEM)].map(() => ({ isLoading: true } as unknown as IToken)))
       );
-      const res = await rpcPBlur.getCollectionTokens({ slug, page: 1, query });
-      dispatch(actionSetTokens(res));
+      const { tokens, collection } = await rpcPBlur.getCollectionTokens({ slug, page: 1, query });
+      dispatch(actionSetTokens({ tokens, collection }));
     } catch (error) {
       console.log('ACTION FETCH COLLECTION TOKENS ERROR: ', error);
     }
@@ -103,8 +103,8 @@ const actionFetchMoreCollectionTokens =
       dispatch(
         actionSetMoreLoadingTokens([...new Array(MAX_GET_ITEM)].map(() => ({ isLoading: true } as unknown as IToken)))
       );
-      const res = await rpcPBlur.getCollectionTokens({ slug, page, query });
-      dispatch(actionSetMoreTokens(res));
+      const { tokens } = await rpcPBlur.getCollectionTokens({ slug, page, query });
+      dispatch(actionSetMoreTokens(tokens));
     } catch (error) {
       console.log('ACTION FETCH MORE TOKENS ERROR: ', error);
     }

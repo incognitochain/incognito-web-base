@@ -16,6 +16,7 @@ const initialState: IBlurReducer = {
   },
   token: {
     list: [],
+    collection: undefined,
     isEstimating: false,
     fee: undefined,
     selectedTokenIds: [],
@@ -41,11 +42,6 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
       const newCollections = action.payload;
       const oldCollections = state.collection.list;
       const newList = uniqBy([...oldCollections, ...newCollections], 'id');
-      console.log('LOGS SET_COLLECTIONS: ', {
-        newCollections: newCollections.length,
-        oldCollections: oldCollections.length,
-        newList: newList.length,
-      });
       return {
         ...state,
         collection: {
@@ -56,11 +52,13 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
       };
     }
     case BlurActionType.SET_TOKENS: {
+      const { tokens, collection } = action.payload;
       return {
         ...state,
         token: {
           ...state.token,
-          list: action.payload,
+          list: tokens,
+          collection,
         },
       };
     }

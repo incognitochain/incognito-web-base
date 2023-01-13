@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { ICollection, IToken, mapperCollections, mapperTokens } from 'pages/Blur';
+import { ICollection, IMapTokens, mapperCollections, mapperTokens } from 'pages/Blur';
 import createAxiosInstance from 'services/axios';
 
 type CollectionSortType =
@@ -52,7 +52,7 @@ class RpcPBlur {
     query = '',
     traits = [],
     hasAsks = true,
-  }: ITokenQuery): Promise<IToken[]> {
+  }: ITokenQuery): Promise<IMapTokens> {
     const params = {
       page,
       query,
@@ -63,7 +63,7 @@ class RpcPBlur {
 
     return this.http
       .get(`papps/pblur/collections/${slug}/tokens?filters=${encodeURIComponent(paramString)}`)
-      .then((resp: any) => mapperTokens(resp.tokens));
+      .then((resp: any) => mapperTokens(resp));
   }
 
   estimateFee({

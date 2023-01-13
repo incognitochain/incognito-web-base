@@ -27,6 +27,7 @@ const lastTokenSelector = createSelector(tokensSelector, (tokens) =>
 const selectedTokensSelector = createSelector(tokensSelector, selectedTokenIdsSelector, (tokens, selectedTokenIds) =>
   tokens.filter((token) => selectedTokenIds.includes(token.tokenId))
 );
+const tokenCollectionSelector = createSelector(tokenSelector, (token) => token.collection);
 
 const buyCollectionSelector = createSelector(
   (state: AppState) => state,
@@ -53,5 +54,6 @@ export {
   collectionsSelector,
   lastTokenSelector,
   selectedTokensSelector,
+  tokenCollectionSelector,
   tokensSelector,
 };
