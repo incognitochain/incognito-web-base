@@ -1,8 +1,9 @@
 import { BigNumber } from 'bignumber.js';
+import { get } from 'lodash';
 import { camelCaseKeys } from 'utils/camelcase';
 import format from 'utils/format';
 
-import { IAmount, ICollection, ICost, IMarketPlaceType, IPrice, IToken } from './Blur.interface';
+import { IAmount, ICollection, ICost, IMarketPlaceType, IPrice, IToken, PBlurBuyFee } from './Blur.interface';
 
 const convertToFormatAmount = (value: string | number) => {
   return format.amountVer2({
@@ -168,4 +169,21 @@ const mapperTokens = (resp: any): IToken[] => {
   });
 };
 
-export { mapperCollections, mapperTokens };
+const convertBlurFee = (json: any) => {
+  const Fee = get(json, 'Fee');
+  const buyFee = new PBlurBuyFee();
+  buyFee.calldata = get(json, 'Calldata');
+  buyFee.callContract = get(json, 'CallContract');
+  buyFee.receiveToken = get(json, 'ReceiveToken');
+  buyFee.fee = {
+    feeAddress: get(Fee, 'feeAddress'),
+    feeAddressShardID: get(Fee, 'feeAddressShardID'),
+    feeAmount: get(Fee, 'feeAmount'),
+    feeInUSD: get(Fee, 'feeInUSD'),
+    privacyFee: get(Fee, 'privacyFee'),
+    tokenid: get(Fee, 'tokenid'),
+  };
+  return buyFee;
+};
+
+export { convertBlurFee, mapperCollections, mapperTokens };

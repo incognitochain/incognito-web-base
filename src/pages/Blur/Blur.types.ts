@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ICollection, IToken } from './Blur.interface';
+import { ICollection, IToken, PBlurBuyFee } from './Blur.interface';
 
 export enum BlurActionType {
   SET_FETCHING_COLLECTION = 'BLUR/SET_FETCHING_COLLECTION',
@@ -12,6 +12,7 @@ export enum BlurActionType {
   UPDATE_TOKEN = 'BLUR/UPDATE_TOKEN',
   CLEAR_SELECTED_TOKENS = 'BLUR/CLEAR_SELECTED_TOKENS',
   SELECT_MAX_BUY_TOKENS = 'BLUR/SELECT_MAX_BUY_TOKENS',
+  SET_ESTIMATED_FEE = 'BLUR/SET_ESTIMATED_FEE',
 }
 
 export interface IBlurReducer {
@@ -23,6 +24,8 @@ export interface IBlurReducer {
   };
   token: {
     list: IToken[];
+    isEstimating: boolean;
+    fee?: PBlurBuyFee;
   };
 }
 
@@ -64,6 +67,16 @@ export interface SelectMaxBuyTokensAction extends Action {
   type: BlurActionType.SELECT_MAX_BUY_TOKENS;
 }
 
+export interface ISetEstimatedFeePayload {
+  isEstimating: boolean;
+  fee?: PBlurBuyFee;
+}
+
+export interface SetEstimatedFeeAction extends Action {
+  type: BlurActionType.SET_ESTIMATED_FEE;
+  payload: ISetEstimatedFeePayload;
+}
+
 export type BlurActions =
   | SetFetchingCollections
   | SetCollectionsAction
@@ -72,4 +85,5 @@ export type BlurActions =
   | AppendLoadingTokensAction
   | ClearSelectedTokensAction
   | SelectMaxBuyTokensAction
-  | UpdateTokenAction;
+  | UpdateTokenAction
+  | SetEstimatedFeeAction;

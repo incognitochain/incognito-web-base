@@ -65,6 +65,25 @@ class RpcPBlur {
       .get(`papps/pblur/collections/${slug}/tokens?filters=${encodeURIComponent(paramString)}`)
       .then((resp: any) => mapperTokens(resp));
   }
+
+  estimateFee({
+    contractAddress,
+    nftIDs,
+    burnTokenID,
+    burnAmount,
+    recipient,
+  }: {
+    contractAddress: string;
+    nftIDs: string[];
+    burnTokenID: string;
+    burnAmount: string;
+    recipient: string;
+  }) {
+    const nftIDStr = nftIDs.join(',');
+    return this.http.get(
+      `papps/pblur/estimatebuyfee?contract=${contractAddress}&burntoken=${burnTokenID}&burnamount=${burnAmount}&nftid=${nftIDStr}&recipient=${recipient}`
+    );
+  }
 }
 
 const rpcPBlur = new RpcPBlur();

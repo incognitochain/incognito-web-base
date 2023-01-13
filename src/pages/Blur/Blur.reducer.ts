@@ -16,6 +16,8 @@ const initialState: IBlurReducer = {
   },
   token: {
     list: [],
+    isEstimating: false,
+    fee: undefined,
   },
 };
 
@@ -106,6 +108,17 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
         token: {
           ...state.token,
           list: state.token.list.map((item, index) => ({ ...item, isSelected: index < MAX_ITEM_BUY })),
+        },
+      };
+    }
+    case BlurActionType.SET_ESTIMATED_FEE: {
+      const { fee, isEstimating } = action.payload;
+      return {
+        ...state,
+        token: {
+          ...state.token,
+          fee,
+          isEstimating,
         },
       };
     }

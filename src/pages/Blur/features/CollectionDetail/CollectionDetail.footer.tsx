@@ -6,11 +6,13 @@ import { ArrowDown } from 'components/Core/ReduxForm/SelectionField/SelectionFie
 import { useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
 import { BIG_COINS } from 'constants/token';
+import debounce from 'lodash/debounce';
 import PToken from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
+import { actionEstimateFee } from 'pages/Blur/Blur.actions';
 import { buyCollectionSelector, selectedTokensSelector } from 'pages/Blur/Blur.selectors';
 import { actionSetToken } from 'pages/Swap/features/FormDeposit/FormDeposit.actions';
-import React, { memo, useEffect } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -21,6 +23,7 @@ import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/to
 import convert from 'utils/convert';
 import format from 'utils/format';
 
+import Loader from '../../../../components/Core/Loader';
 import { FORM_CONFIGS } from './CollectionDetail.constant';
 import enhance from './CollectionDetail.enhanceFooter';
 import { ButtonBuy, Container, SelectionToken } from './CollectionDetail.footer.styled';
@@ -93,21 +96,27 @@ const SelectToken = memo(
   }
 );
 
-const Balance = memo(({ selectedToken }: { selectedToken: SelectedPrivacy | undefined }) => {
-  const balanceStr = React.useMemo(() => {
-    if (!selectedToken || !selectedToken.tokenID) return undefined;
-    return `${selectedToken.formatAmount || 0} ${selectedToken.symbol}`;
-  }, [selectedToken?.tokenID]);
-
-  if (!balanceStr) return null;
-
-  return (
-    <Col className="wrap-balance">
-      <p className="header">Your balance</p>
-      <p className="amount">{balanceStr}</p>
-    </Col>
-  );
-});
+const Balance = memo(
+  ({
+    title,
+    content,
+    className,
+    loading,
+  }: {
+    title: string;
+    content?: string;
+    className?: string;
+    loading?: boolean;
+  }) => {
+    if (!loading && !content) return null;
+    return (
+      <Col className="wrap-balance">
+        <p className="header">{title}</p>
+        {loading ? <Loader stroke="white" size="20px" /> : <p className={`amount ${className || ''}`}>{content}</p>}
+      </Col>
+    );
+  }
+);
 
 const StickyFooter = () => {
   const [selectedToken, setSelectedToken] = React.useState<PToken | undefined>();
@@ -116,7 +125,7 @@ const StickyFooter = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isCanBuy, setIsCanBuy] = React.useState<boolean>(true);
-  const { valid: isValidForm, inputAddress } = useSelector(buyCollectionSelector);
+  const { valid: isValidForm, inputAddress, isEstimating, fee } = useSelector(buyCollectionSelector);
   const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount, showPopup } = useIncognitoWallet();
 
   const tokens = useSelector(unshieldableTokens).filter(
@@ -136,15 +145,21 @@ const StickyFooter = () => {
       decimals: selectedToken?.pDecimals || 9,
       round: true,
     });
-    const amountStr = format.amountVer2({ originalAmount: amountNumb, decimals: 0 });
-    const visibleStr = `${amountStr} ${selectedTokenPrivacy?.symbol}`;
+
+    let totalAmountNumb = amountNumb;
+    if (amountNumb && !!fee) {
+      totalAmountNumb += fee.getFeeHumanAmount(selectedTokenPrivacy.pDecimals);
+    }
+    let totalAmountStr = format.amountVer2({ originalAmount: totalAmountNumb, decimals: 0 });
+    let visibleStr = `${totalAmountStr} ${selectedTokenPrivacy?.symbol}`;
+
     return {
-      amountStr,
       amountNumb,
       originalAmount,
       visibleStr,
+      totalAmountNumb,
     };
-  }, [selectedItems, selectedTokenPrivacy?.tokenID, selectedTokenPrivacy.amount]);
+  }, [selectedItems, selectedTokenPrivacy.amount, selectedTokenPrivacy.tokenID, fee]);
 
   const renderError = () => (
     <p className="current-error ">
@@ -169,6 +184,8 @@ const StickyFooter = () => {
   );
 
   const onClickBuy = async () => {
+    if (isEstimating) return;
+
     // check valid address
     if (!isValidForm) {
       return dispatch(blur(FORM_CONFIGS.formName, FORM_CONFIGS.address, inputAddress, true));
@@ -181,10 +198,22 @@ const StickyFooter = () => {
       return setIsCanBuy(false);
     }
   };
+  const onEstimateFee = () => {
+    const tokenID = selectedToken?.tokenID;
+    if (!tokenID || !buyAmount.amountNumb) return;
+    dispatch(actionEstimateFee({ burnTokenID: tokenID, burnAmount: buyAmount.amountNumb.toString() }));
+  };
+
+  const debounceEstimateFee = useCallback(debounce(onEstimateFee, 300), [selectedToken?.tokenID, buyAmount.amountNumb]);
 
   useEffect(() => {
     tokens.length > 0 && selectedToken === undefined && setSelectedToken(tokens[0]);
   }, [tokens]);
+
+  useEffect(() => {
+    if (!inputAddress) return;
+    debounceEstimateFee();
+  }, [inputAddress, selectedItems, selectedToken?.tokenID, buyAmount.amountNumb]);
 
   if (isMobile) return null;
 
@@ -193,7 +222,24 @@ const StickyFooter = () => {
       <Row className="default-max-width">
         <Address showNote={!isValidForm && !!inputAddress} />
         <SelectToken tokens={tokens} selectedToken={selectedToken} onSelectToken={setSelectedToken} />
-        <Balance selectedToken={selectedTokenPrivacy} />
+        <Balance
+          title="Your balance"
+          content={
+            selectedTokenPrivacy && selectedTokenPrivacy.tokenID
+              ? `${selectedTokenPrivacy.formatAmount || 0} ${selectedTokenPrivacy.symbol}`
+              : undefined
+          }
+        />
+        <Balance
+          title="Fee"
+          content={
+            !!fee
+              ? `${fee.getFeeFormatAmount(selectedTokenPrivacy.pDecimals)} ${selectedTokenPrivacy.symbol}`
+              : undefined
+          }
+          className="fee"
+          loading={isEstimating}
+        />
         <div className="spacing" />
         {!incAccount && (
           <ButtonBuy type="button" onClick={showPopup}>

@@ -24,7 +24,7 @@ const Container = styled.div`
       bottom: -20px;
     }
     100% {
-      bottom: 0;
+      bottom: -2px;
     }
   }
 
@@ -48,7 +48,7 @@ const Container = styled.div`
     color: ${({ theme }) => theme.color_grey};
   }
   .address-group {
-    width: 45%;
+    width: 37%;
   }
   .default-max-width {
     width: 100%;
@@ -56,6 +56,8 @@ const Container = styled.div`
   .spacing {
     flex: 1;
     min-width: 24px;
+  }
+  .fee {
   }
   .wrap-balance {
     margin-left: 32px;

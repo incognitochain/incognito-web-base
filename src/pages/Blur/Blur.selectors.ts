@@ -1,7 +1,6 @@
 import { formValueSelector, isValid } from 'redux-form';
 import { createSelector } from 'reselect';
 import { AppState } from 'state';
-import store from 'state';
 
 import { IBuyCollection } from './Blur.interface';
 import { FORM_CONFIGS } from './features/CollectionDetail/CollectionDetail.constant';
@@ -23,19 +22,24 @@ const lastTokenSelector = createSelector(tokensSelector, (tokens) =>
 
 const selectedTokensSelector = createSelector(tokensSelector, (tokens) => tokens.filter((token) => token.isSelected));
 
-const buyCollectionSelector = createSelector(selectedTokensSelector, (selectedItems): IBuyCollection => {
-  const formSelector = formValueSelector(FORM_CONFIGS.formName);
-  const valid = isValid(FORM_CONFIGS.formName)(store.getState());
+const buyCollectionSelector = createSelector(
+  (state: AppState) => state,
+  tokenSelector,
+  selectedTokensSelector,
+  (state, token, selectedTokens): IBuyCollection => {
+    const formSelector = formValueSelector(FORM_CONFIGS.formName);
+    let valid = isValid(FORM_CONFIGS.formName)(state);
 
-  const inputAddress = formSelector(store.getState(), FORM_CONFIGS.address);
-
-  console.log('SANG TEST: ', inputAddress);
-
-  return {
-    valid,
-    inputAddress,
-  };
-});
+    const inputAddress = formSelector(state, FORM_CONFIGS.address);
+    const { fee, isEstimating } = token;
+    return {
+      valid,
+      inputAddress,
+      isEstimating,
+      fee,
+    };
+  }
+);
 
 export {
   blurSelector,
