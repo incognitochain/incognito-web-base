@@ -9,7 +9,7 @@ import { ITrait } from 'pages/Blur/Blur.interface';
 import React from 'react';
 import styled from 'styled-components/macro';
 
-const INFO_WIDTH = 594;
+const INFO_WIDTH = 608;
 
 const Styled = styled.div<{ x: number; y: number; width: number }>`
   width: ${({ width }) => width}px;
@@ -36,7 +36,19 @@ const Styled = styled.div<{ x: number; y: number; width: number }>`
   }
 
   .column-qty {
-    width: 40px;
+    width: 54px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .qty-percent {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 148%;
+    color: #9c9c9c;
+    margin-left: 2px;
   }
 
   .baseText {
@@ -203,6 +215,17 @@ const StyledCard = styled.div`
     justify-content: space-between;
     align-items: center;
   }
+
+  .rarity-rank {
+    padding: 0px 4px;
+    gap: 10px;
+
+    position: absolute;
+    background: #303030;
+    border-radius: 4px;
+    left: 38px;
+    top: 38px;
+  }
 `;
 
 interface NFTInfoProps {
@@ -256,7 +279,8 @@ const NFTInfoOverlay = (props: NFTInfoProps) => {
       key: 'qty',
       render: (text, record, index) => (
         <div key={index.toString()} className="column-qty">
-          <p className="baseText text-align-center">-</p>
+          <p className="baseText">-</p>
+          {/* <p className="qty-percent">2%</p> */}
         </div>
       ),
       responsive: ['md'],
@@ -272,26 +296,23 @@ const NFTInfoOverlay = (props: NFTInfoProps) => {
     <StyledCard>
       <ImagePlaceholder className="item-img" src={detail.imageUrl} />
       <div className="item-info">
-        <div className="item-name-container">
+        {/* <div className="item-name-container">
           <p className="item-name">{detail.name}</p>
-        </div>
+        </div> */}
         <RowBetween>
           <div>
-            <p className="item-last-sale">Price</p>
-            <p className="item-price">
-              {detail.price.amountFormated}
-              {` ${detail.price.unit}`}
-            </p>
+            <p className="item-last-sale">ID</p>
+            <p className="item-price">{detail.tokenId}</p>
           </div>
           <div>
-            <p className="item-last-sale text-align-right">Last sale</p>
+            <p className="item-last-sale text-align-right">Owner</p>
             <p className="item-price text-align-right">
-              {detail.lastSale.amountFormated}
-              {` ${detail.lastSale.unit}`}
+              {detail.owner.address.substr(detail.owner.address.length - 6)}
             </p>
           </div>
         </RowBetween>
       </div>
+      <p className="rarity-rank">{detail.rarityRank}</p>
     </StyledCard>
   );
 

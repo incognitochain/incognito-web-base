@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Dropdown, Menu } from 'antd';
-import ArrowDownSVG from 'assets/images/arrow-down-white.svg';
+import { Dropdown } from 'antd';
+// import ArrowDownSVG from 'assets/images/arrow-down-white.svg';
 import SearchSVG from 'assets/svg/search-icon.svg';
 import Checkbox from 'pages/Blur/images/checkbox.svg';
 import CheckboxActive from 'pages/Blur/images/checkbox-active.svg';
@@ -236,7 +236,7 @@ const CollectionDetailFilter = (props: CollectionDetailFilterProps) => {
             autoFocus={false}
           />
         </div>
-        <SortSelect
+        {/* <SortSelect
           overlay={
             <Menu
               rootClassName="sort-menu"
@@ -251,7 +251,7 @@ const CollectionDetailFilter = (props: CollectionDetailFilterProps) => {
             <p className="sort-text">{sortBlurNftType.toString()}</p>
             <img src={ArrowDownSVG} />
           </button>
-        </SortSelect>
+        </SortSelect> */}
       </div>
     </Styled>
   );

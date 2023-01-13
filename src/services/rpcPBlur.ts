@@ -63,7 +63,7 @@ class RpcPBlur {
 
     return this.http
       .get(`papps/pblur/collections/${slug}/tokens?filters=${encodeURIComponent(paramString)}`)
-      .then((resp: any) => mapperTokens(resp));
+      .then((resp: any) => mapperTokens(resp.tokens));
   }
 
   estimateFee({

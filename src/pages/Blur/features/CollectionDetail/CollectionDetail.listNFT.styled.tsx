@@ -145,4 +145,15 @@ export const StyledCard = styled.div<{ isSelected: boolean; effectToken: boolean
     width: 24px;
     height: 24px;
   }
+
+  .rarity-rank {
+    padding: 0px 4px;
+    gap: 10px;
+
+    position: absolute;
+    background: #303030;
+    border-radius: 4px;
+    right: 12px;
+    bottom: 112px;
+  }
 `;

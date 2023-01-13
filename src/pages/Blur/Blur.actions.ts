@@ -9,12 +9,13 @@ import {
   AppendLoadingTokensAction,
   AppendTokensAction,
   BlurActionType,
-  ClearSelectedTokensAction,
+  ClearSelectedTokenIdsAction,
   ISetEstimatedFeePayload,
   SelectMaxBuyTokensAction,
   SetCollectionsAction,
   SetEstimatedFeeAction,
   SetFetchingCollections,
+  SetSelectedTokenIdAction,
   SetTokensAction,
   UpdateTokenAction,
 } from './Blur.types';
@@ -54,8 +55,13 @@ export const actionUpdateToken = (payload: IToken): UpdateTokenAction => ({
   payload,
 });
 
-export const clearSelectedTokens = (): ClearSelectedTokensAction => ({
-  type: BlurActionType.CLEAR_SELECTED_TOKENS,
+export const actionSetSelectedTokenId = (payload: string): SetSelectedTokenIdAction => ({
+  type: BlurActionType.SET_SELECTED_TOKEN_ID,
+  payload,
+});
+
+export const clearSelectedTokens = (): ClearSelectedTokenIdsAction => ({
+  type: BlurActionType.CLEAR_SELECTED_TOKEN_IDS,
 });
 
 export const selectMaxBuyTokens = (): SelectMaxBuyTokensAction => ({

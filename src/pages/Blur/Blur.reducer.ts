@@ -18,6 +18,7 @@ const initialState: IBlurReducer = {
     list: [],
     isEstimating: false,
     fee: undefined,
+    selectedTokenIds: [],
   },
 };
 
@@ -93,12 +94,23 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
         },
       };
     }
-    case BlurActionType.CLEAR_SELECTED_TOKENS: {
+    case BlurActionType.SET_SELECTED_TOKEN_ID: {
       return {
         ...state,
         token: {
           ...state.token,
-          list: state.token.list.map((item) => ({ ...item, isSelected: false })),
+          selectedTokenIds: state.token.selectedTokenIds.includes(action.payload)
+            ? state.token.selectedTokenIds.filter((id) => id !== action.payload)
+            : [...state.token.selectedTokenIds, action.payload],
+        },
+      };
+    }
+    case BlurActionType.CLEAR_SELECTED_TOKEN_IDS: {
+      return {
+        ...state,
+        token: {
+          ...state.token,
+          selectedTokenIds: [],
         },
       };
     }
@@ -107,7 +119,7 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
         ...state,
         token: {
           ...state.token,
-          list: state.token.list.map((item, index) => ({ ...item, isSelected: index < MAX_ITEM_BUY })),
+          selectedTokenIds: state.token.list.slice(0, MAX_ITEM_BUY).map((item) => item.tokenId),
         },
       };
     }

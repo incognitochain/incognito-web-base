@@ -64,6 +64,7 @@ const NFTItem = (props: NFTItemProps) => {
             src={IcInfo}
             alt="info-icon"
           />
+          <p className="rarity-rank">{detail.rarityRank}</p>
         </StyledCard>
       )}
     </List.Item>

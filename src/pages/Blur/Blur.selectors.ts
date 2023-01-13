@@ -14,13 +14,19 @@ const collectionsSelector = createSelector(blurSelector, (pBlur) => pBlur.collec
 
 const tokenSelector = createSelector(blurSelector, (pBlur) => pBlur.token);
 
-const tokensSelector = createSelector(tokenSelector, (token) => token.list);
+const selectedTokenIdsSelector = createSelector(tokenSelector, (token) => token.selectedTokenIds);
+
+const tokensSelector = createSelector(tokenSelector, selectedTokenIdsSelector, (token, selectedTokenIds) =>
+  token.list.map((token) => ({ ...token, isSelected: selectedTokenIds.includes(token.tokenId) }))
+);
 
 const lastTokenSelector = createSelector(tokensSelector, (tokens) =>
   tokens && tokens.length > 0 ? tokens[tokens.length - 1] : undefined
 );
 
-const selectedTokensSelector = createSelector(tokensSelector, (tokens) => tokens.filter((token) => token.isSelected));
+const selectedTokensSelector = createSelector(tokensSelector, selectedTokenIdsSelector, (tokens, selectedTokenIds) =>
+  tokens.filter((token) => selectedTokenIds.includes(token.tokenId))
+);
 
 const buyCollectionSelector = createSelector(
   (state: AppState) => state,

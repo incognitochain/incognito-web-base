@@ -11,7 +11,7 @@ import {
   selectMaxBuyTokens,
   tokensSelector,
 } from 'pages/Blur';
-import { actionFetchMoreCollectionTokens, actionUpdateToken } from 'pages/Blur/Blur.actions';
+import { actionFetchMoreCollectionTokens, actionSetSelectedTokenId } from 'pages/Blur/Blur.actions';
 import { MAX_GET_ITEM } from 'pages/Blur/Blur.reducer';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -71,9 +71,7 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
   };
 
   const onClickTokenItem = (token: IToken) => {
-    let newToken = token;
-    newToken.isSelected = !newToken.isSelected;
-    dispatch(actionUpdateToken(newToken));
+    dispatch(actionSetSelectedTokenId(token.tokenId));
   };
 
   const onLoadMoreTokens = () => {
