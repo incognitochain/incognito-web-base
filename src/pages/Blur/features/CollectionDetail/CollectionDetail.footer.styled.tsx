@@ -128,6 +128,10 @@ const ButtonBuy = styled.button`
   :hover {
     background-color: ${({ theme }) => theme.primary1};
   }
+
+  @media only screen and (max-width: ${({ theme }) => `${theme.mediaWidth.upToMedium}px`}) {
+    margin-top: 20px;
+  }
 `;
 
 export { ButtonBuy, Container, SelectionToken };

@@ -70,6 +70,16 @@ const Factory: IFactory[] = [
     route: BlurCollectionsRoute.path,
   },
   {
+    img: voteImg,
+    name: 'pDAO',
+    route: '/vote',
+    status: 'SHIPPED',
+    nameDesc: 'Private DAO',
+    chain: ['Ethereum', 'Governance'],
+    desc: 'Anonymously create proposals or vote on existing ones to empower the Incognito ecosystem to succeed.',
+    network: [MAIN_NETWORK_NAME.ETHEREUM],
+  },
+  {
     img: openseaImg,
     name: 'pOpensea',
     nameDesc: 'Private Opensea',

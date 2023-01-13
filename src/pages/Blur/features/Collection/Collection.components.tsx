@@ -14,7 +14,9 @@ const getColor = ({ numb, value, suffix }: { numb: number; value: string; suffix
   return { text, color };
 };
 
-const CurrencyIcon = <img className="currency-logo" src={EthereumLogo} alt="currency-logo" />;
+const CurrencyIcon = (
+  <img className="currency-logo" src={EthereumLogo} alt="currency-logo" style={{ marginRight: -10 }} />
+);
 
 const renderLabelWithIcon = ({ text, numb, className }: ILabel) => {
   text = numb ? text : '-';

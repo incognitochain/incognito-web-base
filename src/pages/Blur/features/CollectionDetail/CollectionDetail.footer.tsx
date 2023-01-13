@@ -1,6 +1,7 @@
 import { Col, Row } from 'antd';
 import { BigNumber } from 'bignumber.js';
-import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+import { getIncognitoInject, useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+import Loader from 'components/Core/Loader';
 import { InputField, validator } from 'components/Core/ReduxForm';
 import { ArrowDown } from 'components/Core/ReduxForm/SelectionField/SelectionField.styled';
 import { useModal } from 'components/Modal';
@@ -23,7 +24,8 @@ import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/to
 import convert from 'utils/convert';
 import format from 'utils/format';
 
-import Loader from '../../../../components/Core/Loader';
+import LoadingTransaction from '../../../../components/Modal/Modal.transaction';
+import { getTokenPayments } from '../../../Swap/features/FormUnshield/FormUnshield.utils';
 import { FORM_CONFIGS } from './CollectionDetail.constant';
 import enhance from './CollectionDetail.enhanceFooter';
 import { ButtonBuy, Container, SelectionToken } from './CollectionDetail.footer.styled';
@@ -127,6 +129,7 @@ const StickyFooter = () => {
   const [isCanBuy, setIsCanBuy] = React.useState<boolean>(true);
   const { valid: isValidForm, inputAddress, isEstimating, fee } = useSelector(buyCollectionSelector);
   const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount, showPopup } = useIncognitoWallet();
+  const { setModal } = useModal();
 
   const tokens = useSelector(unshieldableTokens).filter(
     (token) => token.isMainETH || token.tokenID === BIG_COINS.ETH_UNIFIED.tokenID
@@ -184,7 +187,7 @@ const StickyFooter = () => {
   );
 
   const onClickBuy = async () => {
-    if (isEstimating) return;
+    if (isEstimating || !fee) return;
 
     // check valid address
     if (!isValidForm) {
@@ -196,6 +199,76 @@ const StickyFooter = () => {
     const isValidAmount = !!originalAmount && new BigNumber(originalAmount).lt(selectedTokenPrivacy.amount || 0);
     if (!isValidAmount) {
       return setIsCanBuy(false);
+    }
+
+    try {
+      // handle buyNFT
+      setModal({
+        isTransparent: false,
+        closable: true,
+        data: <LoadingTransaction pendingText="Waiting For Confirmation" />,
+      });
+
+      // building payload
+      // Get OTA Receiver and Burner address
+      const shardID = fee.getFeeAddressShardID();
+
+      const incognito = getIncognitoInject();
+      const { result }: { result: any } = await incognito.request({
+        method: 'wallet_requestAccounts',
+        params: { senderShardID: shardID },
+      });
+      const otaReceiver = result?.otaReceiver;
+      const feeRefundOTA = result.otaReceiverWithCfg;
+
+      const incToken = selectedTokenPrivacy.isUnified
+        ? selectedTokenPrivacy.listUnifiedToken.find((token) => token.networkID === 1)
+        : selectedTokenPrivacy;
+      const incTokenID = incToken?.tokenID;
+
+      let callContract = fee.callContract;
+      if (callContract.startsWith('0x')) {
+        callContract = callContract.slice(2);
+      }
+      let withdrawAddress = inputAddress;
+      if (withdrawAddress.startsWith('0x')) {
+        withdrawAddress = withdrawAddress.slice(2);
+      }
+      const metadata = {
+        Data: [
+          {
+            IncTokenID: incTokenID,
+            RedepositReceiver: otaReceiver,
+            BurningAmount: buyAmount.originalAmount,
+            ExternalNetworkID: 1,
+            ExternalCalldata: fee.calldata,
+            ExternalCallAddress: callContract,
+            ReceiveToken: fee.receiveToken,
+            WithdrawAddress: withdrawAddress,
+          },
+        ],
+        BurnTokenID: selectedTokenPrivacy.tokenID,
+        Type: 348,
+      };
+
+      const prvPayments: any[] = [];
+      const tokenPayments = await getTokenPayments({
+        data: [
+          {
+            paymentAddress: fee.fee?.feeAddress,
+            amount: fee.getFeeAmount(),
+          },
+        ],
+        burnAmount: buyAmount.originalAmount,
+      });
+
+      console.log('SANG TEST: ', {
+        prvPayments,
+        tokenPayments,
+        metadata,
+      });
+    } catch (error) {
+      console.log('HANDLE ERROR HERE: ', error);
     }
   };
   const onEstimateFee = () => {
@@ -213,7 +286,7 @@ const StickyFooter = () => {
   useEffect(() => {
     if (!inputAddress) return;
     debounceEstimateFee();
-  }, [inputAddress, selectedItems, selectedToken?.tokenID, buyAmount.amountNumb]);
+  }, [inputAddress, selectedItems.length]);
 
   if (isMobile) return null;
 

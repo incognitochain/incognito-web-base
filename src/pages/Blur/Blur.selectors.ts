@@ -24,9 +24,8 @@ const lastTokenSelector = createSelector(tokensSelector, (tokens) =>
   tokens && tokens.length > 0 ? tokens[tokens.length - 1] : undefined
 );
 
-const selectedTokensSelector = createSelector(tokensSelector, selectedTokenIdsSelector, (tokens, selectedTokenIds) =>
-  tokens.filter((token) => selectedTokenIds.includes(token.tokenId))
-);
+const selectedTokensSelector = createSelector(tokensSelector, (tokens) => tokens.filter((token) => token.isSelected));
+
 const tokenCollectionSelector = createSelector(tokenSelector, (token) => token.collection);
 
 const buyCollectionSelector = createSelector(

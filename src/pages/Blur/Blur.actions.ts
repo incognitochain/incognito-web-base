@@ -128,7 +128,7 @@ const actionEstimateFee =
         contractAddress: selectedItems[0].contractAddress,
         nftIDs,
         burnTokenID,
-        burnAmount: '',
+        burnAmount,
         recipient: inputAddress,
       };
       console.log('LOGS: BLUR ESTIMATE FEE PAYLOAD: ', payload);

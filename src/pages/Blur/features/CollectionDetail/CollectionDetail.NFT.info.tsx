@@ -296,9 +296,6 @@ const NFTInfoOverlay = (props: NFTInfoProps) => {
     <StyledCard>
       <ImagePlaceholder className="item-img" src={detail.imageUrl} />
       <div className="item-info">
-        {/* <div className="item-name-container">
-          <p className="item-name">{detail.name}</p>
-        </div> */}
         <RowBetween>
           <div>
             <p className="item-last-sale">ID</p>
