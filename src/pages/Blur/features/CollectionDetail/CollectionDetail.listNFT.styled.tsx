@@ -1,6 +1,8 @@
 import styled, { css, DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled.div`
+  width: 100%;
+
   .list {
     margin-top: 32px;
   }

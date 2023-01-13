@@ -10,7 +10,7 @@ const CollectionDetail = () => {
   const [size] = useContentSize();
 
   return (
-    <div style={{ minHeight: size }}>
+    <div style={{ minHeight: size, width: '100%' }}>
       <Container className="default-max-width">
         <CollectionDetailListNFT slug={slug} />
       </Container>
