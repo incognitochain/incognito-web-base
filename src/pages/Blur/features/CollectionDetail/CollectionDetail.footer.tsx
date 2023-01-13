@@ -6,6 +6,7 @@ import { InputField, validator } from 'components/Core/ReduxForm';
 import { ArrowDown } from 'components/Core/ReduxForm/SelectionField/SelectionField.styled';
 import { useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
+import LoadingTransaction from 'components/Modal/Modal.transaction';
 import { BIG_COINS } from 'constants/token';
 import debounce from 'lodash/debounce';
 import PToken from 'models/model/pTokenModel';
@@ -13,6 +14,7 @@ import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { actionEstimateFee } from 'pages/Blur/Blur.actions';
 import { buyCollectionSelector, selectedTokensSelector } from 'pages/Blur/Blur.selectors';
 import { actionSetToken } from 'pages/Swap/features/FormDeposit/FormDeposit.actions';
+import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
 import React, { memo, useCallback, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,8 +26,6 @@ import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/to
 import convert from 'utils/convert';
 import format from 'utils/format';
 
-import LoadingTransaction from '../../../../components/Modal/Modal.transaction';
-import { getTokenPayments } from '../../../Swap/features/FormUnshield/FormUnshield.utils';
 import { FORM_CONFIGS } from './CollectionDetail.constant';
 import enhance from './CollectionDetail.enhanceFooter';
 import { ButtonBuy, Container, SelectionToken } from './CollectionDetail.footer.styled';

@@ -1,4 +1,5 @@
 import { Select } from 'antd';
+import SearchSVG from 'assets/svg/search-icon.svg';
 import ImagePlaceholder from 'components/ImagePlaceholder';
 import debounce from 'lodash/debounce';
 import { ICollection } from 'pages/Blur/Blur.interface';
@@ -63,6 +64,13 @@ const Search = styled(Select)`
   flex: 1;
   background-color: transparent;
   caret-color: ${({ theme }) => theme.primary5};
+  .search-ic {
+    width: 16px;
+    margin-top: -2px;
+    caret-color: white;
+    filter: brightness(0) invert(1);
+    margin-right: 2px;
+  }
 `;
 
 const DropdownContainer = styled.div`
@@ -131,12 +139,17 @@ const SearchInput = () => {
     <Container>
       <Search
         showSearch
+        placeholder={
+          <React.Fragment>
+            <img className="search-ic" src={SearchSVG} />
+            &nbsp; Search collections
+          </React.Fragment>
+        }
         defaultActiveFirstOption={false}
         showArrow={false}
         filterOption={false}
         autoClearSearchValue={false}
         allowClear={false}
-        placeholder="Search collections"
         onSearch={debounceSearch}
         onKeyDown={(event: any) => {
           if (event.keyCode === 13) {
