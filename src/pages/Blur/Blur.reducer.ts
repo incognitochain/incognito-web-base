@@ -4,6 +4,9 @@ import { Reducer } from 'redux';
 
 import { BlurActions, BlurActionType, IBlurReducer } from './Blur.types';
 
+export const MAX_ITEM_BUY = 10;
+export const MAX_GET_ITEM = 100;
+
 const initialState: IBlurReducer = {
   isFetching: false,
   collection: {
@@ -15,8 +18,6 @@ const initialState: IBlurReducer = {
     list: [],
   },
 };
-
-export const MAX_ITEM_BUY = 10;
 
 export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
   state = initialState,
@@ -66,7 +67,7 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
           ...state,
           token: {
             ...state.token,
-            list: [...state.token.list.filter((token) => !token.isLoading), ...action.payload],
+            list: uniqBy([...state.token.list.filter((token) => !token.isLoading), ...action.payload], 'tokenId'),
           },
         };
       }

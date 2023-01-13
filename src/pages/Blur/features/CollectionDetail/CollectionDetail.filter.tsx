@@ -193,7 +193,7 @@ interface CollectionDetailFilterProps {
   totalToken: number;
   totalSelectedToken: number;
   keySearch?: string;
-  onSearchChange: (key: string) => void;
+  onSearchChange: (event: any) => void;
 
   sortBlurNftType: SortBlurNftType;
   onChangeBlurNftType: (data: SortBlurNftType) => void;
@@ -202,10 +202,6 @@ interface CollectionDetailFilterProps {
 
 const CollectionDetailFilter = (props: CollectionDetailFilterProps) => {
   const { totalToken, totalSelectedToken, keySearch, sortBlurNftType, onChangeBlurNftType } = props;
-
-  const onChange = (e: any) => {
-    props.onSearchChange(e.target.value);
-  };
 
   const renderSortItem = (key: any, label: string) => {
     const typedString: keyof typeof SortBlurNftType = key;
@@ -233,9 +229,9 @@ const CollectionDetailFilter = (props: CollectionDetailFilterProps) => {
         <div className="input-container">
           <img className="search-ic" src={SearchSVG} />
           <TextInputStyled
-            placeholder={'Search by name or attribute'}
+            placeholder={'Search by Token ID'}
             type={'text'}
-            onChange={onChange}
+            onChange={props.onSearchChange}
             value={keySearch}
             autoFocus={false}
           />

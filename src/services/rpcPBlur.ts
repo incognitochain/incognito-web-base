@@ -19,6 +19,13 @@ interface ICollectionQuery {
   query?: string;
 }
 
+interface ITokenQuery {
+  slug: string;
+  page?: number;
+  query?: string;
+  traits?: string[];
+  hasAsks?: boolean;
+}
 class RpcPBlur {
   http: AxiosInstance;
 
@@ -39,16 +46,23 @@ class RpcPBlur {
       .then((resp: any) => mapperCollections(resp));
   }
 
-  async getCollectionTokens(collectionName: string, cursor?: any): Promise<IToken[]> {
+  async getCollectionTokens({
+    slug,
+    page = 0,
+    query = '',
+    traits = [],
+    hasAsks = true,
+  }: ITokenQuery): Promise<IToken[]> {
     const params = {
-      cursor,
-      traits: [],
-      hasAsks: true,
+      page,
+      query,
+      traits,
+      hasAsks,
     };
     const paramString = JSON.stringify(params);
 
     return this.http
-      .get(`papps/pblur/collections/${collectionName}/tokens?filters=${encodeURIComponent(paramString)}`)
+      .get(`papps/pblur/collections/${slug}/tokens?filters=${encodeURIComponent(paramString)}`)
       .then((resp: any) => mapperTokens(resp));
   }
 }

@@ -2,6 +2,7 @@ import { rpcPBlur } from 'services';
 import { AppDispatch, AppState } from 'state';
 
 import { ICollection, IToken } from './Blur.interface';
+import { MAX_GET_ITEM } from './Blur.reducer';
 import {
   AppendLoadingTokensAction,
   AppendTokensAction,
@@ -13,8 +14,6 @@ import {
   SetTokensAction,
   UpdateTokenAction,
 } from './Blur.types';
-
-export const LOADING_COUNT = 100;
 
 const actionFetchingCollections = (payload: { isFetching: boolean }): SetFetchingCollections => ({
   type: BlurActionType.SET_FETCHING_COLLECTION,
@@ -70,30 +69,26 @@ const actionFetchCollections =
     }
   };
 
-const actionFetchCollectionTokens = (slug: string) => async (dispatch: AppDispatch, getState: AppState & any) => {
-  try {
-    dispatch(
-      actionSetMoreLoadingTokens([...new Array(LOADING_COUNT)].map(() => ({ isLoading: true } as unknown as IToken)))
-    );
-    const res = await rpcPBlur.getCollectionTokens(slug);
-    dispatch(actionSetTokens(res));
-  } catch (error) {
-    console.log('ACTION FETCH COLLECTION TOKENS ERROR: ', error);
-  }
-};
-
-const actionFetchMoreCollectionTokens =
-  (slug: string, lastToken: IToken) => async (dispatch: AppDispatch, getState: AppState & any) => {
+const actionFetchCollectionTokens =
+  (slug: string, query?: string) => async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
       dispatch(
-        actionSetMoreLoadingTokens([...new Array(LOADING_COUNT)].map(() => ({ isLoading: true } as unknown as IToken)))
+        actionSetMoreLoadingTokens([...new Array(MAX_GET_ITEM)].map(() => ({ isLoading: true } as unknown as IToken)))
       );
-      const { detail } = lastToken;
-      const cursor = {
-        price: { unit: detail.price.unit, time: detail.price.listAt, amount: detail.price.amount },
-        tokenId: detail.tokenId,
-      };
-      const res = await rpcPBlur.getCollectionTokens(slug, cursor);
+      const res = await rpcPBlur.getCollectionTokens({ slug, page: 1, query });
+      dispatch(actionSetTokens(res));
+    } catch (error) {
+      console.log('ACTION FETCH COLLECTION TOKENS ERROR: ', error);
+    }
+  };
+
+const actionFetchMoreCollectionTokens =
+  (page: number, slug: string, query?: string) => async (dispatch: AppDispatch, getState: AppState & any) => {
+    try {
+      dispatch(
+        actionSetMoreLoadingTokens([...new Array(MAX_GET_ITEM)].map(() => ({ isLoading: true } as unknown as IToken)))
+      );
+      const res = await rpcPBlur.getCollectionTokens({ slug, page, query });
       dispatch(actionSetMoreTokens(res));
     } catch (error) {
       console.log('ACTION FETCH MORE TOKENS ERROR: ', error);
