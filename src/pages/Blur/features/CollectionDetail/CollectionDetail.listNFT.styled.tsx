@@ -79,7 +79,7 @@ export const StyledCard = styled.div<{ isSelected: boolean; effectToken: boolean
   :hover {
     .item-img {
       transform: scale(1.05);
-      transition: all 0.2s ease-in-out;
+      transition: all 0.5s ease-in-out;
     }
   }
 
