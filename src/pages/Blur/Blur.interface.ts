@@ -121,6 +121,7 @@ export interface IBuyCollection {
     originalAmount: number;
     visibleStr: string;
     totalAmountNumb: number;
+    burnFormatAmount: string;
   };
   selectedItems: IToken[];
 }

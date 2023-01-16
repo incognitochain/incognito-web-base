@@ -9,7 +9,12 @@ import LoadingTransaction from 'components/Modal/Modal.transaction';
 import debounce from 'lodash/debounce';
 import PToken from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
-import { actionEstimateFee, actionSelectedPrivacyTokenID } from 'pages/Blur/Blur.actions';
+import {
+  actionEstimateFee,
+  actionSelectedPrivacyTokenID,
+  actionSetEstimateFeeError,
+  clearSelectedTokens,
+} from 'pages/Blur/Blur.actions';
 import { buyCollectionSelector } from 'pages/Blur/Blur.selectors';
 import { actionSetToken } from 'pages/Swap/features/FormDeposit/FormDeposit.actions';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
@@ -21,9 +26,14 @@ import { compose } from 'redux';
 import { blur, Field, reduxForm } from 'redux-form';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 
+import { TransactionSubmittedContent } from '../../../../components/Core/TransactionConfirmationModal';
+import { PRIVATE_TOKEN_CURRENCY_TYPE } from '../../../../constants';
+import rpcPBlur from '../../../../services/rpcPBlur';
+import { setSwapTx } from '../../../Swap/Swap.storage';
 import { FORM_CONFIGS } from './CollectionDetail.constant';
 import enhance from './CollectionDetail.enhanceFooter';
 import { ButtonBuy, Container, SelectionToken } from './CollectionDetail.footer.styled';
+const { ACCOUNT_CONSTANT } = require('incognito-chain-web-js/build/wallet');
 
 const Address = ({ showNote }: { showNote: boolean }) => {
   const getAddressValidator = React.useCallback(() => {
@@ -136,7 +146,7 @@ const StickyFooter = () => {
     showDeposit,
   } = useSelector(buyCollectionSelector);
   const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount, showPopup } = useIncognitoWallet();
-  const { setModal } = useModal();
+  const { setModal, clearAllModal } = useModal();
 
   const renderError = () => {
     const showError = incAccount && ((!isCanBuy && validateErr) || apiError);
@@ -165,12 +175,11 @@ const StickyFooter = () => {
   };
 
   const onClickBuy = async () => {
-    if (isEstimating || !fee) return;
-
     // check valid address
     if (!isValidForm) {
       return dispatch(blur(FORM_CONFIGS.formName, FORM_CONFIGS.address, inputAddress, true));
     }
+    if (isEstimating || !fee) return;
 
     // show error message
     if (!isValidAmount || !isValidNetworkFee) {
@@ -216,7 +225,7 @@ const StickyFooter = () => {
             IncTokenID: incTokenID,
             RedepositReceiver: otaReceiver,
             BurningAmount: buyAmount.originalAmount,
-            ExternalNetworkID: 1,
+            ExternalNetworkID: incToken?.networkID || 1,
             ExternalCalldata: fee.calldata,
             ExternalCallAddress: callContract,
             ReceiveToken: fee.receiveToken,
@@ -237,13 +246,59 @@ const StickyFooter = () => {
         ],
         burnAmount: buyAmount.originalAmount,
       });
+      const payload = {
+        metadata,
+        info: '',
+        networkFee: ACCOUNT_CONSTANT.MAX_FEE_PER_TX,
+        prvPayments,
+        tokenPayments,
+        tokenID: selectedTokenPrivacy.tokenID,
+        txType: 7,
+        receiverAddress: inputAddress,
+        isSignAndSendTransaction: false,
+      };
       console.log('LOGS: PAYLOAD ', {
         prvPayments,
         tokenPayments,
         metadata,
       });
+
+      try {
+        const tx = await requestSignTransaction(payload);
+        await rpcPBlur.submitBuyTx({
+          txRaw: tx.rawData,
+          feeRefundOTA,
+        });
+        if (tx.txHash) {
+          // Save local history TX
+          setSwapTx({
+            interPAppName: '',
+            interPAppNetwork: '',
+            txHash: tx.txHash,
+            time: new Date().getTime(),
+            appName: 'blur',
+            buyTokenID: selectedTokenPrivacy.tokenID,
+            buyAmountText: buyAmount.burnFormatAmount,
+          });
+        }
+        clearAllModal();
+        dispatch(clearSelectedTokens());
+        setTimeout(() => {
+          setModal({
+            isTransparent: false,
+            closable: true,
+            data: <TransactionSubmittedContent chainId={PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO} hash={tx.txHash} />,
+          });
+        }, 500);
+      } catch (error) {
+        clearAllModal();
+        throw error;
+      }
     } catch (error) {
-      console.log('HANDLE ERROR HERE: ', error);
+      console.error('ERROR: ', error);
+      const errorMessage = typeof error === 'string' ? error : error?.message || '';
+      if (!errorMessage || errorMessage === 'Action Reject') return;
+      dispatch(actionSetEstimateFeeError(errorMessage));
     }
   };
   const onEstimateFee = () => {

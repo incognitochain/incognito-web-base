@@ -78,6 +78,10 @@ const buyCollectionSelector = createSelector(
         decimals: selectedTokenPrivacy.pDecimals,
       });
       let visibleStr = `${totalAmountStr} ${selectedTokenPrivacy?.symbol}`;
+      const burnFormatAmount = format.amountVer2({
+        originalAmount: amountNumb,
+        decimals: 0,
+      });
 
       return {
         amountNumb,
@@ -85,6 +89,7 @@ const buyCollectionSelector = createSelector(
         visibleStr,
         totalAmountNumb,
         totalOriginalAmount,
+        burnFormatAmount,
       };
     };
     const buyAmount = getBuyAmount();

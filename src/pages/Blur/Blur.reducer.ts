@@ -145,7 +145,6 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
           ...state.token,
           errorMsg: error,
           isEstimating: false,
-          fee: undefined,
         },
       };
     }

@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { ICollection, IMapTokens, mapperCollections, mapperTokens } from 'pages/Blur';
-import createAxiosInstance, { CANCEL_KEY } from 'services/axios';
+import createAxiosInstance from 'services/axios';
 
 type CollectionSortType =
   | 'floor_price'
@@ -81,8 +81,15 @@ class RpcPBlur {
   }) {
     const nftIDStr = nftIDs.join(',');
     return this.http.get(
-      `papps/pblur/estimatebuyfee?contract=${contractAddress}&burntoken=${burnTokenID}&burnamount=${burnAmount}&nftids=${nftIDStr}&recipient=${recipient}?${CANCEL_KEY}`
+      `papps/pblur/estimatebuyfee?contract=${contractAddress}&burntoken=${burnTokenID}&burnamount=${burnAmount}&nftids=${nftIDStr}&recipient=${recipient}`
     );
+  }
+
+  submitBuyTx({ txRaw, feeRefundOTA }: { txRaw: string; feeRefundOTA: string }) {
+    return this.http.post('papps/pblur/submitbuytx', {
+      TxRaw: txRaw,
+      FeeRefundOTA: feeRefundOTA,
+    });
   }
 }
 

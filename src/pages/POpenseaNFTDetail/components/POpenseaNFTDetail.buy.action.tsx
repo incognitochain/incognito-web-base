@@ -114,6 +114,8 @@ export class POpenseaNFTDetailBuyAction implements IPOpenseaNFTDetailBuyAction {
         isSignAndSendTransaction: false,
       };
 
+      console.log('LOGS: PAYLOAD ', payload);
+
       try {
         const tx = await this.component.requestSignTransaction(payload);
         await rpcPOpensea.submitBuyTx({
