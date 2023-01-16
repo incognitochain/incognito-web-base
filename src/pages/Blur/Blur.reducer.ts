@@ -76,6 +76,16 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
       }
       return state;
     }
+    case BlurActionType.SET_LOADING_TOKENS: {
+      return {
+        ...state,
+        token: {
+          ...state.token,
+          list: action.payload,
+          selectedTokenIds: [],
+        },
+      };
+    }
     case BlurActionType.APPEND_LOADING_TOKENS: {
       return {
         ...state,

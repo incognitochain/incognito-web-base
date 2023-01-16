@@ -13,6 +13,7 @@ import CollectionDetailNFTLoader from './CollectionDetail.NFT.loader';
 interface NFTItemProps {
   key: string;
   token: IToken;
+  selectedTokenIds: string[];
   onClickTokenItem: (item: IToken) => void;
   effectToken: boolean;
   onMouseEnterIcInfo: (event: any, token: IToken) => void;
@@ -20,8 +21,10 @@ interface NFTItemProps {
 }
 
 const NFTItem = (props: NFTItemProps) => {
-  const { token, onClickTokenItem, key, effectToken, onMouseEnterIcInfo, onMouseLeaveIcInfo } = props;
+  const { token, selectedTokenIds, onClickTokenItem, key, effectToken, onMouseEnterIcInfo, onMouseLeaveIcInfo } = props;
   const { detail } = token;
+
+  const isSelected = selectedTokenIds.includes(token.tokenId);
 
   return (
     <List.Item key={key} onClick={() => onClickTokenItem(token)}>
@@ -29,9 +32,9 @@ const NFTItem = (props: NFTItemProps) => {
         <CollectionDetailNFTLoader />
       ) : (
         <StyledCard
-          isSelected={token.isSelected}
-          effectToken={effectToken ? token.isSelected : false}
-          disableEffectToken={effectToken ? !token.isSelected : false}
+          isSelected={isSelected}
+          effectToken={effectToken ? isSelected : false}
+          disableEffectToken={effectToken ? !isSelected : false}
         >
           <ImagePlaceholder className="item-img" src={detail.imageUrl} />
           <div className="item-info">
@@ -55,7 +58,7 @@ const NFTItem = (props: NFTItemProps) => {
               </div>
             </RowBetween>
           </div>
-          <img className="checkbox" src={token.isSelected ? CheckboxActive : Checkbox} alt="checkbox-logo" />
+          <img className="checkbox" src={isSelected ? CheckboxActive : Checkbox} alt="checkbox-logo" />
           <img
             onMouseMove={(event) => onMouseEnterIcInfo(event, token)}
             onMouseOut={onMouseLeaveIcInfo}

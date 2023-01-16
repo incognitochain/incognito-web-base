@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import { BigNumber } from 'bignumber.js';
 import { formValueSelector, isValid } from 'redux-form';
 import { createSelector } from 'reselect';
@@ -8,7 +9,7 @@ import SelectedPrivacy from '../../models/model/SelectedPrivacyModel';
 import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from '../../state/token';
 import convert from '../../utils/convert';
 import format from '../../utils/format';
-import { IBuyCollection } from './Blur.interface';
+import { IBuyCollection, IToken } from './Blur.interface';
 import { FORM_CONFIGS } from './features/CollectionDetail/CollectionDetail.constant';
 const { ACCOUNT_CONSTANT } = require('incognito-chain-web-js/build/wallet');
 
@@ -23,15 +24,22 @@ const tokenSelector = createSelector(blurSelector, (pBlur) => pBlur.token);
 
 const selectedTokenIdsSelector = createSelector(tokenSelector, (token) => token.selectedTokenIds);
 
-const tokensSelector = createSelector(tokenSelector, selectedTokenIdsSelector, (token, selectedTokenIds) =>
-  token.list.map((token) => ({ ...token, isSelected: selectedTokenIds.includes(token.tokenId) }))
-);
+const tokensSelector = createSelector(tokenSelector, (token) => token.list);
 
 const lastTokenSelector = createSelector(tokensSelector, (tokens) =>
   tokens && tokens.length > 0 ? tokens[tokens.length - 1] : undefined
 );
 
-const selectedTokensSelector = createSelector(tokensSelector, (tokens) => tokens.filter((token) => token.isSelected));
+const selectedTokensSelector = createSelector(tokensSelector, selectedTokenIdsSelector, (tokens, selectedTokenIds) => {
+  let selectedTokens: IToken[] = [];
+  for (const tokenId of selectedTokenIds) {
+    const findToken = tokens.find((token) => token.tokenId === tokenId);
+    if (findToken) {
+      selectedTokens = [...selectedTokens, findToken];
+    }
+  }
+  return selectedTokens;
+});
 
 const tokenCollectionSelector = createSelector(tokenSelector, (token) => token.collection);
 
@@ -134,6 +142,7 @@ export {
   buyCollectionSelector,
   collectionsSelector,
   lastTokenSelector,
+  selectedTokenIdsSelector,
   selectedTokensSelector,
   tokenCollectionSelector,
   tokensSelector,

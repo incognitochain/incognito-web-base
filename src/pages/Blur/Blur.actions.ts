@@ -17,6 +17,7 @@ import {
   SetEstimatedFeeAction,
   SetEstimatedFeeErrorAction,
   SetFetchingCollections,
+  SetLoadingTokensAction,
   SetSelectedPrivacyTokenIDAction,
   SetSelectedTokenIdAction,
   SetTokensAction,
@@ -58,7 +59,12 @@ const actionSetMoreTokens = (payload: IToken[]): AppendTokensAction => ({
   payload,
 });
 
-const actionSetMoreLoadingTokens = (payload: IToken[]): AppendLoadingTokensAction => ({
+const actionSetMoreLoadingTokens = (payload: IToken[]): SetLoadingTokensAction => ({
+  type: BlurActionType.SET_LOADING_TOKENS,
+  payload,
+});
+
+const actionAppendMoreLoadingTokens = (payload: IToken[]): AppendLoadingTokensAction => ({
   type: BlurActionType.APPEND_LOADING_TOKENS,
   payload,
 });
@@ -114,7 +120,9 @@ const actionFetchMoreCollectionTokens =
   (page: number, slug: string, query?: string) => async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
       dispatch(
-        actionSetMoreLoadingTokens([...new Array(MAX_GET_ITEM)].map(() => ({ isLoading: true } as unknown as IToken)))
+        actionAppendMoreLoadingTokens(
+          [...new Array(MAX_GET_ITEM)].map(() => ({ isLoading: true } as unknown as IToken))
+        )
       );
       const { tokens } = await rpcPBlur.getCollectionTokens({ slug, page, query });
       dispatch(actionSetMoreTokens(tokens));

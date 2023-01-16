@@ -8,7 +8,9 @@ export enum BlurActionType {
 
   SET_TOKENS = 'BLUR/SET_TOKENS',
   APPEND_TOKENS = 'BLUR/APPEND_TOKENS',
+  SET_LOADING_TOKENS = 'BLUR/SET_LOADING_TOKENS',
   APPEND_LOADING_TOKENS = 'BLUR/SET_MORE_LOADING_TOKENS',
+
   UPDATE_TOKEN = 'BLUR/UPDATE_TOKEN',
   SET_SELECTED_TOKEN_ID = 'BLUR/SET_SELECTED_TOKEN_ID',
   CLEAR_SELECTED_TOKEN_IDS = 'BLUR/CLEAR_SELECTED_TOKEN_IDS',
@@ -53,6 +55,11 @@ export interface SetTokensAction extends Action {
 
 export interface AppendTokensAction extends Action {
   type: BlurActionType.APPEND_TOKENS;
+  payload: IToken[];
+}
+
+export interface SetLoadingTokensAction extends Action {
+  type: BlurActionType.SET_LOADING_TOKENS;
   payload: IToken[];
 }
 
@@ -104,6 +111,7 @@ export type BlurActions =
   | SetCollectionsAction
   | SetTokensAction
   | AppendTokensAction
+  | SetLoadingTokensAction
   | AppendLoadingTokensAction
   | SetSelectedTokenIdAction
   | ClearSelectedTokenIdsAction

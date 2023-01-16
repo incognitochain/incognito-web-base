@@ -299,7 +299,7 @@ const NFTInfoOverlay = (props: NFTInfoProps) => {
         <RowBetween>
           <div>
             <p className="item-last-sale">ID</p>
-            <p className="item-price">{detail.tokenId}</p>
+            <p className="item-price">{detail.tokenId.substr(detail.tokenId.length - 6)}</p>
           </div>
           <div>
             <p className="item-last-sale text-align-right">Owner</p>

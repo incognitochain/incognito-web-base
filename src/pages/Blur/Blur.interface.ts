@@ -95,7 +95,6 @@ export interface ITokenDetail {
 
 export interface IToken {
   isLoading: boolean;
-  isSelected: boolean;
   contractAddress: string;
   id: string;
   tokenId: string;

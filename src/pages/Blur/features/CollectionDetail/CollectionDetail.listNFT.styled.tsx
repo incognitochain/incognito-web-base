@@ -102,7 +102,7 @@ export const StyledCard = styled.div<{ isSelected: boolean; effectToken: boolean
     line-height: 140%;
     overflow-wrap: break-word;
     width: 100%;
-    /* height: 40px; */
+    height: 40px;
   }
 
   .item-price {
@@ -156,6 +156,6 @@ export const StyledCard = styled.div<{ isSelected: boolean; effectToken: boolean
     background: #303030;
     border-radius: 4px;
     right: 12px;
-    bottom: 112px;
+    bottom: 132px;
   }
 `;

@@ -158,7 +158,6 @@ const mapperTokens = (resp: any): IMapTokens => {
 
     return {
       isLoading: false,
-      isSelected: false,
       contractAddress: data.ContractAddress,
       id: data.id,
       tokenId: data.TokenID,

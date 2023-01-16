@@ -7,6 +7,7 @@ import {
   clearSelectedTokens,
   IToken,
   lastTokenSelector,
+  selectedTokenIdsSelector,
   selectedTokensSelector,
   selectMaxBuyTokens,
   tokensSelector,
@@ -33,6 +34,8 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
 
   const tokens = useSelector(tokensSelector);
   const selectedTokens = useSelector(selectedTokensSelector);
+  const selectedTokenIds = useSelector(selectedTokenIdsSelector);
+
   const lastToken = useSelector(lastTokenSelector);
 
   const [eventMouse, setEventMouse] = React.useState<{ event: any; token: IToken } | undefined>();
@@ -108,6 +111,7 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
             <NFTItem
               key={index.toString()}
               token={item}
+              selectedTokenIds={selectedTokenIds}
               effectToken={effectToken}
               onClickTokenItem={onClickTokenItem}
               onMouseEnterIcInfo={(event, token) => setEventMouse({ event, token })}
