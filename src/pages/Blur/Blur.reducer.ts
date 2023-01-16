@@ -102,6 +102,7 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
           selectedTokenIds: state.token.selectedTokenIds.includes(action.payload)
             ? state.token.selectedTokenIds.filter((id) => id !== action.payload)
             : [...state.token.selectedTokenIds, action.payload],
+          errorMsg: '',
         },
       };
     }
@@ -131,6 +132,7 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
           ...state.token,
           fee,
           isEstimating,
+          errorMsg: '',
         },
       };
     }
@@ -142,6 +144,7 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
         token: {
           ...state.token,
           errorMsg: error,
+          isEstimating: false,
           fee: undefined,
         },
       };

@@ -1,5 +1,4 @@
 import { Col, Row } from 'antd';
-import { BigNumber } from 'bignumber.js';
 import { getIncognitoInject, useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import Loader from 'components/Core/Loader';
 import { InputField, validator } from 'components/Core/ReduxForm';
@@ -126,21 +125,25 @@ const StickyFooter = () => {
     inputAddress,
     isEstimating,
     fee,
-    errorMsg: apiError,
+    apiError,
     tokens,
     selectedTokenPrivacy,
     buyAmount,
     selectedItems,
+    validateErr,
+    isValidAmount,
+    isValidNetworkFee,
+    showDeposit,
   } = useSelector(buyCollectionSelector);
   const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount, showPopup } = useIncognitoWallet();
   const { setModal } = useModal();
 
   const renderError = () => {
-    const showError = !isCanBuy && incAccount;
-    const showDeposit = showError && !apiError;
+    const showError = incAccount && ((isCanBuy && validateErr) || apiError);
+    if (!showError) return null;
     return (
       <p className="current-error ">
-        {showError && (apiError ? apiError : 'Your balance is insufficient.')}{' '}
+        {!!showError && `${validateErr}`}{' '}
         {showDeposit && (
           <span
             onClick={() => {
@@ -169,10 +172,8 @@ const StickyFooter = () => {
       return dispatch(blur(FORM_CONFIGS.formName, FORM_CONFIGS.address, inputAddress, true));
     }
 
-    // check valid amount
-    const { originalAmount } = buyAmount;
-    const isValidAmount = !!originalAmount && new BigNumber(originalAmount).lt(selectedTokenPrivacy.amount || 0);
-    if (!isValidAmount) {
+    // show error message
+    if (!isValidAmount || !isValidNetworkFee) {
       return setIsCanBuy(false);
     }
 
@@ -236,8 +237,7 @@ const StickyFooter = () => {
         ],
         burnAmount: buyAmount.originalAmount,
       });
-
-      console.log('SANG TEST: ', {
+      console.log('LOGS: PAYLOAD ', {
         prvPayments,
         tokenPayments,
         metadata,

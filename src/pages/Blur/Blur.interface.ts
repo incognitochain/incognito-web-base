@@ -104,10 +104,16 @@ export interface IToken {
 
 export interface IBuyCollection {
   valid: boolean;
+  isValidNetworkFee: boolean;
+  isValidAmount: boolean;
+  showDeposit: boolean;
+
   inputAddress: string;
+  apiError: string;
+  validateErr: string;
+
   isEstimating: boolean;
   fee?: PBlurBuyFee;
-  errorMsg: string;
   tokens: PToken[];
   selectedTokenPrivacy: SelectedPrivacy;
   buyAmount: {

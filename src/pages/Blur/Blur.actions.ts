@@ -149,10 +149,10 @@ const actionEstimateFee =
       const fee = convertBlurFee(json);
       dispatch(actionSetEstimatedFee({ isEstimating: false, fee }));
     } catch (error) {
-      console.log('ACTION FETCH MORE TOKENS ERROR: ', error);
-      if (error?.message !== CANCEL_MESSAGE) {
-        dispatch(actionSetEstimateFeeError(typeof error === 'string' ? error : error?.message || ''));
-      }
+      console.log('BLUR ESTIMATE FEE ERROR: ', error, error?.message);
+      if (error?.message === CANCEL_MESSAGE || error === CANCEL_MESSAGE) return;
+      const errorMessage = typeof error === 'string' ? error : error?.message || '';
+      dispatch(actionSetEstimateFeeError(typeof error === 'string' ? error : error?.message || ''));
     }
   };
 

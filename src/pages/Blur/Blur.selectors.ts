@@ -3,13 +3,14 @@ import { formValueSelector, isValid } from 'redux-form';
 import { createSelector } from 'reselect';
 import { AppState } from 'state';
 
-import { BIG_COINS } from '../../constants';
+import { BIG_COINS, PRV } from '../../constants';
 import SelectedPrivacy from '../../models/model/SelectedPrivacyModel';
 import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from '../../state/token';
 import convert from '../../utils/convert';
 import format from '../../utils/format';
 import { IBuyCollection } from './Blur.interface';
 import { FORM_CONFIGS } from './features/CollectionDetail/CollectionDetail.constant';
+const { ACCOUNT_CONSTANT } = require('incognito-chain-web-js/build/wallet');
 
 const blurSelector = createSelector(
   (state: AppState) => state.pBlur,
@@ -51,6 +52,7 @@ const buyCollectionSelector = createSelector(
     tokens = tokens.filter((token) => token.isMainETH || token.tokenID === BIG_COINS.ETH_UNIFIED.tokenID);
 
     const selectedTokenPrivacy: SelectedPrivacy = fnGetPrivacyByTokenIdentify(selectedPrivacyTokenID);
+    const nativeToken: SelectedPrivacy = fnGetPrivacyByTokenIdentify(PRV.identify);
 
     const getBuyAmount = () => {
       const amountNumb = (selectedItems || []).reduce((prev, curr) => {
@@ -76,16 +78,38 @@ const buyCollectionSelector = createSelector(
         totalAmountNumb,
       };
     };
+    const buyAmount = getBuyAmount();
+
+    const isValidNetworkFee = (nativeToken.amount || 0) > ACCOUNT_CONSTANT.MAX_FEE_PER_TX;
+    const isValidAmount =
+      !!buyAmount.totalAmountNumb && new BigNumber(buyAmount.totalAmountNumb).lt(selectedTokenPrivacy.amount || 0);
+
+    let validateErr = '';
+    let showDeposit = false;
+    if (errorMsg) {
+      validateErr = errorMsg;
+    } else if (!isValidNetworkFee) {
+      validateErr = 'Incognito collects a small network fee of 0.1 PRV to pay the miners who help power the network.';
+      showDeposit = true;
+    } else if (isValidAmount) {
+      validateErr = 'Your balance is insufficient.';
+    }
 
     return {
       valid,
-      inputAddress,
+      isValidNetworkFee,
+      isValidAmount,
       isEstimating,
+      showDeposit,
+
+      apiError: errorMsg,
+      validateErr,
+
+      inputAddress,
       fee,
-      errorMsg,
       tokens,
       selectedTokenPrivacy,
-      buyAmount: getBuyAmount(),
+      buyAmount,
       selectedItems,
     };
   }
