@@ -127,7 +127,7 @@ const StickyFooter = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isCanBuy, setIsCanBuy] = React.useState<boolean>(true);
-  const { valid: isValidForm, inputAddress, isEstimating, fee } = useSelector(buyCollectionSelector);
+  const { valid: isValidForm, inputAddress, isEstimating, fee, errorMsg } = useSelector(buyCollectionSelector);
   const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount, showPopup } = useIncognitoWallet();
   const { setModal } = useModal();
 
@@ -164,27 +164,31 @@ const StickyFooter = () => {
     };
   }, [selectedItems, selectedTokenPrivacy.amount, selectedTokenPrivacy.tokenID, fee]);
 
-  const renderError = () => (
-    <p className="current-error ">
-      {!isCanBuy && incAccount && 'Your balance is insufficient.'}{' '}
-      {!isCanBuy && incAccount && (
-        <span
-          onClick={() => {
-            history.push('/deposit');
-            const token: any = selectedToken?.isUnified
-              ? selectedToken.listUnifiedToken.find((token) => token.currencyType === 1)
-              : selectedToken;
-            if (token) {
-              dispatch(actionSetToken({ sellToken: token }));
-            }
-          }}
-          style={{ textDecoration: 'underline', cursor: 'pointer' }}
-        >
-          deposit now
-        </span>
-      )}
-    </p>
-  );
+  const renderError = () => {
+    const showError = !isCanBuy && incAccount;
+    const showDeposit = showError && !errorMsg;
+    return (
+      <p className="current-error ">
+        {showError && (errorMsg ? errorMsg : 'Your balance is insufficient.')}{' '}
+        {showDeposit && (
+          <span
+            onClick={() => {
+              history.push('/deposit');
+              const token: any = selectedToken?.isUnified
+                ? selectedToken.listUnifiedToken.find((token) => token.currencyType === 1)
+                : selectedToken;
+              if (token) {
+                dispatch(actionSetToken({ sellToken: token }));
+              }
+            }}
+            style={{ textDecoration: 'underline', cursor: 'pointer' }}
+          >
+            deposit now
+          </span>
+        )}
+      </p>
+    );
+  };
 
   const onClickBuy = async () => {
     if (isEstimating || !fee) return;
@@ -273,8 +277,8 @@ const StickyFooter = () => {
   };
   const onEstimateFee = () => {
     const tokenID = selectedToken?.tokenID;
-    if (!tokenID || !buyAmount.amountNumb) return;
-    dispatch(actionEstimateFee({ burnTokenID: tokenID, burnAmount: buyAmount.amountNumb.toString() }));
+    if (!tokenID || !buyAmount.amountNumb || !buyAmount.originalAmount) return;
+    dispatch(actionEstimateFee({ burnTokenID: tokenID, burnOriginalAmount: buyAmount.originalAmount.toString() }));
   };
 
   const debounceEstimateFee = useCallback(debounce(onEstimateFee, 300), [selectedToken?.tokenID, buyAmount.amountNumb]);
@@ -286,7 +290,7 @@ const StickyFooter = () => {
   useEffect(() => {
     if (!inputAddress) return;
     debounceEstimateFee();
-  }, [inputAddress, selectedItems.length]);
+  }, [inputAddress, selectedItems.length, selectedToken?.tokenID]);
 
   if (isMobile) return null;
 

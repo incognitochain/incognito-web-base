@@ -37,12 +37,13 @@ const buyCollectionSelector = createSelector(
     let valid = isValid(FORM_CONFIGS.formName)(state);
 
     const inputAddress = formSelector(state, FORM_CONFIGS.address);
-    const { fee, isEstimating } = token;
+    const { fee, isEstimating, errorMsg } = token;
     return {
       valid,
       inputAddress,
       isEstimating,
       fee,
+      errorMsg,
     };
   }
 );

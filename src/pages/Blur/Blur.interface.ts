@@ -102,9 +102,9 @@ export interface IToken {
 export interface IBuyCollection {
   valid: boolean;
   inputAddress: string;
-
   isEstimating: boolean;
   fee?: PBlurBuyFee;
+  errorMsg: string;
 }
 
 export class PBlurBuyFee {

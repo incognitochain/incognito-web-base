@@ -14,6 +14,7 @@ export enum BlurActionType {
   CLEAR_SELECTED_TOKEN_IDS = 'BLUR/CLEAR_SELECTED_TOKEN_IDS',
   SELECT_MAX_BUY_TOKENS = 'BLUR/SELECT_MAX_BUY_TOKENS',
   SET_ESTIMATED_FEE = 'BLUR/SET_ESTIMATED_FEE',
+  SET_ESTIMATED_FEE_ERROR = 'BLUR/SET_ESTIMATED_FEE_ERROR',
 }
 
 export interface IBlurReducer {
@@ -29,6 +30,7 @@ export interface IBlurReducer {
     fee?: PBlurBuyFee;
     selectedTokenIds: string[];
     collection: ICollection | undefined;
+    errorMsg: string;
   };
 }
 
@@ -85,6 +87,11 @@ export interface SetEstimatedFeeAction extends Action {
   payload: ISetEstimatedFeePayload;
 }
 
+export interface SetEstimatedFeeErrorAction extends Action {
+  type: BlurActionType.SET_ESTIMATED_FEE_ERROR;
+  payload: string;
+}
+
 export type BlurActions =
   | SetFetchingCollections
   | SetCollectionsAction
@@ -95,4 +102,5 @@ export type BlurActions =
   | ClearSelectedTokenIdsAction
   | SelectMaxBuyTokensAction
   | UpdateTokenAction
-  | SetEstimatedFeeAction;
+  | SetEstimatedFeeAction
+  | SetEstimatedFeeErrorAction;

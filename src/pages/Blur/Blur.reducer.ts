@@ -20,6 +20,7 @@ const initialState: IBlurReducer = {
     isEstimating: false,
     fee: undefined,
     selectedTokenIds: [],
+    errorMsg: '',
   },
 };
 
@@ -129,6 +130,18 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
           ...state.token,
           fee,
           isEstimating,
+        },
+      };
+    }
+
+    case BlurActionType.SET_ESTIMATED_FEE_ERROR: {
+      const error = action.payload;
+      return {
+        ...state,
+        token: {
+          ...state.token,
+          errorMsg: error,
+          fee: undefined,
         },
       };
     }
