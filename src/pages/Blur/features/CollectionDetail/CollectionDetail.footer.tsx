@@ -42,7 +42,7 @@ const Address = ({ showNote }: { showNote: boolean }) => {
         name={FORM_CONFIGS.address}
         inputType={FORM_CONFIGS.address}
         componentProps={{
-          placeholder: 'Recipient Address',
+          placeholder: 'Ethereum Recipient Address',
         }}
         validate={validateAddress}
       />
@@ -139,7 +139,7 @@ const StickyFooter = () => {
   const { setModal } = useModal();
 
   const renderError = () => {
-    const showError = incAccount && ((isCanBuy && validateErr) || apiError);
+    const showError = incAccount && ((!isCanBuy && validateErr) || apiError);
     if (!showError) return null;
     return (
       <p className="current-error ">

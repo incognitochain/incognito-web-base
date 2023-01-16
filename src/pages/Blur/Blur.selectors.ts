@@ -68,7 +68,15 @@ const buyCollectionSelector = createSelector(
       if (amountNumb && !!fee) {
         totalAmountNumb += fee.getFeeHumanAmount(selectedTokenPrivacy.pDecimals);
       }
-      let totalAmountStr = format.amountVer2({ originalAmount: totalAmountNumb, decimals: 0 });
+      const totalOriginalAmount = convert.toOriginalAmount({
+        humanAmount: totalAmountNumb.toString(),
+        decimals: selectedTokenPrivacy.pDecimals,
+        round: true,
+      });
+      let totalAmountStr = format.amountVer2({
+        originalAmount: totalOriginalAmount,
+        decimals: selectedTokenPrivacy.pDecimals,
+      });
       let visibleStr = `${totalAmountStr} ${selectedTokenPrivacy?.symbol}`;
 
       return {
@@ -76,13 +84,14 @@ const buyCollectionSelector = createSelector(
         originalAmount,
         visibleStr,
         totalAmountNumb,
+        totalOriginalAmount,
       };
     };
     const buyAmount = getBuyAmount();
 
     const isValidNetworkFee = (nativeToken.amount || 0) > ACCOUNT_CONSTANT.MAX_FEE_PER_TX;
     const isValidAmount =
-      !!buyAmount.totalAmountNumb && new BigNumber(buyAmount.totalAmountNumb).lt(selectedTokenPrivacy.amount || 0);
+      !!buyAmount.totalAmountNumb && new BigNumber(buyAmount.totalOriginalAmount).lt(selectedTokenPrivacy.amount || 0);
 
     let validateErr = '';
     let showDeposit = false;
@@ -90,9 +99,9 @@ const buyCollectionSelector = createSelector(
       validateErr = errorMsg;
     } else if (!isValidNetworkFee) {
       validateErr = 'Incognito collects a small network fee of 0.1 PRV to pay the miners who help power the network.';
-      showDeposit = true;
-    } else if (isValidAmount) {
+    } else if (!isValidAmount) {
       validateErr = 'Your balance is insufficient.';
+      showDeposit = true;
     }
 
     return {
