@@ -7,12 +7,11 @@ import { ArrowDown } from 'components/Core/ReduxForm/SelectionField/SelectionFie
 import { useModal } from 'components/Modal';
 import ModalTokens from 'components/Modal/Modal.tokens';
 import LoadingTransaction from 'components/Modal/Modal.transaction';
-import { BIG_COINS } from 'constants/token';
 import debounce from 'lodash/debounce';
 import PToken from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
-import { actionEstimateFee } from 'pages/Blur/Blur.actions';
-import { buyCollectionSelector, selectedTokensSelector } from 'pages/Blur/Blur.selectors';
+import { actionEstimateFee, actionSelectedPrivacyTokenID } from 'pages/Blur/Blur.actions';
+import { buyCollectionSelector } from 'pages/Blur/Blur.selectors';
 import { actionSetToken } from 'pages/Swap/features/FormDeposit/FormDeposit.actions';
 import { getTokenPayments } from 'pages/Swap/features/FormUnshield/FormUnshield.utils';
 import React, { memo, useCallback, useEffect } from 'react';
@@ -22,9 +21,6 @@ import { useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { blur, Field, reduxForm } from 'redux-form';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
-import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from 'state/token';
-import convert from 'utils/convert';
-import format from 'utils/format';
 
 import { FORM_CONFIGS } from './CollectionDetail.constant';
 import enhance from './CollectionDetail.enhanceFooter';
@@ -121,62 +117,37 @@ const Balance = memo(
 );
 
 const StickyFooter = () => {
-  const [selectedToken, setSelectedToken] = React.useState<PToken | undefined>();
   const incAccount = useSelector(incognitoWalletAccountSelector);
-  const selectedItems = useSelector(selectedTokensSelector);
   const history = useHistory();
   const dispatch = useDispatch();
   const [isCanBuy, setIsCanBuy] = React.useState<boolean>(true);
-  const { valid: isValidForm, inputAddress, isEstimating, fee, errorMsg } = useSelector(buyCollectionSelector);
+  const {
+    valid: isValidForm,
+    inputAddress,
+    isEstimating,
+    fee,
+    errorMsg: apiError,
+    tokens,
+    selectedTokenPrivacy,
+    buyAmount,
+    selectedItems,
+  } = useSelector(buyCollectionSelector);
   const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount, showPopup } = useIncognitoWallet();
   const { setModal } = useModal();
 
-  const tokens = useSelector(unshieldableTokens).filter(
-    (token) => token.isMainETH || token.tokenID === BIG_COINS.ETH_UNIFIED.tokenID
-  );
-
-  const selectedTokenPrivacy = useSelector(getPrivacyByTokenIdentifySelectors)(
-    selectedToken ? selectedToken.identify : ''
-  );
-
-  const buyAmount = React.useMemo(() => {
-    const amountNumb = (selectedItems || []).reduce((prev, curr) => {
-      return new BigNumber(prev).plus(curr.detail.price.amount || 0).toNumber();
-    }, 0);
-    const originalAmount = convert.toOriginalAmount({
-      humanAmount: amountNumb.toString(),
-      decimals: selectedToken?.pDecimals || 9,
-      round: true,
-    });
-
-    let totalAmountNumb = amountNumb;
-    if (amountNumb && !!fee) {
-      totalAmountNumb += fee.getFeeHumanAmount(selectedTokenPrivacy.pDecimals);
-    }
-    let totalAmountStr = format.amountVer2({ originalAmount: totalAmountNumb, decimals: 0 });
-    let visibleStr = `${totalAmountStr} ${selectedTokenPrivacy?.symbol}`;
-
-    return {
-      amountNumb,
-      originalAmount,
-      visibleStr,
-      totalAmountNumb,
-    };
-  }, [selectedItems, selectedTokenPrivacy.amount, selectedTokenPrivacy.tokenID, fee]);
-
   const renderError = () => {
     const showError = !isCanBuy && incAccount;
-    const showDeposit = showError && !errorMsg;
+    const showDeposit = showError && !apiError;
     return (
       <p className="current-error ">
-        {showError && (errorMsg ? errorMsg : 'Your balance is insufficient.')}{' '}
+        {showError && (apiError ? apiError : 'Your balance is insufficient.')}{' '}
         {showDeposit && (
           <span
             onClick={() => {
               history.push('/deposit');
-              const token: any = selectedToken?.isUnified
-                ? selectedToken.listUnifiedToken.find((token) => token.currencyType === 1)
-                : selectedToken;
+              const token: any = selectedTokenPrivacy?.isUnified
+                ? selectedTokenPrivacy.listUnifiedToken.find((token) => token.currencyType === 1)
+                : selectedTokenPrivacy;
               if (token) {
                 dispatch(actionSetToken({ sellToken: token }));
               }
@@ -276,21 +247,31 @@ const StickyFooter = () => {
     }
   };
   const onEstimateFee = () => {
-    const tokenID = selectedToken?.tokenID;
+    const tokenID = selectedTokenPrivacy?.tokenID;
     if (!tokenID || !buyAmount.amountNumb || !buyAmount.originalAmount) return;
     dispatch(actionEstimateFee({ burnTokenID: tokenID, burnOriginalAmount: buyAmount.originalAmount.toString() }));
   };
 
-  const debounceEstimateFee = useCallback(debounce(onEstimateFee, 300), [selectedToken?.tokenID, buyAmount.amountNumb]);
+  const debounceEstimateFee = useCallback(debounce(onEstimateFee, 300), [
+    selectedTokenPrivacy?.tokenID,
+    buyAmount.amountNumb,
+  ]);
 
+  const onSetSelectedPrivacyTokenID = (token: PToken) => {
+    if (!token.identify || !token.symbol) return;
+    dispatch(actionSelectedPrivacyTokenID(token.identify));
+  };
+
+  // First time set tokenID
   useEffect(() => {
-    tokens.length > 0 && selectedToken === undefined && setSelectedToken(tokens[0]);
+    tokens.length > 0 && selectedTokenPrivacy.tokenID === undefined && onSetSelectedPrivacyTokenID(tokens[0]);
   }, [tokens]);
 
+  // Estimate Fee
   useEffect(() => {
     if (!inputAddress) return;
     debounceEstimateFee();
-  }, [inputAddress, selectedItems.length, selectedToken?.tokenID]);
+  }, [inputAddress, selectedItems.length, selectedTokenPrivacy?.tokenID]);
 
   if (isMobile) return null;
 
@@ -298,7 +279,7 @@ const StickyFooter = () => {
     <Container hidden={!selectedItems.length}>
       <Row className="default-max-width">
         <Address showNote={!isValidForm && !!inputAddress} />
-        <SelectToken tokens={tokens} selectedToken={selectedToken} onSelectToken={setSelectedToken} />
+        <SelectToken tokens={tokens} selectedToken={selectedTokenPrivacy} onSelectToken={onSetSelectedPrivacyTokenID} />
         <Balance
           title="Your balance"
           content={

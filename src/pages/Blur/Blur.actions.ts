@@ -17,6 +17,7 @@ import {
   SetEstimatedFeeAction,
   SetEstimatedFeeErrorAction,
   SetFetchingCollections,
+  SetSelectedPrivacyTokenIDAction,
   SetSelectedTokenIdAction,
   SetTokensAction,
   UpdateTokenAction,
@@ -34,6 +35,11 @@ const actionSetEstimatedFee = (payload: ISetEstimatedFeePayload): SetEstimatedFe
 
 const actionSetEstimateFeeError = (payload: string): SetEstimatedFeeErrorAction => ({
   type: BlurActionType.SET_ESTIMATED_FEE_ERROR,
+  payload,
+});
+
+const actionSelectedPrivacyTokenID = (payload: string): SetSelectedPrivacyTokenIDAction => ({
+  type: BlurActionType.SET_SELECTED_PRIVACY_TOKEN_ID,
   payload,
 });
 
@@ -155,5 +161,6 @@ export {
   actionFetchCollections,
   actionFetchCollectionTokens,
   actionFetchMoreCollectionTokens,
+  actionSelectedPrivacyTokenID,
   actionSetCollections,
 };

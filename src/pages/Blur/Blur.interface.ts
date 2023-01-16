@@ -2,6 +2,9 @@ import { BigNumber } from 'bignumber.js';
 import convert from 'utils/convert';
 import format from 'utils/format';
 
+import PToken from '../../models/model/pTokenModel';
+import SelectedPrivacy from '../../models/model/SelectedPrivacyModel';
+
 export interface IAmount {
   amount: string;
   amountNum: number;
@@ -105,6 +108,15 @@ export interface IBuyCollection {
   isEstimating: boolean;
   fee?: PBlurBuyFee;
   errorMsg: string;
+  tokens: PToken[];
+  selectedTokenPrivacy: SelectedPrivacy;
+  buyAmount: {
+    amountNumb: number;
+    originalAmount: number;
+    visibleStr: string;
+    totalAmountNumb: number;
+  };
+  selectedItems: IToken[];
 }
 
 export class PBlurBuyFee {

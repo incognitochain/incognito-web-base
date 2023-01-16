@@ -21,6 +21,7 @@ const initialState: IBlurReducer = {
     fee: undefined,
     selectedTokenIds: [],
     errorMsg: '',
+    selectedPrivacyTokenID: '',
   },
 };
 
@@ -142,6 +143,16 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
           ...state.token,
           errorMsg: error,
           fee: undefined,
+        },
+      };
+    }
+    case BlurActionType.SET_SELECTED_PRIVACY_TOKEN_ID: {
+      const tokenID = action.payload;
+      return {
+        ...state,
+        token: {
+          ...state.token,
+          selectedPrivacyTokenID: tokenID,
         },
       };
     }
