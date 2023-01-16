@@ -7,6 +7,16 @@ import { BlurActions, BlurActionType, IBlurReducer } from './Blur.types';
 export const MAX_ITEM_BUY = 10;
 export const MAX_GET_ITEM = 100;
 
+const initTokenState = {
+  list: [],
+  collection: undefined,
+  isEstimating: false,
+  fee: undefined,
+  selectedTokenIds: [],
+  errorMsg: '',
+  selectedPrivacyTokenID: '',
+};
+
 const initialState: IBlurReducer = {
   isFetching: false,
   collection: {
@@ -14,15 +24,7 @@ const initialState: IBlurReducer = {
     list: [],
     isFetching: false,
   },
-  token: {
-    list: [],
-    collection: undefined,
-    isEstimating: false,
-    fee: undefined,
-    selectedTokenIds: [],
-    errorMsg: '',
-    selectedPrivacyTokenID: '',
-  },
+  token: { ...initTokenState },
 };
 
 export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
@@ -165,6 +167,14 @@ export const reducer: Reducer<IBlurReducer, BlurActions & any> = (
         token: {
           ...state.token,
           selectedPrivacyTokenID: tokenID,
+        },
+      };
+    }
+    case BlurActionType.CLEAR_TOKEN_STATE: {
+      return {
+        ...state,
+        token: {
+          ...initTokenState,
         },
       };
     }

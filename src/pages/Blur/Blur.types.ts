@@ -18,6 +18,7 @@ export enum BlurActionType {
   SET_ESTIMATED_FEE = 'BLUR/SET_ESTIMATED_FEE',
   SET_ESTIMATED_FEE_ERROR = 'BLUR/SET_ESTIMATED_FEE_ERROR',
   SET_SELECTED_PRIVACY_TOKEN_ID = 'BLUR/SET_SELECTED_PRIVACY_TOKEN_ID',
+  CLEAR_TOKEN_STATE = 'BLUR/CLEAR_TOKEN_STATE',
 }
 
 export interface IBlurReducer {
@@ -106,6 +107,10 @@ export interface SetSelectedPrivacyTokenIDAction extends Action {
   payload: string;
 }
 
+export interface ClearTokenStateAction extends Action {
+  type: BlurActionType.CLEAR_TOKEN_STATE;
+}
+
 export type BlurActions =
   | SetFetchingCollections
   | SetCollectionsAction
@@ -119,4 +124,5 @@ export type BlurActions =
   | UpdateTokenAction
   | SetEstimatedFeeAction
   | SetEstimatedFeeErrorAction
-  | SetSelectedPrivacyTokenIDAction;
+  | SetSelectedPrivacyTokenIDAction
+  | ClearTokenStateAction;

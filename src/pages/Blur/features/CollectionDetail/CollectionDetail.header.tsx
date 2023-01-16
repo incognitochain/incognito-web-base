@@ -7,19 +7,20 @@ const Container = styled.div<{ expand: boolean }>`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-top: -35px;
+  margin-top: 0;
   margin-bottom: 32px;
   padding-bottom: 12px;
   border-bottom: 1px solid ${({ theme }) => theme.bg3};
 
   @keyframes ShowDown {
     0% {
-      margin-top: -150px;
+      margin-top: -100px;
       opacity: 0;
     }
     100% {
-      margin-top: -35px;
+      //margin-top: 0;
       opacity: 1;
+      margin-top: 0;
     }
   }
   animation-duration: 1s;

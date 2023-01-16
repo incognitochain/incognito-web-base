@@ -115,12 +115,14 @@ export interface IBuyCollection {
   fee?: PBlurBuyFee;
   tokens: PToken[];
   selectedTokenPrivacy: SelectedPrivacy;
+
   buyAmount: {
     amountNumb: number;
     originalAmount: number;
     visibleStr: string;
     totalAmountNumb: number;
     burnFormatAmount: string;
+    outchainOriginalAmount: number;
   };
   selectedItems: IToken[];
 }

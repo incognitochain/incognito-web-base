@@ -4,7 +4,6 @@ import ImagePlaceholder from 'components/ImagePlaceholder';
 import { IToken } from 'pages/Blur';
 import Checkbox from 'pages/Blur/images/checkbox.svg';
 import CheckboxActive from 'pages/Blur/images/checkbox-active.svg';
-import IcInfo from 'pages/Blur/images/info.svg';
 import React from 'react';
 
 import { StyledCard } from './CollectionDetail.listNFT.styled';
@@ -59,13 +58,13 @@ const NFTItem = (props: NFTItemProps) => {
             </RowBetween>
           </div>
           <img className="checkbox" src={isSelected ? CheckboxActive : Checkbox} alt="checkbox-logo" />
-          <img
-            onMouseMove={(event) => onMouseEnterIcInfo(event, token)}
-            onMouseOut={onMouseLeaveIcInfo}
-            className="ic-info"
-            src={IcInfo}
-            alt="info-icon"
-          />
+          {/*<img*/}
+          {/*  onMouseMove={(event) => onMouseEnterIcInfo(event, token)}*/}
+          {/*  onMouseOut={onMouseLeaveIcInfo}*/}
+          {/*  className="ic-info"*/}
+          {/*  src={IcInfo}*/}
+          {/*  alt="info-icon"*/}
+          {/*/>*/}
           <p className="rarity-rank">{detail.rarityRank}</p>
         </StyledCard>
       )}

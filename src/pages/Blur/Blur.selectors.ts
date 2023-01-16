@@ -61,6 +61,9 @@ const buyCollectionSelector = createSelector(
 
     const selectedTokenPrivacy: SelectedPrivacy = fnGetPrivacyByTokenIdentify(selectedPrivacyTokenID);
     const nativeToken: SelectedPrivacy = fnGetPrivacyByTokenIdentify(PRV.identify);
+    const incToken = selectedTokenPrivacy.isUnified
+      ? selectedTokenPrivacy.listUnifiedToken.find((token) => token.networkID === 1)
+      : selectedTokenPrivacy;
 
     const getBuyAmount = () => {
       const amountNumb = (selectedItems || []).reduce((prev, curr) => {
@@ -69,6 +72,11 @@ const buyCollectionSelector = createSelector(
       const originalAmount = convert.toOriginalAmount({
         humanAmount: amountNumb.toString(),
         decimals: selectedTokenPrivacy?.pDecimals || 9,
+        round: true,
+      });
+      const outchainOriginalAmount = convert.toOriginalAmount({
+        humanAmount: amountNumb.toString(),
+        decimals: incToken?.decimals || 18,
         round: true,
       });
 
@@ -98,6 +106,7 @@ const buyCollectionSelector = createSelector(
         totalAmountNumb,
         totalOriginalAmount,
         burnFormatAmount,
+        outchainOriginalAmount,
       };
     };
     const buyAmount = getBuyAmount();

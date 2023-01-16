@@ -303,8 +303,10 @@ const StickyFooter = () => {
   };
   const onEstimateFee = () => {
     const tokenID = selectedTokenPrivacy?.tokenID;
-    if (!tokenID || !buyAmount.amountNumb || !buyAmount.originalAmount) return;
-    dispatch(actionEstimateFee({ burnTokenID: tokenID, burnOriginalAmount: buyAmount.originalAmount.toString() }));
+    if (!tokenID || !buyAmount.outchainOriginalAmount) return;
+    dispatch(
+      actionEstimateFee({ burnTokenID: tokenID, outchainOriginalAmount: buyAmount.outchainOriginalAmount.toString() })
+    );
   };
 
   const debounceEstimateFee = useCallback(debounce(onEstimateFee, 300), [

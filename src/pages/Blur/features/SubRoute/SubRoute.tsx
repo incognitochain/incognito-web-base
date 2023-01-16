@@ -6,58 +6,61 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 const Styled = styled.div`
   display: flex;
   flex-direction: row;
-  width: 100%;
+  margin-bottom: 20px;
 
   .sub-title {
-    font-weight: 400;
-    font-size: 14px;
-    letter-spacing: 0.01em;
+    font-weight: 500;
+    font-size: 16px;
     text-align: center;
     margin-right: 8px;
-  }
-
-  .earnings-text {
     color: ${({ theme }: { theme: DefaultTheme }) => theme.text5};
+    line-height: 14px;
   }
-
   button:hover {
     cursor: pointer;
     color: ${({ theme }: { theme: DefaultTheme }) => theme.text1};
   }
 `;
 
-interface POpenseaDetailSubRouteProps {
-  collectionName?: string;
+interface IProps {
+  collectionSlug: string;
+  collectionName: string;
 }
 
-const POpenseaDetailSubRoute = (props: POpenseaDetailSubRouteProps) => {
+const SubRoute = (props: IProps) => {
   const history = useHistory();
   return (
-    <Styled>
+    <Styled className="sub-route">
       <button
         className="hover"
         onClick={() => {
           history.push(routePeggingApps);
         }}
       >
-        <p className="sub-title earnings-text">Use</p>
+        <p className="sub-title">Use</p>
       </button>
       <p className="sub-title">/</p>
 
       <button
         className="hover"
         onClick={() => {
-          history.push('/papps/popensea');
+          history.push('/papps/pblur');
         }}
       >
-        <p className="sub-title earnings-text">pOpensea</p>
+        <p className="sub-title">pBlur</p>
       </button>
       <p className="sub-title">/</p>
-      <button>
-        <p className="sub-title">{props.collectionName}</p>
+      <button
+        onClick={() => {
+          history.push(`/papps/pblur/${props.collectionSlug}`);
+        }}
+      >
+        <p className="sub-title" style={{ color: 'white' }}>
+          {props.collectionName}
+        </p>
       </button>
     </Styled>
   );
 };
 
-export default memo(POpenseaDetailSubRoute);
+export default memo(SubRoute);

@@ -1,7 +1,7 @@
 import { rpcPBlur } from 'services';
+import { CANCEL_MESSAGE } from 'services/axios';
 import { AppDispatch, AppState } from 'state';
 
-import { CANCEL_MESSAGE } from '../../services/axios';
 import { convertBlurFee } from './Blur.builder';
 import { ICollection, IMapTokens, IToken } from './Blur.interface';
 import { MAX_GET_ITEM } from './Blur.reducer';
@@ -11,6 +11,7 @@ import {
   AppendTokensAction,
   BlurActionType,
   ClearSelectedTokenIdsAction,
+  ClearTokenStateAction,
   ISetEstimatedFeePayload,
   SelectMaxBuyTokensAction,
   SetCollectionsAction,
@@ -87,6 +88,10 @@ export const selectMaxBuyTokens = (): SelectMaxBuyTokensAction => ({
   type: BlurActionType.SELECT_MAX_BUY_TOKENS,
 });
 
+export const actionClearTokenState = (): ClearTokenStateAction => ({
+  type: BlurActionType.CLEAR_TOKEN_STATE,
+});
+
 const actionFetchCollections =
   ({ page }: { page: number }) =>
   async (dispatch: AppDispatch) => {
@@ -132,7 +137,7 @@ const actionFetchMoreCollectionTokens =
   };
 
 const actionEstimateFee =
-  ({ burnTokenID, burnOriginalAmount }: { burnTokenID: string; burnOriginalAmount: string }) =>
+  ({ burnTokenID, outchainOriginalAmount }: { burnTokenID: string; outchainOriginalAmount: string }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     try {
       const state = getState();
@@ -149,7 +154,7 @@ const actionEstimateFee =
         contractAddress: selectedItems[0].contractAddress,
         nftIDs,
         burnTokenID,
-        burnAmount: burnOriginalAmount,
+        burnAmount: outchainOriginalAmount,
         recipient: inputAddress,
       };
       console.log('LOGS: BLUR ESTIMATE FEE PAYLOAD: ', payload);
