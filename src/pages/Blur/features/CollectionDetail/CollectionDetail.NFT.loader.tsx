@@ -7,7 +7,7 @@ const NFTItemLoader = () => (
   <React.Fragment>
     <ContentLoader
       style={{ padding: 4 }}
-      height={358}
+      height={368}
       width="100%"
       speed={1}
       backgroundColor={'#333'}

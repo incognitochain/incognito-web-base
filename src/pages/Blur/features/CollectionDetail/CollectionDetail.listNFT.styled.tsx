@@ -135,7 +135,15 @@ export const StyledCard = styled.div<{ isSelected: boolean; effectToken: boolean
   .checkbox {
     position: absolute;
     right: 20px;
-    top: 12px;
+    top: 16px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .ic-market {
+    position: absolute;
+    left: 20px;
+    top: 16px;
     width: 24px;
     height: 24px;
   }
@@ -143,7 +151,7 @@ export const StyledCard = styled.div<{ isSelected: boolean; effectToken: boolean
   .ic-info {
     position: absolute;
     left: 20px;
-    top: 12px;
+    top: 48px;
     width: 24px;
     height: 24px;
   }

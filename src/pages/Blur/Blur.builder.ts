@@ -130,7 +130,9 @@ const convertToCost = (data: any): ICost => {
 const convertToPrice = (data: any): IPrice => {
   return {
     ...convertToCost(data),
-    marketplace: data.marketplace ? IMarketPlaceType[data.marketplace as keyof typeof IMarketPlaceType] : '',
+    marketplace: data.marketplace
+      ? IMarketPlaceType[data.marketplace as keyof typeof IMarketPlaceType]
+      : IMarketPlaceType.BLUR,
   };
 };
 
