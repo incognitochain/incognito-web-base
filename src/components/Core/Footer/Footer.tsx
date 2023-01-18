@@ -143,7 +143,7 @@ const Footer = () => {
           Privacy Policy
         </button>
       </Row>
-      {/*<Col>{renderSocial1()}</Col>*/}
+      <Col>{renderSocial1()}</Col>
     </Styled>
   );
 };
