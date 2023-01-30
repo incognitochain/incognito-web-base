@@ -123,7 +123,7 @@ const Footer = () => {
   return (
     <Styled className="default-max-width" id={FOOTER_ID}>
       <Col className="wrap-branch">
-        <p className="normal-label">© 2022 Incognito</p>
+        <p className="normal-label">© {new Date().getFullYear()} Incognito</p>
       </Col>
       <Row className={`wrap-term`}>
         <button
@@ -143,7 +143,7 @@ const Footer = () => {
           Privacy Policy
         </button>
       </Row>
-      {/*<Col>{renderSocial1()}</Col>*/}
+      <Col>{renderSocial1()}</Col>
     </Styled>
   );
 };
