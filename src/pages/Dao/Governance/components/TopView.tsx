@@ -1,4 +1,5 @@
 import React from 'react';
+import { MINIMUM_PRV_HUMAN_AMOUNT_REQUIRE } from 'state/dao/utils';
 import styled from 'styled-components/macro';
 
 const Container = styled.div`
@@ -34,7 +35,8 @@ const ListProposal: React.FC = () => (
     <h3>Incognito DAO</h3>
     <Desc className="h7">
       PRV holders can now join to vote for particular proposals created by others or directly create their own proposals
-      for the ecosystem improvement. A minimum of 62,500 PRV is required to submit proposals.
+      for the ecosystem improvement. A minimum of {MINIMUM_PRV_HUMAN_AMOUNT_REQUIRE} PRV is required to submit
+      proposals.
     </Desc>
   </Container>
 );
