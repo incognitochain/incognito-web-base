@@ -3,6 +3,7 @@
 import { i18n } from '@lingui/core';
 import { notification } from 'antd';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+import { isMainnet } from 'config';
 import { PRV } from 'constants/token';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
@@ -59,7 +60,7 @@ const ProposalDetail = () => {
 
   const getBlockNumber = async () => {
     try {
-      const web3 = new Web3('https://goerli.infura.io/v3/827ed2f82fb3442da6d516c8b5e5bd16');
+      const web3 = new Web3(isMainnet ? 'https://eth-fullnode.incognito.org' : 'https://eth-goerli.public.blastapi.io');
       const block = await web3.eth.getBlockNumber();
       setCurrentBlock(block);
     } catch (error) {
