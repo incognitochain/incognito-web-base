@@ -13,7 +13,7 @@ import uniImg from 'assets/images/uni-icon.png';
 import unknowImg from 'assets/images/unknow-icon.png';
 import voteImg from 'assets/images/vote.svg';
 import { MAIN_NETWORK_NAME } from 'constants/token';
-import { BlurCollectionsRoute } from 'pages/Blur';
+import { PnftCollectionsRoute } from 'pages/Pnft';
 import { SELECTION_NETWORKS } from 'pages/Swap/features/FormUnshield/FormUnshield.constants';
 import { SwapExchange } from 'pages/Swap/features/FormUnshield/FormUnshield.types';
 import React from 'react';
@@ -59,15 +59,15 @@ const Factory: IFactory[] = [
   },
   {
     img: blurImg,
-    name: 'pBlur',
-    nameDesc: 'Private Blur',
+    name: 'pNft',
+    nameDesc: 'Private Nft',
     status: 'SHIPPED',
     chain: ['Ethereum', 'Marketplace', 'NFT'],
     desc: 'Purchase NFTs and crypto collectibles on the largest web3 marketplace - Blur - with full privacy on Incognito.',
     metric: METRIC_TYPE.PAPP_OPENSEA,
     metricUniq: METRIC_UNIQ.PAPP_OPENSEA_UNIQ,
     network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],
-    route: BlurCollectionsRoute.path,
+    route: PnftCollectionsRoute.path,
   },
   {
     img: voteImg,

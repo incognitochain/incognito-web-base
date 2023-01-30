@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { ICollection, IMapTokens, mapperCollections, mapperTokens } from 'pages/Blur';
+import { ICollection, IMapTokens, mapperCollections, mapperTokens } from 'pages/Pnft';
 import createAxiosInstance from 'services/axios';
 
 type CollectionSortType =

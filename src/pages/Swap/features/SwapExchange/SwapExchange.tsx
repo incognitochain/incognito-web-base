@@ -1,6 +1,6 @@
 import { Row } from 'antd';
 import Loader from 'components/Core/Loader';
-import Blur, { appName as blurAppName } from 'pages/Blur';
+import Pnft, { appName as pnftAppName } from 'pages/Pnft';
 import POpensea from 'pages/POpensea';
 import { FormUnshield } from 'pages/Swap/features/FormUnshield';
 import enhance from 'pages/Swap/Swap.enhance';
@@ -23,8 +23,8 @@ const SwapExchange = (props: any) => {
     return <POpensea />;
   }
 
-  if (name === blurAppName) {
-    return <Blur />;
+  if (name === pnftAppName) {
+    return <Pnft />;
   }
 
   const renderForm = () => {
