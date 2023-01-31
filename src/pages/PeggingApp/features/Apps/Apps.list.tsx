@@ -59,8 +59,8 @@ const Factory: IFactory[] = [
   },
   {
     img: blurImg,
-    name: 'pNft',
-    nameDesc: 'Private Nft',
+    name: 'pNFT',
+    nameDesc: 'Private NFT',
     status: 'SHIPPED',
     chain: ['Ethereum', 'Marketplace', 'NFT'],
     desc: 'Purchase NFTs and crypto collectibles on the largest web3 marketplace - Blur - with full privacy on Incognito.',

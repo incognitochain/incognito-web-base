@@ -2,40 +2,26 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { List } from 'antd';
 import debounce from 'lodash/debounce';
-import {
-  actionFetchCollectionTokens,
-  clearSelectedTokens,
-  IToken,
-  lastTokenSelector,
-  selectedTokenIdsSelector,
-  selectMaxBuyTokens,
-  tokensSelector,
-} from 'pages/Pnft';
+import { IToken, selectedTokenIdsAccountSelector, tokensAccountSelector } from 'pages/Pnft';
 import FilterListNFT from 'pages/Pnft/components/FilterListNFT';
 import { SortNftType } from 'pages/Pnft/components/FilterListNFT/FilterListNFT';
 import NFTInfoOverlay from 'pages/Pnft/components/NFTInfoOverlay';
 import NFTItem from 'pages/Pnft/components/NFTItem';
-import { actionFetchMoreCollectionTokens, actionSetSelectedTokenId } from 'pages/Pnft/Pnft.actions';
-import { MAX_GET_ITEM } from 'pages/Pnft/Pnft.reducer';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'state/hooks';
 
-import { Styled } from './CollectionDetail.listNFT.styled';
+import { Styled } from './Profile.listNFT.styled';
 
-interface CollectionDetailListNFTProps {
-  slug: string;
-}
+interface ProfileListNFTFTProps {}
 
-const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
-  const { slug } = props;
+const ProfileListNFT = (props: ProfileListNFTFTProps) => {
+  const {} = props;
   const dispatch = useAppDispatch();
 
-  const tokens = useSelector(tokensSelector);
-  const selectedTokenIds = useSelector(selectedTokenIdsSelector);
-
-  const lastToken = useSelector(lastTokenSelector);
+  const tokens = useSelector(tokensAccountSelector);
+  const selectedTokenIds = useSelector(selectedTokenIdsAccountSelector);
 
   const [eventMouse, setEventMouse] = React.useState<{ event: any; token: IToken } | undefined>();
   const [reachEnd, setReachend] = React.useState<boolean>(false);
@@ -45,36 +31,13 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
 
   const effectToken = selectedTokenIds && selectedTokenIds.length > 0;
 
-  const debouncedSearchRef = React.useRef(
-    debounce((text: string) => dispatch(actionFetchCollectionTokens(slug, text)), 500)
-  );
-
-  React.useEffect(() => {
-    dispatch(actionFetchCollectionTokens(slug));
-  }, []);
-
-  React.useEffect(() => {
-    if (reachEnd && lastToken && !lastToken.isLoading) {
-      setReachend(false);
-      if (tokens.length % MAX_GET_ITEM === 0) {
-        const nextPage = Math.floor(tokens.length / MAX_GET_ITEM) + 1;
-        dispatch(actionFetchMoreCollectionTokens(nextPage, slug, keySearch));
-      }
-    }
-  }, [lastToken, reachEnd]);
-
   const onChangeSearch = (e: any) => {
     setKeySearch(e.target.value);
-    debouncedSearchRef.current(e.target.value);
   };
 
-  const onCheckManyItems = () => {
-    dispatch(selectedTokenIds.length > 0 ? clearSelectedTokens() : selectMaxBuyTokens());
-  };
+  const onCheckManyItems = () => {};
 
-  const onClickTokenItem = (token: IToken) => {
-    dispatch(actionSetSelectedTokenId(token.tokenId));
-  };
+  const onClickTokenItem = (token: IToken) => {};
 
   const onLoadMoreTokens = () => {
     setReachend(true);
@@ -124,4 +87,4 @@ const CollectionDetailListNFT = (props: CollectionDetailListNFTProps) => {
   );
 };
 
-export default React.memo(CollectionDetailListNFT);
+export default React.memo(ProfileListNFT);

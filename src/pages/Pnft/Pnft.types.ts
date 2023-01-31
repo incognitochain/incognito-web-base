@@ -37,6 +37,10 @@ export interface IPnftReducer {
     errorMsg: string;
     selectedPrivacyTokenID: string;
   };
+  account: {
+    tokens: IToken[];
+    selectedTokenIds: string[];
+  };
 }
 
 export interface SetFetchingCollections extends Action {

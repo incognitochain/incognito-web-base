@@ -17,6 +17,11 @@ const initTokenState = {
   selectedPrivacyTokenID: '',
 };
 
+const initAccountState = {
+  tokens: [],
+  selectedTokenIds: [],
+};
+
 const initialState: IPnftReducer = {
   isFetching: false,
   collection: {
@@ -25,6 +30,7 @@ const initialState: IPnftReducer = {
     isFetching: false,
   },
   token: { ...initTokenState },
+  account: { ...initAccountState },
 };
 
 export const reducer: Reducer<IPnftReducer, PnftActions & any> = (

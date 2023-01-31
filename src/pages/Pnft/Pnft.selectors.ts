@@ -146,13 +146,22 @@ const buyCollectionSelector = createSelector(
   }
 );
 
+const accountSelector = createSelector(pNftSelector, (pNft) => pNft.account);
+
+const tokensAccountSelector = createSelector(accountSelector, (account) => account.tokens);
+
+const selectedTokenIdsAccountSelector = createSelector(accountSelector, (account) => account.selectedTokenIds);
+
 export {
+  accountSelector,
   buyCollectionSelector,
   collectionsSelector,
   lastTokenSelector,
   pNftSelector,
+  selectedTokenIdsAccountSelector,
   selectedTokenIdsSelector,
   selectedTokensSelector,
   tokenCollectionSelector,
+  tokensAccountSelector,
   tokensSelector,
 };

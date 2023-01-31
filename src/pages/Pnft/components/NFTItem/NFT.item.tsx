@@ -9,11 +9,10 @@ import IcLookrare from 'pages/Pnft/images/ic-lookrare.svg';
 import IcOpensea from 'pages/Pnft/images/ic-opensea.svg';
 import IcX2Y2 from 'pages/Pnft/images/ic-x2y2.svg';
 import { IMarketPlaceType } from 'pages/Pnft/Pnft.interface';
-// import IcInfo from 'pages/Pnft/images/info.svg';
 import React from 'react';
 
-import { StyledCard } from './CollectionDetail.listNFT.styled';
-import CollectionDetailNFTLoader from './CollectionDetail.NFT.loader';
+import NFTItemLoader from './NFT.loader';
+import { StyledCard } from './NFT.styled';
 
 const generateLinkToken = (token: IToken) => {
   const contract = token.contractAddress;
@@ -43,7 +42,7 @@ const NFTItem = (props: NFTItemProps) => {
   const { token, selectedTokenIds, onClickTokenItem, key, effectToken, onMouseEnterIcInfo, onMouseLeaveIcInfo } = props;
 
   if (token.isLoading) {
-    return <CollectionDetailNFTLoader />;
+    return <NFTItemLoader />;
   }
 
   const { detail } = token;

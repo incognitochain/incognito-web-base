@@ -11,6 +11,7 @@ import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
 import { PnftCollectionsRoute } from 'pages/Pnft';
 import { PnftCollectionDetailRoute } from 'pages/Pnft/features/CollectionDetail';
+import { PnftProfileRoute } from 'pages/Pnft/features/Profile';
 import React, { Suspense, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Route, Switch, useHistory } from 'react-router-dom';
@@ -125,6 +126,7 @@ const App = () => {
         <Route exact path="/deposit" component={DepositPage} />
         <Route exact path={PnftCollectionsRoute.path} component={PnftCollectionsRoute.component} />
         <Route exact path={PnftCollectionDetailRoute.path} component={PnftCollectionDetailRoute.component} />
+        <Route exact path={PnftProfileRoute.path} component={PnftProfileRoute.component} />
         {!isMobile && (
           <>
             <Route exact path="/vote" component={Governance} />

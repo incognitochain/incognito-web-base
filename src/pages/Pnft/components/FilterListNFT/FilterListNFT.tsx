@@ -172,7 +172,7 @@ const Styled = styled.div`
     `}
 `;
 
-export enum SortBlurNftType {
+export enum SortNftType {
   PriceLowToHigh = 'Price low to high',
   PriceHighToLow = 'Price high to low',
   HighestLastSale = 'Highest last sale',
@@ -184,18 +184,18 @@ interface CollectionDetailFilterProps {
   keySearch?: string;
   onSearchChange: (event: any) => void;
 
-  sortBlurNftType: SortBlurNftType;
-  onChangeBlurNftType: (data: SortBlurNftType) => void;
+  sortNftType: SortNftType;
+  onChangeNftType: (data: SortNftType) => void;
   onCheckManyItems: () => void;
 }
 
-const CollectionDetailFilter = (props: CollectionDetailFilterProps) => {
-  const { totalToken, totalSelectedToken, keySearch, sortBlurNftType, onChangeBlurNftType } = props;
+const FilterListNFT = (props: CollectionDetailFilterProps) => {
+  const { totalToken, totalSelectedToken, keySearch, sortNftType, onChangeNftType } = props;
 
   const renderSortItem = (key: any, label: string) => {
-    const typedString: keyof typeof SortBlurNftType = key;
+    const typedString: keyof typeof SortNftType = key;
     return (
-      <button onClick={() => onChangeBlurNftType(SortBlurNftType[typedString])}>
+      <button onClick={() => onChangeNftType(SortNftType[typedString])}>
         <p>{label}</p>
       </button>
     );
@@ -246,4 +246,4 @@ const CollectionDetailFilter = (props: CollectionDetailFilterProps) => {
   );
 };
 
-export default React.memo(CollectionDetailFilter);
+export default React.memo(FilterListNFT);

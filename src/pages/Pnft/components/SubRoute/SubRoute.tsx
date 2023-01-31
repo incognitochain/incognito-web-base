@@ -47,7 +47,7 @@ const SubRoute = (props: IProps) => {
           history.push('/papps/pnft');
         }}
       >
-        <p className="sub-title">pNft</p>
+        <p className="sub-title">pNFT</p>
       </button>
       <p className="sub-title">/</p>
       <button
