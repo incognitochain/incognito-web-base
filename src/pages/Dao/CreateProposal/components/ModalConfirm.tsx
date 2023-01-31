@@ -5,7 +5,7 @@ import React from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
 import { Fee } from 'state/dao/types';
-import { getMinimumPRVBalanceRequire, MINIMUM_PRV_REQUIRE_TO_BURN, NETWORK_FEE } from 'state/dao/utils';
+import { getMinimumPRVBalanceRequire, MINIMUM_PRV_REQUIRE_TO_BURN } from 'state/dao/utils';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import format from 'utils/format';
@@ -71,16 +71,7 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmPro
   const tokenToPayFeeInfo = useSelector(getPrivacyDataByTokenIDSelector)(fee?.tokenid || '');
   const minimumPRVBalanceRequire = getMinimumPRVBalanceRequire(prvTokenInfo?.amount || 0, fee?.feeAmount || 0);
 
-  const getPrvBalanceToBurn = () => {
-    const prvBalance: number = prvTokenInfo?.amount || 0;
-    let prvToBurn = MINIMUM_PRV_REQUIRE_TO_BURN;
-    if (prvBalance >= minimumPRVBalanceRequire) {
-      prvToBurn = prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE;
-    }
-    return prvToBurn;
-  };
-
-  const prvBalanceToBurn = getPrvBalanceToBurn();
+  const prvBalanceToBurn = MINIMUM_PRV_REQUIRE_TO_BURN;
 
   const checkPrvBalance = () => {
     const prvBalance: number = Number(prvTokenInfo?.amount) || 0;
