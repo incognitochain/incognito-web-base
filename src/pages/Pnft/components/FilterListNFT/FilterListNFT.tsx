@@ -1,10 +1,19 @@
 /* eslint-disable jsx-a11y/alt-text */
+import { Dropdown, Menu } from 'antd';
+import ArrowDownSVG from 'assets/images/arrow-down-white.svg';
 import SearchSVG from 'assets/svg/search-icon.svg';
 import Checkbox from 'pages/Pnft/images/checkbox.svg';
 import CheckboxActive from 'pages/Pnft/images/checkbox-active.svg';
 import React from 'react';
 import styled, { DefaultTheme } from 'styled-components/macro';
 
+const SortSelect = styled(Dropdown)`
+  cursor: pointer;
+
+  .ant-dropdown-selection {
+    background-color: transparent;
+  }
+`;
 const TextInputStyled = styled.input`
   display: flex;
   flex: 1;
@@ -225,11 +234,11 @@ const FilterListNFT = (props: CollectionDetailFilterProps) => {
             autoFocus={false}
           />
         </div>
-        {/* <SortSelect
+        <SortSelect
           overlay={
             <Menu
               rootClassName="sort-menu"
-              items={Object.entries(SortBlurNftType).map(([key, value]) => ({
+              items={Object.entries(SortNftType).map(([key, value]) => ({
                 key: value,
                 label: renderSortItem(key, value),
               }))}
@@ -237,10 +246,10 @@ const FilterListNFT = (props: CollectionDetailFilterProps) => {
           }
         >
           <button className="sort-button">
-            <p className="sort-text">{sortBlurNftType.toString()}</p>
+            <p className="sort-text">{sortNftType.toString()}</p>
             <img src={ArrowDownSVG} />
           </button>
-        </SortSelect> */}
+        </SortSelect>
       </div>
     </Styled>
   );
