@@ -171,7 +171,7 @@ const ProposalDetail = () => {
         )
       );
     } catch (error) {
-      showSubmitVotePopupMessage('error', 'Failed', 'Submit vote fail');
+      showSubmitVotePopupMessage('error', 'Failed', typeof error === 'string' ? error : 'Submit vote failed');
     }
   };
 

@@ -75,6 +75,7 @@ enum ProposalStatusBackEnd {
   rejected = 'rejected',
   accepted = 'accepted',
   waiting = 'waiting',
+  outchain_failed = 'pdao_outchain_failed',
   outchain_success = 'pdao_outchain_success',
 }
 
