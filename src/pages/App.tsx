@@ -10,6 +10,7 @@ import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
 import { Suspense, useEffect } from 'react';
+import { isMobile } from 'react-device-detect';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components/macro';
@@ -18,6 +19,9 @@ import { DarkModeQueryParamReader } from 'theme';
 import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
 import BuyNode from './BuyNode';
+import CreateProposal from './Dao/CreateProposal';
+import Governance from './Dao/Governance';
+import ProposalDetail from './Dao/ProposalDetail';
 import Earnings from './Earnings';
 import Validators from './Earnings/features/Validators/Validators';
 import { GetPRV } from './GetPRV';
@@ -117,13 +121,13 @@ const App = () => {
         <Route exact path="/papps/popensea/detail/:contract/:tokenId" component={POpenseaNFTDetail} />
         <Route exact path="/buy-node" component={BuyNode} />
         <Route exact path="/deposit" component={DepositPage} />
-        {/* {!isMobile && (
+        {!isMobile && (
           <>
             <Route exact path="/vote" component={Governance} />
             <Route exact path="/create-proposal" component={CreateProposal} />
             <Route exact path="/vote/:id" component={ProposalDetail} />
           </>
-        )} */}
+        )}
         <Route component={Page404} />
       </Switch>
     );

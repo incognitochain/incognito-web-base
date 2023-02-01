@@ -64,7 +64,9 @@ const getProposals = () => {
       dispatch(getProposalsRequest());
       let proposalsResponse: ProposalAPIResponse[] = await fetchProposals();
       proposalsResponse = proposalsResponse?.filter(
-        (proposal: ProposalAPIResponse) => proposal?.Status !== ProposalStatusBackEnd.submit_failed
+        (proposal: ProposalAPIResponse) =>
+          proposal?.Status !== ProposalStatusBackEnd.submit_failed &&
+          proposal?.Status !== ProposalStatusBackEnd.outchain_failed
       );
       const promises = proposalsResponse.map(async (proposal) => {
         const proposalStatusBackend: ProposalStatusBackEnd = proposal?.Status;
@@ -210,7 +212,7 @@ const burnPRVToken = ({
               targets: ['0x0000000000000000000000000000000000000000'],
               values: ['0'],
               calldatas: ['0x00'],
-              description: title,
+              description: title?.trim(),
             },
           },
         },
@@ -223,7 +225,7 @@ const burnPRVToken = ({
           targets: ['0x0000000000000000000000000000000000000000'],
           values: ['0'],
           calldatas: ['0x00'],
-          description: title,
+          description: title?.trim(),
         };
       }
       const tx = await requestSignTransaction(payload);
@@ -307,14 +309,14 @@ const createProposal = (
         targets: ['0x0000000000000000000000000000000000000000'],
         values: ['0'],
         calldatas: ['0x00'],
-        description: title,
+        description: title?.trim(),
       });
 
       const submitProposalResponse = await submitCreateProposal({
         Txhash: txHash,
         TxRaw: rawData,
-        Description: description,
-        Title: title,
+        Description: description?.trim(),
+        Title: title?.trim(),
         ReShieldSignature: pDaoSignature?.reShieldSignature,
         CreatePropSignature: pDaoSignature?.createPropSignature,
         PropVoteSignature: pDaoSignature?.propVoteSignature,
@@ -375,6 +377,7 @@ const vote = (
       if (callback) return callback(submitVoteResponse);
     } catch (error) {
       console.log(error);
+      throw error;
     }
   };
 };
