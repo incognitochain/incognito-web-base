@@ -196,10 +196,12 @@ interface CollectionDetailFilterProps {
   sortNftType: SortNftType;
   onChangeNftType: (data: SortNftType) => void;
   onCheckManyItems: () => void;
+
+  titleTotal?: string;
 }
 
 const FilterListNFT = (props: CollectionDetailFilterProps) => {
-  const { totalToken, totalSelectedToken, keySearch, sortNftType, onChangeNftType } = props;
+  const { titleTotal, totalToken, totalSelectedToken, keySearch, sortNftType, onChangeNftType } = props;
 
   const renderSortItem = (key: any, label: string) => {
     const typedString: keyof typeof SortNftType = key;
@@ -220,7 +222,9 @@ const FilterListNFT = (props: CollectionDetailFilterProps) => {
           onClick={props.onCheckManyItems}
         />
         <p className="total-item">
-          {totalSelectedToken > 0 ? `${totalSelectedToken} / ${totalToken} Selected` : `${totalToken} Listed`}
+          {totalSelectedToken > 0
+            ? `${totalSelectedToken} / ${totalToken} Selected`
+            : `${totalToken} ${titleTotal ? titleTotal : 'Listed'}`}
         </p>
       </div>
       <div className="search-container">

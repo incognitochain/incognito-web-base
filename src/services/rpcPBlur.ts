@@ -42,7 +42,7 @@ class RpcPBlur {
     };
     const paramString = JSON.stringify(params);
     return this.http
-      .get(`papps/pblur/collections?filters=${encodeURIComponent(paramString)}`)
+      .get(`papps/pnft/collections?filters=${encodeURIComponent(paramString)}`)
       .then((resp: any) => mapperCollections(resp));
   }
 
@@ -62,7 +62,7 @@ class RpcPBlur {
     const paramString = JSON.stringify(params);
 
     return this.http
-      .get(`papps/pblur/collections/${slug}/tokens?filters=${encodeURIComponent(paramString)}`)
+      .get(`papps/pnft/collections/${slug}/tokens?filters=${encodeURIComponent(paramString)}`)
       .then((resp: any) => mapperTokens(resp));
   }
 

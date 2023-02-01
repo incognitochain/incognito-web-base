@@ -55,6 +55,7 @@ const ProfileListNFT = (props: ProfileListNFTFTProps) => {
         sortNftType={currentSortType}
         onChangeNftType={(type) => setCurrentSortType(type)}
         onCheckManyItems={onCheckManyItems}
+        titleTotal="Total"
       />
       <InfiniteScroll dataLength={tokens.length} next={debounceLoadMore} hasMore={true} loader={<div />}>
         <List
