@@ -100,6 +100,8 @@ const getProposals = () => {
           startBlock: parseInt(proposalInfoViaChain?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposalInfoViaChain?.endBlock?.toString() ?? ''),
           quorumVotes,
+          voteAgainst: proposal?.VoteAgainst || 0,
+          voteFor: proposal?.VoteFor || 0,
         };
       });
       const data = await Promise.all(promises);
@@ -145,6 +147,8 @@ const getProposalDetail = (proposalId: any, callback?: (data: any) => void) => {
         startBlock: parseInt(proposalViaChainInfo?.startBlock?.toString() ?? ''),
         endBlock: parseInt(proposalViaChainInfo?.endBlock?.toString() ?? ''),
         quorumVotes,
+        voteAgainst: proposalDetailResponse?.VoteAgainst || 0,
+        voteFor: proposalDetailResponse?.VoteFor || 0,
       };
       if (callback) callback(proposalDetail);
       return proposalDetail;

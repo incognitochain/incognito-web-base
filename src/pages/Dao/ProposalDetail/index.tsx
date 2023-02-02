@@ -18,6 +18,7 @@ import HeaderBox from './components/HeaderBpx';
 import InfoBox from './components/InfoBox';
 import { ModalVote } from './components/ModalVote';
 import ProposalContent from './components/ProposalContent';
+import VoteInfoBox from './components/VoteInfoBox';
 
 const InfoBoxContainer = styled.div`
   width: 100%;
@@ -77,7 +78,7 @@ const ProposalDetail = () => {
 
   let snapshotTime = '';
   let snapshotDate = '';
-  if (proposalDetail?.status) {
+  if (proposalDetail?.status && startDate) {
     snapshotTime = i18n.date(new Date(startDate?.toISOString() || 0), {
       hour: 'numeric',
       minute: '2-digit',
@@ -198,7 +199,7 @@ const ProposalDetail = () => {
   const isDisabledButtonVote: boolean = isFetchingProposalDetail || proposalDetail?.status !== ProposalStatus.PENDING;
 
   return (
-    <div className="default-max-width-2" style={{ width: '100%', paddingBottom: 40, minHeight: '90vh' }}>
+    <div className="default-max-width-2" style={{ width: '100%', paddingBottom: 40, minHeight: '100vh' }}>
       <>
         {contextHolder}
         <HeaderBox
@@ -207,6 +208,7 @@ const ProposalDetail = () => {
           isLoading={isFetchingProposalDetail}
           onClickVoteButton={getFee}
         />
+        <VoteInfoBox isLoading={isFetchingProposalDetail} proposalDetail={proposalDetail} />
         <InfoBoxContainer>
           <InfoBox
             isLoading={isFetchingProposalDetail}
