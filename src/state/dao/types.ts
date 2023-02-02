@@ -97,6 +97,7 @@ interface Proposal {
   proposalId: string | undefined;
   title: string;
   description: string;
+  submitProposalTx: string;
   proposer: string | undefined;
   status: ProposalStatus | undefined;
   forCount: number;
