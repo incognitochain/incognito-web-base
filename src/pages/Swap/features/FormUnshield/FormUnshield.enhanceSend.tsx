@@ -433,7 +433,7 @@ const enhanceSend = (WrappedComponent: any) => {
         BurningAmount: parseInt(burnOriginalAmount),
         TokenID: sellToken.tokenID,
         RemoteAddress: remoteAddress,
-        Type: buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM ? 274 : 275,
+        Type: buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM ? 338 : 275,
       };
       return metadata;
     };
