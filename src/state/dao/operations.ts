@@ -102,6 +102,8 @@ const getProposals = () => {
           quorumVotes,
           voteAgainst: proposal?.VoteAgainst || 0,
           voteFor: proposal?.VoteFor || 0,
+          voteAgainstAmount: proposal?.VoteAgainstAmount || 0,
+          voteForAmount: proposal?.VoteForAmount || 0,
         };
       });
       const data = await Promise.all(promises);
@@ -149,6 +151,8 @@ const getProposalDetail = (proposalId: any, callback?: (data: any) => void) => {
         quorumVotes,
         voteAgainst: proposalDetailResponse?.VoteAgainst || 0,
         voteFor: proposalDetailResponse?.VoteFor || 0,
+        voteAgainstAmount: proposalDetailResponse?.VoteAgainstAmount || 0,
+        voteForAmount: proposalDetailResponse?.VoteForAmount || 0,
       };
       if (callback) callback(proposalDetail);
       return proposalDetail;
