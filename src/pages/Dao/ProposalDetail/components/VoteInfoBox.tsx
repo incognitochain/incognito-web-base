@@ -2,8 +2,10 @@
 
 import { Progress } from 'antd';
 import { Skeleton } from 'antd';
+import { PRV } from 'constants/token';
 import { Proposal } from 'state/dao/types';
 import styled, { DefaultTheme } from 'styled-components/macro';
+import convert from 'utils/convert';
 
 interface InfoBoxProps {
   proposalDetail?: Proposal;
@@ -55,17 +57,25 @@ const Title = styled.p`
 
 const VoteInfoBox = (props: InfoBoxProps) => {
   const { isLoading, proposalDetail } = props;
-  const voteFor = proposalDetail?.voteFor || 0;
-  const voteAgainst = proposalDetail?.voteAgainst || 0;
+  const voteForAmount = proposalDetail?.voteForAmount || 0;
+  const voteAgainstAmount = proposalDetail?.voteAgainstAmount || 0;
+  const voteForHumanAmount = convert.toHumanAmount({
+    originalAmount: voteForAmount,
+    decimals: PRV.pDecimals,
+  });
+  const voteAgainstHumanAmount = convert.toHumanAmount({
+    originalAmount: voteAgainstAmount,
+    decimals: PRV.pDecimals,
+  });
 
-  const totalVote = voteFor + voteAgainst;
+  const totalVote = voteForAmount + voteAgainstAmount;
 
   let voteForPercent = 0;
   let voteAgainstPercent = 0;
 
   if (totalVote > 0) {
-    voteForPercent = parseFloat(((voteFor / totalVote) * 100).toFixed(2));
-    voteAgainstPercent = 100 - voteForPercent;
+    voteForPercent = parseFloat(((voteForAmount / totalVote) * 100).toFixed(2));
+    voteAgainstPercent = Math.round((100 - voteForPercent) * 100) / 100;
   }
 
   return (
@@ -78,7 +88,7 @@ const VoteInfoBox = (props: InfoBoxProps) => {
             <ItemContainer>
               <Title>For</Title>
               <Title>
-                {voteFor} ({voteForPercent}%)
+                {voteForHumanAmount} PRV {voteForPercent}%
               </Title>
             </ItemContainer>
             <Progress percent={voteForPercent} showInfo={false} strokeColor="#0ECB81" trailColor="#404040" />
@@ -94,7 +104,7 @@ const VoteInfoBox = (props: InfoBoxProps) => {
             <ItemContainer>
               <Title style={{ color: '#F6465D' }}>Against</Title>
               <Title style={{ color: '#F6465D' }}>
-                {voteAgainst} ({voteAgainstPercent}%)
+                {voteAgainstHumanAmount} PRV {voteAgainstPercent}%
               </Title>
             </ItemContainer>
             <Progress percent={voteAgainstPercent} showInfo={false} strokeColor="#F6465D" trailColor="#404040" />

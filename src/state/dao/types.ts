@@ -61,6 +61,8 @@ interface ProposalAPIResponse {
   Reshield: string;
   VoteAgainst: number;
   VoteFor: number;
+  VoteForAmount: number;
+  VoteAgainstAmount: number;
 }
 
 interface Fee {
@@ -111,6 +113,8 @@ interface Proposal {
   quorumVotes: number;
   voteAgainst: number;
   voteFor: number;
+  voteAgainstAmount: number;
+  voteForAmount: number;
 }
 
 interface CreateProposalParams {
