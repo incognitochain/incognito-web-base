@@ -22,12 +22,9 @@ const Styled = styled.div`
   }
 `;
 
-interface IProps {
-  collectionSlug: string;
-  collectionName: string;
-}
+interface IProps {}
 
-const SubRoute = (props: IProps) => {
+const ProfileSubRoute = (props: IProps) => {
   const history = useHistory();
   return (
     <Styled className="sub-route">
@@ -50,17 +47,13 @@ const SubRoute = (props: IProps) => {
         <p className="sub-title">pNFT</p>
       </button>
       <p className="sub-title">/</p>
-      <button
-        onClick={() => {
-          history.push(`/papps/pnft/${props.collectionSlug}`);
-        }}
-      >
+      <button>
         <p className="sub-title" style={{ color: 'white' }}>
-          {props.collectionName}
+          Portfolio
         </p>
       </button>
     </Styled>
   );
 };
 
-export default memo(SubRoute);
+export default memo(ProfileSubRoute);

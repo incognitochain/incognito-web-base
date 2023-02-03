@@ -9,6 +9,7 @@ import {
   ICost,
   IMapTokens,
   IMarketPlaceType,
+  INFT,
   IPrice,
   IToken,
   PnftBuyFee,
@@ -204,4 +205,13 @@ const convertBlurFee = (json: any) => {
   return buyFee;
 };
 
-export { convertBlurFee, mapperCollections, mapperTokens };
+const mapperNFTs = (resp: any): INFT[] => {
+  if (!Array.isArray(resp)) return [];
+
+  const nftsMapper = resp.map((data: any): INFT => {
+    return camelCaseKeys(data);
+  });
+  return nftsMapper;
+};
+
+export { convertBlurFee, mapperCollections, mapperNFTs, mapperTokens };

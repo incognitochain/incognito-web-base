@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'state/hooks';
 
-// import SubRoute from '../../components/SubRoute';
+import SubRoute from '../../components/SubRoute';
 import StickyFooter from './CollectionDetail.footer';
 import Header from './CollectionDetail.header';
 import CollectionDetailListNFT from './CollectionDetail.listNFT';
@@ -27,7 +27,7 @@ const CollectionDetail = () => {
   return (
     <div style={{ minHeight: size, width: '100%' }}>
       <Container className="default-max-width">
-        {/* <SubRoute collectionSlug={slug} collectionName={collection?.name || '...'} /> */}
+        <SubRoute collectionSlug={slug} collectionName={collection?.name || '...'} />
         <Header />
         <CollectionDetailListNFT slug={slug} />
       </Container>

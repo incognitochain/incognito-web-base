@@ -148,20 +148,26 @@ const buyCollectionSelector = createSelector(
 
 const accountSelector = createSelector(pNftSelector, (pNft) => pNft.account);
 
-const tokensAccountSelector = createSelector(accountSelector, (account) => account.tokens);
+const addressAccountSelector = createSelector(accountSelector, (account) => account.address);
 
-const selectedTokenIdsAccountSelector = createSelector(accountSelector, (account) => account.selectedTokenIds);
+const isFetchingNftsAccountSelector = createSelector(accountSelector, (account) => account.isFetching);
+
+const nftsAccountSelector = createSelector(accountSelector, (account) => account.nfts);
+
+const selectedNftIdsAccountSelector = createSelector(accountSelector, (account) => account.selectedNftIds);
 
 export {
   accountSelector,
+  addressAccountSelector,
   buyCollectionSelector,
   collectionsSelector,
+  isFetchingNftsAccountSelector,
   lastTokenSelector,
+  nftsAccountSelector,
   pNftSelector,
-  selectedTokenIdsAccountSelector,
+  selectedNftIdsAccountSelector,
   selectedTokenIdsSelector,
   selectedTokensSelector,
   tokenCollectionSelector,
-  tokensAccountSelector,
   tokensSelector,
 };

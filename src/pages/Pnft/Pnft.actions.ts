@@ -3,7 +3,7 @@ import { CANCEL_MESSAGE } from 'services/axios';
 import { AppDispatch, AppState } from 'state';
 
 import { convertBlurFee } from './Pnft.builder';
-import { ICollection, IMapTokens, IToken } from './Pnft.interface';
+import { ICollection, IMapTokens, INFT, IToken } from './Pnft.interface';
 import { MAX_GET_ITEM } from './Pnft.reducer';
 import { buyCollectionSelector, selectedTokensSelector } from './Pnft.selectors';
 import {
@@ -14,9 +14,11 @@ import {
   ISetEstimatedFeePayload,
   PnftActionType,
   SelectMaxBuyTokensAction,
+  SetAccountNftsAction,
   SetCollectionsAction,
   SetEstimatedFeeAction,
   SetEstimatedFeeErrorAction,
+  SetFetchingAccountNfts,
   SetFetchingCollections,
   SetLoadingTokensAction,
   SetSelectedPrivacyTokenIDAction,
@@ -186,8 +188,32 @@ const actionEstimateFee =
     }
   };
 
+// Account
+const actionFetchingAccountNfts = (payload: { isFetching: boolean }): SetFetchingAccountNfts => ({
+  type: PnftActionType.SET_FETCHING_ACCOUNT_NFTS,
+  payload,
+});
+
+const actionSetAccountNFTs = (payload: INFT[]): SetAccountNftsAction => ({
+  type: PnftActionType.SET_ACCOUNT_NFTS,
+  payload,
+});
+
+const actionFetchAccountNFTs = (address: string) => async (dispatch: AppDispatch, getState: AppState & any) => {
+  try {
+    dispatch(actionFetchingAccountNfts({ isFetching: true }));
+    const nfts = await rpcPBlur.getAccountNfts(address);
+    dispatch(actionSetAccountNFTs(nfts));
+  } catch (error) {
+    console.log('ACTION FETCH ACCOUNT NFTS ERROR: ', error);
+  } finally {
+    dispatch(actionFetchingAccountNfts({ isFetching: false }));
+  }
+};
+
 export {
   actionEstimateFee,
+  actionFetchAccountNFTs,
   actionFetchCollections,
   actionFetchCollectionTokens,
   actionFetchMoreCollectionTokens,

@@ -172,3 +172,25 @@ export class PnftBuyFee {
     return this.fee ? this.fee.feeAddressShardID : '';
   }
 }
+
+export interface INFT {
+  chain: string;
+  collectionAddress: string;
+  collectionName: string;
+  collectionTokenId: string;
+  currentOwner: string;
+  description: string;
+  imageUrl: string;
+  name: string;
+  network: string;
+  provenance: Provenance[];
+  traits: ITrait[];
+}
+
+export interface Provenance {
+  blockNumber: string;
+  date: Date;
+  from: string;
+  to: string;
+  txHash: string;
+}

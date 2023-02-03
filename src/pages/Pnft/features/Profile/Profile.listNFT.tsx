@@ -1,89 +1,57 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable jsx-a11y/alt-text */
-import { List } from 'antd';
 import debounce from 'lodash/debounce';
-import { IToken, selectedTokenIdsAccountSelector, tokensAccountSelector } from 'pages/Pnft';
-import FilterListNFT from 'pages/Pnft/components/FilterListNFT';
-import { SortNftType } from 'pages/Pnft/components/FilterListNFT/FilterListNFT';
-import NFTInfoOverlay from 'pages/Pnft/components/NFTInfoOverlay';
-import NFTItem from 'pages/Pnft/components/NFTItem';
+import { actionFetchAccountNFTs } from 'pages/Pnft/Pnft.actions';
+import { addressAccountSelector, isFetchingNftsAccountSelector, nftsAccountSelector } from 'pages/Pnft/Pnft.selectors';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from 'state/hooks';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Styled } from './Profile.listNFT.styled';
+import { HeaderList, renderHeader, renderNFTItem, ShowListType } from './Profile.components';
+import { ListStyled, Styled } from './Profile.listNFT.styled';
+import ProfileLoader from './Profile.loader';
 
 interface ProfileListNFTFTProps {}
 
 const ProfileListNFT = (props: ProfileListNFTFTProps) => {
-  const {} = props;
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
-  const tokens = useSelector(tokensAccountSelector);
-  const selectedTokenIds = useSelector(selectedTokenIdsAccountSelector);
+  const address = useSelector(addressAccountSelector);
+  const isFetching = useSelector(isFetchingNftsAccountSelector);
+  const nfts = useSelector(nftsAccountSelector);
 
-  const [eventMouse, setEventMouse] = React.useState<{ event: any; token: IToken } | undefined>();
-  const [reachEnd, setReachend] = React.useState<boolean>(false);
+  const showLoader = isFetching && nfts.length <= 0;
 
-  const [keySearch, setKeySearch] = React.useState<string | undefined>();
-  const [currentSortType, setCurrentSortType] = React.useState<SortNftType>(SortNftType.PriceLowToHigh);
+  const [currentListType, setCurrentListType] = React.useState(ShowListType.all.valueOf());
 
-  const effectToken = selectedTokenIds && selectedTokenIds.length > 0;
+  React.useEffect(() => {
+    dispatch(actionFetchAccountNFTs(address));
+  }, []);
 
-  const onChangeSearch = (e: any) => {
-    setKeySearch(e.target.value);
-  };
+  const onLoadMoreCollections = () => {};
 
-  const onCheckManyItems = () => {};
-
-  const onClickTokenItem = (token: IToken) => {};
-
-  const onLoadMoreTokens = () => {
-    setReachend(true);
-  };
-
-  const debounceLoadMore = debounce(onLoadMoreTokens, 300);
+  const debounceLoadMore = debounce(onLoadMoreCollections, 300);
 
   return (
     <Styled>
-      <FilterListNFT
-        totalToken={tokens.length}
-        totalSelectedToken={selectedTokenIds.length}
-        keySearch={keySearch}
-        onSearchChange={onChangeSearch}
-        sortNftType={currentSortType}
-        onChangeNftType={(type) => setCurrentSortType(type)}
-        onCheckManyItems={onCheckManyItems}
-        titleTotal="Total"
-      />
-      <InfiniteScroll dataLength={tokens.length} next={debounceLoadMore} hasMore={true} loader={<div />}>
-        <List
-          className="list"
-          grid={{
-            gutter: 8,
-            xs: 1,
-            sm: 2,
-            md: 3,
-            lg: 4,
-            xl: 5,
-            xxl: 5,
-          }}
-          dataSource={tokens}
-          renderItem={(item: IToken, index: number) => (
-            <NFTItem
-              key={index.toString()}
-              token={item}
-              selectedTokenIds={selectedTokenIds}
-              effectToken={effectToken}
-              onClickTokenItem={onClickTokenItem}
-              onMouseEnterIcInfo={(event, token) => setEventMouse({ event, token })}
-              onMouseLeaveIcInfo={() => setEventMouse(undefined)}
-            />
-          )}
-        />
-      </InfiniteScroll>
-      {eventMouse && <NFTInfoOverlay event={eventMouse.event} token={eventMouse.token} />}
+      <HeaderList currentListType={currentListType} setCurrentListType={setCurrentListType} />
+      {showLoader && <ProfileLoader />}
+      <ListStyled showLoader={showLoader}>
+        {renderHeader()}
+        <InfiniteScroll
+          dataLength={nfts.length}
+          hasMore={true}
+          next={debounceLoadMore}
+          loader={<div />}
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+        >
+          {nfts.map((item, index) => renderNFTItem({ nft: item, index }))}
+        </InfiniteScroll>
+      </ListStyled>
     </Styled>
   );
 };

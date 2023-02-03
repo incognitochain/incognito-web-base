@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { ICollection, IMapTokens, mapperCollections, mapperTokens } from 'pages/Pnft';
+import { ICollection, IMapTokens, INFT, mapperCollections, mapperNFTs, mapperTokens } from 'pages/Pnft';
 import createAxiosInstance from 'services/axios';
 
 type CollectionSortType =
@@ -90,6 +90,10 @@ class RpcPBlur {
       TxRaw: txRaw,
       FeeRefundOTA: feeRefundOTA,
     });
+  }
+
+  async getAccountNfts(address: string): Promise<INFT[]> {
+    return this.http.get(`papps/pnft/nft_list?address=${address}`).then((resp: any) => mapperNFTs(resp));
   }
 }
 

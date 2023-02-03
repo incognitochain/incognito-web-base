@@ -7,10 +7,12 @@ const Container = styled.div<{ expand: boolean }>`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-top: 0;
-  margin-bottom: 32px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  padding-top: 12px;
   padding-bottom: 12px;
   border-bottom: 1px solid ${({ theme }) => theme.bg3};
+  border-top: 1px solid ${({ theme }) => theme.bg3};
 
   @keyframes ShowDown {
     0% {

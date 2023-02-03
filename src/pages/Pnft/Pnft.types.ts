@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ICollection, IMapTokens, IToken, PnftBuyFee } from './Pnft.interface';
+import { ICollection, IMapTokens, INFT, IToken, PnftBuyFee } from './Pnft.interface';
 
 export enum PnftActionType {
   SET_FETCHING_COLLECTION = 'PNFT/SET_FETCHING_COLLECTION',
@@ -19,6 +19,12 @@ export enum PnftActionType {
   SET_ESTIMATED_FEE_ERROR = 'PNFT/SET_ESTIMATED_FEE_ERROR',
   SET_SELECTED_PRIVACY_TOKEN_ID = 'PNFT/SET_SELECTED_PRIVACY_TOKEN_ID',
   CLEAR_TOKEN_STATE = 'PNFT/CLEAR_TOKEN_STATE',
+
+  SET_FETCHING_ACCOUNT_NFTS = 'PNFT/SET_FETCHING_ACCOUNT_NFTS',
+  SET_ACCOUNT_NFTS = 'PNFT/SET_ACCOUNT_NFTS',
+  SET_SELECTED_ACCOUNT_NFT_ID = 'PNFT/SET_SELECTED_ACCOUNT_NFT_ID',
+  CLEAR_SELECTED_ACOUNT_NFT_IDS = 'PNFT/CLEAR_SELECTED_ACOUNT_NFT_IDS',
+  SELECT_MAX_ACCOUNT_NFTS = 'PNFT/SELECT_MAX_ACCOUNT_NFTS',
 }
 
 export interface IPnftReducer {
@@ -38,8 +44,10 @@ export interface IPnftReducer {
     selectedPrivacyTokenID: string;
   };
   account: {
-    tokens: IToken[];
-    selectedTokenIds: string[];
+    isFetching: boolean;
+    address: string;
+    nfts: INFT[];
+    selectedNftIds: string[];
   };
 }
 
@@ -115,6 +123,17 @@ export interface ClearTokenStateAction extends Action {
   type: PnftActionType.CLEAR_TOKEN_STATE;
 }
 
+// Account
+export interface SetFetchingAccountNfts extends Action {
+  type: PnftActionType.SET_FETCHING_ACCOUNT_NFTS;
+  payload: { isFetching: boolean };
+}
+
+export interface SetAccountNftsAction extends Action {
+  type: PnftActionType.SET_ACCOUNT_NFTS;
+  payload: INFT[];
+}
+
 export type PnftActions =
   | SetFetchingCollections
   | SetCollectionsAction
@@ -129,4 +148,6 @@ export type PnftActions =
   | SetEstimatedFeeAction
   | SetEstimatedFeeErrorAction
   | SetSelectedPrivacyTokenIDAction
-  | ClearTokenStateAction;
+  | ClearTokenStateAction
+  | SetFetchingAccountNfts
+  | SetAccountNftsAction;

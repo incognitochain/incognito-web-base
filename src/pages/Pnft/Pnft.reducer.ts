@@ -18,8 +18,10 @@ const initTokenState = {
 };
 
 const initAccountState = {
-  tokens: [],
-  selectedTokenIds: [],
+  address: '0x483d205d57f1fF227AF11232Be4acd34ab2C7914',
+  isFetching: false,
+  nfts: [],
+  selectedNftIds: [],
 };
 
 const initialState: IPnftReducer = {
@@ -181,6 +183,26 @@ export const reducer: Reducer<IPnftReducer, PnftActions & any> = (
         ...state,
         token: {
           ...initTokenState,
+        },
+      };
+    }
+    // Account
+    case PnftActionType.SET_FETCHING_ACCOUNT_NFTS: {
+      const { isFetching } = action.payload;
+      return {
+        ...state,
+        account: {
+          ...state.account,
+          isFetching,
+        },
+      };
+    }
+    case PnftActionType.SET_ACCOUNT_NFTS: {
+      return {
+        ...state,
+        account: {
+          ...state.account,
+          nfts: action.payload,
         },
       };
     }
