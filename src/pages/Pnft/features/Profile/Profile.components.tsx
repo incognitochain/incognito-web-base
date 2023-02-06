@@ -47,6 +47,39 @@ const renderLabelNormal = ({ value, className }: { value: string; className?: st
   );
 };
 
+const renderAdjustPriceNormal = ({ value, className }: { value: string; className?: string }) => {
+  return (
+    <div className={`wrap-item align-end ${className || ''}`} style={{ justifyContent: 'flex-end', paddingRight: 16 }}>
+      <div className="adjust-item">
+        <input
+          className="input"
+          type={'text'}
+          // onChange={onChange}
+          value="1 ETH"
+          autoFocus={false}
+        />
+      </div>
+    </div>
+  );
+};
+
+const renderExtraComponent = () => {
+  return (
+    <div className="extra-container">
+      <div className="extra-content">
+        <div className="fee-container">
+          <p className="label">Marketplace + royalty fees</p>
+          <p className="value">0.5 %</p>
+        </div>
+        <div className="fee-container">
+          <p className="label">Total est. Proceeds</p>
+          <p className="value">0 ETH</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const renderNFTItem = ({
   nft,
   index,
@@ -65,31 +98,42 @@ const renderNFTItem = ({
   };
 
   return (
-    <NFTItem key={index.toString()} effectHover={true} className="collection-item">
-      <div className="wrap-name" onClick={onClickCheckbox}>
-        <img
-          className="ic-checkbox"
-          style={{ marginRight: 32 }}
-          alt="ic"
-          src={isChecked ? IcCheckboxActive : IcCheckbox}
-        />
-        <ImagePlaceholder className="logo" src={nft.imgUrl} />
-        <p key={index.toString()} className="content-label name">
-          {nft.normalizedMetadata.name}
-        </p>
+    <NFTItem key={index.toString()} effectHover={true} isChecked={isChecked} className="collection-item">
+      <div className="container">
+        <div className="wrap-name">
+          <img
+            className="ic-checkbox"
+            style={{ marginRight: 32 }}
+            alt="ic"
+            src={isChecked ? IcCheckboxActive : IcCheckbox}
+            onClick={onClickCheckbox}
+          />
+          <ImagePlaceholder className="logo" src={nft.imgUrl} />
+          <p key={index.toString()} className="content-label name">
+            {nft.normalizedMetadata.name}
+          </p>
+        </div>
+        {renderLabelNormal({
+          value: '0',
+          className: 'medium-hide',
+        })}
+        {renderLabelNormal({
+          value: nft.amountFormated + ' ETH',
+        })}
+        {renderLabelNormal({
+          value: '0',
+          className: 'medium-hide',
+        })}
+        {renderLabelNormal({
+          value: '0',
+          className: 'medium-hide',
+        })}
+        {isChecked &&
+          renderAdjustPriceNormal({
+            value: '0',
+          })}
       </div>
-      {renderLabelNormal({
-        value: '0',
-      })}
-      {renderLabelNormal({
-        value: nft.amount,
-      })}
-      {renderLabelNormal({
-        value: '0',
-      })}
-      {renderLabelNormal({
-        value: '0',
-      })}
+      {isChecked && renderExtraComponent()}
     </NFTItem>
   );
 };
@@ -112,12 +156,16 @@ const renderHeader = ({
   onClickCheckbox: () => void;
 }) => {
   return (
-    <NFTItem effectHover={false}>
-      <div className="wrap-name" style={{ marginRight: 75 }} onClick={onClickCheckbox}>
-        <img className="ic-checkbox" alt="ic" src={selectedNftIds.length > 0 ? IcCheckboxActive : IcCheckbox} />
-        <p className="content-label header-name">{total} total</p>
+    <NFTItem effectHover={false} style={{ marginBottom: 8 }}>
+      <div className="container">
+        <div className="wrap-name" style={{ marginRight: 75 }} onClick={onClickCheckbox}>
+          <img className="ic-checkbox" alt="ic" src={selectedNftIds.length > 0 ? IcCheckboxActive : IcCheckbox} />
+          <p className="content-label header-name">
+            {selectedNftIds.length > 0 ? `${selectedNftIds.length}/${total} selected` : `${total} total`}
+          </p>
+        </div>
+        {(selectedNftIds.length > 0 ? [...HEADER_LIST, { text: '' }] : HEADER_LIST).map(renderNormalHeader)}
       </div>
-      {HEADER_LIST.map(renderNormalHeader)}
     </NFTItem>
   );
 };

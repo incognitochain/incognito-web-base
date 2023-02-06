@@ -9,8 +9,8 @@ const ProfileStickyFooter = () => {
       <Row className="default-max-width">
         <div className="content">
           <div>
-            <p className="text-listed">Listed</p>
-            <p className="text-items">0 items</p>
+            {/* <p className="text-listed">Listed</p>
+            <p className="text-items">0 items</p> */}
           </div>
           <Row>
             <ButtonList type="submit">

@@ -221,6 +221,7 @@ const mapperNFTs = (resp: any): INFT[] => {
     const camelData = camelCaseKeys(data);
     return {
       ...camelData,
+      amountFormated: convertToFormatAmount(camelData.amount),
       imgUrl: converToIpfsImage(camelData.normalizedMetadata.image),
     };
   });
