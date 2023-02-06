@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 import { shortenString } from 'utils';
 
+import useButtonMetamask from './Profile.useButtonMetamask';
+
 const InfoStyled = styled.div`
   margin-bottom: 24px;
 
@@ -47,9 +49,15 @@ const InfoStyled = styled.div`
 const ProfileInfo = () => {
   const address = useSelector(addressAccountSelector);
 
+  const { button, component } = useButtonMetamask();
+
   const onClickEtherScan = () => {
     window.open(`https://etherscan.io/address/${address}`);
   };
+
+  if (button.text) {
+    return component;
+  }
 
   return (
     <InfoStyled>

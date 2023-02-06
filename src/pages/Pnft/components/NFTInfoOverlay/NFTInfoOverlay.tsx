@@ -9,6 +9,8 @@ import { ITrait } from 'pages/Pnft/Pnft.interface';
 import React from 'react';
 import styled from 'styled-components/macro';
 
+import { shortenAddress } from '../../../../utils';
+
 const INFO_WIDTH = 608;
 
 const Styled = styled.div<{ x: number; y: number; width: number }>`
@@ -303,9 +305,7 @@ const NFTInfoOverlay = (props: NFTInfoProps) => {
           </div>
           <div>
             <p className="item-last-sale text-align-right">Owner</p>
-            <p className="item-price text-align-right">
-              {detail.owner.address.substr(detail.owner.address.length - 6)}
-            </p>
+            <p className="item-price text-align-right">{shortenAddress(detail?.owner?.address)}</p>
           </div>
         </RowBetween>
       </div>
