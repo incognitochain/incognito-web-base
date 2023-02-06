@@ -52,6 +52,7 @@ const useButtonMetamask = () => {
         {button.text || 'Connect Wallet'}
       </ButtonConfirmed>
     ),
+    address: account,
   };
 };
 

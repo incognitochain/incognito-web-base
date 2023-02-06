@@ -18,7 +18,7 @@ const initTokenState = {
 };
 
 const initAccountState = {
-  address: '0x483d205d57f1fF227AF11232Be4acd34ab2C7914',
+  address: '',
   isFetching: false,
   nfts: [],
   selectedNftIds: [],
@@ -232,6 +232,28 @@ export const reducer: Reducer<IPnftReducer, PnftActions & any> = (
         account: {
           ...state.account,
           selectedNftIds: state.account.nfts.map((item) => item.tokenId),
+        },
+      };
+    }
+    case PnftActionType.SET_ACCOUNT_ADDRESS: {
+      const address = action.payload;
+      if (!address) {
+        // clear account data
+        return {
+          ...state,
+          account: {
+            address,
+            isFetching: false,
+            nfts: [],
+            selectedNftIds: [],
+          },
+        };
+      }
+      return {
+        ...state,
+        account: {
+          ...state.account,
+          address,
         },
       };
     }

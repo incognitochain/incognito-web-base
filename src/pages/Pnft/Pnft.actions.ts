@@ -16,6 +16,7 @@ import {
   PnftActionType,
   SelectAllAccountNftIdsAction,
   SelectMaxBuyTokensAction,
+  SetAccountAddressAction,
   SetAccountNftsAction,
   SetCollectionsAction,
   SetEstimatedFeeAction,
@@ -91,6 +92,11 @@ export const clearSelectedTokens = (): ClearSelectedTokenIdsAction => ({
 
 export const selectMaxBuyTokens = (): SelectMaxBuyTokensAction => ({
   type: PnftActionType.SELECT_MAX_BUY_TOKENS,
+});
+
+export const setAddress = (address: string): SetAccountAddressAction => ({
+  type: PnftActionType.SET_ACCOUNT_ADDRESS,
+  payload: address,
 });
 
 export const actionClearTokenState = (): ClearTokenStateAction => ({

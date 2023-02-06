@@ -25,6 +25,7 @@ export enum PnftActionType {
   SET_SELECTED_ACCOUNT_NFT_ID = 'PNFT/SET_SELECTED_ACCOUNT_NFT_ID',
   SELECT_ALL_ACCOUNT_NFT_IDS = 'PNFT/SELECT_ALL_ACCOUNT_NFTS',
   CLEAR_SELECTED_ACOUNT_NFT_IDS = 'PNFT/CLEAR_SELECTED_ACOUNT_NFT_IDS',
+  SET_ACCOUNT_ADDRESS = 'PNFT/SET_ACCOUNT_ADDRESS',
 }
 
 export interface IPnftReducer {
@@ -147,6 +148,11 @@ export interface SetSelectedAccountNftIdAction extends Action {
   payload: string;
 }
 
+export interface SetAccountAddressAction extends Action {
+  type: PnftActionType.SET_ACCOUNT_ADDRESS;
+  payload: string;
+}
+
 export type PnftActions =
   | SetFetchingCollections
   | SetCollectionsAction
@@ -166,4 +172,5 @@ export type PnftActions =
   | SetAccountNftsAction
   | ClearSelectedAccountNftIdsAction
   | SelectAllAccountNftIdsAction
-  | SetSelectedAccountNftIdAction;
+  | SetSelectedAccountNftIdAction
+  | SetAccountAddressAction;

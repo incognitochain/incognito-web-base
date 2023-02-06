@@ -36,8 +36,9 @@ const ProfileListNFT = (props: ProfileListNFTFTProps) => {
   const [currentListType, setCurrentListType] = React.useState(ShowListType.all.valueOf());
 
   React.useEffect(() => {
+    if (!address) return;
     dispatch(actionFetchAccountNFTs(address));
-  }, []);
+  }, [address]);
 
   const onClickCheckbox = () => {
     dispatch(selectedNftIds.length > 0 ? clearSelectedAccountNftIds() : selectAllAccountNftIds());

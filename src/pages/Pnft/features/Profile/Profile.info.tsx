@@ -1,6 +1,6 @@
 import CopyIcon from 'components/Copy';
 import Row from 'components/Core/Row';
-import { addressAccountSelector } from 'pages/Pnft';
+import { addressAccountSelector, setAddress } from 'pages/Pnft';
 import DefaultAvatar from 'pages/Pnft/images/default_avatar.svg';
 import IcEtherScan from 'pages/Pnft/images/ic-ether-scan.svg';
 import React from 'react';
@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 import { shortenString } from 'utils';
 
+import { useAppDispatch } from '../../../../state/hooks';
 import useButtonMetamask from './Profile.useButtonMetamask';
 
 const InfoStyled = styled.div`
@@ -48,14 +49,19 @@ const InfoStyled = styled.div`
 
 const ProfileInfo = () => {
   const address = useSelector(addressAccountSelector);
+  const dispatch = useAppDispatch();
 
-  const { button, component } = useButtonMetamask();
+  const { button, component, address: web3Address } = useButtonMetamask();
 
   const onClickEtherScan = () => {
     window.open(`https://etherscan.io/address/${address}`);
   };
 
-  if (button.text) {
+  React.useEffect(() => {
+    dispatch(setAddress(web3Address || ''));
+  }, [web3Address]);
+
+  if (button.text || !address) {
     return component;
   }
 
