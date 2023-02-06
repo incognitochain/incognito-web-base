@@ -1,4 +1,5 @@
 import useContentSize from 'hooks/useContentSize';
+import { useState } from 'react';
 
 import ProfileStickyFooter from './Profile.footer';
 import ProfileInfo from './Profile.info';
@@ -9,6 +10,12 @@ import ProfileSubRoute from './Profile.SubRoute';
 const Profile = () => {
   const [size] = useContentSize();
 
+  const [selectedDuration, setSelectedDuration] = useState<number | undefined>(24 * 7);
+
+  const onSelectDuration = (duration?: number) => {
+    setSelectedDuration(duration);
+  };
+
   return (
     <div style={{ minHeight: size, width: '100%' }}>
       <Container>
@@ -16,7 +23,7 @@ const Profile = () => {
         <ProfileInfo />
         <ProfileListNFT />
       </Container>
-      <ProfileStickyFooter />
+      <ProfileStickyFooter selectedDuration={selectedDuration} onSelectDuration={onSelectDuration} />
     </div>
   );
 };

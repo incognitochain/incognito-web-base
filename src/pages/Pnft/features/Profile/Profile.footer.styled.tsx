@@ -50,6 +50,21 @@ const Container = styled.div`
     font-size: 18px;
     line-height: 140%;
   }
+
+  .duration {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 16px;
+
+    .duration-label {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 140%;
+      color: ${({ theme }) => theme.color_grey};
+      margin-right: 16px;
+    }
+  }
 `;
 
 const ButtonList = styled.button`

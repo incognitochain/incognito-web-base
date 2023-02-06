@@ -1,9 +1,15 @@
 import { Row } from 'antd';
+import DurationDropdown from 'pages/Pnft/components/DurationDropdown';
 import React, { memo } from 'react';
 
 import { ButtonCancel, ButtonList, Container } from './Profile.footer.styled';
 
-const ProfileStickyFooter = () => {
+interface ProfileStickyFooterProps {
+  selectedDuration?: number;
+  onSelectDuration: (duration?: number) => void;
+}
+
+const ProfileStickyFooter = (props: ProfileStickyFooterProps) => {
   return (
     <Container hidden={false}>
       <Row className="default-max-width">
@@ -13,6 +19,11 @@ const ProfileStickyFooter = () => {
             <p className="text-items">0 items</p> */}
           </div>
           <Row>
+            <div className="duration">
+              <p className="duration-label">Duration</p>
+              <DurationDropdown selectedDuration={props.selectedDuration} onSelectDuration={props.onSelectDuration} />
+            </div>
+
             <ButtonList type="submit">
               <p className="text">List 0 items</p>
             </ButtonList>
