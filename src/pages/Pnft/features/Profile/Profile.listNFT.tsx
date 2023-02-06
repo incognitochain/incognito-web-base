@@ -1,8 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable jsx-a11y/alt-text */
 import debounce from 'lodash/debounce';
-import { actionFetchAccountNFTs } from 'pages/Pnft/Pnft.actions';
-import { addressAccountSelector, isFetchingNftsAccountSelector, nftsAccountSelector } from 'pages/Pnft/Pnft.selectors';
+import {
+  actionFetchAccountNFTs,
+  actionSetSelectedAccountNftId,
+  clearSelectedAccountNftIds,
+  selectAllAccountNftIds,
+} from 'pages/Pnft/Pnft.actions';
+import {
+  addressAccountSelector,
+  isFetchingNftsAccountSelector,
+  nftsAccountSelector,
+  selectedNftIdsAccountSelector,
+} from 'pages/Pnft/Pnft.selectors';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +29,7 @@ const ProfileListNFT = (props: ProfileListNFTFTProps) => {
   const address = useSelector(addressAccountSelector);
   const isFetching = useSelector(isFetchingNftsAccountSelector);
   const nfts = useSelector(nftsAccountSelector);
+  const selectedNftIds = useSelector(selectedNftIdsAccountSelector);
 
   const showLoader = isFetching && nfts.length <= 0;
 
@@ -27,6 +38,14 @@ const ProfileListNFT = (props: ProfileListNFTFTProps) => {
   React.useEffect(() => {
     dispatch(actionFetchAccountNFTs(address));
   }, []);
+
+  const onClickCheckbox = () => {
+    dispatch(selectedNftIds.length > 0 ? clearSelectedAccountNftIds() : selectAllAccountNftIds());
+  };
+
+  const onClickCheckboxItem = (tokenId: string) => {
+    dispatch(actionSetSelectedAccountNftId(tokenId));
+  };
 
   const onLoadMoreCollections = () => {};
 
@@ -37,7 +56,7 @@ const ProfileListNFT = (props: ProfileListNFTFTProps) => {
       <HeaderList currentListType={currentListType} setCurrentListType={setCurrentListType} />
       {showLoader && <ProfileLoader />}
       <ListStyled showLoader={showLoader}>
-        {renderHeader()}
+        {renderHeader({ total: nfts.length, selectedNftIds, onClickCheckbox })}
         <InfiniteScroll
           dataLength={nfts.length}
           hasMore={true}
@@ -49,7 +68,7 @@ const ProfileListNFT = (props: ProfileListNFTFTProps) => {
             </p>
           }
         >
-          {nfts.map((item, index) => renderNFTItem({ nft: item, index }))}
+          {nfts.map((item, index) => renderNFTItem({ nft: item, index, selectedNftIds, onClickCheckboxItem }))}
         </InfiniteScroll>
       </ListStyled>
     </Styled>

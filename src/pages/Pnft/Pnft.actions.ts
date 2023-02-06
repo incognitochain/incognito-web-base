@@ -9,10 +9,12 @@ import { buyCollectionSelector, selectedTokensSelector } from './Pnft.selectors'
 import {
   AppendLoadingTokensAction,
   AppendTokensAction,
+  ClearSelectedAccountNftIdsAction,
   ClearSelectedTokenIdsAction,
   ClearTokenStateAction,
   ISetEstimatedFeePayload,
   PnftActionType,
+  SelectAllAccountNftIdsAction,
   SelectMaxBuyTokensAction,
   SetAccountNftsAction,
   SetCollectionsAction,
@@ -21,6 +23,7 @@ import {
   SetFetchingAccountNfts,
   SetFetchingCollections,
   SetLoadingTokensAction,
+  SetSelectedAccountNftIdAction,
   SetSelectedPrivacyTokenIDAction,
   SetSelectedTokenIdAction,
   SetTokensAction,
@@ -197,6 +200,19 @@ const actionFetchingAccountNfts = (payload: { isFetching: boolean }): SetFetchin
 const actionSetAccountNFTs = (payload: INFT[]): SetAccountNftsAction => ({
   type: PnftActionType.SET_ACCOUNT_NFTS,
   payload,
+});
+
+export const actionSetSelectedAccountNftId = (payload: string): SetSelectedAccountNftIdAction => ({
+  type: PnftActionType.SET_SELECTED_ACCOUNT_NFT_ID,
+  payload,
+});
+
+export const clearSelectedAccountNftIds = (): ClearSelectedAccountNftIdsAction => ({
+  type: PnftActionType.CLEAR_SELECTED_ACOUNT_NFT_IDS,
+});
+
+export const selectAllAccountNftIds = (): SelectAllAccountNftIdsAction => ({
+  type: PnftActionType.SELECT_ALL_ACCOUNT_NFT_IDS,
 });
 
 const actionFetchAccountNFTs = (address: string) => async (dispatch: AppDispatch, getState: AppState & any) => {

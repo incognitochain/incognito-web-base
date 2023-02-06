@@ -172,25 +172,40 @@ export class PnftBuyFee {
     return this.fee ? this.fee.feeAddressShardID : '';
   }
 }
-
 export interface INFT {
-  chain: string;
-  collectionAddress: string;
-  collectionName: string;
-  collectionTokenId: string;
-  currentOwner: string;
-  description: string;
-  imageUrl: string;
+  amount: string;
+  blockNumber: string;
+  blockNumberMinted: string;
+  contractType: string;
+  lastMetadataSync: Date;
+  lastTokenUriSync: Date;
+  metadata: string;
+  minterAddress: string;
   name: string;
-  network: string;
-  provenance: Provenance[];
-  traits: ITrait[];
+  normalizedMetadata: NormalizedMetadata;
+  ownerOf: string;
+  symbol: string;
+  tokenAddress: string;
+  tokenHash: string;
+  tokenId: string;
+  tokenUri: string;
+  imgUrl: string;
 }
 
-export interface Provenance {
-  blockNumber: string;
-  date: Date;
-  from: string;
-  to: string;
-  txHash: string;
+export interface NormalizedMetadata {
+  animationUrl: null;
+  attributes: Attribute[];
+  description: string;
+  externalLink: null;
+  image: string;
+  name: string;
+}
+
+export interface Attribute {
+  displayType: null;
+  maxValue: null;
+  order: null;
+  traitCount: number;
+  traitType: string;
+  value: string;
 }

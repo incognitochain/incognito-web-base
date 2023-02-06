@@ -23,8 +23,8 @@ export enum PnftActionType {
   SET_FETCHING_ACCOUNT_NFTS = 'PNFT/SET_FETCHING_ACCOUNT_NFTS',
   SET_ACCOUNT_NFTS = 'PNFT/SET_ACCOUNT_NFTS',
   SET_SELECTED_ACCOUNT_NFT_ID = 'PNFT/SET_SELECTED_ACCOUNT_NFT_ID',
+  SELECT_ALL_ACCOUNT_NFT_IDS = 'PNFT/SELECT_ALL_ACCOUNT_NFTS',
   CLEAR_SELECTED_ACOUNT_NFT_IDS = 'PNFT/CLEAR_SELECTED_ACOUNT_NFT_IDS',
-  SELECT_MAX_ACCOUNT_NFTS = 'PNFT/SELECT_MAX_ACCOUNT_NFTS',
 }
 
 export interface IPnftReducer {
@@ -134,6 +134,19 @@ export interface SetAccountNftsAction extends Action {
   payload: INFT[];
 }
 
+export interface ClearSelectedAccountNftIdsAction extends Action {
+  type: PnftActionType.CLEAR_SELECTED_ACOUNT_NFT_IDS;
+}
+
+export interface SelectAllAccountNftIdsAction extends Action {
+  type: PnftActionType.SELECT_ALL_ACCOUNT_NFT_IDS;
+}
+
+export interface SetSelectedAccountNftIdAction extends Action {
+  type: PnftActionType.SET_SELECTED_ACCOUNT_NFT_ID;
+  payload: string;
+}
+
 export type PnftActions =
   | SetFetchingCollections
   | SetCollectionsAction
@@ -150,4 +163,7 @@ export type PnftActions =
   | SetSelectedPrivacyTokenIDAction
   | ClearTokenStateAction
   | SetFetchingAccountNfts
-  | SetAccountNftsAction;
+  | SetAccountNftsAction
+  | ClearSelectedAccountNftIdsAction
+  | SelectAllAccountNftIdsAction
+  | SetSelectedAccountNftIdAction;

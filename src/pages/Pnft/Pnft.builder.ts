@@ -205,11 +205,24 @@ const convertBlurFee = (json: any) => {
   return buyFee;
 };
 
+const converToIpfsImage = (image: string) => {
+  const SERVER_IPFS = 'https://cloudflare-ipfs.com/ipfs/';
+  const FORMAT_IPFS = 'ipfs://';
+  let uri = image;
+  if (uri.includes(FORMAT_IPFS)) {
+    uri = SERVER_IPFS + uri.replace(FORMAT_IPFS, '');
+  }
+  return uri;
+};
+
 const mapperNFTs = (resp: any): INFT[] => {
   if (!Array.isArray(resp)) return [];
-
   const nftsMapper = resp.map((data: any): INFT => {
-    return camelCaseKeys(data);
+    const camelData = camelCaseKeys(data);
+    return {
+      ...camelData,
+      imgUrl: converToIpfsImage(camelData.normalizedMetadata.image),
+    };
   });
   return nftsMapper;
 };

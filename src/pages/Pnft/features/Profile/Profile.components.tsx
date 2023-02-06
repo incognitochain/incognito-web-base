@@ -47,31 +47,48 @@ const renderLabelNormal = ({ value, className }: { value: string; className?: st
   );
 };
 
-const renderNFTItem = ({ nft, index }: { nft: INFT; index: number }) => {
+const renderNFTItem = ({
+  nft,
+  index,
+  selectedNftIds,
+  onClickCheckboxItem,
+}: {
+  nft: INFT;
+  index: number;
+  selectedNftIds: string[];
+  onClickCheckboxItem: (tokenId: string) => void;
+}) => {
+  const isChecked = selectedNftIds.includes(nft.tokenId);
+
+  const onClickCheckbox = () => {
+    onClickCheckboxItem(nft.tokenId);
+  };
+
   return (
     <NFTItem key={index.toString()} effectHover={true} className="collection-item">
-      <div className="wrap-name">
-        <img className="ic-checkbox" style={{ marginRight: 32 }} alt="ic" src={IcCheckbox} />
-        <ImagePlaceholder className="logo" src={nft.imageUrl} />
+      <div className="wrap-name" onClick={onClickCheckbox}>
+        <img
+          className="ic-checkbox"
+          style={{ marginRight: 32 }}
+          alt="ic"
+          src={isChecked ? IcCheckboxActive : IcCheckbox}
+        />
+        <ImagePlaceholder className="logo" src={nft.imgUrl} />
         <p key={index.toString()} className="content-label name">
-          {nft.name}
+          {nft.normalizedMetadata.name}
         </p>
       </div>
       {renderLabelNormal({
         value: '0',
-        className: 'medium-hide',
+      })}
+      {renderLabelNormal({
+        value: nft.amount,
       })}
       {renderLabelNormal({
         value: '0',
-        className: 'medium-hide',
       })}
       {renderLabelNormal({
         value: '0',
-        className: 'medium-hide',
-      })}
-      {renderLabelNormal({
-        value: '0',
-        className: 'medium-hide',
       })}
     </NFTItem>
   );
@@ -85,12 +102,20 @@ const renderNormalHeader = ({ text, className }: { text: string; className?: str
   );
 };
 
-const renderHeader = () => {
+const renderHeader = ({
+  total,
+  selectedNftIds,
+  onClickCheckbox,
+}: {
+  total: number;
+  selectedNftIds: string[];
+  onClickCheckbox: () => void;
+}) => {
   return (
     <NFTItem effectHover={false}>
-      <div className="wrap-name" style={{ marginRight: 75 }}>
-        <img className="ic-checkbox" alt="ic" src={IcCheckbox} />
-        <p className="content-label header-name">0 total</p>
+      <div className="wrap-name" style={{ marginRight: 75 }} onClick={onClickCheckbox}>
+        <img className="ic-checkbox" alt="ic" src={selectedNftIds.length > 0 ? IcCheckboxActive : IcCheckbox} />
+        <p className="content-label header-name">{total} total</p>
       </div>
       {HEADER_LIST.map(renderNormalHeader)}
     </NFTItem>

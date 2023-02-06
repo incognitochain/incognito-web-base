@@ -206,6 +206,35 @@ export const reducer: Reducer<IPnftReducer, PnftActions & any> = (
         },
       };
     }
+    case PnftActionType.SET_SELECTED_ACCOUNT_NFT_ID: {
+      return {
+        ...state,
+        account: {
+          ...state.account,
+          selectedNftIds: state.account.selectedNftIds.includes(action.payload)
+            ? state.account.selectedNftIds.filter((id) => id !== action.payload)
+            : [...state.account.selectedNftIds, action.payload],
+        },
+      };
+    }
+    case PnftActionType.CLEAR_SELECTED_ACOUNT_NFT_IDS: {
+      return {
+        ...state,
+        account: {
+          ...state.account,
+          selectedNftIds: [],
+        },
+      };
+    }
+    case PnftActionType.SELECT_ALL_ACCOUNT_NFT_IDS: {
+      return {
+        ...state,
+        account: {
+          ...state.account,
+          selectedNftIds: state.account.nfts.map((item) => item.tokenId),
+        },
+      };
+    }
     default:
       return state;
   }
