@@ -36,6 +36,12 @@ const Container = styled.div`
     align-items: center;
     justify-content: space-between;
     width: 100vw;
+
+    .buttons-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
   }
 
   .text-listed {
@@ -89,6 +95,11 @@ const ButtonList = styled.button`
     background-color: ${({ theme }) => theme.primary1};
   }
 
+  :disabled {
+    background-color: ${({ theme }) => theme.primary7};
+    cursor: not-allowed;
+  }
+
   @media only screen and (max-width: ${({ theme }) => `${theme.mediaWidth.upToMedium}px`}) {
     margin-top: 20px;
   }
@@ -116,6 +127,11 @@ const ButtonCancel = styled.button`
   cursor: pointer;
   :hover {
     background-color: ${({ theme }) => theme.primary11};
+  }
+
+  :disabled {
+    background-color: ${({ theme }) => theme.primary7};
+    cursor: not-allowed;
   }
 
   @media only screen and (max-width: ${({ theme }) => `${theme.mediaWidth.upToMedium}px`}) {

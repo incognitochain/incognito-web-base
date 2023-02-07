@@ -10,6 +10,7 @@ import { getPrivacyByTokenIdentifySelectors, unshieldableTokens } from '../../st
 import convert from '../../utils/convert';
 import format from '../../utils/format';
 import { FORM_CONFIGS } from './features/CollectionDetail/CollectionDetail.constant';
+import { ShowListType } from './features/Profile/Profile.components';
 import { IBuyCollection, IToken } from './Pnft.interface';
 const { ACCOUNT_CONSTANT } = require('incognito-chain-web-js/build/wallet');
 
@@ -152,9 +153,24 @@ const addressAccountSelector = createSelector(accountSelector, (account) => acco
 
 const isFetchingNftsAccountSelector = createSelector(accountSelector, (account) => account.isFetching);
 
-const nftsAccountSelector = createSelector(accountSelector, (account) => account.nfts);
+const nftsAccountSelector = createSelector(accountSelector, (account) => (type: ShowListType) => {
+  switch (type) {
+    case ShowListType.all:
+      return account.nfts;
+    case ShowListType.listed:
+      return account.nfts.filter((nft) => nft.listing);
+  }
+});
 
 const selectedNftIdsAccountSelector = createSelector(accountSelector, (account) => account.selectedNftIds);
+
+const selectedListNfsAccountSelector = createSelector(accountSelector, (account) =>
+  account.nfts.filter((nft) => account.selectedNftIds.includes(nft.tokenId) && !nft.listing)
+);
+
+const selectedCancelListNfsAccountSelector = createSelector(accountSelector, (account) =>
+  account.nfts.filter((nft) => account.selectedNftIds.includes(nft.tokenId) && nft.listing)
+);
 
 export {
   accountSelector,
@@ -165,6 +181,8 @@ export {
   lastTokenSelector,
   nftsAccountSelector,
   pNftSelector,
+  selectedCancelListNfsAccountSelector,
+  selectedListNfsAccountSelector,
   selectedNftIdsAccountSelector,
   selectedTokenIdsSelector,
   selectedTokensSelector,

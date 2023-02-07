@@ -63,7 +63,7 @@ const Factory: IFactory[] = [
     nameDesc: 'Private NFT',
     status: 'SHIPPED',
     chain: ['Ethereum', 'Marketplace', 'NFT'],
-    desc: 'Purchase NFTs and crypto collectibles on the largest web3 marketplace - Blur - with full privacy on Incognito.',
+    desc: 'Purchase NFTs and crypto collectibles on the largest web3 marketplace - with full privacy on Incognito.',
     metric: METRIC_TYPE.PAPP_OPENSEA,
     metricUniq: METRIC_UNIQ.PAPP_OPENSEA_UNIQ,
     network: [MAIN_NETWORK_NAME.ETHEREUM, MAIN_NETWORK_NAME.POLYGON],

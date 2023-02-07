@@ -10,7 +10,7 @@ const PnftInfo = () => {
         <div className="title-container">
           <p className="h8 description-custom">
             pNFT is a DApp that allows you to purchase NFTs and crypto collectibles on the largest web3 marketplace -
-            Blur - with full privacy on Incognito.
+            with full privacy on Incognito.
           </p>
         </div>
       </div>

@@ -96,7 +96,7 @@ class RpcPBlur {
 
   async getAccountNfts(address: string): Promise<INFT[]> {
     const chain = isMainnet ? 'eth' : 'goerli';
-    return this.http.get(`papps/pnft/nft-list?address=${address}?chain=${chain}`).then((resp: any) => mapperNFTs(resp));
+    return this.http.get(`papps/pnft/nft-list?address=${address}&chain=${chain}`).then((resp: any) => mapperNFTs(resp));
   }
 }
 

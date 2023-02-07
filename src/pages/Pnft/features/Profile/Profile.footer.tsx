@@ -1,6 +1,8 @@
 import { Row } from 'antd';
+import { selectedCancelListNfsAccountSelector, selectedListNfsAccountSelector } from 'pages/Pnft';
 import DurationDropdown from 'pages/Pnft/components/DurationDropdown';
 import React, { memo } from 'react';
+import { useSelector } from 'react-redux';
 
 import { ButtonCancel, ButtonList, Container } from './Profile.footer.styled';
 
@@ -11,6 +13,9 @@ interface ProfileStickyFooterProps {
 }
 
 const ProfileStickyFooter = (props: ProfileStickyFooterProps) => {
+  const selectedListNfs = useSelector(selectedListNfsAccountSelector);
+  const selectedCancelListNfs = useSelector(selectedCancelListNfsAccountSelector);
+
   return (
     <Container hidden={props.isHidden}>
       <Row className="default-max-width">
@@ -19,20 +24,20 @@ const ProfileStickyFooter = (props: ProfileStickyFooterProps) => {
             {/* <p className="text-listed">Listed</p>
             <p className="text-items">0 items</p> */}
           </div>
-          <Row>
+          <div className="buttons-container">
             <div className="duration">
               <p className="duration-label">Duration</p>
               <DurationDropdown selectedDuration={props.selectedDuration} onSelectDuration={props.onSelectDuration} />
             </div>
 
-            <ButtonList type="submit">
-              <p className="text">List 0 items</p>
+            <ButtonList type="submit" disabled={selectedListNfs.length <= 0}>
+              <p className="text">{`List ${selectedListNfs.length} items`}</p>
             </ButtonList>
 
-            <ButtonCancel type="submit">
-              <p className="text">Cancel 0 items</p>
+            <ButtonCancel type="submit" disabled={selectedCancelListNfs.length <= 0}>
+              <p className="text">{`Cancel ${selectedCancelListNfs.length} items`}</p>
             </ButtonCancel>
-          </Row>
+          </div>
         </div>
       </Row>
     </Container>

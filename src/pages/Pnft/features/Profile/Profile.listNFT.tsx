@@ -21,15 +21,15 @@ interface ProfileListNFTFTProps {
   address: string;
   selectedNftIds: string[];
   nfts: INFT[];
+  currentListType: ShowListType;
+  setCurrentListType: (type: ShowListType) => void;
 }
 
 const ProfileListNFT = (props: ProfileListNFTFTProps) => {
-  const { isFetching, address, nfts, selectedNftIds } = props;
+  const { isFetching, address, nfts, selectedNftIds, currentListType, setCurrentListType } = props;
   const dispatch = useDispatch();
 
   const showLoader = isFetching && nfts.length <= 0;
-
-  const [currentListType, setCurrentListType] = React.useState(ShowListType.all.valueOf());
 
   React.useEffect(() => {
     if (!address) return;
@@ -50,7 +50,7 @@ const ProfileListNFT = (props: ProfileListNFTFTProps) => {
 
   return (
     <Styled>
-      <HeaderList currentListType={currentListType} setCurrentListType={setCurrentListType} />
+      <HeaderList currentListType={currentListType.valueOf()} setCurrentListType={setCurrentListType} />
       {showLoader && <ProfileLoader />}
       <ListStyled showLoader={showLoader}>
         {renderHeader({ total: nfts.length, selectedNftIds, onClickCheckbox })}

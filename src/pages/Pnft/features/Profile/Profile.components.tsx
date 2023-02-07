@@ -49,7 +49,10 @@ const renderLabelNormal = ({ value, className }: { value: string; className?: st
 
 const renderAdjustPriceNormal = ({ value, className }: { value: string; className?: string }) => {
   return (
-    <div className={`wrap-item align-end ${className || ''}`} style={{ justifyContent: 'flex-end', paddingRight: 16 }}>
+    <div
+      className={`adjust-container align-end ${className || ''}`}
+      style={{ justifyContent: 'flex-end', paddingRight: 16 }}
+    >
       <div className="adjust-item">
         <input
           className="input"

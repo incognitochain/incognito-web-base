@@ -159,6 +159,14 @@ export const NFTItem = styled.div<{ effectHover: boolean; isChecked?: boolean }>
       }
     }
 
+    .adjust-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-left: 4px;
+      width: calc(100% / 5) !important;
+    }
+
     .adjust-item {
       height: 40px;
       padding: 0px 16px;

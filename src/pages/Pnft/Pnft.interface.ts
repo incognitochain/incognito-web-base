@@ -175,6 +175,8 @@ export class PnftBuyFee {
 export interface INFT {
   amount: string;
   amountFormated: string;
+  price: string;
+  listing: boolean;
 
   blockNumber: string;
   blockNumberMinted: string;
