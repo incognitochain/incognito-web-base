@@ -69,8 +69,8 @@ export function useV2MigratorContract() {
   return useContract<V3Migrator>(V3_MIGRATOR_ADDRESSES, V2MigratorABI, true);
 }
 
-export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean) {
-  return useContract<Erc20>(tokenAddress, ERC20_ABI, withSignerIfPossible);
+export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean, abi?: any) {
+  return useContract<Erc20>(tokenAddress, abi || ERC20_ABI, withSignerIfPossible);
 }
 
 export function useWETHContract(withSignerIfPossible?: boolean) {

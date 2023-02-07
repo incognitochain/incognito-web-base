@@ -7,6 +7,6 @@ const HEADER_LIST = [
   { text: 'Cost', className: 'medium-hide' },
   { text: 'Received date', className: 'medium-hide' },
 ];
-const CHAIN_ID = isMainnet ? SupportedChainId.MAINNET : SupportedChainId.KOVAN;
+const CHAIN_ID = isMainnet ? SupportedChainId.MAINNET : SupportedChainId.GOERLI;
 
 export { CHAIN_ID, HEADER_LIST };

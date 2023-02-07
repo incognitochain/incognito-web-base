@@ -2,6 +2,8 @@ import { AxiosInstance } from 'axios';
 import { ICollection, IMapTokens, INFT, mapperCollections, mapperNFTs, mapperTokens } from 'pages/Pnft';
 import createAxiosInstance from 'services/axios';
 
+import { isMainnet } from '../config';
+
 type CollectionSortType =
   | 'floor_price'
   | 'volume_fifteen_minutes'
@@ -93,7 +95,8 @@ class RpcPBlur {
   }
 
   async getAccountNfts(address: string): Promise<INFT[]> {
-    return this.http.get(`papps/pnft/nft_list?address=${address}`).then((resp: any) => mapperNFTs(resp));
+    const chain = isMainnet ? 'eth' : 'goerli';
+    return this.http.get(`papps/pnft/nft-list?address=${address}?chain=${chain}`).then((resp: any) => mapperNFTs(resp));
   }
 }
 

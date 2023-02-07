@@ -4,6 +4,7 @@
 
 export enum SupportedChainId {
   MAINNET = 1,
+  GOERLI = 5,
   KOVAN = 42,
 
   OPTIMISM = 10,
