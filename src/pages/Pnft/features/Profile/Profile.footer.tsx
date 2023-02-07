@@ -5,13 +5,14 @@ import React, { memo } from 'react';
 import { ButtonCancel, ButtonList, Container } from './Profile.footer.styled';
 
 interface ProfileStickyFooterProps {
+  isHidden: boolean;
   selectedDuration?: number;
   onSelectDuration: (duration?: number) => void;
 }
 
 const ProfileStickyFooter = (props: ProfileStickyFooterProps) => {
   return (
-    <Container hidden={false}>
+    <Container hidden={props.isHidden}>
       <Row className="default-max-width">
         <div className="content">
           <div>

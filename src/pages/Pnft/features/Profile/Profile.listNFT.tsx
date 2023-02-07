@@ -7,29 +7,25 @@ import {
   clearSelectedAccountNftIds,
   selectAllAccountNftIds,
 } from 'pages/Pnft/Pnft.actions';
-import {
-  addressAccountSelector,
-  isFetchingNftsAccountSelector,
-  nftsAccountSelector,
-  selectedNftIdsAccountSelector,
-} from 'pages/Pnft/Pnft.selectors';
+import { INFT } from 'pages/Pnft/Pnft.interface';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { HeaderList, renderHeader, renderNFTItem, ShowListType } from './Profile.components';
 import { ListStyled, Styled } from './Profile.listNFT.styled';
 import ProfileLoader from './Profile.loader';
 
-interface ProfileListNFTFTProps {}
+interface ProfileListNFTFTProps {
+  isFetching: boolean;
+  address: string;
+  selectedNftIds: string[];
+  nfts: INFT[];
+}
 
 const ProfileListNFT = (props: ProfileListNFTFTProps) => {
+  const { isFetching, address, nfts, selectedNftIds } = props;
   const dispatch = useDispatch();
-
-  const address = useSelector(addressAccountSelector);
-  const isFetching = useSelector(isFetchingNftsAccountSelector);
-  const nfts = useSelector(nftsAccountSelector);
-  const selectedNftIds = useSelector(selectedNftIdsAccountSelector);
 
   const showLoader = isFetching && nfts.length <= 0;
 

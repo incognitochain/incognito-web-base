@@ -1,10 +1,9 @@
 import CopyIcon from 'components/Copy';
 import Row from 'components/Core/Row';
-import { addressAccountSelector, setAddress } from 'pages/Pnft';
+import { setAddress } from 'pages/Pnft';
 import DefaultAvatar from 'pages/Pnft/images/default_avatar.svg';
 import IcEtherScan from 'pages/Pnft/images/ic-ether-scan.svg';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 import { shortenString } from 'utils';
 
@@ -47,8 +46,12 @@ const InfoStyled = styled.div`
   }
 `;
 
-const ProfileInfo = () => {
-  const address = useSelector(addressAccountSelector);
+interface ProfileInfoProps {
+  address: string;
+}
+
+const ProfileInfo = (props: ProfileInfoProps) => {
+  const { address } = props;
   const dispatch = useAppDispatch();
 
   const { button, component, address: web3Address } = useButtonMetamask();

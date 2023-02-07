@@ -20,7 +20,7 @@ const Content = ({ onFetchCollections }: IProps) => {
   return (
     <ContentStyled>
       <Row className="header-row" justify="space-between">
-        {renderLabel('Top')}
+        {renderLabel('')}
         <SearchInput />
       </Row>
       <List isFetching={isFetching} collections={collections} fetchCollections={onFetchCollections} />

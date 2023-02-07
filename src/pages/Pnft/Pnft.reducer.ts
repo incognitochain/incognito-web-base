@@ -237,11 +237,12 @@ export const reducer: Reducer<IPnftReducer, PnftActions & any> = (
     }
     case PnftActionType.SET_ACCOUNT_ADDRESS: {
       const address = action.payload;
-      if (!address) {
-        // clear account data
+      if (state.account.address !== address) {
+        // set new account data
         return {
           ...state,
           account: {
+            ...state.account,
             address,
             isFetching: false,
             nfts: [],
@@ -251,10 +252,6 @@ export const reducer: Reducer<IPnftReducer, PnftActions & any> = (
       }
       return {
         ...state,
-        account: {
-          ...state.account,
-          address,
-        },
       };
     }
     default:

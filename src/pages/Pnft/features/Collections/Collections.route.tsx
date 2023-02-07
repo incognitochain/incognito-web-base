@@ -2,7 +2,7 @@ import { IRouteProps } from 'pages';
 import { lazy } from 'react';
 
 export const appName = 'pnft';
-export const route = `papps/${appName}`;
+export const route = `/papps/${appName}`;
 
 const CollectionRoute: IRouteProps = {
   path: route,
