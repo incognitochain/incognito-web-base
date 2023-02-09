@@ -298,7 +298,6 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           onSelectToken={onSelectSellToken}
           networkName={MAIN_NETWORK_NAME.INCOGNITO}
           amount={userBalanceFormatedText}
-          onClickFooterRight={onClickMax}
           footerRightClass="max-text"
           componentProps={{
             type: 'number',
@@ -308,6 +307,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           onTopUp={onTopUpCoins}
           tokenAmountNum={sellToken.amount}
           tokenType={'sellToken'}
+          footerRightText="Max"
+          onClickFooterRight={onClickMax}
         />
         <div style={{ height: 2 }} />
         <WrapSwapIcon>

@@ -2,8 +2,10 @@ import { validator } from 'components/Core/ReduxForm';
 import debounce from 'lodash/debounce';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import React from 'react';
+import { useAppDispatch } from 'state/hooks';
 import convert from 'utils/convert';
 
+import { actionSetIsMax } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
 
 export interface TInner {
@@ -32,9 +34,11 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
       inputOriginalAmount,
       enoughPRVFee,
       minUnshieldText,
+      isFetching,
     } = props;
     const [state, setState] = React.useState({ ...initialState });
     const { maxAmountValidator, minAmountValidator } = state;
+    const dispatch = useAppDispatch();
 
     const setFormValidator = debounce(async () => {
       const maxAmountNum = convert.toNumber({
@@ -112,6 +116,8 @@ const enhanceAmountValidator = (WrappedComponent: any) => {
     }, [selectedPrivacy.identify, maxAmountText, selectedPrivacy.amount, inputOriginalAmount, minUnshieldText]);
 
     const onClickMax = async () => {
+      if (isFetching) return;
+      dispatch(actionSetIsMax(true));
       onChangeField(maxAmountText || userBalance || '0', FORM_CONFIGS.sellAmount).then();
     };
 

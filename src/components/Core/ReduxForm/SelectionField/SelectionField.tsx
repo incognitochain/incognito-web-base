@@ -76,7 +76,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
             {_error}
             {isTopUp && (
               <div className="selectable-error" onClick={onTopUp}>
-                Deposit now
+                Shield now
               </div>
             )}
             {isTopUp && (
@@ -222,7 +222,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
           )}
 
           {(networkName !== MAIN_NETWORK_NAME.INCOGNITO || tokenType === 'buyToken') && renderNetworkSelection()}
-          {/* {!!footerRightText && (
+          {!!footerRightText && (
             <ThemedText.RegularLabel
               className={`${footerRightClass ? footerRightClass : ''}`}
               style={{ cursor: 'pointer' }}
@@ -231,7 +231,7 @@ const SelectionField = (props: ISelectionFieldProps) => {
             >
               {footerRightText}
             </ThemedText.RegularLabel>
-          )} */}
+          )}
         </RowBetween>
       </Content>
     </Container>

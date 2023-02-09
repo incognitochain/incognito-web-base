@@ -182,7 +182,7 @@ const POpenseaNFTDetailBuy = (props: POpenseaNFTDetailBuyProps) => {
           }}
           style={{ textDecoration: 'underline', cursor: 'pointer' }}
         >
-          deposit now
+          shield now
         </span>
       )}
     </p>
