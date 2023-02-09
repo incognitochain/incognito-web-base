@@ -1,8 +1,9 @@
 import { BigNumber } from 'bignumber.js';
-import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { maxBy } from 'lodash';
 import PToken, { getTokenIdentify, ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
+import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { getQueryPAppName } from 'pages/Swap/Swap.hooks';
 import { batch } from 'react-redux';
 import { change } from 'redux-form';
@@ -15,7 +16,6 @@ import convert from 'utils/convert';
 import format from 'utils/format';
 import { getAcronymNetwork } from 'utils/token';
 
-import { FORM_CONFIGS } from '../../Swap.constant';
 import { GROUP_NETWORK_ID_BY_EXCHANGE } from './FormUnshield.constants';
 import { isMaxSelector, unshieldDataSelector } from './FormUnshield.selectors';
 import { combineExchange } from './FormUnshield.swapEstBuilder';
@@ -377,6 +377,7 @@ export const actionEstimateSwapFee =
         isSubmitting,
         vaults,
         inputOriginalAmount,
+        fee: combineFee,
       } = unshieldDataSelector(getState());
       if (
         !inputAmount ||
@@ -551,15 +552,24 @@ export const actionEstimateSwapFee =
 
       const isMax = isMaxSelector(getState());
       if (bestRate && isMax) {
-        const fee = bestRate.fees[0];
-        const amountFee = fee.amount; // human amount
-        const feeTokenID = fee.tokenId;
+        const apiFee = bestRate.fees[0];
+        let userBalance = sellToken.amount;
+        const amountFee = apiFee.amount; // human amount
+        const feeTokenID = apiFee.tokenId;
+
+        if (sellToken.tokenID === PRV.id) {
+          userBalance = new BigNumber(userBalance || 0).minus(combineFee.networkFee).toNumber();
+        }
+
         // check burn token equal fee token
         if (feeTokenID === sellToken.tokenID) {
-          const isOutOfBalance = new BigNumber(inputOriginalAmount).plus(amountFee).gt(sellToken.amount || 0);
+          const isOutOfBalance = new BigNumber(inputOriginalAmount).plus(amountFee).gt(userBalance || 0);
           if (isOutOfBalance) {
             isReEstByMax = true;
-            const newInputOriginalAmount = new BigNumber(sellToken.amount || 0).minus(amountFee).toNumber();
+            let newInputOriginalAmount = new BigNumber(userBalance || 0).minus(amountFee).toNumber();
+            if (newInputOriginalAmount <= 0) {
+              newInputOriginalAmount = 0;
+            }
             const newInput = format
               .formatAmount({
                 originalAmount: newInputOriginalAmount,
