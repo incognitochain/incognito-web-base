@@ -341,7 +341,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           onSelectToken={onSelectBuyToken}
           onSelectNetwork={onSelectBuyNetwork}
           receiveValue={formType === FormTypes.SWAP ? expectedReceiveAmount || '0' : inputAmount}
-          footerRightText={rightLabelAddress}
+          // footerRightText={rightLabelAddress}
           isUseInput={false}
           footerRightClass="send-to-text"
           tokenNetwork={buyToken.network}
