@@ -32,6 +32,7 @@ const initialState: IFormUnshieldState = {
   exchangeSupports: [],
   errorMsg: null,
   swapNetwork: MAIN_NETWORK_NAME.INCOGNITO,
+  isMax: false,
 };
 
 export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
@@ -119,6 +120,13 @@ export const reducer: Reducer<IFormUnshieldState, FormUnshieldActions & any> = (
     case FormUnshieldActionType.FREE_SWAP_FORM: {
       return {
         ...initialState,
+      };
+    }
+    case FormUnshieldActionType.SET_IS_MAX: {
+      const isMax = action.payload;
+      return {
+        ...state,
+        isMax,
       };
     }
     default:

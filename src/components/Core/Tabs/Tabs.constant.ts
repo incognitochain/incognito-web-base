@@ -9,7 +9,7 @@ interface ITabList {
 
 const TAB_LIST: ITabList = {
   SWAP: {
-    tabNames: ['Swap', 'Deposit'],
+    tabNames: ['Swap', 'Shield'],
     rootTab: getRootTab('SWAP'),
   },
   INCOGNITO_ACCOUNT: {
