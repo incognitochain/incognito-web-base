@@ -1,10 +1,12 @@
 import { Card, Col, List, Row } from 'antd';
 import { marketTranslateSelector } from 'config/Configs.selector';
-import { KEY_TRADE_VOLUME } from 'pages/App.enhance';
 import React from 'react';
 import { isMobile } from 'react-device-detect';
 import { useSelector } from 'react-redux';
+import { KEYS } from 'storage';
+import { StorageManager } from 'storage';
 import styled, { DefaultTheme } from 'styled-components/macro';
+
 export const Styled = styled.div`
   display: flex;
   justify-content: center;
@@ -119,7 +121,7 @@ const MarketAchieve = () => {
   const Factory = React.useMemo(
     () => [
       {
-        title: `${localStorage.getItem(KEY_TRADE_VOLUME) || 347}M`,
+        title: `${StorageManager.getItem(KEYS.TRADE_VOLUME) || 347}M`,
         content: marketTrs.volumeTraded,
         className: 'achieve-margin-right',
       },

@@ -26,9 +26,11 @@ import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
 import { isMobile } from 'utils/userAgent';
 
+import WebWallet from '../../../pages/IncWebWallet/components/WebWallet';
 import { actionFreeSwapForm } from '../../../pages/Swap/features/FormUnshield/FormUnshield.actions';
 import { useAppDispatch } from '../../../state/hooks';
 import IncognitoWallet from '../IncognitoWallet';
+import { useIncognitoWallet } from '../IncognitoWallet/IncongitoWallet.useContext';
 // import IncognitoWallet from '../IncognitoWallet';
 import { DrawerStyled, MenuDropdown, Styled } from './Header.styled';
 // import NetworkSelector from './NetworkSelector';
@@ -411,6 +413,8 @@ export default function Header() {
   const scrollY = useScrollPosition();
   const dispatch = useAppDispatch();
 
+  const { isIncognitoInstalled } = useIncognitoWallet();
+
   const [pathName, setPathName] = React.useState<string>('');
   const [visible, setVisible] = React.useState(false);
   const [expand, setExpand] = React.useState(false);
@@ -517,6 +521,7 @@ export default function Header() {
 
   const renderContent = () => {
     const hrefLink = !isInternetAlready || !isMobile ? '.' : INCOGNITO_LANDING_PAGE;
+
     return (
       <>
         <Title onClick={() => history.replace('/')}>
@@ -599,7 +604,7 @@ export default function Header() {
                 </Row>
               </Dropdown>
 
-              <IncognitoWallet />
+              {isIncognitoInstalled() ? <IncognitoWallet /> : <WebWallet />}
             </HeaderElement>
           </>
         )}

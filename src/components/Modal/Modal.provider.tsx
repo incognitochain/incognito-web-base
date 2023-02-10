@@ -103,7 +103,6 @@ export function Modal({
     enter: { opacity: 1 },
     leave: { opacity: 0 },
   });
-
   const lastModal = last(modalState);
   const { data: modalData, title, isTransparent, closable, isSearchTokenModal } = lastModal || {};
 
@@ -166,18 +165,18 @@ interface SetModalProps {
   isTransparent: boolean;
   closable?: boolean;
 }
-interface LoadingContextType {
+interface ModalContextType {
   setModal: (_: SetModalProps) => void;
   clearAllModal: () => void;
   closeModal: () => void;
 }
-const ModalContextInit = {
+const ModalContextInit: ModalContextType = {
   setModal: () => null,
   clearAllModal: () => null,
   closeModal: () => null,
 };
 
-const ModalContext = React.createContext<LoadingContextType>(ModalContextInit);
+const ModalContext = React.createContext<ModalContextType>(ModalContextInit);
 
 export function ModalProvider(props: any) {
   const [modalProps, setModal] = React.useState<SetModalProps[]>([]);
@@ -216,7 +215,7 @@ export function ModalProvider(props: any) {
   );
 }
 
-export const useModal = (): LoadingContextType => {
+export const useModal = (): ModalContextType => {
   const context = useContext(ModalContext);
   if (!context) {
     throw new Error('Modal not found, useModal must be used within the <ModalProvider>..</ModalProvider>');

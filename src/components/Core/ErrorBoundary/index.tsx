@@ -1,10 +1,9 @@
 import { Trans } from '@lingui/macro';
 import { AutoColumn } from 'components/Core/Column';
 import React from 'react';
-import store, { AppState } from 'state';
+import { AppState } from 'state';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
-import { userAgent } from 'utils/userAgent';
 
 const FallbackWrapper = styled.div`
   display: flex;
@@ -118,49 +117,49 @@ function getRelevantState(): null | keyof AppState {
   return null;
 }
 
-function issueBody(error: Error): string {
-  const relevantState = getRelevantState();
-  const deviceData = userAgent;
-  return `## URL
-  
-${window.location.href}
+// function issueBody(error: Error): string {
+//   const relevantState = getRelevantState();
+//   const deviceData = userAgent;
+//   return `## URL
 
-${
-  relevantState
-    ? `## \`${relevantState}\` state
-    
-\`\`\`json
-${JSON.stringify(store.getState()[relevantState], null, 2)}
-\`\`\`
-`
-    : ''
-}
-${
-  error.name &&
-  `## Error
+// ${window.location.href}
 
-\`\`\`
-${error.name}${error.message && `: ${error.message}`}
-\`\`\`
-`
-}
-${
-  error.stack &&
-  `## Stacktrace
+// ${
+//   relevantState
+//     ? `## \`${relevantState}\` state
 
-\`\`\`
-${error.stack}
-\`\`\`
-`
-}
-${
-  deviceData &&
-  `## Device data
+// \`\`\`json
+// ${JSON.stringify(store.getState()[relevantState], null, 2)}
+// \`\`\`
+// `
+//     : ''
+// }
+// ${
+//   error.name &&
+//   `## Error
 
-\`\`\`json
-${JSON.stringify(deviceData, null, 2)}
-\`\`\`
-`
-}
-`;
-}
+// \`\`\`
+// ${error.name}${error.message && `: ${error.message}`}
+// \`\`\`
+// `
+// }
+// ${
+//   error.stack &&
+//   `## Stacktrace
+
+// \`\`\`
+// ${error.stack}
+// \`\`\`
+// `
+// }
+// ${
+//   deviceData &&
+//   `## Device data
+
+// \`\`\`json
+// ${JSON.stringify(deviceData, null, 2)}
+// \`\`\`
+// `
+// }
+// `;
+// }
