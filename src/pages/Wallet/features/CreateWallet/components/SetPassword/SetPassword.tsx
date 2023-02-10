@@ -1,0 +1,63 @@
+import PasswordStatus from 'pages/Wallet/components/PasswordStatus';
+import React from 'react';
+
+import { Container } from './SetPassword.styled';
+
+interface SetPasswordProps {
+  onConfirmPassword: (password: string) => void;
+}
+
+const SetPassword = (props: SetPasswordProps) => {
+  const [password, setPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+
+  const isStrongPassRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (isStrongPassRef.current && password === confirmPassword) {
+      props.onConfirmPassword(password);
+    }
+  }, [password, confirmPassword]);
+
+  const onChangePassword = (event: any) => {
+    const input = event.target.value;
+    setPassword(input);
+    isStrongPassRef.current = false;
+  };
+
+  const onChangeConfirmPassword = (event: any) => {
+    const input = event.target.value;
+    setConfirmPassword(input);
+  };
+
+  const onPasswordStrong = () => {
+    isStrongPassRef.current = true;
+  };
+
+  return (
+    <Container>
+      <p className="title">Set a password</p>
+      <p className="desc">
+        When performing operations that need to be signed with your secret key, this password will be required
+      </p>
+      <input
+        className="input-container"
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={onChangePassword}
+      />
+      <PasswordStatus value={password} onPasswordStrong={onPasswordStrong} />
+
+      <input
+        className="input-container"
+        type="password"
+        placeholder="Confirm password"
+        value={confirmPassword}
+        onChange={onChangeConfirmPassword}
+      />
+    </Container>
+  );
+};
+
+export default React.memo(SetPassword);

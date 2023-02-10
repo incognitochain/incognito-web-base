@@ -38,6 +38,8 @@ import Structure from './Structure';
 import DepositPage from './Swap/features/DepositPage';
 import SwapExchange from './Swap/features/SwapExchange';
 import TermOfService from './TermOfService';
+import CreateWallet, { CreateWalletRoute } from './Wallet/features/CreateWallet';
+import ImportWallet, { ImportWalletRoute } from './Wallet/features/ImportWallet';
 
 export const HEADER_ID = 'HEADER_VIEW';
 export const FOOTER_ID = 'FOOTER_VIEW';
@@ -121,6 +123,9 @@ const App = () => {
         <Route exact path="/papps/popensea/detail/:contract/:tokenId" component={POpenseaNFTDetail} />
         <Route exact path="/buy-node" component={BuyNode} />
         <Route exact path="/deposit" component={DepositPage} />
+        <Route exact path={CreateWalletRoute.path} component={CreateWallet} />
+        <Route exact path={ImportWalletRoute.path} component={ImportWallet} />
+
         {!isMobile && (
           <>
             <Route exact path="/vote" component={Governance} />
