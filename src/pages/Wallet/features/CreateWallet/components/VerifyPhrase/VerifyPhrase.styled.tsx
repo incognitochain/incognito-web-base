@@ -26,6 +26,15 @@ export const Container = styled.div`
     color: ${({ theme }) => theme.color_grey};
   }
 
+  .mnemonic-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-top: 24px;
+    width: 55%;
+  }
+
   .box {
     margin-top: 40px;
     min-height: 106px;
@@ -34,38 +43,14 @@ export const Container = styled.div`
     border-radius: 8px;
     width: 50%;
     position: relative;
+    align-items: center;
+    justify-content: center;
 
-    .overlay {
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background: rgba(117, 117, 117, 0.8);
-      backdrop-filter: blur(4px);
-      border-radius: 8px;
-
-      .text-phrase {
-        font-weight: 600;
-        font-size: 18px;
-        line-height: 140%;
-        text-align: center;
-      }
-
-      .content {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-
-        .text-click {
-          font-weight: 500;
-          font-size: 16px;
-          line-height: 140%;
-          text-align: center;
-          cursor: default;
-        }
-      }
+    .text-phrase {
+      font-weight: 600;
+      font-size: 18px;
+      line-height: 140%;
+      text-align: center;
     }
   }
 
@@ -91,6 +76,10 @@ export const Container = styled.div`
         width: 70%;
       }
 
+      .mnemonic-box {
+        width: 70%;
+      }
+
       .box {
         width: 70%;
       }
@@ -111,15 +100,22 @@ export const Container = styled.div`
         width: 90%;
       }
 
+      .mnemonic-box {
+        width: 90%;
+      }
+
       .box {
         width: 90%;
         margin-top: 20px;
-
       }
 
       .btn {
-        margin-top: 24px;
+        margin-top: 48px;
         width: 90%;
       }
   `}
+`;
+
+export const MnemonicItemWrapper = styled.div`
+  margin-bottom: 8px;
 `;

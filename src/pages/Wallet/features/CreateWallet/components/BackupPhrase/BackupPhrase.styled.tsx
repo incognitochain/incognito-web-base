@@ -26,8 +26,24 @@ export const Container = styled.div`
     color: ${({ theme }) => theme.color_grey};
   }
 
-  .box {
+  .masterkey {
+    width: 50%;
+
     margin-top: 40px;
+    .text {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 140%;
+      color: ${({ theme }) => theme.color_grey};
+    }
+
+    .wrap-input {
+      margin-top: 8px;
+    }
+  }
+
+  .box {
+    margin-top: 16px;
     min-height: 106px;
     padding: 24px 40px;
     background: ${({ theme }) => theme.color_grey2};
@@ -82,10 +98,17 @@ export const Container = styled.div`
       line-height: 140%;
       text-align: center;
     }
+
+    &:disabled {
+      background-color: ${({ theme }) => theme.primary7};
+    }
   }
 
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
      
+     .masterkey {
+        width: 70%;
+     }
       .desc {
         width: 70%;
       }
@@ -106,14 +129,16 @@ export const Container = styled.div`
         font-size: 28px;
       }
 
+      .masterkey {
+        width: 90%;
+     }
+
       .desc {
         width: 90%;
       }
 
       .box {
         width: 90%;
-        margin-top: 20px;
-
       }
 
       .btn {

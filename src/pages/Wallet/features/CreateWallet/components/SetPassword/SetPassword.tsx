@@ -1,3 +1,5 @@
+import { ButtonPrimary } from 'components/Core/Button';
+import AlertMessage, { AlertMessageType } from 'pages/Wallet/components/AlertMessage/AlertMessage';
 import PasswordStatus from 'pages/Wallet/components/PasswordStatus';
 import React from 'react';
 
@@ -13,9 +15,12 @@ const SetPassword = (props: SetPasswordProps) => {
 
   const isStrongPassRef = React.useRef(false);
 
+  const [isAbleContinue, setIsAbleContinue] = React.useState(false);
+
   React.useEffect(() => {
+    setIsAbleContinue(false);
     if (isStrongPassRef.current && password === confirmPassword) {
-      props.onConfirmPassword(password);
+      setIsAbleContinue(true);
     }
   }, [password, confirmPassword]);
 
@@ -56,6 +61,16 @@ const SetPassword = (props: SetPasswordProps) => {
         value={confirmPassword}
         onChange={onChangeConfirmPassword}
       />
+
+      {isStrongPassRef.current === true &&
+        password.length === confirmPassword.length &&
+        password !== confirmPassword && (
+          <AlertMessage type={AlertMessageType.error} message="Password and Confirm password does not match!" />
+        )}
+
+      <ButtonPrimary className="btn" disabled={!isAbleContinue} onClick={() => props.onConfirmPassword(password)}>
+        <p className="text-btn">Continue</p>
+      </ButtonPrimary>
     </Container>
   );
 };

@@ -9,6 +9,8 @@ import VerifyPhrase from './components/VerifyPhrase';
 import WalletCreated from './components/WalletCreated';
 import { Styled } from './CreateWallet.styled';
 
+const { newMnemonic } = require('incognito-chain-web-js/build/web/wallet');
+
 enum CreateWalletSteps {
   backup,
   verifyPhrase,
@@ -20,17 +22,24 @@ const CreateWallet = () => {
   const history = useHistory();
   const [currentStep, setCurrentStep] = React.useState(CreateWalletSteps.backup);
 
-  const phrase = 'diet found sense torch eyebrow excite magic click fluid cousin ceiling slogan';
+  const [phrase, setPhrase] = React.useState('');
+  const masterKeyNameRef = React.useRef('');
 
-  const onContinuteBackupPhrase = () => {
+  React.useLayoutEffect(() => {
+    const mnemonic: string = newMnemonic() || '';
+    setPhrase(mnemonic);
+  }, []);
+
+  const onContinuteBackupPhrase = (keyName: string) => {
+    masterKeyNameRef.current = keyName;
     setCurrentStep(CreateWalletSteps.verifyPhrase);
   };
 
-  const onVerifyPhrase = () => {
+  const onVerifyPhraseSuccess = () => {
     setCurrentStep(CreateWalletSteps.setPassword);
   };
 
-  const onConfirmPassword = (password: string) => {
+  const onConfirmPasswordSuccess = (password: string) => {
     setCurrentStep(CreateWalletSteps.created);
   };
 
@@ -43,10 +52,13 @@ const CreateWallet = () => {
       title: 'Back up your phrase',
       content: () => <BackupPhrase phrase={phrase} onContinue={onContinuteBackupPhrase} />,
     },
-    { title: 'Verify your phrase', content: () => <VerifyPhrase phrase={phrase} onVerifyPhrase={onVerifyPhrase} /> },
-    { title: 'Set a password', content: () => <SetPassword onConfirmPassword={onConfirmPassword} /> },
     {
-      title: 'Wallet create',
+      title: 'Verify your phrase',
+      content: () => <VerifyPhrase phrase={phrase} onVerifySuccess={onVerifyPhraseSuccess} />,
+    },
+    { title: 'Set a password', content: () => <SetPassword onConfirmPassword={onConfirmPasswordSuccess} /> },
+    {
+      title: 'Wallet created',
       content: () => <WalletCreated address="tz1QVNRU9u1uEa5Vq51dlubscDeZ8o7jvw4Z" onContinue={onGotoHome} />,
     },
   ];

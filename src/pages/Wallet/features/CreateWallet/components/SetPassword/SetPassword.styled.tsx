@@ -40,6 +40,22 @@ export const Container = styled.div`
     color: ${({ theme }) => theme.white};
   }
 
+  .btn {
+    height: 50px;
+    width: 40%;
+    margin-top: 40px;
+    .text-btn {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 140%;
+      text-align: center;
+    }
+
+    &:disabled {
+      background-color: ${({ theme }) => theme.primary7};
+    }
+  }
+
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
      
       .desc {
@@ -67,6 +83,11 @@ export const Container = styled.div`
       }
 
       .input-container {
+        width: 90%;
+      }
+
+      .btn {
+        margin-top: 48px;
         width: 90%;
       }
   `}
