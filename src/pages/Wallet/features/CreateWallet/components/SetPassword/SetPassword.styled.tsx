@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from 'styled-components/macro';
+import styled, { DefaultTheme, keyframes } from 'styled-components/macro';
 
 export const Container = styled.div`
   display: flex;
@@ -91,4 +91,31 @@ export const Container = styled.div`
         width: 90%;
       }
   `}
+`;
+
+const rotate360 = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const Spinner = styled.div`
+  animation: ${rotate360} 1s cubic-bezier(0.83, 0, 0.17, 1) infinite;
+  transform: translateZ(0);
+  border-top: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-left: 2px solid ${({ theme }) => theme.text1};
+  background: transparent;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  position: relative;
+  transition: 250ms ease border-color;
+  left: 3px;
+  top: 3px;
+  bottom: 3px;
 `;

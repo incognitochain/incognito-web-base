@@ -3,9 +3,10 @@ import AlertMessage, { AlertMessageType } from 'pages/Wallet/components/AlertMes
 import PasswordStatus from 'pages/Wallet/components/PasswordStatus';
 import React from 'react';
 
-import { Container } from './SetPassword.styled';
+import { Container, Spinner } from './SetPassword.styled';
 
 interface SetPasswordProps {
+  loading: boolean;
   onConfirmPassword: (password: string) => void;
 }
 
@@ -69,7 +70,7 @@ const SetPassword = (props: SetPasswordProps) => {
         )}
 
       <ButtonPrimary className="btn" disabled={!isAbleContinue} onClick={() => props.onConfirmPassword(password)}>
-        <p className="text-btn">Continue</p>
+        {props.loading ? <Spinner /> : <p className="text-btn">Continue</p>}
       </ButtonPrimary>
     </Container>
   );

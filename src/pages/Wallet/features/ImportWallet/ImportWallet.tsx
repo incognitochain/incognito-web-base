@@ -17,6 +17,7 @@ const ImportWallet = () => {
   const history = useHistory();
 
   const [currentStep, setCurrentStep] = React.useState(ImportWalletSteps.import);
+  const [loading, setLoading] = React.useState(false);
 
   const onConfirmPassword = (password: string) => {
     console.log('Password: ', password);
@@ -28,7 +29,7 @@ const ImportWallet = () => {
 
   const steps: IStep[] = [
     { title: 'Import wallet', content: () => <ImportPhrase /> },
-    { title: 'Set a password', content: () => <SetPassword onConfirmPassword={onConfirmPassword} /> },
+    { title: 'Set a password', content: () => <SetPassword loading={loading} onConfirmPassword={onConfirmPassword} /> },
   ];
 
   return (

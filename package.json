@@ -237,7 +237,8 @@
     "workbox-core": "^6.1.0",
     "workbox-navigation-preload": "^6.1.0",
     "workbox-precaching": "^6.1.0",
-    "workbox-routing": "^6.1.0"
+    "workbox-routing": "^6.1.0",
+    "uuid": "^8.3.2"
   },
   "resolutions": {
     "@walletconnect/ethereum-provider": "1.7.1"
@@ -252,6 +253,7 @@
     "@types/redux-persist": "^4.3.1",
     "@types/redux-thunk": "^2.1.0",
     "@types/reselect": "^2.2.0",
+    "@types/uuid": "^8.3.0",
     "@types/webpack-env": "^1.18.0",
     "craco-alias": "^3.0.1"
   }

@@ -41,6 +41,8 @@ import TermOfService from './TermOfService';
 import CreateWallet, { CreateWalletRoute } from './Wallet/features/CreateWallet';
 import ImportWallet, { ImportWalletRoute } from './Wallet/features/ImportWallet';
 
+const { init } = require('incognito-chain-web-js/build/web/wallet');
+
 export const HEADER_ID = 'HEADER_VIEW';
 export const FOOTER_ID = 'FOOTER_VIEW';
 
@@ -100,6 +102,17 @@ const App = () => {
 
   useEffect(() => {
     updateMetric().then();
+  }, []);
+
+  useEffect(() => {
+    const fetchWasm = async () => {
+      try {
+        init('http://localhost:3000/privacy.wasm', 8);
+      } catch (error) {
+        console.log('error: ', error);
+      }
+    };
+    fetchWasm();
   }, []);
 
   const renderContent = () => {

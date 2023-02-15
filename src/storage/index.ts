@@ -14,15 +14,30 @@ const Storage = {
   },
 
   getItem(key: string): any {
-    let data = localStorage.getItem(key);
-    if (data) {
-      data = JSON.parse(data);
+    try {
+      let data = localStorage.getItem(key);
+      console.log('getItem data: ', data);
+
+      if (data && this.isJsonString(data)) {
+        data = JSON.parse(data);
+      }
+      return data;
+    } catch (error) {
+      console.log('getItem error: ', error);
     }
-    return data;
   },
 
   removeItem(key: string) {
     localStorage.removeItem(key);
+  },
+
+  isJsonString(str: string) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
   },
 };
 

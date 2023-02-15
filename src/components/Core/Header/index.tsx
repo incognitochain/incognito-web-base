@@ -29,6 +29,7 @@ import { isMobile } from 'utils/userAgent';
 import { actionFreeSwapForm } from '../../../pages/Swap/features/FormUnshield/FormUnshield.actions';
 import { useAppDispatch } from '../../../state/hooks';
 import IncognitoWallet from '../IncognitoWallet';
+import WebWallet from '../WebWallet';
 // import IncognitoWallet from '../IncognitoWallet';
 import { DrawerStyled, MenuDropdown, Styled } from './Header.styled';
 // import NetworkSelector from './NetworkSelector';
@@ -517,6 +518,11 @@ export default function Header() {
 
   const renderContent = () => {
     const hrefLink = !isInternetAlready || !isMobile ? '.' : INCOGNITO_LANDING_PAGE;
+
+    const isIncognitoExtensionInstalled = (): boolean => {
+      return typeof window.incognito !== 'undefined';
+    };
+
     return (
       <>
         <Title onClick={() => history.replace('/')}>
@@ -599,7 +605,7 @@ export default function Header() {
                 </Row>
               </Dropdown>
 
-              <IncognitoWallet />
+              {isIncognitoExtensionInstalled() ? <IncognitoWallet /> : <WebWallet />}
             </HeaderElement>
           </>
         )}
