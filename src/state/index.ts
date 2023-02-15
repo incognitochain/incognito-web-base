@@ -31,7 +31,7 @@ import { reducer as webWallet } from './webWallet/webWallet.reducer';
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists'];
 
-const rootReducers = combineReducers({
+const appReducers = combineReducers({
   application,
   user,
   wallet,
@@ -53,6 +53,15 @@ const rootReducers = combineReducers({
   masterKey,
   webToken,
 });
+
+export const clearReduxStore = () => ({
+  type: 'CLEAR_STORE',
+});
+
+const rootReducers = (state: any, action: any) => {
+  if (action.type === 'CLEAR_STORE') state = undefined;
+  return appReducers(state, action);
+};
 
 const store = configureStore({
   reducer: rootReducers,

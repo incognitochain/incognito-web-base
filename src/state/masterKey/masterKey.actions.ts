@@ -4,7 +4,7 @@ import { WalletSDK } from 'core/types';
 import MasterKeyModel, { DEFAULT_MASTER_KEY, MASTERLESS } from 'models/model/MasterKeyModel';
 import { batch } from 'react-redux';
 import { getWalletAccounts } from 'services/api/masterKey';
-import { clearWalletCaches } from 'services/cache/cache';
+import { clearAllCaches, clearWalletCaches } from 'services/cache/cache';
 import { ExHandler } from 'services/exception';
 import accountServices from 'services/wallet/accountService';
 import {
@@ -15,7 +15,7 @@ import {
 } from 'services/wallet/passwordService';
 import serverService from 'services/wallet/Server';
 import WalletServices from 'services/wallet/walletService';
-import { AppGetState, AppThunk, AppThunkDispatch } from 'state/index';
+import { AppGetState, AppThunk, AppThunkDispatch, clearReduxStore } from 'state/index';
 import {
   currentMasterKeySelector,
   isExistMasterlessWallet,
@@ -172,6 +172,11 @@ export const unlockMasterKey =
 export const initMasterKey =
   (payload: InitMasterKeyPayload): AppThunk =>
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+    // Clear All Local Data
+    localStorage.clear();
+    clearAllCaches();
+    dispatch(clearReduxStore());
+
     const { masterKeyName, mnemonic, password } = payload;
     await cachePassword(password);
     await getPassphrase();
@@ -210,6 +215,11 @@ export const initMasterKey =
 
 export const importMasterKey =
   (data: ImportMasterKeyPayload) => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+    // Clear All Local Data
+    localStorage.clear();
+    clearAllCaches();
+    dispatch(clearReduxStore());
+
     const { masterKeyName, mnemonic, password } = data;
 
     let wallet: WalletSDK;

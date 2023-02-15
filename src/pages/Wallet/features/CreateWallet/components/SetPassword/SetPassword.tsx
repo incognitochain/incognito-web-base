@@ -66,7 +66,7 @@ const SetPassword = (props: SetPasswordProps) => {
       {isStrongPassRef.current === true &&
         password.length === confirmPassword.length &&
         password !== confirmPassword && (
-          <AlertMessage type={AlertMessageType.error} message="Password and Confirm password does not match!" />
+          <AlertMessage type={AlertMessageType.error} message={'Password and Confirm password does not match!'} />
         )}
 
       <ButtonPrimary className="btn" disabled={!isAbleContinue} onClick={() => props.onConfirmPassword(password)}>

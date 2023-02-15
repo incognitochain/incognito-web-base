@@ -2,10 +2,12 @@ import Header from 'pages/Wallet/components/Header';
 import Steps from 'pages/Wallet/components/Steps';
 import { IStep } from 'pages/Wallet/components/Steps/Steps';
 import React, { memo } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import SetPassword from '../CreateWallet/components/SetPassword';
 import ImportPhrase from './components/ImportPhrase';
+import { IImportWalletAction, ImportWalletAction } from './ImportWallet.actions';
 import { Styled } from './ImportWallet.styled';
 
 enum ImportWalletSteps {
@@ -15,12 +17,34 @@ enum ImportWalletSteps {
 
 const ImportWallet = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [currentStep, setCurrentStep] = React.useState(ImportWalletSteps.import);
   const [loading, setLoading] = React.useState(false);
 
+  const phraseRef = React.useRef('');
+  const masterKeyNameRef = React.useRef('');
+
+  const importWalletActions: IImportWalletAction = new ImportWalletAction({
+    component: {
+      history,
+      setLoading,
+    },
+    dispatch,
+  });
+
+  const onImportPhrase = (masterKeyName: string, phrase: string) => {
+    masterKeyNameRef.current = masterKeyName;
+    phraseRef.current = phrase;
+    setCurrentStep(ImportWalletSteps.setPassword);
+  };
+
   const onConfirmPassword = (password: string) => {
-    console.log('Password: ', password);
+    importWalletActions.importWallet({
+      masterKeyName: masterKeyNameRef.current,
+      password,
+      mnemonic: phraseRef.current,
+    });
   };
 
   const onGotoHome = () => {
@@ -28,8 +52,11 @@ const ImportWallet = () => {
   };
 
   const steps: IStep[] = [
-    { title: 'Import wallet', content: () => <ImportPhrase /> },
-    { title: 'Set a password', content: () => <SetPassword loading={loading} onConfirmPassword={onConfirmPassword} /> },
+    { title: 'Import wallet', content: () => <ImportPhrase onImportPhrase={onImportPhrase} /> },
+    {
+      title: 'Set a password',
+      content: () => <SetPassword loading={loading} onConfirmPassword={onConfirmPassword} />,
+    },
   ];
 
   return (
