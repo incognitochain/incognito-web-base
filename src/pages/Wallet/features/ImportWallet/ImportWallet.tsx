@@ -21,6 +21,7 @@ const ImportWallet = () => {
 
   const [currentStep, setCurrentStep] = React.useState(ImportWalletSteps.import);
   const [loading, setLoading] = React.useState(false);
+  const [errMess, setErrMess] = React.useState<undefined | string>();
 
   const phraseRef = React.useRef('');
   const masterKeyNameRef = React.useRef('');
@@ -29,6 +30,7 @@ const ImportWallet = () => {
     component: {
       history,
       setLoading,
+      setErrMess,
     },
     dispatch,
   });
@@ -55,7 +57,7 @@ const ImportWallet = () => {
     { title: 'Import wallet', content: () => <ImportPhrase onImportPhrase={onImportPhrase} /> },
     {
       title: 'Set a password',
-      content: () => <SetPassword loading={loading} onConfirmPassword={onConfirmPassword} />,
+      content: () => <SetPassword loading={loading} errorMess={errMess} onConfirmPassword={onConfirmPassword} />,
     },
   ];
 

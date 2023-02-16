@@ -3,6 +3,7 @@ import { importMasterKey, ImportMasterKeyPayload } from 'state/masterKey';
 interface IComponent {
   history: any;
   setLoading: (data: boolean) => void;
+  setErrMess: (data: string) => void;
 }
 export interface IImportWalletAction {
   importWallet: (data: ImportMasterKeyPayload) => void;
@@ -25,7 +26,13 @@ export class ImportWalletAction implements IImportWalletAction {
         this.component.history.push('/');
       }
     } catch (error) {
-      console.log('importWalletError: ', error);
+      const err = new Error(error);
+      if (err.message.includes('Mnemonic words is invalid')) {
+        this.component.setErrMess('Your phrase is invalid');
+      } else {
+        this.component.setErrMess('Something went wrong');
+      }
+      console.log('importWalletError: ', err);
     } finally {
       this.component.setLoading(false);
     }

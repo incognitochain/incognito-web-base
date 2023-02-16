@@ -43,7 +43,7 @@ export const Container = styled.div`
   }
 
   .box {
-    margin-top: 40px;
+    margin-top: 16px;
     min-height: 106px;
     padding: 24px;
     background: ${({ theme }) => theme.color_grey2};
@@ -70,7 +70,7 @@ export const Container = styled.div`
   .btn {
     height: 50px;
     width: 50%;
-    margin-top: 40px;
+    margin-top: 44px;
     .text-btn {
       font-weight: 500;
       font-size: 16px;
@@ -119,12 +119,10 @@ export const Container = styled.div`
 
       .box {
         width: 90%;
-        margin-top: 20px;
-
       }
 
       .btn {
-        margin-top: 24px;
+        margin-top: 32px;
         width: 90%;
       }
   `}
