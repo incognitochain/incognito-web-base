@@ -196,4 +196,4 @@ const App = () => {
   );
 };
 
-export default enhance(App);
+export default enhance(App) as any;
