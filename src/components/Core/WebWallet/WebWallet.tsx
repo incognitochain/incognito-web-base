@@ -1,9 +1,13 @@
 import { useModal } from 'components/Modal';
+import BalanceModal from 'components/Modal/Modal.balance';
 import { WalletState } from 'core/types';
+import { walletRequestAccounts } from 'pages/Wallet/actions/wallet.actions';
+import React from 'react';
 import { memo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { defaultAccountPaymentAddressSelector } from 'state/account/account.selectors';
+import { incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
 import { webWalletStateSelector } from 'state/masterKey';
 import { shortenString } from 'utils';
 
@@ -14,11 +18,34 @@ import { Container, Text, WalletButton, Wrapper } from './WebWallet.styled';
 
 const WebWallet = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const { setModal } = useModal();
 
   const webWalletState = useSelector(webWalletStateSelector);
   const address = useSelector(defaultAccountPaymentAddressSelector);
+
+  React.useEffect(() => {
+    dispatch(incognitoWalletSetState(webWalletState));
+    switch (webWalletState) {
+      case WalletState.uninitialized:
+        dispatch(incognitoWalletSetAccount([]));
+        break;
+      case WalletState.locked:
+        dispatch(incognitoWalletSetAccount([]));
+        break;
+      case WalletState.unlocked:
+        handleWhenWalletStateUnlocked();
+        break;
+    }
+  }, [webWalletState]);
+
+  const handleWhenWalletStateUnlocked = async () => {
+    const { result }: any = await dispatch(walletRequestAccounts());
+    if (result && result.accounts && result.accounts.length > 0) {
+      dispatch(incognitoWalletSetAccount(result.accounts));
+    }
+  };
 
   const onClickCreateWallet = async () => {
     history.push('/create-wallet');
@@ -39,7 +66,16 @@ const WebWallet = () => {
     });
   };
 
-  const onClickWallet = () => {};
+  const onClickWallet = () => {
+    setModal({
+      closable: true,
+      data: <BalanceModal />,
+      isTransparent: false,
+      rightHeader: undefined,
+      title: 'Account',
+      isSearchTokenModal: true,
+    });
+  };
 
   return (
     <div className="wrap-inc-waller">

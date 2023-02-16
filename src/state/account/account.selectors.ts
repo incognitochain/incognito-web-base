@@ -96,6 +96,8 @@ export const defaultAccountPaymentAddressSelector = createSelector(
   (account: any) => account?.PaymentAddress
 );
 
+export const defaultAccountOTAKeySelector = createSelector(defaultAccountSelector, (account: any) => account?.OTAKey);
+
 export const switchAccountSelector = createSelector(
   (state: RootState) => state?.account,
   (account) => !!account?.switch
