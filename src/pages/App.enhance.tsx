@@ -2,8 +2,11 @@ import axios from 'axios';
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import { actionGetPools, actionSetExplorer } from 'state/pools';
 import { actionGetPTokens } from 'state/token';
+
+import enhanceLoadWasm from './App.enhanceLoadWasm';
 
 export const KEY_TRADE_VOLUME = 'TRADE_VOLUME';
 
@@ -45,4 +48,4 @@ const enhance = (WrappedComponent: React.FunctionComponent) => {
   return AppComp;
 };
 
-export default enhance;
+export default compose(enhanceLoadWasm, enhance);
