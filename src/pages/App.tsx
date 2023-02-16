@@ -1,6 +1,8 @@
+/* eslint-disable no-restricted-imports */
 // eslint-disable-next-line no-restricted-imports
 import 'antd/dist/antd.css';
 import './reset.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Footer from 'components/Core/Footer';
@@ -177,21 +179,23 @@ const App = () => {
             {/*  </div>*/}
             {/*)}*/}
           </BodyWrapper>
+          <ToastContainer
+            autoClose={700}
+            hideProgressBar={true}
+            // position="bottom-center"
+            // toastClassName="white-color"
+            // closeButton={<></>}
+            // toastStyle={{ backgroundColor: '#252525', borderColor: '#363636', borderWidth: 1 }}
+            // autoClose={500}
+            // hideProgressBar={true}
+            // newestOnTop={false}
+            // rtl={false}
+            // pauseOnFocusLoss
+            // draggable
+            // pauseOnHover
+          />
         </AppWrapper>
       </IncognitoWalletProvider>
-      <ToastContainer
-        position="bottom-center"
-        toastClassName="white-color"
-        closeButton={<></>}
-        toastStyle={{ backgroundColor: '#252525', borderColor: '#363636', borderWidth: 1 }}
-        autoClose={500}
-        hideProgressBar={true}
-        newestOnTop={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </ErrorBoundary>
   );
 };
