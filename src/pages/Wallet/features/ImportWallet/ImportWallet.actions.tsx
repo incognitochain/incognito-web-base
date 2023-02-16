@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { importMasterKey, ImportMasterKeyPayload } from 'state/masterKey';
 
 interface IComponent {
@@ -24,6 +25,7 @@ export class ImportWalletAction implements IImportWalletAction {
       const wallet = await this.dispatch(importMasterKey(data));
       if (wallet && wallet.PassPhrase) {
         this.component.history.push('/');
+        toast.success('Assets Imported');
       }
     } catch (error) {
       const err = new Error(error);

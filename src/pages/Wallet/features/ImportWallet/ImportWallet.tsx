@@ -1,14 +1,22 @@
+import { WalletState } from 'core/types';
+import Page404 from 'pages/Page404';
 import Header from 'pages/Wallet/components/Header';
 import Steps from 'pages/Wallet/components/Steps';
 import { IStep } from 'pages/Wallet/components/Steps/Steps';
 import React, { memo } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import { webWalletStateSelector } from 'state/masterKey';
 
 import SetPassword from '../CreateWallet/components/SetPassword';
 import ImportPhrase from './components/ImportPhrase';
 import { IImportWalletAction, ImportWalletAction } from './ImportWallet.actions';
 import { Styled } from './ImportWallet.styled';
+
+export enum ImportWalletType {
+  import,
+  restore,
+}
 
 enum ImportWalletSteps {
   import,
@@ -19,12 +27,30 @@ const ImportWallet = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const webWalletState = useSelector(webWalletStateSelector);
+
+  const { path }: any = useParams();
+
+  const [walletType, setWalletType] = React.useState<ImportWalletType>(ImportWalletType.import);
+
   const [currentStep, setCurrentStep] = React.useState(ImportWalletSteps.import);
   const [loading, setLoading] = React.useState(false);
   const [errMess, setErrMess] = React.useState<undefined | string>();
 
   const phraseRef = React.useRef('');
   const masterKeyNameRef = React.useRef('');
+
+  React.useEffect(() => {
+    if (webWalletState === WalletState.uninitialized) {
+      setWalletType(ImportWalletType.import);
+    } else {
+      setWalletType(ImportWalletType.restore);
+    }
+  }, []);
+
+  if (!(path === 'import' || path === 'restore')) {
+    return <Page404 />;
+  }
 
   const importWalletActions: IImportWalletAction = new ImportWalletAction({
     component: {
@@ -54,7 +80,10 @@ const ImportWallet = () => {
   };
 
   const steps: IStep[] = [
-    { title: 'Import wallet', content: () => <ImportPhrase onImportPhrase={onImportPhrase} /> },
+    {
+      title: walletType === ImportWalletType.import ? 'Import wallet' : 'Restore wallet',
+      content: () => <ImportPhrase importWalletType={walletType} onImportPhrase={onImportPhrase} />,
+    },
     {
       title: 'Set a password',
       content: () => <SetPassword loading={loading} errorMess={errMess} onConfirmPassword={onConfirmPassword} />,

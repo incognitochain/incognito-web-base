@@ -64,15 +64,15 @@ const SetPassword = (props: SetPasswordProps) => {
         onChange={onChangeConfirmPassword}
       />
 
-      {(isStrongPassRef.current === true &&
+      {((isStrongPassRef.current === true &&
         password.length === confirmPassword.length &&
         password !== confirmPassword) ||
-        (props.errorMess && (
-          <AlertMessage
-            type={AlertMessageType.error}
-            message={props.errorMess || 'Password and Confirm password does not match!'}
-          />
-        ))}
+        props.errorMess) && (
+        <AlertMessage
+          type={AlertMessageType.error}
+          message={props.errorMess || 'Password and Confirm password does not match!'}
+        />
+      )}
 
       <ButtonPrimary className="btn" disabled={!isAbleContinue} onClick={() => props.onConfirmPassword(password)}>
         {props.loading ? <Spinner /> : <p className="text-btn">Continue</p>}

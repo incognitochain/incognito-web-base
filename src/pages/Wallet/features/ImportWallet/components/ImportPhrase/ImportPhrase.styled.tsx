@@ -18,7 +18,7 @@ export const Container = styled.div`
 
   .desc {
     margin-top: 16px;
-    width: 50%;
+    width: 40%;
     font-weight: 400;
     font-size: 14px;
     line-height: 140%;

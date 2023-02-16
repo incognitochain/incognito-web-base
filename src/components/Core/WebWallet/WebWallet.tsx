@@ -1,6 +1,7 @@
+import { useModal } from 'components/Modal';
 import { WalletState } from 'core/types';
 import { memo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { defaultAccountPaymentAddressSelector } from 'state/account/account.selectors';
 import { webWalletStateSelector } from 'state/masterKey';
@@ -8,11 +9,13 @@ import { shortenString } from 'utils';
 
 import { PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from '../../../constants';
 import { Image } from '../Image';
+import UnlockWalletModal from '../UnlockWalletModal';
 import { Container, Text, WalletButton, Wrapper } from './WebWallet.styled';
 
 const WebWallet = () => {
-  const dispatch = useDispatch();
   const history = useHistory();
+
+  const { setModal } = useModal();
 
   const webWalletState = useSelector(webWalletStateSelector);
   const address = useSelector(defaultAccountPaymentAddressSelector);
@@ -22,7 +25,18 @@ const WebWallet = () => {
   };
 
   const onClickImportWallet = async () => {
-    history.push('/import-wallet');
+    history.push('/wallet/import');
+  };
+
+  const onClickUnlockWallet = () => {
+    setModal({
+      closable: true,
+      data: <UnlockWalletModal />,
+      isTransparent: false,
+      rightHeader: undefined,
+      title: 'Unlock wallet',
+      isSearchTokenModal: true,
+    });
   };
 
   const onClickWallet = () => {};
@@ -41,7 +55,7 @@ const WebWallet = () => {
           </>
         )}
         {webWalletState === WalletState.locked && (
-          <WalletButton isImport={false} onClick={onClickCreateWallet}>
+          <WalletButton isImport={false} onClick={onClickUnlockWallet}>
             <p className="text">Unlock wallet</p>
           </WalletButton>
         )}
