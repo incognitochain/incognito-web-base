@@ -3,6 +3,7 @@ import { isEmpty, trim } from 'lodash';
 import AlertMessage from 'pages/Wallet/components/AlertMessage';
 import { AlertMessageType } from 'pages/Wallet/components/AlertMessage/AlertMessage';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import MasterKeyNameInput from '../../../CreateWallet/components/BackupPhrase/BackupPhrase.input';
 import { ImportWalletType } from '../../ImportWallet';
@@ -18,6 +19,8 @@ interface ImportPhraseProps {
 const NAME_PATTERN = /^[A-Za-z0-9]*$/;
 
 const ImportPhrase = (props: ImportPhraseProps) => {
+  const history = useHistory();
+
   const [phrase, setPhrase] = React.useState('');
   const [masterKeyName, setMasterKeyName] = React.useState('');
   const [errorVisible, setErrorVisible] = React.useState(false);
@@ -43,6 +46,10 @@ const ImportPhrase = (props: ImportPhraseProps) => {
     } else {
       setIsValidPhrase(true);
     }
+  };
+
+  const onClickCreateWallet = () => {
+    history.push('/create-wallet');
   };
 
   return (
@@ -93,6 +100,12 @@ const ImportPhrase = (props: ImportPhraseProps) => {
       >
         <p className="text-btn">{props.importWalletType === ImportWalletType.import ? 'Import' : 'Restore'}</p>
       </ButtonPrimary>
+
+      {props.importWalletType === ImportWalletType.restore && (
+        <p className="create-new-wallet" onClick={onClickCreateWallet}>
+          Create new wallet?
+        </p>
+      )}
     </Container>
   );
 };

@@ -1,6 +1,7 @@
 import { ReactComponent as IncognitoLogo } from 'assets/svg/incognito-logo.svg';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { defaultAccountPaymentAddressSelector } from 'state/account/account.selectors';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
@@ -51,7 +52,9 @@ const PaymentAddressBarStyled = styled.div`
 
 const PaymentAddressBar = (props: any) => {
   const incAccount = useSelector(incognitoWalletAccountSelector);
-  const incAddress = incAccount ? incAccount.paymentAddress : '';
+  const defaultAccountPaymentAddress = useSelector(defaultAccountPaymentAddressSelector);
+
+  const incAddress = incAccount ? incAccount.paymentAddress : defaultAccountPaymentAddress || '';
   return (
     <PaymentAddressBarStyled>
       <div className="address-area">

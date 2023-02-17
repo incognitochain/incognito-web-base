@@ -133,15 +133,6 @@ export const burnerAddressSelector = createSelector(accountSelector, ({ burnerAd
 
 export const otaKeyOfDefaultAccountSelector = createSelector(defaultAccountSelector, (account: any) => account.OTAKey);
 
-// export const keyDefineAccountSelector = createSelector(
-//   otaKeyOfDefaultAccountSelector,
-//   networkSelector,
-//   (OTAKey, network) => {
-//     if (!OTAKey || !network) return undefined;
-//     return `${OTAKey}-${network}`;
-//   }
-// );
-
 export const paymentAddressOfDefaultAccountSelector = createSelector(
   defaultAccountSelector,
   (account: any) => account.PaymentAddress

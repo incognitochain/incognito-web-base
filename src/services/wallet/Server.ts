@@ -66,7 +66,7 @@ export const MAIN_NET_SERVER = {
   web3Configs: WEB3_CONSTANT.WEB3_MAINNET_CONFIGS,
 };
 
-const TEST_NET_SERVER = {
+export const TEST_NET_SERVER = {
   id: 'testnet',
   default: false,
   address: TESTNET_FULLNODE,
@@ -98,22 +98,22 @@ export default class Server {
     await storage.setItem(KEY.SERVER, JSON.stringify(serverList));
   }
 
-  static async getServerListFromStorage(): Promise<ServerModel[]> {
-    const serverListJSON = await storage.getItem(KEY.SERVER);
+  static getServerListFromStorage(): ServerModel[] {
+    const serverListJSON = storage.getItem(KEY.SERVER);
     return (serverListJSON && JSON.parse(serverListJSON)) || [];
   }
 
-  static async clearServerListFromStorage(): Promise<void> {
-    await storage.removeItem(KEY.SERVER);
+  static clearServerListFromStorage() {
+    storage.removeItem(KEY.SERVER);
   }
 
-  static async getServerList(): Promise<ServerModel[]> {
+  static getServerList(): ServerModel[] {
     let serverList: ServerModel[] = [];
     try {
-      serverList = await Server.getServerListFromStorage();
+      serverList = Server.getServerListFromStorage();
       if (serverList && serverList.length < 1) {
         serverList = DEFAULT_LIST_SERVER;
-        await storage.setItem(KEY.SERVER, JSON.stringify(serverList));
+        storage.setItem(KEY.SERVER, JSON.stringify(serverList));
       }
     } catch (error) {
       console.log('[getServerList] ERROR: ', error);
@@ -122,16 +122,16 @@ export default class Server {
     }
   }
 
-  static async getDefault(): Promise<ServerModel> {
-    const serverList = await Server.getServerList();
+  static getDefault(): ServerModel {
+    const serverList = Server.getServerList();
     const serverDefaultFilter = serverList.filter((server) => server.default);
     const serverDefault = serverDefaultFilter.length > 0 ? serverDefaultFilter[0] : MAIN_NET_SERVER;
     return serverDefault;
   }
 
-  static async setDefaultServer(defaultServer: ServerModel): Promise<void> {
+  static setDefaultServer(defaultServer: ServerModel) {
     try {
-      const serverList = await Server.getServerList();
+      const serverList = Server.getServerList();
       const newServerList = serverList.map((server: ServerModel) => {
         if (defaultServer.address === server.address) {
           return {
@@ -141,10 +141,18 @@ export default class Server {
         }
         return { ...server, default: false };
       });
-      await Server.setServerListToStorage(newServerList);
+      Server.setServerListToStorage(newServerList);
     } catch (e) {
       throw e;
     }
+  }
+
+  static setDefaultIsMainetServer() {
+    Server.setDefaultServer(MAIN_NET_SERVER);
+  }
+
+  static setDefaultIsTestnetServer() {
+    Server.setDefaultServer(TEST_NET_SERVER);
   }
 
   static async checkExistNetworkWithId(address: string, networkType: NetworkType): Promise<boolean> {
@@ -206,8 +214,8 @@ export default class Server {
     return _.isEqual(currentNetworkId, 'mainnet');
   }
 
-  static async getNetwork(): Promise<string> {
-    const server = await Server.getDefault();
+  static getNetwork(): string {
+    const server = Server.getDefault();
     return server.id;
   }
 

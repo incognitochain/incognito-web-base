@@ -83,6 +83,17 @@ export const Container = styled.div`
     }
   }
 
+  .create-new-wallet {
+    align-self: center;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 140%;
+    margin-top: 24px;
+    cursor: pointer;
+    text-align: center;
+    /* color: ${({ theme }) => theme.primary7}; */
+  }
+
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
      
      .masterkey {

@@ -55,16 +55,6 @@ export type IBalance = {
   swipable: boolean;
 };
 
-export type PopupState = {
-  walletState: WalletState;
-  accounts: string[];
-  authorizedOrigins: string[];
-  actions: OrderedAction[];
-  storeData?: any;
-  reqResponse: null;
-  accountDetail?: any;
-};
-
 export type ActionKey = {
   tabId: string;
   origin: string;
@@ -160,35 +150,6 @@ export type PendingRequestAccounts = {
 export type SecretBox = {
   passphraseEncrypted: string;
   salt: string;
-};
-
-export type Notification =
-  | NotificationNetworkChanged
-  | NotificationAccountsChanged
-  | NotificationPopupStateChanged
-  | NotificationStateChanged;
-
-export type NotificationNetworkChanged = {
-  type: 'clusterChanged';
-  // data: Network;
-  data: {};
-};
-
-export type NotificationAccountsChanged = {
-  type: 'accountsChanged';
-  data: AccountInfo[];
-};
-
-export type NotificationPopupStateChanged = {
-  type: 'popupStateChanged';
-  data: PopupState;
-};
-
-export type NotificationStateChanged = {
-  type: 'stateChanged';
-  data: {
-    state: WalletState;
-  };
 };
 
 export const WalletActionsList = [

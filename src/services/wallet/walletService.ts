@@ -82,7 +82,7 @@ async function configsWallet(wallet: any) {
     if (!wallet) {
       return;
     }
-    const server = await Server.getDefault();
+    const server = Server.getDefault();
     wallet.RpcClient = server.address;
     wallet.RpcCoinService = server?.coinServices;
     wallet.Storage = storage;

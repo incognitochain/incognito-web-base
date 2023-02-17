@@ -1,7 +1,7 @@
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
 import { WalletState } from 'core/types';
-import { walletRequestAccounts } from 'pages/Wallet/actions/wallet.actions';
+import { getIncognitoAccounts, scanCoins } from 'pages/Wallet/actions/scancoin.actions';
 import React from 'react';
 import { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,10 +9,12 @@ import { useHistory } from 'react-router-dom';
 import { defaultAccountPaymentAddressSelector } from 'state/account/account.selectors';
 import { incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
 import { webWalletStateSelector } from 'state/masterKey';
+import { isFirstTimeScanCoinsSelector } from 'state/scanCoins';
 import { shortenString } from 'utils';
 
 import { PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from '../../../constants';
 import { Image } from '../Image';
+import { ScanCoinsBar } from '../ScanCoinsBar/ScanCoinsBar';
 import UnlockWalletModal from '../UnlockWalletModal';
 import { Container, Text, WalletButton, Wrapper } from './WebWallet.styled';
 
@@ -24,6 +26,7 @@ const WebWallet = () => {
 
   const webWalletState = useSelector(webWalletStateSelector);
   const address = useSelector(defaultAccountPaymentAddressSelector);
+  const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
 
   React.useEffect(() => {
     dispatch(incognitoWalletSetState(webWalletState));
@@ -41,10 +44,10 @@ const WebWallet = () => {
   }, [webWalletState]);
 
   const handleWhenWalletStateUnlocked = async () => {
-    const { result }: any = await dispatch(walletRequestAccounts());
-    if (result && result.accounts && result.accounts.length > 0) {
-      dispatch(incognitoWalletSetAccount(result.accounts));
-    }
+    //Start get accounts
+    dispatch(getIncognitoAccounts());
+    //Start scan coins
+    dispatch(scanCoins());
   };
 
   const onClickCreateWallet = async () => {
@@ -96,10 +99,13 @@ const WebWallet = () => {
           </WalletButton>
         )}
         {webWalletState === WalletState.unlocked && (
-          <Wrapper isConnected onClick={onClickWallet}>
-            <Image iconUrl={ROOT_NETWORK_IMG[PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]} />
-            <Text>{address ? shortenString(address) : ''}</Text>
-          </Wrapper>
+          <>
+            <Wrapper isConnected onClick={onClickWallet}>
+              <Image iconUrl={ROOT_NETWORK_IMG[PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]} />
+              <Text>{address ? shortenString(address) : ''}</Text>
+            </Wrapper>
+            {isScanCoins && <ScanCoinsBar />}
+          </>
         )}
       </Container>
     </div>

@@ -18,9 +18,11 @@ import incognitoWallet from './incognitoWallet/incognitoWallet.reducer';
 import lists from './lists/reducer';
 import logs from './logs/slice';
 import { reducer as masterKey } from './masterKey/masterKey.reducer';
+import { reducer as networkReducer } from './network/network.reducer';
 import pool from './pools/pool.reducer';
 import pOpensea from './pOpensea/pOpensea.reducer';
 import { routingApi } from './routing/slice';
+import scanCoinsReducer from './scanCoins/scanCoins.reducer';
 // import swap from './swap/reducer';
 import token from './token/token.reducer';
 import transactions from './transactions/reducer';
@@ -52,6 +54,8 @@ const appReducers = combineReducers({
   account,
   masterKey,
   webToken,
+  scanCoinsReducer,
+  networkReducer,
 });
 
 export const clearReduxStore = () => ({

@@ -29,9 +29,9 @@ export const masterKeysSelector = createSelector(
   (masterKeyState: MasterKeyState) => masterKeyState.list
 );
 
-export const webWalletStateSelector = createSelector(masterKeyReducerSelector, (masterKeyState: MasterKeyState) => {
+export const webWalletStateSelector = createSelector(masterKeysSelector, (list?: MasterKeyModel[]) => {
   let walletState = WalletState.uninitialized;
-  if (masterKeyState.list.length > 0) {
+  if (list && list.length > 0) {
     walletState = WalletState.unlocked;
   } else {
     const passPhrase = getPasspharseFromStorage();

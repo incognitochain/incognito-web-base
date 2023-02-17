@@ -1,5 +1,5 @@
 import { IBalance } from 'core/types';
-import { uniqBy } from 'lodash';
+import { uniq, uniqBy } from 'lodash';
 import Server, { TESTNET_FULLNODE } from 'services/wallet/Server';
 import {
   defaultAccountOTAKeySelector,
@@ -7,7 +7,12 @@ import {
   defaultAccountSelector,
   defaultAccountWalletSelector,
 } from 'state/account/account.selectors';
+import { incognitoWalletSetAccount } from 'state/incognitoWallet';
 import store, { AppGetState, AppThunkDispatch } from 'state/index';
+import { actionFetchingScanCoins, actionFistTimeScanCoins, isFetchingScanCoinsSelector } from 'state/scanCoins';
+import { measure } from 'utils/func';
+
+import { walletRequestAccounts } from './wallet.actions';
 
 const { PrivacyVersion } = require('incognito-chain-web-js/build/web/wallet');
 
@@ -74,6 +79,14 @@ export const getDefaultFollowTokensBalance = async (): Promise<{
   const tokens = await getTokensDefault();
   const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
   if (!accountSender || !keyDefine) return { balance: [], OTAKey: '' };
+
+  // if scanning coin get default balances else get from FollowTokens
+  const coinsStore = await accountSender.getStorageCoinsScan();
+  const isFinishScan = coinsStore && coinsStore.finishScan;
+  if (!isFinishScan) {
+    return { balance: tokens.map((token) => ({ amount: '0', id: token, swipable: true })) as IBalance[], OTAKey: '' };
+  }
+
   const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
     defaultTokens: tokens,
     version: PrivacyVersion.ver3,
@@ -96,4 +109,73 @@ export const getBalanceFromDApp = () => async (dispatch: AppThunkDispatch, getSt
     balances: _balance,
     paymentAddress,
   };
+};
+
+export const getIncognitoAccounts = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+  try {
+    const { result }: any = await dispatch(walletRequestAccounts());
+    if (result && result.accounts && result.accounts.length > 0) {
+      dispatch(incognitoWalletSetAccount(result.accounts));
+    }
+  } catch (error) {}
+};
+
+let counterFetchingCoins = 0;
+const maxCounterFetchingCoins = 6;
+
+export const scanCoins = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+  const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
+
+  const reduxStorage = getState();
+
+  const isFetching = isFetchingScanCoinsSelector(reduxStorage);
+  let coinsStore;
+  if (!accountSender) return;
+  coinsStore = await accountSender.getStorageCoinsScan();
+  const isFinishScan = coinsStore && coinsStore.finishScan;
+  if (isFinishScan && isFetching && keyDefine) {
+    if (counterFetchingCoins > maxCounterFetchingCoins) {
+      await dispatch(actionFetchingScanCoins({ isFetching: false }));
+      counterFetchingCoins = 0;
+      return;
+    }
+    counterFetchingCoins++;
+  }
+
+  console.log('SCAN COINS: 222 ', { isFetching });
+  // Validate data
+  if (!accountSender || isFetching || !keyDefine) return;
+
+  try {
+    const otaKey = accountSender.getOTAKey();
+    const _followTokens = (await accountSender.getListFollowingTokens()) || [];
+    // Get coins scanned from storage, existed ignore and continue scan
+    if (!isFinishScan) {
+      await dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
+    }
+
+    await dispatch(actionFetchingScanCoins({ isFetching: true }));
+
+    const tokens = await getTokensDefault();
+
+    console.log('SCAN COINS::: ');
+    // start scan coins
+    const { elapsed, result } = await measure(accountSender, 'scanCoins', {
+      tokenList: uniq(tokens.concat(_followTokens)),
+    });
+
+    await dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
+    counterFetchingCoins = 0;
+    if (!isFinishScan) {
+      // await getFollowTokensBalance({ reduxSyncStorage });
+    }
+
+    dispatch(getIncognitoAccounts());
+
+    console.log('scanCoins: ', { elapsed, otaKey, coins: result });
+  } catch (error) {
+    console.log('SCAN COINS WITH ERROR: ', error);
+  } finally {
+    await dispatch(actionFetchingScanCoins({ isFetching: false }));
+  }
 };
