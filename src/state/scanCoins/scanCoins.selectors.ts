@@ -1,4 +1,4 @@
-import { WalletState } from 'core/types';
+import { WalletState } from 'pages/IncWebWallet/core/types';
 import { createSelector } from 'reselect';
 import { defaultAccountOTAKeySelector } from 'state/account/account.selectors';
 import { RootState } from 'state/index';

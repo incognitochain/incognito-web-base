@@ -28,6 +28,8 @@ import Earnings from './Earnings';
 import Validators from './Earnings/features/Validators/Validators';
 import { GetPRV } from './GetPRV';
 import Home from './Home';
+import CreateWallet, { CreateWalletRoute } from './IncWebWallet/features/CreateWallet';
+import ImportWallet, { ImportWalletRoute } from './IncWebWallet/features/ImportWallet';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
 import Page404 from './Page404';
@@ -40,8 +42,6 @@ import Structure from './Structure';
 import DepositPage from './Swap/features/DepositPage';
 import SwapExchange from './Swap/features/SwapExchange';
 import TermOfService from './TermOfService';
-import CreateWallet, { CreateWalletRoute } from './Wallet/features/CreateWallet';
-import ImportWallet, { ImportWalletRoute } from './Wallet/features/ImportWallet';
 
 export const HEADER_ID = 'HEADER_VIEW';
 export const FOOTER_ID = 'FOOTER_VIEW';
@@ -180,9 +180,9 @@ const App = () => {
             {/*)}*/}
           </BodyWrapper>
           <ToastContainer
-            autoClose={700}
+            autoClose={500}
             hideProgressBar={true}
-            // position="bottom-center"
+            position="top-center"
             // toastClassName="white-color"
             // closeButton={<></>}
             // toastStyle={{ backgroundColor: '#252525', borderColor: '#363636', borderWidth: 1 }}

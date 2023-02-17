@@ -1,5 +1,5 @@
 import { cloneDeep, remove } from 'lodash';
-import AccountModel from 'models/model/account';
+import AccountModel from 'pages/IncWebWallet/models/account';
 import { Reducer } from 'redux';
 import { AccountActions, AccountActionType } from 'state/account/account.types';
 

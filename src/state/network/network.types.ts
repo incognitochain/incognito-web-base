@@ -1,5 +1,5 @@
+import { ServerModel } from 'pages/IncWebWallet/services/wallet/Server';
 import { Action } from 'redux';
-import { ServerModel } from 'services/wallet/Server';
 
 export type NetworkInfo = {
   currentNetwork: ServerModel;

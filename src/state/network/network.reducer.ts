@@ -1,5 +1,5 @@
+import Server, { ServerModel } from 'pages/IncWebWallet/services/wallet/Server';
 import { Reducer } from 'redux';
-import Server, { ServerModel } from 'services/wallet/Server';
 
 import { NetworkActions, NetworkActionType } from './network.types';
 

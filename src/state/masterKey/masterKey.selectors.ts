@@ -1,9 +1,9 @@
-import { WalletState } from 'core/types';
 import { flatMap } from 'lodash';
 import groupBy from 'lodash/groupBy';
-import MasterKeyModel from 'models/model/MasterKeyModel';
+import { WalletState } from 'pages/IncWebWallet/core/types';
+import MasterKeyModel from 'pages/IncWebWallet/models/MasterKeyModel';
+import { getPasspharseFromStorage } from 'pages/IncWebWallet/services/wallet/passwordService';
 import { createSelector } from 'reselect';
-import { getPasspharseFromStorage } from 'services/wallet/passwordService';
 import { RootState } from 'state/index';
 
 import { MasterKeyState } from './masterKey.reducer';

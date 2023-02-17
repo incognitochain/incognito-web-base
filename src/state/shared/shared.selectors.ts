@@ -1,6 +1,6 @@
 import CONSTANT_COMMONS from 'constants/common';
+import { getAccountWallet } from 'pages/IncWebWallet/services/wallet/wallet.shared';
 import { createSelector } from 'reselect';
-import { getAccountWallet } from 'services/wallet/wallet.shared';
 import { defaultAccountName, defaultAccountSelector } from 'state/account/account.selectors';
 import { RootState } from 'state/index';
 import { walletSelector } from 'state/webWallet/webWallet.selectors';

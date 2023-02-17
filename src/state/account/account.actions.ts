@@ -1,10 +1,10 @@
 /* eslint-disable no-restricted-syntax */
-import AccountModel from 'models/model/account';
-import MasterKeyModel from 'models/model/MasterKeyModel';
+import AccountModel from 'pages/IncWebWallet/models/account';
+import MasterKeyModel from 'pages/IncWebWallet/models/MasterKeyModel';
+import { ExHandler } from 'pages/IncWebWallet/services/exception';
+import accountService from 'pages/IncWebWallet/services/wallet/accountService';
+import { getPassphrase } from 'pages/IncWebWallet/services/wallet/passwordService';
 import { batch } from 'react-redux';
-import { ExHandler } from 'services/exception';
-import accountService from 'services/wallet/accountService';
-import { getPassphrase } from 'services/wallet/passwordService';
 import {
   burnerAddressSelector,
   default as accountSelector,

@@ -1,4 +1,4 @@
-import MasterKeyModel from 'models/model/MasterKeyModel';
+import MasterKeyModel from 'pages/IncWebWallet/models/MasterKeyModel';
 import { Action } from 'redux';
 
 export enum MasterKeyActionType {

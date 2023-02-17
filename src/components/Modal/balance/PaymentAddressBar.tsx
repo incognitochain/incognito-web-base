@@ -1,4 +1,5 @@
 import { ReactComponent as IncognitoLogo } from 'assets/svg/incognito-logo.svg';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { defaultAccountPaymentAddressSelector } from 'state/account/account.selectors';
@@ -61,7 +62,7 @@ const PaymentAddressBar = (props: any) => {
         <IncognitoLogo className="logo" />
         <div className="content">
           <ThemedText.RegularLabel fontWeight={500} color="primary5">
-            {shortenString(incAddress, 8)}
+            {!isEmpty(incAddress) && shortenString(incAddress, 8)}
           </ThemedText.RegularLabel>
 
           <ThemedText.SmallLabel fontWeight={400} color="primary8">

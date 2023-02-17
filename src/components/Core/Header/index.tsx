@@ -26,11 +26,11 @@ import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
 import { isMobile } from 'utils/userAgent';
 
+import WebWallet from '../../../pages/IncWebWallet/components/WebWallet';
 import { actionFreeSwapForm } from '../../../pages/Swap/features/FormUnshield/FormUnshield.actions';
 import { useAppDispatch } from '../../../state/hooks';
 import IncognitoWallet from '../IncognitoWallet';
 import { useIncognitoWallet } from '../IncognitoWallet/IncongitoWallet.useContext';
-import WebWallet from '../WebWallet';
 // import IncognitoWallet from '../IncognitoWallet';
 import { DrawerStyled, MenuDropdown, Styled } from './Header.styled';
 // import NetworkSelector from './NetworkSelector';

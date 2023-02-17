@@ -1,20 +1,20 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-vars */
-import { WalletSDK } from 'core/types';
-import MasterKeyModel, { DEFAULT_MASTER_KEY, MASTERLESS } from 'models/model/MasterKeyModel';
-import { batch } from 'react-redux';
-import { getWalletAccounts } from 'services/api/masterKey';
-import { clearAllCaches, clearWalletCaches } from 'services/cache/cache';
-import { ExHandler } from 'services/exception';
-import accountServices from 'services/wallet/accountService';
+import { WalletSDK } from 'pages/IncWebWallet/core/types';
+import MasterKeyModel, { DEFAULT_MASTER_KEY, MASTERLESS } from 'pages/IncWebWallet/models/MasterKeyModel';
+import { getWalletAccounts } from 'pages/IncWebWallet/services/api/masterKey';
+import { clearAllCaches, clearWalletCaches } from 'pages/IncWebWallet/services/cache/cache';
+import { ExHandler } from 'pages/IncWebWallet/services/exception';
+import accountServices from 'pages/IncWebWallet/services/wallet/accountService';
 import {
   cachePassword,
   getPassphrase,
   getPassphraseNoCache,
   savePasspharseToStorage,
-} from 'services/wallet/passwordService';
-import serverService from 'services/wallet/Server';
-import WalletServices from 'services/wallet/walletService';
+} from 'pages/IncWebWallet/services/wallet/passwordService';
+import serverService from 'pages/IncWebWallet/services/wallet/Server';
+import WalletServices from 'pages/IncWebWallet/services/wallet/walletService';
+import { batch } from 'react-redux';
 import { AppGetState, AppThunk, AppThunkDispatch, clearReduxStore } from 'state/index';
 import {
   currentMasterKeySelector,

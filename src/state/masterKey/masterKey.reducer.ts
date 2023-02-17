@@ -1,11 +1,11 @@
 import { KEYS } from 'constants/keys';
 import lodash from 'lodash';
-import MasterKeyModel from 'models/model/MasterKeyModel';
+import MasterKeyModel from 'pages/IncWebWallet/models/MasterKeyModel';
+import accountServices from 'pages/IncWebWallet/services/wallet/accountService';
+import { getPassphrase } from 'pages/IncWebWallet/services/wallet/passwordService';
+import StorageService from 'pages/IncWebWallet/storage';
 import { Reducer } from 'redux';
-import accountServices from 'services/wallet/accountService';
-import { getPassphrase } from 'services/wallet/passwordService';
 import algorithms from 'utils/algorithms';
-import StorageService from 'walletStorage';
 
 import { MasterKeyActions, MasterKeyActionType } from './masterKey.types';
 

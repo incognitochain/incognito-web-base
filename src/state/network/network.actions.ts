@@ -1,4 +1,4 @@
-import { ServerModel } from 'services/wallet/Server';
+import { ServerModel } from 'pages/IncWebWallet/services/wallet/Server';
 
 import { ChangeNetworkAction, NetworkActionType } from './network.types';
 

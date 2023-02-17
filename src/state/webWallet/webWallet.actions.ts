@@ -1,8 +1,8 @@
 import { isEqual } from 'lodash';
-import AccountModel from 'models/model/account';
+import AccountModel from 'pages/IncWebWallet/models/account';
+import accountService from 'pages/IncWebWallet/services/wallet/accountService';
+import WalletServices from 'pages/IncWebWallet/services/wallet/walletService';
 import { batch } from 'react-redux';
-import accountService from 'services/wallet/accountService';
-import WalletServices from 'services/wallet/walletService';
 import {
   actionSetSignPublicKeyEncode,
   setAccount,

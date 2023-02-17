@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
+import { getAccountWallet } from 'pages/IncWebWallet/services/wallet/wallet.shared';
 import { createSelector } from 'reselect';
-import { getAccountWallet } from 'services/wallet/wallet.shared';
 import { RootState } from 'state/index';
 import { walletSelector } from 'state/webWallet/webWallet.selectors';
 

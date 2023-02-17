@@ -1,5 +1,5 @@
 import { isMainnet } from 'config';
-import { MAINNET_FULLNODE, TESTNET_FULLNODE } from 'services/wallet/Server';
+import { MAINNET_FULLNODE, TESTNET_FULLNODE } from 'pages/IncWebWallet/services/wallet/Server';
 
 export const MAIN_WEBSITE = 'https://we.incognito.org';
 
