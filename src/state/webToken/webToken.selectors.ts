@@ -1,5 +1,5 @@
-import { PRV_ID } from 'constants/common';
 import uniq from 'lodash/uniq';
+import { PRV_ID } from 'pages/IncWebWallet/constants/common';
 import { createSelector } from 'reselect';
 import { RootState } from 'state/index';
 

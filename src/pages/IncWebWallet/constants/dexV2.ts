@@ -1,4 +1,4 @@
-import config from 'constants/config';
+import config from 'pages/IncWebWallet/constants/config';
 
 export const MAX_PDEX_TRADE_STEPS = 4;
 export const PRV_ID = '0000000000000000000000000000000000000000000000000000000000000004';

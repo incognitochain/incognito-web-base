@@ -1,5 +1,5 @@
-import { APP_PASS_PHRASE_CIPHER, APP_PASSWORD_KEY, APP_SALT_KEY } from 'constants/common';
-import config from 'constants/config';
+import { APP_PASS_PHRASE_CIPHER, APP_PASSWORD_KEY, APP_SALT_KEY } from 'pages/IncWebWallet/constants/common';
+import config from 'pages/IncWebWallet/constants/config';
 import { cache, cachePromise, clearCache, getCache } from 'pages/IncWebWallet/services/cache/cache';
 import Storage from 'pages/IncWebWallet/storage';
 const { Validator } = require('incognito-chain-web-js/build/web/wallet');

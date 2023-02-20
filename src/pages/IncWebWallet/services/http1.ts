@@ -1,5 +1,5 @@
 import axios from 'axios';
-import CONSTANT_CONFIGS from 'constants/config';
+import CONSTANT_CONFIGS from 'pages/IncWebWallet/constants/config';
 import Server from 'pages/IncWebWallet/services/wallet/Server';
 
 import { CustomError, ErrorCode, ExHandler } from './exception';

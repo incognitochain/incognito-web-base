@@ -1,5 +1,5 @@
-import { KEYS } from 'constants/keys';
 import lodash from 'lodash';
+import { KEYS } from 'pages/IncWebWallet/constants/keys';
 import MasterKeyModel from 'pages/IncWebWallet/models/MasterKeyModel';
 import accountServices from 'pages/IncWebWallet/services/wallet/accountService';
 import { getPassphrase } from 'pages/IncWebWallet/services/wallet/passwordService';

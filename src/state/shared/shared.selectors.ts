@@ -1,4 +1,4 @@
-import CONSTANT_COMMONS from 'constants/common';
+import CONSTANT_COMMONS from 'pages/IncWebWallet/constants/common';
 import { getAccountWallet } from 'pages/IncWebWallet/services/wallet/wallet.shared';
 import { createSelector } from 'reselect';
 import { defaultAccountName, defaultAccountSelector } from 'state/account/account.selectors';

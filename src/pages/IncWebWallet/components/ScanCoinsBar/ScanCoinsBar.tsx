@@ -1,4 +1,4 @@
-import { PRV_ID } from 'constants/common';
+import { PRV_ID } from 'pages/IncWebWallet/constants/common';
 import Storage from 'pages/IncWebWallet/storage';
 import React from 'react';
 import styled from 'styled-components/macro';

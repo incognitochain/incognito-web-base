@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
-import COINS from 'constants/coin';
-import { PRV_ID } from 'constants/common';
-import CONSTANT_KEYS from 'constants/keys';
 import _, { cloneDeep } from 'lodash';
+import COINS from 'pages/IncWebWallet/constants/coin';
+import { PRV_ID } from 'pages/IncWebWallet/constants/common';
+import CONSTANT_KEYS from 'pages/IncWebWallet/constants/keys';
 import AccountModel from 'pages/IncWebWallet/models/account';
 import { clearAllCaches } from 'pages/IncWebWallet/services/cache/cache';
 import { STACK_TRACE } from 'pages/IncWebWallet/services/exception/customError/code/webjsCode';
