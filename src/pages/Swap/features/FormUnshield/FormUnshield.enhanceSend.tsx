@@ -471,6 +471,9 @@ const enhanceSend = (WrappedComponent: any) => {
           } else if (sellToken.isCentralized) {
             /** Case Unshield Centralized */
             isSignAndSendTransaction = true;
+            payload = {
+              info: typeof id === 'number' ? String(id) : '',
+            };
           } else {
             /** Case Unshield Decentralized */
             const metadata = getUnshieldDecentralizedMetadata({ otaReceiver, burnerAddress });
