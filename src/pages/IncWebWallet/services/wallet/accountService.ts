@@ -8,7 +8,7 @@ import { clearAllCaches } from 'pages/IncWebWallet/services/cache/cache';
 import { STACK_TRACE } from 'pages/IncWebWallet/services/exception/customError/code/webjsCode';
 import Server from 'pages/IncWebWallet/services/wallet/Server';
 import { getAccountNameByAccount, getAccountWallet } from 'pages/IncWebWallet/services/wallet/wallet.shared';
-import storage from 'pages/IncWebWallet/storage';
+import { StorageManager } from 'storage';
 
 import { CustomError, ErrorCode, ExHandler } from '../exception';
 import WalletServices from './walletService';
@@ -34,7 +34,7 @@ export default class Account {
 
   static async getDefaultAccountName() {
     try {
-      return await storage.getItem(CONSTANT_KEYS.DEFAULT_ACCOUNT_NAME);
+      return await StorageManager.getItem(CONSTANT_KEYS.DEFAULT_ACCOUNT_NAME);
     } catch (e) {
       console.error('Error while getting default account index, fallback index to 0');
     }
@@ -74,7 +74,7 @@ export default class Account {
   }
 
   static saveDefaultAccountToStorage(accountName: any) {
-    return storage.setItem(CONSTANT_KEYS.DEFAULT_ACCOUNT_NAME, accountName);
+    return StorageManager.setItem(CONSTANT_KEYS.DEFAULT_ACCOUNT_NAME, accountName);
   }
 
   static async importAccount(privakeyStr: any, accountName: any, passPhrase: any, wallet: any) {

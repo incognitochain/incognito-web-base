@@ -2,10 +2,9 @@ import Header from 'pages/IncWebWallet/components/Header';
 import Steps from 'pages/IncWebWallet/components/Steps';
 import { IStep } from 'pages/IncWebWallet/components/Steps/Steps';
 import { WalletState } from 'pages/IncWebWallet/core/types';
-import Page404 from 'pages/Page404';
 import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { webWalletStateSelector } from 'state/masterKey';
 
 import SetPassword from '../CreateWallet/components/SetPassword';
@@ -29,8 +28,6 @@ const ImportWallet = () => {
 
   const webWalletState = useSelector(webWalletStateSelector);
 
-  const { path }: any = useParams();
-
   const [walletType, setWalletType] = React.useState<ImportWalletType>(ImportWalletType.import);
 
   const [currentStep, setCurrentStep] = React.useState(ImportWalletSteps.import);
@@ -47,11 +44,6 @@ const ImportWallet = () => {
       setWalletType(ImportWalletType.restore);
     }
   }, []);
-
-  if (!(path === 'import' || path === 'restore')) {
-    return <Page404 />;
-  }
-
   const importWalletActions: IImportWalletAction = new ImportWalletAction({
     component: {
       history,

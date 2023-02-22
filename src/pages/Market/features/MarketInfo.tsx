@@ -1,13 +1,12 @@
 import { Tooltip } from 'antd';
 import { ReactComponent as Info } from 'assets/images/info.svg';
 import { marketTranslateSelector } from 'config/Configs.selector';
-import { KEY_TRADE_VOLUME } from 'pages/App.enhance';
 import React, { useState } from 'react';
 import CountUp from 'react-countup';
 import { useSelector } from 'react-redux';
 import VisibilitySensor from 'react-visibility-sensor';
+import { KEYS, StorageManager } from 'storage';
 import styled, { DefaultTheme } from 'styled-components/macro';
-
 export const Styled = styled.div`
   width: 100%;
   display: flex;
@@ -134,7 +133,7 @@ const MarketInfo = () => {
   const Factory = React.useMemo(
     () => [
       {
-        number: localStorage.getItem(KEY_TRADE_VOLUME) || 347,
+        number: StorageManager.getItem(KEYS.TRADE_VOLUME) || 347,
         prefix: '$',
         suffix: 'M+',
         desc: marketTrs.volumeTraded,

@@ -4,7 +4,7 @@ import { WalletSDK } from 'pages/IncWebWallet/core/types';
 import { getPassphrase } from 'pages/IncWebWallet/services/wallet/passwordService';
 import Server from 'pages/IncWebWallet/services/wallet/Server';
 import WalletServices from 'pages/IncWebWallet/services/wallet/walletService';
-import StorageService from 'pages/IncWebWallet/storage';
+import { StorageManager } from 'storage';
 const { loadBackupKey, parseStorageBackup } = require('incognito-chain-web-js/build/web/wallet');
 
 export interface MasterKeyModelProps {
@@ -77,7 +77,7 @@ class MasterKeyModel extends BaseModel implements MasterKeyModelActions {
   async getBackupMasterKeys() {
     const [network, passphrase] = await Promise.all([Server.getNetwork(), getPassphrase()]);
     const storageKey = loadBackupKey(network);
-    const backupStr = (await StorageService.getItem(storageKey)) || '';
+    const backupStr = (await StorageManager.getItem(storageKey)) || '';
     return parseStorageBackup({ passphrase, backupStr }) || [];
   }
 
@@ -88,7 +88,7 @@ class MasterKeyModel extends BaseModel implements MasterKeyModelActions {
   async loadWallet(): Promise<WalletSDK> {
     const rootName = this.name;
     const storageName = this.getStorageName();
-    const rawData = await StorageService.getItem(storageName);
+    const rawData = await StorageManager.getItem(storageName);
     const passphrase = await getPassphrase();
 
     let wallet: WalletSDK;

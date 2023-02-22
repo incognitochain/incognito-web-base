@@ -1,7 +1,7 @@
 import { APP_PASS_PHRASE_CIPHER, APP_PASSWORD_KEY, APP_SALT_KEY } from 'pages/IncWebWallet/constants/common';
 import config from 'pages/IncWebWallet/constants/config';
 import { cache, cachePromise, clearCache, getCache } from 'pages/IncWebWallet/services/cache/cache';
-import Storage from 'pages/IncWebWallet/storage';
+import { StorageManager } from 'storage';
 const { Validator } = require('incognito-chain-web-js/build/web/wallet');
 const sjcl = require('incognito-chain-web-js/lib/privacy/sjcl');
 const { codec, misc } = require('incognito-chain-web-js/lib/privacy/sjcl');
@@ -28,7 +28,7 @@ const clearPasspharse = (): void => {
  * @returns {string} - JSON
  */
 const getPasspharseFromStorage = (): string => {
-  return Storage.getItem(APP_PASS_PHRASE_CIPHER);
+  return StorageManager.getItem(APP_PASS_PHRASE_CIPHER);
 };
 
 /**
@@ -46,7 +46,7 @@ const savePasspharseToStorage = async (aesKeyString: string, mnemonic: string, p
       password,
     });
     const passpharseCipherText = sjcl.encrypt(sjcl.codec.hex.toBits(aesKeyString), passpharseJSON);
-    await Storage.setItem(APP_PASS_PHRASE_CIPHER, passpharseCipherText);
+    await StorageManager.setItem(APP_PASS_PHRASE_CIPHER, passpharseCipherText);
     return Promise.resolve(true);
   } catch (error) {
     return Promise.resolve(false);
@@ -87,7 +87,7 @@ const createNewSalt = (bytes = 16): string => {
  * @returns Promise<string | undefined>
  */
 const getSaltFromStorage = (): string | undefined => {
-  return Storage.getItem(APP_SALT_KEY);
+  return StorageManager.getItem(APP_SALT_KEY);
 };
 
 /**
@@ -118,7 +118,7 @@ const getPassphraseNoCache = async (): Promise<PassphraseProps> => {
       salt = createNewSalt();
 
       //save Salt to Local Storage
-      Storage.setItem(APP_SALT_KEY, salt);
+      StorageManager.setItem(APP_SALT_KEY, salt);
     }
     const password = await getCache(APP_PASSWORD_KEY);
     const aesKey = getAesKeyFromSalt({ salt, password });

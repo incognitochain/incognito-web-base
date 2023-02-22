@@ -1,4 +1,5 @@
-import storage from 'pages/IncWebWallet/storage';
+import { StorageManager } from 'storage';
+import JSONHelper from 'utils/jsonHelper';
 
 const getKeyStorageError = () => {
   return '$STORAGE_ERROR_LOAD_WALLET';
@@ -6,11 +7,11 @@ const getKeyStorageError = () => {
 
 export const getStorageLoadWalletError = async () => {
   const key = getKeyStorageError();
-  const result = (await storage.getItem(key)) || '[]';
-  return JSON.parse(result);
+  const result = (await StorageManager.getItem(key)) || '[]';
+  return JSONHelper.isJsonString(result) && JSON.parse(result);
 };
 
 export const setStorageLoadWalletError = async (data: any) => {
   const key = getKeyStorageError();
-  await storage.setItem(key, JSON.stringify(data));
+  await StorageManager.setItem(key, JSON.stringify(data));
 };

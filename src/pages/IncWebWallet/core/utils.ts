@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { GEN_PROPOSAL_SIGNATURE_INDEX, TEMP_WALLET_INFO } from 'constants/common';
-import Storage from 'pages/IncWebWallet/storage';
+import { StorageManager } from 'storage';
+import JSONHelper from 'utils/jsonHelper';
 
 import { ENVIRONMENT_TYPE_NOTIFICATION, ENVIRONMENT_TYPE_POPUP } from './types';
 
@@ -20,7 +21,7 @@ export const createLogger = (module: string): any => {
 
 export function enableLogger() {
   if (process.env.NODE_ENV === 'development') {
-    localStorage.setItem('debug', '*');
+    StorageManager.setItem('debug', '*');
   }
   return;
 }
@@ -204,13 +205,13 @@ const genSignData = (data: any) => {
 export const genETHAccFromOTAKey = async (otaKey: any) => {
   try {
     const web3 = new Web3();
-    let index = await Storage.getItem(GEN_PROPOSAL_SIGNATURE_INDEX);
+    let index = await StorageManager.getItem(GEN_PROPOSAL_SIGNATURE_INDEX);
     if (!index) {
       index = 0;
-      await Storage.setItem(GEN_PROPOSAL_SIGNATURE_INDEX, '0');
+      await StorageManager.setItem(GEN_PROPOSAL_SIGNATURE_INDEX, '0');
     } else {
       index = parseInt(index) + 1;
-      await Storage.setItem(GEN_PROPOSAL_SIGNATURE_INDEX, index.toString());
+      await StorageManager.setItem(GEN_PROPOSAL_SIGNATURE_INDEX, index.toString());
     }
     const indexToHex = bs58.encode(Buffer.from(index.toString(16).slice(2)));
     let bytes = bs58.decode(otaKey + indexToHex);
@@ -268,7 +269,8 @@ export const genETHAccFromOTAKey2 = async (otaKey: any) => {
 export const signMessage = async (signData, signerAddr, otaPrivateKey) => {
   let signerWallet;
   if (signerAddr) {
-    signerWallet = JSON.parse(await Storage.getItem(TEMP_WALLET_INFO));
+    const data = await StorageManager.getItem(TEMP_WALLET_INFO);
+    signerWallet = JSONHelper.isJsonString(data) && JSON.parse(data);
     if (signerWallet?.address !== signerAddr) return;
   } else {
     const dateToHex = bs58.encode(
@@ -279,7 +281,7 @@ export const signMessage = async (signData, signerAddr, otaPrivateKey) => {
       )
     );
     signerWallet = await genETHAccFromOTAKey2(otaPrivateKey + dateToHex);
-    await Storage.setItem(TEMP_WALLET_INFO, JSON.stringify(signerWallet));
+    await StorageManager.setItem(TEMP_WALLET_INFO, JSON.stringify(signerWallet));
   }
 
   if (!signerWallet) {

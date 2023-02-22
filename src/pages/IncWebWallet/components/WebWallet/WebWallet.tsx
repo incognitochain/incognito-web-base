@@ -56,7 +56,7 @@ const WebWallet = () => {
   };
 
   const onClickCreateWallet = async () => {
-    history.push('/create-wallet');
+    history.push('/wallet/create');
   };
 
   const onClickImportWallet = async () => {

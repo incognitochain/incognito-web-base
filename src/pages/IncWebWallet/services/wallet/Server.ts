@@ -1,7 +1,8 @@
 /* eslint-disable no-unsafe-finally */
 /* eslint-disable no-useless-catch */
 import _ from 'lodash';
-import storage from 'pages/IncWebWallet/storage';
+import { StorageManager } from 'storage';
+import JSONHelper from 'utils/jsonHelper';
 const {
   PANCAKE_CONSTANTS,
   WEB3_CONSTANT,
@@ -95,16 +96,16 @@ export const KEY = {
 
 export default class Server {
   static async setServerListToStorage(serverList: ServerModel[]): Promise<void> {
-    await storage.setItem(KEY.SERVER, JSON.stringify(serverList));
+    await StorageManager.setItem(KEY.SERVER, JSON.stringify(serverList));
   }
 
   static getServerListFromStorage(): ServerModel[] {
-    const serverListJSON = storage.getItem(KEY.SERVER);
-    return (serverListJSON && JSON.parse(serverListJSON)) || [];
+    const serverListJSON = StorageManager.getItem(KEY.SERVER);
+    return (serverListJSON && JSONHelper.isJsonString(serverListJSON) && JSON.parse(serverListJSON)) || [];
   }
 
   static clearServerListFromStorage() {
-    storage.removeItem(KEY.SERVER);
+    StorageManager.removeItem(KEY.SERVER);
   }
 
   static getServerList(): ServerModel[] {
@@ -113,7 +114,7 @@ export default class Server {
       serverList = Server.getServerListFromStorage();
       if (serverList && serverList.length < 1) {
         serverList = DEFAULT_LIST_SERVER;
-        storage.setItem(KEY.SERVER, JSON.stringify(serverList));
+        StorageManager.setItem(KEY.SERVER, JSON.stringify(serverList));
       }
     } catch (error) {
       console.log('[getServerList] ERROR: ', error);
@@ -121,7 +122,6 @@ export default class Server {
       return serverList;
     }
   }
-
   static getDefault(): ServerModel {
     const serverList = Server.getServerList();
     const serverDefaultFilter = serverList.filter((server) => server.default);

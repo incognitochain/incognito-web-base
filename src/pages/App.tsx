@@ -28,8 +28,8 @@ import Earnings from './Earnings';
 import Validators from './Earnings/features/Validators/Validators';
 import { GetPRV } from './GetPRV';
 import Home from './Home';
-import CreateWallet, { CreateWalletRoute } from './IncWebWallet/features/CreateWallet';
-import ImportWallet, { ImportWalletRoute } from './IncWebWallet/features/ImportWallet';
+import CreateWallet from './IncWebWallet/features/CreateWallet';
+import ImportWallet from './IncWebWallet/features/ImportWallet';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
 import Page404 from './Page404';
@@ -125,9 +125,8 @@ const App = () => {
         <Route exact path="/papps/popensea/detail/:contract/:tokenId" component={POpenseaNFTDetail} />
         <Route exact path="/buy-node" component={BuyNode} />
         <Route exact path="/deposit" component={DepositPage} />
-        <Route exact path={CreateWalletRoute.path} component={CreateWallet} />
-        <Route exact path={ImportWalletRoute.path} component={ImportWallet} />
-
+        <Route exact path="/wallet/create" component={CreateWallet} />
+        <Route exact path={['/wallet/import', '/wallet/restore']} component={ImportWallet} />
         {!isMobile && (
           <>
             <Route exact path="/vote" component={Governance} />

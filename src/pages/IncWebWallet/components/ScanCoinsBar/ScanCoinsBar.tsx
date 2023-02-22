@@ -1,8 +1,9 @@
 import { PRV_ID } from 'pages/IncWebWallet/constants/common';
-import Storage from 'pages/IncWebWallet/storage';
 import React from 'react';
+import { StorageManager } from 'storage';
 import styled from 'styled-components/macro';
 import format from 'utils/format';
+import JSONHelper from 'utils/jsonHelper';
 
 interface ScanCoinsBarProps {
   className?: string;
@@ -30,15 +31,21 @@ export const ScanCoinsBar = (props: ScanCoinsBarProps) => {
   const { className } = props;
   const [percent, setPercent] = React.useState(0);
   const getPercentScan = async () => {
-    const data = Storage.getItem(COINS_INDEX_STORAGE_KEY);
-    if (data) {
-      const { coinsLen, prvLen, tokenID, batchStart } = JSON.parse(data);
-      const index = tokenID === PRV_ID ? batchStart : batchStart + prvLen;
-      const percent = format.toFixed({
-        number: Number(index / coinsLen) * 100,
-        decimals: 2,
+    const data = StorageManager.getItem(COINS_INDEX_STORAGE_KEY);
+    try {
+      if (data) {
+        const { coinsLen, prvLen, tokenID, batchStart } = JSONHelper.isJsonString(data) && JSON.parse(data);
+        const index = tokenID === PRV_ID ? batchStart : batchStart + prvLen;
+        const percent = format.toFixed({
+          number: Number(index / coinsLen) * 100,
+          decimals: 2,
+        });
+        setPercent(Number(percent));
+      }
+    } catch (error) {
+      console.log('[getPercentScan] error ', {
+        error,
       });
-      setPercent(Number(percent));
     }
   };
   const handlePercent = async () => {

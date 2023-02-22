@@ -3,9 +3,10 @@ import { KEYS } from 'pages/IncWebWallet/constants/keys';
 import MasterKeyModel from 'pages/IncWebWallet/models/MasterKeyModel';
 import accountServices from 'pages/IncWebWallet/services/wallet/accountService';
 import { getPassphrase } from 'pages/IncWebWallet/services/wallet/passwordService';
-import StorageService from 'pages/IncWebWallet/storage';
 import { Reducer } from 'redux';
+import { StorageManager } from 'storage';
 import algorithms from 'utils/algorithms';
+import JSONHelper from 'utils/jsonHelper';
 
 import { MasterKeyActions, MasterKeyActionType } from './masterKey.types';
 
@@ -81,7 +82,7 @@ function removeMasterKey(name: string, list: any[]) {
       console.log('ERROR remove master key', error);
     }
 
-    await StorageService.removeItem(item.getStorageName());
+    await StorageManager.removeItem(item.getStorageName());
   });
   saveMasterKeys(newList);
   return newList;
@@ -107,15 +108,16 @@ export async function saveMasterKeys(masterKeyList: MasterKeyModel[]) {
   const masterKeyListJSON = JSON.stringify(newMasterKeyListRawData);
   const { aesKey } = await getPassphrase();
   const masterKeyListEncryped = algorithms.encryptData(masterKeyListJSON, aesKey);
-  await StorageService.setItem(KEYS.MASTER_KEY_LIST, masterKeyListEncryped);
+  await StorageManager.setItem(KEYS.MASTER_KEY_LIST, masterKeyListEncryped);
   return;
 }
 
 export async function loadMasterKeysRawData(): Promise<MasterKeyRawData[]> {
   const { aesKey } = await getPassphrase();
-  const masterKeyListEncryped = await StorageService.getItem(KEYS.MASTER_KEY_LIST);
+  const masterKeyListEncryped = await StorageManager.getItem(KEYS.MASTER_KEY_LIST);
   const masterKeyListDecryped = await algorithms.decryptData(masterKeyListEncryped, aesKey);
-  const masterKeyRawDataList: MasterKeyRawData[] = JSON.parse(masterKeyListDecryped);
+  const masterKeyRawDataList: MasterKeyRawData[] =
+    (JSONHelper.isJsonString(masterKeyListDecryped) && JSON.parse(masterKeyListDecryped)) || [];
   return masterKeyRawDataList;
 }
 

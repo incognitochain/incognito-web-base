@@ -1,7 +1,7 @@
 import { IRouteProps } from 'pages';
 import { lazy } from 'react';
 
-export const route = '/create-wallet';
+export const route = '/wallet/create';
 
 const CreateWalletRoute: IRouteProps = {
   path: route,

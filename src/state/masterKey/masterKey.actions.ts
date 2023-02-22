@@ -26,6 +26,7 @@ import { ImportMasterKeyPayload, InitMasterKeyPayload } from 'state/masterKey/ma
 import { MasterKeySwitchAction } from 'state/masterKey/masterKey.types';
 import { reloadWallet, setWallet } from 'state/webWallet/webWallet.actions';
 import { walletSelector } from 'state/webWallet/webWallet.selectors';
+import { StorageManager } from 'storage';
 
 import { MasterKeyImportAction, MasterKeyRemoveAction } from '.';
 import { loadMasterKeysRawData } from './masterKey.reducer';
@@ -173,7 +174,7 @@ export const initMasterKey =
   (payload: InitMasterKeyPayload): AppThunk =>
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     // Clear All Local Data
-    localStorage.clear();
+    StorageManager.clear();
     clearAllCaches();
     dispatch(clearReduxStore());
 
@@ -216,7 +217,7 @@ export const initMasterKey =
 export const importMasterKey =
   (data: ImportMasterKeyPayload) => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     // Clear All Local Data
-    localStorage.clear();
+    StorageManager.clear();
     clearAllCaches();
     dispatch(clearReduxStore());
 

@@ -1,7 +1,7 @@
 import { WalletSDK } from 'pages/IncWebWallet/core/types';
 import AccountModel from 'pages/IncWebWallet/models/account';
 import { getStorageLoadWalletError, setStorageLoadWalletError } from 'pages/IncWebWallet/models/storageError';
-import storage from 'pages/IncWebWallet/storage';
+import { StorageManager as storage } from 'storage';
 import formatUtil from 'utils/format';
 
 import { getPassphrase } from './passwordService';

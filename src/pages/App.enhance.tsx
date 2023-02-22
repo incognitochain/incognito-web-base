@@ -5,10 +5,9 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import { actionGetPools, actionSetExplorer } from 'state/pools';
 import { actionGetPTokens } from 'state/token';
+import { KEYS, StorageManager } from 'storage';
 
 import enhanceLoadWasm from './App.enhanceLoadWasm';
-
-export const KEY_TRADE_VOLUME = 'TRADE_VOLUME';
 
 const enhance = (WrappedComponent: React.FunctionComponent) => {
   const AppComp = (props: any) => {
@@ -21,7 +20,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => {
           const volume = Math.ceil(
             data.data.data.find((item: any) => item['metricType'] === 'TRADING_VOLUME_TOTAL').value / 1e6
           );
-          localStorage.setItem(KEY_TRADE_VOLUME, `${volume}`);
+          StorageManager.setItem(KEYS.TRADE_VOLUME, `${volume}`);
           dispatch(actionSetExplorer(data.data.data));
         });
       } catch (e) {
