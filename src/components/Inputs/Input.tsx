@@ -15,6 +15,14 @@ const InputWrapper = styled.div`
   border-radius: 8px;
   color: ${({ theme }) => theme.white};
 
+  :focus {
+    border: 2px solid ${({ theme }) => theme.color_blue};
+  }
+  :hover {
+    outline: none !important;
+    border: 2px solid ${({ theme }) => theme.color_blue};
+  }
+
   .input-container-style {
     flex: 1;
     font-weight: 400;
