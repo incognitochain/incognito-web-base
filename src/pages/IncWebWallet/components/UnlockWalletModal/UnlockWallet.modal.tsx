@@ -1,4 +1,5 @@
 import UnlockLogo from 'assets/svg/unlock_wallet_logo.svg';
+import { Input } from 'components/Inputs';
 import { useModal } from 'components/Modal';
 import { isEmpty } from 'lodash';
 import { checkPasswordValid } from 'pages/IncWebWallet/services/wallet/passwordService';
@@ -56,15 +57,18 @@ const UnlockWalletModal = () => {
         <img alt="logo" src={UnlockLogo} />
         <p className="title">Welcome back</p>
       </div>
-      <div className="input-container">
+      <div className="input-area">
         <p className="text">Password</p>
-        <input
+        <div className="input-container">
+          <Input type="password" placeholder="Enter your password" value={password} onChange={onChangePassword} />
+        </div>
+        {/* <input
           className="input"
           type="password"
           placeholder="Enter your password"
           value={password}
           onChange={onChangePassword}
-        />
+        /> */}
         {passwordErrorMessage && <p className="error">{passwordErrorMessage}</p>}
       </div>
       <ButtonPrimary className="btn" disabled={isEmpty(password)} onClick={onClickGoIncognito}>

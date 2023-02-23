@@ -28,16 +28,6 @@ export const Container = styled.div`
 
   .input-container {
     margin-top: 40px;
-    width: 40%;
-    height: 52px;
-    background: ${({ theme }) => theme.color_grey2};
-    padding-left: 16px;
-    padding-right: 16px;
-    border-radius: 8px;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 140%;
-    color: ${({ theme }) => theme.white};
   }
 
   .btn {

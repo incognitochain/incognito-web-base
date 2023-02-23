@@ -23,7 +23,7 @@ export const Styled = styled(Column)`
     }
   }
 
-  .input-container {
+  .input-area {
     margin-top: 40px;
 
     .text {
@@ -32,18 +32,8 @@ export const Styled = styled(Column)`
       line-height: 140%;
       color: ${({ theme }) => theme.color_grey};
     }
-    .input {
+    .input-container {
       margin-top: 8px;
-      width: 100%;
-      height: 52px;
-      background: ${({ theme }) => theme.color_grey2};
-      padding-left: 16px;
-      padding-right: 16px;
-      border-radius: 8px;
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 140%;
-      color: ${({ theme }) => theme.white};
     }
 
     .error {

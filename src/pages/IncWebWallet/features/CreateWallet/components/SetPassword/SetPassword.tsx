@@ -1,4 +1,5 @@
 import { ButtonPrimary } from 'components/Core/Button';
+import { Input } from 'components/Inputs';
 import AlertMessage, { AlertMessageType } from 'pages/IncWebWallet/components/AlertMessage/AlertMessage';
 import PasswordStatus from 'pages/IncWebWallet/components/PasswordStatus';
 import React from 'react';
@@ -45,35 +46,33 @@ const SetPassword = (props: SetPasswordProps) => {
     <Container>
       <p className="title">Set a password</p>
       <p className="desc">
-        When performing operations that need to be signed with your secret key, this password will be required
+        {'When performing operations that need to be signed with your secret key, this password will be required'}
       </p>
-      <input
-        className="input-container"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={onChangePassword}
-      />
+      {/* Password field */}
+      <div className="input-container">
+        <Input type="password" placeholder="Password" value={password} onChange={onChangePassword} />
+      </div>
+      {/* Password Status */}
       <PasswordStatus value={password} onPasswordStrong={onPasswordStrong} />
-
-      <input
-        className="input-container"
-        type="password"
-        placeholder="Confirm password"
-        value={confirmPassword}
-        onChange={onChangeConfirmPassword}
-      />
-
+      {/* Confirm Password field */}
+      <div className="input-container">
+        <Input
+          type="password"
+          placeholder="Confirm password"
+          value={confirmPassword}
+          onChange={onChangeConfirmPassword}
+        />
+      </div>
+      {'thank manage kick mimic miss wall youth sing napkin nerve recall memory'}
       {((isStrongPassRef.current === true &&
         password.length === confirmPassword.length &&
         password !== confirmPassword) ||
         props.errorMess) && (
         <AlertMessage
           type={AlertMessageType.error}
-          message={props.errorMess || 'Password and Confirm password does not match!'}
+          message={props.errorMess || 'Password and Confirm Password does not match!'}
         />
       )}
-
       <ButtonPrimary className="btn" disabled={!isAbleContinue} onClick={() => props.onConfirmPassword(password)}>
         {props.loading ? <Spinner /> : <p className="text-btn">Continue</p>}
       </ButtonPrimary>

@@ -49,7 +49,7 @@ const ImportPhrase = (props: ImportPhraseProps) => {
   };
 
   const onClickCreateWallet = () => {
-    history.push('/create-wallet');
+    history.push('/wallet/create');
   };
 
   return (
