@@ -4,7 +4,6 @@ import { defaultAccountOTAKeySelector } from 'state/account/account.selectors';
 import { RootState } from 'state/index';
 import { webWalletStateSelector } from 'state/masterKey';
 import { getCurrentNetworkSelector } from 'state/network';
-
 const scanCoinsReducerSelector = createSelector(
   (state: RootState) => state.scanCoinsReducer,
   (scanCoinsReducer) => scanCoinsReducer
@@ -33,10 +32,17 @@ const isShowConfirmScanCoins = createSelector(
   defaultAccountOTAKeySelector,
   getCurrentNetworkSelector,
   (walletState, scanStatus, OTAkey, network) => {
+    // console.log('[isShowConfirmScanCoins] ', {
+    //   network,
+    //   OTAkey,
+    //   walletState,
+    //   scanStatus,
+    // });
     if (!network || !OTAkey) return false;
+    if (!walletState && walletState !== WalletState.unlocked) return false;
     const key = `${OTAkey}-${network.address}`;
-    if (walletState !== WalletState.unlocked) return false;
-    return key && (!scanStatus || scanStatus[key] === undefined);
+    if (!scanStatus || scanStatus[key] === undefined) return true;
+    return false;
   }
 );
 

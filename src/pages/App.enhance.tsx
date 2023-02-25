@@ -8,6 +8,7 @@ import { actionGetPTokens } from 'state/token';
 import { KEYS, StorageManager } from 'storage';
 
 import enhanceLoadWasm from './App.enhanceLoadWasm';
+import enhanceScainCoin from './App.enhanceScainCoin';
 
 const enhance = (WrappedComponent: React.FunctionComponent) => {
   const AppComp = (props: any) => {
@@ -47,4 +48,4 @@ const enhance = (WrappedComponent: React.FunctionComponent) => {
   return AppComp;
 };
 
-export default compose(enhanceLoadWasm, enhance);
+export default compose(enhanceLoadWasm, enhanceScainCoin, enhance);

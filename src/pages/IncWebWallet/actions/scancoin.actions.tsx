@@ -14,6 +14,9 @@ import { measure } from 'utils/func';
 
 import { walletRequestAccounts } from './wallet.actions';
 
+let counterFetchingCoins = 0;
+const maxCounterFetchingCoins = 6;
+
 const { PrivacyVersion } = require('incognito-chain-web-js/build/web/wallet');
 
 const MAINNET_TOKEN: any[] = [
@@ -42,7 +45,7 @@ const TESTNET_TOKEN: any[] = [
   'c01e7dc1d1aba995c19b257412340b057f8ad1482ccb6a9bb0adce61afbf05d4',
 ];
 
-const getTokensDefault = async () => {
+export const getTokensDefault = async () => {
   const server = await Server.getDefault();
   let isMainnet = true;
   if (server && server.address === TESTNET_FULLNODE) isMainnet = false;
@@ -119,9 +122,6 @@ export const getIncognitoAccounts = () => async (dispatch: AppThunkDispatch, get
     }
   } catch (error) {}
 };
-
-let counterFetchingCoins = 0;
-const maxCounterFetchingCoins = 6;
 
 export const scanCoins = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
   const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();

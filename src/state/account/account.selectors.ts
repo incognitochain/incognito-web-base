@@ -2,6 +2,7 @@
 import { getAccountWallet } from 'pages/IncWebWallet/services/wallet/wallet.shared';
 import { createSelector } from 'reselect';
 import { RootState } from 'state/index';
+import { getCurrentNetworkSelector } from 'state/network/network.selectors';
 import { walletSelector } from 'state/webWallet/webWallet.selectors';
 
 export const getAccountWithPaymentAddress = (paymentAddress: string) => (state: RootState) => {
@@ -163,6 +164,15 @@ export const getCurrentPaymentAddress = createSelector(
   (paymentAddress) => paymentAddress || 'Unknow'
 );
 
+export const getKeyDefineAccountSelector = createSelector(
+  otaKeyOfDefaultAccountSelector,
+  getCurrentNetworkSelector,
+  (OTAKey, network) => {
+    if (!OTAKey || !network) return undefined;
+    return `${OTAKey}-${network.address}`;
+  }
+);
+
 export default {
   defaultAccountName,
   listAccount,
@@ -186,4 +196,5 @@ export default {
   defaultAccountWalletSelector,
   isFetchingNFTSelector,
   getCurrentPaymentAddress,
+  getKeyDefineAccountSelector,
 };

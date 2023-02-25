@@ -1,6 +1,6 @@
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
-import { getIncognitoAccounts, scanCoins } from 'pages/IncWebWallet/actions/scancoin.actions';
+import { getIncognitoAccounts } from 'pages/IncWebWallet/actions/scancoin.actions';
 import { WalletState } from 'pages/IncWebWallet/core/types';
 import Server from 'pages/IncWebWallet/services/wallet/Server';
 import React from 'react';
@@ -17,6 +17,7 @@ import { Image } from '../../../../components/Core/Image';
 import { PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from '../../../../constants';
 import { ScanCoinsBar } from '../ScanCoinsBar/ScanCoinsBar';
 import UnlockWalletModal from '../UnlockWalletModal';
+// import BoxScanCoinModal from '../BoxScanCoin';
 import { Container, Text, WalletButton, Wrapper } from './WebWallet.styled';
 
 const WebWallet = () => {
@@ -52,7 +53,7 @@ const WebWallet = () => {
     //Start get accounts
     dispatch(getIncognitoAccounts());
     //Start scan coins
-    dispatch(scanCoins());
+    // dispatch(scanCoins());
   };
 
   const onClickCreateWallet = async () => {

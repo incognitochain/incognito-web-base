@@ -34,7 +34,8 @@ export const ScanCoinsBar = (props: ScanCoinsBarProps) => {
     const data = StorageManager.getItem(COINS_INDEX_STORAGE_KEY);
     try {
       if (data) {
-        const { coinsLen, prvLen, tokenID, batchStart } = JSONHelper.isJsonString(data) && JSON.parse(data);
+        const result = JSONHelper.isJsonString(data) && JSON.parse(data);
+        const { coinsLen, prvLen, tokenID, batchStart } = result;
         const index = tokenID === PRV_ID ? batchStart : batchStart + prvLen;
         const percent = format.toFixed({
           number: Number(index / coinsLen) * 100,
