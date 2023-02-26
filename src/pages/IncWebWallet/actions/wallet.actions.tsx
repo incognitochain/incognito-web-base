@@ -1,7 +1,7 @@
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { AppGetState, AppThunkDispatch } from 'state/index';
 
-// import { getBalanceFromDApp } from './scancoin.actions';
+import { getBalanceFromDApp } from './scancoin.actions';
 
 const { createNewCoins } = require('incognito-chain-web-js/build/web/wallet');
 
@@ -10,7 +10,7 @@ export const walletRequestAccounts =
     try {
       const reduxStore = getState();
 
-      // const accountDefault = await dispatch(getBalanceFromDApp());
+      const accountDefault = await dispatch(getBalanceFromDApp());
       const accountSender = defaultAccountWalletSelector(reduxStore);
 
       const otaReceiver = await accountSender?.getOTAReceive();
@@ -26,8 +26,8 @@ export const walletRequestAccounts =
 
       const resp = {
         result: {
-          // accounts: [accountDefault],
-          accounts: [],
+          accounts: [accountDefault],
+          // accounts: [],
           otaReceiver,
           burnerAddress,
           otaReceiverWithCfg,
