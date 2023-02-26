@@ -11,7 +11,8 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import store from 'state';
+import { PersistGate } from 'redux-persist/integration/react';
+import store, { persistor } from 'state';
 import ApplicationUpdater from 'state/application/updater';
 import ListsUpdater from 'state/lists/updater';
 import LogsUpdater from 'state/logs/updater';
@@ -42,21 +43,23 @@ function Updaters() {
 ReactDOM.render(
   <StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <LanguageProvider>
-          <Web3Provider>
-            <BlockNumberProvider>
-              <Updaters />
-              <ThemeProvider>
-                <ThemedGlobalStyle />
-                <ModalProvider>
-                  <App />
-                </ModalProvider>
-              </ThemeProvider>
-            </BlockNumberProvider>
-          </Web3Provider>
-        </LanguageProvider>
-      </BrowserRouter>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <LanguageProvider>
+            <Web3Provider>
+              <BlockNumberProvider>
+                <Updaters />
+                <ThemeProvider>
+                  <ThemedGlobalStyle />
+                  <ModalProvider>
+                    <App />
+                  </ModalProvider>
+                </ThemeProvider>
+              </BlockNumberProvider>
+            </Web3Provider>
+          </LanguageProvider>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </StrictMode>,
   document.getElementById('root')

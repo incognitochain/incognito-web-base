@@ -1,6 +1,6 @@
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
-import { getIncognitoAccounts } from 'pages/IncWebWallet/actions/scancoin.actions';
+// import { getIncognitoAccounts } from 'pages/IncWebWallet/actions/scancoin.actions';
 import { WalletState } from 'pages/IncWebWallet/core/types';
 import Server from 'pages/IncWebWallet/services/wallet/Server';
 import React from 'react';
@@ -51,7 +51,7 @@ const WebWallet = () => {
 
   const handleWhenWalletStateUnlocked = async () => {
     //Start get accounts
-    dispatch(getIncognitoAccounts());
+    // dispatch(getIncognitoAccounts());
     //Start scan coins
     // dispatch(scanCoins());
   };

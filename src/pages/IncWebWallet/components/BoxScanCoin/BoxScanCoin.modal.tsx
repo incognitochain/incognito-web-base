@@ -5,7 +5,6 @@ import { defaultAccountWalletSelector, getKeyDefineAccountSelector } from 'state
 import { actionFistTimeScanCoins } from 'state/scanCoins/scanCoins.actions';
 
 import { ButtonPrimary } from '../../../../components/Core/Button';
-import { scanCoinHandler } from '../../actions/scanCoinHandler';
 import { Styled } from './BoxScanCoin.styled';
 
 const BoxScanCoinModal = () => {
@@ -16,33 +15,24 @@ const BoxScanCoinModal = () => {
   const accountSender = useSelector(defaultAccountWalletSelector);
   const keyDefine = useSelector(getKeyDefineAccountSelector);
 
-  const onButtonPress = async (isCancel = false) => {
-    try {
-      if (clearAllModal) clearAllModal();
-      if (!accountSender || !keyDefine) return;
+  if (!keyDefine || !accountSender) return null;
 
-      const isFirstTimeScan = isCancel ? false : true;
-
-      await dispatch(actionFistTimeScanCoins({ isScanning: isFirstTimeScan, otaKey: keyDefine }));
-      if (isCancel) {
-        await accountSender.setNewAccountCoinsScan();
-      }
-      setTimeout(() => {
-        scanCoinHandler({ isClear: false });
-      }, 2000);
-    } catch (err) {
-      console.log('error: set default UTXOs scan coins failed  with error: %s', err);
-    }
+  const hideModal = () => {
+    if (clearAllModal) clearAllModal();
   };
 
   const onSkipPressed = async () => {
     console.log('onSkipPressed TO DO  ');
-    onButtonPress(true);
+    hideModal();
+    await dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
+    await accountSender.setNewAccountCoinsScan();
   };
 
   const onSurePressed = async () => {
     console.log('onSurePressed TO DO  ');
-    onButtonPress(false);
+    hideModal();
+    await dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
+    // await accountSender.setNewAccountCoinsScan();
   };
 
   return (

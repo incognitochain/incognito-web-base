@@ -7,6 +7,7 @@ import { $CombinedState, combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 import { load, save } from 'redux-localstorage-simple';
 import logger from 'redux-logger';
+import { persistStore } from 'redux-persist';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 import { isMainnet } from '../config';
@@ -30,7 +31,6 @@ import user from './user/reducer';
 import wallet from './wallet/reducer';
 import { reducer as webToken } from './webToken/webToken.reducer';
 import { reducer as webWallet } from './webWallet/webWallet.reducer';
-
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists'];
 
 const appReducers = combineReducers({
@@ -81,6 +81,7 @@ const store = configureStore({
   preloadedState: load({ states: PERSISTED_KEYS, disableWarnings: process.env.NODE_ENV === 'test' }),
 });
 
+export const persistor = persistStore(store);
 store.dispatch(updateVersion());
 
 export type RootState = ReturnType<typeof rootReducers> & {
