@@ -1,4 +1,5 @@
 import { useModal } from 'components/Modal';
+import ScanCoinHanlder from 'pages/IncWebWallet/actions/scanCoinHandler';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { defaultAccountWalletSelector, getKeyDefineAccountSelector } from 'state/account/account.selectors';
@@ -32,6 +33,7 @@ const BoxScanCoinModal = () => {
     console.log('onSurePressed TO DO  ');
     hideModal();
     await dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
+    ScanCoinHanlder.startScan();
     // await accountSender.setNewAccountCoinsScan();
   };
 
