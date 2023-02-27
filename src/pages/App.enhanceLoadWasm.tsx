@@ -10,13 +10,13 @@ const enhanceLoadWasm = (WrappedComponent: React.FunctionComponent) => {
       const loadPrivacyWasm = async () => {
         try {
           const wasmFileURL = isLocalhost
-            ? (window.location?.origin || window.location?.host) + '/privacy.wasm'
-            : window.location.origin + '/privacy.wasm';
+            ? (window.location?.origin || window.location?.host) + '/assets/privacy.wasm'
+            : window.location.origin + '/assets/privacy.wasm';
 
           console.log('WASM File URL ', wasmFileURL);
 
-          await init(wasmFileURL, 8);
-          await fetch(wasmFileURL);
+          // await init(wasmFileURL, 8);
+          // await fetch(wasmFileURL);
         } catch (error) {
           console.log('[APP] loadPrivacyWasm ERROR: ', error);
         } finally {

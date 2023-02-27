@@ -116,7 +116,7 @@ export const getFollowTokensBalance = async () => {
 export const getAccountInstanceAndKeyDefine = async (): Promise<{ accountSender?: any; keyDefine?: string }> => {
   const state = store.getState();
   const accountData = defaultAccountSelector(state);
-  if (!accountData || !accountData.PrivateKey) throw Error('accountData is invalid ');
+  if (!accountData || !accountData.PrivateKey) return {};
   const accountSender = defaultAccountWalletSelector(state);
   let keyDefine = '';
   try {
