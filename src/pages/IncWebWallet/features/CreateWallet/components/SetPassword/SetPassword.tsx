@@ -2,6 +2,7 @@ import { ButtonPrimary } from 'components/Core/Button';
 import { Input } from 'components/Inputs';
 import AlertMessage, { AlertMessageType } from 'pages/IncWebWallet/components/AlertMessage/AlertMessage';
 import PasswordStatus from 'pages/IncWebWallet/components/PasswordStatus';
+import { MOCKUP_PASSWORD } from 'pages/IncWebWallet/mockup/password';
 import React from 'react';
 
 import { Container, Spinner } from './SetPassword.styled';
@@ -13,8 +14,8 @@ interface SetPasswordProps {
 }
 
 const SetPassword = (props: SetPasswordProps) => {
-  const [password, setPassword] = React.useState('');
-  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [password, setPassword] = React.useState(MOCKUP_PASSWORD);
+  const [confirmPassword, setConfirmPassword] = React.useState(MOCKUP_PASSWORD);
 
   const isStrongPassRef = React.useRef(false);
 

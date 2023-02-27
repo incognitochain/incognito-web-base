@@ -2,6 +2,7 @@ import UnlockLogo from 'assets/svg/unlock_wallet_logo.svg';
 import { Input } from 'components/Inputs';
 import { useModal } from 'components/Modal';
 import { isEmpty } from 'lodash';
+import { MOCKUP_PASSWORD } from 'pages/IncWebWallet/mockup/password';
 import { checkPasswordValid } from 'pages/IncWebWallet/services/wallet/passwordService';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -17,7 +18,7 @@ const UnlockWalletModal = () => {
   const dispath = useDispatch();
   const { clearAllModal } = useModal();
 
-  const [password, setPassword] = React.useState('');
+  const [password, setPassword] = React.useState(MOCKUP_PASSWORD);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState<string>('');
   const [loading, setLoading] = React.useState(false);
 
