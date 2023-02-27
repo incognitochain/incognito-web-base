@@ -23,14 +23,12 @@ const BoxScanCoinModal = () => {
   };
 
   const onSkipPressed = async () => {
-    console.log('onSkipPressed TO DO  ');
     hideModal();
     await dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
     await accountSender.setNewAccountCoinsScan();
   };
 
   const onSurePressed = async () => {
-    console.log('onSurePressed TO DO  ');
     hideModal();
     await dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
     ScanCoinHanlder.startScan();

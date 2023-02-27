@@ -5,7 +5,7 @@ import styled from 'styled-components/macro';
 import format from 'utils/format';
 import JSONHelper from 'utils/jsonHelper';
 
-interface ScanCoinsBarProps {
+interface ScanCoinsProgressBarProps {
   className?: string;
 }
 
@@ -27,7 +27,7 @@ const Styled = styled.div`
   margin-left: 8px;
 `;
 
-export const ScanCoinsBar = (props: ScanCoinsBarProps) => {
+export const ScanCoinsProgressBar = (props: ScanCoinsProgressBarProps) => {
   const { className } = props;
   const [percent, setPercent] = React.useState(0);
   const getPercentScan = async () => {

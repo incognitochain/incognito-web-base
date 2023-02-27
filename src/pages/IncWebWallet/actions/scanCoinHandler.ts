@@ -19,16 +19,15 @@ export const scanCoins = async () => {
   const { accountSender, keyDefine } = await BalanceHandler.getAccountInstanceAndKeyDefine();
   const state = store.getState();
   const isFetching = isFetchingScanCoinsSelector(state);
-  let coinsStore;
   if (!accountSender) return;
-  coinsStore = await accountSender.getStorageCoinsScan();
-  const isFinishScan = coinsStore && coinsStore.finishScan;
+  const isFinishScan = await ScanCoinService.isFinishScan({ accountSender });
 
-  console.log('ABCD ', {
+  console.log('===== ', {
     isFinishScan,
     isFetching,
     keyDefine,
   });
+
   if (isFinishScan && isFetching && keyDefine) {
     if (counterFetchingCoins > maxCounterFetchingCoins) {
       await store.dispatch(actionFetchingScanCoins({ isFetching: false }));
@@ -53,13 +52,11 @@ export const scanCoins = async () => {
     await store.dispatch(actionFetchingScanCoins({ isFetching: true }));
 
     const tokens = await BalanceHandler.getTokensDefault();
-    console.log('tokens: ', tokens);
     // console.log("SCAN COINS::: ");
     // start scan coins
 
     const tokenList = uniq(tokens.concat(_followTokens));
     const { elapsed, result } = await ScanCoinService.scan({ accountSender, tokenList });
-    console.log('bbb: ', { elapsed, result });
     await store.dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
     counterFetchingCoins = 0;
     // if (!isFinishScan) {
@@ -108,7 +105,7 @@ const startScan = async (params?: any) => {
               console.log(' 1 SCAN COINS ERROR: ', e);
               throw e;
             }
-          }, 15000);
+          }, 5000);
         });
       } catch (e) {
         // Handle error

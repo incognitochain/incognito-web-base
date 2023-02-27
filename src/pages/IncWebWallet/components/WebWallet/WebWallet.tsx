@@ -16,7 +16,7 @@ import { shortenString } from 'utils';
 
 import { Image } from '../../../../components/Core/Image';
 import { PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from '../../../../constants';
-import { ScanCoinsBar } from '../ScanCoinsBar/ScanCoinsBar';
+import { ScanCoinsProgressBar } from '../ScanCoinsProgressBar/ScanCoinsProgressBar';
 import UnlockWalletModal from '../UnlockWalletModal';
 // import BoxScanCoinModal from '../BoxScanCoin';
 import { Container, Text, WalletButton, Wrapper } from './WebWallet.styled';
@@ -111,7 +111,7 @@ const WebWallet = () => {
               <Image iconUrl={ROOT_NETWORK_IMG[PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]} />
               <Text>{address ? shortenString(address) : ''}</Text>
             </Wrapper>
-            {isScanCoins && <ScanCoinsBar />}
+            {isScanCoins && <ScanCoinsProgressBar />}
           </>
         )}
       </Container>
