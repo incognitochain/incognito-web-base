@@ -1,31 +1,17 @@
 import { PRV_ID } from 'pages/IncWebWallet/constants/common';
 import React from 'react';
 import { StorageManager } from 'storage';
-import styled from 'styled-components/macro';
 import format from 'utils/format';
 import JSONHelper from 'utils/jsonHelper';
+
+import Styled from './ScanCoinsProgressBar.style';
 
 interface ScanCoinsProgressBarProps {
   className?: string;
 }
 
+const INTERVAL_TIME_UPDATE_PROGRESS = 5000;
 export const COINS_INDEX_STORAGE_KEY = 'COINS_INDEX_STORAGE_KEY';
-
-const Styled = styled.div`
-  width: fit-content;
-  height: 40px;
-  background: #333335;
-  border-radius: 8px;
-  right: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: width 2s;
-  padding: 0 8px 0 8px;
-  opacity: 0.9;
-  min-width: 115px;
-  margin-left: 8px;
-`;
 
 export const ScanCoinsProgressBar = (props: ScanCoinsProgressBarProps) => {
   const { className } = props;
@@ -53,7 +39,7 @@ export const ScanCoinsProgressBar = (props: ScanCoinsProgressBarProps) => {
     await getPercentScan();
     setInterval(async () => {
       await getPercentScan();
-    }, 4000);
+    }, INTERVAL_TIME_UPDATE_PROGRESS);
   };
 
   React.useEffect(() => {

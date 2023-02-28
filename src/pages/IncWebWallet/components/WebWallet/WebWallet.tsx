@@ -1,6 +1,6 @@
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
-import { getIncognitoAccounts } from 'pages/IncWebWallet/actions/scancoin.actions';
+import BalanceHandler from 'pages/IncWebWallet/actions/balanceHandler';
 import ScanCoinHandler from 'pages/IncWebWallet/actions/scanCoinHandler';
 import { WalletState } from 'pages/IncWebWallet/core/types';
 import Server from 'pages/IncWebWallet/services/wallet/Server';
@@ -8,7 +8,7 @@ import React from 'react';
 import { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { defaultAccountPaymentAddressSelector } from 'state/account/account.selectors';
+import { defaultAccountPaymentAddressSelector, defaultAccountSelector } from 'state/account/account.selectors';
 import { incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
 import { webWalletStateSelector } from 'state/masterKey';
 import { isFirstTimeScanCoinsSelector } from 'state/scanCoins';
@@ -21,6 +21,9 @@ import UnlockWalletModal from '../UnlockWalletModal';
 // import BoxScanCoinModal from '../BoxScanCoin';
 import { Container, Text, WalletButton, Wrapper } from './WebWallet.styled';
 
+const INTERVAL_TIME_LOAD_BALANCE = 10000; //10s
+let loadBalanceInterval: any = null;
+
 const WebWallet = () => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -30,6 +33,7 @@ const WebWallet = () => {
   const webWalletState = useSelector(webWalletStateSelector);
   const address = useSelector(defaultAccountPaymentAddressSelector);
   const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
+  const currentAccount = useSelector(defaultAccountSelector);
 
   React.useEffect(() => {
     Server.setDefaultIsMainetServer();
@@ -50,10 +54,22 @@ const WebWallet = () => {
     }
   }, [webWalletState]);
 
+  React.useEffect(() => {
+    if (!currentAccount) {
+      if (loadBalanceInterval) clearInterval(loadBalanceInterval);
+      loadBalanceInterval = null;
+    } else {
+      BalanceHandler.getFollowTokensBalance();
+      if (!loadBalanceInterval) {
+        loadBalanceInterval = setInterval(() => {
+          BalanceHandler.getFollowTokensBalance();
+        }, INTERVAL_TIME_LOAD_BALANCE);
+      }
+    }
+  }, [currentAccount]);
+
   const handleWhenWalletStateUnlocked = async () => {
     //Start get accounts
-    dispatch(getIncognitoAccounts());
-    //Start scan coins
     ScanCoinHandler.startScan();
   };
 

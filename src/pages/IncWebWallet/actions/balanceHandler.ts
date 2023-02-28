@@ -1,12 +1,11 @@
-import BigNumber from 'bignumber.js';
 import { uniqBy } from 'lodash';
 import Server, { TESTNET_FULLNODE } from 'pages/IncWebWallet/services/wallet/Server';
 import store from 'state';
 import { defaultAccountSelector, defaultAccountWalletSelector } from 'state/account/account.selectors';
-import { isFetchingScanCoinsSelector } from 'state/scanCoins';
+import { incognitoWalletSetAccount } from 'state/incognitoWallet';
 import { followTokensFormatedSelector } from 'state/token/token.selectors';
 
-import { IBalance } from '../core/types';
+import LoadBalanceService from '../services/loadBalanceService';
 
 const { PrivacyVersion } = require('incognito-chain-web-js/build/web/wallet');
 
@@ -69,40 +68,50 @@ export const getTokensDefault = async () => {
 
 export const getFollowTokensBalance = async () => {
   const state = store.getState();
-  const accountData = defaultAccountSelector(state);
-  // const isFetching = isFetchingAssetsSelector(state);
+  const currentAccount = defaultAccountSelector(state);
   const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
-  const isScanningCoins = isFetchingScanCoinsSelector(state);
-  // if (!accountSender || isFetching || isScanningCoins) return;
-  if (!accountSender || isScanningCoins) return;
+  console.log('[getFollowTokensBalance] ', {
+    accountSender,
+    keyDefine,
+  });
+  // if (!accountSender || isScanningCoins) return;
+  if (!accountSender) return;
   if (!keyDefine) return;
-  let isUpdate = false;
+  let isUpdate = true;
   try {
     const tokens = await getTokensDefault();
     // await store.dispatch(actionFetchingFollowBalance({ isFetching: true }));
     const oldTokens = followTokensFormatedSelector(state);
-    const { balance: newTokens }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
+    const newTokens = await LoadBalanceService.getBalance({
+      accountSender,
       defaultTokens: tokens,
-      version: PrivacyVersion.ver3,
     });
     const _newTokens = uniqBy(newTokens, 'id');
-    isUpdate = newTokens.some(({ amount: newAmount, id }) => {
-      const token = oldTokens.find((token) => token.tokenID === id);
-      if (!token) return true;
-      const oldAmount = token.amount;
-      return !new BigNumber(oldAmount || 0).eq(newAmount || 0); // is new amount
-    });
+
+    // isUpdate = newTokens.some(({ amount: newAmount, id }) => {
+    //   const token = oldTokens.find((token) => token.tokenID === id);
+    //   if (!token) return true;
+    //   const oldAmount = token.amount;
+    //   return !new BigNumber(oldAmount || 0).eq(newAmount || 0); // is new amount
+    // });
 
     const coinsStore = await accountSender.getStorageCoinsScan();
     console.log('LOAD BALANCE: ', { newTokens, oldTokens, tokens, coinsStore }, isUpdate);
-    if (isUpdate) {
-      // await store.dispatch(actionFetchedFollowBalance({ balance: _newTokens, OTAKey: keyDefine }));
-    }
-    return {
+
+    const accoutBalacne: any = {
       keyDefine,
       balances: _newTokens,
-      paymentAddress: accountData.PaymentAddress,
+      paymentAddress: currentAccount.PaymentAddress,
     };
+    if (isUpdate) {
+      // await store.dispatch(actionFetchedFollowBalance({ balance: _newTokens, OTAKey: keyDefine }));
+      store.dispatch(incognitoWalletSetAccount([accoutBalacne]));
+    }
+    // return {
+    //   keyDefine,
+    //   balances: _newTokens,
+    //   paymentAddress: currentAccount.PaymentAddress,
+    // };
   } catch (error) {
     console.log('LOAD FOLLOW TOKENS BALANCE ERROR: ', error);
   } finally {

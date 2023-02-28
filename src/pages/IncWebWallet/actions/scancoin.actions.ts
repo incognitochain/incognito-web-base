@@ -1,11 +1,22 @@
 import { defaultAccountOTAKeySelector } from 'state/account/account.selectors';
 import { defaultAccountPaymentAddressSelector } from 'state/account/account.selectors';
-import { incognitoWalletSetAccount } from 'state/incognitoWallet';
 import { AppGetState, AppThunkDispatch } from 'state/index';
 
 import { walletRequestAccounts } from './wallet.actions';
 
-const MOCKUP_DATA_BALANCE = [
+interface Balance {
+  amount: string;
+  id: string;
+  swipable: boolean;
+}
+
+interface AccountBalance {
+  keyDefine: string;
+  balances: Balance[];
+  paymentAddress: string;
+}
+
+const MOCKUP_DATA_BALANCE: Balance[] = [
   {
     amount: '0',
     id: '3ee31eba6376fc16cadb52c8765f20b6ebff92c0b1c5ab5fc78c8c25703bb19e',
@@ -56,47 +67,30 @@ export const getIncognitoAccounts = () => async (dispatch: AppThunkDispatch, get
   try {
     const { result }: any = await dispatch(walletRequestAccounts());
     if (result && result.accounts && result.accounts.length > 0) {
-      dispatch(incognitoWalletSetAccount(result.accounts));
+      // dispatch(incognitoWalletSetAccount(result.accounts));
     }
   } catch (error) {}
 };
 
-// export const getDefaultFollowTokensBalance = async (): Promise<{
-//   balance: IBalance[];
-//   OTAKey: string;
-// }> => {
-//   const tokens = await getTokensDefault();
-//   const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
-//   if (!accountSender || !keyDefine) return { balance: [], OTAKey: '' };
+export const getBalanceFromDApp =
+  () =>
+  async (dispatch: AppThunkDispatch, getState: AppGetState): Promise<AccountBalance | null> => {
+    const state = getState();
+    if (!state) return null;
 
-//   // if scanning coin get default balances else get from FollowTokens
-//   const coinsStore = await accountSender.getStorageCoinsScan();
-//   const isFinishScan = coinsStore && coinsStore.finishScan;
-//   if (!isFinishScan) {
-//     return { balance: tokens.map((token) => ({ amount: '0', id: token, swipable: true })) as IBalance[], OTAKey: '' };
-//   }
+    const otaKey = defaultAccountOTAKeySelector(state);
+    const paymentAddress = defaultAccountPaymentAddressSelector(state);
+    // const { balance: _balance } = await getDefaultFollowTokensBalance();
 
-//   const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
-//     defaultTokens: tokens,
-//     version: PrivacyVersion.ver3,
-//   });
-//   const _balance = uniqBy(balance, 'id');
-//   return { balance: _balance, OTAKey: keyDefine };
-// };
-
-export const getBalanceFromDApp = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
-  const reduxState = getState();
-  if (!reduxState) return;
-
-  // get data from memory, improve performance
-  const keyDefine = defaultAccountOTAKeySelector(getState());
-  const paymentAddress = defaultAccountPaymentAddressSelector(getState());
-  // const { balance: _balance } = await getDefaultFollowTokensBalance();
-
-  return {
-    keyDefine,
-    // balances: _balance,
-    balances: MOCKUP_DATA_BALANCE,
-    paymentAddress,
+    console.log('[getBalanceFromDApp] ', {
+      keyDefine: otaKey,
+      balances: MOCKUP_DATA_BALANCE,
+      paymentAddress,
+    });
+    return {
+      keyDefine: otaKey,
+      // balances: _balance,
+      balances: MOCKUP_DATA_BALANCE,
+      paymentAddress,
+    };
   };
-};

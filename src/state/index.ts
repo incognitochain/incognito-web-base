@@ -14,6 +14,7 @@ import { isMainnet } from '../config';
 import { reducer as account } from './account/account.reducer';
 import application from './application/reducer';
 import dao from './dao';
+import { reducer as followTokensReducer } from './followTokens/followTokens.reducer';
 import { updateVersion } from './global/actions';
 import incognitoWallet from './incognitoWallet/incognitoWallet.reducer';
 import lists from './lists/reducer';
@@ -31,6 +32,7 @@ import user from './user/reducer';
 import wallet from './wallet/reducer';
 import { reducer as webToken } from './webToken/webToken.reducer';
 import { reducer as webWallet } from './webWallet/webWallet.reducer';
+
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists'];
 
 const appReducers = combineReducers({
@@ -56,6 +58,7 @@ const appReducers = combineReducers({
   webToken,
   scanCoinsReducer,
   networkReducer,
+  followTokensReducer,
 });
 
 export const clearReduxStore = () => ({

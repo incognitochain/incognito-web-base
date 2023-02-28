@@ -18,7 +18,6 @@ export const incognitoWalletAccountSelector = createSelector(incognitoWalletAcco
 
 export const incognitoAccountFollowTokenIDs = createSelector(incognitoWalletAccountSelector, (incAccount) => {
   if (!incAccount) return [];
-  console.log('DDDDD incAccount ', incAccount);
   return incAccount.balances.map(({ id }) => id);
 });
 

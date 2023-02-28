@@ -22,10 +22,11 @@ export const scanCoins = async () => {
   if (!accountSender) return;
   const isFinishScan = await ScanCoinService.isFinishScan({ accountSender });
 
-  console.log('===== ', {
+  console.log('[scanCoins] ===== ', {
     isFinishScan,
     isFetching,
     keyDefine,
+    counterFetchingCoins,
   });
 
   if (isFinishScan && isFetching && keyDefine) {
@@ -37,13 +38,12 @@ export const scanCoins = async () => {
     counterFetchingCoins++;
   }
 
-  // console.log("SCAN COINS: 222 ", { isFetching });
-  // Validate data
   if (!accountSender || isFetching || !keyDefine) return;
 
   try {
     const otaKey = accountSender.getOTAKey();
     const _followTokens = (await accountSender.getListFollowingTokens()) || [];
+
     // Get coins scanned from storage, existed ignore and continue scan
     if (!isFinishScan) {
       await store.dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
@@ -56,14 +56,22 @@ export const scanCoins = async () => {
     // start scan coins
 
     const tokenList = uniq(tokens.concat(_followTokens));
+
+    // ------------------------------------------------------------
+    // Watting load scan coin from WebJS., Update Balance after this job have been finished!
+    // Humh.....
+    // ------------------------------------------------------------
+
     const { elapsed, result } = await ScanCoinService.scan({ accountSender, tokenList });
+
     await store.dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
     counterFetchingCoins = 0;
     // if (!isFinishScan) {
     //   await BalanceHandler.getFollowTokensBalance();
     // }
     await BalanceHandler.getFollowTokensBalance();
-    console.log('scanCoins: ', { elapsed, otaKey, coins: result });
+
+    console.log('[scanCoins] FINSIHED: ', { elapsed, otaKey, coins: result });
   } catch (error) {
     console.log('SCAN COINS WITH ERROR: ', error);
   } finally {
@@ -87,7 +95,6 @@ const startScan = async (params?: any) => {
   const state = store.getState();
   const showConfirmScanCoins = isShowConfirmScanCoins(state);
   const walletState = webWalletStateSelector(state);
-
   if (walletState === 'unlocked') {
     if (!scanCoinInterval && !showConfirmScanCoins) {
       try {
