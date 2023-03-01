@@ -41,7 +41,7 @@ const isShowConfirmScanCoins = createSelector(
     if (!network || !OTAkey) return false;
     if (!walletState && walletState !== WalletState.unlocked) return false;
     const key = `${OTAkey}-${network.address}`;
-    if (!scanStatus || scanStatus[key] === undefined) return true;
+    if (!scanStatus || !scanStatus[key]) return true;
     return false;
   }
 );

@@ -423,20 +423,12 @@ export const actionSyncAccountMasterKey =
       let wallet = masterKey.wallet;
       await WalletServices.configsWallet(wallet);
       let masterAccountInfo = await wallet.MasterAccount.getDeserializeInformation();
-      console.log('[actionSyncAccountMasterKey] - masterAccountInfo ', masterAccountInfo);
       const serverAccounts = await getWalletAccounts(masterAccountInfo.PublicKeyCheckEncode);
-      console.log('[actionSyncAccountMasterKey] - serverAccounts ', serverAccounts);
       const accountIds: any = [];
       for (const account of wallet.MasterAccount.child) {
         const accountInfo = await account.getDeserializeInformation();
-
-        console.log('[actionSyncAccountMasterKey] - accountInfo ', accountInfo);
-
         accountIds.push(accountInfo.ID);
       }
-
-      console.log('[actionSyncAccountMasterKey] - serverAccounts ', serverAccounts);
-      console.log('[actionSyncAccountMasterKey] - accountIds ', serverAccounts);
 
       const newAccounts = serverAccounts.filter(
         (item: any) => !accountIds.includes(item.id) && !(masterKey.deletedAccountIds || []).includes(item.id)

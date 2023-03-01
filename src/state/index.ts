@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { reducer as tabs } from 'components/Core/Tabs';
 import multicall from 'lib/state/multicall';
 import swap from 'pages/Swap/Swap.reducer';
+// import webWalletReducer from 'pages/IncWebWallet/WebWallet.reducer';
 import { AnyAction } from 'redux';
 import { $CombinedState, combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
@@ -32,8 +33,7 @@ import user from './user/reducer';
 import wallet from './wallet/reducer';
 import { reducer as webToken } from './webToken/webToken.reducer';
 import { reducer as webWallet } from './webWallet/webWallet.reducer';
-
-const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists'];
+const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'scanCoinsReducer.scanStatus'];
 
 const appReducers = combineReducers({
   application,
@@ -59,6 +59,7 @@ const appReducers = combineReducers({
   scanCoinsReducer,
   networkReducer,
   followTokensReducer,
+  // webWalletReducer,
 });
 
 export const clearReduxStore = () => ({
@@ -66,7 +67,18 @@ export const clearReduxStore = () => ({
 });
 
 const rootReducers = (state: any, action: any) => {
-  if (action.type === 'CLEAR_STORE') state = undefined;
+  if (action.type === 'CLEAR_STORE') {
+    state = {
+      ...state,
+      webWallet: undefined,
+      account: undefined,
+      masterKey: undefined,
+      webToken: undefined,
+      scanCoinsReducer: undefined,
+      networkReducer: undefined,
+      followTokensReducer: undefined,
+    };
+  }
   return appReducers(state, action);
 };
 
@@ -79,7 +91,7 @@ const store = configureStore({
       immutableCheck: false,
     })
       .concat(routingApi.middleware)
-      .concat(isMainnet ? [logger] : [logger])
+      .concat(isMainnet ? [] : [logger])
       .concat(save({ states: PERSISTED_KEYS, debounce: 1000 })),
   preloadedState: load({ states: PERSISTED_KEYS, disableWarnings: process.env.NODE_ENV === 'test' }),
 });

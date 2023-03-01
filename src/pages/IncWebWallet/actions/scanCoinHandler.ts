@@ -29,12 +29,12 @@ export const scanCoins = async () => {
 
   const isFinishScan = await ScanCoinService.isFinishScan({ accountWallet: currentAccount });
 
-  console.log('[scanCoins] ===== ', {
-    isFinishScan,
-    isFetching,
-    keyDefine,
-    counterFetchingCoins,
-  });
+  // console.log('[scanCoins] ===== ', {
+  //   isFinishScan,
+  //   isFetching,
+  //   keyDefine,
+  //   counterFetchingCoins,
+  // });
   if (isFinishScan && isFetching && keyDefine) {
     if (counterFetchingCoins > maxCounterFetchingCoins) {
       await store.dispatch(actionFetchingScanCoins({ isFetching: false }));

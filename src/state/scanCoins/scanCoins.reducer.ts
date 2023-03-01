@@ -62,6 +62,7 @@ const persistConfig: any = {
   key: 'scanCoinsReducer',
   storage,
   whitelist: ['scanStatus'],
+  backlist: ['isFetching'],
   stateReconciler: autoMergeLevel2,
 };
 
