@@ -3,11 +3,11 @@ import { measure } from 'utils/func';
 const { Validator } = require('incognito-chain-web-js/build/wallet');
 
 class ScanCoinService {
-  static async scan({ accountSender, tokenList }: { accountSender: any; tokenList: any }) {
-    new Validator('[ScanCoinService][scan]-accountSender', accountSender).required().object();
+  static async scan({ accountWallet, tokenList }: { accountWallet: any; tokenList: any }) {
+    new Validator('[ScanCoinService][scan]-accountWallet', accountWallet).required().object();
     new Validator('[ScanCoinService][scan]-tokenList', tokenList).required().array();
     try {
-      const { elapsed, result } = await measure(accountSender, 'scanCoins', {
+      const { elapsed, result } = await measure(accountWallet, 'scanCoins', {
         tokenList,
       });
       return { elapsed, result };
@@ -16,11 +16,11 @@ class ScanCoinService {
       throw e;
     }
   }
-  static async isFinishScan({ accountSender }: { accountSender: any }) {
-    // new Validator('[ScanCoinService][isFinishScan]-accountSender', accountSender).required().object();
+  static async isFinishScan({ accountWallet }: { accountWallet: any }) {
+    // new Validator('[ScanCoinService][isFinishScan]-accountWallet', accountWallet).required().object();
     let result = true;
     try {
-      const coinsStore = await accountSender.getStorageCoinsScan();
+      const coinsStore = await accountWallet.getStorageCoinsScan();
       if (!coinsStore || !coinsStore.finishScan) result = false;
     } catch (e) {
       console.log('[ScanCoinService][isFinishScan] ERROR ', e);

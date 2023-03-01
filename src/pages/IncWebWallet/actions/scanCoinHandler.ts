@@ -1,5 +1,6 @@
 import { uniq } from 'lodash';
 import store from 'state';
+import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { webWalletStateSelector } from 'state/masterKey';
 import {
   actionFetchingScanCoins,
@@ -16,11 +17,17 @@ let counterFetchingCoins: any = 0;
 const maxCounterFetchingCoins: any = 6;
 
 export const scanCoins = async () => {
-  const { accountSender, keyDefine } = await BalanceHandler.getAccountInstanceAndKeyDefine();
   const state = store.getState();
   const isFetching = isFetchingScanCoinsSelector(state);
-  if (!accountSender) return;
-  const isFinishScan = await ScanCoinService.isFinishScan({ accountSender });
+  const currentAccount = defaultAccountWalletSelector(state);
+
+  if (!currentAccount) return;
+
+  const { keyDefine } = await BalanceHandler.getKeyDefine({ account: currentAccount });
+
+  if (!keyDefine) return;
+
+  const isFinishScan = await ScanCoinService.isFinishScan({ accountWallet: currentAccount });
 
   console.log('[scanCoins] ===== ', {
     isFinishScan,
@@ -28,7 +35,6 @@ export const scanCoins = async () => {
     keyDefine,
     counterFetchingCoins,
   });
-
   if (isFinishScan && isFetching && keyDefine) {
     if (counterFetchingCoins > maxCounterFetchingCoins) {
       await store.dispatch(actionFetchingScanCoins({ isFetching: false }));
@@ -38,11 +44,11 @@ export const scanCoins = async () => {
     counterFetchingCoins++;
   }
 
-  if (!accountSender || isFetching || !keyDefine) return;
+  if (!currentAccount || isFetching || !keyDefine) return;
 
   try {
-    const otaKey = accountSender.getOTAKey();
-    const _followTokens = (await accountSender.getListFollowingTokens()) || [];
+    const otaKey = currentAccount.getOTAKey();
+    const _followTokens = (await currentAccount.getListFollowingTokens()) || [];
 
     // Get coins scanned from storage, existed ignore and continue scan
     if (!isFinishScan) {
@@ -51,7 +57,7 @@ export const scanCoins = async () => {
 
     await store.dispatch(actionFetchingScanCoins({ isFetching: true }));
 
-    const tokens = await BalanceHandler.getTokensDefault();
+    const tokens = await BalanceHandler.getTokenIDsDefault();
     // console.log("SCAN COINS::: ");
     // start scan coins
 
@@ -62,7 +68,7 @@ export const scanCoins = async () => {
     // Humh.....
     // ------------------------------------------------------------
 
-    const { elapsed, result } = await ScanCoinService.scan({ accountSender, tokenList });
+    const { elapsed, result } = await ScanCoinService.scan({ accountWallet: currentAccount, tokenList });
 
     await store.dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
     counterFetchingCoins = 0;

@@ -55,7 +55,7 @@ const WebWallet = () => {
   }, [webWalletState]);
 
   React.useEffect(() => {
-    if (!currentAccount) {
+    if (!currentAccount || webWalletState !== WalletState.unlocked) {
       if (loadBalanceInterval) clearInterval(loadBalanceInterval);
       loadBalanceInterval = null;
     } else {

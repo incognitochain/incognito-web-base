@@ -1,26 +1,26 @@
 import { uniqBy } from 'lodash';
 import Server, { TESTNET_FULLNODE } from 'pages/IncWebWallet/services/wallet/Server';
 import store from 'state';
-import { defaultAccountSelector, defaultAccountWalletSelector } from 'state/account/account.selectors';
+import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { incognitoWalletSetAccount } from 'state/incognitoWallet';
 import { followTokensFormatedSelector } from 'state/token/token.selectors';
 
 import LoadBalanceService from '../services/loadBalanceService';
 
-const { PrivacyVersion } = require('incognito-chain-web-js/build/web/wallet');
+type TokenId = string;
 
-const MAINNET_TOKEN: any[] = [
+const MAINNET_TOKEN_IDS: TokenId[] = [
   '3ee31eba6376fc16cadb52c8765f20b6ebff92c0b1c5ab5fc78c8c25703bb19e', //-> pETH
   '076a4423fa20922526bd50b0d7b0dc1c593ce16e15ba141ede5fb5a28aa3f229', //-> pUSDT
   '545ef6e26d4d428b16117523935b6be85ec0a63e8c2afeb0162315eb0ce3d151', //-> pUSDC
   '0d953a47a7a488cee562e64c80c25d3dbe29d3b477ccd2b54408c0553a93f126', //-> pDAI
   '26df4d1bca9fd1a8871a24b9b84fc97f3dd62ca8809975c6d971d1b79d1d9f31', //-> MATIC
-  'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696',
-  'e5032c083f0da67ca141331b6005e4a3740c50218f151a5e829e9d03227e33e2',
-  'c01e7dc1d1aba995c19b257412340b057f8ad1482ccb6a9bb0adce61afbf05d4',
+  'b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696', //-> BTC
+  'e5032c083f0da67ca141331b6005e4a3740c50218f151a5e829e9d03227e33e2', //-> BNB
+  'c01e7dc1d1aba995c19b257412340b057f8ad1482ccb6a9bb0adce61afbf05d4', //-> XMR
 ];
 
-const TESTNET_TOKEN: any[] = [
+const TESTNET_TOKEN_IDS: TokenId[] = [
   'ebc1c1b5819aa5647192aefd729ef18cd8894d22656e8add678c0aef93e404d4', // -> FTM
   'b366fa400c36e6bbcf24ac3e99c90406ddc64346ab0b7ba21e159b83d938812d', // -> ETH
   '6fa448f24835b0c72e62004edf391679fdbc391a82e4edb3726d16251509a2d0', // -> USDC
@@ -35,55 +35,26 @@ const TESTNET_TOKEN: any[] = [
   'c01e7dc1d1aba995c19b257412340b057f8ad1482ccb6a9bb0adce61afbf05d4',
 ];
 
-// export const getDefaultFollowTokensBalance = async (): Promise<{
-//   balance: IBalance[];
-//   OTAKey: string;
-// }> => {
-//   const tokens = await getTokensDefault();
-//   const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
-//   if (!accountSender || !keyDefine) return { balance: [], OTAKey: '' };
-
-//   // if scanning coin get default balances else get from FollowTokens
-//   const coinsStore = await accountSender.getStorageCoinsScan();
-//   const isFinishScan = coinsStore && coinsStore.finishScan;
-//   if (!isFinishScan) {
-//     return { balance: tokens.map((token) => ({ amount: '0', id: token, swipable: true })) as IBalance[], OTAKey: '' };
-//   }
-
-//   const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
-//     defaultTokens: tokens,
-//     version: PrivacyVersion.ver3,
-//   });
-//   const _balance = uniqBy(balance, 'id');
-//   return { balance: _balance, OTAKey: keyDefine };
-// };
-
-export const getTokensDefault = async () => {
+export const getTokenIDsDefault = async (): Promise<TokenId[]> => {
   const server = await Server.getDefault();
   let isMainnet = true;
   if (server && server.address === TESTNET_FULLNODE) isMainnet = false;
 
-  return isMainnet ? MAINNET_TOKEN : TESTNET_TOKEN;
+  return isMainnet ? MAINNET_TOKEN_IDS : TESTNET_TOKEN_IDS;
 };
 
 export const getFollowTokensBalance = async () => {
   const state = store.getState();
-  const currentAccount = defaultAccountSelector(state);
-  const { accountSender, keyDefine } = await getAccountInstanceAndKeyDefine();
-  console.log('[getFollowTokensBalance] ', {
-    accountSender,
-    keyDefine,
-  });
-  // if (!accountSender || isScanningCoins) return;
-  if (!accountSender) return;
-  if (!keyDefine) return;
-  let isUpdate = true;
+  const currentAccount = await defaultAccountWalletSelector(state);
+  const keyDefine = await getKeyDefine(currentAccount);
+  if (!currentAccount || !keyDefine) return;
+
   try {
-    const tokens = await getTokensDefault();
+    const tokens = await getTokenIDsDefault();
     // await store.dispatch(actionFetchingFollowBalance({ isFetching: true }));
     const oldTokens = followTokensFormatedSelector(state);
     const newTokens = await LoadBalanceService.getBalance({
-      accountSender,
+      accountWallet: currentAccount,
       defaultTokens: tokens,
     });
     const _newTokens = uniqBy(newTokens, 'id');
@@ -95,56 +66,43 @@ export const getFollowTokensBalance = async () => {
     //   return !new BigNumber(oldAmount || 0).eq(newAmount || 0); // is new amount
     // });
 
-    const coinsStore = await accountSender.getStorageCoinsScan();
-    console.log('LOAD BALANCE: ', { newTokens, oldTokens, tokens, coinsStore }, isUpdate);
+    const coinsStore = await currentAccount.getStorageCoinsScan();
+    console.log('LOAD BALANCE: ', { newTokens, oldTokens, tokens, coinsStore });
 
-    const accoutBalacne: any = {
+    const accoutBalacneExtension: any = {
       keyDefine,
       balances: _newTokens,
       paymentAddress: currentAccount.PaymentAddress,
     };
-    if (isUpdate) {
-      // await store.dispatch(actionFetchedFollowBalance({ balance: _newTokens, OTAKey: keyDefine }));
-      store.dispatch(incognitoWalletSetAccount([accoutBalacne]));
-    }
-    // return {
-    //   keyDefine,
-    //   balances: _newTokens,
-    //   paymentAddress: currentAccount.PaymentAddress,
-    // };
+    store.dispatch(incognitoWalletSetAccount([accoutBalacneExtension]));
   } catch (error) {
     console.log('LOAD FOLLOW TOKENS BALANCE ERROR: ', error);
   } finally {
     // await store.dispatch(actionFetchingFollowBalance({ isFetching: false }));
   }
 };
+
 /**
  * @keyDefine [string] format =>  OTAKey-Network.address
  * @returns {Promise<boolean | { accountSender: any; keyDefine: string }>}
  */
-export const getAccountInstanceAndKeyDefine = async (): Promise<{ accountSender?: any; keyDefine?: string }> => {
-  const state = store.getState();
-  const accountData = defaultAccountSelector(state);
-  if (!accountData || !accountData.PrivateKey) return {};
-  const accountSender = defaultAccountWalletSelector(state);
+export const getKeyDefine = async ({ account }: { account: any }): Promise<{ keyDefine?: string }> => {
   let keyDefine = '';
   try {
-    if (accountSender?.rpc?.rpcHttpService?.url) {
-      keyDefine = `${accountSender.getOTAKey()}-${accountSender?.rpc?.rpcHttpService?.url}`;
+    if (account?.rpc?.rpcHttpService?.url) {
+      keyDefine = `${account?.getOTAKey()}-${account?.rpc?.rpcHttpService?.url}`;
     }
   } catch (e) {
     console.log('getAccountInstanceAndKeyDefine ERROR ', e);
     throw e;
   }
-  return { accountSender, keyDefine };
+  return { keyDefine };
 };
 
 const BalanceHandler = {
-  getAccountInstanceAndKeyDefine,
+  getKeyDefine,
   getFollowTokensBalance,
-  getTokensDefault,
-  MAINNET_TOKEN,
-  TESTNET_TOKEN,
+  getTokenIDsDefault,
 };
 
 export default BalanceHandler;

@@ -4,18 +4,18 @@ const { Validator } = require('incognito-chain-web-js/build/wallet');
 
 class LoadBalanceService {
   static async getBalance({
-    accountSender,
+    accountWallet,
     defaultTokens,
     version = PrivacyVersion.ver3,
   }: {
-    accountSender: any;
+    accountWallet: any;
     defaultTokens: any[];
     version?: number;
   }) {
-    new Validator('[LoadBalanceService][getBalance]-accountSender', accountSender).required().object();
+    new Validator('[LoadBalanceService][getBalance]-accountWallet', accountWallet).required().object();
     new Validator('[LoadBalanceService][getBalance]-defaultTokens', defaultTokens).required().array();
     try {
-      const { balance }: { balance: IBalance[] } = await accountSender.getFollowTokensBalance({
+      const { balance }: { balance: IBalance[] } = await accountWallet.getFollowTokensBalance({
         defaultTokens,
         version,
       });
