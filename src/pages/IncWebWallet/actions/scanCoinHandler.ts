@@ -3,7 +3,9 @@ import store from 'state';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { webWalletStateSelector } from 'state/masterKey';
 import { actionFetchingScanCoins, actionFistTimeScanCoins, isFetchingScanCoinsSelector } from 'state/scanCoins';
+import { StorageManager } from 'storage';
 
+import { COINS_INDEX_STORAGE_KEY } from '../components/ScanCoinsProgressBar/ScanCoinsProgressBar';
 import ScanCoinService from '../services/scainCoinService';
 import BalanceHandler from './balanceHandler';
 
@@ -24,12 +26,6 @@ const scanCoins = async () => {
 
   const isFinishScan = await ScanCoinService.isFinishScan({ accountWallet: currentAccount });
 
-  // console.log('[scanCoins] ===== ', {
-  //   isFinishScan,
-  //   isFetching,
-  //   keyDefine,
-  //   counterFetchingCoins,
-  // });
   if (isFinishScan && isFetching && keyDefine) {
     if (counterFetchingCoins > maxCounterFetchingCoins) {
       await store.dispatch(actionFetchingScanCoins({ isFetching: false }));
@@ -73,10 +69,24 @@ const scanCoins = async () => {
     console.log('SCAN COINS WITH ERROR: ', error);
   } finally {
     await store.dispatch(actionFetchingScanCoins({ isFetching: false }));
-    clearScan();
+    stopScan();
   }
 };
+
 const clearScan = async () => {
+  const state = store.getState();
+  const currentAccount = defaultAccountWalletSelector(state);
+
+  if (!currentAccount) return;
+  const { keyDefine } = await BalanceHandler.getKeyDefine({ account: currentAccount });
+  if (!keyDefine) return;
+
+  await StorageManager.removeItem(COINS_INDEX_STORAGE_KEY);
+  await stopScan();
+  await currentAccount.clearStorageCoinsScan();
+};
+
+const stopScan = async () => {
   await store.dispatch(actionFetchingScanCoins({ isFetching: false }));
   scanCoinInterval && clearInterval(scanCoinInterval);
   scanCoinInterval = undefined;
@@ -87,7 +97,7 @@ const startScan = async () => {
   const walletState = webWalletStateSelector(state);
 
   if (walletState !== 'unlocked') {
-    clearScan();
+    stopScan();
   }
 
   if (!scanCoinInterval) {
@@ -97,7 +107,7 @@ const startScan = async () => {
           try {
             const state = store.getState();
             if (state.account.list.length === 0) {
-              await clearScan();
+              await stopScan();
               return;
             }
             scanCoins().then();
@@ -119,6 +129,7 @@ const reScan = async () => {};
 const ScanCoinHanlder = {
   reScan,
   clearScan,
+  stopScan,
   startScan,
 };
 

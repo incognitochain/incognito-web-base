@@ -31,6 +31,7 @@ import Home from './Home';
 import CreateWallet from './IncWebWallet/features/CreateWallet';
 import ImportWallet from './IncWebWallet/features/ImportWallet';
 import KeyChain from './IncWebWallet/features/Keychain/Keychain';
+import Settings from './IncWebWallet/features/Settings/Settings';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
 import Page404 from './Page404';
@@ -129,6 +130,7 @@ const App = () => {
         <Route exact path="/wallet/create" component={CreateWallet} />
         <Route exact path={['/wallet/import', '/wallet/restore']} component={ImportWallet} />
         <Route exact path={'/wallet/account'} component={KeyChain} />
+        <Route exact path={'/wallet/settings'} component={Settings} />
         {!isMobile && (
           <>
             <Route exact path="/vote" component={Governance} />
