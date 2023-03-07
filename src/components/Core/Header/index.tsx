@@ -5,7 +5,6 @@ import downImg from 'assets/images/down-icon.png';
 import apk from 'assets/images/install/apk.png';
 import appstore from 'assets/images/install/appstore.png';
 import ggplay from 'assets/images/install/play.png';
-// import { ReactComponent as Logo } from 'assets/svg/logo.svg';
 import logo from 'assets/images/logo.png';
 import menuBarIcon from 'assets/images/menu-bar.png';
 import { ReactComponent as MoreIcon } from 'assets/images/more.svg';
@@ -14,13 +13,16 @@ import { useInternetConnnection } from 'components/Core/InternetConnection';
 import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useTheme from 'hooks/useTheme';
+import { isEmpty } from 'lodash';
 import { routePeggingApps } from 'pages';
 import React from 'react';
+// import { ReactComponent as Logo } from 'assets/svg/logo.svg';
 import { useSelector } from 'react-redux';
 // import Web3Status from 'components/Core/Web3Status';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Link } from 'rebass';
 import { METRIC_TYPE, METRIC_UNIQ, updateMetric } from 'services/rpcMetric';
+import { defaultAccountSelector } from 'state/account/account.selectors';
 import { poolsSelectors } from 'state/pools';
 import { useDarkModeManager } from 'state/user/hooks';
 import styled from 'styled-components/macro';
@@ -44,14 +46,10 @@ interface MenuItemProps {
   uniqMetric?: number;
 }
 
-const menuItem: MenuItemProps[] = [
+let menuItem: MenuItemProps[] = [
   // {
   //   name: 'Markets',
   //   path: routeMarket,
-  // },
-  // {
-  //   name: 'Home',
-  //   path: routeHome,
   // },
   {
     name: 'PRV',
@@ -407,6 +405,7 @@ const IncognitoIcon = styled.div`
 
 export default function Header() {
   const { account } = useActiveWeb3React();
+  const currentAccount = useSelector(defaultAccountSelector);
   const [darkMode] = useDarkModeManager();
   const { white, black } = useTheme();
   const isInternetAlready = useInternetConnnection();
@@ -519,6 +518,13 @@ export default function Header() {
     );
   };
 
+  if (!isEmpty(currentAccount) && !menuItem.find((item: any) => item?.name === 'Account')) {
+    menuItem.push({
+      name: 'Account',
+      path: '/wallet/account',
+    });
+  }
+
   const renderContent = () => {
     const hrefLink = !isInternetAlready || !isMobile ? '.' : INCOGNITO_LANDING_PAGE;
 
@@ -603,11 +609,11 @@ export default function Header() {
                   <MoreIcon style={{ marginRight: 16 }} />
                 </Row>
               </Dropdown>
-
               {isIncognitoInstalled() ? <IncognitoWallet /> : <WebWallet />}
             </HeaderElement>
           </>
         )}
+
         <div className="menu-mobile btn-round" onClick={openMenu}>
           <img src={menuBarIcon} style={{ width: 32, height: 32 }} alt="close-icon" />
         </div>

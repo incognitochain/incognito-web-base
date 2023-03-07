@@ -1,6 +1,7 @@
 import Column from 'components/Core/Column';
 import { TAB_LIST, Tabs } from 'components/Core/Tabs';
 import { selectedTabIndexSelector } from 'components/Core/Tabs/Tabs.selectors';
+import KeyChain from 'pages/IncWebWallet/features/Keychain';
 import { SwapTxs } from 'pages/Swap/features/SwapTxs';
 import { useAppSelector } from 'state/hooks';
 import styled from 'styled-components/macro';
@@ -38,6 +39,7 @@ const BalanceModal = (props: any) => {
       <FollowTokensList key="follow-tokens" />,
       // <SubmitForm key="submit-form" />,
       <SwapTxs key="swap-txs" />,
+      <KeyChain key="keychain" />,
     ];
     return tabs[selectedTabIndex];
   };
