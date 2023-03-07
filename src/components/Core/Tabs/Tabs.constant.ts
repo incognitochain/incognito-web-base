@@ -21,6 +21,10 @@ const TAB_LIST: ITabList = {
     tabNames: ['Swap', 'Deposit'],
     rootTab: getRootTab('SUBMIT_PROOF'),
   },
+  KEYCHAIN: {
+    tabNames: ['Masterkey', 'Masterless'],
+    rootTab: getRootTab('KEYCHAIN'),
+  },
 };
 
 export { TAB_LIST };

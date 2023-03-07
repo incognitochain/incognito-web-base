@@ -24,8 +24,8 @@ const ItemContainer = styled.div`
 
 const ItemTitle = styled.p`
   color: #ffffff;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 500;
   padding: 16px 0px;
 `;
 

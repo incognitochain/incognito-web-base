@@ -24,7 +24,6 @@ const ListMasterLess = () => {
 
   return (
     <div>
-      <h4>Masterless</h4>
       {groupAccounts.map((accounts: any) =>
         accounts.child.map((account: any, index: any) => (
           <AccountItem

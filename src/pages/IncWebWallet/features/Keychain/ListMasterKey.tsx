@@ -54,7 +54,6 @@ const ListMasterKey = () => {
   return (
     <>
       {contextHolder}
-      <h4>Masterkey</h4>
       <div>
         {groupAccounts.map((accounts: any) =>
           accounts.child.map((account: any, index: any) => renderItem(account, index))
