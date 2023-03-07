@@ -14,7 +14,7 @@ const { Wallet, PrivacyVersion, setShardNumber } = require('incognito-chain-web-
 Wallet.RandomBytesFunc = crypto.randomBytes;
 Wallet.setPrivacyUtilRandomBytesFunc(crypto.randomBytes);
 
-async function loadListAccount(wallet: any) {
+export async function loadListAccount(wallet: any) {
   try {
     if (!wallet) return;
     const listAccountRaw = (await wallet.listAccount()) || [];

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { defaultAccountPaymentAddressSelector, defaultAccountSelector } from 'state/account/account.selectors';
 import { incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
-import { webWalletStateSelector } from 'state/masterKey';
+import { masterKeyReducerSelector, webWalletStateSelector } from 'state/masterKey';
 import { isFirstTimeScanCoinsSelector } from 'state/scanCoins';
 import { shortenString } from 'utils';
 
@@ -34,6 +34,9 @@ const WebWallet = () => {
   const address = useSelector(defaultAccountPaymentAddressSelector);
   const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
   const currentAccount = useSelector(defaultAccountSelector);
+  const masterKey = useSelector(masterKeyReducerSelector);
+
+  console.log(masterKey);
 
   useEffect(() => {
     Server.setDefaultIsMainetServer();
