@@ -14,16 +14,12 @@ const TAB_LIST: ITabList = {
   },
   INCOGNITO_ACCOUNT: {
     // tabNames: ['Profile', 'Submit Proof', 'Transactions'],
-    tabNames: ['Profile', 'Transactions', 'Keychain'],
+    tabNames: ['Profile', 'Transactions'],
     rootTab: getRootTab('INCOGNITO_ACCOUNT'),
   },
   SUBMIT_PROOF: {
     tabNames: ['Swap', 'Deposit'],
     rootTab: getRootTab('SUBMIT_PROOF'),
-  },
-  KEYCHAIN: {
-    tabNames: ['Accounts', 'Actions'],
-    rootTab: getRootTab('KEYCHAIN'),
   },
 };
 

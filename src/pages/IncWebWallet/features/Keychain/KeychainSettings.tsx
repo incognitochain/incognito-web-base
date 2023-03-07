@@ -17,7 +17,6 @@ const ItemContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
   :hover {
     cursor: pointer;
   }
@@ -25,7 +24,7 @@ const ItemContainer = styled.div`
 
 const ItemTitle = styled.p`
   color: #ffffff;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   padding: 16px 0px;
 `;
