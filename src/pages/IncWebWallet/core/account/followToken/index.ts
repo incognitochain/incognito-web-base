@@ -7,19 +7,17 @@ interface FollowToken extends Method {
   getKeyFollowTokens(): void | Error;
   getKeyFollowedDefaultTokens(): void | Error;
 
-  getListFollowingTokens(): Promise<TokenID[]> | Error;
+  getListFollowingTokens(): Promise<TokenID[]>;
   isFollowedDefaultTokens(): Promise<boolean> | Error;
-  followingDefaultTokens(params: { tokenIDs: TokenID[] }): Promise<void | Error>;
-  setListFollowingTokens(params: { list: TokenID[] }): Promise<boolean | Error>;
-  addListFollowingToken(params: { tokenIDs: TokenID[] }): Promise<void | Error>;
-  removeFollowingToken(params: { tokenID: TokenID[] }): Promise<void | Error>;
+  followingDefaultTokens(params: { tokenIDs: TokenID[] }): Promise<void>;
+  setListFollowingTokens(params: { list: TokenID[] }): Promise<boolean>;
+  addListFollowingToken(params: { tokenIDs: TokenID[] }): Promise<void>;
+  removeFollowingToken(params: { tokenID: TokenID[] }): Promise<void>;
 
-  getFollowTokensBalance(params: { defaultTokens: TokenID[]; version: number }):
-    | Promise<{
-        followTokens: TokenID[];
-        balance: BalanceObject[];
-      }> &
-        Error;
+  getFollowTokensBalance(params: { defaultTokens: TokenID[]; version: number }): Promise<{
+    followTokens: TokenID[];
+    balance: BalanceObject[];
+  }>;
 }
 
 export type { FollowToken };

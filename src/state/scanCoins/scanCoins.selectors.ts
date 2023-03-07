@@ -18,22 +18,21 @@ const getKeySelector = createSelector(defaultAccountOTAKeySelector, getCurrentNe
   return `${OTAkey}-${network.address}`;
 });
 
-const isExistScanSelector = createSelector(statusScanCoinsSelector, getKeySelector, (scanStatus, key) => {
-  if (!scanStatus || !key) return false;
-  if (!scanStatus[key]) return false;
-  return true;
-});
 const isFetchingScanCoinsSelector = createSelector(scanCoinsReducerSelector, ({ isFetching }) => isFetching);
 
-const isFirstTimeScanCoinsSelector = createSelector(
+// Undefined => Unknow
+// isScanning = true
+// isScanning = false
+
+const getScanningCoinStatusByCurrentAccount = createSelector(
   webWalletStateSelector,
   statusScanCoinsSelector,
   defaultAccountOTAKeySelector,
   getCurrentNetworkSelector,
   (walletState, scanStatus, OTAkey, network) => {
-    if (!network || !OTAkey) return false;
+    if (!network || !OTAkey) return undefined;
     const key = `${OTAkey}-${network.address}`;
-    if (!key || !scanStatus[key] || walletState !== WalletState.unlocked) return false;
+    if (!key || !scanStatus[key]) return undefined;
     return scanStatus[key].isScanning;
   }
 );
@@ -50,18 +49,26 @@ const isShowConfirmScanCoins = createSelector(
     //   walletState,
     //   scanStatus,
     // });
+
+    //(network or OTAkey ) is undefinied | null => return FALSE ==> Not Show Popup Confirm Scan Scoin
     if (!network || !OTAkey) return false;
-    if (!walletState && walletState !== WalletState.unlocked) return false;
+
+    //Not Unlock Wallet  ==> Not Show Popup Confirm Scan Scoin => return FALSE
+    if (walletState !== WalletState.unlocked) return false;
     const key = `${OTAkey}-${network.address}`;
-    if (!scanStatus || !scanStatus[key]) return true;
-    return false;
+
+    //scanStatus[key] != undefinied, that mean is scanned exist => return FALSE ==> Not Show Popup Confirm Scan Scoin
+    if (scanStatus && scanStatus[key]) return false;
+
+    //Otherwise, return TRUE ==> Show Popup
+    return true;
   }
 );
 
 export {
   getKeySelector,
+  getScanningCoinStatusByCurrentAccount,
   isFetchingScanCoinsSelector,
-  isFirstTimeScanCoinsSelector,
   isShowConfirmScanCoins,
   scanCoinsReducerSelector,
   statusScanCoinsSelector,
