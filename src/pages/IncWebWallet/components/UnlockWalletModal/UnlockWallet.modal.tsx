@@ -61,15 +61,18 @@ const UnlockWalletModal = () => {
       <div className="input-area">
         <p className="text">Password</p>
         <div className="input-container">
-          <Input type="password" placeholder="Enter your password" value={password} onChange={onChangePassword} />
+          <Input
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={onChangePassword}
+            onKeyDown={(e) => {
+              if (e.code.toLowerCase() === 'enter') {
+                !isEmpty(password) && onClickGoIncognito();
+              }
+            }}
+          />
         </div>
-        {/* <input
-          className="input"
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={onChangePassword}
-        /> */}
         {passwordErrorMessage && <p className="error">{passwordErrorMessage}</p>}
       </div>
       <ButtonPrimary className="btn" disabled={isEmpty(password)} onClick={onClickGoIncognito}>
