@@ -40,7 +40,6 @@ const UnlockWalletModal = () => {
       if (passWordValid) {
         dispath(unlockMasterKey(password));
         clearAllModal();
-        history.push('/');
         toast.success('Wallet unlocked');
       }
     } catch (error) {
