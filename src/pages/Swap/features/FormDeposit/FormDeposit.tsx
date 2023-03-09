@@ -5,11 +5,16 @@ import QrCode from 'components/QrCode';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useSwitchNetwork from 'lib/hooks/useSwitchNetwork';
 import debounce from 'lodash/debounce';
-import React, { useEffect, useState } from 'react';
+import { WalletState } from 'pages/IncWebWallet/core/types';
+import useUnlockWallet from 'pages/IncWebWallet/hooks/useUnlockWalelt';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { genDepositAddress, IDepositAddress } from 'services/rpcClient';
 import { useWalletModalToggle } from 'state/application/hooks';
+import { webWalletStateSelector } from 'state/masterKey';
 import styled from 'styled-components/macro';
 import { getAcronymNetwork } from 'utils/token';
+import { walletController } from 'wallet';
 
 import { Selection } from '../Selection';
 import AddressBox from './components/AddressBox';
@@ -39,7 +44,10 @@ const FormDeposit = (props: IMergeProps) => {
   const [onSwitchNetwork] = useSwitchNetwork({ targetChain: sellToken.chainID });
   const { account } = useActiveWeb3React();
   const toggleWalletModal = useWalletModalToggle();
+  const webWalletState = useSelector(webWalletStateSelector);
   const [isShowQrCode, setShowQrCode] = useState(true);
+  const { showUnlockModal } = useUnlockWallet();
+
   const _actionMetamask = () => {
     if (!account) return toggleWalletModal();
     return onSwitchNetwork(false);
@@ -87,6 +95,25 @@ const FormDeposit = (props: IMergeProps) => {
     if (!incAccount?.paymentAddress) return;
     debounceGenDepositAddress();
   }, [incAccount?.paymentAddress, sellToken.tokenID, sellToken.currencyType]);
+
+  const buttonTitle = useMemo(() => {
+    let title = '';
+    if (walletController.isWalletExtension) {
+      title = isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet';
+    }
+    if (walletController.isWalletWeb) {
+      switch (webWalletState) {
+        case WalletState.uninitialized:
+          title = 'Install wallet';
+          break;
+        case WalletState.unlocked:
+        case WalletState.locked:
+          title = 'Connect wallet';
+          break;
+      }
+    }
+    return title;
+  }, [webWalletState]);
 
   return (
     <Styled>
@@ -137,8 +164,14 @@ const FormDeposit = (props: IMergeProps) => {
       {!incAccount && (
         <>
           <VerticalSpace />
-          <ButtonConfirmed style={{ height: '50px' }} onClick={showPopup}>
-            {isIncognitoInstalled() ? 'Connect wallet' : 'Install wallet'}
+          <ButtonConfirmed
+            style={{ height: '50px' }}
+            onClick={() => {
+              // showPopup && showPopup();
+              showUnlockModal();
+            }}
+          >
+            {buttonTitle}
           </ButtonConfirmed>
         </>
       )}
