@@ -518,12 +518,12 @@ export default function Header() {
     );
   };
 
-  if (!isEmpty(currentAccount) && !menuItem.find((item: any) => item?.name === 'Account')) {
-    menuItem.push({
-      name: 'Account',
-      path: '/wallet/account',
-    });
-  }
+  // if (!isEmpty(currentAccount) && !menuItem.find((item: any) => item?.name === 'Account')) {
+  //   menuItem.push({
+  //     name: 'Account',
+  //     path: '/wallet/account',
+  //   });
+  // }
 
   if (!isEmpty(currentAccount) && !menuItem.find((item: any) => item?.name === 'Settings')) {
     menuItem.push({
