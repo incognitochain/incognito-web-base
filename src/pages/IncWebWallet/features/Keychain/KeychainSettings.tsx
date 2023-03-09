@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useModal } from 'components/Modal';
+import ConfirmReScanCoin from 'pages/IncWebWallet/components/ConfirmReScanCoin';
+import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { currentMasterKeySelector } from 'state/masterKey';
 import styled from 'styled-components/macro';
@@ -7,7 +9,6 @@ import { ModalBackup } from './ModalBackup';
 import { ModalCreateAccount } from './ModalCreateAccount';
 import { ModalImportKeychain } from './ModalImportKeychain';
 import { ModalPhrase } from './ModalPhrase';
-
 interface ItemProps {
   label?: string;
   onClick?: () => void;
@@ -44,7 +45,7 @@ interface KeychainSettingsProps {
 
 const KeychainSettings = (props: KeychainSettingsProps) => {
   const { isMasterless } = props;
-
+  const { setModal } = useModal();
   const masterKey = useSelector(currentMasterKeySelector);
   const [isOpenModalPhrase, setIsOpenModalPhrase] = useState<boolean>(false);
   const [isOpenModalImportKeychain, setIsOpenModalImportKeychain] = useState<boolean>(false);
@@ -52,6 +53,17 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
   const [isOpenModalBackup, setIsOpenModalBackup] = useState<boolean>(false);
 
   let listItems: any = [];
+
+  const reScanCoinOnClicked = useCallback(
+    () =>
+      setModal({
+        data: <ConfirmReScanCoin />,
+        title: '',
+        isTransparent: true,
+        closable: false,
+      }),
+    []
+  );
 
   if (isMasterless) {
     listItems.push({
@@ -117,6 +129,15 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
     onClick: () => {
       setIsOpenModalBackup(true);
     },
+    belongTo: ['Masterkey', 'Masterless'],
+  });
+
+  listItems.push({
+    key: 'Rescan coins',
+    // icon: <RestoreIcon />,
+    name: 'Rescan coins',
+    visible: true,
+    onClick: reScanCoinOnClicked,
     belongTo: ['Masterkey', 'Masterless'],
   });
 

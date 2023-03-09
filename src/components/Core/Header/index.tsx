@@ -13,7 +13,6 @@ import { useInternetConnnection } from 'components/Core/InternetConnection';
 import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useTheme from 'hooks/useTheme';
-import { isEmpty } from 'lodash';
 import { routePeggingApps } from 'pages';
 import React from 'react';
 // import { ReactComponent as Logo } from 'assets/svg/logo.svg';
@@ -525,12 +524,12 @@ export default function Header() {
   //   });
   // }
 
-  if (!isEmpty(currentAccount) && !menuItem.find((item: any) => item?.name === 'Settings')) {
-    menuItem.push({
-      name: 'Settings',
-      path: '/wallet/settings',
-    });
-  }
+  // if (!isEmpty(currentAccount) && !menuItem.find((item: any) => item?.name === 'Settings')) {
+  //   menuItem.push({
+  //     name: 'Settings',
+  //     path: '/wallet/settings',
+  //   });
+  // }
 
   const renderContent = () => {
     const hrefLink = !isInternetAlready || !isMobile ? '.' : INCOGNITO_LANDING_PAGE;
