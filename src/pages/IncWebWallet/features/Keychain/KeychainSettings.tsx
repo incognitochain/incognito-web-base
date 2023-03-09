@@ -104,7 +104,7 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
     name: 'Back up',
     visible: true,
     onClick: () => {
-      // setIsOpenModalBackup(true);
+      setIsOpenModalBackup(true);
     },
     belongTo: ['Masterkey', 'Masterless'],
   });
@@ -114,7 +114,9 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
     // icon: <RestoreIcon />,
     name: 'Restore',
     visible: true,
-    onClick: () => {},
+    onClick: () => {
+      setIsOpenModalBackup(true);
+    },
     belongTo: ['Masterkey', 'Masterless'],
   });
 

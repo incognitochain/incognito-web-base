@@ -1,6 +1,6 @@
 import { Input, message, Modal } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
-import { trim } from 'lodash';
+import { isEmpty, trim } from 'lodash';
 import { CustomError, ErrorCode } from 'pages/IncWebWallet/services/exception';
 import { useState } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
@@ -56,6 +56,12 @@ const TextInput = styled(Input)`
   }
 `;
 
+const ErrorFieldMessage = styled.p`
+  font-size: 14px;
+  color: #f6465d;
+  margin-top: 4px;
+`;
+
 const TextInputContainer = styled.div`
   margin-top: 16px;
 `;
@@ -65,28 +71,69 @@ export const ModalImportKeychain = (props: ModalImportKeychainProps) => {
 
   const { isModalOpen, onCloseModal } = props;
 
+  // Form value
   const [keychainName, setKeychainName] = useState<string>('');
   const [privateKey, setPrivateKey] = useState<string>('');
+
+  // Form field error message
+  const [errorKeychainNameMsg, setErrorKeychainNameMsg] = useState<string>('');
+  const [errorPrivateKeyMsg, setErrorPrivateKeyMsg] = useState<string>('');
 
   const [importing, setImporting] = useState<boolean>(false);
 
   const onChangeKeychainName = (value: string) => {
     setKeychainName(value);
+    validateKeychainName(value);
   };
 
   const onChangePrivateKey = (value: string) => {
     setPrivateKey(value);
+    validatePrivateKey(value);
   };
 
   const dispatch = useDispatch();
 
+  // =====================================================
+  // VALIDATE FORM
+  // =====================================================
   const validateKeychainName = (value: string) => {
-    // if()
+    if (isEmpty(value)) {
+      setErrorKeychainNameMsg('Please enter keychain name');
+      return false;
+    } else {
+      setErrorKeychainNameMsg('');
+      return true;
+    }
   };
 
-  const validatePrivateKey = (value: string) => {};
+  const validatePrivateKey = (value: string) => {
+    if (isEmpty(value)) {
+      setErrorPrivateKeyMsg('Please enter private key');
+      return false;
+    } else {
+      setErrorPrivateKeyMsg('');
+      return true;
+    }
+  };
+
+  const validateForm = () => {
+    const isValidateKeychainName = validateKeychainName(keychainName);
+    const isValidatePrivateKey = validatePrivateKey(privateKey);
+    if (isValidateKeychainName && isValidatePrivateKey) {
+      return true;
+    }
+    return false;
+  };
+
+  const resetFormValue = () => {
+    setKeychainName('');
+    setPrivateKey('');
+    setErrorKeychainNameMsg('');
+    setErrorPrivateKeyMsg('');
+  };
 
   const handleImportAccount = async () => {
+    if (!validateForm()) return;
     try {
       setImporting(true);
       const isImported = await dispatch(
@@ -100,6 +147,7 @@ export const ModalImportKeychain = (props: ModalImportKeychainProps) => {
         type: 'success',
         content: 'Import successful.',
       });
+      resetFormValue();
       onCloseModal?.();
     } catch (error) {
       messageApi.open({
@@ -118,7 +166,10 @@ export const ModalImportKeychain = (props: ModalImportKeychainProps) => {
       footer={null}
       bodyStyle={{ padding: 24, borderRadius: 16, backgroundColor: '#303030' }}
       closeIcon={<IoCloseOutline size={24} color="#FFFFFF" />}
-      onCancel={() => onCloseModal?.()}
+      onCancel={() => {
+        resetFormValue();
+        onCloseModal?.();
+      }}
     >
       {contextHolder}
       <ModalContainer>
@@ -131,6 +182,7 @@ export const ModalImportKeychain = (props: ModalImportKeychainProps) => {
               onChange={(e) => onChangeKeychainName?.(e.target.value)}
               placeholder="Enter Keychain Name"
             />
+            {errorKeychainNameMsg && <ErrorFieldMessage>{errorKeychainNameMsg}</ErrorFieldMessage>}
           </TextInputContainer>
 
           <TextInputContainer>
@@ -140,6 +192,7 @@ export const ModalImportKeychain = (props: ModalImportKeychainProps) => {
               onChange={(e) => onChangePrivateKey?.(e.target.value)}
               placeholder="Enter Private Key"
             />
+            {errorPrivateKeyMsg && <ErrorFieldMessage>{errorPrivateKeyMsg}</ErrorFieldMessage>}
           </TextInputContainer>
 
           <ButtonConfirmed onClick={handleImportAccount} height={'50px'} type="submit" style={{ marginTop: 32 }}>

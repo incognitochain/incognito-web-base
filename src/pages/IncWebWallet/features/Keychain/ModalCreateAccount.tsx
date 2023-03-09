@@ -1,6 +1,6 @@
 import { Input, message, Modal } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
-import { lowerCase, trim } from 'lodash';
+import { isEmpty, lowerCase, trim } from 'lodash';
 import { CustomError, ErrorCode } from 'pages/IncWebWallet/services/exception';
 import { useState } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
@@ -67,25 +67,19 @@ export const ModalCreateAccount = (props: ModalCreateAccountProps) => {
   const { isModalOpen, onCloseModal } = props;
 
   const [keychainName, setKeychainName] = useState<string>('');
-  const [privateKey, setPrivateKey] = useState<string>('');
-
-  const [importing, setImporting] = useState<boolean>(false);
 
   const onChangeKeychainName = (value: string) => {
     setKeychainName(value);
   };
 
-  const onChangePrivateKey = (value: string) => {
-    setPrivateKey(value);
-  };
-
   const dispatch = useDispatch();
 
-  const validateKeychainName = (value: string) => {
-    // if()
+  const validateKeychainName = () => {
+    if (isEmpty(keychainName)) {
+      return false;
+    }
+    return true;
   };
-
-  const validatePrivateKey = (value: string) => {};
 
   const listAccount = useSelector(listAccountSelector);
 
@@ -97,6 +91,9 @@ export const ModalCreateAccount = (props: ModalCreateAccountProps) => {
   };
 
   const handleCreateAccount = async () => {
+    if (!validateKeychainName()) {
+      return;
+    }
     try {
       const isAccountExist = checkAccountExist();
       if (isAccountExist) {
@@ -107,6 +104,7 @@ export const ModalCreateAccount = (props: ModalCreateAccountProps) => {
         type: 'success',
         content: 'Create account successful.',
       });
+      resetFormValue();
       onCloseModal?.();
     } catch (error) {
       messageApi.open({
@@ -114,6 +112,10 @@ export const ModalCreateAccount = (props: ModalCreateAccountProps) => {
         content: error?.message,
       });
     }
+  };
+
+  const resetFormValue = () => {
+    setKeychainName('');
   };
 
   return (
@@ -124,7 +126,10 @@ export const ModalCreateAccount = (props: ModalCreateAccountProps) => {
       footer={null}
       bodyStyle={{ padding: 24, borderRadius: 16, backgroundColor: '#303030' }}
       closeIcon={<IoCloseOutline size={24} color="#FFFFFF" />}
-      onCancel={() => onCloseModal?.()}
+      onCancel={() => {
+        resetFormValue();
+        onCloseModal?.();
+      }}
     >
       {contextHolder}
       <ModalContainer>

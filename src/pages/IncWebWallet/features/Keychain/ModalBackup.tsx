@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux';
 import { listAllMasterKeyAccounts, masterlessWalletSelector, noMasterLessSelector } from 'state/masterKey';
 import styled from 'styled-components/macro';
 
+import CopyItem from './CopyItem';
+
 const ModalWrapper = styled(Modal)`
   .ant-modal {
     border-radius: 20px;
@@ -56,21 +58,15 @@ const ButtonQrCode = styled.div`
 
 const ModalContainer = styled.div`
   background-color: #303030;
-  text-align: center;
+  max-height: 60vh;
+  overflow-y: auto;
 `;
 
-const Box = styled.div`
-  padding: 32px;
-  box-shadow: 0px 4px 12px #757575;
-  margin-top: 32px;
-  border-radius: 8px;
-`;
-
-const PhraseText = styled.p`
+const Label = styled.p`
+  font-size: 20px;
+  font-weight: bold;
   color: #ffffff;
-  text-align: center;
-  font-size: 18px;
-  font-weight: 500;
+  margin-top: 16px;
 `;
 
 interface ItemProps {
@@ -179,7 +175,7 @@ interface ModalPhraseProps {
 
 export const ModalBackup = (props: ModalPhraseProps) => {
   const { isModalOpen, onCloseModal } = props;
-
+  const [messageApi, contextHolder] = message.useMessage();
   const listAccount = useSelector(listAllMasterKeyAccounts);
 
   const masterKeys = useSelector(noMasterLessSelector);
@@ -211,11 +207,16 @@ export const ModalBackup = (props: ModalPhraseProps) => {
 
   const handleCopyAll = () => {
     // clipboard.set(backupDataStr, { copiedMessage: 'All keys copied' });
-    markBackedUp();
+    // markBackedUp();
+    copy(backupDataStr);
+    messageApi.open({
+      type: 'success',
+      content: 'All keys copied',
+    });
   };
 
   const renderAccountItem = (name: any, key: any) => {
-    return <p>dsfs</p>;
+    return <CopyItem label={name} value={key} />;
   };
 
   return (
@@ -224,14 +225,14 @@ export const ModalBackup = (props: ModalPhraseProps) => {
       centered
       width={600}
       footer={null}
-      bodyStyle={{ padding: 24, borderRadius: 16, backgroundColor: '#303030' }}
-      closeIcon={<IoCloseOutline size={24} color="#FFFFFF" />}
+      closeIcon={<IoCloseOutline size={28} color="#FFFFFF" />}
       onCancel={() => onCloseModal?.()}
     >
+      <h5>Backup private keys</h5>
       <ModalContainer>
-        <h5>Backup private keys</h5>
+        {contextHolder}
         <div>
-          <p>Master keys</p>
+          <Label>Master keys</Label>
           {noMasterless.length > 0 &&
             noMasterless?.map((pair: any) => {
               const [name, key] = getNameKey(pair);
@@ -239,19 +240,19 @@ export const ModalBackup = (props: ModalPhraseProps) => {
             })}
         </div>
         <div>
-          <p>Master keys</p>
+          <Label>Master less</Label>
           {masterless?.map((pair: any) => {
             const [name, key] = getNameKey(pair);
             return renderAccountItem(name, key);
           })}
         </div>
-        <div>
-          <ButtonQrCode />
-          <ButtonConfirmed height={'50px'} type="submit" style={{ marginTop: 32 }}>
-            Copy all keys
-          </ButtonConfirmed>
-        </div>
       </ModalContainer>
+      <div>
+        <ButtonQrCode />
+        <ButtonConfirmed onClick={handleCopyAll} height={'50px'} type="submit" style={{ marginTop: 32 }}>
+          Copy all keys
+        </ButtonConfirmed>
+      </div>
     </ModalWrapper>
   );
 };
