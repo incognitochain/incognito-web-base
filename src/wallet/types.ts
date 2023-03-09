@@ -1,3 +1,3 @@
-type WalletType = 'WalletExtension' | 'WalletWebsite';
+type WalletType = 'WalletExtension' | 'WalletWeb';
 
 export type { WalletType };

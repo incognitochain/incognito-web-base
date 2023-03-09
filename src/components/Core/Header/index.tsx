@@ -525,6 +525,13 @@ export default function Header() {
     });
   }
 
+  if (!isEmpty(currentAccount) && !menuItem.find((item: any) => item?.name === 'Settings')) {
+    menuItem.push({
+      name: 'Settings',
+      path: '/wallet/settings',
+    });
+  }
+
   const renderContent = () => {
     const hrefLink = !isInternetAlready || !isMobile ? '.' : INCOGNITO_LANDING_PAGE;
 

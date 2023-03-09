@@ -1,15 +1,14 @@
 import { WalletType } from './types';
 
 class WalletController {
-  private walletType: WalletType = 'WalletWebsite';
+  private walletType: WalletType = 'WalletWeb';
   private wallet: any; //Instance Wallet from SDK or anywhere
 
   //DJ
   constructor(wallet?: any, walletType?: WalletType) {
     this.wallet = wallet;
-    this.walletType = walletType || 'WalletWebsite';
+    this.walletType = walletType || 'WalletWeb';
   }
-
   setWallet(wallet: any) {
     this.wallet = wallet;
   }
@@ -26,17 +25,17 @@ class WalletController {
     return this.walletType;
   }
 
-  isWalletExtension(): boolean {
+  get isWalletExtension(): boolean {
     return !!(this.walletType === 'WalletExtension');
   }
 
-  isWalletWebsite(): boolean {
-    return !!(this.walletType === 'WalletWebsite');
+  get isWalletWeb(): boolean {
+    return !!(this.walletType === 'WalletWeb');
   }
 }
 
 const walletExtensionInstalled: any = window.incognito;
-const waleltTypeInit: WalletType = walletExtensionInstalled ? 'WalletExtension' : 'WalletWebsite';
+const waleltTypeInit: WalletType = walletExtensionInstalled ? 'WalletExtension' : 'WalletWeb';
 const walletController = new WalletController(null, waleltTypeInit); //SP
 
 console.log('WalletController ', walletController);

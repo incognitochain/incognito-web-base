@@ -8,6 +8,7 @@ import { VerticalSpace } from 'components/Core/Space';
 import { TAB_LIST } from 'components/Core/Tabs';
 import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
 import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
+import useUnlockWallet from 'pages/IncWebWallet/hooks/useUnlockWalelt';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { getQueryPAppName } from 'pages/Swap/Swap.hooks';
 import React, { useEffect, useState } from 'react';
@@ -159,6 +160,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
   } = props;
 
   const { isIncognitoInstalled } = useIncognitoWallet();
+  const { showUnlockModal } = useUnlockWallet();
   const incAccount = useAppSelector(incognitoWalletAccountSelector);
   const history = useHistory();
   const tokens = useAppSelector(unshieldableTokens);
@@ -167,8 +169,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
   const [changing, setChanging] = React.useState(false);
   const prvToken = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
 
-  const _buttonAction = () => showPopup();
-
+  // const _buttonAction = () => showPopup();
+  const _buttonAction = () => showUnlockModal();
   const dispatch = useDispatch();
 
   const onSelectExchange = (exchangeName: any) => {

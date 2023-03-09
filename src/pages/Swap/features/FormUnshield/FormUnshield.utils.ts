@@ -331,7 +331,7 @@ const getUnshieldData = ({
               tokenVault[_item?.identify?.split('-')[0]]['LockedAmount'] >
             0;
         } catch (e) {
-          console.log('CANT FILTER NETWORK LIST');
+          console.log('CANT FILTER NETWORK LIST ERROR: ', e);
         }
         return isAccept;
       });

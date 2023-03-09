@@ -1,9 +1,7 @@
-import { uniqBy } from 'lodash';
 import Server, { TESTNET_FULLNODE } from 'pages/IncWebWallet/services/wallet/Server';
 import store from 'state';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { incognitoWalletSetAccount } from 'state/incognitoWallet';
-import { followTokensFormatedSelector } from 'state/token/token.selectors';
 
 import { Account } from '../core';
 import LoadBalanceService from '../services/loadBalanceService';
@@ -51,35 +49,36 @@ export const getFollowTokensBalance = async () => {
   if (!currentAccount || !keyDefine) return;
 
   try {
-    const tokenIdList = await getTokenIDsDefault();
-    const oldTokens = followTokensFormatedSelector(state);
+    let tokenIdList = [];
+
+    // Get Token Id List has been followed into Local Storage!
+    const followingTokenIdList = await LoadBalanceService.getListFollowingTokens({
+      accountWallet: currentAccount,
+    });
+
+    if (!followingTokenIdList || followingTokenIdList.length < 1) {
+      tokenIdList = await getTokenIDsDefault();
+    } else {
+      tokenIdList = followingTokenIdList;
+    }
+
+    //Load Balance form Storage (using method from Account Instance)
     const newTokensBalance = await LoadBalanceService.getBalance({
       accountWallet: currentAccount,
       defaultTokens: tokenIdList,
     });
 
-    const _newTokens = uniqBy(newTokensBalance, 'id');
-
-    // isUpdate = newTokens.some(({ amount: newAmount, id }) => {
-    //   const token = oldTokens.find((token) => token.tokenID === id);
-    //   if (!token) return true;
-    //   const oldAmount = token.amount;
-    //   return !new BigNumber(oldAmount || 0).eq(newAmount || 0); // is new amount
-    // });
-
-    const coinsStore = await currentAccount.getStorageCoinsScan();
-    console.log('LOAD BALANCE: ', { newTokensBalance, oldTokens, tokenIdList, coinsStore });
-
+    //Account Object interface the same Extension
     const accoutBalacneExtension: any = {
       keyDefine,
-      balances: _newTokens,
+      balances: newTokensBalance,
       paymentAddress: currentAccount.PaymentAddress,
     };
+
+    //Action update Balance UI
     store.dispatch(incognitoWalletSetAccount([accoutBalacneExtension]));
   } catch (error) {
     console.log('LOAD FOLLOW TOKENS BALANCE ERROR: ', error);
-  } finally {
-    // await store.dispatch(actionFetchingFollowBalance({ isFetching: false }));
   }
 };
 

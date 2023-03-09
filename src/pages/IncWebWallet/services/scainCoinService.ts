@@ -19,7 +19,7 @@ class ScanCoinService {
     }
   }
   static async isFinishScan({ accountWallet }: { accountWallet: Account }) {
-    // new Validator('[ScanCoinService][isFinishScan]-accountWallet', accountWallet).required().object();
+    new Validator('[ScanCoinService][isFinishScan]-accountWallet', accountWallet).required().object();
     let result = true;
     try {
       const coinsStore = await accountWallet.getStorageCoinsScan();

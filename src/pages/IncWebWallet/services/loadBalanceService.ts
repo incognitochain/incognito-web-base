@@ -23,12 +23,22 @@ class LoadBalanceService {
         version,
       });
       return balance;
-    } catch (e) {
-      console.log('[LoadBalanceService][getBalance] ERROR ', e);
-      throw e;
-    } finally {
+    } catch (error) {
+      console.log('[LoadBalanceService][getBalance] ERROR ', error);
       return [];
     }
+  }
+
+  static async getListFollowingTokens({ accountWallet }: { accountWallet: Account }): Promise<TokenID[]> {
+    new Validator('[LoadBalanceService][getBalance]-accountWallet', accountWallet).required().object();
+    let tokenIDList: TokenID[];
+    try {
+      tokenIDList = await accountWallet.getListFollowingTokens();
+    } catch (error) {
+      console.log('[LoadBalanceService][getBalance] ERROR ', error);
+      tokenIDList = [];
+    }
+    return tokenIDList;
   }
 }
 

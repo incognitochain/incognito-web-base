@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom';
 import { defaultAccountPaymentAddressSelector, defaultAccountSelector } from 'state/account/account.selectors';
 import { incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
 import { masterKeyReducerSelector, webWalletStateSelector } from 'state/masterKey';
-import { isFirstTimeScanCoinsSelector } from 'state/scanCoins';
+import { getScanningCoinStatusByCurrentAccount } from 'state/scanCoins';
 import { shortenString } from 'utils';
 
 import { Image } from '../../../../components/Core/Image';
@@ -32,7 +32,7 @@ const WebWallet = () => {
 
   const webWalletState = useSelector(webWalletStateSelector);
   const address = useSelector(defaultAccountPaymentAddressSelector);
-  const isScanCoins = useSelector(isFirstTimeScanCoinsSelector);
+  const isScanningCoin = useSelector(getScanningCoinStatusByCurrentAccount);
   const currentAccount = useSelector(defaultAccountSelector);
   const masterKey = useSelector(masterKeyReducerSelector);
 
@@ -52,7 +52,7 @@ const WebWallet = () => {
         dispatch(incognitoWalletSetAccount([]));
         break;
       case WalletState.unlocked:
-        handleWhenWalletStateUnlocked();
+        // handleWhenWalletStateUnlocked();
         break;
     }
   }, [webWalletState]);
@@ -71,10 +71,11 @@ const WebWallet = () => {
     }
   }, [currentAccount]);
 
-  const handleWhenWalletStateUnlocked = async () => {
-    //Start get accounts
-    ScanCoinHandler.startScan();
-  };
+  useEffect(() => {
+    if (isScanningCoin) {
+      ScanCoinHandler.startScan();
+    }
+  }, [webWalletState, currentAccount]);
 
   const onClickCreateWallet = async () => {
     history.push('/wallet/create');
@@ -130,7 +131,7 @@ const WebWallet = () => {
               <Image iconUrl={ROOT_NETWORK_IMG[PRIVATE_TOKEN_CURRENCY_TYPE.INCOGNITO]} />
               <Text>{address ? shortenString(address) : ''}</Text>
             </Wrapper>
-            {isScanCoins && <ScanCoinsProgressBar />}
+            {isScanningCoin && <ScanCoinsProgressBar />}
           </>
         )}
       </Container>
