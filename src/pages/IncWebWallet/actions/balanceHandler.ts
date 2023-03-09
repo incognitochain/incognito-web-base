@@ -1,6 +1,6 @@
 import Server, { TESTNET_FULLNODE } from 'pages/IncWebWallet/services/wallet/Server';
 import store from 'state';
-import { defaultAccountWalletSelector } from 'state/account/account.selectors';
+import { defaultAccountPaymentAddressSelector, defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { incognitoWalletSetAccount } from 'state/incognitoWallet';
 
 import { Account } from '../core';
@@ -45,6 +45,7 @@ export const getTokenIDsDefault = async (): Promise<TokenId[]> => {
 export const getFollowTokensBalance = async () => {
   const state = store.getState();
   const currentAccount: Account = await defaultAccountWalletSelector(state);
+  const paymentAddress = await defaultAccountPaymentAddressSelector(state);
   const keyDefine = await getKeyDefine({ account: currentAccount });
   if (!currentAccount || !keyDefine) return;
 
@@ -72,7 +73,7 @@ export const getFollowTokensBalance = async () => {
     const accoutBalacneExtension: any = {
       keyDefine,
       balances: newTokensBalance,
-      paymentAddress: currentAccount.PaymentAddress,
+      paymentAddress: currentAccount.PaymentAddress || paymentAddress,
     };
 
     //Action update Balance UI
