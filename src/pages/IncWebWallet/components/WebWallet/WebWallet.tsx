@@ -1,7 +1,7 @@
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
 import BalanceHandler from 'pages/IncWebWallet/actions/balanceHandler';
-import ScanCoinHandler from 'pages/IncWebWallet/actions/scanCoinHandler';
+import ScanCoinHanlder from 'pages/IncWebWallet/actions/scanCoinHandler';
 import { WalletState } from 'pages/IncWebWallet/core/types';
 import Server from 'pages/IncWebWallet/services/wallet/Server';
 import React, { useEffect } from 'react';
@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { defaultAccountPaymentAddressSelector, defaultAccountSelector } from 'state/account/account.selectors';
 import { incognitoWalletSetAccount, incognitoWalletSetState } from 'state/incognitoWallet';
-import { masterKeyReducerSelector, webWalletStateSelector } from 'state/masterKey';
+import { webWalletStateSelector } from 'state/masterKey';
 import { getScanningCoinStatusByCurrentAccount } from 'state/scanCoins';
 import { shortenString } from 'utils';
 
@@ -34,9 +34,6 @@ const WebWallet = () => {
   const address = useSelector(defaultAccountPaymentAddressSelector);
   const isScanningCoin = useSelector(getScanningCoinStatusByCurrentAccount);
   const currentAccount = useSelector(defaultAccountSelector);
-  const masterKey = useSelector(masterKeyReducerSelector);
-
-  console.log(masterKey);
 
   useEffect(() => {
     Server.setDefaultIsMainetServer();
@@ -53,6 +50,7 @@ const WebWallet = () => {
         break;
       case WalletState.unlocked:
         // handleWhenWalletStateUnlocked();
+        ScanCoinHanlder.startScan();
         break;
     }
   }, [webWalletState]);
@@ -72,8 +70,8 @@ const WebWallet = () => {
   }, [currentAccount]);
 
   useEffect(() => {
-    if (isScanningCoin) {
-      ScanCoinHandler.startScan();
+    if (currentAccount && webWalletState === WalletState.unlocked) {
+      ScanCoinHanlder.startScan();
     }
   }, [webWalletState, currentAccount]);
 

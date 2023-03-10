@@ -3,7 +3,8 @@ import ScanCoinHanlder from 'pages/IncWebWallet/actions/scanCoinHandler';
 import { Account } from 'pages/IncWebWallet/core';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { defaultAccountWalletSelector, getKeyDefineAccountSelector } from 'state/account/account.selectors';
+import { defaultAccountWalletSelector, getScanCoinKeySelector } from 'state/account/account.selectors';
+import { actionFistTimeScanCoins } from 'state/scanCoins/scanCoins.actions';
 
 import { ButtonPrimary } from '../../../../components/Core/Button';
 import { Styled } from './ConfirmReScanCoin.styled';
@@ -14,9 +15,9 @@ const ConfirmReScanCoinModal = () => {
   const { clearAllModal } = useModal();
 
   const accountSender: Account = useSelector(defaultAccountWalletSelector);
-  const keyDefine = useSelector(getKeyDefineAccountSelector);
+  const scanCoinKey = useSelector(getScanCoinKeySelector);
 
-  if (!keyDefine || !accountSender) return null;
+  if (!scanCoinKey || !accountSender) return null;
 
   const hideModal = () => {
     if (clearAllModal) clearAllModal();
@@ -29,6 +30,9 @@ const ConfirmReScanCoinModal = () => {
   const onSurePressed = async () => {
     hideModal();
     await ScanCoinHanlder.clearScan();
+    await ScanCoinHanlder.stopScan();
+
+    await dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: scanCoinKey }));
     await ScanCoinHanlder.startScan();
   };
 

@@ -3,7 +3,7 @@ import ScanCoinHanlder from 'pages/IncWebWallet/actions/scanCoinHandler';
 import { Account } from 'pages/IncWebWallet/core';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { defaultAccountWalletSelector, getKeyDefineAccountSelector } from 'state/account/account.selectors';
+import { defaultAccountWalletSelector, getScanCoinKeySelector } from 'state/account/account.selectors';
 import { actionFistTimeScanCoins } from 'state/scanCoins/scanCoins.actions';
 
 import { ButtonPrimary } from '../../../../components/Core/Button';
@@ -15,8 +15,9 @@ const BoxScanCoinModal = () => {
   const { clearAllModal } = useModal();
 
   const accountSender: Account = useSelector(defaultAccountWalletSelector);
-  const keyDefine = useSelector(getKeyDefineAccountSelector);
-  if (!keyDefine || !accountSender) return null;
+  const scanCoinKey = useSelector(getScanCoinKeySelector);
+
+  if (!scanCoinKey || !accountSender) return null;
 
   const hideModal = () => {
     if (clearAllModal) clearAllModal();
@@ -24,15 +25,14 @@ const BoxScanCoinModal = () => {
 
   const onSkipPressed = async () => {
     hideModal();
-    await dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: keyDefine }));
+    await dispatch(actionFistTimeScanCoins({ isScanning: false, otaKey: scanCoinKey }));
     await accountSender.setNewAccountCoinsScan();
   };
 
   const onSurePressed = async () => {
     hideModal();
-    await dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: keyDefine }));
+    await dispatch(actionFistTimeScanCoins({ isScanning: true, otaKey: scanCoinKey }));
     ScanCoinHanlder.startScan();
-    // await accountSender.setNewAccountCoinsScan();
   };
 
   return (
