@@ -14,6 +14,8 @@ import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
 import { useAppDispatch, useAppSelector } from 'state/hooks';
 import { getShardIDByAddress } from 'state/incognitoWallet';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
+import { WalletType } from 'wallet/types';
+import walletController from 'wallet/WalletController';
 
 import { actionEstimateFee, actionSetErrorMsg } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
@@ -91,11 +93,27 @@ const enhanceSend = (WrappedComponent: any) => {
       const incognito = getIncognitoInject();
 
       // Get OTA Receiver and Burner address
+
+      const walletType: WalletType = walletController.getWalletType();
+
       const _shardID = shardID ? shardID : (exchangeSelectedData || fee || {}).feeAddressShardID;
-      const { result }: { result: any } = await incognito.request({
-        method: 'wallet_requestAccounts',
-        params: { senderShardID: _shardID },
-      });
+
+      let result: any = {};
+
+      if (walletType === 'WalletWeb') {
+        const response: any = await walletController.requestAccount({
+          method: 'wallet_requestAccounts',
+          params: { senderShardID: _shardID },
+        });
+        result = response.result;
+      } else {
+        const response: any = await incognito.request({
+          method: 'wallet_requestAccounts',
+          params: { senderShardID: _shardID },
+        });
+        result = response.result;
+      }
+
       const otaReceiver = result?.otaReceiver;
       const burnerAddress = result?.burnerAddress;
       let feeRefundOTA = '';
@@ -536,7 +554,13 @@ const enhanceSend = (WrappedComponent: any) => {
         // console.log('LOGS PAYLOAD 222: ', { sellToken, buyToken, buyNetworkName, formType, exchangeSelectedData });
         return new Promise(async (resolve, reject) => {
           try {
-            const tx = await requestSignTransaction(payload);
+            let tx: any;
+            const walletType: WalletType = walletController.getWalletType();
+            if (walletType === 'WalletWeb') {
+              tx = await walletController.signTransaction(payload);
+            } else {
+              tx = await requestSignTransaction(payload);
+            }
             console.log('LOGS PAYLOAD 000: ', { tx });
             if (formType === FormTypes.SWAP) {
               if (exchangeSelectedData.appName === SwapExchange.PDEX) {
@@ -674,9 +698,9 @@ const enhanceSend = (WrappedComponent: any) => {
           dispatch(focus(FORM_CONFIGS.formName, FORM_CONFIGS.sellAmount));
         });
       }
-      if (!isIncognitoInstalled()) {
-        return requestIncognitoAccount();
-      }
+      // if (!isIncognitoInstalled()) {
+      //   return requestIncognitoAccount();
+      // }
 
       setModal({
         isTransparent: false,
