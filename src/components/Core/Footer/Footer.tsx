@@ -8,6 +8,7 @@ import { Styled } from './Footer.styled';
 import BookSVG from './images/book.svg';
 import DiscordSVG from './images/discord.svg';
 import ForumSVG from './images/forum.svg';
+import RedditSVG from './images/reddit.svg';
 import TelegramSVG from './images/telegram.svg';
 import TwitterSVG from './images/twitter.svg';
 
@@ -113,6 +114,16 @@ const Footer = () => {
             className="default-margin-left"
             onClick={() => {
               window.open('https://discord.com/invite/Wh6xRFz72U', '_blank');
+            }}
+            alt="image"
+          />
+        </Tooltip>
+        <Tooltip title="Reddit">
+          <img
+            src={RedditSVG}
+            className="default-margin-left"
+            onClick={() => {
+              window.open('https://www.reddit.com/r/IncognitoChain/', '_blank');
             }}
             alt="image"
           />
