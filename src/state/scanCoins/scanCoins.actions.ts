@@ -1,12 +1,9 @@
 import { ScanCoinsActionType } from 'state/scanCoins/scanCoins.constants';
 import {
-  ReScanCoinsAction,
-  RescanCoinsPayload,
   ScanCoinsFetchingAction,
   ScanCoinsFetchingPayload,
   ScanCoinsFirstTimeAction,
   ScanCoinsFirstTimePayload,
-  ScanCoinsFreeDataAction,
 } from 'state/scanCoins/scanCoins.types';
 
 // Flag support check status scan coins
@@ -22,14 +19,4 @@ const actionFistTimeScanCoins = (payload: ScanCoinsFirstTimePayload): ScanCoinsF
   payload,
 });
 
-// Store status scan coins, if first time, show loading on UX
-const actionReScanCoins = (payload: RescanCoinsPayload): ReScanCoinsAction => ({
-  type: ScanCoinsActionType.RESCAN_COINS,
-  payload,
-});
-
-const actionFreeScanCoins = (): ScanCoinsFreeDataAction => ({
-  type: ScanCoinsActionType.FREE_DATA,
-});
-
-export { actionFetchingScanCoins, actionFistTimeScanCoins, actionFreeScanCoins, actionReScanCoins };
+export { actionFetchingScanCoins, actionFistTimeScanCoins };

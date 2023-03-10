@@ -8,14 +8,15 @@ class ScanCoinService {
   static async scan({ accountWallet, tokenList }: { accountWallet: Account; tokenList: any }) {
     new Validator('[ScanCoinService][scan]-accountWallet', accountWallet).required().object();
     new Validator('[ScanCoinService][scan]-tokenList', tokenList).required().array();
+    let result = {};
     try {
-      const { elapsed, result } = await measure(accountWallet, 'scanCoins', {
+      result = await measure(accountWallet, 'scanCoins', {
         tokenList,
       });
-      return { elapsed, result };
     } catch (e) {
       console.log('[ScanCoinService][scan] ERROR ', e);
-      throw e;
+    } finally {
+      return result;
     }
   }
   static async isFinishScan({ accountWallet }: { accountWallet: Account }) {

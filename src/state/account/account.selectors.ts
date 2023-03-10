@@ -160,6 +160,18 @@ export const defaultAccountWalletSelector = createSelector(
   (defaultAccount, wallet) => defaultAccount && wallet && getAccountWallet(defaultAccount, wallet)
 );
 
+export const getScanCoinKeySelector = createSelector(defaultAccountWalletSelector, (accountWallet) => {
+  let scanCoinKey = undefined;
+  try {
+    scanCoinKey = `${accountWallet?.getOTAKey()}-${accountWallet?.rpc?.rpcHttpService?.url}`;
+  } catch (e) {
+    console.log('[getKeyScanCoinSelector] ERROR ', e);
+    scanCoinKey = undefined;
+  } finally {
+    return scanCoinKey;
+  }
+});
+
 export const isFetchingNFTSelector = createSelector(accountSelector, ({ isFetchingNFT }) => isFetchingNFT);
 export const getCurrentPaymentAddress = createSelector(
   paymentAddressOfDefaultAccountSelector,
