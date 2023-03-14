@@ -34,7 +34,6 @@ const AccountItemContainer = styled.div`
 `;
 
 const AccountItemLeftContainer = styled.div`
-  width: 60px;
   align-items: center;
   justify-content: center;
 `;
@@ -45,13 +44,14 @@ const AccountName = styled.p`
 `;
 
 const PaymentAddress = styled.p`
+  flex: 1;
   font-size: 14px;
   color: #9c9c9c;
 `;
 const AccountItemRightContainer = styled.div`
-  padding: 0px 16px;
   width: 100%;
   flex: 1;
+  margin-left: 16px;
 `;
 
 const AccountItem = (props: AccountItemProps) => {

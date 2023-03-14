@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { groupMasterless } from 'state/masterKey';
+import format from 'utils/format';
 
 import AccountItem from './AccountItem';
-import KeychainSettings from './KeychainSettings';
+import TabSetting from './KeychainSettings';
 import { ModalAccountDetail } from './ModalAccountDetail';
 
 const ListMasterLess = () => {
   const groupAccounts = useSelector(groupMasterless);
   const [selectedAccount, setSelectedAccount] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  if (!groupAccounts?.length) return null;
 
   const onSelectAccount = (account: any) => {
     setSelectedAccount(account);
@@ -25,19 +24,22 @@ const ListMasterLess = () => {
   return (
     <div>
       {groupAccounts.map((accounts: any) =>
-        accounts.child.map((account: any, index: any) => (
-          <AccountItem
-            key={index}
-            name={account?.name}
-            paymentAddress={account?.PaymentAddress}
-            onClick={() => onSelectAccount(account)}
-            privateKey={account?.PrivateKey}
-            masterKeyName={account.MasterKeyName}
-          />
-        ))
+        accounts.child.map((account: any, index: any) => {
+          const paymentAddress = format.shortCryptoAddress(account?.PaymentAddress, 20);
+          return (
+            <AccountItem
+              key={index}
+              name={account?.name}
+              paymentAddress={paymentAddress}
+              onClick={() => onSelectAccount(account)}
+              privateKey={account?.PrivateKey}
+              masterKeyName={account.MasterKeyName}
+            />
+          );
+        })
       )}
       <ModalAccountDetail account={selectedAccount} isModalOpen={isModalOpen} onCloseModal={handleCancel} />
-      <KeychainSettings isMasterless={true} />
+      <TabSetting isMasterless={true} />
     </div>
   );
 };

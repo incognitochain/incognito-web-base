@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { defaultAccount, switchAccountSelector } from 'state/account/account.selectors';
 import { groupMasterKeys, isLoadingAllMasterKeyAccountSelector } from 'state/masterKey';
+import format from 'utils/format';
 
 import AccountItem from './AccountItem';
 import TabSetting from './KeychainSettings';
@@ -37,11 +38,12 @@ const ListMasterKey = () => {
     setIsModalOpen(true);
   };
   const renderItem = (account: any, index: any) => {
+    const paymentAddress = format.shortCryptoAddress(account?.PaymentAddress, 20);
     return (
       <AccountItem
         onClick={() => onSelectAccount(account)}
         name={account?.name}
-        paymentAddress={account?.PaymentAddress}
+        paymentAddress={paymentAddress}
         key={account.ValidatorKey}
         privateKey={account?.PrivateKey}
         masterKeyName={account.MasterKeyName}
