@@ -2,17 +2,28 @@ import store from 'state';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 
 import { WalletType } from './types';
+
 const { createNewCoins } = require('incognito-chain-web-js/build/web/wallet');
 
-class WalletController {
+export class WalletController {
+  static instance: WalletController = WalletController.getIntance();
   private walletType: WalletType = 'WalletWeb';
   private wallet: any; //Instance Wallet from SDK or anywhere
 
   //DJ
-  constructor(wallet?: any, walletType?: WalletType) {
-    this.wallet = wallet;
-    this.walletType = walletType || 'WalletWeb';
+  private constructor() {
+    this.wallet = undefined; // init default
+    this.walletType = 'WalletWeb'; // init default
+    return this;
   }
+
+  static getIntance(): WalletController {
+    if (!WalletController.instance) {
+      WalletController.instance = new WalletController();
+    }
+    return WalletController.instance;
+  }
+
   setWallet(wallet: any) {
     this.wallet = wallet;
   }
@@ -99,10 +110,4 @@ class WalletController {
   }
 }
 
-const walletExtensionInstalled: any = window.incognito;
-const waleltTypeInit: WalletType = walletExtensionInstalled ? 'WalletExtension' : 'WalletWeb';
-const walletController = new WalletController(null, waleltTypeInit); //SP
-
-console.log('WalletController ', walletController);
-
-export default walletController;
+export {};

@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { reducer as tabs } from 'components/Core/Tabs';
 import multicall from 'lib/state/multicall';
+import { reducer as followTokenSelectedReducer } from 'pages/IncWebWallet/state/followTokenSelected.reducer';
 import swap from 'pages/Swap/Swap.reducer';
 // import webWalletReducer from 'pages/IncWebWallet/WebWallet.reducer';
 import { AnyAction } from 'redux';
@@ -59,6 +60,7 @@ const appReducers = combineReducers({
   scanCoinsReducer,
   networkReducer,
   followTokensReducer,
+  followTokenSelectedReducer,
   // webWalletReducer,
 });
 

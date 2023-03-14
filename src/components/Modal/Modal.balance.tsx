@@ -2,6 +2,7 @@ import Column from 'components/Core/Column';
 import { TAB_LIST, Tabs } from 'components/Core/Tabs';
 import { selectedTabIndexSelector } from 'components/Core/Tabs/Tabs.selectors';
 import KeyChain from 'pages/IncWebWallet/features/Keychain';
+import useWalletController from 'pages/IncWebWallet/hooks/useWalletController';
 import { SwapTxs } from 'pages/Swap/features/SwapTxs';
 import { useAppSelector } from 'state/hooks';
 import styled from 'styled-components/macro';
@@ -33,7 +34,11 @@ const Styled = styled(Column)`
 
 const { INCOGNITO_ACCOUNT } = TAB_LIST;
 const BalanceModal = (props: any) => {
-  const selectedTabIndex = useAppSelector(selectedTabIndexSelector)(INCOGNITO_ACCOUNT.rootTab);
+  const walletController = useWalletController();
+
+  let tabList = walletController.isWalletWeb ? TAB_LIST.INCOGNITO_WEB_WALLET_ACCOUNT : TAB_LIST.INCOGNITO_ACCOUNT;
+
+  const selectedTabIndex = useAppSelector(selectedTabIndexSelector)(tabList.rootTab);
   const renderUI = () => {
     const tabs: any = [
       <FollowTokensList key="follow-tokens" />,
@@ -44,7 +49,7 @@ const BalanceModal = (props: any) => {
   };
   return (
     <Styled>
-      <Tabs rootTab={INCOGNITO_ACCOUNT.rootTab} tabNames={INCOGNITO_ACCOUNT.tabNames} />
+      <Tabs rootTab={tabList.rootTab} tabNames={tabList.tabNames} />
       <div className="lineBreak" />
       {renderUI()}
     </Styled>

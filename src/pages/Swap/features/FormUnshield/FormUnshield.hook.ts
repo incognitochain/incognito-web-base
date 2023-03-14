@@ -9,8 +9,8 @@ import { useSelector } from 'react-redux';
 import { useAppSelector } from 'state/hooks';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { webWalletStateSelector } from 'state/masterKey';
-import walletController from 'wallet/WalletController';
 
+import useWalletController from '../../../IncWebWallet/hooks/useWalletController';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import { FormTypes, ISwapExchangeData, SwapExchange } from './FormUnshield.types';
 import { IFee } from './FormUnshield.utils';
@@ -137,7 +137,7 @@ export const useUnshield = (): IUnshield => {
   const webWalletState = useSelector(webWalletStateSelector);
   const incAccount = useAppSelector(incognitoWalletAccountSelector);
   const { isIncognitoInstalled } = useIncognitoWallet();
-
+  const walletController = useWalletController();
   const button = useMemo(() => {
     let text = '';
 

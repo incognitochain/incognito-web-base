@@ -104,7 +104,14 @@ export function Modal({
     leave: { opacity: 0 },
   });
   const lastModal = last(modalState);
-  const { data: modalData, title, isTransparent, closable, isSearchTokenModal } = lastModal || {};
+  const {
+    data: modalData,
+    title,
+    isTransparent,
+    closable,
+    isSearchTokenModal,
+    hideHeaderDefault = false,
+  } = lastModal || {};
 
   const [{ y }, set] = useSpring(() => ({ y: 0, config: { mass: 1, tension: 210, friction: 20 } }));
   const bind = useGesture({
@@ -144,10 +151,12 @@ export function Modal({
               >
                 {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
                 {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
-                <RowBetween className="header">
-                  <ThemedText.AvgMediumLabel color="primary5">{title}</ThemedText.AvgMediumLabel>
-                  <CloseIcon onClick={() => closeModal && closeModal()} />
-                </RowBetween>
+                {!hideHeaderDefault && (
+                  <RowBetween className="header">
+                    <ThemedText.AvgMediumLabel color="primary5">{title}</ThemedText.AvgMediumLabel>
+                    <CloseIcon onClick={() => closeModal && closeModal()} />
+                  </RowBetween>
+                )}
                 {modalData}
               </StyledDialogContent>
             </StyledDialogOverlay>
@@ -164,6 +173,7 @@ interface SetModalProps {
   rightHeader?: React.ReactNode;
   isTransparent: boolean;
   closable?: boolean;
+  hideHeaderDefault?: boolean;
 }
 interface ModalContextType {
   setModal: (_: SetModalProps) => void;
