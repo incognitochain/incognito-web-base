@@ -1,3 +1,4 @@
+import useWalletController from 'pages/IncWebWallet/hooks/useWalletController';
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'state/hooks';
@@ -8,7 +9,6 @@ import {
   incognitoWalletSetState,
   WalletState,
 } from 'state/incognitoWallet';
-import { walletController } from 'wallet';
 import { WalletType } from 'wallet/types';
 
 interface IncognitoWalletContextType {
@@ -31,6 +31,7 @@ const IncognitoWalletProvider = (props: any) => {
   const dispatch = useAppDispatch();
   const children = React.useMemo(() => props.children, []);
   useSelector(incognitoWalletSelector);
+  const walletController = useWalletController();
 
   const isIncognitoInstalled = (): boolean => {
     return typeof window.incognito !== 'undefined';
