@@ -1,8 +1,9 @@
 import { Modal } from 'antd';
+import { useModal } from 'components/Modal';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components/macro';
 
+import FormSendPage from '../../features/Send';
 import CoinsInfoModal from '../CoinsInfo/CoinsInfoModal';
 import Header from './components/Header';
 import HistoryList from './components/HistoryList';
@@ -31,31 +32,70 @@ interface Props {
 }
 
 const FollowTokenDetail = (props: Props) => {
-  const dispatch = useDispatch();
-  const { data, isModalOpen, onCloseModal } = props;
+  const { isModalOpen, onCloseModal } = props;
   const [isShowCoinsInfo, setShowCoinsInfo] = useState(false);
-  return (
-    <ModalWrapper
-      open={isModalOpen}
-      footer={null}
-      style={{ top: 42, right: 0, left: 45 }}
-      closable={false}
-      maskClosable={false}
-      onCancel={() => onCloseModal?.()}
-      destroyOnClose={true}
-    >
+  const [isShowSendForm, setShowSendForm] = useState(false);
+  const [isShowReceive, setShowReceive] = useState(false);
+  const { setModal, closeModal } = useModal();
+
+  const renderWithModal = (children: any) => {
+    return (
+      <ModalWrapper
+        open={isModalOpen}
+        footer={null}
+        style={{ top: 42, right: 0, left: 45 }}
+        closable={false}
+        maskClosable={false}
+        onCancel={() => onCloseModal?.()}
+      >
+        {children}
+      </ModalWrapper>
+    );
+  };
+
+  const renderMainContent = () => {
+    return (
       <div className="container">
-        <Header onCloseModal={onCloseModal} onClickCoinInfo={() => setShowCoinsInfo(true)}></Header>
-        <TokenBalanceDetail />
+        <Header
+          onCloseModal={() => {
+            closeModal();
+          }}
+          onClickCoinInfo={() => setShowCoinsInfo(true)}
+        ></Header>
+        <TokenBalanceDetail
+          onReceiveClick={() => setShowReceive(true)}
+          onSendClick={() => {
+            // Modal.info({
+            //   content: <FormSendModal />,
+            // });
+
+            setModal({
+              closable: false,
+              data: <FormSendPage />,
+              isTransparent: false,
+              rightHeader: undefined,
+              title: '',
+              isSearchTokenModal: false,
+              hideHeaderDefault: true,
+            });
+          }}
+        />
         <HistoryList />
 
         {/* Modal  */}
         {isShowCoinsInfo && (
           <CoinsInfoModal isModalOpen={isShowCoinsInfo} onCloseModal={() => setShowCoinsInfo(false)} />
         )}
+
+        {/* Modal  */}
+        {/* {isShowSendForm && <FormSendPage isModalOpen={isShowSendForm} onCloseModal={() => setShowSendForm(false)} />} */}
+
+        {/* Modal  */}
+        {/* {isShowReceive && <CoinsInfoModal isModalOpen={isShowReceive} onCloseModal={() => setShowReceive(false)} />} */}
       </div>
-    </ModalWrapper>
-  );
+    );
+  };
+  return renderMainContent();
 };
 
 export default FollowTokenDetail;

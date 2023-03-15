@@ -12,6 +12,7 @@ const ModalWrapper = styled(Modal)`
     background: ${({ theme }) => theme.color_grey1};
     border-radius: 20px;
     width: 430px;
+    min-height: 670px;
   }
 `;
 

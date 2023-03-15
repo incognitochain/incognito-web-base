@@ -49,13 +49,15 @@ const Container = styled.div`
 `;
 interface Props {
   onCloseModal?: () => void;
+  onSendClick?: () => void;
+  onReceiveClick?: () => void;
 }
-
-interface Props {}
 
 const TokenBalanceDetail = (props: Props) => {
   console.log('TokenBalanceDetail Render');
   // const dispatch = useDispatch();
+
+  const { onCloseModal, onSendClick, onReceiveClick } = props;
   const followTokenSelected: SelectedPrivacy = useSelector(getFollowTokenSelectedTokenSelector);
 
   if (!followTokenSelected) return null;
@@ -73,9 +75,13 @@ const TokenBalanceDetail = (props: Props) => {
       <h6 className="text-center">{`$ ${formatBalanceByUsd}`}</h6>
       <div className="space" />
       <div className="rowButton">
-        <div className="button">Send</div>
+        <div className="button" onClick={onSendClick}>
+          Send
+        </div>
         <div className="space-horizontal" />
-        <div className="button">Receive</div>
+        <div className="button" onClick={onReceiveClick}>
+          Receive
+        </div>
       </div>
     </Container>
   );

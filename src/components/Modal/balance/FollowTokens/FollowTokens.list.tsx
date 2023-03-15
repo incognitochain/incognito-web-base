@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import { useModal } from 'components/Modal';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import FollowTokenDetail from 'pages/IncWebWallet/components/FollowTokenDetail';
 import useWalletController from 'pages/IncWebWallet/hooks/useWalletController';
@@ -25,6 +26,7 @@ const FollowTokensList = React.memo(() => {
   const [isShowFollowTokenDetail, setShowFollowTokenDetail] = useState<boolean>(false);
 
   const dispatch = useDispatch();
+  const { setModal } = useModal();
 
   const walletController = useWalletController();
 
@@ -34,7 +36,16 @@ const FollowTokensList = React.memo(() => {
     if (walletController.isWalletWeb) {
       dispatch(setFollowTokenSelectedByToken(tokenSelected));
       setTokenSelected(tokenSelected);
-      setShowFollowTokenDetail(true);
+      // setShowFollowTokenDetail(true);
+      setModal({
+        closable: false,
+        data: <FollowTokenDetail />,
+        isTransparent: false,
+        rightHeader: undefined,
+        title: '',
+        isSearchTokenModal: false,
+        hideHeaderDefault: true,
+      });
     }
   }, []);
 
@@ -52,13 +63,13 @@ const FollowTokensList = React.memo(() => {
               />
             ))
           : null}
-        {isShowFollowTokenDetail && (
+        {/* {isShowFollowTokenDetail && (
           <FollowTokenDetail
             isModalOpen={isShowFollowTokenDetail}
             data={tokenSelected}
             onCloseModal={() => setShowFollowTokenDetail(false)}
           />
-        )}
+        )} */}
       </Styled>
     </>
   );
