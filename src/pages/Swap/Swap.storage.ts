@@ -17,8 +17,11 @@ export interface ISwapTxStorage {
 }
 
 const getSwapTxs = (): ISwapTxStorage[] => {
-  const swapTxs = StorageManager.getItem(KEY);
+  let swapTxs = StorageManager.getItem(KEY);
   if (!swapTxs) return [];
+  if (typeof swapTxs === 'string') {
+    swapTxs = JSON.parse(swapTxs);
+  }
   return swapTxs;
 };
 
