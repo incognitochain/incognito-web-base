@@ -15,8 +15,8 @@ import { useAppDispatch, useAppSelector } from 'state/hooks';
 import { getShardIDByAddress } from 'state/incognitoWallet';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import { WalletType } from 'wallet/types';
-import walletController from 'wallet/WalletController';
 
+import useWalletController from '../../../IncWebWallet/hooks/useWalletController';
 import { actionEstimateFee, actionSetErrorMsg } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
 import { FormTypes, NetworkTypePayload, SwapExchange } from './FormUnshield.types';
@@ -51,6 +51,7 @@ const enhanceSend = (WrappedComponent: any) => {
     } = props;
 
     const dispatch = useAppDispatch();
+    const walletController = useWalletController();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
     const { setModal, clearAllModal } = useModal();
     const updateMetric = ({ type }: { type: METRIC_TYPE }) => rpcMetric.updateMetric({ type });

@@ -5,9 +5,9 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { webWalletStateSelector } from 'state/masterKey';
-import walletController from 'wallet/WalletController';
 
 import UnlockWalletModal from '../components/UnlockWalletModal';
+import useWalletController from './useWalletController';
 
 interface UseUnlockWalletResult {
   // showUnlockModal: () => void;
@@ -17,6 +17,7 @@ interface UseUnlockWalletResult {
 export default function useUnlockWallet(): UseUnlockWalletResult {
   const { setModal } = useModal();
   const history = useHistory();
+  const walletController = useWalletController();
 
   //Extention, using Provider
   const { isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();

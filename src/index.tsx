@@ -22,9 +22,15 @@ import UserUpdater from 'state/user/updater';
 import { RadialGradientByChainUpdater, ThemedGlobalStyle, ThemeProvider } from 'theme';
 
 import { LanguageProvider } from './i18n';
+import useWalletController from './pages/IncWebWallet/hooks/useWalletController';
 
 if (!!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false;
+}
+
+function WalletDectector() {
+  useWalletController();
+  return <></>;
 }
 
 function Updaters() {
@@ -46,6 +52,7 @@ ReactDOM.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
+          <WalletDectector />
           <LanguageProvider>
             <Web3Provider>
               <BlockNumberProvider>

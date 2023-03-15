@@ -13,7 +13,8 @@
     "i18n:extract": "lingui extract --locale en-US",
     "i18n:compile": "yarn i18n:extract && lingui compile",
     "i18n:pseudo": "lingui extract --locale pseudo && lingui compile",
-    "prepare": "yarn contracts:compile && yarn i18n:compile",
+    "prepare": "",
+    "prepare1": "yarn contracts:compile && yarn i18n:compile",
     "start": "react-scripts start",
     "build": "react-scripts --max_old_space_size=8192 build",
     "build:develop": "NODE_ENV=development react-scripts --max_old_space_size=8192 build",
@@ -192,6 +193,7 @@
     "react-dom": "^17.0.1",
     "react-feather": "^2.0.8",
     "react-ga4": "^1.4.1",
+    "react-hook-form": "^7.43.5",
     "react-icons": "^4.7.1",
     "react-is": "^17.0.2",
     "react-lottie": "^1.2.3",
@@ -230,6 +232,7 @@
     "ua-parser-js": "^0.7.28",
     "use-count-up": "^2.2.5",
     "use-resize-observer": "^8.0.0",
+    "uuid": "^8.3.2",
     "wcag-contrast": "^3.0.0",
     "web-vitals": "^2.1.0",
     "web3": "^1.7.4",
@@ -238,7 +241,7 @@
     "workbox-navigation-preload": "^6.1.0",
     "workbox-precaching": "^6.1.0",
     "workbox-routing": "^6.1.0",
-    "uuid": "^8.3.2"
+    "yup": "^1.0.2"
   },
   "resolutions": {
     "@walletconnect/ethereum-provider": "1.7.1"

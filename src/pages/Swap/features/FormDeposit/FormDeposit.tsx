@@ -14,8 +14,8 @@ import { useWalletModalToggle } from 'state/application/hooks';
 import { webWalletStateSelector } from 'state/masterKey';
 import styled from 'styled-components/macro';
 import { getAcronymNetwork } from 'utils/token';
-import { walletController } from 'wallet';
 
+import useWalletController from '../../../IncWebWallet/hooks/useWalletController';
 import { Selection } from '../Selection';
 import AddressBox from './components/AddressBox';
 import DescriptionQrCode from './components/DescriptionQrCode';
@@ -47,6 +47,7 @@ const FormDeposit = (props: IMergeProps) => {
   const webWalletState = useSelector(webWalletStateSelector);
   const [isShowQrCode, setShowQrCode] = useState(true);
   const { showUnlockModal } = useUnlockWallet();
+  const walletController = useWalletController();
 
   const _actionMetamask = () => {
     if (!account) return toggleWalletModal();

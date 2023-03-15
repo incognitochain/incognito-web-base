@@ -71,6 +71,7 @@ class PToken {
   isMainNEAR: boolean;
   isMainEVMToken: boolean;
 
+  incognitoTotalSupply: any;
   isIncognitoToken: boolean;
   isErc20Token: boolean;
   isBep2Token: boolean;
@@ -90,6 +91,7 @@ class PToken {
 
   isDepositable: boolean;
   poolPair: string;
+  totalSupply: any;
 
   getIconUrl({ url }: { url: string }) {
     if (this.tokenID === PRVIDSTR) {
@@ -163,6 +165,7 @@ class PToken {
 
     // pToken is private token (pETH <=> ETH, pBTC <=> BTC, ...)
     this.isIncognitoToken = !this.isPToken && !this.isMainCrypto;
+
     this.isErc20Token = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.ERC20;
     this.isBep2Token = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.BNB_BEP2;
     this.isPolygonErc20Token = isPrivateToken && this.currencyType === PRIVATE_TOKEN_CURRENCY_TYPE.POLYGON_ERC20;

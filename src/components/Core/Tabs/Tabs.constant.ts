@@ -12,6 +12,11 @@ const TAB_LIST: ITabList = {
     tabNames: ['Swap', 'Shield'],
     rootTab: getRootTab('SWAP'),
   },
+  INCOGNITO_WEB_WALLET_ACCOUNT: {
+    // tabNames: ['Profile', 'Submit Proof', 'Transactions'],
+    tabNames: ['Profile', 'Transactions', 'Settings'],
+    rootTab: getRootTab('INCOGNITO_ACCOUNT'),
+  },
   INCOGNITO_ACCOUNT: {
     // tabNames: ['Profile', 'Submit Proof', 'Transactions'],
     tabNames: ['Profile', 'Transactions', 'Settings'],

@@ -12,7 +12,7 @@ const PaymentAddressBarStyled = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-
+  padding: 0px 12px 0px 12px;
   .address-area {
     display: flex;
     flex-direction: row;
