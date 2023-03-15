@@ -97,34 +97,12 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
       },
       belongTo: ['Masterkey'],
     });
-
-    listItems.push({
-      key: 'Import a keychain',
-      // icon: <ImportAKeyChainIcon />,
-      name: 'Import a keychain',
-      visible: true,
-      onClick: () => {
-        setIsOpenModalImportKeychain(true);
-      },
-      belongTo: ['Masterkey', 'Masterless'],
-    });
   }
 
   listItems.push({
     key: 'Back up',
     // icon: <BackupIcon />,
     name: 'Back up',
-    visible: true,
-    onClick: () => {
-      setIsOpenModalBackup(true);
-    },
-    belongTo: ['Masterkey', 'Masterless'],
-  });
-
-  listItems.push({
-    key: 'Restore',
-    // icon: <RestoreIcon />,
-    name: 'Restore',
     visible: true,
     onClick: () => {
       setIsOpenModalBackup(true);

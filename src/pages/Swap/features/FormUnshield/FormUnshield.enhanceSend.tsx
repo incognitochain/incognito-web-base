@@ -555,13 +555,7 @@ const enhanceSend = (WrappedComponent: any) => {
         return new Promise(async (resolve, reject) => {
           try {
             let tx: any;
-            const walletType: WalletType = walletController.getWalletType();
-            if (walletType === 'WalletWeb') {
-              tx = await walletController.signTransaction(payload);
-            } else {
-              tx = await requestSignTransaction(payload);
-            }
-            console.log('LOGS PAYLOAD 000: ', { tx });
+            tx = await requestSignTransaction(payload);
             if (formType === FormTypes.SWAP) {
               if (exchangeSelectedData.appName === SwapExchange.PDEX) {
                 await rpcClient.submitSwapPdex({

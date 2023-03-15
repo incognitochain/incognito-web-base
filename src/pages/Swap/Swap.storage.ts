@@ -35,6 +35,9 @@ const setSwapTx = ({
   interPAppNetwork,
 }: ISwapTxStorage) => {
   let swapTxs: ISwapTxStorage[] = StorageManager.getItem(KEY) || [];
+  if (typeof swapTxs === 'string') {
+    swapTxs = JSON.parse(swapTxs);
+  }
   swapTxs.push({
     txHash,
     incAddress,
