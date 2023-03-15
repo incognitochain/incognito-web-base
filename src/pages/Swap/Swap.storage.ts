@@ -17,8 +17,11 @@ export interface ISwapTxStorage {
 }
 
 const getSwapTxs = (): ISwapTxStorage[] => {
-  const swapTxs = StorageManager.getItem(KEY);
+  let swapTxs = StorageManager.getItem(KEY);
   if (!swapTxs) return [];
+  if (typeof swapTxs === 'string') {
+    swapTxs = JSON.parse(swapTxs);
+  }
   return swapTxs;
 };
 
@@ -35,6 +38,9 @@ const setSwapTx = ({
   interPAppNetwork,
 }: ISwapTxStorage) => {
   let swapTxs: ISwapTxStorage[] = StorageManager.getItem(KEY) || [];
+  if (typeof swapTxs === 'string') {
+    swapTxs = JSON.parse(swapTxs);
+  }
   swapTxs.push({
     txHash,
     incAddress,
