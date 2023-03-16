@@ -60,7 +60,7 @@ const FormSendPage = (props: Props) => {
         }}
         className="drawer-style"
       >
-        <AddressBook />
+        <AddressBook showDrawer={showDrawer} />
       </Drawer>
     </Container>
   );

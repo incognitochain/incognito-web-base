@@ -130,7 +130,7 @@ const NavigationHeader = (props: NavigationHeaderProps) => {
     <Container>
       <LeftViewContainer>{renerLeftView()}</LeftViewContainer>
       {middleTitle && <MiddleViewContainer>{renderMiddleView()}</MiddleViewContainer>}
-      <RightViewContainer>{renderRightView()}</RightViewContainer>
+      {rightSubView && <RightViewContainer>{renderRightView()}</RightViewContainer>}
     </Container>
   );
 };

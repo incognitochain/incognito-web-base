@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-
+import { ThemedText } from 'theme';
 export interface EmptyProps {
   title?: string;
   description?: string;
 }
 
-const Styled = styled.div`
+const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,10 +19,14 @@ const Styled = styled.div`
 
 const EmptyView: React.FC<any> = ({ description }: { description: any }) => {
   return (
-    <Styled>
+    <Container>
       {/* <img src="../../../icons/ic_empty.png" width="70" height="70" alt="empty" /> */}
-      {!!description && <p className="desc">{description}</p>}
-    </Styled>
+      {!!description && (
+        <ThemedText.MediumLabel fontWeight={600} color="primary9">
+          {description}
+        </ThemedText.MediumLabel>
+      )}
+    </Container>
   );
 };
 

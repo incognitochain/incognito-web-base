@@ -3,7 +3,7 @@ import React from 'react';
 export interface IHistoryItem {
   id?: string;
   title?: string;
-  desc?: string;
+  desc?: string | any;
   copyData?: string;
   link?: string;
   descClassName?: string;

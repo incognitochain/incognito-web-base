@@ -1,27 +1,48 @@
-// import RightArrowIcon from "@popup/components/Icons/RightArrowIcon";
-// import React from "react";
-// import { IAddressBookItem } from "@module/Account/features/AddressBook/AddressBook.interface";
-// import { ellipsisCenter } from "@popup/utils";
-// import { AddressBookItemStyled } from "./AddressBook.styled";
+import styled from 'styled-components/macro';
+import { ThemedText } from 'theme';
+import { ellipsisCenter } from 'utils';
 
-// const AddressBookItem: React.FC<IAddressBookItem> = (props: IAddressBookItem) => {
-//   const { name, address, onSelectedItem } = props;
-//   console.log(props);
-//   const addressEllipsis = ellipsisCenter({
-//     str: address || "",
-//     limit: 13,
-//   });
-//   return (
-//     <AddressBookItemStyled className="hover-with-cursor" hover-with-cursor>
-//       <div className="left-view" onClick={() => onSelectedItem({ address })}>
-//         <p className="title fs-regular fw-medium noselect">{name}</p>
-//         <p className="desc fs-small fw-medium noselect">{addressEllipsis}</p>
-//       </div>
-//       <div className="right-view">
-//         <RightArrowIcon />
-//       </div>
-//     </AddressBookItemStyled>
-//   );
-// };
-// export default AddressBookItem;
-export {};
+const Container = styled.div`
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.bg1};
+  min-height: 60px;
+
+  :hover {
+    transform: scale(1.03);
+    cursor: pointer;
+  }
+`;
+
+type Props = {
+  name?: string;
+  address?: string;
+  onSelectedItem: (item: any) => void;
+};
+
+const AddressBookItem = (props: Props) => {
+  const { name = '', address = '', onSelectedItem = () => {} } = props;
+  const addressEllipsis = ellipsisCenter({
+    str: address || '',
+    limit: 18,
+  });
+  return (
+    <Container className="" onClick={() => onSelectedItem(address)}>
+      <ThemedText.MediumLabel fontWeight={600} color="primary5">
+        {name}
+      </ThemedText.MediumLabel>
+      <ThemedText.Small fontWeight={500} color="primary9">
+        {addressEllipsis}
+      </ThemedText.Small>
+    </Container>
+  );
+};
+
+export default AddressBookItem;
+
+// export {};
