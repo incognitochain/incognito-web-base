@@ -6,6 +6,7 @@ import enhanceAddressValidation from './FormSend.enhanceAddressValidator';
 import enhanceAmountValidator from './FormSend.enhanceAmountValidator';
 import enhanceChangeField from './FormSend.enhanceChangeField';
 import enhanceInit from './FormSend.enhanceInit';
+import enhanceSend from './FormSend.enhanceSend';
 import { SendFormProps, WrappedComponentType } from './FormSend.types';
 
 const enhance = (WrappedComponent: WrappedComponentType) => {
@@ -26,8 +27,6 @@ export default compose(
   enhanceChangeField,
   enhanceAddressValidation,
   enhanceAmountValidator,
-  // enhanceAddressValidation,
-  // enhanceSelect,
-  // enhanceDeposit,
+  enhanceSend,
   enhance
 ) as any;

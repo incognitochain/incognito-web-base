@@ -1,18 +1,18 @@
-import BinIconSrc from 'assets/svg/ic-bin.svg';
 import InfoIconSrc from 'assets/svg/ic-info.svg';
-import ReloadIconSrc from 'assets/svg/ic-reload.svg';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 
+import BalanceHandler from '../../../actions/balanceHandler';
 import { getFollowTokenSelectedTokenSelector } from '../../../state/followTokenSelected.selectors';
 import NavigationHeader from '../../NavigationHeader/NavigationHeader';
+import ReloadBalanceButton from './ReloadBalanceButton';
+import RemoveFollowTokenButton from './RemoveFollowTokenButton';
 
 const Container = styled.div`
   .container {
     background-color: ${({ theme }) => theme.color_grey1};
   }
-
   .space {
     width: 10px;
   }
@@ -41,13 +41,19 @@ const Header = (props: Props) => {
           </div>
         }
         rightSubView={[
-          <div key="bin-ic-key" className="hover-opacity center">
-            <img alt="ic-bin" src={BinIconSrc} />
-          </div>,
+          <RemoveFollowTokenButton
+            key={'remove-button'}
+            onClickCallback={() => {
+              //TO DO
+            }}
+          />,
           <div key="space" className="space" />,
-          <div key="remove-ic-key" className="hover-opacity center">
-            <img alt="ic-reload1" src={ReloadIconSrc} />
-          </div>,
+          <ReloadBalanceButton
+            key={'reload-balance-button'}
+            onClickCallback={() => {
+              BalanceHandler.getFollowTokensBalance();
+            }}
+          />,
         ]}
       />
     </Container>

@@ -10,36 +10,15 @@ export interface TInner {
 
 const enhanceAddressValidation = (WrappedComponent: WrappedComponentType) => {
   const FormSendComp = (props: any) => {
-    const { isIncognitoAddress, onChangeField, incAccount, inputAddress } = props;
-    const refObject = React.useRef(false);
-    const getExternalAddressValidator = React.useCallback(() => {
-      // default
-      return validator.combinedUnknownAddress;
-    }, [isIncognitoAddress]);
+    const { isIncognitoAddress } = props;
 
     const getAddressValidator = React.useCallback(() => {
       return validator.combinedIncognitoAddress;
     }, [isIncognitoAddress]);
 
-    const getWarningAddress = React.useCallback(() => {
-      // if (isExternalAddress) {
-      //   return 'You are exiting Incognito and going public.';
-      // }
-      // return "You are exiting Incognito and going public.";
-    }, []);
-
     const validateAddress = getAddressValidator();
-    const warningAddress = getWarningAddress();
 
-    // React.useEffect(() => {
-    //   if (refObject && refObject.current) return;
-    //   if (incAccount && incAccount.paymentAddress && onChangeField) {
-    //     onChangeField(incAccount.paymentAddress, FORM_CONFIGS.toAddress);
-    //     refObject.current = true;
-    //   }
-    // }, [incAccount]);
-
-    return <WrappedComponent {...{ ...props, validateAddress, warningAddress }} />;
+    return <WrappedComponent {...{ ...props, validateAddress }} />;
   };
   FormSendComp.displayName = 'FormSend.enhanceAddressValidation';
   return FormSendComp;

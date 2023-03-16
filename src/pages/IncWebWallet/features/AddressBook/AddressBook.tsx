@@ -1,35 +1,45 @@
-// import WrapContent from '@components/Content/Content';
-// import { Empty } from '@components/empty';
-// import Header from '@components/Header';
-// import { IAddressBookItem } from '@module/Account/features/AddressBook/AddressBook.interface';
-// import AddressBookItem from '@module/Account/features/AddressBook/AddressBook.item';
+import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { change } from 'redux-form';
+import { useAppDispatch } from 'state/hooks';
 
+import { FORM_CONFIGS } from '../Send/FormSend/FormSend.constant';
+import AddressBookItem from './AddressBook.item';
+import { getAccountListSelector } from './AddressBook.selector';
 import { Container } from './AddressBook.styled';
 import EmptyView from './EmptyView';
 
-const AddressBook = (props: any) => {
-  const { addressBook, onSelectedItem } = props;
-  const factories = (addressBook || []).map((item: { title: string; data: any[] }) => ({
-    masterKeyName: item.title,
-    listAccount: item.data,
-  }));
+type Props = {
+  showDrawer: (flag: boolean) => void;
+};
+const AddressBook = (props: Props) => {
+  const { showDrawer = () => {} } = props;
+  const dispatch = useAppDispatch();
+  const factories = useSelector(getAccountListSelector) || [];
+  const isEmpty = factories.length === 0;
 
-  const isEmpty = !factories.some((master: any) => master.listAccount.length > 0);
+  const onSelectedItem = useCallback((address: any) => {
+    dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, address));
+    showDrawer(false);
+  }, []);
 
-  const renderKeyChain = (item: any) => {
-    // <AddressBookItem address={item.address} name={item.name} onSelectedItem={onSelectedItem} key={item.address} />
-    return <></>;
+  const renderItem = (account: any) => {
+    return (
+      <AddressBookItem
+        address={account.paymentAddress || account.PaymentAddress}
+        name={account.name}
+        onSelectedItem={onSelectedItem}
+        key={account.paymentAddress || account.PaymentAddress}
+      />
+    );
   };
 
   return (
     <Container>
-      {factories.map((account: any) => (
-        <div key={account.masterKeyName}>{account.listAccount.map(renderKeyChain)}</div>
-      ))}
+      {factories.map((account: any) => renderItem(account))}
       {isEmpty && <EmptyView description="Empty address book" />}
     </Container>
   );
 };
 
-// export default withAddressBook(AddressBook);
 export default AddressBook;

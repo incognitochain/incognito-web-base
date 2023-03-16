@@ -40,7 +40,7 @@ const scanCoins = async () => {
 
   // const isFinishScan = await ScanCoinService.isFinishScan({ accountWallet: currentAccount });
 
-  // console.log('[PHAT][scanCoins] ', {
+  // console.log('[TAG][scanCoins] ', {
   //   scanCoinKey,
   //   isFetching,
   //   isFinishScan,

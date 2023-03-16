@@ -1,5 +1,3 @@
-// export { default as FormSend } from './FormSend';
-// export { default as reducer } from './FormSend.reducer';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { SelectionSendField } from 'components/Core/ReduxForm/SelectionSendField';
@@ -8,6 +6,7 @@ import styled from 'styled-components/macro';
 
 import { FORM_CONFIGS } from './FormSend.constant';
 import { default as enhance } from './FormSend.enhance';
+import { getNetworkFee } from './FormSend.utils';
 
 const Container = styled.div`
   display: flex;
@@ -22,7 +21,6 @@ const VerticalSpace = styled.div`
 interface Props {}
 
 const FormSend = (props: Props & any) => {
-  console.log('FormSend props ', props);
   const {
     formatAmount = '0.00',
     symbol,
@@ -31,14 +29,13 @@ const FormSend = (props: Props & any) => {
     validateAddress,
     onAmountMaxClicked,
     openAddressBook,
+    handleSendAnonymously,
+    sendBtnDisable,
   } = props;
-  const onSend = (data: any) => {
-    console.log('TO DO onSend ', data);
-  };
 
   return (
     <Container>
-      <form onSubmit={handleSubmit(onSend)}>
+      <form onSubmit={handleSubmit(handleSendAnonymously)}>
         <Field
           component={SelectionSendField}
           name={FORM_CONFIGS.amount}
@@ -53,7 +50,6 @@ const FormSend = (props: Props & any) => {
           validate={validateAmount}
           onClickFooterRight={() => {}}
           maxButtonOnClick={() => {
-            console.log('maxButtonOnClick  TO DO ');
             onAmountMaxClicked && onAmountMaxClicked();
           }}
         />
@@ -69,7 +65,6 @@ const FormSend = (props: Props & any) => {
           }}
           validate={validateAddress}
           selectPaymentAddressButtonOnClick={() => {
-            console.log('selectPaymentAddressButtonOnClick  TO DO ');
             openAddressBook && openAddressBook();
           }}
         />
@@ -84,7 +79,6 @@ const FormSend = (props: Props & any) => {
             type: 'text',
           }}
           validate={[]}
-          showShowTopUp={true}
         />
         <VerticalSpace />
         <Field
@@ -92,7 +86,7 @@ const FormSend = (props: Props & any) => {
           name={FORM_CONFIGS.fee}
           inputType={INPUT_FIELD.string}
           headerTitle="Network Fee"
-          placeholder="0.1"
+          placeholder={getNetworkFee()}
           disabled={true}
           componentProps={{
             type: 'text',
@@ -103,7 +97,7 @@ const FormSend = (props: Props & any) => {
         />
         <VerticalSpace />
         <VerticalSpace />
-        <ButtonConfirmed height={'50px'} type="submit">
+        <ButtonConfirmed height={'50px'} type="submit" disabled={sendBtnDisable}>
           {'Send Anonymously'}
         </ButtonConfirmed>
       </form>
