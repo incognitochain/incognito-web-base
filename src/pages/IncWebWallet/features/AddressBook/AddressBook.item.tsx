@@ -10,7 +10,7 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.bg1};
+  background-color: ${({ theme }) => theme.bg2};
   min-height: 60px;
 
   :hover {

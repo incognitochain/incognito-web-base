@@ -1124,4 +1124,35 @@ export const ThemedGlobalStyle = createGlobalStyle`
   .ant-tabs-nav-wrap {
     border-bottom: 1px solid ${({ theme }) => theme.color_grey4};
   }
+
+  .ant-drawer-header {
+    display: flex;
+    flex: 0 1;
+    align-items: center;
+    padding: 16px 24px;
+    font-size: 16px;
+    line-height: 22px;
+    border-bottom: 1px solid rgb(65 62 62);
+  }
+
+  .ant-drawer-close {
+    color: white;
+  }
+
+  .ant-drawer-title {
+    flex: 1 1;
+    margin: 0;
+    color:  white;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .ant-popover-message-title {
+    color:  white;
+  }
+
+  .ant-popover-inner {
+    border-radius: 10px;
+  }
 `;

@@ -1,9 +1,11 @@
+import { Popconfirm } from 'antd';
 import InfoIconSrc from 'assets/svg/ic-info.svg';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import styled from 'styled-components/macro';
 
-import BalanceHandler from '../../../actions/balanceHandler';
 import { getFollowTokenSelectedTokenSelector } from '../../../state/followTokenSelected.selectors';
 import NavigationHeader from '../../NavigationHeader/NavigationHeader';
 import ReloadBalanceButton from './ReloadBalanceButton';
@@ -20,13 +22,22 @@ const Container = styled.div`
 interface Props {
   onCloseModal?: () => void;
   onClickCoinInfo?: () => void;
+  onReloadBalanceCallback?: () => void;
+  onRemoveFollowTokeneCallback?: () => void;
 }
 
 const Header = (props: Props) => {
-  console.log('Header Render');
-  const dispatch = useDispatch();
-  const { onCloseModal, onClickCoinInfo = () => {} } = props;
+  const {
+    onCloseModal,
+    onClickCoinInfo = () => {},
+    onReloadBalanceCallback = () => {},
+    onRemoveFollowTokeneCallback = () => {},
+  } = props;
   const followTokenSelected: SelectedPrivacy = useSelector(getFollowTokenSelectedTokenSelector);
+  const accountWallet = useSelector(defaultAccountWalletSelector);
+  const [isPopConfirm, setPopConfirm] = useState(false);
+  if (!followTokenSelected || !accountWallet) return null;
+
   return (
     <Container>
       <NavigationHeader
@@ -41,19 +52,26 @@ const Header = (props: Props) => {
           </div>
         }
         rightSubView={[
-          <RemoveFollowTokenButton
-            key={'remove-button'}
-            onClickCallback={() => {
-              //TO DO
-            }}
-          />,
+          followTokenSelected.isMainCrypto ? null : (
+            <Popconfirm
+              color="#000000"
+              placement="bottom"
+              title={'Are you sure to delete this token?'}
+              onConfirm={() => {
+                onRemoveFollowTokeneCallback && onRemoveFollowTokeneCallback();
+              }}
+              onCancel={() => {
+                setPopConfirm(false);
+              }}
+              okText="Sure"
+              cancelText="Cancel"
+              open={isPopConfirm}
+            >
+              <RemoveFollowTokenButton key={'remove-button'} onClickCallback={() => setPopConfirm(true)} />
+            </Popconfirm>
+          ),
           <div key="space" className="space" />,
-          <ReloadBalanceButton
-            key={'reload-balance-button'}
-            onClickCallback={() => {
-              BalanceHandler.getFollowTokensBalance();
-            }}
-          />,
+          <ReloadBalanceButton key={'reload-balance-button'} onClickCallback={onReloadBalanceCallback} />,
         ]}
       />
     </Container>
