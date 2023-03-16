@@ -1,30 +1,19 @@
-import { Modal } from 'antd';
 import { useModal } from 'components/Modal';
+import Loading from 'components/Modal/Modal.loading';
+import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { useState } from 'react';
-import styled from 'styled-components/macro';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { defaultAccountSelector, defaultAccountWalletSelector } from 'state/account/account.selectors';
 
+import BalanceHandler from '../../actions/balanceHandler';
+import QRCode from '../../features/QRCode';
 import FormSendPage from '../../features/Send';
+import { getFollowTokenSelectedTokenSelector } from '../../state/followTokenSelected.selectors';
 import CoinsInfoModal from '../CoinsInfo/CoinsInfoModal';
 import Header from './components/Header';
 import HistoryList from './components/HistoryList';
 import TokenBalanceDetail from './components/TokenBalanceDetail';
-
-const ModalWrapper = styled(Modal)`
-  .ant-modal-content {
-    background: ${({ theme }) => theme.color_grey1};
-    border-radius: 20px;
-    width: 430px;
-  }
-
-  .container {
-    background-color: ${({ theme }) => theme.color_grey1};
-  }
-
-  .space {
-    width: 10px;
-  }
-`;
-
 interface Props {
   data?: any;
   isModalOpen?: boolean;
@@ -32,25 +21,20 @@ interface Props {
 }
 
 const FollowTokenDetail = (props: Props) => {
-  const { isModalOpen, onCloseModal } = props;
   const [isShowCoinsInfo, setShowCoinsInfo] = useState(false);
-  const [isShowSendForm, setShowSendForm] = useState(false);
-  const [isShowReceive, setShowReceive] = useState(false);
   const { setModal, closeModal } = useModal();
 
-  const renderWithModal = (children: any) => {
-    return (
-      <ModalWrapper
-        open={isModalOpen}
-        footer={null}
-        style={{ top: 42, right: 0, left: 45 }}
-        closable={false}
-        maskClosable={false}
-        onCancel={() => onCloseModal?.()}
-      >
-        {children}
-      </ModalWrapper>
-    );
+  const followTokenSelected: SelectedPrivacy = useSelector(getFollowTokenSelectedTokenSelector);
+  const accountWallet = useSelector(defaultAccountWalletSelector);
+  const accountInfo: any = useSelector(defaultAccountSelector);
+
+  const tokenID = followTokenSelected.tokenID;
+  const { PaymentAddress = '', paymentAddress = '' } = accountInfo;
+
+  if (!followTokenSelected || !accountWallet || !tokenID) return null;
+
+  const goBack = () => {
+    closeModal();
   };
 
   const renderMainContent = () => {
@@ -58,17 +42,55 @@ const FollowTokenDetail = (props: Props) => {
       <div className="container">
         <Header
           onCloseModal={() => {
-            closeModal();
+            goBack();
           }}
           onClickCoinInfo={() => setShowCoinsInfo(true)}
-        ></Header>
-        <TokenBalanceDetail
-          onReceiveClick={() => setShowReceive(true)}
-          onSendClick={() => {
-            // Modal.info({
-            //   content: <FormSendModal />,
-            // });
+          onReloadBalanceCallback={() => {
+            BalanceHandler.getFollowTokensBalance();
+          }}
+          onRemoveFollowTokeneCallback={async () => {
+            try {
+              setModal({
+                closable: false,
+                data: <Loading />,
+                isTransparent: false,
+                rightHeader: undefined,
+                title: '',
+                hideHeaderDefault: true,
+              });
 
+              await accountWallet.removeFollowingToken({ tokenID });
+              await BalanceHandler.getFollowTokensBalance();
+
+              setTimeout(() => {
+                toast.success('Remove Success');
+                closeModal();
+                goBack();
+              }, 1000);
+            } catch (error) {
+              console.log('onRemoveFollowTokeneCallback ERROR ', error);
+            }
+          }}
+        />
+        <TokenBalanceDetail
+          onReceiveClick={() => {
+            setModal({
+              closable: false,
+              data: (
+                <QRCode
+                  title={'Payment Address'}
+                  label={'This is your address. Use it to receive any cryptocurrency from another Incognito address.'}
+                  value={PaymentAddress || paymentAddress}
+                />
+              ),
+              isTransparent: false,
+              rightHeader: undefined,
+              title: '',
+              isSearchTokenModal: false,
+              hideHeaderDefault: true,
+            });
+          }}
+          onSendClick={() => {
             setModal({
               closable: false,
               data: <FormSendPage />,
@@ -86,12 +108,6 @@ const FollowTokenDetail = (props: Props) => {
         {isShowCoinsInfo && (
           <CoinsInfoModal isModalOpen={isShowCoinsInfo} onCloseModal={() => setShowCoinsInfo(false)} />
         )}
-
-        {/* Modal  */}
-        {/* {isShowSendForm && <FormSendPage isModalOpen={isShowSendForm} onCloseModal={() => setShowSendForm(false)} />} */}
-
-        {/* Modal  */}
-        {/* {isShowReceive && <CoinsInfoModal isModalOpen={isShowReceive} onCloseModal={() => setShowReceive(false)} />} */}
       </div>
     );
   };

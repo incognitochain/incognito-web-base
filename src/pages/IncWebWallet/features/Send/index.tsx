@@ -16,11 +16,6 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${({ theme }) => theme.color_grey1};
   min-height: 670px;
-
-  .drawer-style {
-    display: flex;
-    background-color: ${({ theme }) => theme.color_grey1};
-  }
 `;
 
 interface Props {
@@ -55,10 +50,12 @@ const FormSendPage = (props: Props) => {
         placement="right"
         onClose={() => showDrawer(false)}
         open={open}
-        contentWrapperStyle={{
+        headerStyle={{
           backgroundColor: '#303030',
         }}
-        className="drawer-style"
+        bodyStyle={{
+          backgroundColor: '#303030',
+        }}
       >
         <AddressBook showDrawer={showDrawer} />
       </Drawer>
