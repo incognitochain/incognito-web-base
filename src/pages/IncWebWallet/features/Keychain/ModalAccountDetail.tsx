@@ -1,13 +1,16 @@
 import { message, Modal } from 'antd';
 import copy from 'copy-to-clipboard';
+import withBlur from 'pages/IncWebWallet/hoc/withBlur';
 import { IoCloseOutline } from 'react-icons/io5';
 import { MdContentCopy, MdQrCode } from 'react-icons/md';
 import styled from 'styled-components/macro';
-interface ExportItem {
+interface ExportItemProps {
   label: string;
   data: any;
   onPress: () => void;
   onPressQRCode?: () => void;
+  requiredPass?: boolean;
+  children?: any;
 }
 
 const ModalWrapper = styled(Modal)`
@@ -54,8 +57,8 @@ const ButtonQrCode = styled.div`
   }
 `;
 
-const ExportItem = (props: ExportItem) => {
-  const { label, data, onPress, onPressQRCode } = props;
+const ExportItem = (props: ExportItemProps): any => {
+  const { label, data, onPress, onPressQRCode, requiredPass } = props;
   const [messageApi, contextHolder] = message.useMessage();
   const onCopy = (text: string) => {
     copy(text);
@@ -64,7 +67,8 @@ const ExportItem = (props: ExportItem) => {
       content: 'Copied',
     });
   };
-  return (
+
+  const renderMainContent = (): any => (
     <ExportItemContainer>
       {contextHolder}
       <ExportItemTopContainer>
@@ -81,6 +85,9 @@ const ExportItem = (props: ExportItem) => {
       <ItemValue>{data}</ItemValue>
     </ExportItemContainer>
   );
+
+  if (requiredPass) return withBlur(renderMainContent)(props);
+  return renderMainContent();
 };
 
 export const parseShard = (bytes: any) => {
@@ -99,14 +106,23 @@ interface ModalAccountDetailProps {
 
 export const ModalAccountDetail = (props: ModalAccountDetailProps) => {
   const { account, isModalOpen, onCloseModal } = props;
-  const renderItem = (label: any, value: any) =>
-    value ? <ExportItem label={label} data={value} onPress={() => null} onPressQRCode={() => null} /> : null;
+  const renderItem = (label: any, value: any, requiredPass = false): any =>
+    value ? (
+      <ExportItem
+        label={label}
+        data={value}
+        requiredPass={requiredPass}
+        onPress={() => null}
+        onPressQRCode={() => null}
+      />
+    ) : null;
   return (
     <ModalWrapper
       open={isModalOpen}
       centered
       width={600}
       footer={null}
+      destroyOnClose={true}
       bodyStyle={{ padding: 24, borderRadius: 16, backgroundColor: '#303030' }}
       closeIcon={<IoCloseOutline size={24} color="#FFFFFF" />}
       onCancel={() => onCloseModal?.()}
@@ -114,7 +130,7 @@ export const ModalAccountDetail = (props: ModalAccountDetailProps) => {
       <div style={{ flex: 1, backgroundColor: '#303030' }}>
         <h5>{account?.name} keys</h5>
         {renderItem('Your incognito address', account?.PaymentAddress)}
-        {renderItem('Private key', account?.PrivateKey)}
+        {renderItem('Private key', account?.PrivateKey, true)}
         {renderItem('Public key', account?.PublicKeyCheckEncode)}
         {renderItem('Readonly key', account?.ReadonlyKey)}
         {renderItem('Validator key', account?.ValidatorKey)}
