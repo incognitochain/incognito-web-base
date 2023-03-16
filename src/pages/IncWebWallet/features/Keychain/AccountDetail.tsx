@@ -1,11 +1,12 @@
 import { Modal } from 'antd';
 import styled from 'styled-components/macro';
 
-interface ExportItem {
+interface ExportItemProps {
   label: string;
   data: any;
   onPress: () => void;
   onPressQRCode?: () => void;
+  requiredPass?: boolean;
 }
 
 const ExportItemContainer = styled.div`
@@ -28,7 +29,7 @@ const ButtonCopy = styled.div``;
 
 const ButtonQrCode = styled.div``;
 
-const ExportItem = (props: ExportItem) => {
+const ExportItem = (props: ExportItemProps) => {
   const { label, data, onPress, onPressQRCode } = props;
   return (
     <ExportItemContainer>
@@ -59,11 +60,12 @@ interface AccountDetail {
 
 export const ModalAccountDetail = (props: AccountDetail) => {
   const { account, isModalOpen } = props;
-  const renderItem = (label: any, value: any) =>
+  const renderItem = (label: any, value: any, requiredPass = false) =>
     value ? (
       <ExportItem
         label={label}
         data={value}
+        requiredPass
         onPress={() => null}
         onPressQRCode={() => null}
         // onPressQRCode={() =>
@@ -82,13 +84,6 @@ export const ModalAccountDetail = (props: AccountDetail) => {
   return (
     <Modal title="Basic Modal" open={isModalOpen}>
       {renderItem('Your incognito address', account?.PaymentAddress)}
-      {renderItem('Private key', account?.PrivateKey)}
-      {renderItem('Public key', account?.PublicKeyCheckEncode)}
-      {renderItem('Readonly key', account?.ReadonlyKey)}
-      {renderItem('Validator key', account?.ValidatorKey)}
-      {renderItem('Validator Public key', account?.BLSPublicKey)}
-      {renderItem('OTA key', account?.OTAKey)}
-      {renderItem('ID', account?.ID.toString())}
     </Modal>
   );
 };

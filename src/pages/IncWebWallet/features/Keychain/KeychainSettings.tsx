@@ -8,7 +8,8 @@ import styled from 'styled-components/macro';
 import { ModalBackup } from './ModalBackup';
 import { ModalCreateAccount } from './ModalCreateAccount';
 import { ModalImportKeychain } from './ModalImportKeychain';
-import { ModalPhrase } from './ModalPhrase';
+import ModalPhrase from './ModalPhrase';
+
 interface ItemProps {
   label?: string;
   onClick?: () => void;
@@ -124,7 +125,13 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
       {listItems?.map((item: any, i: any) => {
         return <Item key={i} label={item.name} onClick={() => item?.onClick?.()} />;
       })}
-      <ModalPhrase isModalOpen={isOpenModalPhrase} data={masterKey} onCloseModal={() => setIsOpenModalPhrase(false)} />
+      {isOpenModalPhrase && (
+        <ModalPhrase
+          isModalOpen={isOpenModalPhrase}
+          data={masterKey}
+          onCloseModal={() => setIsOpenModalPhrase(false)}
+        />
+      )}
       <ModalImportKeychain
         isModalOpen={isOpenModalImportKeychain}
         onCloseModal={() => setIsOpenModalImportKeychain(false)}
@@ -133,7 +140,9 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
         isModalOpen={isOpenModalCreateAccount}
         onCloseModal={() => setIsOpenModalCreateAccount(false)}
       />
-      <ModalBackup isModalOpen={isOpenModalBackup} onCloseModal={() => setIsOpenModalBackup(false)} />
+      {isOpenModalBackup && (
+        <ModalBackup isModalOpen={isOpenModalBackup} onCloseModal={() => setIsOpenModalBackup(false)} />
+      )}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { Modal } from 'antd';
+import withBlur from 'pages/IncWebWallet/hoc/withBlur';
 import { IoCloseOutline } from 'react-icons/io5';
 import styled from 'styled-components/macro';
-
 const ModalWrapper = styled(Modal)`
   .ant-modal {
     border-radius: 20px;
@@ -75,27 +75,38 @@ interface ModalPhraseProps {
   data?: any;
   isModalOpen?: boolean;
   onCloseModal?: () => void;
+  children?: React.ReactNode;
 }
 
-export const ModalPhrase = (props: ModalPhraseProps) => {
+const ModalPhrase = (props: ModalPhraseProps) => {
   const { data, isModalOpen, onCloseModal } = props;
   const words = data?.mnemonic;
-  return (
-    <ModalWrapper
-      open={isModalOpen}
-      centered
-      width={960}
-      footer={null}
-      bodyStyle={{ padding: 24, borderRadius: 16, backgroundColor: '#303030' }}
-      closeIcon={<IoCloseOutline size={24} color="#FFFFFF" />}
-      onCancel={() => onCloseModal?.()}
-    >
+
+  const renderMainContent = (): any => {
+    return (
       <ModalContainer>
         <h5>Reveal Seed Words</h5>
         <Box>
           <PhraseText>{words}</PhraseText>
         </Box>
       </ModalContainer>
+    );
+  };
+
+  return (
+    <ModalWrapper
+      open={isModalOpen}
+      centered
+      width={960}
+      footer={null}
+      destroyOnClose={true}
+      bodyStyle={{ padding: 24, borderRadius: 16, backgroundColor: '#303030' }}
+      closeIcon={<IoCloseOutline size={24} color="#FFFFFF" />}
+      onCancel={() => onCloseModal?.()}
+    >
+      {withBlur(renderMainContent)(props)}
     </ModalWrapper>
   );
 };
+
+export default ModalPhrase;
