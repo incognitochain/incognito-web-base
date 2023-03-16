@@ -1,9 +1,11 @@
+import { useModal } from 'components/Modal';
 import { getFollowTokenSelectedTokenSelector } from 'pages/IncWebWallet/state/followTokenSelected.selectors';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import styled from 'styled-components/macro';
 
+import TransactionDetail from '../TransactionDetail';
 import { IHistory, IHistoryFromSDK } from '../TxsHistory.interfaces';
 import { getTxsHistoryBuilder } from '../TxsHistory.utils';
 import { HistoryItem } from './HistoryItem';
@@ -39,7 +41,23 @@ const HistoryList = (props: Props) => {
     handleLoadHistory();
   }, [selectedPrivacy.tokenID]);
 
-  const renderItem = (history: IHistory) => <HistoryItem history={history} key={history.txID} />;
+  const { setModal, closeModal } = useModal();
+
+  const showTransactionDetailModal = (data: any) => {
+    setModal({
+      closable: true,
+      data: <TransactionDetail history={data} />,
+      isTransparent: false,
+      rightHeader: undefined,
+      title: '',
+      isSearchTokenModal: false,
+      hideHeaderDefault: true,
+    });
+  };
+
+  const renderItem = (history: IHistory) => (
+    <HistoryItem history={history} key={history.txID} onClick={() => showTransactionDetailModal(history)} />
+  );
 
   return <Container>{histories?.map(renderItem)}</Container>;
 };

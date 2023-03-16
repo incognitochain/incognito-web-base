@@ -30,12 +30,12 @@ const Desc = styled.p`
 `;
 
 const StatusText = styled.p`
-  font-size: 13px;
+  font-size: 14px;
 `;
 
-export const HistoryItem = React.memo(({ history }: { history: IHistory }) => {
+export const HistoryItem = React.memo(({ history, onClick }: { history: IHistory; onClick?: () => void }) => {
   return (
-    <Container>
+    <Container onClick={onClick}>
       <Row>
         <Title>{history.txTypeStr}</Title>
         <Title>{history.amountStr}</Title>
