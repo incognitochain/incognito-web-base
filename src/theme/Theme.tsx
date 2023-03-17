@@ -1155,4 +1155,16 @@ export const ThemedGlobalStyle = createGlobalStyle`
   .ant-popover-inner {
     border-radius: 10px;
   }
+
+  .animation-opacity {
+    animation: keyOpacity 0.8s alternate;
+    @keyframes keyOpacity {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  }
 `;

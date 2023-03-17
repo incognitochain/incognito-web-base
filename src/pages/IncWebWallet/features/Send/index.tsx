@@ -36,7 +36,7 @@ const FormSendPage = (props: Props) => {
   };
 
   return (
-    <Container>
+    <Container className="animation-opacity">
       <NavigationHeader
         leftTitle={`Send ${followTokenSelectedData.symbol || ''}`}
         onBack={() => {

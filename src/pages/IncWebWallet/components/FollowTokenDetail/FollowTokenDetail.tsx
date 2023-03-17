@@ -39,7 +39,7 @@ const FollowTokenDetail = (props: Props) => {
 
   const renderMainContent = () => {
     return (
-      <div className="container">
+      <div className="container animation-opacity">
         <Header
           onCloseModal={() => {
             goBack();
