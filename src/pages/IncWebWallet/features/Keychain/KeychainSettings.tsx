@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { currentMasterKeySelector } from 'state/masterKey';
 import styled from 'styled-components/macro';
 
-import { ModalBackup } from './ModalBackup';
+import ModalBackup from './ModalBackup';
 import { ModalCreateAccount } from './ModalCreateAccount';
 import { ModalImportKeychain } from './ModalImportKeychain';
 import ModalPhrase from './ModalPhrase';

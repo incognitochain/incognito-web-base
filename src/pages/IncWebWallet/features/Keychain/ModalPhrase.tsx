@@ -1,6 +1,6 @@
 // import { IoCloseOutline } from 'react-icons/io5';
+import withBlur from 'pages/IncWebWallet/hoc/withBlur';
 import styled from 'styled-components/macro';
-
 const ModalContainer = styled.div`
   background-color: #303030;
   min-height: 600px;
@@ -46,4 +46,4 @@ export const ModalPhrase = (props: ModalPhraseProps) => {
   );
 };
 
-export default ModalPhrase;
+export default withBlur(ModalPhrase);
