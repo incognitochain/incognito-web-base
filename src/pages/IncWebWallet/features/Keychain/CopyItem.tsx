@@ -38,6 +38,9 @@ const Value = styled.p`
   font-size: 14x;
   font-weight: 500;
   color: #9c9c9c;
+  word-wrap: break-word;
+  white-space: -moz-pre-wrap;
+  white-space: pre-wrap;
 `;
 
 const ButtonCopy = styled.div`
@@ -68,7 +71,7 @@ const CopyItem = (props: CopyItemProps) => {
     <Container>
       {contextHolder}
       <LabelContainer>
-        <Label>{label || 'test'}</Label>
+        <Label>{label}</Label>
         <RightLabelContainer>
           <ButtonCopy onClick={() => handleCopy(value)}>
             <MdContentCopy size={20} color="#FFFFFF" />

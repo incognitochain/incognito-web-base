@@ -1,31 +1,17 @@
-import { Input, message, Modal } from 'antd';
+import { Input, message } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
+import { useModal } from 'components/Modal';
 import { isEmpty, trim } from 'lodash';
 import { CustomError, ErrorCode } from 'pages/IncWebWallet/services/exception';
 import { useState } from 'react';
-import { IoCloseOutline } from 'react-icons/io5';
+// import { IoCloseOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 import { actionFetchImportAccount } from 'state/account';
 import styled from 'styled-components/macro';
 
-interface ModalImportKeychainProps {
-  isModalOpen?: boolean;
-  onCloseModal?: () => void;
-}
-
-const ModalWrapper = styled(Modal)`
-  .ant-modal {
-    border-radius: 20px;
-  }
-
-  .ant-modal-content {
-    background: #303030;
-    border-radius: 20px;
-  }
-`;
-
-const ModalContainer = styled.div`
+const Container = styled.div`
   background-color: #303030;
+  min-height: 600px;
 `;
 
 const LabelInput = styled.p`
@@ -66,10 +52,8 @@ const TextInputContainer = styled.div`
   margin-top: 16px;
 `;
 
-export const ModalImportKeychain = (props: ModalImportKeychainProps) => {
+export const ModalImportKeychain = () => {
   const [messageApi, contextHolder] = message.useMessage();
-
-  const { isModalOpen, onCloseModal } = props;
 
   // Form value
   const [keychainName, setKeychainName] = useState<string>('');
@@ -80,6 +64,8 @@ export const ModalImportKeychain = (props: ModalImportKeychainProps) => {
   const [errorPrivateKeyMsg, setErrorPrivateKeyMsg] = useState<string>('');
 
   const [importing, setImporting] = useState<boolean>(false);
+
+  const { closeModal } = useModal();
 
   const onChangeKeychainName = (value: string) => {
     setKeychainName(value);
@@ -148,7 +134,7 @@ export const ModalImportKeychain = (props: ModalImportKeychainProps) => {
         content: 'Import successful.',
       });
       resetFormValue();
-      onCloseModal?.();
+      closeModal?.();
     } catch (error) {
       messageApi.open({
         type: 'error',
@@ -159,20 +145,9 @@ export const ModalImportKeychain = (props: ModalImportKeychainProps) => {
   };
 
   return (
-    <ModalWrapper
-      open={isModalOpen}
-      centered
-      width={600}
-      footer={null}
-      bodyStyle={{ padding: 24, borderRadius: 16, backgroundColor: '#303030' }}
-      closeIcon={<IoCloseOutline size={24} color="#FFFFFF" />}
-      onCancel={() => {
-        resetFormValue();
-        onCloseModal?.();
-      }}
-    >
+    <>
       {contextHolder}
-      <ModalContainer>
+      <Container>
         <h5>Import a keychain</h5>
         <div>
           <TextInputContainer>
@@ -199,7 +174,7 @@ export const ModalImportKeychain = (props: ModalImportKeychainProps) => {
             Import
           </ButtonConfirmed>
         </div>
-      </ModalContainer>
-    </ModalWrapper>
+      </Container>
+    </>
   );
 };

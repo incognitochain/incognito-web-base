@@ -1,32 +1,18 @@
-import { Input, message, Modal } from 'antd';
+import { Input, message } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
+import { useModal } from 'components/Modal';
 import { isEmpty, lowerCase, trim } from 'lodash';
 import { CustomError, ErrorCode } from 'pages/IncWebWallet/services/exception';
 import { useState } from 'react';
-import { IoCloseOutline } from 'react-icons/io5';
+// import { IoCloseOutline } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionFetchCreateAccount } from 'state/account';
 import { listAccountSelector } from 'state/account/account.selectors';
 import styled from 'styled-components/macro';
 
-interface ModalCreateAccountProps {
-  isModalOpen?: boolean;
-  onCloseModal?: () => void;
-}
-
-const ModalWrapper = styled(Modal)`
-  .ant-modal {
-    border-radius: 20px;
-  }
-
-  .ant-modal-content {
-    background: #303030;
-    border-radius: 20px;
-  }
-`;
-
-const ModalContainer = styled.div`
+const Container = styled.div`
   background-color: #303030;
+  min-height: 600px;
 `;
 
 const LabelInput = styled.p`
@@ -61,12 +47,12 @@ const TextInputContainer = styled.div`
   margin-top: 16px;
 `;
 
-export const ModalCreateAccount = (props: ModalCreateAccountProps) => {
+export const ModalCreateAccount = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
-  const { isModalOpen, onCloseModal } = props;
-
   const [keychainName, setKeychainName] = useState<string>('');
+
+  const { closeModal } = useModal();
 
   const onChangeKeychainName = (value: string) => {
     setKeychainName(value);
@@ -105,7 +91,7 @@ export const ModalCreateAccount = (props: ModalCreateAccountProps) => {
         content: 'Create account successful.',
       });
       resetFormValue();
-      onCloseModal?.();
+      closeModal?.();
     } catch (error) {
       messageApi.open({
         type: 'error',
@@ -119,20 +105,9 @@ export const ModalCreateAccount = (props: ModalCreateAccountProps) => {
   };
 
   return (
-    <ModalWrapper
-      open={isModalOpen}
-      centered
-      width={600}
-      footer={null}
-      bodyStyle={{ padding: 24, borderRadius: 16, backgroundColor: '#303030' }}
-      closeIcon={<IoCloseOutline size={24} color="#FFFFFF" />}
-      onCancel={() => {
-        resetFormValue();
-        onCloseModal?.();
-      }}
-    >
+    <>
       {contextHolder}
-      <ModalContainer>
+      <Container>
         <h5>Create keychain</h5>
         <div>
           <TextInputContainer>
@@ -143,12 +118,11 @@ export const ModalCreateAccount = (props: ModalCreateAccountProps) => {
               placeholder="Enter Keychain Name"
             />
           </TextInputContainer>
-
           <ButtonConfirmed onClick={handleCreateAccount} height={'50px'} type="submit" style={{ marginTop: 32 }}>
             Create keychain
           </ButtonConfirmed>
         </div>
-      </ModalContainer>
-    </ModalWrapper>
+      </Container>
+    </>
   );
 };

@@ -1,11 +1,11 @@
 import { useModal } from 'components/Modal';
 import ConfirmReScanCoin from 'pages/IncWebWallet/components/ConfirmReScanCoin';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { currentMasterKeySelector } from 'state/masterKey';
 import styled from 'styled-components/macro';
 
-import { ModalBackup } from './ModalBackup';
+import ModalBackup from './ModalBackup';
 import { ModalCreateAccount } from './ModalCreateAccount';
 import { ModalImportKeychain } from './ModalImportKeychain';
 import ModalPhrase from './ModalPhrase';
@@ -48,10 +48,6 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
   const { isMasterless } = props;
   const { setModal } = useModal();
   const masterKey = useSelector(currentMasterKeySelector);
-  const [isOpenModalPhrase, setIsOpenModalPhrase] = useState<boolean>(false);
-  const [isOpenModalImportKeychain, setIsOpenModalImportKeychain] = useState<boolean>(false);
-  const [isOpenModalCreateAccount, setIsOpenModalCreateAccount] = useState<boolean>(false);
-  const [isOpenModalBackup, setIsOpenModalBackup] = useState<boolean>(false);
 
   let listItems: any = [];
 
@@ -61,7 +57,51 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
         data: <ConfirmReScanCoin />,
         title: '',
         isTransparent: true,
-        closable: false,
+        closable: true,
+      }),
+    []
+  );
+
+  const openModalCreateAccount = useCallback(
+    () =>
+      setModal({
+        data: <ModalCreateAccount />,
+        title: '',
+        isTransparent: true,
+        closable: true,
+      }),
+    []
+  );
+
+  const openModalImportKeychain = useCallback(
+    () =>
+      setModal({
+        data: <ModalImportKeychain />,
+        title: '',
+        isTransparent: true,
+        closable: true,
+      }),
+    []
+  );
+
+  const openModalBackup = useCallback(
+    () =>
+      setModal({
+        data: <ModalBackup />,
+        title: '',
+        isTransparent: true,
+        closable: true,
+      }),
+    []
+  );
+
+  const openModalPhrase = useCallback(
+    () =>
+      setModal({
+        data: <ModalPhrase data={masterKey} />,
+        title: '',
+        isTransparent: true,
+        closable: true,
       }),
     []
   );
@@ -72,9 +112,7 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
       // icon: <ImportAKeyChainIcon />,
       name: 'Import a keychain',
       visible: true,
-      onClick: () => {
-        setIsOpenModalImportKeychain(true);
-      },
+      onClick: openModalImportKeychain,
       belongTo: ['Masterkey', 'Masterless'],
     });
   } else {
@@ -83,9 +121,7 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
       // icon: <CreateNewKeyChainIcon />,
       name: 'Create a new keychain',
       visible: true,
-      onClick: () => {
-        setIsOpenModalCreateAccount(true);
-      },
+      onClick: openModalCreateAccount,
       belongTo: ['Masterkey'],
     });
     listItems.push({
@@ -93,9 +129,7 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
       // icon: <RevealRecoveryPhraseIcon />,
       name: 'Reveal recovery phrase',
       visible: true,
-      onClick: () => {
-        setIsOpenModalPhrase(true);
-      },
+      onClick: openModalPhrase,
       belongTo: ['Masterkey'],
     });
   }
@@ -105,9 +139,7 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
     // icon: <BackupIcon />,
     name: 'Back up',
     visible: true,
-    onClick: () => {
-      setIsOpenModalBackup(true);
-    },
+    onClick: openModalBackup,
     belongTo: ['Masterkey', 'Masterless'],
   });
 
@@ -125,24 +157,6 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
       {listItems?.map((item: any, i: any) => {
         return <Item key={i} label={item.name} onClick={() => item?.onClick?.()} />;
       })}
-      {isOpenModalPhrase && (
-        <ModalPhrase
-          isModalOpen={isOpenModalPhrase}
-          data={masterKey}
-          onCloseModal={() => setIsOpenModalPhrase(false)}
-        />
-      )}
-      <ModalImportKeychain
-        isModalOpen={isOpenModalImportKeychain}
-        onCloseModal={() => setIsOpenModalImportKeychain(false)}
-      />
-      <ModalCreateAccount
-        isModalOpen={isOpenModalCreateAccount}
-        onCloseModal={() => setIsOpenModalCreateAccount(false)}
-      />
-      {isOpenModalBackup && (
-        <ModalBackup isModalOpen={isOpenModalBackup} onCloseModal={() => setIsOpenModalBackup(false)} />
-      )}
     </div>
   );
 };

@@ -12,7 +12,7 @@ import { Styled } from './BoxScanCoin.styled';
 const BoxScanCoinModal = () => {
   const dispatch = useDispatch();
 
-  const { clearAllModal } = useModal();
+  const { closeModal } = useModal();
 
   const accountSender: Account = useSelector(defaultAccountWalletSelector);
   const scanCoinKey = useSelector(getScanCoinKeySelector);
@@ -20,7 +20,7 @@ const BoxScanCoinModal = () => {
   if (!scanCoinKey || !accountSender) return null;
 
   const hideModal = () => {
-    if (clearAllModal) clearAllModal();
+    if (closeModal) closeModal();
   };
 
   const onSkipPressed = async () => {
