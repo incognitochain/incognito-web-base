@@ -1,28 +1,16 @@
-import { message, Modal } from 'antd';
+import { message } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
 import copy from 'copy-to-clipboard';
 import { isEmpty } from 'lodash';
-import withBlur from 'pages/IncWebWallet/hoc/withBlur';
 import { loadListAccount } from 'pages/IncWebWallet/services/wallet/walletService';
 import React from 'react';
-import { IoCloseOutline } from 'react-icons/io5';
+// import { IoCloseOutline } from 'react-icons/io5';
 import { MdContentCopy, MdQrCode } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { listAllMasterKeyAccounts, masterlessWalletSelector, noMasterLessSelector } from 'state/masterKey';
 import styled from 'styled-components/macro';
 
 import CopyItem from './CopyItem';
-
-const ModalWrapper = styled(Modal)`
-  .ant-modal {
-    border-radius: 20px;
-  }
-
-  .ant-modal-content {
-    background: #303030;
-    border-radius: 20px;
-  }
-`;
 
 const ExportItemContainer = styled.div`
   padding: 8px 0px;
@@ -59,7 +47,7 @@ const ButtonQrCode = styled.div`
 
 const ModalContainer = styled.div`
   background-color: #303030;
-  max-height: 60vh;
+  max-height: 600px;
   overflow-y: auto;
 `;
 
@@ -254,16 +242,32 @@ export const ModalBackup = (props: ModalPhraseProps) => {
   };
 
   return (
-    <ModalWrapper
-      open={isModalOpen}
-      centered
-      width={600}
-      footer={null}
-      destroyOnClose={true}
-      closeIcon={<IoCloseOutline size={28} color="#FFFFFF" />}
-      onCancel={() => onCloseModal?.()}
-    >
-      {withBlur(renderMainContent)(props)}
-    </ModalWrapper>
+    <>
+      <h5>Backup private keys</h5>
+      <ModalContainer>
+        {contextHolder}
+        <div>
+          <Label>Master keys</Label>
+          {noMasterless.length > 0 &&
+            noMasterless?.map((pair: any) => {
+              const [name, key] = getNameKey(pair);
+              return renderAccountItem(name, key);
+            })}
+        </div>
+        <div>
+          <Label>Master less</Label>
+          {masterless?.map((pair: any) => {
+            const [name, key] = getNameKey(pair);
+            return renderAccountItem(name, key);
+          })}
+        </div>
+      </ModalContainer>
+      <div>
+        <ButtonQrCode />
+        <ButtonConfirmed onClick={handleCopyAll} height={'50px'} type="submit" style={{ marginTop: 32 }}>
+          Copy all keys
+        </ButtonConfirmed>
+      </div>
+    </>
   );
 };
