@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import { useModal } from 'components/Modal';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { groupMasterKeys } from 'state/masterKey';
 import format from 'utils/format';
 
@@ -36,8 +36,6 @@ const ListMasterKey = () => {
       />
     );
   };
-
-  const dispatch = useDispatch();
 
   return (
     <>

@@ -1,13 +1,15 @@
 import { message } from 'antd';
+import { useModal } from 'components/Modal';
 import copy from 'copy-to-clipboard';
 import withBlur from 'pages/IncWebWallet/hoc/withBlur';
 import { MdContentCopy, MdQrCode } from 'react-icons/md';
 import styled from 'styled-components/macro';
+
+import QRCode from '../QRCode';
 interface ExportItemProps {
   label: string;
   data: any;
-  onPress: () => void;
-  onPressQRCode?: () => void;
+  onClickQrCode?: () => void;
   requiredPass?: boolean;
   children?: any;
 }
@@ -49,7 +51,7 @@ const ButtonQrCode = styled.div`
 `;
 
 const ExportItem = (props: ExportItemProps): any => {
-  const { label, data, onPress, onPressQRCode, requiredPass } = props;
+  const { label, data, onClickQrCode, requiredPass } = props;
   const [messageApi, contextHolder] = message.useMessage();
   const onCopy = (text: string) => {
     copy(text);
@@ -68,7 +70,7 @@ const ExportItem = (props: ExportItemProps): any => {
           <ButtonCopy onClick={() => onCopy(data)}>
             <MdContentCopy size={20} color="#FFFFFF" />
           </ButtonCopy>
-          <ButtonQrCode>
+          <ButtonQrCode onClick={onClickQrCode}>
             <MdQrCode size={20} color="#FFFFFF" />
           </ButtonQrCode>
         </GroupButton>
@@ -96,15 +98,29 @@ interface ModalAccountDetailProps {
 }
 
 export const ModalAccountDetail = (props: ModalAccountDetailProps) => {
-  const { account, isModalOpen, onCloseModal } = props;
+  const { account } = props;
+
+  const { setModal } = useModal();
+
+  const onClickQrCode = (label: string, value: string) => {
+    setModal({
+      closable: false,
+      data: <QRCode title={label} value={value} />,
+      isTransparent: false,
+      rightHeader: undefined,
+      title: '',
+      isSearchTokenModal: false,
+      hideHeaderDefault: true,
+    });
+  };
+
   const renderItem = (label: any, value: any, requiredPass = false): any =>
     value ? (
       <ExportItem
         label={label}
         data={value}
         requiredPass={requiredPass}
-        onPress={() => null}
-        onPressQRCode={() => null}
+        onClickQrCode={() => onClickQrCode(label, value)}
       />
     ) : null;
   return (

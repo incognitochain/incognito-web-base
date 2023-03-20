@@ -1,49 +1,31 @@
 import { message } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
+import { useModal } from 'components/Modal';
 import copy from 'copy-to-clipboard';
 import { isEmpty } from 'lodash';
 import withBlur from 'pages/IncWebWallet/hoc/withBlur';
 import { loadListAccount } from 'pages/IncWebWallet/services/wallet/walletService';
 import React from 'react';
-// import { IoCloseOutline } from 'react-icons/io5';
-import { MdContentCopy, MdQrCode } from 'react-icons/md';
+import { MdQrCode } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { listAllMasterKeyAccounts, masterlessWalletSelector, noMasterLessSelector } from 'state/masterKey';
 import styled from 'styled-components/macro';
 
+import QRCode from '../QRCode';
 import CopyItem from './CopyItem';
 
-const ExportItemContainer = styled.div`
-  padding: 8px 0px;
-`;
-
-const ExportItemTopContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const GroupButton = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const ItemValue = styled.p`
-  color: #9c9c9c;
-`;
-
-const ButtonCopy = styled.div`
-  :hover {
-    cursor: pointer;
-  }
-`;
-
 const ButtonQrCode = styled.div`
-  margin-left: 8px;
+  margin-right: 8px;
   :hover {
     cursor: pointer;
   }
+  border-radius: 8px;
+  background-color: #ffffff;
+  width: 60px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const ModalContainer = styled.div`
@@ -59,10 +41,11 @@ const Label = styled.p`
   margin-top: 16px;
 `;
 
-interface ItemProps {
-  label: string;
-  value: string;
-}
+const BottomContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+`;
 
 const getNameKey = (obj: any) => {
   const name = Object.keys(obj)[0];
@@ -123,35 +106,6 @@ const getBackupData = (accounts: any, masterKeys: any) => {
   }
 };
 
-const Item = (props: ItemProps) => {
-  const { label, value } = props;
-  const [messageApi, contextHolder] = message.useMessage();
-  const onCopy = (text: string) => {
-    copy(text);
-    messageApi.open({
-      type: 'success',
-      content: 'Copied',
-    });
-  };
-  return (
-    <ExportItemContainer>
-      {contextHolder}
-      <ExportItemTopContainer>
-        <p>{label}</p>
-        <GroupButton>
-          <ButtonCopy onClick={() => onCopy(value)}>
-            <MdContentCopy size={20} color="#FFFFFF" />
-          </ButtonCopy>
-          <ButtonQrCode>
-            <MdQrCode size={20} color="#FFFFFF" />
-          </ButtonQrCode>
-        </GroupButton>
-      </ExportItemTopContainer>
-      <ItemValue>{value}</ItemValue>
-    </ExportItemContainer>
-  );
-};
-
 export const parseShard = (bytes: any) => {
   const arr = bytes.split(',');
   const lastByte = arr[arr.length - 1];
@@ -165,7 +119,6 @@ interface ModalPhraseProps {
 }
 
 const ModalBackup = (props: ModalPhraseProps) => {
-  const { isModalOpen, onCloseModal } = props;
   const [messageApi, contextHolder] = message.useMessage();
   const listAccount = useSelector(listAllMasterKeyAccounts);
 
@@ -192,13 +145,7 @@ const ModalBackup = (props: ModalPhraseProps) => {
     loadMasterlessAccounts().then();
   }, [masterlessWallet]);
 
-  const markBackedUp = () => {
-    // storageService.setItem(CONSTANT_KEYS.IS_BACKEDUP_ACCOUNT, JSON.stringify(true));
-  };
-
   const handleCopyAll = () => {
-    // clipboard.set(backupDataStr, { copiedMessage: 'All keys copied' });
-    // markBackedUp();
     copy(backupDataStr);
     messageApi.open({
       type: 'success',
@@ -206,8 +153,22 @@ const ModalBackup = (props: ModalPhraseProps) => {
     });
   };
 
+  const { setModal } = useModal();
+
+  const onClickQrCode = (label: string, value: string) => {
+    setModal({
+      closable: false,
+      data: <QRCode title={label} value={value} />,
+      isTransparent: false,
+      rightHeader: undefined,
+      title: '',
+      isSearchTokenModal: false,
+      hideHeaderDefault: true,
+    });
+  };
+
   const renderAccountItem = (name: any, key: any) => {
-    return <CopyItem label={name} value={key} />;
+    return <CopyItem label={name} value={key} handleClickQrCode={() => onClickQrCode(name, key)} />;
   };
 
   return (
@@ -231,12 +192,14 @@ const ModalBackup = (props: ModalPhraseProps) => {
           })}
         </div>
       </ModalContainer>
-      <div>
-        <ButtonQrCode />
-        <ButtonConfirmed onClick={handleCopyAll} height={'50px'} type="submit" style={{ marginTop: 32 }}>
+      <BottomContainer>
+        <ButtonQrCode onClick={() => onClickQrCode('Back up private keys', backupDataStr)}>
+          <MdQrCode size={25} color="#000000" />
+        </ButtonQrCode>
+        <ButtonConfirmed onClick={handleCopyAll} height={'50px'} type="submit">
           Copy all keys
         </ButtonConfirmed>
-      </div>
+      </BottomContainer>
     </>
   );
 };

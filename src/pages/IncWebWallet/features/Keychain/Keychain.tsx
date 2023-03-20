@@ -1,19 +1,11 @@
 import { TAB_LIST, Tabs } from 'components/Core/Tabs';
 import { selectedTabIndexSelector } from 'components/Core/Tabs/Tabs.selectors';
-import { useSelector } from 'react-redux';
 import { useAppSelector } from 'state/hooks';
-import { webWalletStateSelector } from 'state/masterKey';
-import styled from 'styled-components/macro';
 
 import ListMasterKey from './ListMasterKey';
 import ListMasterLess from './ListMasterLess';
 
-const Space = styled.div`
-  height: 16px;
-`;
-
 const KeyChain = () => {
-  const webWalletState = useSelector(webWalletStateSelector);
   const { KEYCHAIN } = TAB_LIST;
   const selectedTabIndex = useAppSelector(selectedTabIndexSelector)(KEYCHAIN.rootTab);
   const renderUI = () => {
