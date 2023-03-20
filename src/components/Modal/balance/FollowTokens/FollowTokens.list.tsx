@@ -14,9 +14,12 @@ import PaymentAddressBar from '../PaymentAddressBar';
 import FollowTokenItem from './FollowTokens.token';
 
 const Styled = styled.div`
-  width: 100%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
   overflow-y: auto;
   margin-top: 15px;
+  margin-bottom: 20px;
 `;
 
 const FollowTokensList = React.memo(() => {
