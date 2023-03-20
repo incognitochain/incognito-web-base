@@ -1,8 +1,7 @@
 import { message } from 'antd';
-import { useState } from 'react';
+import { useModal } from 'components/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { defaultAccount, switchAccountSelector } from 'state/account/account.selectors';
-import { groupMasterKeys, isLoadingAllMasterKeyAccountSelector } from 'state/masterKey';
+import { groupMasterKeys } from 'state/masterKey';
 import format from 'utils/format';
 
 import AccountItem from './AccountItem';
@@ -10,32 +9,19 @@ import TabSetting from './KeychainSettings';
 import { ModalAccountDetail } from './ModalAccountDetail';
 
 const ListMasterKey = () => {
-  const [selectedAccount, setSelectedAccount] = useState<any>(null);
   const [messageApi, contextHolder] = message.useMessage();
 
   const groupAccounts = useSelector(groupMasterKeys);
-  const loading = useSelector(isLoadingAllMasterKeyAccountSelector);
-  const account: any = useSelector(defaultAccount);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const switchingAccount = useSelector(switchAccountSelector);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  const { setModal } = useModal();
 
   const onSelectAccount = (account: any) => {
-    setSelectedAccount(account);
-    setIsModalOpen(true);
+    setModal({
+      data: <ModalAccountDetail account={account} />,
+      title: '',
+      isTransparent: true,
+      closable: true,
+    });
   };
   const renderItem = (account: any, index: any) => {
     const paymentAddress = format.shortCryptoAddress(account?.PaymentAddress, 20);
@@ -60,7 +46,6 @@ const ListMasterKey = () => {
         {groupAccounts.map((accounts: any) =>
           accounts.child.map((account: any, index: any) => renderItem(account, index))
         )}
-        <ModalAccountDetail account={selectedAccount} isModalOpen={isModalOpen} onCloseModal={handleCancel} />
         <TabSetting isMasterless={false} />
       </div>
     </>

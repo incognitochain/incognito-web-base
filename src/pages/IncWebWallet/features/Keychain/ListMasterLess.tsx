@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useModal } from 'components/Modal';
 import { useSelector } from 'react-redux';
 import { groupMasterless } from 'state/masterKey';
 import format from 'utils/format';
@@ -9,16 +9,16 @@ import { ModalAccountDetail } from './ModalAccountDetail';
 
 const ListMasterLess = () => {
   const groupAccounts = useSelector(groupMasterless);
-  const [selectedAccount, setSelectedAccount] = useState<any>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { setModal } = useModal();
 
   const onSelectAccount = (account: any) => {
-    setSelectedAccount(account);
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
+    setModal({
+      data: <ModalAccountDetail account={account} />,
+      title: '',
+      isTransparent: true,
+      closable: true,
+    });
   };
 
   return (
@@ -38,7 +38,6 @@ const ListMasterLess = () => {
           );
         })
       )}
-      <ModalAccountDetail account={selectedAccount} isModalOpen={isModalOpen} onCloseModal={handleCancel} />
       <TabSetting isMasterless={true} />
     </div>
   );

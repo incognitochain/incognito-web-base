@@ -1,7 +1,6 @@
-import { message, Modal } from 'antd';
+import { message } from 'antd';
 import copy from 'copy-to-clipboard';
 import withBlur from 'pages/IncWebWallet/hoc/withBlur';
-import { IoCloseOutline } from 'react-icons/io5';
 import { MdContentCopy, MdQrCode } from 'react-icons/md';
 import styled from 'styled-components/macro';
 interface ExportItemProps {
@@ -12,17 +11,6 @@ interface ExportItemProps {
   requiredPass?: boolean;
   children?: any;
 }
-
-const ModalWrapper = styled(Modal)`
-  .ant-modal {
-    border-radius: 20px;
-  }
-
-  .ant-modal-content {
-    background: #303030;
-    border-radius: 20px;
-  }
-`;
 
 const ExportItemContainer = styled.div`
   padding: 8px 0px;
@@ -42,6 +30,9 @@ const GroupButton = styled.div`
 
 const ItemValue = styled.p`
   color: #9c9c9c;
+  word-wrap: break-word;
+  white-space: -moz-pre-wrap;
+  white-space: pre-wrap;
 `;
 
 const ButtonCopy = styled.div`
@@ -117,27 +108,16 @@ export const ModalAccountDetail = (props: ModalAccountDetailProps) => {
       />
     ) : null;
   return (
-    <ModalWrapper
-      open={isModalOpen}
-      centered
-      width={600}
-      footer={null}
-      destroyOnClose={true}
-      bodyStyle={{ padding: 24, borderRadius: 16, backgroundColor: '#303030' }}
-      closeIcon={<IoCloseOutline size={24} color="#FFFFFF" />}
-      onCancel={() => onCloseModal?.()}
-    >
-      <div style={{ flex: 1, backgroundColor: '#303030' }}>
-        <h5>{account?.name} keys</h5>
-        {renderItem('Your incognito address', account?.PaymentAddress)}
-        {renderItem('Private key', account?.PrivateKey, true)}
-        {renderItem('Public key', account?.PublicKeyCheckEncode)}
-        {renderItem('Readonly key', account?.ReadonlyKey)}
-        {renderItem('Validator key', account?.ValidatorKey)}
-        {renderItem('Validator Public key', account?.BLSPublicKey)}
-        {renderItem('OTA key', account?.OTAKey)}
-        {renderItem('ID', account?.ID.toString())}
-      </div>
-    </ModalWrapper>
+    <div style={{ flex: 1, backgroundColor: '#303030' }}>
+      <h5>{account?.name} keys</h5>
+      {renderItem('Your incognito address', account?.PaymentAddress)}
+      {renderItem('Private key', account?.PrivateKey, true)}
+      {renderItem('Public key', account?.PublicKeyCheckEncode)}
+      {renderItem('Readonly key', account?.ReadonlyKey)}
+      {renderItem('Validator key', account?.ValidatorKey)}
+      {renderItem('Validator Public key', account?.BLSPublicKey)}
+      {renderItem('OTA key', account?.OTAKey)}
+      {renderItem('ID', account?.ID.toString())}
+    </div>
   );
 };
