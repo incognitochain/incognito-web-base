@@ -76,7 +76,7 @@ const CopyItem = (props: CopyItemProps) => {
           <ButtonCopy onClick={() => handleCopy(value)}>
             <MdContentCopy size={20} color="#FFFFFF" />
           </ButtonCopy>
-          <ButtonQrCode>
+          <ButtonQrCode onClick={handleClickQrCode}>
             <MdQrCode size={20} color="#FFFFFF" />
           </ButtonQrCode>
         </RightLabelContainer>
