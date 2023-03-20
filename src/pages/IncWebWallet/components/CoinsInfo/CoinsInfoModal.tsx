@@ -1,6 +1,13 @@
 import { Modal } from 'antd';
+import { ButtonConfirmed } from 'components/Core/Button';
+import { useModal } from 'components/Modal';
+import Loading from 'components/Modal/Modal.loading';
+import { uniq } from 'lodash';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { defaultAccountWalletSelector } from 'state/account/account.selectors';
+import { incognitoAccountFollowTokenIDs } from 'state/incognitoWallet';
 import styled from 'styled-components/macro';
 
 import { getFollowTokenSelectedTokenSelector } from '../../state/followTokenSelected.selectors';
@@ -36,13 +43,50 @@ interface Props {
   isModalOpen?: boolean;
   onCloseModal?: () => void;
   infosFactories?: IHistoryItem[];
+  isAddToken?: boolean;
+  onSuccess?: () => void;
 }
 
 const CoinsInfoModal = (props: Props & any): any => {
-  const { isModalOpen, onCloseModal, infosFactories = [] } = props;
-
+  const { isModalOpen, onCloseModal, infosFactories = [], isAddToken = false, onSuccess = () => {} } = props;
+  const { setModal, closeModal } = useModal();
   const followTokenSelected: SelectedPrivacy = useSelector(getFollowTokenSelectedTokenSelector);
-  const { symbol, network, shortName, isVerified } = followTokenSelected;
+  const { symbol, network, shortName, isVerified, tokenID } = followTokenSelected;
+  const followedTokenIDList: any[] = useSelector(incognitoAccountFollowTokenIDs) as any[];
+  const accountSender = useSelector(defaultAccountWalletSelector);
+  const importToken = async () => {
+    try {
+      //Show Loading...
+      setModal({
+        closable: false,
+        data: <Loading />,
+        isTransparent: false,
+        rightHeader: undefined,
+        title: '',
+        hideHeaderDefault: true,
+      });
+      //push new token to list token before...
+      followedTokenIDList.push(tokenID);
+
+      //Remove duplicate tokenID
+      const newFollowed = uniq(followedTokenIDList);
+
+      // SAVE new list token to storage by SDK
+      await accountSender.addListFollowingToken({
+        tokenIDs: newFollowed,
+      });
+
+      setTimeout(() => {
+        //Close Loading...
+        closeModal();
+        toast.success('Import Token Success');
+        onSuccess && onSuccess();
+      }, 300);
+    } catch (error) {
+      console.log('[importToken] error: ', error);
+      closeModal();
+    }
+  };
 
   return (
     <ModalWrapper
@@ -68,6 +112,12 @@ const CoinsInfoModal = (props: Props & any): any => {
         {infosFactories.map((item: IHistoryItem) => (
           <HistoryItem key={item.title} {...item} />
         ))}
+
+        {isAddToken && (
+          <ButtonConfirmed height={'50px'} type="submit" onClick={importToken}>
+            {'Import Token'}
+          </ButtonConfirmed>
+        )}
       </Container>
     </ModalWrapper>
   );
