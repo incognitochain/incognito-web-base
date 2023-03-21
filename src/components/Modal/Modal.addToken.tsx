@@ -116,7 +116,7 @@ const AddTokenModal = React.memo((props: IProps & any) => {
       if (token.tokenID === PRV.id && token.currencyType !== 0) return false;
       return true;
     }) || [];
-  tokenList = orderBy(tokenList, ['isPRV', 'isUnified'], ['desc', 'desc']);
+  tokenList = orderBy(tokenList, ['isPRV', 'isVerified', 'isUnified'], ['desc', 'desc', 'desc']);
 
   const importTokenSuccess = () => {
     closeModal();

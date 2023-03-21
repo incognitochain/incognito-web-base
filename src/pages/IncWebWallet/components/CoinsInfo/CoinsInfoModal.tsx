@@ -81,7 +81,7 @@ const CoinsInfoModal = (props: Props & any): any => {
         closeModal();
         toast.success('Import Token Success');
         onSuccess && onSuccess();
-      }, 300);
+      }, 1000);
     } catch (error) {
       console.log('[importToken] error: ', error);
       closeModal();
