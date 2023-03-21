@@ -61,7 +61,6 @@ const Styled = styled.div`
   }
 `;
 
-const { INCOGNITO_ACCOUNT } = TAB_LIST;
 const BalanceModal = (props: any) => {
   const walletController = useWalletController();
   const { setModal, closeModal } = useModal();
