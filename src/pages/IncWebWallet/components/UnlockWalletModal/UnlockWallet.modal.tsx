@@ -1,4 +1,5 @@
 import UnlockLogo from 'assets/svg/unlock_wallet_logo.svg';
+import { AppButton, Space, Typography } from 'components/Core';
 import { Input } from 'components/Inputs';
 import { useModal } from 'components/Modal';
 import { isEmpty } from 'lodash';
@@ -10,8 +11,7 @@ import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { unlockMasterKey } from 'state/masterKey';
 
-import { ButtonPrimary } from '../../../../components/Core/Button';
-import { Spinner, Styled } from './UnlockWallet.styled';
+import { Styled } from './UnlockWallet.styled';
 
 const UnlockWalletModal = () => {
   const history = useHistory();
@@ -54,11 +54,18 @@ const UnlockWalletModal = () => {
   return (
     <Styled>
       <div className="header">
+        <Space.Vertical size={50} />
         <img alt="logo" src={UnlockLogo} />
-        <p className="title">Welcome back</p>
+        <Space.Vertical size={16} />
+        <Typography.Text type="h5" fontWeight={700}>
+          Welcome back
+        </Typography.Text>
       </div>
       <div className="input-area">
-        <p className="text">Password</p>
+        <Space.Vertical size={40} />
+        <Typography.Text type="p2" fontWeight={400} color="gray_9C9C9C" textAlign={'left'}>
+          Password
+        </Typography.Text>
         <div className="input-container">
           <Input
             type="password"
@@ -74,13 +81,13 @@ const UnlockWalletModal = () => {
         </div>
         {passwordErrorMessage && <p className="error">{passwordErrorMessage}</p>}
       </div>
-      <ButtonPrimary className="btn" disabled={isEmpty(password)} onClick={onClickGoIncognito}>
-        {loading ? <Spinner /> : <p className="text-btn">Go Incognito</p>}
-      </ButtonPrimary>
-
-      <p className="forgot-pass" onClick={onClickForgotpassword}>
-        Forgot your password?
-      </p>
+      <Space.Vertical size={20} />
+      <AppButton variant="contained" buttonType="primary" disabled={isEmpty(password)} onClick={onClickGoIncognito}>
+        {'Go Incognito'}
+      </AppButton>
+      <AppButton variant="text" onClick={onClickForgotpassword}>
+        {'Forgot your password?'}
+      </AppButton>
     </Styled>
   );
 };

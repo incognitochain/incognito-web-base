@@ -1,3 +1,5 @@
+import { AppButton } from 'components/Core';
+import { Space } from 'components/Core';
 import { Image } from 'components/Core/Image';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import { useSelector } from 'react-redux';
@@ -11,29 +13,8 @@ const Container = styled.div`
 
   flex-direction: column;
 
-  .space {
-    height: 10px;
-  }
-
   .text-center {
     text-align: center;
-  }
-
-  .button {
-    padding: 8px;
-    color: ${({ theme }) => theme.color_white};
-    background-color: ${({ theme }) => theme.bg4};
-    border-radius: 8px;
-    height: 30px;
-    min-width: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    :hover {
-      cursor: pointer;
-      opacity: 0.8;
-    }
   }
 
   .rowButton {
@@ -41,10 +22,6 @@ const Container = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-
-    .space-horizontal {
-      width: 10px;
-    }
   }
 `;
 interface Props {
@@ -66,22 +43,23 @@ const TokenBalanceDetail = (props: Props) => {
 
   return (
     <Container>
+      <Space.Vertical size={20} />
       <div className="center">
         <Image iconUrl={followTokenSelected.iconUrl} size={100} />
       </div>{' '}
-      <div className="space" />
+      <Space.Vertical size={20} />
       <h3 className="text-center">{`${formatAmount} ${symbol}`}</h3>
-      <div className="space" />
+      <Space.Vertical size={10} />
       <h6 className="text-center">{`$ ${formatBalanceByUsd}`}</h6>
-      <div className="space" />
+      <Space.Vertical size={20} />
       <div className="rowButton">
-        <div className="button" onClick={onSendClick}>
+        <AppButton variant="contained" buttonType="third" onClick={onSendClick} className="maxSize">
           Send
-        </div>
-        <div className="space-horizontal" />
-        <div className="button" onClick={onReceiveClick}>
+        </AppButton>
+        <Space.Horizontal size={20} />
+        <AppButton variant="contained" buttonType="third" onClick={onReceiveClick} className="maxSize">
           Receive
-        </div>
+        </AppButton>
       </div>
     </Container>
   );

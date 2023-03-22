@@ -1,3 +1,4 @@
+import { Space } from 'components/Core';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import { SelectionSendField } from 'components/Core/ReduxForm/SelectionSendField';
@@ -12,10 +13,6 @@ const Container = styled.div`
   display: flex;
   min-height: 300px;
   flex-direction: column;
-`;
-
-const VerticalSpace = styled.div`
-  height: 25px;
 `;
 
 interface Props {}
@@ -53,7 +50,7 @@ const FormSend = (props: Props & any) => {
             onAmountMaxClicked && onAmountMaxClicked();
           }}
         />
-        <VerticalSpace />
+        <Space.Vertical size={25} />
         <Field
           component={SelectionSendField}
           name={FORM_CONFIGS.toAddress}
@@ -68,7 +65,7 @@ const FormSend = (props: Props & any) => {
             openAddressBook && openAddressBook();
           }}
         />
-        <VerticalSpace />
+        <Space.Vertical size={25} />
         <Field
           component={SelectionSendField}
           name={FORM_CONFIGS.memo}
@@ -80,7 +77,7 @@ const FormSend = (props: Props & any) => {
           }}
           validate={[]}
         />
-        <VerticalSpace />
+        <Space.Vertical size={25} />
         <Field
           component={SelectionSendField}
           name={FORM_CONFIGS.fee}
@@ -95,8 +92,7 @@ const FormSend = (props: Props & any) => {
           validate={[]}
           showShowTopUp={true}
         />
-        <VerticalSpace />
-        <VerticalSpace />
+        <Space.Vertical size={50} />
         <ButtonConfirmed height={'50px'} type="submit" disabled={sendBtnDisable}>
           {'Send Anonymously'}
         </ButtonConfirmed>

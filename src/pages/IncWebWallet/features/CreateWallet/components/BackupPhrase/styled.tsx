@@ -1,28 +1,16 @@
 import styled, { css } from 'styled-components/macro';
 import { MediaQueryBuilder } from 'theme/mediaQuery';
+
 const MediaLarge = css`
   width: 60%;
-  .box {
-    padding-left: 100px;
-    padding-right: 100px;
-  }
 `;
 
 const MediaMeidum = css`
   width: 70%;
-  .box {
-    padding-left: 80px;
-    padding-right: 80px;
-  }
 `;
 
 const MediaSmall = css`
   width: 80%;
-
-  .box {
-    padding-left: 60px;
-    padding-right: 60px;
-  }
 `;
 
 export const Container = styled.div`
@@ -31,32 +19,36 @@ export const Container = styled.div`
   flex-direction: column;
   align-self: center;
   align-items: center;
+  /* justify-content: center; */
+  margin-top: 80px;
   margin: auto;
-  min-height: 55vh;
+  min-height: 15vh;
   width: 55%;
 
   .box {
+    display: flex;
     width: 100%;
-    margin-top: 16px;
     min-height: 106px;
-    padding: 24px;
     background: ${({ theme }) => theme.color_grey2};
     border-radius: 8px;
+    padding: 20px;
     position: relative;
+    align-items: center;
+    justify-content: center;
 
-    .input-phrase {
-      font-weight: 600;
-      font-size: 18px;
-      line-height: 140%;
-      text-align: center;
+    .overlay {
+      height: 100%;
       width: 100%;
-      min-height: 86px;
-      padding-top: 28px;
-      color: ${({ theme }) => theme.white};
-      word-break: break-word;
-      background-color: transparent;
-      border: none;
-      resize: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0.98;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: ${({ theme }) => theme.colors.gray_757575};
+      backdrop-filter: blur(1px);
+      border-radius: 8px;
     }
   }
 

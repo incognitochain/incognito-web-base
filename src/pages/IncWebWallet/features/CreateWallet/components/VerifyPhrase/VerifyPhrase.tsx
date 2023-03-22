@@ -1,4 +1,4 @@
-import { ButtonPrimary } from 'components/Core/Button';
+import { AppButton, Space, Typography } from 'components/Core';
 import { shuffle } from 'lodash';
 import AlertMessage, { AlertMessageType } from 'pages/IncWebWallet/components/AlertMessage/AlertMessage';
 import MnemonicItem from 'pages/IncWebWallet/components/Mnemonic';
@@ -41,8 +41,14 @@ const VerifyPhrase = (props: VerifyPhraseProps) => {
 
   return (
     <Container>
-      <p className="title">Verify your phrase</p>
-      <p className="desc">Fill in the words to verify your phrase backup</p>
+      <Space.Vertical size={50} />
+      <Typography.Text type="h4" fontWeight={700}>
+        Verify your phrase
+      </Typography.Text>
+      <Space.Vertical size={16} />
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'}>
+        Fill in the words to verify your phrase backup
+      </Typography.Text>
       <div className="mnemonic-box">
         {phraseListShuffle.map((item, index) => (
           <MnemonicItemWrapper key={item}>
@@ -56,18 +62,26 @@ const VerifyPhrase = (props: VerifyPhraseProps) => {
           </MnemonicItemWrapper>
         ))}
       </div>
-
+      <Space.Vertical size={40} />
       <div className="box">
-        <p className="text-phrase">{phraseSelectedString}</p>
+        <Typography.Text type="h7" fontWeight={600} color={'white'}>
+          {phraseSelectedString}
+        </Typography.Text>
       </div>
-
       {!isPhraseCorrect && isAbleVerify && (
         <AlertMessage type={AlertMessageType.error} message="That's not quite right" />
       )}
 
-      <ButtonPrimary className="btn" disabled={!isPhraseCorrect} onClick={props.onVerifySuccess}>
-        <p className="text-btn">Continue</p>
-      </ButtonPrimary>
+      <Space.Vertical size={40} />
+      <AppButton
+        variant="contained"
+        buttonType="primary"
+        width={'100%'}
+        disabled={!isPhraseCorrect}
+        onClick={props.onVerifySuccess}
+      >
+        {'Verify'}
+      </AppButton>
     </Container>
   );
 };

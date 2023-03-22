@@ -50,6 +50,7 @@ interface TextInputProps {
   value: string;
   placeholder?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement> | undefined;
   errorEnable?: boolean;
   errorText?: string;
@@ -73,6 +74,7 @@ const MasterKeyNameInput = (props: TextInputProps) => {
     marginTop = 0,
     onChange = () => {},
     onKeyDown = () => {},
+    onBlur = () => {},
     refInput,
     type = 'text',
   } = props;
@@ -89,6 +91,7 @@ const MasterKeyNameInput = (props: TextInputProps) => {
         disabled={disabled}
         multiple={multiple}
         onKeyDown={onKeyDown}
+        onBlur={onBlur}
         ref={refInput}
       />
       {errorEnable && <ErrorText className="fs-small fw-regular">{errorText}</ErrorText>}

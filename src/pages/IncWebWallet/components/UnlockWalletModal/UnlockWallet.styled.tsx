@@ -8,24 +8,14 @@ export const Styled = styled(Column)`
   height: 472px;
 
   .header {
-    margin-top: 48px;
     display: flex;
     width: 100%;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
-    .title {
-      font-weight: 700;
-      font-size: 24px;
-      line-height: 140%;
-      margin-top: 16px;
-    }
   }
 
   .input-area {
-    margin-top: 40px;
-
     .text {
       font-weight: 400;
       font-size: 14px;
