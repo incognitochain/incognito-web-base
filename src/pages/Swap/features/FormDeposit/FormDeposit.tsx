@@ -1,6 +1,6 @@
+import { Space } from 'components/Core';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
-import { VerticalSpace } from 'components/Core/Space';
 import QrCode from 'components/QrCode';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useSwitchNetwork from 'lib/hooks/useSwitchNetwork';
@@ -119,7 +119,7 @@ const FormDeposit = (props: IMergeProps) => {
   return (
     <Styled>
       {/*<form onSubmit={handleSubmit(onSend)}>*/}
-      <VerticalSpace />
+      <Space.Vertical size={16} />
       <Selection
         title="From"
         leftValue={sellToken.symbol}
@@ -135,7 +135,7 @@ const FormDeposit = (props: IMergeProps) => {
       {isShowQrCode && (
         <div>
           <AddressBox paymentAddress={state && state.data?.address} />
-          <VerticalSpace />
+          <Space.Vertical size={16} />
           <QrCode
             qrCodeProps={{
               value: state.data?.address || 'NON VALUE',
@@ -164,7 +164,7 @@ const FormDeposit = (props: IMergeProps) => {
       {/*</form>*/}
       {!incAccount && (
         <>
-          <VerticalSpace />
+          <Space.Vertical size={16} />
           <ButtonConfirmed
             style={{ height: '50px' }}
             onClick={() => {

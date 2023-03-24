@@ -1,4 +1,4 @@
-import { ButtonPrimary } from 'components/Core/Button';
+import { AppButton, Space, Typography } from 'components/Core';
 // import IcWarning from 'pages/Wallet/images/ic_warning.svg';
 import React from 'react';
 import { shortenString } from 'utils';
@@ -13,16 +13,33 @@ interface WalletCreatedProps {
 const WalletCreated = (props: WalletCreatedProps) => {
   return (
     <Container>
-      <p className="title">Wallet created!</p>
-      <p className="desc">Your wallet is now set up and ready to be used.</p>
+      <Space.Vertical size={50} />
+      <Typography.Text type="h4" fontWeight={700}>
+        {'Wallet created!'}
+      </Typography.Text>
+
+      <Space.Vertical size={20} />
+
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'}>
+        {'Your wallet is now set up and ready to be used.'}
+      </Typography.Text>
+
+      <Space.Vertical size={40} />
+
       <div className="box">
-        <p className="text">Your public account address:</p>
-        <p className="text text-address">{props.address ? shortenString(props.address) : ''}</p>
+        <Typography.Text type="h7" fontWeight={600} color={'gray_9C9C9C'}>
+          {'Your public account address:'}
+        </Typography.Text>
+        <Typography.Text type="h7" fontWeight={600} color={'white'}>
+          {props.address ? shortenString(props.address) : ''}
+        </Typography.Text>
       </div>
 
-      <ButtonPrimary className="btn" onClick={props.onContinue}>
-        <p className="text-btn">Continue</p>
-      </ButtonPrimary>
+      <Space.Vertical size={60} />
+
+      <AppButton variant="contained" buttonType="primary" width={'100%'} onClick={props.onContinue}>
+        {'Continue'}
+      </AppButton>
     </Container>
   );
 };

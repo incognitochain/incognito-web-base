@@ -1,11 +1,11 @@
-import { ButtonPrimary } from 'components/Core/Button';
+import { AppButton, Space, Typography } from 'components/Core';
 import { Input } from 'components/Inputs';
 import AlertMessage, { AlertMessageType } from 'pages/IncWebWallet/components/AlertMessage/AlertMessage';
 import PasswordStatus from 'pages/IncWebWallet/components/PasswordStatus';
 import { MOCKUP_PASSWORD } from 'pages/IncWebWallet/mockup/password';
 import React from 'react';
 
-import { Container, Spinner } from './SetPassword.styled';
+import { Container } from './SetPassword.styled';
 
 interface SetPasswordProps {
   loading: boolean;
@@ -45,26 +45,34 @@ const SetPassword = (props: SetPasswordProps) => {
 
   return (
     <Container>
-      <p className="title">Set a password</p>
-      <p className="desc">
+      <Space.Vertical size={50} />
+      <Typography.Text type="h4" fontWeight={700}>
+        {'Set a password'}
+      </Typography.Text>
+      <Space.Vertical size={16} />
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'}>
         {'When performing operations that need to be signed with your secret key, this password will be required'}
-      </p>
+      </Typography.Text>
+
+      <Space.Vertical size={40} />
+
       {/* Password field */}
-      <div className="input-container">
-        <Input type="password" placeholder="Password" value={password} onChange={onChangePassword} />
-      </div>
+      <Input type="password" placeholder="Password" value={password} onChange={onChangePassword} />
+
+      <Space.Vertical size={20} />
+
       {/* Password Status */}
       <PasswordStatus value={password} onPasswordStrong={onPasswordStrong} />
+
+      <Space.Vertical size={40} />
+
       {/* Confirm Password field */}
-      <div className="input-container">
-        <Input
-          type="password"
-          placeholder="Confirm password"
-          value={confirmPassword}
-          onChange={onChangeConfirmPassword}
-        />
-      </div>
-      {'thank manage kick mimic miss wall youth sing napkin nerve recall memory'}
+      <Input
+        type="password"
+        placeholder="Confirm password"
+        value={confirmPassword}
+        onChange={onChangeConfirmPassword}
+      />
       {((isStrongPassRef.current === true &&
         password.length === confirmPassword.length &&
         password !== confirmPassword) ||
@@ -74,9 +82,16 @@ const SetPassword = (props: SetPasswordProps) => {
           message={props.errorMess || 'Password and Confirm Password does not match!'}
         />
       )}
-      <ButtonPrimary className="btn" disabled={!isAbleContinue} onClick={() => props.onConfirmPassword(password)}>
-        {props.loading ? <Spinner /> : <p className="text-btn">Continue</p>}
-      </ButtonPrimary>
+      <Space.Vertical size={40} />
+      <AppButton
+        variant="contained"
+        buttonType="primary"
+        width={'100%'}
+        disabled={!isAbleContinue}
+        onClick={() => props.onConfirmPassword(password)}
+      >
+        {'Continue'}
+      </AppButton>
     </Container>
   );
 };

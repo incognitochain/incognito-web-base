@@ -69,7 +69,7 @@ const CreateWallet = () => {
 
   const steps: IStep[] = [
     {
-      title: 'Back up your phrase',
+      title: 'Back up your seed',
       content: () => <BackupPhrase phrase={phrase} onContinue={onContinuteBackupPhrase} />,
     },
     {

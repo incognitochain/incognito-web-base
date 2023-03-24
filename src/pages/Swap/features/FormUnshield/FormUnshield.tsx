@@ -1,10 +1,10 @@
 import SwapIcon from 'assets/svg/swap.svg';
+import { Space } from 'components/Core';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import SelectionField from 'components/Core/ReduxForm/SelectionField';
-import { VerticalSpace } from 'components/Core/Space';
 import { TAB_LIST } from 'components/Core/Tabs';
 import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
 import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
@@ -320,7 +320,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
   return (
     <Styled>
       <form onSubmit={handleSubmit(onSend)}>
-        <VerticalSpace />
+        <Space.Vertical size={16} />
         <Field
           component={SelectionField}
           name={FORM_CONFIGS.sellAmount}
@@ -445,7 +445,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           errorMsg={errorMsg || undefined}
           interPath={exchangeSelectedData?.interSwapData?.path}
         />
-        <VerticalSpace />
+        <Space.Vertical size={16} />
         {button.isConnected ? (
           <ButtonConfirmed height={'50px'} type="submit">
             {button.text}

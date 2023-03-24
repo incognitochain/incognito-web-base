@@ -1,7 +1,7 @@
+import { Space } from 'components/Core';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
-import { VerticalSpace } from 'components/Core/Space';
 import React from 'react';
 import { Field } from 'redux-form';
 import { rpcClient } from 'services';
@@ -39,7 +39,7 @@ const SubmitTxUnshield = React.memo((props: any) => {
 
   return (
     <form className="form" onSubmit={handleSubmit(handleSubmitTxHash)}>
-      <VerticalSpace />
+      <Space.Vertical size={16} />
       <Field
         component={InputField}
         name={FORM_CONFIGS.txHash}
@@ -50,7 +50,7 @@ const SubmitTxUnshield = React.memo((props: any) => {
         }}
         validate={validateTxhash}
       />
-      <VerticalSpace />
+      <Space.Vertical size={16} />
       <Field
         component={InputField}
         name={FORM_CONFIGS.address}
@@ -61,7 +61,7 @@ const SubmitTxUnshield = React.memo((props: any) => {
         }}
         validate={validateAddress}
       />
-      <VerticalSpace />
+      <Space.Vertical size={16} />
       <BottomView>
         <ThemedText.Error marginBottom="4px" error className={`error`}>
           {error}

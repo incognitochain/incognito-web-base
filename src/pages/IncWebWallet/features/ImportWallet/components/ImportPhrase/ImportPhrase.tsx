@@ -1,8 +1,8 @@
-import { ButtonPrimary } from 'components/Core/Button';
+import { AppButton, Space, Typography } from 'components/Core';
 import { isEmpty, trim } from 'lodash';
 import AlertMessage from 'pages/IncWebWallet/components/AlertMessage';
 import { AlertMessageType } from 'pages/IncWebWallet/components/AlertMessage/AlertMessage';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import MasterKeyNameInput from '../../../CreateWallet/components/BackupPhrase/BackupPhrase.input';
@@ -25,9 +25,16 @@ const ImportPhrase = (props: ImportPhraseProps) => {
   const [masterKeyName, setMasterKeyName] = React.useState('');
   const [errorVisible, setErrorVisible] = React.useState(false);
 
-  const [isValidPhrase, setIsValidPhrase] = React.useState(false);
+  const [isInValidPhrase, setInValidPhrase] = React.useState(false);
 
   const ableClick = phrase.split(' ').length === 12;
+
+  const disbaleContinue = useMemo(() => {
+    if (errorVisible) return true;
+    if (isInValidPhrase) return true;
+    if (isEmpty(masterKeyName)) return true;
+    return false;
+  }, [ableClick, errorVisible, isInValidPhrase]);
 
   const masterKeyOnChange = React.useCallback((e: any) => {
     setErrorVisible(false);
@@ -37,16 +44,26 @@ const ImportPhrase = (props: ImportPhraseProps) => {
   const onChangePhrase = (event: any) => {
     const input = event.target.value;
     setPhrase(input);
-    setIsValidPhrase(false);
+    setInValidPhrase(false);
   };
 
   const onClickContinue = () => {
     if (validateMnemonic(trim(phrase))) {
       props.onImportPhrase(props.importWalletType === ImportWalletType.import ? masterKeyName : 'Wallet', phrase);
     } else {
-      setIsValidPhrase(true);
+      setInValidPhrase(true);
     }
   };
+  const onBlurTextArea = (event: any) => {
+    setInValidPhrase(!validateMnemonic(phrase));
+  };
+
+  const masterKeyOnBlur = React.useCallback(
+    (e: any) => {
+      setErrorVisible(!NAME_PATTERN.test(masterKeyName));
+    },
+    [masterKeyName]
+  );
 
   const onClickCreateWallet = () => {
     history.push('/wallet/create');
@@ -54,57 +71,76 @@ const ImportPhrase = (props: ImportPhraseProps) => {
 
   return (
     <Container>
-      <p className="title">{props.importWalletType === ImportWalletType.import ? 'Import wallet' : 'Restore wallet'}</p>
-      <p className="desc">
+      <Space.Vertical size={50} />
+      <Typography.Text type="h4" fontWeight={700}>
+        {props.importWalletType === ImportWalletType.import ? 'Import wallet' : 'Restore wallet'}
+      </Typography.Text>
+
+      <Space.Vertical size={20} />
+
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} textAlign="center" width={'80%'}>
         {props.importWalletType === ImportWalletType.import
           ? 'Recovery your phrase 12 words'
           : 'Restore your wallet using your twelve seed words. Note that this will delete all existing keychains on this device.'}
-      </p>
-      {props.importWalletType === ImportWalletType.import && (
-        <div className="masterkey">
-          <p className="text">Master key name</p>
-          <div className="wrap-input">
-            <MasterKeyNameInput
-              value={masterKeyName}
-              placeholder={'Enter a name for your master key'}
-              onChange={masterKeyOnChange}
-              errorEnable={errorVisible}
-              errorText={'Master key names must be alphanumeric. Please choose another.'}
-              onKeyDown={(e) => {
-                if (e.code.toLowerCase() === 'enter') {
-                  if (!NAME_PATTERN.test(masterKeyName)) {
-                    setErrorVisible(true);
-                    return;
-                  }
-                }
-              }}
-            />
-          </div>
-        </div>
-      )}
+      </Typography.Text>
+
+      <Space.Vertical size={20} />
+
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} textAlign="left">
+        {'Master key name'}
+      </Typography.Text>
+
+      <Space.Vertical size={10} />
+
+      <MasterKeyNameInput
+        value={masterKeyName}
+        placeholder={'Enter a name for your master key'}
+        onChange={masterKeyOnChange}
+        onBlur={masterKeyOnBlur}
+        errorEnable={errorVisible}
+        errorText={'Master key names must be alphanumeric. Please choose another.'}
+        onKeyDown={(e) => {
+          if (e.code.toLowerCase() === 'enter') {
+            if (!NAME_PATTERN.test(masterKeyName)) {
+              setErrorVisible(true);
+              return;
+            }
+          }
+        }}
+      />
+
+      <Space.Vertical size={20} />
+
       <div className="box">
         <textarea
           className="input-phrase"
           placeholder="Your phrase (required)"
           value={phrase}
           onChange={onChangePhrase}
+          onBlur={onBlurTextArea}
         />
       </div>
 
-      {isValidPhrase && <AlertMessage type={AlertMessageType.error} message="Your phrase is invalid." />}
+      {isInValidPhrase && <AlertMessage type={AlertMessageType.error} message="Your phrase is invalid." />}
 
-      <ButtonPrimary
-        className="btn"
-        disabled={!ableClick || (props.importWalletType === ImportWalletType.import && isEmpty(masterKeyName))}
+      <Space.Vertical size={40} />
+
+      <AppButton
+        variant="contained"
+        buttonType="primary"
+        width={'100%'}
+        disabled={disbaleContinue}
         onClick={onClickContinue}
       >
-        <p className="text-btn">{props.importWalletType === ImportWalletType.import ? 'Import' : 'Restore'}</p>
-      </ButtonPrimary>
+        {props.importWalletType === ImportWalletType.import ? 'Import' : 'Restore'}
+      </AppButton>
+
+      <Space.Vertical size={10} />
 
       {props.importWalletType === ImportWalletType.restore && (
-        <p className="create-new-wallet" onClick={onClickCreateWallet}>
-          Create new wallet?
-        </p>
+        <AppButton variant="text" onClick={onClickCreateWallet}>
+          {'Create new wallet?'}
+        </AppButton>
       )}
     </Container>
   );

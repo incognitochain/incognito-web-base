@@ -8,13 +8,9 @@ export const Container = styled.div<{ type: AlertMessageType }>`
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  width: 80%;
 
   .text-warning {
     margin-left: 8px;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 140%;
     color: ${({ theme, type }) => {
       switch (type) {
         case AlertMessageType.error:

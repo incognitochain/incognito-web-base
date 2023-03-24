@@ -1,7 +1,7 @@
 import { SupportedChainId } from 'constants/chains';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import styled from 'styled-components/macro';
-import { MEDIA_WIDTHS } from 'theme';
+import { MEDIA_WIDTHS } from 'theme/mediaQuery';
 
 import { useActivePopups } from '../../../state/application/hooks';
 import { useURLWarningVisible } from '../../../state/user/hooks';

@@ -1,3 +1,4 @@
+import Typography from 'components/Core/Typography';
 import IcError from 'pages/IncWebWallet/images/ic_error.svg';
 import IcSuccess from 'pages/IncWebWallet/images/ic_success.svg';
 import IcWarning from 'pages/IncWebWallet/images/ic_warning.svg';
@@ -32,7 +33,9 @@ const AlertMessage = (props: AlertMessageProps) => {
   return (
     <Container type={props.type}>
       <img alt="ic-warning" src={ic} />
-      <p className="text-warning">{props.message}</p>
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} className="text-warning">
+        {props.message}
+      </Typography.Text>
     </Container>
   );
 };
