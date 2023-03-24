@@ -69,10 +69,11 @@ const mediaQueryFactory = (props?: any) => {
 const TextWrapper = styled(TextOriginal)<TextWrapperType>`
   /* Default CSS */
   text-align: center;
+  text-overflow: ellipsis;
+
   /* Inside auto layout */
   margin: 0px;
   padding: 0px;
-  width: 100%;
 
   /* Custome CSS */
   font-weight: ${({ fontWeightOverrdie, theme }) => fontWeightOverrdie || 500};

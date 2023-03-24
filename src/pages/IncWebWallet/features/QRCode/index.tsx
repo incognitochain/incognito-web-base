@@ -50,7 +50,7 @@ const QRCodePage = (props: Props) => {
   const { closeModal } = useModal();
 
   return (
-    <Container>
+    <Container className="animation-opacity">
       <NavigationHeader
         leftTitle={`${title || ''}`}
         onBack={() => {

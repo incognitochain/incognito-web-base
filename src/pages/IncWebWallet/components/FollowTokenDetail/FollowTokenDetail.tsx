@@ -14,6 +14,7 @@ import CoinsInfoModal from '../CoinsInfo/CoinsInfoModal';
 import Header from './components/Header';
 import HistoryList from './components/HistoryList';
 import TokenBalanceDetail from './components/TokenBalanceDetail';
+import { Container } from './styled';
 interface Props {
   data?: any;
   isModalOpen?: boolean;
@@ -39,7 +40,7 @@ const FollowTokenDetail = (props: Props) => {
 
   const renderMainContent = () => {
     return (
-      <div className="container animation-opacity">
+      <Container className="animation-opacity">
         <Header
           onCloseModal={() => {
             goBack();
@@ -108,7 +109,7 @@ const FollowTokenDetail = (props: Props) => {
         {isShowCoinsInfo && (
           <CoinsInfoModal isModalOpen={isShowCoinsInfo} onCloseModal={() => setShowCoinsInfo(false)} />
         )}
-      </div>
+      </Container>
     );
   };
   return renderMainContent();

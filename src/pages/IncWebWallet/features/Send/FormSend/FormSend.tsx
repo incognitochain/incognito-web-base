@@ -71,7 +71,7 @@ const FormSend = (props: Props & any) => {
           name={FORM_CONFIGS.memo}
           inputType={INPUT_FIELD.string}
           headerTitle="Memo"
-          placeholder="memo"
+          placeholder="memo (optional)"
           componentProps={{
             type: 'text',
           }}

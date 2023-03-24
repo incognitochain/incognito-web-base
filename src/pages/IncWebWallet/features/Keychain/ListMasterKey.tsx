@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import { useModal } from 'components/Modal';
 import { useSelector } from 'react-redux';
 import { groupMasterKeys } from 'state/masterKey';
@@ -9,8 +8,6 @@ import TabSetting from './KeychainSettings';
 import { ModalAccountDetail } from './ModalAccountDetail';
 
 const ListMasterKey = () => {
-  const [messageApi, contextHolder] = message.useMessage();
-
   const groupAccounts = useSelector(groupMasterKeys);
 
   const { setModal } = useModal();
@@ -24,7 +21,7 @@ const ListMasterKey = () => {
     });
   };
   const renderItem = (account: any, index: any) => {
-    const paymentAddress = format.shortCryptoAddress(account?.PaymentAddress, 20);
+    const paymentAddress = format.shortCryptoAddress(account?.PaymentAddress, 25);
     return (
       <AccountItem
         onClick={() => onSelectAccount(account)}
@@ -39,7 +36,6 @@ const ListMasterKey = () => {
 
   return (
     <>
-      {contextHolder}
       <div>
         {groupAccounts.map((accounts: any) =>
           accounts.child.map((account: any, index: any) => renderItem(account, index))

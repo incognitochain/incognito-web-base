@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { Container, Typography } from 'components/Core';
 import { useMemo } from 'react';
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,7 +7,6 @@ import { actionSwitchAccountFetched, actionSwitchAccountFetching } from 'state/a
 import { defaultAccount, switchAccountSelector } from 'state/account/account.selectors';
 import { switchMasterKey } from 'state/masterKey';
 import styled from 'styled-components/macro';
-
 interface AccountItemProps {
   name: string;
   paymentAddress: string;
@@ -15,45 +15,26 @@ interface AccountItemProps {
   masterKeyName: string;
 }
 
-const AccountItemContainer = styled.div`
-  word-wrap: break-word;
-  width: 100%;
-  padding: 18px 16px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid ${({ theme }) => theme.border1};
-  color: ${({ theme }) => theme.white};
-
-  border-radius: 12px;
-  margin-top: 16px;
-  :hover {
-    cursor: pointer;
-    background: ${({ theme }) => theme.bg1};
-    border: 1px solid ${({ theme }) => theme.border1};
+const ContainerWrapper = styled.div`
+  margin-top: 10px;
+  .container {
+    word-wrap: break-word;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
-`;
 
-const AccountItemLeftContainer = styled.div`
-  align-items: center;
-  justify-content: center;
-`;
+  .leftView {
+    align-items: center;
+    justify-content: center;
+  }
 
-const AccountName = styled.p`
-  font-size: 16px;
-  color: ${({ theme }) => theme.text1};
-`;
-
-const PaymentAddress = styled.p`
-  flex: 1;
-  font-size: 14px;
-  color: ${({ theme }) => theme.text2};
-`;
-const AccountItemRightContainer = styled.div`
-  width: 100%;
-  flex: 1;
-  margin-left: 16px;
+  .rigtView {
+    flex: 1;
+    width: 100%;
+    margin-left: 16px;
+  }
 `;
 
 const AccountItem = (props: AccountItemProps) => {
@@ -87,25 +68,32 @@ const AccountItem = (props: AccountItemProps) => {
   };
 
   return (
-    <AccountItemContainer onClick={onClick}>
-      {contextHolder}
-      <AccountItemLeftContainer
-        onClick={(e) => {
-          e.stopPropagation();
-          onSwitchAccount();
-        }}
-      >
-        {isCurrentAccount ? (
-          <MdCheckBox size={24} color="#1A73E8" />
-        ) : (
-          <MdCheckBoxOutlineBlank color="#9C9C9C" size={24} />
-        )}
-      </AccountItemLeftContainer>
-      <AccountItemRightContainer>
-        <AccountName>{name}</AccountName>
-        <PaymentAddress>{paymentAddress}</PaymentAddress>
-      </AccountItemRightContainer>
-    </AccountItemContainer>
+    <ContainerWrapper>
+      <Container className="container" onClick={onClick}>
+        {contextHolder}
+        <div
+          className="leftView"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSwitchAccount();
+          }}
+        >
+          {isCurrentAccount ? (
+            <MdCheckBox size={24} color="#1A73E8" />
+          ) : (
+            <MdCheckBoxOutlineBlank color="#9C9C9C" size={24} />
+          )}
+        </div>
+        <div className="rigtView">
+          <Typography.Text type="p1" fontWeight={600} textAlign="left">
+            {name}
+          </Typography.Text>
+          <Typography.Text type="p2" fontWeight={500} textAlign="left" color="gray_9C9C9C">
+            {paymentAddress}
+          </Typography.Text>
+        </div>
+      </Container>
+    </ContainerWrapper>
   );
 };
 

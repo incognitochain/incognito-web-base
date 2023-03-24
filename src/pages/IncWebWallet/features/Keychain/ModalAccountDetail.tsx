@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { Typography } from 'components/Core';
 import { useModal } from 'components/Modal';
 import copy from 'copy-to-clipboard';
 import withBlur from 'pages/IncWebWallet/hoc/withBlur';
@@ -30,13 +31,6 @@ const GroupButton = styled.div`
   flex-direction: row;
 `;
 
-const ItemValue = styled.p`
-  color: ${({ theme }) => theme.text2};
-  word-wrap: break-word;
-  white-space: -moz-pre-wrap;
-  white-space: pre-wrap;
-`;
-
 const ButtonCopy = styled.div`
   :hover {
     cursor: pointer;
@@ -65,7 +59,9 @@ const ExportItem = (props: ExportItemProps): any => {
     <ExportItemContainer>
       {contextHolder}
       <ExportItemTopContainer>
-        <p>{label}</p>
+        <Typography.Text type="p1" fontWeight={600}>
+          {label}
+        </Typography.Text>
         <GroupButton>
           <ButtonCopy onClick={() => onCopy(data)}>
             <MdContentCopy size={20} color="#FFFFFF" />
@@ -75,7 +71,17 @@ const ExportItem = (props: ExportItemProps): any => {
           </ButtonQrCode>
         </GroupButton>
       </ExportItemTopContainer>
-      <ItemValue>{data}</ItemValue>
+      <Typography.Text
+        type="p2"
+        textAlign={'left'}
+        fontWeight={500}
+        color="gray_9C9C9C"
+        style={{
+          wordWrap: 'break-word',
+        }}
+      >
+        {data}
+      </Typography.Text>
     </ExportItemContainer>
   );
 

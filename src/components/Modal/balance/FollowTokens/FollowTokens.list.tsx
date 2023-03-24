@@ -4,7 +4,7 @@ import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import FollowTokenDetail from 'pages/IncWebWallet/components/FollowTokenDetail';
 import useWalletController from 'pages/IncWebWallet/hooks/useWalletController';
 import { setFollowTokenSelectedByToken } from 'pages/IncWebWallet/state/followTokenSelected.actions';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'state/hooks';
 import { followTokensFormatedSelector } from 'state/token/token.selectors';
@@ -24,9 +24,6 @@ const Styled = styled.div`
 
 const FollowTokensList = React.memo(() => {
   const followTokensFormated = useAppSelector(followTokensFormatedSelector) || [];
-  const [tokenSelected, setTokenSelected] = useState<any>(null);
-
-  const [isShowFollowTokenDetail, setShowFollowTokenDetail] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const { setModal } = useModal();
@@ -38,8 +35,6 @@ const FollowTokensList = React.memo(() => {
     if (walletController.isWalletExtension) return;
     if (walletController.isWalletWeb) {
       dispatch(setFollowTokenSelectedByToken(tokenSelected));
-      setTokenSelected(tokenSelected);
-      // setShowFollowTokenDetail(true);
       setModal({
         closable: false,
         data: <FollowTokenDetail />,
@@ -52,7 +47,6 @@ const FollowTokensList = React.memo(() => {
     }
   }, []);
 
-  // console.log('followTokensFormated ', followTokensFormated);
   return (
     <>
       <PaymentAddressBar />

@@ -1,4 +1,5 @@
 import { Modal } from 'antd';
+import { AppButton, Space, Typography } from 'components/Core';
 import { Input } from 'components/Inputs';
 import { isEmpty } from 'lodash';
 import { MOCKUP_PASSWORD } from 'pages/IncWebWallet/mockup/password';
@@ -6,7 +7,6 @@ import { checkPasswordValid } from 'pages/IncWebWallet/services/wallet/passwordS
 import React from 'react';
 import styled from 'styled-components/macro';
 
-import { ButtonPrimary } from '../../../../components/Core/Button';
 import NavigationHeader from '../NavigationHeader/NavigationHeader';
 const Container = styled.div`
   display: flex;
@@ -40,22 +40,6 @@ const ModalWrapper = styled(Modal)`
       line-height: 140%;
       margin-top: 4px;
       color: ${({ theme }) => theme.content4};
-    }
-  }
-
-  .btn {
-    height: 50px;
-    width: 100%;
-    margin-top: 16px;
-    .text-btn {
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 140%;
-      text-align: center;
-    }
-
-    &:disabled {
-      background-color: ${({ theme }) => theme.primary7};
     }
   }
 `;
@@ -100,6 +84,7 @@ const ConfirmPasswordModal = (props: ConfirmPasswordModalType) => {
       footer={null}
       style={{ top: 42, right: 0, left: 45 }}
       closable={false}
+      centered
       closeIcon={null}
       maskClosable={false}
       destroyOnClose={true}
@@ -107,25 +92,32 @@ const ConfirmPasswordModal = (props: ConfirmPasswordModalType) => {
       <Container>
         <NavigationHeader leftTitle={'Confirm Your Password'} onBack={() => onBackPress()} />
         <div className="input-area">
-          <p className="text">Password</p>
-          <div className="input-container">
-            <Input
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={onChangePassword}
-              onKeyDown={(e) => {
-                if (e.code.toLowerCase() === 'enter') {
-                  !isEmpty(password) && onConfirm();
-                }
-              }}
-            />
-          </div>
-          {passwordErrorMessage && <p className="error">{passwordErrorMessage}</p>}
+          <Typography.Text type="p2" fontWeight={500} color="gray_9C9C9C" textAlign="left">
+            {'Password'}
+          </Typography.Text>
+          <Space.Vertical size={10} />
+          <Input
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={onChangePassword}
+            onKeyDown={(e) => {
+              if (e.code.toLowerCase() === 'enter') {
+                !isEmpty(password) && onConfirm();
+              }
+            }}
+          />
+          <Space.Vertical size={10} />
+          {passwordErrorMessage && (
+            <Typography.Text type="p2" fontWeight={500} color="red_F6465D" textAlign="left">
+              {passwordErrorMessage}
+            </Typography.Text>
+          )}
         </div>
-        <ButtonPrimary className="btn" disabled={isEmpty(password)} onClick={onConfirm}>
-          <p className="text-btn">Continue</p>
-        </ButtonPrimary>
+        <Space.Vertical size={20} />
+        <AppButton variant="contained" buttonType="primary" disabled={isEmpty(password)} onClick={onConfirm}>
+          {'Continue'}
+        </AppButton>
       </Container>
     </ModalWrapper>
   );
