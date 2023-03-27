@@ -87,7 +87,12 @@ const Token = React.memo(({ selectedToken, onItemClick }: { selectedToken: Selec
         </div>
         <div className="amount-area">
           <ThemedText.RegularLabel color="primary5">{`$${formatBalanceByUsd || 0}`}</ThemedText.RegularLabel>
-          <ThemedText.SmallLabel color="primary8">{`${formatAmount || 0} ${symbol}`}</ThemedText.SmallLabel>
+          <ThemedText.SmallLabel
+            color="primary8"
+            style={{
+              fontSize: 'small',
+            }}
+          >{`${formatAmount || 0} ${symbol}`}</ThemedText.SmallLabel>
         </div>
       </Row>
     </Styled>

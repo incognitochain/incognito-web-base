@@ -23,6 +23,9 @@ export const Colors = {
   //Yellow
   yellow_FFC043: '#FFC043',
 
+  //Orange
+  orange_FF9500: '#FF9500',
+
   //Red
   red_F6465D: '#F6465D',
   red_CF304A: '#CF304A',
@@ -34,6 +37,7 @@ export const Colors = {
   //Green
   green_0ECB81: '#0ECB81',
   green_03A66D: '#03A66D',
+  green_34C759: '#34C759',
 
   // TODO: add all other vibrant variations
 };

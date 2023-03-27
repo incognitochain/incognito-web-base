@@ -1,4 +1,4 @@
-import { AppButton } from 'components/Core';
+import { AppButton, Typography } from 'components/Core';
 import { Space } from 'components/Core';
 import { Image } from 'components/Core/Image';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
@@ -48,9 +48,9 @@ const TokenBalanceDetail = (props: Props) => {
         <Image iconUrl={followTokenSelected.iconUrl} size={100} />
       </div>{' '}
       <Space.Vertical size={20} />
-      <h3 className="text-center">{`${formatAmount} ${symbol}`}</h3>
+      <Typography.Text type="h4" fontWeight={600}>{`${formatAmount} ${symbol}`}</Typography.Text>
       <Space.Vertical size={10} />
-      <h6 className="text-center">{`$ ${formatBalanceByUsd}`}</h6>
+      <Typography.Text type="h6" color="gray_9C9C9C">{`$ ${formatBalanceByUsd}`}</Typography.Text>
       <Space.Vertical size={20} />
       <div className="rowButton">
         <AppButton variant="contained" buttonType="third" onClick={onSendClick} className="maxSize">

@@ -54,7 +54,13 @@ const withBlur =
           <Component {...props}></Component>
           {overlayView && <OverlayView />}
 
-          <ConfirmPasswordModal isModalOpen={isShowConfirmPassword} onBack={onBacked} confirmSuccess={confirmSuccess} />
+          {isShowConfirmPassword && (
+            <ConfirmPasswordModal
+              isModalOpen={isShowConfirmPassword}
+              onBack={onBacked}
+              confirmSuccess={confirmSuccess}
+            />
+          )}
         </div>
       </ContainerWrapper>
     );

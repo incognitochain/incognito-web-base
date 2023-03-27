@@ -1,5 +1,5 @@
 import { Modal } from 'antd';
-import { ButtonConfirmed } from 'components/Core/Button';
+import { AppButton, Space, Typography } from 'components/Core';
 import { useModal } from 'components/Modal';
 import Loading from 'components/Modal/Modal.loading';
 import { uniq } from 'lodash';
@@ -14,6 +14,7 @@ import { getFollowTokenSelectedTokenSelector } from '../../state/followTokenSele
 import HistoryItem, { IHistoryItem } from '../HistoryItem';
 import NavigationHeader from '../NavigationHeader/NavigationHeader';
 import enhance from './CoinsInfoModal.enhance';
+
 const ModalWrapper = styled(Modal)`
   .ant-modal-content {
     background: ${({ theme }) => theme.color_grey1};
@@ -23,19 +24,10 @@ const ModalWrapper = styled(Modal)`
   }
 `;
 
-const Container = styled.div<{ isVerified: boolean }>`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.color_grey1};
-
-  .verify {
-    color: ${({ theme, isVerified }: { theme: any; isVerified: boolean }) => (isVerified ? '#34C759' : '#FF9500')};
-    margin-bottom: 16px;
-    margin-top: 16px;
-  }
-  .name-text {
-    margin-bottom: 6px;
-  }
 `;
 
 interface Props {
@@ -98,7 +90,7 @@ const CoinsInfoModal = (props: Props & any): any => {
       onCancel={() => onCloseModal?.()}
       destroyOnClose={true}
     >
-      <Container isVerified>
+      <Container>
         <NavigationHeader
           leftTitle={'Coin Info'}
           onBack={() => {
@@ -106,17 +98,37 @@ const CoinsInfoModal = (props: Props & any): any => {
           }}
         />
 
-        <p className="name-text fs-supermedium fw-bold fs-medium">{shortName}</p>
-        <p className="fs-regular">{`${symbol} (${network ? network : 'Incognito'})`}</p>
-        <p className="verify fw-medium fs-medium">{isVerified ? 'Verified' : 'Unverified'}</p>
+        <Typography.Text type="h5" fontWeight={600} textAlign="left" title={shortName}>
+          {shortName}
+        </Typography.Text>
+
+        <Space.Vertical size={10} />
+
+        <Typography.Text type="h7" fontWeight={500} textAlign="left">
+          {`${symbol} (${network ? network : 'Incognito'})`}
+        </Typography.Text>
+
+        <Space.Vertical size={10} />
+
+        <Typography.Text
+          type="h7"
+          fontWeight={500}
+          textAlign="left"
+          color={isVerified ? 'green_34C759' : 'orange_FF9500'}
+        >
+          {isVerified ? 'Verified' : 'Unverified'}
+        </Typography.Text>
+
+        <Space.Vertical size={10} />
+
         {infosFactories.map((item: IHistoryItem) => (
           <HistoryItem key={item.title} {...item} />
         ))}
 
         {isAddToken && (
-          <ButtonConfirmed height={'50px'} type="submit" onClick={importToken}>
+          <AppButton variant="contained" buttonType="primary" onClick={importToken}>
             {'Import Token'}
-          </ButtonConfirmed>
+          </AppButton>
         )}
       </Container>
     </ModalWrapper>

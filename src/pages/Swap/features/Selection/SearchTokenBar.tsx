@@ -17,11 +17,13 @@ const TextInputStyled = styled.input`
   caret-color: ${({ theme }) => theme.primary5};
 
   :hover {
-    border: 1px solid ${({ theme }) => theme.border5};
+    /* border: 1px solid ${({ theme }) => theme.border5}; */
+    border: 1px solid ${({ theme }) => theme.colors.blue_1A73E8};
   }
 
   :focus {
-    border: 1px solid ${({ theme }) => theme.border5};
+    /* border: 1px solid ${({ theme }) => theme.border5}; */
+    border: 1px solid ${({ theme }) => theme.colors.blue_1A73E8};
     color: ${({ theme }) => theme.primary5};
   }
 

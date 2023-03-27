@@ -142,7 +142,7 @@ export const useUnshield = (): IUnshield => {
     let text = '';
 
     if (walletController.isWalletExtension) {
-      if (isIncognitoInstalled()) {
+      if (!isIncognitoInstalled()) {
         text = 'Install Wallet';
       } else if (!incAccount) {
         text = 'Connect Wallet';

@@ -1,3 +1,4 @@
+import { Typography } from 'components/Core';
 import { useModal } from 'components/Modal';
 import ConfirmReScanCoin from 'pages/IncWebWallet/components/ConfirmReScanCoin';
 import { useCallback } from 'react';
@@ -16,26 +17,20 @@ interface ItemProps {
 }
 
 const ItemContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  margin-top: 15px;
   :hover {
     cursor: pointer;
+    opacity: 0.8;
   }
-`;
-
-const ItemTitle = styled.p`
-  color: ${({ theme }) => theme.white};
-  font-size: 22px;
-  font-weight: 500;
-  padding: 16px 0px;
 `;
 
 const Item = (props: ItemProps) => {
   const { onClick, label } = props;
   return (
     <ItemContainer onClick={onClick}>
-      <ItemTitle>{label}</ItemTitle>
+      <Typography.Text type="h6" fontWeight={600} textAlign="left">
+        {label}
+      </Typography.Text>
     </ItemContainer>
   );
 };

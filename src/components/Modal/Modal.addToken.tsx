@@ -1,4 +1,5 @@
 import CheckIconSrc from 'assets/svg/ic-check.svg';
+import { Typography } from 'components/Core';
 import { PRV } from 'constants/token';
 import { useFuse } from 'hooks/useFuse';
 import orderBy from 'lodash/orderBy';
@@ -148,23 +149,23 @@ const AddTokenModal = React.memo((props: IProps & any) => {
       >
         <Row style={{ flex: 1, alignItems: 'center' }}>
           <Image iconUrl={token.iconUrl} size={showNetwork ? 40 : 32} />
-          <Column>
+          <Column style={{ marginLeft: 12 }}>
             <Row style={{ flex: 1, alignItems: 'center' }}>
-              <ThemedText.RegularLabel color="primary5" style={{ marginLeft: 12 }}>
+              <Typography.Text type="p1" fontWeight={600}>
                 {token.symbol}
-              </ThemedText.RegularLabel>
+              </Typography.Text>
               <div className="space"></div>
               {token.isVerified && <VerifyIcon />}
             </Row>
             {showNetwork && (
               <div className="extra-info">
-                <ThemedText.SmallLabel color="primary8" style={{ marginLeft: 12 }}>
+                <Typography.Text type="p2" fontWeight={500} color="gray_9C9C9C">
                   {token.shortName}
-                </ThemedText.SmallLabel>
+                </Typography.Text>
                 <div className="network">
-                  <ThemedText.SmallLabel color="primary8" style={{ padding: 2 }}>
+                  <Typography.Text type="p2" fontWeight={500} color="gray_9C9C9C">
                     {token.network}
-                  </ThemedText.SmallLabel>
+                  </Typography.Text>
                 </div>
               </div>
             )}

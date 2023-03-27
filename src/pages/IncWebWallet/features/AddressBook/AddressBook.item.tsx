@@ -1,22 +1,9 @@
+import { Container, Typography } from 'components/Core';
 import styled from 'styled-components/macro';
-import { ThemedText } from 'theme';
 import { ellipsisCenter } from 'utils';
 
-const Container = styled.div`
-  width: 100%;
-  margin-top: 20px;
-  padding: 12px;
-  border-radius: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.bg2};
-  min-height: 60px;
-
-  :hover {
-    transform: scale(1.03);
-    cursor: pointer;
-  }
+const ContainerWrapper = styled.div`
+  margin-top: 10px;
 `;
 
 type Props = {
@@ -29,17 +16,19 @@ const AddressBookItem = (props: Props) => {
   const { name = '', address = '', onSelectedItem = () => {} } = props;
   const addressEllipsis = ellipsisCenter({
     str: address || '',
-    limit: 18,
+    limit: 15,
   });
   return (
-    <Container className="" onClick={() => onSelectedItem(address)}>
-      <ThemedText.MediumLabel fontWeight={600} color="primary5">
-        {name}
-      </ThemedText.MediumLabel>
-      <ThemedText.Small fontWeight={500} color="primary9">
-        {addressEllipsis}
-      </ThemedText.Small>
-    </Container>
+    <ContainerWrapper>
+      <Container onClick={() => onSelectedItem(address)}>
+        <Typography.Text type="h7" fontWeight={600} textAlign="left">
+          {name}
+        </Typography.Text>
+        <Typography.Text type="p2" fontWeight={500} color="gray_9C9C9C" textAlign="left">
+          {addressEllipsis}
+        </Typography.Text>
+      </Container>
+    </ContainerWrapper>
   );
 };
 
