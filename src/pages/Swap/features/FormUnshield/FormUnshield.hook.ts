@@ -55,6 +55,7 @@ export interface IUnshield {
     isConnected: boolean;
   };
   networkFeeText: string;
+  enoughNetworkFee: boolean;
   burnFeeText: string;
 
   estReceiveAmount: string | number;
@@ -112,6 +113,7 @@ export const useUnshield = (): IUnshield => {
     inputAddress,
     isFetching,
     networkFeeText,
+    enoughNetworkFee,
     burnFeeText,
     estReceiveAmount,
     expectedReceiveAmount,
@@ -203,6 +205,7 @@ export const useUnshield = (): IUnshield => {
 
     button,
     networkFeeText,
+    enoughNetworkFee,
     burnFeeText,
 
     estReceiveAmount,
