@@ -31,13 +31,13 @@ const RightLabelContainer = styled.div`
 const Label = styled.p`
   font-size: 16px;
   font-weight: 500;
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
 `;
 
 const Value = styled.p`
   font-size: 14x;
   font-weight: 500;
-  color: #9c9c9c;
+  color: ${({ theme }) => theme.text2};
   word-wrap: break-word;
   white-space: -moz-pre-wrap;
   white-space: pre-wrap;

@@ -23,8 +23,8 @@ const ListMasterLess = () => {
 
   return (
     <div>
-      {groupAccounts.map((accounts: any) =>
-        accounts.child.map((account: any, index: any) => {
+      {groupAccounts?.map((accounts: any) =>
+        accounts?.child?.map((account: any, index: any) => {
           const paymentAddress = format.shortCryptoAddress(account?.PaymentAddress, 20);
           return (
             <AccountItem

@@ -1,21 +1,20 @@
-// import { IoCloseOutline } from 'react-icons/io5';
 import withBlur from 'pages/IncWebWallet/hoc/withBlur';
 import styled from 'styled-components/macro';
 const ModalContainer = styled.div`
-  background-color: #303030;
+  background-color: ${({ theme }) => theme.bg1};
   min-height: 600px;
   text-align: center;
 `;
 
 const Box = styled.div`
   padding: 32px;
-  box-shadow: 0px 4px 12px #404040;
+  box-shadow: 0px 4px 12px ${({ theme }) => theme.bg4};
   margin-top: 32px;
   border-radius: 8px;
 `;
 
 const PhraseText = styled.p`
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
   text-align: center;
   font-size: 18px;
   font-weight: 500;

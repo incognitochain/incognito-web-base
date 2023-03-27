@@ -26,7 +26,7 @@ const SettingItemContainer = styled.div`
 
 const Title = styled.p`
   font-size: 16px;
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
   align-self: flex-start;
 `;
 

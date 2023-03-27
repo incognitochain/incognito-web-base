@@ -10,18 +10,18 @@ import { actionFetchImportAccount } from 'state/account';
 import styled from 'styled-components/macro';
 
 const Container = styled.div`
-  background-color: #303030;
+  background-color: ${({ theme }) => theme.bg1};
   min-height: 600px;
 `;
 
 const LabelInput = styled.p`
   font-size: 14px;
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
 `;
 
 const TextInput = styled(Input)`
   background-color: #252525;
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
   padding: 12px;
   border-radius: 8px;
   border-width: 0px;
@@ -29,22 +29,22 @@ const TextInput = styled(Input)`
   margin-top: 8px;
 
   ::placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
     opacity: 1;
   }
 
   :-ms-input-placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
   }
 
   ::-ms-input-placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
   }
 `;
 
 const ErrorFieldMessage = styled.p`
   font-size: 14px;
-  color: #f6465d;
+  color: ${({ theme }) => theme.error};
   margin-top: 4px;
 `;
 

@@ -31,7 +31,7 @@ const GroupButton = styled.div`
 `;
 
 const ItemValue = styled.p`
-  color: #9c9c9c;
+  color: ${({ theme }) => theme.text2};
   word-wrap: break-word;
   white-space: -moz-pre-wrap;
   white-space: pre-wrap;
