@@ -20,7 +20,7 @@ const ButtonQrCode = styled.div`
     cursor: pointer;
   }
   border-radius: 8px;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.white};
   width: 60px;
   height: 50px;
   display: flex;
@@ -29,7 +29,7 @@ const ButtonQrCode = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  background-color: #303030;
+  background-color: ${({ theme }) => theme.bg1};
   max-height: 600px;
   overflow-y: auto;
 `;
@@ -37,7 +37,7 @@ const ModalContainer = styled.div`
 const Label = styled.p`
   font-size: 20px;
   font-weight: bold;
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
   margin-top: 16px;
 `;
 

@@ -21,7 +21,7 @@ const Row = styled.div`
 const Title = styled.p`
   font-size: 16px;
   font-weight: 500;
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
 `;
 
 const Desc = styled.p`

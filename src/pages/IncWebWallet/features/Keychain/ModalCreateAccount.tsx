@@ -11,18 +11,18 @@ import { listAccountSelector } from 'state/account/account.selectors';
 import styled from 'styled-components/macro';
 
 const Container = styled.div`
-  background-color: #303030;
+  background-color: ${({ theme }) => theme.bg1};
   min-height: 600px;
 `;
 
 const LabelInput = styled.p`
   font-size: 14px;
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
 `;
 
 const TextInput = styled(Input)`
   background-color: #252525;
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
   padding: 12px;
   border-radius: 8px;
   border-width: 0px;
@@ -30,16 +30,16 @@ const TextInput = styled(Input)`
   margin-top: 8px;
 
   ::placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
     opacity: 1;
   }
 
   :-ms-input-placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
   }
 
   ::-ms-input-placeholder {
-    color: #757575;
+    color: ${({ theme }) => theme.text5};
   }
 `;
 
@@ -47,21 +47,32 @@ const TextInputContainer = styled.div`
   margin-top: 16px;
 `;
 
+const TextInputErrorMsg = styled.div`
+  color: ${({ theme }) => theme.error};
+  margin-top: 4px;
+`;
+
 export const ModalCreateAccount = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
+  // form value
   const [keychainName, setKeychainName] = useState<string>('');
+
+  // form error
+  const [errorKeychainNameMsg, setErrorKeychainNameMsg] = useState<string>('');
 
   const { closeModal } = useModal();
 
   const onChangeKeychainName = (value: string) => {
     setKeychainName(value);
+    validateKeychainName(value);
   };
 
   const dispatch = useDispatch();
 
-  const validateKeychainName = () => {
-    if (isEmpty(keychainName)) {
+  const validateKeychainName = (value: string) => {
+    if (isEmpty(value)) {
+      setErrorKeychainNameMsg('Please enter keychain name');
       return false;
     }
     return true;
@@ -77,7 +88,7 @@ export const ModalCreateAccount = () => {
   };
 
   const handleCreateAccount = async () => {
-    if (!validateKeychainName()) {
+    if (!validateKeychainName(keychainName)) {
       return;
     }
     try {
@@ -117,6 +128,7 @@ export const ModalCreateAccount = () => {
               onChange={(e) => onChangeKeychainName?.(e.target.value)}
               placeholder="Enter Keychain Name"
             />
+            <TextInputErrorMsg>{errorKeychainNameMsg}</TextInputErrorMsg>
           </TextInputContainer>
           <ButtonConfirmed onClick={handleCreateAccount} height={'50px'} type="submit" style={{ marginTop: 32 }}>
             Create keychain

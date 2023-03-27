@@ -23,13 +23,15 @@ const AccountItemContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #363636;
+  border: 1px solid ${({ theme }) => theme.border1};
+  color: ${({ theme }) => theme.white};
+
   border-radius: 12px;
   margin-top: 16px;
   :hover {
     cursor: pointer;
-    background: #303030;
-    border: 1px solid #363636;
+    background: ${({ theme }) => theme.bg1};
+    border: 1px solid ${({ theme }) => theme.border1};
   }
 `;
 
@@ -40,13 +42,13 @@ const AccountItemLeftContainer = styled.div`
 
 const AccountName = styled.p`
   font-size: 16px;
-  color: #ffffff;
+  color: ${({ theme }) => theme.text1};
 `;
 
 const PaymentAddress = styled.p`
   flex: 1;
   font-size: 14px;
-  color: #9c9c9c;
+  color: ${({ theme }) => theme.text2};
 `;
 const AccountItemRightContainer = styled.div`
   width: 100%;

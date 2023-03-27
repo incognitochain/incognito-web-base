@@ -25,7 +25,7 @@ const ItemContainer = styled.div`
 `;
 
 const ItemTitle = styled.p`
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
   font-size: 22px;
   font-weight: 500;
   padding: 16px 0px;

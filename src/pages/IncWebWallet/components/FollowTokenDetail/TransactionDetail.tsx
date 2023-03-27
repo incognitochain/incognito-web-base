@@ -25,7 +25,7 @@ const ItemRightContainer = styled.div`
 
 const ItemTitle = styled.p`
   font-size: 16px;
-  color: #ffffff;
+  color: ${({ theme }) => theme.white};
 `;
 
 export const Item = React.memo((props: IHistoryItem) => {

@@ -51,7 +51,7 @@ const HeaderTitle = styled.div`
   font-weight: 500;
   font-size: 34px;
   line-height: 140%;
-  color: #ffffff;
+  color: ${({ theme }) => theme.text1};
   margin-left: 16px;
 `;
 
