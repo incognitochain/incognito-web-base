@@ -130,6 +130,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     button,
     inputAmount,
     networkFeeText,
+    enoughNetworkFee,
     burnFeeText,
 
     validateAddress,
@@ -387,7 +388,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           }}
           tokenType={'buyToken'}
         />
-        {!prvToken.amount && !!inputAmount && isIncognitoInstalled() && incAccount ? (
+        {(!prvToken.amount || !enoughNetworkFee) && !!inputAmount && isIncognitoInstalled() && incAccount ? (
           <ErrorMsgContainer>
             <ThemedText.Error error fontWeight={400}>
               {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network.`}
