@@ -74,8 +74,10 @@ export const ModalCreateAccount = () => {
     if (isEmpty(value)) {
       setErrorKeychainNameMsg('Please enter keychain name');
       return false;
+    } else {
+      setErrorKeychainNameMsg('');
+      return true;
     }
-    return true;
   };
 
   const listAccount = useSelector(listAccountSelector);

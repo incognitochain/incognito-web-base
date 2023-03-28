@@ -1,9 +1,9 @@
 import { Typography } from 'components/Core';
 import { useModal } from 'components/Modal';
 import ConfirmReScanCoin from 'pages/IncWebWallet/components/ConfirmReScanCoin';
-import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import { currentMasterKeySelector } from 'state/masterKey';
+import { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { currentMasterKeySelector, loadAllMasterKeyAccounts } from 'state/masterKey';
 import styled from 'styled-components/macro';
 
 import ModalBackup from './ModalBackup';
@@ -42,6 +42,13 @@ interface KeychainSettingsProps {
 const KeychainSettings = (props: KeychainSettingsProps) => {
   const { isMasterless } = props;
   const { setModal } = useModal();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadAllMasterKeyAccounts());
+  }, []);
+
   const masterKey = useSelector(currentMasterKeySelector);
 
   let listItems: any = [];
