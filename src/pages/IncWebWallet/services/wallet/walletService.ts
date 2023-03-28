@@ -1,3 +1,4 @@
+import { PrivacyVersion, setShardNumber, Wallet } from 'incognito-chain-web-js';
 import { WalletSDK } from 'pages/IncWebWallet/core/types';
 import AccountModel from 'pages/IncWebWallet/models/account';
 import { getStorageLoadWalletError, setStorageLoadWalletError } from 'pages/IncWebWallet/models/storageError';
@@ -8,8 +9,6 @@ import { getPassphrase } from './passwordService';
 import Server from './Server';
 
 const crypto = require('crypto');
-
-const { Wallet, PrivacyVersion, setShardNumber } = require('incognito-chain-web-js/build/web/wallet');
 
 Wallet.RandomBytesFunc = crypto.randomBytes;
 Wallet.setPrivacyUtilRandomBytesFunc(crypto.randomBytes);
