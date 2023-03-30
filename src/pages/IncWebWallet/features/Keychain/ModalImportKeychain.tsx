@@ -7,6 +7,7 @@ import { useState } from 'react';
 // import { IoCloseOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 import { actionFetchImportAccount } from 'state/account';
+import { switchKeychainType } from 'state/masterKey';
 import styled from 'styled-components/macro';
 
 const Container = styled.div`
@@ -122,12 +123,15 @@ export const ModalImportKeychain = () => {
     if (!validateForm()) return;
     try {
       setImporting(true);
-      const isImported = await dispatch(
+      const isImported: any = await dispatch(
         actionFetchImportAccount({
           privateKey: trim(privateKey),
           accountName: trim(keychainName),
         })
       );
+      if (isImported) {
+        await dispatch(switchKeychainType('Masterless'));
+      }
       if (!isImported) throw new CustomError(ErrorCode.importAccount_failed);
       messageApi.open({
         type: 'success',

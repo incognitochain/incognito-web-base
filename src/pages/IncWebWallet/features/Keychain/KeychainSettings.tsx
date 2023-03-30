@@ -3,7 +3,12 @@ import { useModal } from 'components/Modal';
 import ConfirmReScanCoin from 'pages/IncWebWallet/components/ConfirmReScanCoin';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { currentMasterKeySelector, loadAllMasterKeyAccounts } from 'state/masterKey';
+import {
+  currentMasterKeySelector,
+  groupMasterless,
+  keychainTypeSelector,
+  loadAllMasterKeyAccounts,
+} from 'state/masterKey';
 import styled from 'styled-components/macro';
 
 import ModalBackup from './ModalBackup';
@@ -40,8 +45,10 @@ interface KeychainSettingsProps {
 }
 
 const KeychainSettings = (props: KeychainSettingsProps) => {
-  const { isMasterless } = props;
   const { setModal } = useModal();
+
+  const listMasterLess = useSelector(groupMasterless);
+  const keychainType = useSelector(keychainTypeSelector);
 
   const dispatch = useDispatch();
 
@@ -108,16 +115,16 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
     []
   );
 
-  if (isMasterless) {
-    listItems.push({
-      key: 'Import a keychain',
-      // icon: <ImportAKeyChainIcon />,
-      name: 'Import a keychain',
-      visible: true,
-      onClick: openModalImportKeychain,
-      belongTo: ['Masterkey', 'Masterless'],
-    });
-  } else {
+  listItems.push({
+    key: 'Import a keychain',
+    // icon: <ImportAKeyChainIcon />,
+    name: 'Import a keychain',
+    visible: true,
+    onClick: openModalImportKeychain,
+    belongTo: ['Masterkey', 'Masterless'],
+  });
+
+  if (keychainType === 'Masterkey') {
     listItems.push({
       key: 'Create a new keychain',
       // icon: <CreateNewKeyChainIcon />,
@@ -136,23 +143,25 @@ const KeychainSettings = (props: KeychainSettingsProps) => {
     });
   }
 
-  listItems.push({
-    key: 'Back up',
-    // icon: <BackupIcon />,
-    name: 'Back up',
-    visible: true,
-    onClick: openModalBackup,
-    belongTo: ['Masterkey', 'Masterless'],
-  });
+  if (keychainType === 'Masterkey' || listMasterLess?.length) {
+    listItems.push({
+      key: 'Back up',
+      // icon: <BackupIcon />,
+      name: 'Back up',
+      visible: true,
+      onClick: openModalBackup,
+      belongTo: ['Masterkey', 'Masterless'],
+    });
 
-  listItems.push({
-    key: 'Rescan coins',
-    // icon: <RestoreIcon />,
-    name: 'Rescan coins',
-    visible: true,
-    onClick: reScanCoinOnClicked,
-    belongTo: ['Masterkey', 'Masterless'],
-  });
+    listItems.push({
+      key: 'Rescan coins',
+      // icon: <RestoreIcon />,
+      name: 'Rescan coins',
+      visible: true,
+      onClick: reScanCoinOnClicked,
+      belongTo: ['Masterkey', 'Masterless'],
+    });
+  }
 
   return (
     <div style={{ flex: 1 }}>

@@ -18,12 +18,19 @@ import { batch } from 'react-redux';
 import { AppGetState, AppThunk, AppThunkDispatch, clearReduxStore } from 'state/index';
 import {
   currentMasterKeySelector,
+  getMasterkeySelector,
+  getMasterlessSelector,
   isExistMasterlessWallet,
   masterlessKeyChainSelector,
   noMasterLessSelector,
 } from 'state/masterKey/masterKey.selectors';
-import { ImportMasterKeyPayload, InitMasterKeyPayload } from 'state/masterKey/masterKey.types';
-import { MasterKeySwitchAction } from 'state/masterKey/masterKey.types';
+import {
+  ImportMasterKeyPayload,
+  InitMasterKeyPayload,
+  KeychainType,
+  MasterKeySwitchAction,
+  SetKeychainType,
+} from 'state/masterKey/masterKey.types';
 import { reloadWallet, setWallet } from 'state/webWallet/webWallet.actions';
 import { walletSelector } from 'state/webWallet/webWallet.selectors';
 import { StorageManager } from 'storage';
@@ -100,6 +107,11 @@ export const actionLoadingAllMasterKeyAccount = (payload: any): MasterKeyLoading
 export const loadAllMasterKeyAccountsSuccess = (accounts: any): MasterKeyLoadAllAccoutsAction => ({
   type: MasterKeyActionType.LOAD_ALL_ACCOUNTS,
   payload: accounts,
+});
+
+export const actionSetKeychainType = (keychainType: any): SetKeychainType => ({
+  type: MasterKeyActionType.SET_KEYCHAIN_TYPE,
+  payload: keychainType,
 });
 
 //--------------------------------------------------------------------
@@ -449,5 +461,34 @@ export const actionSyncAccountMasterKey =
       }
     } catch (error) {
       throw error;
+    }
+  };
+
+export const setKeychainType =
+  (keychainType: KeychainType) => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+    console.log('[createNewMasterlessWallet]');
+    try {
+      await dispatch(actionSetKeychainType(keychainType));
+    } catch (error) {
+      throw error;
+    }
+  };
+
+export const switchKeychainType =
+  (keychainType: KeychainType) => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+    console.log('[createNewMasterlessWallet]');
+    try {
+      let masterKey;
+      if (keychainType === 'Masterless') {
+        masterKey = getMasterlessSelector(getState());
+      } else {
+        masterKey = getMasterkeySelector(getState());
+      }
+      await dispatch(switchMasterKey(masterKey.name));
+
+      //Save LocalStorage Redux => Update UI
+      await dispatch(setKeychainType(keychainType));
+    } catch (error) {
+      console.log('[switchMasterKeyHandler] ERROR ', error);
     }
   };

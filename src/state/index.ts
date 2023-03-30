@@ -20,7 +20,7 @@ import { updateVersion } from './global/actions';
 import incognitoWallet from './incognitoWallet/incognitoWallet.reducer';
 import lists from './lists/reducer';
 import logs from './logs/slice';
-import { reducer as masterKey } from './masterKey/masterKey.reducer';
+import masterKey from './masterKey/masterKey.reducer';
 import { reducer as networkReducer } from './network/network.reducer';
 import pool from './pools/pool.reducer';
 import pOpensea from './pOpensea/pOpensea.reducer';
@@ -33,7 +33,7 @@ import user from './user/reducer';
 import wallet from './wallet/reducer';
 import { reducer as webToken } from './webToken/webToken.reducer';
 import { reducer as webWallet } from './webWallet/webWallet.reducer';
-const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'scanCoinsReducer.scanStatus'];
+const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'scanCoinsReducer.scanStatus', 'masterKeyReducer'];
 
 const appReducers = combineReducers({
   application,
