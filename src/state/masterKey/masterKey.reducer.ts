@@ -4,11 +4,14 @@ import MasterKeyModel from 'pages/IncWebWallet/models/MasterKeyModel';
 import accountServices from 'pages/IncWebWallet/services/wallet/accountService';
 import { getPassphrase } from 'pages/IncWebWallet/services/wallet/passwordService';
 import { Reducer } from 'redux';
+import { persistReducer } from 'redux-persist';
+import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
+import storage from 'redux-persist/lib/storage';
 import { StorageManager } from 'storage';
 import algorithms from 'utils/algorithms';
 import JSONHelper from 'utils/jsonHelper';
 
-import { MasterKeyActions, MasterKeyActionType } from './masterKey.types';
+import { KeychainType, MasterKeyActions, MasterKeyActionType } from './masterKey.types';
 
 // Remove Wallet when Save Local Storage!
 interface MasterKeyRawData {
@@ -24,6 +27,7 @@ export interface MasterKeyState {
   list: MasterKeyModel[];
   accounts: any[];
   switching: boolean;
+  keychainType: KeychainType;
   initial: {
     loading: boolean;
     masterKeyList: any[];
@@ -39,6 +43,7 @@ export const initialState: MasterKeyState = {
     loading: true,
     masterKeyList: [],
   },
+  keychainType: 'Masterkey',
   loadingAll: false,
 };
 
@@ -192,7 +197,22 @@ export const reducer: Reducer<MasterKeyState, MasterKeyActions> = (
         loadingAll: action.payload,
       };
     }
+    case MasterKeyActionType.SET_KEYCHAIN_TYPE: {
+      return {
+        ...state,
+        keychainType: action.payload,
+      };
+    }
     default:
       return state;
   }
 };
+
+const persistConfig: any = {
+  key: 'masterKeyReducer',
+  storage,
+  whitelist: ['keychainType'],
+  stateReconciler: autoMergeLevel2,
+};
+
+export default persistReducer(persistConfig, reducer);

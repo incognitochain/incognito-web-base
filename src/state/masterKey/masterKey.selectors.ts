@@ -140,3 +140,8 @@ export const isExistMasterlessWallet = createSelector(masterKeysSelector, (maste
   const founded = masterKeyList.find((item: MasterKeyModel) => item.isMasterless);
   return !!founded;
 });
+
+export const keychainTypeSelector = createSelector(
+  masterKeyReducerSelector,
+  (masterKeyState: MasterKeyState) => masterKeyState.keychainType
+);

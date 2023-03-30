@@ -15,6 +15,7 @@ export enum MasterKeyActionType {
   SYNC_ACCOUNT_SUCCESS = `MASTER_KEY/SYNC_ACCOUNT_SUCCESS`,
   LOADING_ALL_ACCOUNTS = `MASTER_KEY/LOADING_ALL_ACCOUNTS`,
   SWITCH_NETWORK = `MASTER_KEY/SWITCH_NETWORK`,
+  SET_KEYCHAIN_TYPE = `MASTER_KEY/SET_KEYCHAIN_TYPE`,
 }
 
 //----------------------------------------------
@@ -91,6 +92,13 @@ export interface MasterKeySwitchNetworkAction extends Action {
   payload: any;
 }
 
+export interface SetKeychainType extends Action {
+  type: MasterKeyActionType.SET_KEYCHAIN_TYPE;
+  payload: KeychainType;
+}
+
+export type KeychainType = 'Masterkey' | 'Masterless';
+
 //-----------------------------------
 
 export type MasterKeyActions =
@@ -105,4 +113,5 @@ export type MasterKeyActions =
   | MasterKeyImportAction
   | MasterKeyLoadAllAccoutsAction
   | MasterKeyLoadingAllAccountAction
-  | MasterKeySwitchNetworkAction;
+  | MasterKeySwitchNetworkAction
+  | SetKeychainType;
