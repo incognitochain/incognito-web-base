@@ -1,10 +1,14 @@
 /* eslint-disable import/no-anonymous-default-export */
+import BigNumber from 'bignumber.js';
+import { ACCOUNT_CONSTANT, PRVIDSTR } from 'incognito-chain-web-js';
+import SelectedPrivacyModel from 'models/model/SelectedPrivacyModel';
 import { getAccountWallet } from 'pages/IncWebWallet/services/wallet/wallet.shared';
 import { createSelector } from 'reselect';
 import { RootState } from 'state/index';
 import { getCurrentNetworkSelector } from 'state/network/network.selectors';
+import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import { walletSelector } from 'state/webWallet/webWallet.selectors';
-
+import convert from 'utils/convert';
 export const getAccountWithPaymentAddress = (paymentAddress: string) => (state: RootState) => {
   return state.account.list.find((acc) => acc.PaymentAddress === paymentAddress);
 };
@@ -186,6 +190,68 @@ export const getKeyDefineAccountSelector = createSelector(
     return `${OTAKey}-${network.address}`;
   }
 );
+
+export const getPRVBalanceInfo = createSelector(getPrivacyDataByTokenIDSelector, defaultAccount, (getFn, account) => {
+  let result = {};
+
+  if (account) {
+    try {
+      const prvInfor = getFn(PRVIDSTR) as SelectedPrivacyModel;
+      const { priceUSD, decimals, pDecimals, tokenID, symbol, amount = 0 } = prvInfor;
+
+      const feePerTx = ACCOUNT_CONSTANT.MAX_FEE_PER_TX || 0;
+
+      const feePerTxToHuman = convert.toHumanAmount({
+        originalAmount: new BigNumber(feePerTx).toNumber(),
+        decimals: pDecimals,
+      });
+      const feePerTxToHumanStr = feePerTxToHuman.toString();
+      const feeAndSymbol = `${feePerTxToHumanStr} ${symbol} `;
+
+      // const prvBalanceOriginal = convert.toNumber(account.value) || 0;
+      const prvBalanceOriginal = amount;
+      const prvbalanceToHuman = convert.toHumanAmount({
+        originalAmount: new BigNumber(prvBalanceOriginal).toNumber(),
+        decimals: pDecimals,
+      });
+
+      const prvbalanceToHumanStr = prvbalanceToHuman.toString();
+      // console.log(' prvBalanceOriginal ', prvBalanceOriginal);
+      // console.log(' feePerTx ', feePerTx);
+
+      const isEnoughPRVNetworkFee = new BigNumber(prvBalanceOriginal).gt(new BigNumber(feePerTx));
+
+      const isNeedFaucet = new BigNumber(prvBalanceOriginal).isLessThan(new BigNumber(feePerTx));
+      const isCurrentBalanceGreaterPerTx = new BigNumber(prvBalanceOriginal).gt(feePerTx);
+
+      result = {
+        priceUSD,
+        decimals,
+        tokenID,
+        pDecimals,
+        symbol,
+        prvID: PRVIDSTR,
+        feePerTx,
+        feePerTxToHuman,
+        feePerTxToHumanStr,
+        feeAndSymbol,
+
+        prvBalanceOriginal,
+        prvbalanceToHuman,
+        prvbalanceToHumanStr,
+        isEnoughPRVNetworkFee,
+
+        isCurrentBalanceGreaterPerTx,
+        isNeedFaucet,
+      };
+    } catch (error) {
+      console.log('[getPRVBalanceInfo] ERROR ', error);
+      result = {};
+    } finally {
+    }
+  }
+  return result;
+});
 
 export default {
   defaultAccountName,

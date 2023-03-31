@@ -2,13 +2,14 @@ import SelectPaymentIconSrc from 'assets/svg/ic-select-payment-address.svg';
 import Row, { RowBetween } from 'components/Core/Row';
 import { useModal } from 'components/Modal';
 import React from 'react';
+import { BaseFieldProps } from 'redux-form';
 import { ThemedText } from 'theme';
 
 import InputField from './SectionSendField.input';
 import { ISelectionFieldProps } from './SelectionSendField.interface';
 import { Container, Content } from './SelectionSendField.styled';
 
-const SelectionSendField = (props: ISelectionFieldProps) => {
+const SelectionSendField = (props: ISelectionFieldProps & BaseFieldProps) => {
   const {
     headerTitle,
     networks,
