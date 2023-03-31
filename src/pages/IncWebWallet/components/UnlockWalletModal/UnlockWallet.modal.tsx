@@ -1,6 +1,5 @@
 import UnlockLogo from 'assets/svg/unlock_wallet_logo.svg';
-import { AppButton, Space, Typography } from 'components/Core';
-import { Input } from 'components/Inputs';
+import { AppButton, PasswordInput, Space, Typography } from 'components/Core';
 import { useModal } from 'components/Modal';
 import { isEmpty } from 'lodash';
 import { MOCKUP_PASSWORD } from 'pages/IncWebWallet/mockup/password';
@@ -61,27 +60,21 @@ const UnlockWalletModal = () => {
           Welcome back
         </Typography.Text>
       </div>
-      <div className="input-area">
-        <Space.Vertical size={40} />
-        <Typography.Text type="p2" fontWeight={400} color="gray_9C9C9C" textAlign={'left'}>
-          Password
-        </Typography.Text>
-        <div className="input-container">
-          <Input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={onChangePassword}
-            onKeyDown={(e) => {
-              if (e.code.toLowerCase() === 'enter') {
-                !isEmpty(password) && onClickGoIncognito();
-              }
-            }}
-          />
-        </div>
-        {passwordErrorMessage && <p className="error">{passwordErrorMessage}</p>}
-      </div>
-      <Space.Vertical size={20} />
+      <Space.Vertical size={10} />
+
+      <PasswordInput
+        title="Password"
+        placeholder="Enter your password"
+        value={password}
+        onChange={onChangePassword}
+        onKeyDown={(e) => {
+          if (e.code.toLowerCase() === 'enter') {
+            !isEmpty(password) && onClickGoIncognito();
+          }
+        }}
+      />
+      {passwordErrorMessage && <p className="error">{passwordErrorMessage}</p>}
+      <Space.Vertical size={30} />
       <AppButton variant="contained" buttonType="primary" disabled={isEmpty(password)} onClick={onClickGoIncognito}>
         {'Go Incognito'}
       </AppButton>

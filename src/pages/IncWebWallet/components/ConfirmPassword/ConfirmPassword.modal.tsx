@@ -1,6 +1,5 @@
 import { Modal } from 'antd';
-import { AppButton, Space, Typography } from 'components/Core';
-import { Input } from 'components/Inputs';
+import { AppButton, PasswordInput, Space, Typography } from 'components/Core';
 import { isEmpty } from 'lodash';
 import { MOCKUP_PASSWORD } from 'pages/IncWebWallet/mockup/password';
 import { checkPasswordValid } from 'pages/IncWebWallet/services/wallet/passwordService';
@@ -92,11 +91,10 @@ const ConfirmPasswordModal = (props: ConfirmPasswordModalType) => {
       <Container>
         <NavigationHeader leftTitle={'Confirm Your Password'} onBack={() => onBackPress()} />
         <div className="input-area">
-          <Typography.Text type="p2" fontWeight={500} color="gray_9C9C9C" textAlign="left">
+          {/* <Typography.Text type="p2" fontWeight={500} color="gray_9C9C9C" textAlign="left">
             {'Password'}
-          </Typography.Text>
-          <Space.Vertical size={10} />
-          <Input
+          </Typography.Text> */}
+          {/* <Input
             type="password"
             placeholder="Enter your password"
             value={password}
@@ -106,6 +104,13 @@ const ConfirmPasswordModal = (props: ConfirmPasswordModalType) => {
                 !isEmpty(password) && onConfirm();
               }
             }}
+          /> */}
+
+          <PasswordInput
+            title="Password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={onChangePassword}
           />
           <Space.Vertical size={10} />
           {passwordErrorMessage && (
