@@ -68,7 +68,7 @@ const BackupPhrase = (props: BackupPhraseProps) => {
 
       <Space.Vertical size={20} />
 
-      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} textAlign="left">
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} textAlign="left" width={'100%'}>
         {'Master key name'}
       </Typography.Text>
 
