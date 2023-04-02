@@ -1,5 +1,6 @@
 import store from 'state';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
+import { genETHAccFromOTAKey, makeSignature } from 'utils/pDao';
 
 import { WalletType } from './types';
 
@@ -74,9 +75,22 @@ export class WalletController {
   }
 
   async signTransaction(req: any) {
-    const { isSignAndSendTransaction, fee, tokenID, txType, version, prvPayments, tokenPayments, metadata, info } = req;
+    const {
+      isSignAndSendTransaction,
+      fee,
+      tokenID,
+      txType,
+      version,
+      prvPayments,
+      tokenPayments,
+      metadata,
+      info,
+      pDaoData,
+    } = req;
 
     let tx: any;
+    let pDaoSignature: any = {};
+    let ethWalletInfo: any = {};
     try {
       const accountSender = defaultAccountWalletSelector(store.getState());
       const params = {
@@ -93,17 +107,50 @@ export class WalletController {
       if (!_tokenPayments || _tokenPayments.length === 0) {
         _tokenPayments = null;
       }
+
+      if (pDaoData && metadata && metadata?.Type === 338 && !metadata?.RemoteAddress) {
+        const otaKey = await accountSender?.getOTAKey();
+        const genETHAccFromOTAKeyPayload =
+          pDaoData?.transactionType === 'CREATE_PROPOSAL'
+            ? pDaoData?.createProposalInfo
+            : pDaoData?.voteProposalInfo?.proposal;
+        ethWalletInfo = await genETHAccFromOTAKey(otaKey, genETHAccFromOTAKeyPayload);
+        req.params.metadata.RemoteAddress = ethWalletInfo.address;
+        req.params.receiverAddress = ethWalletInfo.address;
+      }
+
       if (isSignAndSendTransaction) {
         tx = await accountSender.createAndSignTransaction({ ...params, tokenPayments: _tokenPayments });
       } else {
         tx = await accountSender.createTransaction({ ...params, tokenPayments: _tokenPayments });
+      }
+
+      if (pDaoData) {
+        // Make pDao Signature
+        const privateKey = Buffer.from(ethWalletInfo.privateKey, 'hex');
+        const pDaoTransactionType: 'CREATE_PROPOSAL' | 'VOTE' = pDaoData.transactionType;
+
+        pDaoSignature = {
+          createPropSignature:
+            pDaoTransactionType === 'CREATE_PROPOSAL'
+              ? await makeSignature(1, pDaoData.createProposalInfo, privateKey)
+              : '',
+          propVoteSignature: await makeSignature(2, pDaoData.voteProposalInfo, privateKey),
+          reShieldSignature: await makeSignature(
+            3,
+            {
+              burnTX: tx?.txHash.startsWith('0x') ? tx?.txHash?.slice(2) : tx.txHash,
+            },
+            privateKey
+          ),
+        };
       }
     } catch (error) {
       console.log('CREATE TRANSACTION ERROR: ', error);
     }
 
     if (tx && (tx.hash || tx.txId)) {
-      return { txHash: tx.hash || tx.txId, rawData: tx.rawTx || tx.rawData };
+      return { txHash: tx.hash || tx.txId, rawData: tx.rawTx || tx.rawData, pDaoSignature };
     } else {
       return new Error('Create Transaction failed');
     }
