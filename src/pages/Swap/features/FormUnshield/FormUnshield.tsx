@@ -160,7 +160,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     rate,
   } = props;
 
-  const { isIncognitoInstalled } = useIncognitoWallet();
+  // const { isIncognitoInstalled } = useIncognitoWallet();
   const { showUnlockModal } = useUnlockWallet();
   const incAccount = useAppSelector(incognitoWalletAccountSelector);
   const history = useHistory();
@@ -388,7 +388,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           }}
           tokenType={'buyToken'}
         />
-        {(!prvToken.amount || !enoughNetworkFee) && !!inputAmount && isIncognitoInstalled() && incAccount ? (
+        {(!prvToken.amount || !enoughNetworkFee) && !!inputAmount && incAccount ? (
           <ErrorMsgContainer>
             <ThemedText.Error error fontWeight={400}>
               {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network.`}
