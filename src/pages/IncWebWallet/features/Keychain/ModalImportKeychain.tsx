@@ -160,6 +160,7 @@ export const ModalImportKeychain = () => {
               value={keychainName}
               onChange={(e) => onChangeKeychainName?.(e.target.value)}
               placeholder="Enter Keychain Name"
+              maxLength={50}
             />
             {errorKeychainNameMsg && <ErrorFieldMessage>{errorKeychainNameMsg}</ErrorFieldMessage>}
           </TextInputContainer>

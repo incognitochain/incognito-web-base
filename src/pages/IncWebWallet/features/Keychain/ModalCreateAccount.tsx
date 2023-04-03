@@ -129,6 +129,7 @@ export const ModalCreateAccount = () => {
               value={keychainName}
               onChange={(e) => onChangeKeychainName?.(e.target.value)}
               placeholder="Enter Keychain Name"
+              maxLength={50}
             />
             <TextInputErrorMsg>{errorKeychainNameMsg}</TextInputErrorMsg>
           </TextInputContainer>
