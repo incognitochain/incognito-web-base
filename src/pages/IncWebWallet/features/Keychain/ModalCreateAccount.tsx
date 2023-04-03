@@ -1,4 +1,4 @@
-import { Input, message } from 'antd';
+import { Input } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useModal } from 'components/Modal';
 import { isEmpty, lowerCase, trim } from 'lodash';
@@ -6,6 +6,7 @@ import { CustomError, ErrorCode } from 'pages/IncWebWallet/services/exception';
 import { useState } from 'react';
 // import { IoCloseOutline } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { actionFetchCreateAccount } from 'state/account';
 import { listAccountSelector } from 'state/account/account.selectors';
 import styled from 'styled-components/macro';
@@ -53,8 +54,6 @@ const TextInputErrorMsg = styled.div`
 `;
 
 export const ModalCreateAccount = () => {
-  const [messageApi, contextHolder] = message.useMessage();
-
   // form value
   const [keychainName, setKeychainName] = useState<string>('');
 
@@ -99,17 +98,11 @@ export const ModalCreateAccount = () => {
         throw new CustomError(ErrorCode.createAccount_existed_name);
       }
       await dispatch(actionFetchCreateAccount({ accountName: trim(keychainName) }));
-      messageApi.open({
-        type: 'success',
-        content: 'Create account successful.',
-      });
+      toast.success('Create account successful.');
       resetFormValue();
       closeModal?.();
     } catch (error) {
-      messageApi.open({
-        type: 'error',
-        content: error?.message,
-      });
+      toast.error(error?.message || 'Something went wrong');
     }
   };
 
@@ -119,7 +112,6 @@ export const ModalCreateAccount = () => {
 
   return (
     <>
-      {contextHolder}
       <Container>
         <h5>Create keychain</h5>
         <div>

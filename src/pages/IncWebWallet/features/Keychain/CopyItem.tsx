@@ -1,6 +1,6 @@
-import { message } from 'antd';
 import copy from 'copy-to-clipboard';
 import { MdContentCopy, MdQrCode } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import styled from 'styled-components/macro';
 
 interface CopyItemProps {
@@ -58,18 +58,13 @@ const ButtonQrCode = styled.div`
 
 const CopyItem = (props: CopyItemProps) => {
   const { label, value, handleClickQrCode } = props;
-  const [messageApi, contextHolder] = message.useMessage();
 
   const handleCopy = (value: string) => {
     copy(value);
-    messageApi.open({
-      type: 'success',
-      content: 'Copied',
-    });
+    toast.success('Copied');
   };
   return (
     <Container>
-      {contextHolder}
       <LabelContainer>
         <Label>{label}</Label>
         <RightLabelContainer>

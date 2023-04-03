@@ -1,9 +1,11 @@
-import { message, Modal } from 'antd';
+import { Modal } from 'antd';
 import copy from 'copy-to-clipboard';
 import { IoCloseOutline } from 'react-icons/io5';
 import { MdContentCopy, MdQrCode } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import styled from 'styled-components/macro';
-interface ExportItem {
+
+interface ExportItemProps {
   label: string;
   data: any;
   onPress: () => void;
@@ -54,19 +56,14 @@ const ButtonQrCode = styled.div`
   }
 `;
 
-const ExportItem = (props: ExportItem) => {
+const ExportItem = (props: ExportItemProps) => {
   const { label, data, onPress, onPressQRCode } = props;
-  const [messageApi, contextHolder] = message.useMessage();
   const onCopy = (text: string) => {
     copy(text);
-    messageApi.open({
-      type: 'success',
-      content: 'Copied',
-    });
+    toast.success('Copied');
   };
   return (
     <ExportItemContainer>
-      {contextHolder}
       <ExportItemTopContainer>
         <p>{label}</p>
         <GroupButton>

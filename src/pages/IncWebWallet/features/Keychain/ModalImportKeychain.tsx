@@ -1,4 +1,4 @@
-import { Input, message } from 'antd';
+import { Input } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useModal } from 'components/Modal';
 import { isEmpty, trim } from 'lodash';
@@ -6,10 +6,10 @@ import { CustomError, ErrorCode } from 'pages/IncWebWallet/services/exception';
 import { useState } from 'react';
 // import { IoCloseOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { actionFetchImportAccount } from 'state/account';
 import { switchKeychainType } from 'state/masterKey';
 import styled from 'styled-components/macro';
-
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bg1};
   min-height: 600px;
@@ -54,8 +54,6 @@ const TextInputContainer = styled.div`
 `;
 
 export const ModalImportKeychain = () => {
-  const [messageApi, contextHolder] = message.useMessage();
-
   // Form value
   const [keychainName, setKeychainName] = useState<string>('');
   const [privateKey, setPrivateKey] = useState<string>('');
@@ -133,24 +131,17 @@ export const ModalImportKeychain = () => {
         await dispatch(switchKeychainType('Masterless'));
       }
       if (!isImported) throw new CustomError(ErrorCode.importAccount_failed);
-      messageApi.open({
-        type: 'success',
-        content: 'Import successful.',
-      });
+      toast.success('Import successful.');
       resetFormValue();
       closeModal?.();
     } catch (error) {
-      messageApi.open({
-        type: 'error',
-        content: error?.message || 'Import keychain failed, please try again.',
-      });
+      toast.error(error?.message || 'Import keychain failed, please try again.');
       setImporting(false);
     }
   };
 
   return (
     <>
-      {contextHolder}
       <Container>
         <h5>Import a keychain</h5>
         <div>
