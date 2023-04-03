@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useModal } from 'components/Modal';
 import copy from 'copy-to-clipboard';
@@ -8,6 +7,7 @@ import { loadListAccount } from 'pages/IncWebWallet/services/wallet/walletServic
 import React from 'react';
 import { MdQrCode } from 'react-icons/md';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { listAllMasterKeyAccounts, masterlessWalletSelector, noMasterLessSelector } from 'state/masterKey';
 import styled from 'styled-components/macro';
 
@@ -119,7 +119,6 @@ interface ModalPhraseProps {
 }
 
 const ModalBackup = (props: ModalPhraseProps) => {
-  const [messageApi, contextHolder] = message.useMessage();
   const listAccount = useSelector(listAllMasterKeyAccounts);
 
   const masterKeys = useSelector(noMasterLessSelector);
@@ -147,10 +146,7 @@ const ModalBackup = (props: ModalPhraseProps) => {
 
   const handleCopyAll = () => {
     copy(backupDataStr);
-    messageApi.open({
-      type: 'success',
-      content: 'All keys copied',
-    });
+    toast.success('All keys copied');
   };
 
   const { setModal } = useModal();
@@ -175,7 +171,6 @@ const ModalBackup = (props: ModalPhraseProps) => {
     <>
       <h5>Backup private keys</h5>
       <ModalContainer>
-        {contextHolder}
         <div>
           <Label>Master keys</Label>
           {noMasterless.length > 0 &&

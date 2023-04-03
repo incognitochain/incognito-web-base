@@ -1,8 +1,8 @@
-import { message } from 'antd';
 import { Container, Typography } from 'components/Core';
 import { useMemo } from 'react';
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { actionSwitchAccountFetched, actionSwitchAccountFetching } from 'state/account';
 import { defaultAccount, switchAccountSelector } from 'state/account/account.selectors';
 import { switchMasterKey } from 'state/masterKey';
@@ -38,7 +38,6 @@ const ContainerWrapper = styled.div`
 `;
 
 const AccountItem = (props: AccountItemProps) => {
-  const [messageApi, contextHolder] = message.useMessage();
   const { name, paymentAddress, onClick, privateKey, masterKeyName } = props;
   const account: any = useSelector(defaultAccount);
 
@@ -58,10 +57,7 @@ const AccountItem = (props: AccountItemProps) => {
       }
       await dispatch(switchMasterKey(masterKeyName, name));
     } catch (error) {
-      messageApi.open({
-        type: 'error',
-        content: error?.message,
-      });
+      toast.error(error?.message || 'Something went wrong');
     } finally {
       await dispatch(actionSwitchAccountFetched());
     }
@@ -70,7 +66,6 @@ const AccountItem = (props: AccountItemProps) => {
   return (
     <ContainerWrapper>
       <Container className="container" onClick={onClick}>
-        {contextHolder}
         <div
           className="leftView"
           onClick={(e) => {

@@ -1,9 +1,9 @@
-import { message } from 'antd';
 import { Typography } from 'components/Core';
 import { useModal } from 'components/Modal';
 import copy from 'copy-to-clipboard';
 import withBlur from 'pages/IncWebWallet/hoc/withBlur';
 import { MdContentCopy, MdQrCode } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import styled from 'styled-components/macro';
 
 import QRCode from '../QRCode';
@@ -46,18 +46,13 @@ const ButtonQrCode = styled.div`
 
 const ExportItem = (props: ExportItemProps): any => {
   const { label, data, onClickQrCode, requiredPass } = props;
-  const [messageApi, contextHolder] = message.useMessage();
   const onCopy = (text: string) => {
     copy(text);
-    messageApi.open({
-      type: 'success',
-      content: 'Copied',
-    });
+    toast.success('Copied');
   };
 
   const renderMainContent = (): any => (
     <ExportItemContainer>
-      {contextHolder}
       <ExportItemTopContainer>
         <Typography.Text type="p1" fontWeight={600}>
           {label}
