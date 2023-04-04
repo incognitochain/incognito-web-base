@@ -83,6 +83,7 @@ export interface IUnshieldData {
 
   isFetching: boolean;
   networkFeeText: string;
+  enoughNetworkFee: boolean;
   burnFeeText: string;
 
   enoughPRVFee: boolean;
@@ -331,7 +332,7 @@ const getUnshieldData = ({
               tokenVault[_item?.identify?.split('-')[0]]['LockedAmount'] >
             0;
         } catch (e) {
-          console.log('CANT FILTER NETWORK LIST');
+          console.log('CANT FILTER NETWORK LIST ERROR: ', e);
         }
         return isAccept;
       });
@@ -695,6 +696,7 @@ const getUnshieldData = ({
     fee: combineFee,
     inputAddress,
     isFetching: unshield.isFetchingFee,
+    enoughNetworkFee,
     networkFeeText,
     burnFeeText,
 

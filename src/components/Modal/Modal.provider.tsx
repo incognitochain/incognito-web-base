@@ -103,9 +103,15 @@ export function Modal({
     enter: { opacity: 1 },
     leave: { opacity: 0 },
   });
-
   const lastModal = last(modalState);
-  const { data: modalData, title, isTransparent, closable, isSearchTokenModal } = lastModal || {};
+  const {
+    data: modalData,
+    title,
+    isTransparent,
+    closable,
+    isSearchTokenModal,
+    hideHeaderDefault = false,
+  } = lastModal || {};
 
   const [{ y }, set] = useSpring(() => ({ y: 0, config: { mass: 1, tension: 210, friction: 20 } }));
   const bind = useGesture({
@@ -127,7 +133,10 @@ export function Modal({
             <StyledDialogOverlay
               key={key}
               style={props}
-              onDismiss={() => closeModal && closeModal()}
+              onDismiss={() => {
+                if (!closable) return;
+                else closeModal && closeModal();
+              }}
               initialFocusRef={initialFocusRef}
               unstable_lockFocusAcrossFrames={false}
             >
@@ -145,10 +154,18 @@ export function Modal({
               >
                 {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
                 {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
-                <RowBetween className="header">
-                  <ThemedText.AvgMediumLabel color="primary5">{title}</ThemedText.AvgMediumLabel>
-                  <CloseIcon onClick={() => closeModal && closeModal()} />
-                </RowBetween>
+                {!hideHeaderDefault && (
+                  <RowBetween className="header">
+                    <ThemedText.AvgMediumLabel color="primary5">{title}</ThemedText.AvgMediumLabel>
+                    {closable && (
+                      <CloseIcon
+                        onClick={() => {
+                          closeModal && closeModal();
+                        }}
+                      />
+                    )}
+                  </RowBetween>
+                )}
                 {modalData}
               </StyledDialogContent>
             </StyledDialogOverlay>
@@ -165,19 +182,20 @@ interface SetModalProps {
   rightHeader?: React.ReactNode;
   isTransparent: boolean;
   closable?: boolean;
+  hideHeaderDefault?: boolean;
 }
-interface LoadingContextType {
+interface ModalContextType {
   setModal: (_: SetModalProps) => void;
   clearAllModal: () => void;
   closeModal: () => void;
 }
-const ModalContextInit = {
+const ModalContextInit: ModalContextType = {
   setModal: () => null,
   clearAllModal: () => null,
   closeModal: () => null,
 };
 
-const ModalContext = React.createContext<LoadingContextType>(ModalContextInit);
+const ModalContext = React.createContext<ModalContextType>(ModalContextInit);
 
 export function ModalProvider(props: any) {
   const [modalProps, setModal] = React.useState<SetModalProps[]>([]);
@@ -216,7 +234,7 @@ export function ModalProvider(props: any) {
   );
 }
 
-export const useModal = (): LoadingContextType => {
+export const useModal = (): ModalContextType => {
   const context = useContext(ModalContext);
   if (!context) {
     throw new Error('Modal not found, useModal must be used within the <ModalProvider>..</ModalProvider>');

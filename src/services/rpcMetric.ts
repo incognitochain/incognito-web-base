@@ -1,8 +1,7 @@
 import { AxiosInstance } from 'axios';
 import { isMainnet } from 'config';
+import { checkUpdateMetricUniq } from 'metric';
 import createAxiosInstance from 'services/axios';
-
-import { checkUpdateMetricUniq } from '../storage';
 
 export enum METRIC_TYPE {
   OPEN = 81,

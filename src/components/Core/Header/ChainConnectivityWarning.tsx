@@ -4,7 +4,8 @@ import { SupportedChainId } from 'constants/chains';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { AlertOctagon } from 'react-feather';
 import styled from 'styled-components/macro';
-import { ExternalLink, MEDIA_WIDTHS } from 'theme';
+import { ExternalLink } from 'theme';
+import { MEDIA_WIDTHS } from 'theme/mediaQuery';
 
 const BodyRow = styled.div`
   color: ${({ theme }) => theme.black};

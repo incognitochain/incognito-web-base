@@ -1,4 +1,9 @@
-import { FlattenSimpleInterpolation, ThemedCssFunction } from 'styled-components/macro';
+import { SuperColorsTheme } from './colors';
+import { FontsTheme } from './fonts';
+import { MediaQueryTheme } from './mediaQuery';
+import { SnippetsTheme } from './snippets';
+
+export interface Theme {}
 
 export type Color = string;
 export interface Colors {
@@ -86,6 +91,7 @@ export interface Colors {
   content4: Color;
 
   // Primary
+  primary: Color;
   primary1: Color;
   primary2: Color;
   primary3: Color;
@@ -106,26 +112,18 @@ export interface Colors {
   btn1: Color;
   btn2: Color;
   btn3: Color;
+
+  shadow1: Color;
+}
+
+interface CombineTheme extends SuperColorsTheme, FontsTheme, MediaQueryTheme, Colors, SnippetsTheme {
+  // TODO: add all other vibrant variations
+}
+
+interface InferredTheme extends CombineTheme {
+  // TODO: add all other vibrant variations
 }
 
 declare module 'styled-components/macro' {
-  export interface DefaultTheme extends Colors {
-    grids: Grids;
-
-    // shadows
-    shadow1: string;
-
-    // media queries
-    mediaWidth: {
-      upToExtraSmall: ThemedCssFunction<DefaultTheme>;
-      upToSmall: ThemedCssFunction<DefaultTheme>;
-      upToMedium: ThemedCssFunction<DefaultTheme>;
-      upToLarge: ThemedCssFunction<DefaultTheme>;
-      upToSupperLarge: ThemedCssFunction<ITheme>;
-    };
-
-    // css snippets
-    flexColumnNoWrap: FlattenSimpleInterpolation;
-    flexRowNoWrap: FlattenSimpleInterpolation;
-  }
+  export interface DefaultTheme extends InferredTheme {}
 }
