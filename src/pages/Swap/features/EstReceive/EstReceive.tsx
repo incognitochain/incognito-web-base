@@ -225,24 +225,22 @@ const EstReceive = React.memo(
                 />
               </>
             )}
-            {formType === FormTypes.UNSHIELD ? (
-              <>
-                <RowBetween>
+            <>
+              <RowBetween style={{ marginTop: 12 }}>
+                <ThemedText.SmallLabel fontWeight={400} color="primary8">
+                  Network fee
+                </ThemedText.SmallLabel>
+                <ThemedText.SmallLabel fontWeight={400}>{networkFee}</ThemedText.SmallLabel>
+              </RowBetween>
+              {!!burnFeeText && parseFloat(burnFeeText) > 0 && (
+                <RowBetween style={{ marginTop: 12 }}>
                   <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                    Network fee
+                    Outchain Fee (est.)
                   </ThemedText.SmallLabel>
-                  <ThemedText.SmallLabel fontWeight={400}>{networkFee}</ThemedText.SmallLabel>
+                  <ThemedText.SmallLabel fontWeight={400}>{burnFeeText}</ThemedText.SmallLabel>
                 </RowBetween>
-                {!!burnFeeText && (
-                  <RowBetween style={{ marginTop: 12 }}>
-                    <ThemedText.SmallLabel fontWeight={400} color="primary8">
-                      Outchain Fee (est.)
-                    </ThemedText.SmallLabel>
-                    <ThemedText.SmallLabel fontWeight={400}>{burnFeeText}</ThemedText.SmallLabel>
-                  </RowBetween>
-                )}
-              </>
-            ) : null}
+              )}
+            </>
 
             {formType === FormTypes.SWAP && (
               <>
