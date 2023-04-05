@@ -172,7 +172,7 @@ const ValidatorRewardEstimation = () => {
       fetch('https://api-explorer.incognito.org/api/v1/explorer/landing-validator-data')
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           setDataChart(data?.data);
           convertData(data?.data?.activeValidatorChartData || []);
         })

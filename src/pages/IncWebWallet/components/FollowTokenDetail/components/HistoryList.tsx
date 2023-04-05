@@ -49,7 +49,6 @@ const HistoryList = (props: Props) => {
   }, []);
 
   const handleLoadHistory = async () => {
-    console.log('HandleLoadHistory === ');
     if (accountSender) {
       const { txsTransactor }: { txsTransactor: IHistoryFromSDK[] } = await accountSender.getTxsHistory({
         tokenID: selectedPrivacy.tokenID,

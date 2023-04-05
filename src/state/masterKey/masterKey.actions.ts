@@ -369,7 +369,7 @@ export const createMasterKey = (data: any) => async (dispatch: AppThunkDispatch,
 };
 
 export const createNewMasterlessWallet = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
-  console.log('[createNewMasterlessWallet]');
+  // console.log('[createNewMasterlessWallet]');
   try {
     const masterlessMasterKey = new MasterKeyModel(MASTERLESS);
     const masterlessWallet: WalletSDK = await masterlessMasterKey.loadWallet();
@@ -383,7 +383,7 @@ export const createNewMasterlessWallet = () => async (dispatch: AppThunkDispatch
 };
 
 export const loadAllMasterKeyAccounts = () => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
-  console.log('loadAllMasterKeyAccounts.... ');
+  // console.log('loadAllMasterKeyAccounts.... ');
   await dispatch(actionLoadingAllMasterKeyAccount(true));
   try {
     const state = getState();
@@ -466,7 +466,7 @@ export const actionSyncAccountMasterKey =
 
 export const setKeychainType =
   (keychainType: KeychainType) => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
-    console.log('[createNewMasterlessWallet]');
+    // console.log('[createNewMasterlessWallet]');
     try {
       await dispatch(actionSetKeychainType(keychainType));
     } catch (error) {
@@ -476,7 +476,7 @@ export const setKeychainType =
 
 export const switchKeychainType =
   (keychainType: KeychainType) => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
-    console.log('[createNewMasterlessWallet]');
+    // console.log('[createNewMasterlessWallet]');
     try {
       let masterKey;
       if (keychainType === 'Masterless') {

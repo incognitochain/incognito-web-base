@@ -182,7 +182,7 @@ export const actionFetchFailCreateAccount = () => ({
 export const actionFetchCreateAccount =
   ({ accountName }: any) =>
   async (dispatch: AppThunkDispatch, getState: AppGetState) => {
-    console.time('TOTAL_TIME_CREATE_ACCOUNT');
+    // console.time('TOTAL_TIME_CREATE_ACCOUNT');
     const state = getState();
     const create = accountSelector.createAccountSelector(state);
     let wallet = walletSelector(state);
@@ -203,8 +203,8 @@ export const actionFetchCreateAccount =
         }
       });
 
-      console.log('[actionFetchCreateAccount]  end ');
-      console.timeEnd('TOTAL_TIME_CREATE_ACCOUNT');
+      // console.log('[actionFetchCreateAccount]  end ');
+      // console.timeEnd('TOTAL_TIME_CREATE_ACCOUNT');
       return serializedAccount;
     } catch (error) {
       dispatch(actionFetchFailCreateAccount());
