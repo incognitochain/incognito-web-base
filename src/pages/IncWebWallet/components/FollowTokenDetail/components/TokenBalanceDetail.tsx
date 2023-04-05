@@ -31,7 +31,7 @@ interface Props {
 }
 
 const TokenBalanceDetail = (props: Props) => {
-  console.log('TokenBalanceDetail Render');
+  // console.log('TokenBalanceDetail Render');
   // const dispatch = useDispatch();
 
   const { onCloseModal, onSendClick, onReceiveClick } = props;
