@@ -93,14 +93,14 @@ class MasterKeyModel extends BaseModel implements MasterKeyModelActions {
 
     let wallet: WalletSDK;
     if (rawData) {
-      console.log('[loadWallet] INSTANCE MasterKeyModel: => ', this);
-      console.log('[loadWallet] LOAD WALLET co trong LOCAL STORAGE: => ');
+      // console.log('[loadWallet] INSTANCE MasterKeyModel: => ', this);
+      // console.log('[loadWallet] LOAD WALLET co trong LOCAL STORAGE: => ');
       wallet = await WalletServices.loadWallet(passphrase, storageName, rootName);
     } else if (this.mnemonic) {
-      console.log('[loadWallet] INIT WALLET voi Mnemonic: => ');
+      // console.log('[loadWallet] INIT WALLET voi Mnemonic: => ');
       wallet = await WalletServices.importWallet(this.mnemonic, rootName);
     } else {
-      console.log('[loadWallet] INIT WALLET default trong SDK: => ');
+      // console.log('[loadWallet] INIT WALLET default trong SDK: => ');
       wallet = await WalletServices.initWallet(storageName, rootName);
     }
     this.mnemonic = wallet.Mnemonic;

@@ -21,7 +21,6 @@ const enhanceAmountValidation = (WrappedComponent: WrappedComponentType) => {
     const dispatch = useAppDispatch();
 
     let { selectedPrivacy, isFetching, onChangeField, formatAmountNoClip: amountMaxText } = props;
-    console.log('enhanceAmountValidation ', props);
     const initialState: IState = {
       maxAmountValidator: undefined,
       minAmountValidator: undefined,
