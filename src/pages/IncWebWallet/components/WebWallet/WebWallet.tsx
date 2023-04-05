@@ -89,7 +89,7 @@ const WebWallet = () => {
       data: <UnlockWalletModal />,
       isTransparent: false,
       rightHeader: undefined,
-      title: 'Unlock wallet',
+      title: 'Unlock Wallet',
       isSearchTokenModal: true,
     });
   };
@@ -120,7 +120,7 @@ const WebWallet = () => {
         )}
         {webWalletState === WalletState.locked && (
           <WalletButton isImport={false} onClick={onClickUnlockWallet}>
-            <p className="text">Unlock wallet</p>
+            <p className="text">Unlock Wallet</p>
           </WalletButton>
         )}
         {webWalletState === WalletState.unlocked && (
