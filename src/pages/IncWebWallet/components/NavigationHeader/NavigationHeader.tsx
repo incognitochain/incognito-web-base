@@ -65,8 +65,6 @@ type NavigationHeaderProps = {
 };
 
 const NavigationHeader = (props: NavigationHeaderProps) => {
-  console.log('NavigationHeader props ', props);
-
   //LeftView Props
   const {
     leftIcon,

@@ -118,7 +118,7 @@ const BackupPhrase = (props: BackupPhraseProps) => {
         disabled={errorVisible || isEmpty(masterKeyName)}
         onClick={() => props.onContinue(masterKeyName)}
       >
-        {'Continute'}
+        {'Continue'}
       </AppButton>
     </Container>
   );
