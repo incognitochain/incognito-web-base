@@ -48,7 +48,7 @@ export default function useUnlockWallet(): UseUnlockWalletResult {
             data: <UnlockWalletModal />,
             isTransparent: false,
             rightHeader: undefined,
-            title: 'Unlock wallet',
+            title: 'Unlock Wallet',
             isSearchTokenModal: true,
           });
       default:
