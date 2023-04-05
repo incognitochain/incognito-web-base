@@ -13,7 +13,7 @@ const enhanceLoadWasm = (WrappedComponent: React.FunctionComponent) => {
             ? (window.location?.origin || window.location?.host) + '/assets/privacy.wasm'
             : window.location.origin + '/assets/privacy.wasm';
 
-          console.log('WASM File URL ', wasmFileURL);
+          // console.log('WASM File URL ', wasmFileURL);
 
           // await init(wasmFileURL, 8);
           // await fetch(wasmFileURL);
