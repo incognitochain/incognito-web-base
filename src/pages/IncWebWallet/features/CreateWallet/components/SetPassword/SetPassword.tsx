@@ -16,31 +16,32 @@ interface SetPasswordProps {
 const SetPassword = (props: SetPasswordProps) => {
   const [password, setPassword] = React.useState(MOCKUP_PASSWORD);
   const [confirmPassword, setConfirmPassword] = React.useState(MOCKUP_PASSWORD);
-
+  const [isMissMatch, setMisMatch] = React.useState(false);
   const isStrongPassRef = React.useRef(false);
-
-  const [isAbleContinue, setIsAbleContinue] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsAbleContinue(false);
-    if (isStrongPassRef.current && password === confirmPassword) {
-      setIsAbleContinue(true);
-    }
-  }, [password, confirmPassword]);
 
   const onChangePassword = (event: any) => {
     const input = event.target.value;
     setPassword(input);
+    setMisMatch(false);
     isStrongPassRef.current = false;
   };
 
   const onChangeConfirmPassword = (event: any) => {
     const input = event.target.value;
+    setMisMatch(false);
     setConfirmPassword(input);
   };
 
   const onPasswordStrong = () => {
     isStrongPassRef.current = true;
+  };
+
+  const continueOnClick = () => {
+    if (password.length !== confirmPassword.length || password !== confirmPassword) {
+      setMisMatch(true);
+    } else {
+      props.onConfirmPassword(password);
+    }
   };
 
   return (
@@ -73,22 +74,20 @@ const SetPassword = (props: SetPasswordProps) => {
         value={confirmPassword}
         onChange={onChangeConfirmPassword}
       />
-      {((isStrongPassRef.current === true &&
-        password.length === confirmPassword.length &&
-        password !== confirmPassword) ||
-        props.errorMess) && (
+      {isStrongPassRef.current === true && (isMissMatch || props.errorMess) && (
         <AlertMessage
           type={AlertMessageType.error}
           message={props.errorMess || 'Password and Confirm Password does not match!'}
         />
       )}
       <Space.Vertical size={40} />
+
       <AppButton
         variant="contained"
         buttonType="primary"
         width={'100%'}
-        disabled={!isAbleContinue}
-        onClick={() => props.onConfirmPassword(password)}
+        disabled={!isStrongPassRef.current}
+        onClick={continueOnClick}
       >
         {'Continue'}
       </AppButton>
