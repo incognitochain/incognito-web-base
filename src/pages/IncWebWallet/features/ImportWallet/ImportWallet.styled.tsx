@@ -2,11 +2,11 @@ import styled, { DefaultTheme } from 'styled-components/macro';
 
 export const Styled = styled.div`
   width: 100%;
-  margin-bottom: 70px;
+  height: 80vh;
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToLarge`
-      
+       height: 80vh;
   `}
   ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToMedium`
-      
+       height: 85vh;
   `}
 `;
