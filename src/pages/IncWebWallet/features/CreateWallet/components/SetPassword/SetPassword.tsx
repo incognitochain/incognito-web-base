@@ -51,22 +51,40 @@ const SetPassword = (props: SetPasswordProps) => {
         {'Set a password'}
       </Typography.Text>
       <Space.Vertical size={16} />
-      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'}>
+
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} textAlign={'left'} width={'100%'}>
         {'When performing operations that need to be signed with your secret key, this password will be required'}
       </Typography.Text>
 
-      <Space.Vertical size={40} />
-
-      {/* Password field */}
-      <Input type="password" placeholder="Password" value={password} onChange={onChangePassword} />
-
       <Space.Vertical size={20} />
 
-      {/* Password Status */}
-      <PasswordStatus value={password} onPasswordStrong={onPasswordStrong} />
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} textAlign={'left'} width={'100%'}>
+        {'Passwords must contain:'}
+      </Typography.Text>
+      <Space.Vertical size={10} />
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} textAlign={'left'} width={'100%'}>
+        &emsp;{'• A minimum of 1 upper case letter [A-Z]'}
+      </Typography.Text>
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} textAlign={'left'} width={'100%'}>
+        &emsp;{'• A minimum of 1 lower case letter [a-z]'}
+      </Typography.Text>
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} textAlign={'left'} width={'100%'}>
+        &emsp;{'• A minimum of 1 numeric character [0-9]'}
+      </Typography.Text>
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} textAlign={'left'} width={'100%'}>
+        &emsp;{'• A minimum of 1 special character [!@#$%^&*]'}
+      </Typography.Text>
+      <Typography.Text type="p2" fontWeight={400} color={'gray_9C9C9C'} textAlign={'left'} width={'100%'}>
+        &emsp;{'• Must be at least 10 characters'}
+      </Typography.Text>
 
       <Space.Vertical size={40} />
-
+      {/* Password field */}
+      <Input type="password" placeholder="Password" value={password} onChange={onChangePassword} />
+      <Space.Vertical size={20} />
+      {/* Password Status */}
+      <PasswordStatus value={password} onPasswordStrong={onPasswordStrong} />
+      <Space.Vertical size={40} />
       {/* Confirm Password field */}
       <Input
         type="password"
@@ -81,7 +99,6 @@ const SetPassword = (props: SetPasswordProps) => {
         />
       )}
       <Space.Vertical size={40} />
-
       <AppButton
         variant="contained"
         buttonType="primary"

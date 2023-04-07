@@ -1,3 +1,5 @@
+import { useWindowSize } from 'hooks/useWindowSize';
+import { FOOTER_ID, HEADER_ID } from 'pages/App';
 import Header from 'pages/IncWebWallet/components/Header';
 import Steps from 'pages/IncWebWallet/components/Steps';
 import { IStep } from 'pages/IncWebWallet/components/Steps/Steps';
@@ -36,6 +38,25 @@ const ImportWallet = () => {
 
   const phraseRef = React.useRef('');
   const masterKeyNameRef = React.useRef('');
+  const { width, height } = useWindowSize();
+  const [contentSize, setContentSize] = React.useState(height || 0);
+
+  const getContentSize = () => {
+    let contentSize = 0;
+    const header = document.getElementById(HEADER_ID);
+    const footer = document.getElementById(FOOTER_ID);
+    if (height && header && footer) {
+      const headerHeight = header.clientHeight;
+      // const footerHeight = footer.clientHeight;
+      const footerHeight = 0;
+      contentSize = height - headerHeight - footerHeight - 100;
+    }
+    setContentSize(contentSize);
+  };
+
+  React.useEffect(() => {
+    getContentSize();
+  }, [width, height]);
 
   React.useEffect(() => {
     if (webWalletState === WalletState.uninitialized) {
@@ -83,7 +104,7 @@ const ImportWallet = () => {
   ];
 
   return (
-    <Styled className="default-max-width">
+    <Styled className="default-max-width" height={contentSize}>
       <Header centerComponent={() => <Steps currentStep={currentStep} steps={steps} />} onClickGoBack={onGotoHome} />
       {steps[currentStep].content()}
     </Styled>

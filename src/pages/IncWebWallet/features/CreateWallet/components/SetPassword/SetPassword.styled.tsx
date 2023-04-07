@@ -12,7 +12,6 @@ const MediaQueryMeidum = css`
 const MediaQuerySmall = css`
   width: 80%;
 `;
-
 export const Container = styled.div`
   flex: 1;
   display: flex;
@@ -20,7 +19,7 @@ export const Container = styled.div`
   align-self: center;
   align-items: center;
   margin: auto;
-  min-height: 55vh;
+  margin-bottom: 20px;
   width: 55%;
 
   ${MediaQueryBuilder('upToLarge', MediaQueryLarge)}
