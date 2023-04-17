@@ -39,7 +39,7 @@ import { DrawerStyled, MenuDropdown, Styled } from './Header.styled';
 interface MenuItemProps {
   name: string;
   path: string;
-  isLink?: string;
+  isLink?: string | boolean;
   target?: string;
   metric?: number;
   uniqMetric?: number;
@@ -74,6 +74,12 @@ let menuItem: MenuItemProps[] = [
   //   target: '_blank',
   //   isLink: true,
   // },
+  {
+    name: 'Forum',
+    path: 'https://we.incognito.org/',
+    target: '_blank',
+    isLink: true,
+  },
   // {
   //   name: 'Earning',
   //   path: routeEarnings,
@@ -562,7 +568,7 @@ export default function Header() {
                     key={item.name}
                   >
                     {item?.isLink ? (
-                      <Link href={item.path} target="_blank" rel="noopener noreferrer">
+                      <Link href={item.path} target="_blank" rel="noopener noreferrer" className={'color-white'}>
                         {item.name}
                       </Link>
                     ) : (
