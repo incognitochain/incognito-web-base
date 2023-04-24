@@ -1,3 +1,4 @@
+import CopyIcon from 'components/Copy';
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
 import BalanceHandler from 'pages/IncWebWallet/actions/balanceHandler';
@@ -19,7 +20,7 @@ import { PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from '../../../../const
 import { ScanCoinsProgressBar } from '../ScanCoinsProgressBar/ScanCoinsProgressBar';
 import UnlockWalletModal from '../UnlockWalletModal';
 // import BoxScanCoinModal from '../BoxScanCoin';
-import { Container, Text, WalletButton, Wrapper } from './WebWallet.styled';
+import { Container, Space, Text, WalletButton, Wrapper } from './WebWallet.styled';
 
 const INTERVAL_TIME_LOAD_BALANCE = 10000; //10s
 let loadBalanceInterval: any = null;
@@ -130,6 +131,8 @@ const WebWallet = () => {
               <Text>{address ? shortenString(address) : ''}</Text>
             </Wrapper>
             {isScanningCoin && <ScanCoinsProgressBar />}
+            <Space />
+            <CopyIcon text={address ?? ''} size={20} />
           </>
         )}
       </Container>
