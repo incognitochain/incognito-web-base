@@ -1,5 +1,9 @@
 import styled from 'styled-components/macro';
 
+export const Space = styled.div`
+  width: 10px;
+`;
+
 export const Container = styled.div`
   display: flex;
   flex-direction: row;
