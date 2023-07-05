@@ -1,10 +1,10 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { Space } from 'components/Core';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { Image } from 'components/Core/Image';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import Row, { RowBetween } from 'components/Core/Row';
-import { VerticalSpace } from 'components/Core/Space';
 import { NetworkModal, useModal } from 'components/Modal';
 import { SITE_KEY } from 'config';
 import { MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from 'constants/token';
@@ -163,7 +163,7 @@ const SubmitTxDeposit = React.memo((props: any) => {
 
   return (
     <form onSubmit={handleSubmit(handleSubmitTxHash)}>
-      <VerticalSpace />
+      <Space.Vertical size={16} />
       <Field
         component={InputField}
         name={FORM_CONFIGS.txHash}
@@ -174,7 +174,7 @@ const SubmitTxDeposit = React.memo((props: any) => {
         }}
         validate={validateTxhash}
       />
-      <VerticalSpace />
+      <Space.Vertical size={16} />
       <ThemedText.SmallLabel fontWeight={400} marginBottom="4px" color="primary8">
         Network
       </ThemedText.SmallLabel>
@@ -187,7 +187,7 @@ const SubmitTxDeposit = React.memo((props: any) => {
         </Row>
         <ChevronDown size={24} />
       </NetworkSelector>
-      <VerticalSpace />
+      <Space.Vertical size={16} />
       <div
         style={{
           paddingTop: 30,

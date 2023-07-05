@@ -3,7 +3,7 @@
 import { i18n } from '@lingui/core';
 import { notification } from 'antd';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
-import { PRV } from 'constants/token';
+import { isMainnet } from 'config';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -12,13 +12,13 @@ import { fetchProposalFee } from 'services/rpcDao';
 import { getProposalDetail, vote } from 'state/dao/operations';
 import { Fee, Proposal, ProposalStatus } from 'state/dao/types';
 import styled, { DefaultTheme } from 'styled-components/macro';
-import format from 'utils/format';
 import Web3 from 'web3';
 
 import HeaderBox from './components/HeaderBpx';
 import InfoBox from './components/InfoBox';
 import { ModalVote } from './components/ModalVote';
 import ProposalContent from './components/ProposalContent';
+import VoteInfoBox from './components/VoteInfoBox';
 
 const InfoBoxContainer = styled.div`
   width: 100%;
@@ -43,6 +43,7 @@ const ProposalDetail = () => {
   const [isFetchingProposalDetail, setIsFetchingProposalDetail] = useState<boolean>(false);
   const [proposalDetail, setProposalDetail] = useState<Proposal>();
   const [currentBlock, setCurrentBlock] = useState<any>(0);
+  const [createdBlockTimestamp, setCreatedBlockTimestamp] = useState<any>(0);
 
   const [selectedVote, setSelectedVote] = useState<0 | 1>(1);
 
@@ -59,7 +60,7 @@ const ProposalDetail = () => {
 
   const getBlockNumber = async () => {
     try {
-      const web3 = new Web3('https://goerli.infura.io/v3/827ed2f82fb3442da6d516c8b5e5bd16');
+      const web3 = new Web3(isMainnet ? 'https://eth-fullnode.incognito.org' : 'https://eth-goerli.public.blastapi.io');
       const block = await web3.eth.getBlockNumber();
       setCurrentBlock(block);
     } catch (error) {
@@ -75,40 +76,29 @@ const ProposalDetail = () => {
       ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (proposalDetail.startBlock - currentBlock), 'seconds')
       : undefined;
 
-  const endDate =
-    proposalDetail && proposalDetail.status && timestamp && currentBlock
-      ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (proposalDetail.endBlock - currentBlock), 'seconds')
-      : undefined;
-  const now = dayjs();
-
-  const startOrEndTimeCopy = () => {
-    if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
-      return 'Ends';
-    }
-    if (endDate?.isBefore(now)) {
-      return 'Ended';
-    }
-    return 'Starts';
-  };
-
-  const titleDate = startOrEndTimeCopy();
-
-  const startOrEndTimeTime = () => {
-    if (!startDate?.isBefore(now)) {
-      return startDate;
-    }
-    return endDate;
-  };
-
-  let rightTitleDate = '';
-  let rightTitleDateValue = '';
-  if (proposalDetail?.status) {
-    rightTitleDate = i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+  let snapshotTime = '';
+  let snapshotDate = '';
+  if (proposalDetail?.status && startDate) {
+    snapshotTime = i18n.date(new Date(startDate?.toISOString() || 0), {
       hour: 'numeric',
       minute: '2-digit',
       timeZoneName: 'short',
     });
-    rightTitleDateValue = i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+    snapshotDate = i18n.date(new Date(startDate?.toISOString() || 0), {
+      dateStyle: 'long',
+    });
+  }
+
+  let createdTime = '';
+  let createdDate = '';
+
+  if (proposalDetail?.status && createdBlockTimestamp) {
+    createdTime = i18n.date(new Date(createdBlockTimestamp * 1000 || 0), {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
+    createdDate = i18n.date(new Date(createdBlockTimestamp * 1000 || 0), {
       dateStyle: 'long',
     });
   }
@@ -145,11 +135,6 @@ const ProposalDetail = () => {
 
   const [api, contextHolder] = notification.useNotification();
 
-  const prvVote = format.amountVer2({
-    originalAmount: proposalDetail?.quorumVotes || 0,
-    decimals: PRV.pDecimals,
-  });
-
   const handleSubmitVote = async (prvBurnAmount: number) => {
     try {
       await dispatch(
@@ -170,7 +155,7 @@ const ProposalDetail = () => {
         )
       );
     } catch (error) {
-      showSubmitVotePopupMessage('error', 'Failed', 'Submit vote fail');
+      showSubmitVotePopupMessage('error', 'Failed', typeof error === 'string' ? error : 'Submit vote failed');
     }
   };
 
@@ -188,15 +173,33 @@ const ProposalDetail = () => {
     [setAmount]
   );
 
+  const getCreatedProposalBlockNumber = async () => {
+    try {
+      const web3 = new Web3(isMainnet ? 'https://eth-fullnode.incognito.org' : 'https://eth-goerli.public.blastapi.io');
+      if (proposalDetail && proposalDetail?.submitProposalTx) {
+        const receipt = await web3.eth.getTransactionReceipt(proposalDetail?.submitProposalTx);
+        const blockInfo = await web3.eth.getBlock(receipt?.blockNumber);
+        console.log(blockInfo);
+        setCreatedBlockTimestamp(blockInfo?.timestamp);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchProposalDetail();
     getBlockNumber();
   }, []);
 
+  useEffect(() => {
+    getCreatedProposalBlockNumber();
+  }, [proposalDetail]);
+
   const isDisabledButtonVote: boolean = isFetchingProposalDetail || proposalDetail?.status !== ProposalStatus.PENDING;
 
   return (
-    <div className="default-max-width-2" style={{ width: '100%', paddingBottom: 40 }}>
+    <div className="default-max-width-2" style={{ width: '100%', paddingBottom: 40, minHeight: '100vh' }}>
       <>
         {contextHolder}
         <HeaderBox
@@ -205,26 +208,27 @@ const ProposalDetail = () => {
           isLoading={isFetchingProposalDetail}
           onClickVoteButton={getFee}
         />
+        <VoteInfoBox isLoading={isFetchingProposalDetail} proposalDetail={proposalDetail} />
         <InfoBoxContainer>
           <InfoBox
             isLoading={isFetchingProposalDetail}
             leftTitle="Threshold"
             rightTitle="Current Quorum"
-            rightValue={`${prvVote} votes`}
+            rightValue="20,000 PRV"
           />
           <div style={{ width: 24 }} />
           <InfoBox
             isLoading={isFetchingProposalDetail}
-            leftTitle={titleDate}
-            rightTitle={rightTitleDate}
-            rightValue={rightTitleDateValue || 'Updating'}
+            leftTitle={'Starts'}
+            rightTitle={createdTime}
+            rightValue={createdDate || 'Updating'}
           />
           <div style={{ width: 24 }} />
           <InfoBox
             isLoading={isFetchingProposalDetail}
             leftTitle="Snapshot"
-            rightTitle="Taken at block"
-            rightValue={proposalDetail?.startBlock || 'Updating'}
+            rightTitle={snapshotTime}
+            rightValue={snapshotDate || 'Updating'}
           />
         </InfoBoxContainer>
         <DescriptionBox>

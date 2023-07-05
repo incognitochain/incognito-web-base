@@ -1,9 +1,12 @@
 import { BigNumber } from 'bignumber.js';
-import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE } from 'constants/token';
+import { BIG_COINS, MAIN_NETWORK_NAME, PRIVATE_TOKEN_CURRENCY_TYPE, PRV } from 'constants/token';
 import { maxBy } from 'lodash';
 import PToken, { getTokenIdentify, ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
+import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { getQueryPAppName } from 'pages/Swap/Swap.hooks';
+import { batch } from 'react-redux';
+import { change } from 'redux-form';
 import { rpcClient } from 'services';
 import { CANCEL_MESSAGE } from 'services/axios';
 import { AppDispatch, AppState } from 'state';
@@ -14,7 +17,7 @@ import format from 'utils/format';
 import { getAcronymNetwork } from 'utils/token';
 
 import { GROUP_NETWORK_ID_BY_EXCHANGE } from './FormUnshield.constants';
-import { unshieldDataSelector } from './FormUnshield.selectors';
+import { isMaxSelector, unshieldDataSelector } from './FormUnshield.selectors';
 import { combineExchange } from './FormUnshield.swapEstBuilder';
 import {
   FormTypes,
@@ -22,6 +25,7 @@ import {
   FreeSwapFormAction,
   ISwapExchangeData,
   NetworkTypePayload,
+  SetIsMaxAction,
   UnshieldFetchingUserFeePayLoad,
   UnshieldSetFetchingUserFeeAction,
   UnshieldSetTokenAction,
@@ -76,6 +80,11 @@ export const actionSetErrorMsg = (payload: string) => ({
 
 export const actionSetSwapNetwork = (payload: MAIN_NETWORK_NAME) => ({
   type: FormUnshieldActionType.SET_SWAP_NETWORK,
+  payload,
+});
+
+export const actionSetIsMax = (payload: boolean): SetIsMaxAction => ({
+  type: FormUnshieldActionType.SET_IS_MAX,
   payload,
 });
 
@@ -356,6 +365,7 @@ export const actionEstimateSwapFee =
   ({ isResetForm = false, incAddress = '' }: { isResetForm: boolean; incAddress?: string }) =>
   async (dispatch: AppDispatch, getState: AppState & any) => {
     let isCancelMsg = false;
+    let isReEstByMax = false;
     try {
       const {
         inputAmount,
@@ -367,6 +377,7 @@ export const actionEstimateSwapFee =
         isSubmitting,
         vaults,
         inputOriginalAmount,
+        fee: combineFee,
       } = unshieldDataSelector(getState());
       if (
         !inputAmount ||
@@ -538,6 +549,42 @@ export const actionEstimateSwapFee =
           return new BigNumber(prevValue).gt(currValue) ? prev : current;
         });
       }
+
+      const isMax = isMaxSelector(getState());
+      if (bestRate && isMax) {
+        const apiFee = bestRate.fees[0];
+        let userBalance = sellToken.amount;
+        const amountFee = apiFee.amount; // human amount
+        const feeTokenID = apiFee.tokenId;
+
+        if (sellToken.tokenID === PRV.id) {
+          userBalance = new BigNumber(userBalance || 0).minus(combineFee.networkFee).toNumber();
+        }
+
+        // check burn token equal fee token
+        if (feeTokenID === sellToken.tokenID) {
+          const isOutOfBalance = new BigNumber(inputOriginalAmount).plus(amountFee).gt(userBalance || 0);
+          if (isOutOfBalance) {
+            isReEstByMax = true;
+            let newInputOriginalAmount = new BigNumber(userBalance || 0).minus(amountFee).toNumber();
+            if (newInputOriginalAmount <= 0) {
+              newInputOriginalAmount = 0;
+            }
+            const newInput = format
+              .formatAmount({
+                originalAmount: newInputOriginalAmount,
+                decimals: sellToken.pDecimals,
+                clipAmount: false,
+              })
+              .toString();
+            return batch(() => {
+              dispatch(actionSetIsMax(false));
+              dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.sellAmount, newInput));
+            });
+          }
+        }
+      }
+
       // Set default exchange has best rate
       const defaultExchange: string = bestRate?.exchangeName;
       dispatch(actionSetExchangeSelected(defaultExchange));
@@ -551,7 +598,7 @@ export const actionEstimateSwapFee =
         dispatch(actionSetErrorMsg(typeof error === 'string' ? error : error?.message || ''));
       }
     } finally {
-      if (!isCancelMsg) {
+      if (!isCancelMsg && !isReEstByMax) {
         setTimeout(() => {
           dispatch(actionSetFetchingFee({ isFetchingFee: false }));
         }, 200);

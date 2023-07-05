@@ -1,8 +1,7 @@
 import { AxiosInstance } from 'axios';
 import { isMainnet } from 'config';
+import { checkUpdateMetricUniq } from 'metric';
 import createAxiosInstance from 'services/axios';
-
-import { checkUpdateMetricUniq } from '../storage';
 
 export enum METRIC_TYPE {
   OPEN = 81,
@@ -47,6 +46,7 @@ export enum METRIC_TYPE {
   PAPP_TRADER_JOE = 417,
   PAPP_TRISOLARIS = 418,
   PAPP_OPENSEA = 419,
+  PAPP_DEVELOPER = 420,
 }
 
 export enum METRIC_UNIQ {
@@ -85,6 +85,7 @@ export enum METRIC_UNIQ {
   PAPP_TRADER_JOE_UNIQ = 517,
   PAPP_TRISOLARIS = 518,
   PAPP_OPENSEA_UNIQ = 519,
+  PAPP_DEVELOPER_UNIQ = 520,
 }
 
 class RpcMetric {

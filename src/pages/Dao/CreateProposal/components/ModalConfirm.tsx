@@ -5,7 +5,7 @@ import React from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
 import { Fee } from 'state/dao/types';
-import { getMinimumPRVBalanceRequire, MINIMUM_PRV_REQUIRE_TO_BURN, NETWORK_FEE } from 'state/dao/utils';
+import { getMinimumPRVBalanceRequire, MINIMUM_PRV_REQUIRE_TO_BURN } from 'state/dao/utils';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 import styled from 'styled-components/macro';
 import format from 'utils/format';
@@ -71,16 +71,7 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmPro
   const tokenToPayFeeInfo = useSelector(getPrivacyDataByTokenIDSelector)(fee?.tokenid || '');
   const minimumPRVBalanceRequire = getMinimumPRVBalanceRequire(prvTokenInfo?.amount || 0, fee?.feeAmount || 0);
 
-  const getPrvBalanceToBurn = () => {
-    const prvBalance: number = prvTokenInfo?.amount || 0;
-    let prvToBurn = MINIMUM_PRV_REQUIRE_TO_BURN;
-    if (prvBalance >= minimumPRVBalanceRequire) {
-      prvToBurn = prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE;
-    }
-    return prvToBurn;
-  };
-
-  const prvBalanceToBurn = getPrvBalanceToBurn();
+  const prvBalanceToBurn = MINIMUM_PRV_REQUIRE_TO_BURN;
 
   const checkPrvBalance = () => {
     const prvBalance: number = Number(prvTokenInfo?.amount) || 0;
@@ -117,14 +108,13 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = (props: ModalConfirmPro
     } else {
       return (
         <div>
-          <ErrorText>Your PRV balance is insufficien</ErrorText>
           <ErrorText>
-            Your can minimum{' '}
+            Your PRV balance is insufficient, you need at least{' '}
             {format.amountVer2({
               originalAmount: Number(minimumPRVBalanceRequire || 0),
               decimals: tokenToPayFeeInfo.pDecimals,
             })}{' '}
-            {tokenToPayFeeInfo?.symbol} to create transaction
+            {tokenToPayFeeInfo?.symbol} to create the proposal.
           </ErrorText>
         </div>
       );

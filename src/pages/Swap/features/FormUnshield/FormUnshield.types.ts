@@ -14,6 +14,7 @@ export enum FormUnshieldActionType {
   SET_SWAP_EXCHANGE_SELECTED = 'FORM_UNSHIELD/SET_SWAP_EXCHANGE_SELECTED',
   SET_ERROR_MSG = 'FORM_UNSHIELD/SET_ERROR_MSG',
   SET_SWAP_NETWORK = 'FORM_UNSHIELD/SET_SWAP_NETWORK',
+  SET_IS_MAX = 'FORM_UNSHIELD/SET_IS_MAX',
 }
 
 export enum FormTypes {
@@ -66,6 +67,8 @@ export interface IFormUnshieldState {
   exchangeSelected: string | null;
   errorMsg: string | null;
   swapNetwork: MAIN_NETWORK_NAME;
+
+  isMax: boolean;
 }
 
 export interface ISwapFee {
@@ -175,6 +178,11 @@ export interface FreeSwapFormAction extends Action {
   type: FormUnshieldActionType.FREE_SWAP_FORM;
 }
 
+export interface SetIsMaxAction extends Action {
+  type: FormUnshieldActionType.SET_IS_MAX;
+  payload: boolean;
+}
+
 export type FormUnshieldActions =
   // Unshield action
   | UnshieldSetTokenAction
@@ -187,4 +195,5 @@ export type FormUnshieldActions =
   | SwapSetExchangeSelectedAction
   | SwapSetEstimateTradeErrorMsg
   | SwapSetNetwork
-  | FreeSwapFormAction;
+  | FreeSwapFormAction
+  | SetIsMaxAction;

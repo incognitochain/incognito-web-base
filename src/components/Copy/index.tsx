@@ -42,7 +42,7 @@ const CopyIcon = (props: IProps & React.ButtonHTMLAttributes<HTMLButtonElement>)
   const { text, size } = props;
   const handleCopyText = () => {
     if (text) {
-      toast('Copied');
+      toast.success('Copied');
       copy(text);
     }
   };

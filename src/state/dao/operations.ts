@@ -64,7 +64,9 @@ const getProposals = () => {
       dispatch(getProposalsRequest());
       let proposalsResponse: ProposalAPIResponse[] = await fetchProposals();
       proposalsResponse = proposalsResponse?.filter(
-        (proposal: ProposalAPIResponse) => proposal?.Status !== ProposalStatusBackEnd.submit_failed
+        (proposal: ProposalAPIResponse) =>
+          proposal?.Status !== ProposalStatusBackEnd.submit_failed &&
+          proposal?.Status !== ProposalStatusBackEnd.outchain_failed
       );
       const promises = proposalsResponse.map(async (proposal) => {
         const proposalStatusBackend: ProposalStatusBackEnd = proposal?.Status;
@@ -88,6 +90,7 @@ const getProposals = () => {
           proposalId: proposalInfoViaChain?.id?.toString(),
           title: proposal?.Title || '',
           description: proposal?.Description ?? 'No description.',
+          submitProposalTx: proposal?.SubmitProposalTx || '',
           proposer: proposalInfoViaChain?.proposer || '',
           status: proposalStatusViaChain,
           forCount: parseInt(proposalInfoViaChain?.forVotes?.toString() ?? '0'),
@@ -97,6 +100,10 @@ const getProposals = () => {
           startBlock: parseInt(proposalInfoViaChain?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposalInfoViaChain?.endBlock?.toString() ?? ''),
           quorumVotes,
+          voteAgainst: proposal?.VoteAgainst || 0,
+          voteFor: proposal?.VoteFor || 0,
+          voteAgainstAmount: proposal?.VoteAgainstAmount || 0,
+          voteForAmount: proposal?.VoteForAmount || 0,
         };
       });
       const data = await Promise.all(promises);
@@ -132,6 +139,7 @@ const getProposalDetail = (proposalId: any, callback?: (data: any) => void) => {
         proposalId: proposalDetailResponse?.ProposalID.toString(),
         title: proposalDetailResponse.Title || '',
         description: proposalDetailResponse.Description ?? 'No description.',
+        submitProposalTx: proposalDetailResponse?.SubmitProposalTx || '',
         proposer: proposalViaChainInfo?.proposer,
         status: proposalStatusViaChain,
         forCount: parseInt(proposalViaChainInfo?.forVotes?.toString() ?? '0'),
@@ -141,6 +149,10 @@ const getProposalDetail = (proposalId: any, callback?: (data: any) => void) => {
         startBlock: parseInt(proposalViaChainInfo?.startBlock?.toString() ?? ''),
         endBlock: parseInt(proposalViaChainInfo?.endBlock?.toString() ?? ''),
         quorumVotes,
+        voteAgainst: proposalDetailResponse?.VoteAgainst || 0,
+        voteFor: proposalDetailResponse?.VoteFor || 0,
+        voteAgainstAmount: proposalDetailResponse?.VoteAgainstAmount || 0,
+        voteForAmount: proposalDetailResponse?.VoteForAmount || 0,
       };
       if (callback) callback(proposalDetail);
       return proposalDetail;
@@ -210,7 +222,7 @@ const burnPRVToken = ({
               targets: ['0x0000000000000000000000000000000000000000'],
               values: ['0'],
               calldatas: ['0x00'],
-              description: title,
+              description: title?.trim(),
             },
           },
         },
@@ -223,7 +235,7 @@ const burnPRVToken = ({
           targets: ['0x0000000000000000000000000000000000000000'],
           values: ['0'],
           calldatas: ['0x00'],
-          description: title,
+          description: title?.trim(),
         };
       }
       const tx = await requestSignTransaction(payload);
@@ -307,14 +319,14 @@ const createProposal = (
         targets: ['0x0000000000000000000000000000000000000000'],
         values: ['0'],
         calldatas: ['0x00'],
-        description: title,
+        description: title?.trim(),
       });
 
       const submitProposalResponse = await submitCreateProposal({
         Txhash: txHash,
         TxRaw: rawData,
-        Description: description,
-        Title: title,
+        Description: description?.trim(),
+        Title: title?.trim(),
         ReShieldSignature: pDaoSignature?.reShieldSignature,
         CreatePropSignature: pDaoSignature?.createPropSignature,
         PropVoteSignature: pDaoSignature?.propVoteSignature,
@@ -375,6 +387,7 @@ const vote = (
       if (callback) return callback(submitVoteResponse);
     } catch (error) {
       console.log(error);
+      throw error;
     }
   };
 };

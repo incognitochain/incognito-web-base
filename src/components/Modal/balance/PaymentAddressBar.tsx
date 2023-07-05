@@ -1,6 +1,8 @@
 import { ReactComponent as IncognitoLogo } from 'assets/svg/incognito-logo.svg';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { defaultAccountPaymentAddressSelector } from 'state/account/account.selectors';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import styled from 'styled-components/macro';
 import { ThemedText } from 'theme';
@@ -10,7 +12,7 @@ const PaymentAddressBarStyled = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-
+  padding: 0px 12px 0px 12px;
   .address-area {
     display: flex;
     flex-direction: row;
@@ -51,14 +53,22 @@ const PaymentAddressBarStyled = styled.div`
 
 const PaymentAddressBar = (props: any) => {
   const incAccount = useSelector(incognitoWalletAccountSelector);
-  const incAddress = incAccount ? incAccount.paymentAddress : '';
+  const defaultAccountPaymentAddress = useSelector(defaultAccountPaymentAddressSelector);
+
+  let incAddress;
+  if (incAccount && incAccount.paymentAddress && incAccount.paymentAddress.length > 0) {
+    incAddress = incAccount.paymentAddress;
+  } else {
+    incAddress = defaultAccountPaymentAddress || '';
+  }
+
   return (
     <PaymentAddressBarStyled>
       <div className="address-area">
         <IncognitoLogo className="logo" />
         <div className="content">
           <ThemedText.RegularLabel fontWeight={500} color="primary5">
-            {shortenString(incAddress, 8)}
+            {!isEmpty(incAddress) && shortenString(incAddress, 8)}
           </ThemedText.RegularLabel>
 
           <ThemedText.SmallLabel fontWeight={400} color="primary8">

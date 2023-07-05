@@ -58,6 +58,7 @@ class SelectedPrivacy extends PToken {
       this.formatAmount = formatAmount;
       this.formatAmountNoClip = formatAmountNoClip;
       this.formatBalanceByUsd = formatBalanceByUsd;
+      this.incognitoTotalSupply = (this.isIncognitoToken && Number(pTokenData?.totalSupply)) || 0;
     }
   }
 }

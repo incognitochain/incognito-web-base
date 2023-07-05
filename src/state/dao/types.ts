@@ -59,6 +59,10 @@ interface ProposalAPIResponse {
   Description: string;
   Title: string;
   Reshield: string;
+  VoteAgainst: number;
+  VoteFor: number;
+  VoteForAmount: number;
+  VoteAgainstAmount: number;
 }
 
 interface Fee {
@@ -75,6 +79,7 @@ enum ProposalStatusBackEnd {
   rejected = 'rejected',
   accepted = 'accepted',
   waiting = 'waiting',
+  outchain_failed = 'pdao_outchain_failed',
   outchain_success = 'pdao_outchain_success',
 }
 
@@ -96,6 +101,7 @@ interface Proposal {
   proposalId: string | undefined;
   title: string;
   description: string;
+  submitProposalTx: string;
   proposer: string | undefined;
   status: ProposalStatus | undefined;
   forCount: number;
@@ -105,6 +111,10 @@ interface Proposal {
   startBlock: number;
   endBlock: number;
   quorumVotes: number;
+  voteAgainst: number;
+  voteFor: number;
+  voteAgainstAmount: number;
+  voteForAmount: number;
 }
 
 interface CreateProposalParams {

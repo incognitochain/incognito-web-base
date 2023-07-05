@@ -3,10 +3,14 @@ import { MAIN_NETWORK_NAME } from 'constants/token';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { ITokenNetwork } from 'models/model/pTokenModel';
 import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
+import { WalletState } from 'pages/IncWebWallet/core/types';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { useAppSelector } from 'state/hooks';
 import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
+import { webWalletStateSelector } from 'state/masterKey';
 
+import useWalletController from '../../../IncWebWallet/hooks/useWalletController';
 import { unshieldDataSelector } from './FormUnshield.selectors';
 import { FormTypes, ISwapExchangeData, SwapExchange } from './FormUnshield.types';
 import { IFee } from './FormUnshield.utils';
@@ -51,6 +55,7 @@ export interface IUnshield {
     isConnected: boolean;
   };
   networkFeeText: string;
+  enoughNetworkFee: boolean;
   burnFeeText: string;
 
   estReceiveAmount: string | number;
@@ -108,6 +113,7 @@ export const useUnshield = (): IUnshield => {
     inputAddress,
     isFetching,
     networkFeeText,
+    enoughNetworkFee,
     burnFeeText,
     estReceiveAmount,
     expectedReceiveAmount,
@@ -130,12 +136,36 @@ export const useUnshield = (): IUnshield => {
   } = useAppSelector(unshieldDataSelector);
 
   const { account: web3Account } = useActiveWeb3React();
+  const webWalletState = useSelector(webWalletStateSelector);
   const incAccount = useAppSelector(incognitoWalletAccountSelector);
   const { isIncognitoInstalled } = useIncognitoWallet();
-
+  const walletController = useWalletController();
   const button = useMemo(() => {
+    let text = '';
+
+    if (walletController.isWalletExtension) {
+      if (!isIncognitoInstalled()) {
+        text = 'Install Wallet';
+      } else if (!incAccount) {
+        text = 'Connect Wallet';
+      } else {
+        text = 'Swap';
+      }
+    } else if (walletController.isWalletWeb) {
+      if (webWalletState === WalletState.uninitialized) {
+        text = 'Install Wallet';
+      } else if (!incAccount || webWalletState === WalletState.locked) {
+        text = 'Unlock Wallet';
+      } else {
+        text = 'Swap';
+      }
+    } else {
+      text = 'Install Wallet';
+    }
+
     return {
-      text: isIncognitoInstalled() ? (!incAccount ? 'Connect Wallet' : 'Swap') : 'Install Wallet',
+      // text: isIncognitoInstalled() ? (!incAccount ? 'Connect Wallet' : 'Swap') : 'Install Wallet 12345',
+      text,
       isConnected: !!incAccount,
     };
   }, [isFetching, incAccount, isIncognitoInstalled]);
@@ -175,6 +205,7 @@ export const useUnshield = (): IUnshield => {
 
     button,
     networkFeeText,
+    enoughNetworkFee,
     burnFeeText,
 
     estReceiveAmount,

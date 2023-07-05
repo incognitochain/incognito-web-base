@@ -51,7 +51,7 @@ const HeaderTitle = styled.div`
   font-weight: 500;
   font-size: 34px;
   line-height: 140%;
-  color: #ffffff;
+  color: ${({ theme }) => theme.text1};
   margin-left: 16px;
 `;
 
@@ -152,10 +152,7 @@ const CreateProposal = () => {
         </div>
         <DescriptionContainer>
           <DescriptionText>
-            Tip: Add one or more proposal actions and describe your proposal for the community. The proposal cannot be
-            modified after submission, so please verify all information before submitting. The voting period will begin
-            after 7 days and last for 1 days.{'\n\n'}You MUST maintain enough voting power to meet the proposal
-            threshold until your proposal is executed. If you fail to do so, anyone can cancel your proposal.
+            {`Tip: Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin right after the proposal's submission and last for 7 days.. You MUST maintain enough voting power to meet the proposal threshold until your proposal is ended. If you fail to do so, anyone can cancel your proposal.`}
           </DescriptionText>
         </DescriptionContainer>
         <FormContainer>

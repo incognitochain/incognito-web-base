@@ -157,7 +157,7 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
       decimals: PRV.pDecimals,
       round: false,
     });
-    const minOriginalAmount = 1e9;
+    const minOriginalAmount = 1e-9;
 
     const bn = new BigNumber(amount);
     if (bn.isNaN()) {
@@ -174,7 +174,11 @@ export const ModalVote: React.FC<ModalVoteProps> = (props: ModalVoteProps) => {
       };
     }
 
-    if (originalAmount >= minOriginalAmount && originalAmount < prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE) {
+    if (
+      prvBalance >= minOriginalAmount + (fee?.feeAmount || 0) + 2 * NETWORK_FEE &&
+      originalAmount >= minOriginalAmount &&
+      originalAmount <= prvBalance - (fee?.feeAmount || 0) - 2 * NETWORK_FEE
+    ) {
       return {
         isValidate: true,
         errorMessage: '',

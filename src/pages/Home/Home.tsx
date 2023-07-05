@@ -2,7 +2,6 @@ import { useWindowSize } from 'hooks/useWindowSize';
 import { FOOTER_ID, HEADER_ID } from 'pages/App';
 import React, { memo } from 'react';
 
-import rpcPBlur from '../../services/rpcPBlur';
 import Analytics from './Home.analytics';
 import Collections from './Home.colections';
 import GroupButtons from './Home.groupBtn';
@@ -29,8 +28,6 @@ const Home = () => {
 
   React.useEffect(() => {
     getContentSize();
-
-    rpcPBlur.getCollections().then();
   }, [width, height]);
 
   return (
@@ -39,7 +36,7 @@ const Home = () => {
         <h2 className="main-header-text">The privacy layer of crypto</h2>
         <p className="sub-header-text">
           Privacy is a fundamental human right. Even more so for crypto users. Which is why we build Incognito to
-          protect it.
+          protect it....
         </p>
         <GroupButtons />
       </div>
