@@ -442,14 +442,14 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-       //background: ${({ theme }) => theme.background2};
-       //border-radius: 10px;
-       //border: 2px solid ${({ theme }) => theme.background1};
+       /* background: ${({ theme }) => theme.background2};
+       border-radius: 10px;
+       border: 2px solid ${({ theme }) => theme.background1}; */
     }
 
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
-      // background: ${({ theme }) => theme.background2};
+       /* background: ${({ theme }) => theme.background2}; */
     }
     .ant-tooltip-inner {
       background: ${({ theme }) => theme.background2};

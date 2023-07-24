@@ -33,6 +33,7 @@ import ImportWallet from './IncWebWallet/features/ImportWallet';
 import KeyChain from './IncWebWallet/features/Keychain/Keychain';
 import Settings from './IncWebWallet/features/Settings/Settings';
 import withUnlockWallet from './IncWebWallet/hooks/withUnlockWallet';
+import Inscriptions from './Inscriptions';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
 import Page404 from './Page404';
@@ -46,7 +47,6 @@ import Structure from './Structure';
 import DepositPage from './Swap/features/DepositPage';
 import SwapExchange from './Swap/features/SwapExchange';
 import TermOfService from './TermOfService';
-
 export const HEADER_ID = 'HEADER_VIEW';
 export const FOOTER_ID = 'FOOTER_VIEW';
 
@@ -117,6 +117,7 @@ const App = () => {
         <Route exact path={RoutePaths.SWAP} component={Market} />
         <Route exact path={RoutePaths.PAPPS_ID} component={SwapExchange} />
         <Route exact path={RoutePaths.PAPPS} component={PeggingApp} />
+        <Route exact path={RoutePaths.INSCRIPTINOS} component={Inscriptions} />
         <Route exact path={RoutePaths.EARNINGS} component={Earnings} />
         <Route exact path={RoutePaths.PRIVACY_POLICY} component={Policy} />
         <Route exact path={RoutePaths.TERM_OF_SERVICE} component={TermOfService} />

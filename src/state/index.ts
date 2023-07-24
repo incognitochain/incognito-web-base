@@ -18,6 +18,7 @@ import dao from './dao';
 import { reducer as followTokensReducer } from './followTokens/followTokens.reducer';
 import { updateVersion } from './global/actions';
 import incognitoWallet from './incognitoWallet/incognitoWallet.reducer';
+import inscriptionsReducer from './inscriptions/inscriptions.reducer';
 import lists from './lists/reducer';
 import logs from './logs/slice';
 import masterKey from './masterKey/masterKey.reducer';
@@ -33,6 +34,7 @@ import user from './user/reducer';
 import wallet from './wallet/reducer';
 import { reducer as webToken } from './webToken/webToken.reducer';
 import { reducer as webWallet } from './webWallet/webWallet.reducer';
+
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'scanCoinsReducer.scanStatus', 'masterKeyReducer'];
 
 const appReducers = combineReducers({
@@ -61,6 +63,7 @@ const appReducers = combineReducers({
   followTokensReducer,
   followTokenSelectedReducer,
   // webWalletReducer,
+  inscriptionsReducer,
 });
 
 export const clearReduxStore = () => ({
@@ -92,7 +95,7 @@ const store = configureStore({
       immutableCheck: false,
     })
       .concat(routingApi.middleware)
-      .concat(isMainnet ? [] : [logger])
+      .concat(isMainnet ? [logger] : [logger])
       .concat(save({ states: PERSISTED_KEYS, debounce: 1000 })),
   preloadedState: load({ states: PERSISTED_KEYS, disableWarnings: process.env.NODE_ENV === 'test' }),
 });
