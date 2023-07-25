@@ -1,3 +1,4 @@
+import { FORM_CONFIGS as FORM_SEND_INSCRIPTION_CONFIGS } from 'pages/InscriptionDetail/Send/FormSend/FormSend.constant';
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { change } from 'redux-form';
@@ -11,15 +12,20 @@ import EmptyView from './EmptyView';
 
 type Props = {
   showDrawer: (flag: boolean) => void;
+  isSendInscription?: boolean;
 };
 const AddressBook = (props: Props) => {
-  const { showDrawer = () => {} } = props;
+  const { showDrawer = () => {}, isSendInscription = false } = props;
   const dispatch = useAppDispatch();
   const factories = useSelector(getAccountListSelector) || [];
   const isEmpty = factories.length === 0;
 
   const onSelectedItem = useCallback((address: any) => {
-    dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, address));
+    if (isSendInscription) {
+      dispatch(change(FORM_SEND_INSCRIPTION_CONFIGS.formName, FORM_SEND_INSCRIPTION_CONFIGS.toAddress, address));
+    } else {
+      dispatch(change(FORM_CONFIGS.formName, FORM_CONFIGS.toAddress, address));
+    }
     showDrawer(false);
   }, []);
 

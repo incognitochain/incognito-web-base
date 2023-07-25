@@ -11,6 +11,7 @@ import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWa
 import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
+import useNFTCoins from 'pages/IncWebWallet/hooks/useNFTCoins';
 import { Suspense, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Route, Switch, useHistory } from 'react-router-dom';
@@ -21,6 +22,7 @@ import { DarkModeQueryParamReader } from 'theme';
 import rpcMetric, { METRIC_TYPE } from '../services/rpcMetric';
 import enhance from './App.enhance';
 import BuyNode from './BuyNode';
+import CreateInscription from './CreateInscription';
 import CreateProposal from './Dao/CreateProposal';
 import Governance from './Dao/Governance';
 import ProposalDetail from './Dao/ProposalDetail';
@@ -33,8 +35,11 @@ import ImportWallet from './IncWebWallet/features/ImportWallet';
 import KeyChain from './IncWebWallet/features/Keychain/Keychain';
 import Settings from './IncWebWallet/features/Settings/Settings';
 import withUnlockWallet from './IncWebWallet/hooks/withUnlockWallet';
+import InscriptionDetail from './InscriptionDetail';
+import Inscriptions from './Inscriptions';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
+import MyInscriptions from './MyInscriptions';
 import Page404 from './Page404';
 import PeggingApp from './PeggingApp';
 import Policy from './Policy';
@@ -46,7 +51,6 @@ import Structure from './Structure';
 import DepositPage from './Swap/features/DepositPage';
 import SwapExchange from './Swap/features/SwapExchange';
 import TermOfService from './TermOfService';
-
 export const HEADER_ID = 'HEADER_VIEW';
 export const FOOTER_ID = 'FOOTER_VIEW';
 
@@ -83,6 +87,7 @@ const HeaderWrapper = styled.div`
 const App = () => {
   const history = useHistory();
   const isInternetAlready = useInternetConnnection();
+  useNFTCoins();
 
   const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.OPEN });
 
@@ -117,6 +122,10 @@ const App = () => {
         <Route exact path={RoutePaths.SWAP} component={Market} />
         <Route exact path={RoutePaths.PAPPS_ID} component={SwapExchange} />
         <Route exact path={RoutePaths.PAPPS} component={PeggingApp} />
+        <Route exact path={RoutePaths.INSCRIPTIONS} component={Inscriptions} />
+        <Route exact path={RoutePaths.INSCRIPTION_DETAIL} component={InscriptionDetail} />
+        <Route exact path={RoutePaths.CREATE_INSCRIPTION} component={CreateInscription} />
+        <Route exact path={RoutePaths.MY_INSCRIPTIONS} component={MyInscriptions} />
         <Route exact path={RoutePaths.EARNINGS} component={Earnings} />
         <Route exact path={RoutePaths.PRIVACY_POLICY} component={Policy} />
         <Route exact path={RoutePaths.TERM_OF_SERVICE} component={TermOfService} />

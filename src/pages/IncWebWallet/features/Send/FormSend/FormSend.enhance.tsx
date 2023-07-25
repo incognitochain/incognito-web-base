@@ -3,7 +3,6 @@ import { reduxForm } from 'redux-form';
 
 import { FORM_CONFIGS } from './FormSend.constant';
 import enhanceAddressValidation from './FormSend.enhanceAddressValidator';
-import enhanceAmountValidator from './FormSend.enhanceAmountValidator';
 import enhanceChangeField from './FormSend.enhanceChangeField';
 import enhanceInit from './FormSend.enhanceInit';
 import enhanceSend from './FormSend.enhanceSend';
@@ -26,7 +25,6 @@ export default compose(
   enhanceInit,
   enhanceChangeField,
   enhanceAddressValidation,
-  enhanceAmountValidator,
   enhanceSend,
   enhance
 ) as any;

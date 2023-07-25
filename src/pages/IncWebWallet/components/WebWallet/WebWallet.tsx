@@ -1,12 +1,12 @@
 import CopyIcon from 'components/Copy';
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
+import { isMainnet } from 'config';
 import BalanceHandler from 'pages/IncWebWallet/actions/balanceHandler';
 import ScanCoinHanlder from 'pages/IncWebWallet/actions/scanCoinHandler';
 import { WalletState } from 'pages/IncWebWallet/core/types';
 import Server from 'pages/IncWebWallet/services/wallet/Server';
-import React, { useEffect } from 'react';
-import { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { defaultAccountPaymentAddressSelector, defaultAccountSelector } from 'state/account/account.selectors';
@@ -37,7 +37,11 @@ const WebWallet = () => {
   const currentAccount = useSelector(defaultAccountSelector);
 
   useEffect(() => {
-    Server.setDefaultIsMainetServer();
+    if (isMainnet) {
+      Server.setDefaultIsMainetServer();
+    } else {
+      Server.setDefaultIsTestnetServer();
+    }
   }, []);
 
   useEffect(() => {

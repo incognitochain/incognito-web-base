@@ -179,7 +179,8 @@ export default class Account {
 
     let result;
     const infoStr = typeof info !== 'string' ? JSON.stringify(info) : info;
-    result = await accountSender.createAndSendPrivacyToken({
+
+    const payload = {
       transfer: {
         info: infoStr,
         prvPayments,
@@ -196,7 +197,9 @@ export default class Account {
         txHashHandler,
         version,
       },
-    });
+    };
+    console.log('[createAndSendPrivacyToken] payload ', payload);
+    result = await accountSender.createAndSendPrivacyToken(payload);
     return result;
   }
 
@@ -1197,5 +1200,36 @@ export default class Account {
     new Validator('removeTxHistoryByTxIDs-offset', version).required().number();
     const accountWallet = getAccountWallet(account, wallet);
     return accountWallet.removeTxHistoryByTxIDs({ txIDs, tokenIDs, version });
+  }
+
+  //------------------------------------------------------------
+  //----------------------  Inscription  -----------------------
+  //------------------------------------------------------------
+  static async createAndSendInscribeRequestTx({
+    accountSender,
+    version = PrivacyVersion.ver3,
+    burningCallback,
+    data, //File Data (base64)
+  }: any = {}) {
+    try {
+      new Validator('createAndSendInscribeRequestTx-accountSender', accountSender).required();
+      new Validator('createAndSendInscribeRequestTx-version', version).required().number();
+      const payloadSDK = {
+        transfer: {},
+        extra: {
+          data,
+          version,
+          burningCallback,
+        },
+      };
+
+      // console.log('[createAndSendInscribeRequestTx] payloadSDK: ', payloadSDK);
+
+      const result = await accountSender.createAndSendInscribeRequestTx(payloadSDK);
+      return result;
+    } catch (error) {
+      console.log('[createAndSendInscribeRequestTx] error: ', error);
+      throw error;
+    }
   }
 }
