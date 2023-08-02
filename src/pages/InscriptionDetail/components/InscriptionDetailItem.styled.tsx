@@ -4,7 +4,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  padding: 1.5rem 0px;
+  padding: 1rem 0px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
   .title {

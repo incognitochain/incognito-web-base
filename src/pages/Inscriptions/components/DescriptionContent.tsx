@@ -92,9 +92,9 @@ const InscriptionDetail = () => {
     history.push(RoutePaths.CREATE_INSCRIPTION);
   }, []);
 
-  const myInscriptionOnClick = useCallback(() => {
-    history.push(RoutePaths.MY_INSCRIPTIONS);
-  }, []);
+  // const myInscriptionOnClick = useCallback(() => {
+  //   history.push(RoutePaths.MY_INSCRIPTIONS);
+  // }, []);
 
   return (
     <Container>
@@ -105,9 +105,9 @@ const InscriptionDetail = () => {
         <div className="inscribe-now" onClick={inscribeNowOnClick}>
           <p className="text">Create Inscription</p>
         </div>
-        <div className="inscribe-now" onClick={myInscriptionOnClick}>
+        {/* <div className="inscribe-now" onClick={myInscriptionOnClick}>
           <p className="text">My Inscriptions</p>
-        </div>
+        </div> */}
       </div>
     </Container>
   );

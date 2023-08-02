@@ -1,4 +1,3 @@
-import CopyIcon from 'components/Copy';
 import { useModal } from 'components/Modal';
 import BalanceModal from 'components/Modal/Modal.balance';
 import { isMainnet } from 'config';
@@ -6,6 +5,7 @@ import BalanceHandler from 'pages/IncWebWallet/actions/balanceHandler';
 import ScanCoinHanlder from 'pages/IncWebWallet/actions/scanCoinHandler';
 import { WalletState } from 'pages/IncWebWallet/core/types';
 import Server from 'pages/IncWebWallet/services/wallet/Server';
+import { RoutePaths } from 'pages/Routes';
 import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -20,7 +20,7 @@ import { PRIVATE_TOKEN_CURRENCY_TYPE, ROOT_NETWORK_IMG } from '../../../../const
 import { ScanCoinsProgressBar } from '../ScanCoinsProgressBar/ScanCoinsProgressBar';
 import UnlockWalletModal from '../UnlockWalletModal';
 // import BoxScanCoinModal from '../BoxScanCoin';
-import { Container, Space, Text, WalletButton, Wrapper } from './WebWallet.styled';
+import { Container, Row, Space, Text, WalletButton, Wrapper } from './WebWallet.styled';
 
 const INTERVAL_TIME_LOAD_BALANCE = 10000; //10s
 let loadBalanceInterval: any = null;
@@ -110,6 +110,10 @@ const WebWallet = () => {
     });
   };
 
+  const goToMyInscriptions = () => {
+    history.push(RoutePaths.MY_INSCRIPTIONS);
+  };
+
   return (
     <div className="wrap-inc-waller">
       <Container>
@@ -124,9 +128,14 @@ const WebWallet = () => {
           </>
         )}
         {webWalletState === WalletState.locked && (
-          <WalletButton isImport={false} onClick={onClickUnlockWallet}>
-            <p className="text">Unlock Wallet</p>
-          </WalletButton>
+          <Row>
+            <WalletButton isImport={false} onClick={onClickUnlockWallet}>
+              <p className="text">Unlock Wallet</p>
+            </WalletButton>
+            <WalletButton isImport={false} onClick={onClickUnlockWallet}>
+              <p className="text">{'My Inscriptions'}</p>
+            </WalletButton>
+          </Row>
         )}
         {webWalletState === WalletState.unlocked && (
           <>
@@ -136,7 +145,9 @@ const WebWallet = () => {
             </Wrapper>
             {isScanningCoin && <ScanCoinsProgressBar />}
             <Space />
-            <CopyIcon text={address ?? ''} size={20} />
+            <WalletButton isImport={false} onClick={goToMyInscriptions}>
+              <p className="text">{'My Inscriptions'}</p>
+            </WalletButton>
           </>
         )}
       </Container>

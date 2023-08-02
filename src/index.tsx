@@ -3,7 +3,8 @@ import '@reach/dialog/styles.css';
 import 'inter-ui';
 import 'polyfills';
 import './wallet';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import './reset.scss';
 
 import AppSpinner from 'components/AppSpinner';
 import Web3Provider from 'components/Core/Web3Provider';
