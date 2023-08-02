@@ -1232,4 +1232,29 @@ export default class Account {
       throw error;
     }
   }
+
+  static async setInscriptionsHistory({ accountWallet, historyData }: { accountWallet: any; historyData: any }) {
+    try {
+      new Validator('setInscriptionsHistory-accountSender', accountWallet).required();
+      new Validator('setInscriptionsHistory-historyData', historyData).required().object();
+      await accountWallet.setInscriptionsHistory(historyData);
+    } catch (error) {
+      console.log('[setInscriptionsHistory] ERROR: ', error);
+      throw error;
+    }
+  }
+
+  static async getInscriptionsHistory(accountWallet: any) {
+    let historyList = [];
+    try {
+      new Validator('getInscriptionsHistory-accountSender', accountWallet).required();
+      historyList = await accountWallet.getInscriptionsHistory();
+    } catch (error) {
+      console.log('[getInscriptionsHistory] ERROR: ', error);
+      historyList = [];
+      throw error;
+    } finally {
+      return historyList;
+    }
+  }
 }

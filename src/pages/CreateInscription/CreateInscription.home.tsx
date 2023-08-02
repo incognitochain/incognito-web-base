@@ -152,6 +152,20 @@ const CreateInscription = () => {
 
         if (!tx) return;
 
+        // console.log('TX Create Inscription ', tx);
+
+        // const historyData = {
+        //   eventType: 'CREATE',
+        //   txID: '',
+        //   fileSize: fileUpload?.size,
+        //   fileType: fileUpload?.type,
+        //   time: new Date().getTime(),
+        // };
+
+        // console.log('TX historyData ', historyData);
+
+        // await accountService.setInscriptionsHistory({ accountWallet: accountSender, historyData });
+
         toast.success('Inscribe Successfully!');
       } catch (error) {
         console.error('------createAndSendInscribeRequestTx------');

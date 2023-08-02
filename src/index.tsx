@@ -2,6 +2,7 @@
 import '@reach/dialog/styles.css';
 import 'inter-ui';
 import 'polyfills';
+import 'preprocessor';
 import './wallet';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import './reset.scss';

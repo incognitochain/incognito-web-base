@@ -90,7 +90,6 @@ const getInscriptionListAPI =
         dispatch(setLoadMore(true));
       }
 
-      console.log('PHAT inscriptionListFetched ', inscriptionListFetched);
       return inscriptionListFetched;
     }
   };
@@ -131,9 +130,7 @@ const getInscriptionContentAPI =
     try {
       console.log('[getInscriptionContentAPI] START: ');
       const { id } = params;
-      const data = http2.get(`inscription-content?id=${id}`).then((respone: any) => {
-        console.log('[getInscriptionContentAPI] respone ==> ', respone);
-      });
+      const data = http2.get(`inscription-content?id=${id}`).then((respone: any) => {});
       console.log('[getInscriptionContentAPI] DONE: ');
       return data;
     } catch (e) {
@@ -156,8 +153,6 @@ const getInscriptionInfoAPI =
           token_ids,
         })
       );
-
-      console.log('[getInscriptionInfoAPI] DONE: ', data);
       return data;
     } catch (e) {
       console.log('[getInscriptionInfoAPI] ERROR: ', e);
@@ -188,8 +183,6 @@ const getMyInscriptionListAPI =
         });
         myInscriptionList = [...data];
       }
-
-      console.log('[getMyInscriptionListAPI] DONE: ', myInscriptionList);
     } catch (e) {
       console.log('[getMyInscriptionListAPI] ERROR: ', e);
     } finally {
@@ -207,7 +200,6 @@ const queryWithTokenIdAPI = (tokenId: string) => async (dispatch: AppThunkDispat
         token_ids: [tokenId],
       })
     );
-    console.log('[queryWithTokenIdAPI] DONE inscriptionListFetched: ', inscriptionListFetched);
   } catch (e) {
     console.log('[queryWithTokenIdAPI] ERROR: ', e);
     inscriptionListFetched = [];
