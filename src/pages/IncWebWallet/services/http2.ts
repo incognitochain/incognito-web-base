@@ -1,21 +1,19 @@
 import axios from 'axios';
-// import CONSTANT_CONFIGS from 'pages/IncWebWallet/constants/config';
-import Server from 'pages/IncWebWallet/services/wallet/Server';
 
+// import CONSTANT_CONFIGS from 'pages/IncWebWallet/constants/config';
 import { CustomError, ErrorCode, ExHandler } from './exception';
 
-const LAM_SERVICE_URL = 'http://51.161.117.193:2401/api/';
+export const INSCRIPTION_SERVICE_URL = 'http://51.161.117.193:2401/api';
 
 const HEADERS = { 'Content-Type': 'application/json' };
 const TIMEOUT = 20000;
 
 const instance = axios.create({
   // baseURL: CONSTANT_CONFIGS.COINS_SERVICE_URL,
-  baseURL: LAM_SERVICE_URL,
+  baseURL: INSCRIPTION_SERVICE_URL,
   timeout: TIMEOUT,
   headers: {
     ...HEADERS,
-    Authorization: '',
   },
 });
 
@@ -25,11 +23,6 @@ instance.interceptors.request.use(
     const newConfig = {
       ...config,
     };
-    const server = await Server.getDefault();
-    const BASE_URL = server.coinServices;
-    if (BASE_URL) {
-      newConfig['baseURL'] = BASE_URL;
-    }
     return newConfig;
   },
   (error) => {
@@ -39,7 +32,8 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (res) => {
-    const result = res?.data?.Result;
+    console.log('PHAT Response Obj ', res);
+    const result = res?.data?.Result || res?.data;
     return Promise.resolve(result);
   },
   (errorData) => {

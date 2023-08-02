@@ -20,6 +20,7 @@ import { updateVersion } from './global/actions';
 import incognitoWallet from './incognitoWallet/incognitoWallet.reducer';
 import inscriptionsReducer from './inscriptions/inscriptions.reducer';
 import lists from './lists/reducer';
+import loadingReducer from './loading/loading.reducer';
 import logs from './logs/slice';
 import masterKey from './masterKey/masterKey.reducer';
 import { reducer as networkReducer } from './network/network.reducer';
@@ -64,6 +65,7 @@ const appReducers = combineReducers({
   followTokenSelectedReducer,
   // webWalletReducer,
   inscriptionsReducer,
+  loadingReducer,
 });
 
 export const clearReduxStore = () => ({

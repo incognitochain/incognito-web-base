@@ -4,16 +4,14 @@ import { MediaQueryBuilder } from 'theme/mediaQuery';
 
 export const Container = styled.div`
   flex: 1;
-  padding: 3rem;
-  background-color: black;
+  /* background-color: black; */
   height: auto;
 `;
 
 export const InfiniteScrollContainer = styled.div`
-  padding: 1rem;
   overflow: scroll;
   flex-direction: column;
-  background-color: grey;
+  /* background-color: grey; */
 
   ${MediaQueryBuilder(
     'upToLarge',
@@ -32,7 +30,7 @@ export const InfiniteScrollContainer = styled.div`
     min-height: 50vh;
     display: grid;
     flex: 1;
-    gap: 1.5rem;
+    gap: 2rem;
     grid-template-columns: repeat(4, 1fr);
 
     ${MediaQueryBuilder(

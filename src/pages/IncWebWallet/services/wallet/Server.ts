@@ -3,6 +3,8 @@
 import _ from 'lodash';
 import { StorageManager } from 'storage';
 import JSONHelper from 'utils/jsonHelper';
+
+import { isMainnet } from '../../../../config/config.env';
 const {
   PANCAKE_CONSTANTS,
   WEB3_CONSTANT,
@@ -49,7 +51,7 @@ export interface ServerModel {
 
 export const MAIN_NET_SERVER = {
   id: 'mainnet',
-  default: true,
+  default: isMainnet,
   address: MAINNET_FULLNODE,
   name: 'Mainnet',
   coinServices: 'https://api-coinservice.incognito.org',
@@ -69,16 +71,16 @@ export const MAIN_NET_SERVER = {
 
 export const TEST_NET_SERVER = {
   id: 'testnet',
-  default: false,
+  default: !isMainnet,
   address: TESTNET_FULLNODE,
   name: 'Testnet',
   shardNumber: DEFAULT_SHARD_NUMBER,
-  coinServices: 'https://api-coinservice-staging.incognito.org',
+  coinServices: 'http://51.161.117.193:8096',
   apiServices: 'https://staging-api-service.incognito.org',
   IncContractAddress: '0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7',
   IncBSCContractAddress: '0x2f6F03F1b43Eab22f7952bd617A24AB46E970dF7',
   explorer: 'https://testnet.incognito.org',
-  tradeServices: 'https://api-coinservice-staging.incognito.org',
+  tradeServices: 'http://51.161.117.193:8096',
   portalServices: 'http://51.161.119.66:8020',
   webviewChartServices: 'https://chart-webview-staging.incognito.org',
   bscConfigs: BSC_CONSTANT.BSC_TESTNET_CONFIGS,
@@ -88,6 +90,7 @@ export const TEST_NET_SERVER = {
 };
 
 const DEFAULT_LIST_SERVER = [TEST_NET_SERVER, MAIN_NET_SERVER];
+const SERVER_DEFAULT = isMainnet ? MAIN_NET_SERVER : TEST_NET_SERVER;
 
 export const KEY = {
   SERVER: '$servers',
@@ -125,7 +128,7 @@ export default class Server {
   static getDefault(): ServerModel {
     const serverList = Server.getServerList();
     const serverDefaultFilter = serverList.filter((server) => server.default);
-    const serverDefault = serverDefaultFilter.length > 0 ? serverDefaultFilter[0] : MAIN_NET_SERVER;
+    const serverDefault = serverDefaultFilter.length > 0 ? serverDefaultFilter[0] : SERVER_DEFAULT;
     return serverDefault;
   }
 

@@ -1,8 +1,11 @@
+/* eslint-disable no-restricted-imports */
 import '@reach/dialog/styles.css';
 import 'inter-ui';
 import 'polyfills';
 import './wallet';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
+import AppSpinner from 'components/AppSpinner';
 import Web3Provider from 'components/Core/Web3Provider';
 import { ModalProvider } from 'components/Modal';
 import { BlockNumberProvider } from 'lib/hooks/useBlockNumber';
@@ -62,6 +65,7 @@ ReactDOM.render(
                   <ModalProvider>
                     <App />
                   </ModalProvider>
+                  <AppSpinner />
                 </ThemeProvider>
               </BlockNumberProvider>
             </Web3Provider>

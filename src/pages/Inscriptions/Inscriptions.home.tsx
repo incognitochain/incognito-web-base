@@ -1,19 +1,21 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
 
+import DescriptionContent from './components/DescriptionContent';
 import InscriptionList from './components/InscriptionList';
+import ScrollToTop from './components/ScrollToTop';
+import ToolBar from './components/ToolBar';
 import { Container } from './Inscriptions.styles';
 
-const Inscriptions = () => {
-  // const dispatch = useDispatch();
-  // const history = useHistory();
+const InscriptionDetail = () => {
   React.useEffect(() => {}, []);
   return (
     <Container>
-      {/* <DescriptionContent/> */}
+      <DescriptionContent />
+      <ToolBar />
       <InscriptionList></InscriptionList>
+      <ScrollToTop />
     </Container>
   );
 };
 
-export default React.memo(Inscriptions);
+export default React.memo(InscriptionDetail);
