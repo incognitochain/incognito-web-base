@@ -1,16 +1,17 @@
 import axios from 'axios';
+import { INSCRIPTION_URL } from 'config';
 
 // import CONSTANT_CONFIGS from 'pages/IncWebWallet/constants/config';
 import { CustomError, ErrorCode, ExHandler } from './exception';
 
-export const INSCRIPTION_SERVICE_URL = 'http://51.161.117.193:2401/api';
+export const INSCRIPTION_BASE_URL = `${INSCRIPTION_URL}/api`;
 
 const HEADERS = { 'Content-Type': 'application/json' };
 const TIMEOUT = 20000;
 
 const instance = axios.create({
   // baseURL: CONSTANT_CONFIGS.COINS_SERVICE_URL,
-  baseURL: INSCRIPTION_SERVICE_URL,
+  baseURL: INSCRIPTION_BASE_URL,
   timeout: TIMEOUT,
   headers: {
     ...HEADERS,

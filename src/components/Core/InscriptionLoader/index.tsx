@@ -1,5 +1,5 @@
 import placeHolderImg from 'assets/images/image_default.png';
-import { INSCRIPTION_SERVICE_URL } from 'pages/IncWebWallet/services/http2';
+import { INSCRIPTION_BASE_URL } from 'pages/IncWebWallet/services/http2';
 import React, { useState } from 'react';
 import { Inscription } from 'state/inscriptions';
 
@@ -32,7 +32,7 @@ const InscriptionLoader = React.memo((props: Props) => {
   const renderInscriptionContent = () => {
     const { content_type } = inscription;
 
-    const srcUrl = `${INSCRIPTION_SERVICE_URL}/inscription-content?id=${token_id}`;
+    const srcUrl = `${INSCRIPTION_BASE_URL}/inscription-content?id=${token_id}`;
 
     if (error)
       return (
