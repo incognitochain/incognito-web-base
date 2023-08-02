@@ -5,10 +5,10 @@ if (process.env.NODE_ENV === 'production') {
   console.debug = () => {};
 }
 
-if (process.env.NODE_ENV === 'development') {
-  console.log = () => {};
-  console.error = () => {};
-  console.debug = () => {};
-}
+// if (process.env.NODE_ENV === 'development') {
+//   console.log = () => {};
+//   console.error = () => {};
+//   console.debug = () => {};
+// }
 
 export {};

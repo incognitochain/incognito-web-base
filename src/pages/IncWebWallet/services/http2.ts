@@ -4,8 +4,7 @@ import { INSCRIPTION_URL } from 'config';
 // import CONSTANT_CONFIGS from 'pages/IncWebWallet/constants/config';
 import { CustomError, ErrorCode, ExHandler } from './exception';
 
-export const INSCRIPTION_BASE_URL = `${INSCRIPTION_URL}/api`;
-
+export const INSCRIPTION_BASE_URL = `${INSCRIPTION_URL}api`;
 const HEADERS = { 'Content-Type': 'application/json' };
 const TIMEOUT = 20000;
 

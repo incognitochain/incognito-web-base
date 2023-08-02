@@ -156,10 +156,12 @@ const CreateInscription = () => {
 
         // const historyData = {
         //   eventType: 'CREATE',
-        //   txID: '',
+        //   txId: tx.txId,
         //   fileSize: fileUpload?.size,
         //   fileType: fileUpload?.type,
-        //   time: new Date().getTime(),
+        //   txType: tx.txType,
+        //   memo: tx.memo,
+        //   timestamp: Date.now(),
         // };
 
         // console.log('TX historyData ', historyData);
