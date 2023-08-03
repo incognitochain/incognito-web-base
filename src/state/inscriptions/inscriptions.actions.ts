@@ -1,16 +1,17 @@
+import { flattenDeep, uniqBy } from 'lodash';
 import http2 from 'pages/IncWebWallet/services/http2';
 import { AppGetState, AppThunkDispatch } from 'state';
 
 import { getInscriptionListSelector, getLastItemSelector, getQueryInfoSelector } from './inscriptions.selectors';
-import { Inscription, InscriptionsActionType } from './inscriptions.types';
+import { Inscription, InscriptionsActionType, NFTCoin } from './inscriptions.types';
 
 const setFetchingAction = (payload: boolean) => ({
   type: InscriptionsActionType.FETCHING,
   payload,
 });
 
-const resetState = () => ({
-  type: InscriptionsActionType.RESET_STATE,
+const resetSearchState = () => ({
+  type: InscriptionsActionType.RESET_SEARCH_STATE,
 });
 
 const setLoadMore = (payload: boolean) => ({
@@ -31,6 +32,11 @@ const setMyInscriptionList = (payload: Inscription[]) => ({
 const setSortBy = (payload: { asc: boolean }) => ({
   type: InscriptionsActionType.SET_SORT_BY,
   payload: payload.asc,
+});
+
+const setNFTUnspentCoins = (payload: NFTCoin[]) => ({
+  type: InscriptionsActionType.SET_NFT_UNSPENT_COINS,
+  payload,
 });
 
 type GetInscriptionListAPIParams = {
@@ -165,26 +171,47 @@ type GetMyInscriptionListAPI = {
   tokenIdsList?: string[];
 };
 
-const getMyInscriptionListAPI =
+const fetchMyInscriptionListAPI =
   (params: GetMyInscriptionListAPI) => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
     let myInscriptionList: Inscription[] = [];
     try {
-      console.log('[getMyInscriptionListAPI] START: ');
       const { assetTagList = [], tokenIdsList = [] } = params;
+      // console.log('[fetchMyInscriptionListAPI] PARAMS: ', {
+      //   assetTagList,
+      //   tokenIdsList,
+      // });
+
+      let taskAPIList: any[] = [];
+
+      if (tokenIdsList && Array.isArray(tokenIdsList) && tokenIdsList.length > 0) {
+        taskAPIList.push(
+          http2.post(
+            `inscriptions-info`,
+            JSON.stringify({
+              token_ids: tokenIdsList,
+            })
+          )
+        );
+      }
 
       if (assetTagList && Array.isArray(assetTagList) && assetTagList.length > 0) {
-        const data: Inscription[] = await http2.post(`inscriptions-info`, {
-          asset_tags: assetTagList,
-        });
-        myInscriptionList = [...data];
-      } else if (tokenIdsList && Array.isArray(tokenIdsList) && tokenIdsList.length > 0) {
-        const data: Inscription[] = await http2.post(`inscriptions-info`, {
-          tokenIdsList,
-        });
-        myInscriptionList = [...data];
+        taskAPIList.push(
+          http2.post(
+            `inscriptions-info`,
+            JSON.stringify({
+              asset_tags: assetTagList,
+            })
+          )
+        );
       }
+
+      const listData = await Promise.all(taskAPIList);
+      // console.log('[fetchMyInscriptionListAPI] listData : ', listData);
+      myInscriptionList = uniqBy(flattenDeep(listData), 'token_id');
+      // console.log('[fetchMyInscriptionListAPI] RESULT : ', myInscriptionList);
     } catch (e) {
-      console.log('[getMyInscriptionListAPI] ERROR: ', e);
+      console.log('[fetchMyInscriptionListAPI] ERROR: ', e);
+      myInscriptionList = [];
     } finally {
       dispatch(setMyInscriptionList(myInscriptionList));
     }
@@ -213,16 +240,17 @@ const queryWithTokenIdAPI = (tokenId: string) => async (dispatch: AppThunkDispat
 };
 
 export {
+  fetchMyInscriptionListAPI,
   getInscriptionContentAPI,
   getInscriptionInfoAPI,
   getInscriptionListAPI,
-  getMyInscriptionListAPI,
   queryWithIndexAPI,
   queryWithTokenIdAPI,
-  resetState,
+  resetSearchState,
   setFetchingAction,
   setInscriptionList,
   setLoadMore,
   setMyInscriptionList,
+  setNFTUnspentCoins,
   setSortBy,
 };

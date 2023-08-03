@@ -1,16 +1,18 @@
 import { uniq } from 'lodash';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { incognitoAccountFollowTokenIDs } from 'state/incognitoWallet';
 import {
+  fetchMyInscriptionListAPI,
   getInscriptionTokenIDsListSelector,
-  getMyInscriptionList,
-  getMyInscriptionListAPI,
-  Inscription,
+  getNFTCoinsInforSelector,
+  getNFTCoinsSelector,
+  setInscriptionList,
+  setMyInscriptionList,
+  setNFTUnspentCoins,
 } from 'state/inscriptions';
 
-import { NFTCoin } from '../../../state/inscriptions/inscriptions.types';
 import { WalletState } from '../core/types';
 import ScanCoinService from '../services/scainCoinService';
 import useWalletState from './useWalletState';
@@ -22,18 +24,13 @@ export default function useNFTCoins() {
 
   const { walletState } = useWalletState();
   const currentAccount = useSelector(defaultAccountWalletSelector);
-  const myInscriptionList: Inscription[] = useSelector(getMyInscriptionList);
   const accountSender = useSelector(defaultAccountWalletSelector);
   const followedTokenIDList: any[] = useSelector(incognitoAccountFollowTokenIDs);
   const myInscriptionTokenIDsList = useSelector(getInscriptionTokenIDsListSelector);
+  const NFTCoins = useSelector(getNFTCoinsSelector);
+  const { assetTagList, tokenIdsList } = useSelector(getNFTCoinsInforSelector);
 
   const timerRef = useRef<any>();
-
-  const [NFTUnspentCoins, setNFTUnspentCoins] = useState<NFTCoin[]>([]);
-
-  const assetTagList = useMemo(() => {
-    return NFTUnspentCoins.map((item) => item.AssetTag) || [];
-  }, [NFTUnspentCoins]);
 
   const addListFollowingTokenHandler = async () => {
     //Remove duplicate tokenID
@@ -55,14 +52,21 @@ export default function useNFTCoins() {
   }, [currentAccount, walletState, followedTokenIDList, myInscriptionTokenIDsList]);
 
   const fetchMyInscriptionsAPI = useCallback(async () => {
-    if (assetTagList && assetTagList.length > 0) {
-      dispatch(
-        getMyInscriptionListAPI({
-          assetTagList,
-        })
-      );
+    dispatch(
+      fetchMyInscriptionListAPI({
+        assetTagList,
+        tokenIdsList,
+      })
+    );
+  }, [NFTCoins, assetTagList, tokenIdsList]);
+
+  useEffect(() => {
+    if (NFTCoins && NFTCoins.length > 0 && walletState === WalletState.unlocked) {
+      fetchMyInscriptionsAPI();
+    } else {
+      dispatch(setMyInscriptionList([]));
     }
-  }, [currentAccount, walletState, assetTagList]);
+  }, [NFTCoins, walletState]);
 
   const clearTimer = () => {
     clearInterval(timerRef.current);
@@ -82,12 +86,12 @@ export default function useNFTCoins() {
       console.log('[loadNFTUnSpentCoinsLocal] ERROR: ', error);
       data = [];
     } finally {
-      // console.log('[loadNFTUnSpentCoinsLocal]: ', data);
-      setNFTUnspentCoins(data);
+      dispatch(setNFTUnspentCoins(data));
     }
   };
 
   useEffect(() => {
+    clearTimer();
     loadNFTUnSpentCoinsLocal();
     if (timerRef) {
       timerRef.current = setInterval(() => {
@@ -100,12 +104,9 @@ export default function useNFTCoins() {
   }, [currentAccount, walletState]);
 
   useEffect(() => {
-    fetchMyInscriptionsAPI();
-  }, [currentAccount, walletState]);
-
-  return {
-    assetTagList,
-    myInscriptionList,
-    myInscriptionTokenIDsList: [],
-  };
+    if (walletState === WalletState.locked || walletState === WalletState.uninitialized) {
+      dispatch(setNFTUnspentCoins([]));
+      dispatch(setInscriptionList([]));
+    }
+  }, [walletState]);
 }

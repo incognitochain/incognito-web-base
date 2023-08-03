@@ -86,15 +86,22 @@ const CreateInscription = () => {
     };
   }, [incAccount, isIncognitoInstalled, webWalletState]);
 
-  console.log('ALL Info ', {
-    isFocused,
-    isDragAccept,
-    isDragReject,
-    acceptedFiles,
-    totalFileSize,
-    prvBalance,
-    fileUpload,
-  });
+  // console.log('ALL Info ', {
+  //   isFocused,
+  //   isDragAccept,
+  //   isDragReject,
+  //   acceptedFiles,
+  //   totalFileSize,
+  //   prvBalance,
+  //   fileUpload,
+  // });
+
+  const isEnoughtPRVBalance = useMemo(() => {
+    if (prvBalance.isLessThan(new BigNumber(MINIMUM_PRV_BALANCE))) {
+      return false;
+    }
+    return true;
+  }, [prvBalance, prvTokenInfo]);
 
   const checkValidate = () => {
     let errorMessage = 'Something went wrong';
@@ -116,13 +123,13 @@ const CreateInscription = () => {
       }
 
       // Validate Your PRV BalanceisValid
-      if (prvBalance.isLessThan(new BigNumber(MINIMUM_PRV_BALANCE))) {
-        errorMessage = `Your PRV balance must be larger than or equal ${format.amountVer2({
-          originalAmount: Number(MINIMUM_PRV_BALANCE),
-          decimals: prvTokenInfo.pDecimals,
-        })}PRV`;
-        isValidate = false;
-      }
+      // if (prvBalance.isLessThan(new BigNumber(MINIMUM_PRV_BALANCE))) {
+      //   errorMessage = `Your PRV balance must be larger than or equal ${format.amountVer2({
+      //     originalAmount: Number(MINIMUM_PRV_BALANCE),
+      //     decimals: prvTokenInfo.pDecimals,
+      //   })}PRV`;
+      //   isValidate = false;
+      // }
     }
 
     return {
@@ -132,6 +139,8 @@ const CreateInscription = () => {
   };
 
   const inscribeNowOnClick = useThrottle(async () => {
+    if (!isEnoughtPRVBalance) return;
+
     const { isValidate, errorMessage } = checkValidate();
     if (isValidate) {
       //TO DO
@@ -152,21 +161,24 @@ const CreateInscription = () => {
 
         if (!tx) return;
 
-        // console.log('TX Create Inscription ', tx);
+        console.log('TX Create Inscription ', tx);
 
-        // const historyData = {
-        //   eventType: 'CREATE',
-        //   txId: tx.txId,
-        //   fileSize: fileUpload?.size,
-        //   fileType: fileUpload?.type,
-        //   txType: tx.txType,
-        //   memo: tx.memo,
-        //   timestamp: Date.now(),
-        // };
+        const historyData = {
+          eventType: 'CREATE',
+          txId: tx.txId,
+          fileSize: fileUpload?.size,
+          fileType: fileUpload?.type,
+          txType: tx.txType,
+          memo: tx.memo,
+          timestamp: Date.now(),
+        };
 
-        // console.log('TX historyData ', historyData);
-
-        // await accountService.setInscriptionsHistory({ accountWallet: accountSender, historyData });
+        console.log('TX historyData ', historyData);
+        const listHistory1 = accountService.getInscriptionsHistory({ accountWallet: accountSender });
+        console.log('listHistory1 ', listHistory1);
+        await accountService.setInscriptionsHistory({ accountWallet: accountSender, historyData });
+        const listHistory2 = accountService.getInscriptionsHistory({ accountWallet: accountSender });
+        console.log('listHistory2 ', listHistory2);
 
         toast.success('Inscribe Successfully!');
       } catch (error) {
@@ -216,6 +228,17 @@ const CreateInscription = () => {
           </ul>
           {/* Please note that one zip file can only include one file extension. */}
         </p>
+        {!isEnoughtPRVBalance && (
+          <div>
+            <ErrorMessage>
+              {`PRV balance is insufficient. Your PRV balance must be larger than or equal ${format.amountVer2({
+                originalAmount: Number(MINIMUM_PRV_BALANCE),
+                decimals: prvTokenInfo.pDecimals,
+              })} PRV to create the inscription.`}
+            </ErrorMessage>
+          </div>
+        )}
+
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
         {button.isConnected ? (
           <InscribeNowButton onClick={inscribeNowOnClick}>

@@ -2,7 +2,13 @@ import SearchSVG from 'assets/svg/search-icon.svg';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { getInscriptionListAPI, queryWithIndexAPI, queryWithTokenIdAPI, resetState } from 'state/inscriptions';
+import {
+  getInscriptionListAPI,
+  queryWithIndexAPI,
+  queryWithTokenIdAPI,
+  resetSearchState,
+  setLoadMore,
+} from 'state/inscriptions';
 import styled from 'styled-components/macro';
 
 const Column = styled.div`
@@ -89,10 +95,8 @@ const SearchBar = (props: Props) => {
     let queryIndex = false;
     console.log('TEST checkVaidateKeySearch  ', keySearch);
     if (keySearch && keySearch.length > 0) {
-      console.log('TEST 111 ');
       if (isNaN(Number(keySearch))) {
         queryIndex = false;
-        console.log('TEST 2222 ');
         if (keySearch.length !== 64) {
           errorMessage = 'Key search is inavalid';
           isValid = false;
@@ -120,14 +124,14 @@ const SearchBar = (props: Props) => {
     if (!keySearch || keySearch.length < 1) {
       //CALL Get List Default
       setKeySearchError(undefined);
-      await dispatch(resetState());
+      await dispatch(resetSearchState());
       await dispatch(getInscriptionListAPI());
-      console.log('TEST CALL Get List Default ');
     } else {
       const { isValid, errorMessage, getDefault, queryIndex } = checkVaidateKeySearch(keySearch);
 
       if (isValid) {
-        await dispatch(resetState());
+        // await dispatch(reset());
+        dispatch(setLoadMore(false));
         if (getDefault) {
           await dispatch(getInscriptionListAPI());
         } else {

@@ -1,12 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getHasLoadMoreSelector,
-  getInscriptionListAPI,
-  getInscriptionListSelector,
-  resetState,
-} from 'state/inscriptions';
+import { getHasLoadMoreSelector, getInscriptionListAPI, getInscriptionListSelector } from 'state/inscriptions';
 
 import InscriptionItem from './InscriptionItem';
 import { Container, InfiniteScrollContainer, SpinStyled } from './InscriptionList.styled';
@@ -31,12 +26,8 @@ const InscriptionList = () => {
     fetchInscriptionsAPI();
   }, []);
 
-  const resetPageState = useCallback(() => {
-    dispatch(resetState());
-  }, []);
-
   const renderItem = (item: any) => {
-    return <InscriptionItem item={item} onClickCallback={resetPageState}></InscriptionItem>;
+    return <InscriptionItem item={item}></InscriptionItem>;
   };
 
   const loadMoreHandler = useCallback(async () => {

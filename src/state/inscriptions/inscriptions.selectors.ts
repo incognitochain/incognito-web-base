@@ -1,7 +1,9 @@
+/* eslint-disable array-callback-return */
 import { createSelector } from '@reduxjs/toolkit';
+import uniq from 'lodash/uniq';
 import { RootState } from 'state/index';
 
-import { Inscription } from './inscriptions.types';
+import { Inscription, NFTCoin } from './inscriptions.types';
 
 export const reducerSelector = createSelector(
   (state: RootState) => state.inscriptionsReducer,
@@ -49,4 +51,37 @@ export const getMyInscriptionSortedList = createSelector(getMyInscriptionList, (
 export const getInscriptionTokenIDsListSelector = createSelector(getMyInscriptionList, (inscriptions) => {
   if (!inscriptions || inscriptions.length < 1) return [];
   return inscriptions.map((item) => item.token_id);
+});
+
+//NFT
+
+export const getNFTCoinsSelector = createSelector(
+  reducerSelector,
+  (inscriptionReducer) => inscriptionReducer.NFTUnspentCoinsList || []
+);
+
+export const getNFTCoinsInforSelector = createSelector(getNFTCoinsSelector, (nftCoins: NFTCoin[]) => {
+  if (!nftCoins || nftCoins.length < 1) return {};
+
+  let assetTagList: string[] = [];
+  let tokenIdsList: string[] = [];
+
+  if (nftCoins && nftCoins.length > 0) {
+    nftCoins.map((coin) => {
+      assetTagList.push(coin.AssetTag);
+      if (coin.RawAssetTag === '' || coin.RawAssetTag === undefined) {
+        tokenIdsList.push(coin.TokenID);
+      } else {
+        assetTagList.push(coin.RawAssetTag);
+      }
+    });
+  }
+
+  assetTagList = uniq(assetTagList);
+  tokenIdsList = uniq(tokenIdsList);
+
+  return {
+    assetTagList,
+    tokenIdsList,
+  };
 });

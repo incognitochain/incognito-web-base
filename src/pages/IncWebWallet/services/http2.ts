@@ -32,7 +32,6 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (res) => {
-    console.log('PHAT Response Obj ', res);
     const result = res?.data?.Result || res?.data;
     return Promise.resolve(result);
   },

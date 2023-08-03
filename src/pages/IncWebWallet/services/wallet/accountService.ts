@@ -1244,7 +1244,7 @@ export default class Account {
     }
   }
 
-  static async getInscriptionsHistory(accountWallet: any) {
+  static async getInscriptionsHistory({ accountWallet }: { accountWallet: any }) {
     let historyList = [];
     try {
       new Validator('getInscriptionsHistory-accountSender', accountWallet).required();
@@ -1252,7 +1252,6 @@ export default class Account {
     } catch (error) {
       console.log('[getInscriptionsHistory] ERROR: ', error);
       historyList = [];
-      throw error;
     } finally {
       return historyList;
     }

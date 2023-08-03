@@ -1,11 +1,10 @@
 import { WalletState } from 'pages/IncWebWallet/core/types';
-import useNFTCoins from 'pages/IncWebWallet/hooks/useNFTCoins';
 import useUnlockWallet from 'pages/IncWebWallet/hooks/useUnlockWalelt';
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { File } from 'react-feather';
 import InfiniteScroll from 'react-infinite-scroller';
-import { useDispatch, useSelector } from 'react-redux';
-import { getMyInscriptionListAPI, getMyInscriptionSortedList } from 'state/inscriptions';
+import { useSelector } from 'react-redux';
+import { getMyInscriptionSortedList } from 'state/inscriptions';
 import { webWalletStateSelector } from 'state/masterKey';
 
 import InscriptionItem from './InscriptionItem';
@@ -13,33 +12,12 @@ import { ButtonConfirm, Container, InfiniteScrollContainer } from './Inscription
 
 const InscriptionList = () => {
   const { showUnlockModal } = useUnlockWallet();
-  const [isFetching, setFetching] = useState(false);
   const myInscriptionList = useSelector(getMyInscriptionSortedList);
   const walletState = useSelector(webWalletStateSelector);
 
-  const { assetTagList: nftAssetTags } = useNFTCoins();
-
   const _walletAction = () => showUnlockModal();
 
-  const dispatch = useDispatch();
-
-  const fetchMyInscriptionsAPI = useCallback(async () => {
-    if (!isFetching) {
-      setFetching(true);
-      if (nftAssetTags) {
-        dispatch(
-          getMyInscriptionListAPI({
-            assetTagList: nftAssetTags,
-          })
-        );
-      }
-      setFetching(false);
-    }
-  }, [setFetching, isFetching, nftAssetTags, myInscriptionList]);
-
-  useEffect(() => {
-    fetchMyInscriptionsAPI();
-  }, [nftAssetTags]);
+  // const dispatch = useDispatch();
 
   const renderItem = (item: any, index: number) => {
     return <InscriptionItem item={item} key={`${item?.token_id}-${index}}`}></InscriptionItem>;

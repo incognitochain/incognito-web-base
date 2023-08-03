@@ -64,8 +64,20 @@ export const reducer: Reducer<InscriptionsReducer, any> = (state = initialState,
       };
     }
 
-    case InscriptionsActionType.RESET_STATE: {
-      return initialState;
+    case InscriptionsActionType.SET_NFT_UNSPENT_COINS: {
+      return {
+        ...state,
+        NFTUnspentCoinsList: action.payload,
+      };
+    }
+
+    case InscriptionsActionType.RESET_SEARCH_STATE: {
+      return {
+        ...state,
+        inscriptionList: [],
+        fetching: false,
+        hasLoadMore: false,
+      };
     }
     default:
       return state;

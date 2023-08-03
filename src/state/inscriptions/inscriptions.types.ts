@@ -3,8 +3,9 @@ export enum InscriptionsActionType {
   LOAD_MORE = 'INSCRIPTION/LOAD_MORE',
   SET_INSCRIPTIONS = 'INSCRIPTION/SET_INSCRIPTIONS',
   SET_SORT_BY = 'INSCRIPTION/SET_SORT_BY',
-  RESET_STATE = 'INSCRIPTION/RESET_STATE',
+  RESET_SEARCH_STATE = 'INSCRIPTION/RESET_SEARCH_STATE',
   SET_MY_INSCRIPTIONS = 'INSCRIPTION/SET_MY_INSCRIPTIONS',
+  SET_NFT_UNSPENT_COINS = 'INSCRIPTION/SET_NFT_UNSPENT_COINS',
 }
 
 export type Inscription = {
@@ -42,7 +43,8 @@ export type NFTCoin = {
   CoinDetailsEncrypted?: string;
   SNDerivator?: string;
   AssetTag: string;
-  TokenID?: string;
+  RawAssetTag: string;
+  TokenID: string;
 };
 
 export interface InscriptionsReducer {
