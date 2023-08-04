@@ -69,9 +69,9 @@ export const getFollowTokensBalance = async () => {
       defaultTokens: tokenIdList,
     });
 
-    console.log('[getFollowTokensBalance] tokenIds  ', {
-      newTokensBalance,
-    });
+    // console.log('[getFollowTokensBalance] tokenIds  ', {
+    //   newTokensBalance,
+    // });
 
     //Account Object interface the same Extension
     const accoutBalacneExtension: any = {

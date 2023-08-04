@@ -97,7 +97,7 @@ const store = configureStore({
       immutableCheck: false,
     })
       .concat(routingApi.middleware)
-      .concat(isMainnet ? [logger] : [logger])
+      .concat(isMainnet || isDevelopment ? [] : [logger])
       .concat(save({ states: PERSISTED_KEYS, debounce: 1000 })),
   preloadedState: load({ states: PERSISTED_KEYS, disableWarnings: process.env.NODE_ENV === 'test' }),
 });

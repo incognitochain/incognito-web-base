@@ -44,6 +44,7 @@ export const getEnvs = () => {
 export const ENVS: IENVS = getEnvs();
 
 export const isMainnet: boolean = ENVS.REACT_APP_ENV === 'production';
+export const isDevelopment: boolean = ENVS.REACT_APP_ENV === 'development';
 export const isLocalHost: boolean = ENVS.REACT_APP_ENV === 'test';
 
 export const SITE_KEY: string = ENVS.REACT_APP_SITE_KEY;
