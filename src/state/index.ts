@@ -11,7 +11,7 @@ import logger from 'redux-logger';
 import { persistStore } from 'redux-persist';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
-import { isMainnet } from '../config';
+import { isDevelopment, isMainnet } from '../config';
 import { reducer as account } from './account/account.reducer';
 import application from './application/reducer';
 import dao from './dao';
