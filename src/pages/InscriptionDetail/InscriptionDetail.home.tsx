@@ -58,7 +58,7 @@ const InscriptionDetail = () => {
     if (!tokenId) return;
     setModal({
       closable: true,
-      data: <FormSendInscription inscriptionId={tokenId} />,
+      data: <FormSendInscription inscriptionId={tokenId} inscription={inscriptionItem} />,
       isTransparent: false,
       rightHeader: undefined,
       title: 'Send Inscription',

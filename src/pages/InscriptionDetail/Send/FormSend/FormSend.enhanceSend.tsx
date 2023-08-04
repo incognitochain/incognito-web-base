@@ -22,13 +22,13 @@ const enhanceSend = (WrappedComponent: any) => {
     const isFormValid = useSelector((state) => isValid(FORM_CONFIGS.formName)(state));
     const sendBtnDisable = !isFormValid;
 
-    const { inscriptionId } = props;
+    const { inscriptionId, inscription } = props;
 
     const handleSendInscription = async (formData: any) => {
       try {
         // updateMetric().then();
 
-        if (!isFormValid || !accountSender) return;
+        if (!isFormValid || !accountSender || !inscription) return;
 
         //Show Modal Loading
         setModal({
@@ -73,6 +73,20 @@ const enhanceSend = (WrappedComponent: any) => {
         console.log('SEND INSCRIPTION: tx ====>>>> ', tx);
 
         if (!tx) return;
+
+        const historyData = {
+          eventType: 'SEND',
+          txId: tx.txId,
+          fileSize: inscription?.size,
+          fileType: inscription?.content_type,
+          txType: tx.txType,
+          memo,
+          timestamp: Date.now(),
+          tokenID: tx.tokenID,
+          toAddress,
+        };
+
+        await accountService.setInscriptionsHistory({ accountWallet: accountSender, historyData });
 
         toast.success('Send Success');
       } catch (e) {

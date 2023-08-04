@@ -21,10 +21,11 @@ interface Props {
   isModalOpen?: boolean;
   onCloseModal?: () => void;
   inscriptionId: string;
+  inscription: any;
 }
 
 const FormSendInscription = (props: Props) => {
-  const { inscriptionId } = props;
+  const { inscriptionId, inscription } = props;
   const { closeModal } = useModal();
   const [open, setOpen] = useState(false);
 
@@ -40,7 +41,7 @@ const FormSendInscription = (props: Props) => {
           closeModal();
         }}
       /> */}
-      <FormSend openAddressBook={() => showDrawer(true)} inscriptionId={inscriptionId} />
+      <FormSend openAddressBook={() => showDrawer(true)} inscriptionId={inscriptionId} inscription={inscription} />
       <Drawer
         title="Address Book"
         placement="right"
