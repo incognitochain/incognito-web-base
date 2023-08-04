@@ -59,7 +59,7 @@ export const Container = styled.div`
 
       span {
         font-weight: 600;
-        color: orange;
+        color: blue;
       }
     }
 
