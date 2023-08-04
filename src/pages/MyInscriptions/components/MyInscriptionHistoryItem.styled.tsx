@@ -26,6 +26,7 @@ export const Row = styled.div`
 `;
 
 export const Title = styled.p`
+  min-width: 80px;
   letter-spacing: -0.01em;
   font-weight: 500;
   font-size: 0.8125rem;
@@ -36,11 +37,12 @@ export const Title = styled.p`
   color: ${({ theme }) => theme.primary5};
 `;
 
-export const Content = styled.div`
-  overflow-wrap: break-word;
+export const Content = styled.p`
   word-break: break-all;
   font-weight: 500;
   font-size: 1rem;
+  word-wrap: break-word;
+  overflow: hidden;
   line-height: 1.25rem;
   color: white;
 `;

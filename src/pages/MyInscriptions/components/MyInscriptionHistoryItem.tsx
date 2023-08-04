@@ -1,5 +1,6 @@
 import CopyIcon from 'components/Copy';
 import React from 'react';
+import { shortenString } from 'utils';
 import { humanFileSize } from 'utils/fileUtils';
 import format from 'utils/format';
 
@@ -18,13 +19,13 @@ const MyInscriptionHistoryItem = (props: Props) => {
   return (
     <Container>
       <Row>
-        <Title>{'Event Type:'}</Title>
+        {/* <Title>{'Event Type:'}</Title> */}
         <Content className={`${eventType === 'SEND' ? 'eventSend' : 'eventCreate'} `}>{eventType}</Content>
       </Row>
       <Row>
         <Title>{'TxID:'}</Title>
         <Row>
-          <Content>{txId}</Content>
+          <Content>{shortenString(txId || '', 14)}</Content>
           <CopyIcon text={txId} size={20} />
         </Row>
       </Row>
@@ -32,7 +33,7 @@ const MyInscriptionHistoryItem = (props: Props) => {
         <Row>
           <Title>{'TokenID:'}</Title>
           <Row>
-            <Content>{tokenID}</Content>
+            <Content>{shortenString(tokenID || '', 14)}</Content>
             <CopyIcon text={tokenID} size={20} />
           </Row>
         </Row>
@@ -41,7 +42,7 @@ const MyInscriptionHistoryItem = (props: Props) => {
         <Row>
           <Title>{'To Address:'}</Title>
           <Row>
-            <Content>{toAddress}</Content>
+            <Content>{shortenString(toAddress, 14)}</Content>
             <CopyIcon text={toAddress} size={20} />
           </Row>
         </Row>
