@@ -10,6 +10,11 @@ const setFetchingAction = (payload: boolean) => ({
   payload,
 });
 
+const setSearching = (payload: boolean) => ({
+  type: InscriptionsActionType.SET_SEARCHING,
+  payload,
+});
+
 const resetSearchState = () => ({
   type: InscriptionsActionType.RESET_SEARCH_STATE,
 });
@@ -89,7 +94,6 @@ const getInscriptionListAPI =
       if (inscriptionListFetched && inscriptionListFetched.length > 0) {
         dispatch(setInscriptionList([...currentInscriptionList, ...inscriptionListFetched]));
       }
-
       if (inscriptionListFetched && inscriptionListFetched.length < limit) {
         dispatch(setLoadMore(false));
       } else {
@@ -122,6 +126,8 @@ const queryWithIndexAPI = (from: number) => async (dispatch: AppThunkDispatch, g
     dispatch(setFetchingAction(false));
     if (inscriptionListFetched && inscriptionListFetched.length > 0) {
       dispatch(setInscriptionList([inscriptionListFetched[0]]));
+    } else {
+      dispatch(setInscriptionList([]));
     }
     return inscriptionListFetched;
   }
@@ -234,6 +240,8 @@ const queryWithTokenIdAPI = (tokenId: string) => async (dispatch: AppThunkDispat
     dispatch(setFetchingAction(false));
     if (inscriptionListFetched && inscriptionListFetched.length > 0) {
       dispatch(setInscriptionList([inscriptionListFetched[0]]));
+    } else {
+      dispatch(setInscriptionList([]));
     }
     return inscriptionListFetched;
   }
@@ -252,5 +260,6 @@ export {
   setLoadMore,
   setMyInscriptionList,
   setNFTUnspentCoins,
+  setSearching,
   setSortBy,
 };

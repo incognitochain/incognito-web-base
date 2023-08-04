@@ -243,7 +243,7 @@ const CreateInscription = () => {
           </ul>
           {/* Please note that one zip file can only include one file extension. */}
         </p>
-        {!isEnoughtPRVBalance && (
+        {!isEnoughtPRVBalance && webWalletState === WalletState.unlocked && (
           <div>
             <ErrorMessage>
               {`PRV balance is insufficient. Your PRV balance must be larger than or equal ${format.amountVer2({

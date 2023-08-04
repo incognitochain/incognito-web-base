@@ -1,6 +1,7 @@
 import SearchSVG from 'assets/svg/search-icon.svg';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect } from 'react';
+import { XCircle } from 'react-feather';
 import { useDispatch } from 'react-redux';
 import {
   getInscriptionListAPI,
@@ -8,6 +9,7 @@ import {
   queryWithTokenIdAPI,
   resetSearchState,
   setLoadMore,
+  setSearching,
 } from 'state/inscriptions';
 import styled from 'styled-components/macro';
 
@@ -15,6 +17,13 @@ const Column = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+
+  .clearSearch {
+    :hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
 `;
 
 export const TextInputStyled = styled.input`
@@ -93,7 +102,6 @@ const SearchBar = (props: Props) => {
     let errorMessage = undefined;
     let getDefault = false;
     let queryIndex = false;
-    console.log('TEST checkVaidateKeySearch  ', keySearch);
     if (keySearch && keySearch.length > 0) {
       if (isNaN(Number(keySearch))) {
         queryIndex = false;
@@ -104,9 +112,7 @@ const SearchBar = (props: Props) => {
       } else {
         queryIndex = true;
       }
-      console.log('TEST useEffect keySearch ', keySearch);
     } else {
-      console.log('TEST 555 ');
       //CALL Get List Default
       getDefault = true;
     }
@@ -119,13 +125,18 @@ const SearchBar = (props: Props) => {
     };
   };
 
+  const clearSearchOnClick = async () => {
+    setKeySearch('');
+    setKeySearchError(undefined);
+    dispatch(setSearching(false));
+    await dispatch(resetSearchState());
+    await dispatch(getInscriptionListAPI());
+  };
+
   const searchInscriptionAPI = async (keySearch: string | undefined) => {
-    console.log('TEST keySearch ', keySearch);
     if (!keySearch || keySearch.length < 1) {
       //CALL Get List Default
-      setKeySearchError(undefined);
-      await dispatch(resetSearchState());
-      await dispatch(getInscriptionListAPI());
+      clearSearchOnClick();
     } else {
       const { isValid, errorMessage, getDefault, queryIndex } = checkVaidateKeySearch(keySearch);
 
@@ -133,8 +144,10 @@ const SearchBar = (props: Props) => {
         // await dispatch(reset());
         dispatch(setLoadMore(false));
         if (getDefault) {
+          dispatch(setSearching(false));
           await dispatch(getInscriptionListAPI());
         } else {
+          dispatch(setSearching(true));
           if (queryIndex) {
             await dispatch(queryWithIndexAPI(Number(keySearch)));
           } else {
@@ -155,7 +168,6 @@ const SearchBar = (props: Props) => {
 
   const onChange = (e: any) => {
     const keySearch = e.target.value;
-    console.log('TEST onChange keySearch ', keySearch);
     setKeySearch(keySearch || '');
   };
 
@@ -170,6 +182,9 @@ const SearchBar = (props: Props) => {
           value={keySearch}
           autoFocus={false}
         />
+        {keySearch && keySearch.length > 0 && (
+          <XCircle color="white" className="clearSearch" onClick={clearSearchOnClick}></XCircle>
+        )}
       </Container>
       {keySearchError && <ErrorMessage>{keySearchError}</ErrorMessage>}
     </Column>

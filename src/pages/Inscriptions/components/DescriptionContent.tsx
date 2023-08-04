@@ -99,7 +99,7 @@ const InscriptionDetail = () => {
   return (
     <Container>
       <p className="title">Inscriptions</p>
-      <p className="description">Inscribe smart inscriptions, large file size support with great utilities.</p>
+      <p className="description">Inscriptions Description.</p>
 
       <div className="row">
         <div className="inscribe-now" onClick={inscribeNowOnClick}>

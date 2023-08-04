@@ -24,6 +24,10 @@ export const getQueryInfoSelector = createSelector(reducerSelector, (inscription
   return inscriptionReducer.query;
 });
 
+export const getSearchingSelector = createSelector(reducerSelector, (inscriptionReducer) => {
+  return inscriptionReducer.isSearching || false;
+});
+
 export const getSortBySelector = createSelector(getQueryInfoSelector, (queryInfo) => {
   let sortByStr = 'Latest';
   if (queryInfo && queryInfo.asc === true) {

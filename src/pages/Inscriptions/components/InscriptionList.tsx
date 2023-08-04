@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useDispatch, useSelector } from 'react-redux';
-import { getHasLoadMoreSelector, getInscriptionListAPI, getInscriptionListSelector } from 'state/inscriptions';
+import {
+  getHasLoadMoreSelector,
+  getInscriptionListAPI,
+  getInscriptionListSelector,
+  getSearchingSelector,
+} from 'state/inscriptions';
 
 import InscriptionItem from './InscriptionItem';
 import { Container, InfiniteScrollContainer, SpinStyled } from './InscriptionList.styled';
@@ -11,6 +16,7 @@ const InscriptionList = () => {
   const [isFetching, setFetching] = useState(false);
   const dataList = useSelector(getInscriptionListSelector);
   const hasLoadMore = useSelector(getHasLoadMoreSelector);
+  const isSearching = useSelector(getSearchingSelector);
 
   const dispatch = useDispatch();
 
@@ -37,6 +43,16 @@ const InscriptionList = () => {
       setLoadingMore(false);
     }
   }, [setLoadingMore, hasLoadMore, isLoadingMore]);
+
+  if (isSearching && dataList && dataList.length < 1) {
+    return (
+      <Container>
+        <div className="not-found">
+          <p className="text">{'NOT FOUND'}</p>
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container>

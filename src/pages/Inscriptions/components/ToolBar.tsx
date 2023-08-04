@@ -8,6 +8,7 @@ import {
   getQueryInfoSelector,
   getSortBySelector,
   setInscriptionList,
+  setSearching,
   setSortBy,
 } from 'state/inscriptions';
 import styled, { css } from 'styled-components/macro';
@@ -110,6 +111,7 @@ const ToolBar = (props: Props) => {
   }, [sortByStr]);
 
   const refreshPage = useThrottle(async () => {
+    dispatch(setSearching(false));
     dispatch(setInscriptionList([]));
     dispatch(getInscriptionListAPI());
   }, 1500);

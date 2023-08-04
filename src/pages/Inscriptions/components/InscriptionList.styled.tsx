@@ -4,8 +4,27 @@ import { MediaQueryBuilder } from 'theme/mediaQuery';
 
 export const Container = styled.div`
   flex: 1;
-  /* background-color: black; */
   height: auto;
+
+  .not-found {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    height: auto;
+    min-height: 400px;
+    align-items: center;
+    justify-content: center;
+
+    .text {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 1.5rem;
+      line-height: 1.75rem;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+  }
 `;
 
 export const InfiniteScrollContainer = styled.div`

@@ -158,6 +158,8 @@ export const InscribeNowButton = styled.div`
   }
 `;
 
+// export const InscribeNowButton = withWalletConnected(InscribeNowButton1);
+
 export const Row = styled.div`
   display: flex;
   flex-direction: row;

@@ -17,6 +17,7 @@ const initialState: InscriptionsReducer = {
     from: undefined, //Default get lasted
   },
 
+  isSearching: false,
   NFTUnspentCoinsList: [],
 };
 
@@ -35,6 +36,12 @@ export const reducer: Reducer<InscriptionsReducer, any> = (state = initialState,
       return {
         ...state,
         hasLoadMore,
+      };
+    }
+    case InscriptionsActionType.SET_SEARCHING: {
+      return {
+        ...state,
+        isSearching: action.payload,
       };
     }
 

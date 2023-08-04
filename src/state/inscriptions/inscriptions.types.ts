@@ -3,6 +3,7 @@ export enum InscriptionsActionType {
   LOAD_MORE = 'INSCRIPTION/LOAD_MORE',
   SET_INSCRIPTIONS = 'INSCRIPTION/SET_INSCRIPTIONS',
   SET_SORT_BY = 'INSCRIPTION/SET_SORT_BY',
+  SET_SEARCHING = 'INSCRIPTION/SET_SEARCHING',
   RESET_SEARCH_STATE = 'INSCRIPTION/RESET_SEARCH_STATE',
   SET_MY_INSCRIPTIONS = 'INSCRIPTION/SET_MY_INSCRIPTIONS',
   SET_NFT_UNSPENT_COINS = 'INSCRIPTION/SET_NFT_UNSPENT_COINS',
@@ -51,6 +52,7 @@ export interface InscriptionsReducer {
   inscriptionList: Inscription[];
   fetching: boolean;
   hasLoadMore: boolean;
+  isSearching: boolean;
 
   //Query
   query: QueryInscription;
