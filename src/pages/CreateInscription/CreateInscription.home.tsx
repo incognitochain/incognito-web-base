@@ -1,7 +1,8 @@
 import BigNumber from 'bignumber.js';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+import { useModal } from 'components/Modal';
+import LoadingTransaction from 'components/Modal/Modal.transaction';
 import { PRV } from 'constants/token';
-import useLoading from 'hooks/useLoading';
 import useThrottle from 'hooks/useThrottle';
 import { WalletState } from 'pages/IncWebWallet/core/types';
 import useUnlockWallet from 'pages/IncWebWallet/hooks/useUnlockWalelt';
@@ -28,7 +29,8 @@ const CreateInscription = () => {
   const incAccount = useAppSelector(incognitoWalletAccountSelector);
   const webWalletState = useAppSelector(webWalletStateSelector);
   const { isIncognitoInstalled } = useIncognitoWallet();
-  const { showLoading } = useLoading();
+  const { setModal, closeModal } = useModal();
+
   const walletController = useWalletController();
   const prvTokenInfo = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
@@ -143,9 +145,16 @@ const CreateInscription = () => {
 
     const { isValidate, errorMessage } = checkValidate();
     if (isValidate) {
-      //TO DO
-      //createAndSendInscribeRequestTx
-      showLoading(true);
+      //Show Modal Loading
+      setModal({
+        isTransparent: false,
+        rightHeader: undefined,
+        hideHeaderDefault: true,
+        title: '',
+        closable: false,
+        data: <LoadingTransaction pendingText="" />,
+      });
+
       const burningCallback = async () => {
         console.log('Crreate Inscription Success Callback !!! ===> TO DO');
       };
@@ -174,19 +183,25 @@ const CreateInscription = () => {
         };
 
         console.log('TX historyData ', historyData);
-        const listHistory1 = accountService.getInscriptionsHistory({ accountWallet: accountSender });
+
+        const listHistory1 = await accountService.getInscriptionsHistory({ accountWallet: accountSender });
+
         console.log('listHistory1 ', listHistory1);
+
         await accountService.setInscriptionsHistory({ accountWallet: accountSender, historyData });
-        const listHistory2 = accountService.getInscriptionsHistory({ accountWallet: accountSender });
+
+        const listHistory2 = await accountService.getInscriptionsHistory({ accountWallet: accountSender });
+
         console.log('listHistory2 ', listHistory2);
 
         toast.success('Inscribe Successfully!');
+        closeModal();
       } catch (error) {
         console.error('------createAndSendInscribeRequestTx------');
         console.log('[createAndSendInscribeRequestTx] ERROR: ', error);
         toast.error(parseError(error));
       } finally {
-        showLoading(false);
+        closeModal();
       }
     } else {
       setErrorMessage(errorMessage);

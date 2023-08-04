@@ -40,7 +40,7 @@ export const getLastItemSelector = createSelector(
 );
 
 export const getMyInscriptionList = createSelector(reducerSelector, (inscriptionReducer) => {
-  return inscriptionReducer.myInscriptionList || [];
+  return inscriptionReducer.myInscriptionList.filter((item) => !!item) || [];
 });
 
 export const getMyInscriptionSortedList = createSelector(getMyInscriptionList, (list) => {

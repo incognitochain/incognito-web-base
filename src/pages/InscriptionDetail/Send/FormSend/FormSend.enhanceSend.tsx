@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { isValid } from 'redux-form';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
-import { useAppDispatch } from 'state/hooks';
 import { parseError } from 'utils/errorHelper';
 
 // import { getConfirmTxBuilder } from '../TransactionReceipt';
@@ -18,7 +17,6 @@ export interface enhanceSendAction {
 
 const enhanceSend = (WrappedComponent: any) => {
   const FormSendComp = (props: any) => {
-    const dispatch = useAppDispatch();
     const { setModal, closeModal } = useModal();
     const accountSender = useSelector(defaultAccountWalletSelector);
     const isFormValid = useSelector((state) => isValid(FORM_CONFIGS.formName)(state));
@@ -39,7 +37,7 @@ const enhanceSend = (WrappedComponent: any) => {
           hideHeaderDefault: true,
           title: '',
           closable: false,
-          data: <LoadingTransaction pendingText="Please wait a moment" />,
+          data: <LoadingTransaction pendingText="" />,
         });
 
         const { memo = '', toAddress = '' } = formData;
@@ -77,36 +75,6 @@ const enhanceSend = (WrappedComponent: any) => {
         if (!tx) return;
 
         toast.success('Send Success');
-
-        // const transactionRecepitData = getConfirmTxBuilder({
-        //   tx,
-        //   address: toAddress,
-        //   amount: inputOriginalAmount,
-        //   networkFee: networkFeeAmount,
-        //   sendToken: followTokenSelectedData as SelectedPrivacy,
-        // });
-
-        //Dismiss Modal Loading
-        closeModal();
-
-        //Show Transaciton Receipt
-        // setTimeout(() => {
-        //   setModal({
-        //     closable: false,
-        //     data: (
-        //       <TransactionReceipt
-        //         transactionReceiptData={transactionRecepitData}
-        //         onClose={() => {
-        //           closeModal();
-        //         }}
-        //       />
-        //     ),
-        //     isTransparent: false,
-        //     rightHeader: undefined,
-        //     title: '',
-        //     hideHeaderDefault: true,
-        //   });
-        // }, 500);
       } catch (e) {
         console.log('handleSendInscription ERROR: ', e);
         toast.error(parseError(e));
