@@ -17,11 +17,19 @@ export const Container = styled.div`
     margin-bottom: 0.5rem;
   }
 
-  .content {
-    word-break: break-all;
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.25rem;
-    color: white;
+  .row {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    align-items: center;
+    gap: 1rem;
+
+    .content {
+      word-break: break-all;
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.25rem;
+      color: white;
+    }
   }
 `;

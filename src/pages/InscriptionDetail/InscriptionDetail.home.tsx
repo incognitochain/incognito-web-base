@@ -87,7 +87,7 @@ const InscriptionDetail = () => {
           <p className="header">{`INSCRIPTION #${inscriptionItem.index}`}</p>
         </div>
         <div className="listContent">
-          <InscriptionDetailItem title="Token ID:" content={inscriptionItem.token_id} />
+          <InscriptionDetailItem title="Token ID:" content={inscriptionItem.token_id} copiable={true} />
           <InscriptionDetailItem title="File Size:" content={humanFileSize(inscriptionItem.size || 0)} />
           <InscriptionDetailItem title="Content Type:" content={inscriptionItem.content_type} />
           <InscriptionDetailItem title="Mint At Block:" content={inscriptionItem.minted_at_block} />
