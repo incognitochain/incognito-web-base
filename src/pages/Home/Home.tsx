@@ -36,7 +36,7 @@ const Home = () => {
         <h2 className="main-header-text">The privacy layer of crypto</h2>
         <p className="sub-header-text">
           Privacy is a fundamental human right. Even more so for crypto users. Which is why we build Incognito to
-          protect it....
+          protect it.
         </p>
         <GroupButtons />
       </div>

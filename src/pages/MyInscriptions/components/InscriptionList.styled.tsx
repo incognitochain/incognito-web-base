@@ -4,7 +4,6 @@ import { MediaQueryBuilder } from 'theme/mediaQuery';
 
 export const Container = styled.div`
   flex: 1;
-  /* background-color: lightgray; */
   height: auto;
   display: flex;
   min-height: 400px;
@@ -33,22 +32,9 @@ export const Container = styled.div`
 `;
 
 export const InfiniteScrollContainer = styled.div`
+  width: 100%;
   overflow: scroll;
   flex-direction: column;
-  /* background-color: grey; */
-
-  ${MediaQueryBuilder(
-    'upToLarge',
-    css`
-      padding: 1.2rem;
-    `
-  )}
-  ${MediaQueryBuilder(
-    'upToMedium',
-    css`
-      padding: 1.5rem;
-    `
-  )}
 
   .gridView {
     min-height: 50vh;

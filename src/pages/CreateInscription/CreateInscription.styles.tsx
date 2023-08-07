@@ -66,16 +66,31 @@ export const Container = styled.div`
     ${MediaQueryBuilder(
       'upToLarge',
       css`
-        width: 95%;
+        width: 40%;
+        padding: 10px;
       `
     )}
     ${MediaQueryBuilder(
       'upToMedium',
       css`
-        width: 100%;
+        width: 50%;
+        padding: 10px 0;
       `
     )}
   }
+
+  ${MediaQueryBuilder(
+    'upToLarge',
+    css`
+      width: 100%;
+    `
+  )}
+  ${MediaQueryBuilder(
+    'upToMedium',
+    css`
+      width: 100%;
+    `
+  )}
 `;
 
 export const UploadFileZone = styled.div`
