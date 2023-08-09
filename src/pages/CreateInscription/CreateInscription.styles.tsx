@@ -194,4 +194,12 @@ export const ErrorMessage = styled.p`
   line-height: 1.25rem;
   color: red;
   text-align: left;
+
+  span {
+    text-decoration: solid underline;
+    text-underline-offset: 2px;
+    :hover {
+      cursor: pointer;
+    }
+  }
 `;

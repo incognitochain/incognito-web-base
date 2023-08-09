@@ -10,6 +10,7 @@ import useWalletController from 'pages/IncWebWallet/hooks/useWalletController';
 import accountService from 'pages/IncWebWallet/services/wallet/accountService';
 import React, { useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { useAppSelector } from 'state/hooks';
@@ -26,6 +27,7 @@ import { Container, ErrorMessage, InscribeNowButton, UploadFileZone } from './Cr
 
 const CreateInscription = () => {
   const { showUnlockModal } = useUnlockWallet();
+  const history = useHistory();
   const incAccount = useAppSelector(incognitoWalletAccountSelector);
   const webWalletState = useAppSelector(webWalletStateSelector);
   const { isIncognitoInstalled } = useIncognitoWallet();
@@ -248,8 +250,15 @@ const CreateInscription = () => {
             <ErrorMessage>
               {`PRV balance is insufficient. Your PRV balance must be larger than or equal ${format.amountVer2({
                 originalAmount: Number(MINIMUM_PRV_BALANCE),
-                decimals: prvTokenInfo.pDecimals,
+                decimals: prvTokenInfo.pDecimals || 9,
               })} PRV to create the inscription.`}
+              <span
+                onClick={() => {
+                  history.push('/swap');
+                }}
+              >
+                Topup PRV
+              </span>
             </ErrorMessage>
           </div>
         )}
