@@ -1,19 +1,54 @@
-import React from 'react';
+import { Drawer } from 'antd';
+import MyInscriptionList from 'pages/MyInscriptions/components/InscriptionList';
+import MyInscriptionHistory from 'pages/MyInscriptions/components/MyInscriptionHistory';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getIsMyInscriptionPage } from 'state/inscriptions';
 
 import DescriptionContent from './components/DescriptionContent';
-import InscriptionList from './components/InscriptionList';
+import FilterBox from './components/FilterBox';
+import AllInscriptionList from './components/InscriptionList';
 import ScrollToTop from './components/ScrollToTop';
 import ToolBar from './components/ToolBar';
 import { Container } from './Inscriptions.styles';
 
 const InscriptionDetail = () => {
-  React.useEffect(() => {}, []);
+  const [open, setOpen] = useState(false);
+  const showDrawer = (flag: boolean) => {
+    setOpen(flag);
+  };
+
+  const isMyInscriptionPage = useSelector(getIsMyInscriptionPage);
+
+  const showHistoryOnClick = () => {
+    showDrawer(true);
+  };
+
   return (
     <Container>
       <DescriptionContent />
+      <FilterBox showHistory={showHistoryOnClick} />
       <ToolBar />
-      <InscriptionList></InscriptionList>
+      {isMyInscriptionPage ? <MyInscriptionList /> : <AllInscriptionList />}
       <ScrollToTop />
+
+      <Drawer
+        title="History My Inscriptions"
+        placement="right"
+        onClose={() => {
+          showDrawer(false);
+        }}
+        open={open}
+        headerStyle={{
+          backgroundColor: '#303030',
+        }}
+        width={'30%'}
+        bodyStyle={{
+          backgroundColor: '#303030',
+        }}
+      >
+        <MyInscriptionHistory showDrawer={showDrawer} />
+      </Drawer>
     </Container>
   );
 };

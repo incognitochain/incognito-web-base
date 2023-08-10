@@ -14,9 +14,28 @@ const getColor = (props: any) => {
   return '#eeeeee';
 };
 
+export const LeftContainer = styled.div`
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border: 1px solid ${({ theme }) => theme.border1};
+  cursor: pointer;
+
+  :hover {
+    border: 1px solid ${({ theme }) => theme.white};
+  }
+`;
+
 export const Container = styled.div`
   padding-bottom: 40px;
   width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
   min-height: calc(100vh - 155px);
   display: flex;
   flex-direction: column;
@@ -28,7 +47,7 @@ export const Container = styled.div`
     width: 500px;
     min-height: 550px;
     background-color: lightgrey;
-    box-shadow: 15px 15px 60px rgba(255, 255, 255, 0.6);
+    box-shadow: 15px 15px 60px rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     margin: 10px auto;
 

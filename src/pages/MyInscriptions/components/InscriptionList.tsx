@@ -1,30 +1,67 @@
 import { WalletState } from 'pages/IncWebWallet/core/types';
 import useUnlockWallet from 'pages/IncWebWallet/hooks/useUnlockWalelt';
-import { RoutePaths } from 'pages/Routes';
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { File } from 'react-feather';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { getMyInscriptionSortedList } from 'state/inscriptions';
+import { getKeySearchSelector, getMyInscriptionSortedList, Inscription } from 'state/inscriptions';
 import { webWalletStateSelector } from 'state/masterKey';
 
 import InscriptionItem from './InscriptionItem';
-import { ButtonConfirm, Container, CreateInscriptionNow, InfiniteScrollContainer } from './InscriptionList.styled';
+import { ButtonConfirm, Container, InfiniteScrollContainer } from './InscriptionList.styled';
 
 const InscriptionList = () => {
   const history = useHistory();
   const { showUnlockModal } = useUnlockWallet();
-  const myInscriptionList = useSelector(getMyInscriptionSortedList);
+  const myInscriptionListDefault = useSelector(getMyInscriptionSortedList) || [];
   const walletState = useSelector(webWalletStateSelector);
+  const keySearch = useSelector(getKeySearchSelector);
 
   const _walletAction = () => showUnlockModal();
 
   // const dispatch = useDispatch();
 
-  const inscribeNowOnClick = useCallback(() => {
-    history.push(RoutePaths.CREATE_INSCRIPTION);
-  }, []);
+  const checkVaidateKeySearch = useMemo(() => {
+    let isValid = true;
+    let getDefault = false;
+    let queryIndex = false;
+    if (keySearch && keySearch.length > 0) {
+      if (isNaN(Number(keySearch))) {
+        queryIndex = false;
+        if (keySearch.length !== 64) {
+          isValid = false;
+        }
+      } else {
+        queryIndex = true;
+      }
+    } else {
+      getDefault = true;
+    }
+    return {
+      isValid,
+      getDefault,
+      queryIndex,
+    };
+  }, [keySearch]);
+
+  const myInscriptionList = useMemo(() => {
+    const { isValid, getDefault, queryIndex } = checkVaidateKeySearch;
+    let list: Inscription[] = [];
+
+    if (getDefault) {
+      list = myInscriptionListDefault || [];
+    } else if (isValid) {
+      if (queryIndex) {
+        list = myInscriptionListDefault?.filter((item) => item.index === Number(keySearch)) || [];
+      } else {
+        list = myInscriptionListDefault?.filter((item) => item.token_id === keySearch) || [];
+      }
+    } else {
+      list = myInscriptionListDefault || [];
+    }
+    return list;
+  }, [checkVaidateKeySearch, myInscriptionListDefault, keySearch]);
 
   const renderItem = (item: any, index: number) => {
     return <InscriptionItem item={item} key={`${item?.token_id}-${index}}`}></InscriptionItem>;
@@ -35,7 +72,6 @@ const InscriptionList = () => {
       <div className="emptyList">
         <File color="white" size={100} />
         <p className="emptyText">{'No Recent Inscriptions'}</p>
-        <CreateInscriptionNow onClick={inscribeNowOnClick}>Create Now</CreateInscriptionNow>
       </div>
     );
   };
@@ -48,11 +84,6 @@ const InscriptionList = () => {
             myInscriptionList.length > 0 &&
             myInscriptionList.map((item, index) => renderItem(item, index))}
         </InfiniteScroll>
-        {/* {isLoadingMore && (
-          <div className="load-more-loading">
-            <SpinStyled tip="Loading..." size="large" />
-          </div>
-        )} */}
       </InfiniteScrollContainer>
     );
   };

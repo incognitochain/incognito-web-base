@@ -19,6 +19,9 @@ const initialState: InscriptionsReducer = {
 
   isSearching: false,
   NFTUnspentCoinsList: [],
+
+  filterPage: 'All',
+  keySearch: '',
 };
 
 export const reducer: Reducer<InscriptionsReducer, any> = (state = initialState, action): InscriptionsReducer => {
@@ -75,6 +78,20 @@ export const reducer: Reducer<InscriptionsReducer, any> = (state = initialState,
       return {
         ...state,
         NFTUnspentCoinsList: action.payload,
+      };
+    }
+
+    case InscriptionsActionType.SET_FILTER_PAGE: {
+      return {
+        ...state,
+        filterPage: action.payload,
+      };
+    }
+
+    case InscriptionsActionType.SET_KEY_SEARCH: {
+      return {
+        ...state,
+        keySearch: action.payload,
       };
     }
 

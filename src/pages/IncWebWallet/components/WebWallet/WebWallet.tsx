@@ -5,7 +5,6 @@ import BalanceHandler from 'pages/IncWebWallet/actions/balanceHandler';
 import ScanCoinHanlder from 'pages/IncWebWallet/actions/scanCoinHandler';
 import { WalletState } from 'pages/IncWebWallet/core/types';
 import Server from 'pages/IncWebWallet/services/wallet/Server';
-import { RoutePaths } from 'pages/Routes';
 import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -110,9 +109,9 @@ const WebWallet = () => {
     });
   };
 
-  const goToMyInscriptions = () => {
-    history.push(RoutePaths.MY_INSCRIPTIONS);
-  };
+  // const goToMyInscriptions = () => {
+  //   history.push(RoutePaths.MY_INSCRIPTIONS);
+  // };
 
   return (
     <div className="wrap-inc-waller">
@@ -132,9 +131,9 @@ const WebWallet = () => {
             <WalletButton isImport={false} onClick={onClickUnlockWallet}>
               <p className="text">Unlock Wallet</p>
             </WalletButton>
-            <WalletButton isImport={false} onClick={onClickUnlockWallet}>
+            {/* <WalletButton isImport={false} onClick={onClickUnlockWallet}>
               <p className="text">{'My Inscriptions'}</p>
-            </WalletButton>
+            </WalletButton> */}
           </Row>
         )}
         {webWalletState === WalletState.unlocked && (
@@ -145,9 +144,9 @@ const WebWallet = () => {
             </Wrapper>
             {isScanningCoin && <ScanCoinsProgressBar />}
             <Space />
-            <WalletButton isImport={false} onClick={goToMyInscriptions}>
+            {/* <WalletButton isImport={false} onClick={goToMyInscriptions}>
               <p className="text">{'My Inscriptions'}</p>
-            </WalletButton>
+            </WalletButton> */}
           </>
         )}
       </Container>

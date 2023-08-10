@@ -1,16 +1,8 @@
 import SearchSVG from 'assets/svg/search-icon.svg';
-import { debounce } from 'lodash';
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { XCircle } from 'react-feather';
-import { useDispatch } from 'react-redux';
-import {
-  getInscriptionListAPI,
-  queryWithIndexAPI,
-  queryWithTokenIdAPI,
-  resetSearchState,
-  setLoadMore,
-  setSearching,
-} from 'state/inscriptions';
+import { useDispatch, useSelector } from 'react-redux';
+import { getKeySearchSelector, setKeySearch } from 'state/inscriptions';
 import styled from 'styled-components/macro';
 
 const Column = styled.div`
@@ -87,20 +79,17 @@ export const ErrorMessage = styled.p`
   text-align: left;
 `;
 
-type Props = {
-  sortByCallback?: any;
-  keySearchCallback?: (key?: string) => void;
-};
+// eslint-disable-next-line @typescript-eslint/ban-types
+type Props = {};
 
-const SearchBar = (props: Props) => {
-  const { sortByCallback, keySearchCallback = () => {} } = props;
-
+const SearchBarMyInscription = (props: Props) => {
   const dispatch = useDispatch();
 
-  const [keySearch, setKeySearch] = React.useState<string | undefined>();
   const [keySearchError, setKeySearchError] = React.useState<string | undefined>();
 
-  const checkVaidateKeySearch = (keySearch: string) => {
+  const keySearch = useSelector(getKeySearchSelector);
+
+  const checkVaidateKeySearch = (keySearch: string | undefined) => {
     let isValid = true;
     let errorMessage = undefined;
     let getDefault = false;
@@ -119,7 +108,7 @@ const SearchBar = (props: Props) => {
       //CALL Get List Default
       getDefault = true;
     }
-
+    setKeySearchError(errorMessage);
     return {
       isValid,
       getDefault,
@@ -129,51 +118,20 @@ const SearchBar = (props: Props) => {
   };
 
   const clearSearchOnClick = async () => {
-    setKeySearch('');
-    setKeySearchError(undefined);
-    dispatch(setSearching(false));
-    await dispatch(resetSearchState());
-    await dispatch(getInscriptionListAPI());
+    dispatch(setKeySearch(''));
   };
-
-  const searchInscriptionAPI = async (keySearch: string | undefined) => {
-    if (!keySearch || keySearch.length < 1) {
-      //CALL Get List Default
-      clearSearchOnClick();
-    } else {
-      const { isValid, errorMessage, getDefault, queryIndex } = checkVaidateKeySearch(keySearch);
-
-      if (isValid) {
-        // await dispatch(reset());
-        dispatch(setLoadMore(false));
-        if (getDefault) {
-          dispatch(setSearching(false));
-          await dispatch(getInscriptionListAPI());
-        } else {
-          dispatch(setSearching(true));
-          if (queryIndex) {
-            await dispatch(queryWithIndexAPI(Number(keySearch)));
-          } else {
-            await dispatch(queryWithTokenIdAPI(keySearch));
-          }
-        }
-      } else {
-        setKeySearchError(errorMessage);
-      }
-    }
-  };
-
-  const searchInscriptionDeounce = useCallback(debounce(searchInscriptionAPI, 1000), []);
-  const keySearchCallbackDeounce = useCallback(debounce(keySearchCallback, 1000), []);
 
   useEffect(() => {
-    searchInscriptionDeounce(keySearch);
-    keySearchCallbackDeounce(keySearch);
+    if (!keySearch || keySearch.length < 1) {
+      clearSearchOnClick();
+    } else {
+      checkVaidateKeySearch(keySearch);
+    }
   }, [keySearch]);
 
   const onChange = (e: any) => {
     const keySearch = e.target.value;
-    setKeySearch(keySearch || '');
+    dispatch(setKeySearch(keySearch));
   };
 
   return (
@@ -196,4 +154,4 @@ const SearchBar = (props: Props) => {
   );
 };
 
-export default React.memo(SearchBar);
+export default React.memo(SearchBarMyInscription);

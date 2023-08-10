@@ -37,13 +37,11 @@ const Styled = styled.div`
   }
 
   .addTokenBtn {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     background-color: ${({ theme }) => '#252525'};
-    position: fixed;
+    position: sticky;
     bottom: 25px;
-    right: auto;
-    left: auto;
-    margin-left: 320px;
+    margin-left: 85%;
 
     border-radius: 25px;
     display: flex;

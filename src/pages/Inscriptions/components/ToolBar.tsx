@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUp } from 'react-feather';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getInscriptionListAPI,
+  getIsMyInscriptionPage,
   getQueryInfoSelector,
   getSortBySelector,
   setInscriptionList,
@@ -15,6 +16,7 @@ import styled, { css } from 'styled-components/macro';
 import { MediaQueryBuilder } from 'theme/mediaQuery';
 
 import SearchBar from './SearchBar';
+import SearchBarMyInscription from './SearchBarMyInscription';
 
 export const Container = styled.div`
   margin: 2rem 0;
@@ -99,30 +101,30 @@ type Props = {
 const ToolBar = (props: Props) => {
   const { sortByCallback } = props;
   const dispatch = useDispatch();
+  const isMyInscriptionPage = useSelector(getIsMyInscriptionPage);
 
   const sortByStr = useSelector(getSortBySelector);
   const queryInfo = useSelector(getQueryInfoSelector);
-
-  React.useEffect(() => {}, []);
 
   const sortByOnClicked = useCallback(() => {
     dispatch(setSortBy({ asc: !queryInfo.asc }));
     dispatch(setInscriptionList([]));
     dispatch(getInscriptionListAPI());
     sortByCallback && sortByCallback();
-  }, [sortByStr]);
+  }, [sortByStr, isMyInscriptionPage]);
 
   const refreshPage = useThrottle(async () => {
-    dispatch(setSearching(false));
-    dispatch(setInscriptionList([]));
-    dispatch(getInscriptionListAPI());
+    if (!isMyInscriptionPage) {
+      dispatch(setSearching(false));
+      dispatch(setInscriptionList([]));
+      dispatch(getInscriptionListAPI());
+    } else {
+    }
   }, 1500);
 
   return (
     <Container>
-      <div className="leftView">
-        <SearchBar />
-      </div>
+      <div className="leftView">{isMyInscriptionPage ? <SearchBarMyInscription /> : <SearchBar />}</div>
       <div className="space"></div>
       <div className="rightView">
         <ReloadBalanceButton key={'refresh-inscription-page'} onClickCallback={refreshPage} />,

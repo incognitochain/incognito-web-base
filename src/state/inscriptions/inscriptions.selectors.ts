@@ -20,6 +20,16 @@ export const getHasLoadMoreSelector = createSelector(
   (inscriptionReducer) => inscriptionReducer.hasLoadMore
 );
 
+export const getFilterPageSelector = createSelector(
+  reducerSelector,
+  (inscriptionReducer) => inscriptionReducer.filterPage
+);
+
+export const getIsMyInscriptionPage = createSelector(
+  reducerSelector,
+  (inscriptionReducer) => inscriptionReducer.filterPage === 'My Inscriptions'
+);
+
 export const getQueryInfoSelector = createSelector(reducerSelector, (inscriptionReducer) => {
   return inscriptionReducer.query;
 });
@@ -47,10 +57,18 @@ export const getMyInscriptionList = createSelector(reducerSelector, (inscription
   return inscriptionReducer.myInscriptionList.filter((item) => !!item) || [];
 });
 
-export const getMyInscriptionSortedList = createSelector(getMyInscriptionList, (list) => {
-  let sortList = list.sort((a, b) => b.index - a.index); //Desc
-  return sortList;
-});
+export const getMyInscriptionSortedList = createSelector(
+  [getMyInscriptionList, getSortBySelector],
+  (list, sortByStr) => {
+    let sortList;
+    if (sortByStr === 'Latest') {
+      sortList = list.sort((a, b) => b.index - a.index); //Desc
+    } else if (sortByStr === 'Oldest') {
+      sortList = list.sort((a, b) => a.index - b.index); //Asc
+    }
+    return sortList;
+  }
+);
 
 export const getInscriptionTokenIDsListSelector = createSelector(getMyInscriptionList, (inscriptions) => {
   if (!inscriptions || inscriptions.length < 1) return [];
@@ -89,3 +107,9 @@ export const getNFTCoinsInforSelector = createSelector(getNFTCoinsSelector, (nft
     tokenIdsList,
   };
 });
+
+//Search
+export const getKeySearchSelector = createSelector(
+  reducerSelector,
+  (inscriptionReducer) => inscriptionReducer.keySearch
+);

@@ -5,6 +5,16 @@ import { AppGetState, AppThunkDispatch } from 'state';
 import { getInscriptionListSelector, getLastItemSelector, getQueryInfoSelector } from './inscriptions.selectors';
 import { Inscription, InscriptionsActionType, NFTCoin } from './inscriptions.types';
 
+const setKeySearch = (payload: string) => ({
+  type: InscriptionsActionType.SET_KEY_SEARCH,
+  payload,
+});
+
+const setFilterPage = (payload: string) => ({
+  type: InscriptionsActionType.SET_FILTER_PAGE,
+  payload,
+});
+
 const setFetchingAction = (payload: boolean) => ({
   type: InscriptionsActionType.FETCHING,
   payload,
@@ -59,7 +69,6 @@ const getInscriptionListAPI =
 
     const { limit, asc } = queryInfo;
     let inscriptionListFetched: Inscription[] = [];
-
     try {
       dispatch(setFetchingAction(true));
 
@@ -256,7 +265,9 @@ export {
   queryWithTokenIdAPI,
   resetSearchState,
   setFetchingAction,
+  setFilterPage,
   setInscriptionList,
+  setKeySearch,
   setLoadMore,
   setMyInscriptionList,
   setNFTUnspentCoins,

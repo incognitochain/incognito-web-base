@@ -7,7 +7,9 @@ import useThrottle from 'hooks/useThrottle';
 import { WalletState } from 'pages/IncWebWallet/core/types';
 import useUnlockWallet from 'pages/IncWebWallet/hooks/useUnlockWalelt';
 import useWalletController from 'pages/IncWebWallet/hooks/useWalletController';
+import IcArrowLeft from 'pages/IncWebWallet/images/ic_arrow_left.svg';
 import accountService from 'pages/IncWebWallet/services/wallet/accountService';
+import { RoutePaths } from 'pages/Routes';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useHistory } from 'react-router-dom';
@@ -23,7 +25,14 @@ import format from 'utils/format';
 
 import { parseError } from '../../utils/errorHelper';
 import { MAXIMUM_FILE_SIZE, MINIMUM_PRV_BALANCE, SUPPORTED_FILE_EXTENSIONS } from './CreateInscription.constants';
-import { Container, ErrorMessage, InscribeNowButton, Row, UploadFileZone } from './CreateInscription.styles';
+import {
+  Container,
+  ErrorMessage,
+  InscribeNowButton,
+  LeftContainer,
+  Row,
+  UploadFileZone,
+} from './CreateInscription.styles';
 
 export const formatAmount = (price?: string, canEmpty = false, decimals = 9): string => {
   let result = '';
@@ -76,7 +85,7 @@ const CreateInscription = () => {
     const file = fileRejections[0];
     const errorCode = file.errors[0].code;
     if (errorCode === 'file-too-large') {
-      errorMessage = `File too large. File's size must be smaller than ${humanFileSize(MAXIMUM_FILE_SIZE)}`;
+      errorMessage = `File too large. File size must be smaller than ${humanFileSize(MAXIMUM_FILE_SIZE)}`;
     } else {
       if (errorCode === 'file-invalid-type') {
         errorMessage = 'File invalid type';
@@ -104,7 +113,8 @@ const CreateInscription = () => {
     const currentFileSize = fileUpload.size;
     const buffer = 5 * 1024; // = 5 KB
     const totalSize = currentFileSize + buffer;
-    const fee = (totalSize / 1024) * 1e9;
+    const estimateFeeTmp = (totalSize / 1024) * 1e9;
+    const fee = BigNumber.maximum(MINIMUM_PRV_BALANCE, estimateFeeTmp).toNumber();
 
     return {
       estimateFee: fee || 0,
@@ -259,8 +269,15 @@ const CreateInscription = () => {
 
   return (
     <Container>
+      <LeftContainer
+        onClick={() => {
+          history.push(RoutePaths.INSCRIPTIONS);
+        }}
+      >
+        <img alt="ic-arrow-left" src={IcArrowLeft} />
+      </LeftContainer>
       <div className="body-container">
-        <p className="title">Upload file</p>
+        <p className="title">Upload File</p>
         <UploadFileZone {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
           {!fileUpload ? (
@@ -284,7 +301,7 @@ const CreateInscription = () => {
         </p> */}
 
         {renderRowDescription('Supported file extensions:', `jpg, jpeg, png, html, pdf, json`, 'blue')}
-        {renderRowDescription(`Maximum file's size:`, `${humanFileSize(MAXIMUM_FILE_SIZE)}`)}
+        {renderRowDescription(`Maximum file size:`, `${humanFileSize(MAXIMUM_FILE_SIZE)}`)}
         {/* {renderRowDescription(`Minimum PRV Balance:`, `10 PRV`)} */}
         {renderRowDescription('Your PRV Balance:', `${prvTokenInfo.formatAmount || 0} PRV`)}
         {fileUpload &&

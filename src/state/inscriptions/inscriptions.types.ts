@@ -7,6 +7,9 @@ export enum InscriptionsActionType {
   RESET_SEARCH_STATE = 'INSCRIPTION/RESET_SEARCH_STATE',
   SET_MY_INSCRIPTIONS = 'INSCRIPTION/SET_MY_INSCRIPTIONS',
   SET_NFT_UNSPENT_COINS = 'INSCRIPTION/SET_NFT_UNSPENT_COINS',
+
+  SET_FILTER_PAGE = 'INSCRIPTION/SET_FILTER_PAGE',
+  SET_KEY_SEARCH = 'INSCRIPTION/SET_KEY_SEARCH',
 }
 
 export type Inscription = {
@@ -60,4 +63,8 @@ export interface InscriptionsReducer {
   myInscriptionList: Inscription[];
 
   NFTUnspentCoinsList: NFTCoin[];
+
+  filterPage: 'All' | 'My Inscriptions';
+
+  keySearch: string | undefined;
 }
