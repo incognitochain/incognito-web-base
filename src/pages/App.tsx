@@ -125,7 +125,7 @@ const App = () => {
         <Route exact path={RoutePaths.INSCRIPTIONS} component={Inscriptions} />
         <Route exact path={RoutePaths.INSCRIPTION_DETAIL} component={InscriptionDetail} />
         <Route exact path={RoutePaths.CREATE_INSCRIPTION} component={CreateInscription} />
-        <Route exact path={RoutePaths.MY_INSCRIPTIONS} component={MyInscriptions} />
+        <Route exact path={RoutePaths.MY_INSCRIPTIONS} component={withUnlockWallet(MyInscriptions)} />
         <Route exact path={RoutePaths.EARNINGS} component={Earnings} />
         <Route exact path={RoutePaths.PRIVACY_POLICY} component={Policy} />
         <Route exact path={RoutePaths.TERM_OF_SERVICE} component={TermOfService} />

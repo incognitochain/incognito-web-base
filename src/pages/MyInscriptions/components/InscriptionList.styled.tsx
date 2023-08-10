@@ -111,3 +111,27 @@ export const ButtonConfirm = styled.div`
     color: ${({ theme }) => theme.primary5};
   }
 `;
+
+export const CreateInscriptionNow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  gap: 0.3rem;
+  background-color: ${({ theme }) => theme.primary2};
+  border-radius: 8px;
+
+  align-self: center;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  white-space: nowrap;
+  color: white;
+
+  :hover {
+    cursor: pointer;
+    opacity: 0.8;
+    scale: 1.02;
+  }
+`;

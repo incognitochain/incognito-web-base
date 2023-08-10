@@ -53,3 +53,71 @@ export const Container = styled.div`
     `
   )}
 `;
+
+export const TabContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0 2rem;
+  width: 100%;
+  min-height: calc(100vh - 135px);
+  overflow: scroll;
+
+  .nav-tabs {
+    padding: 8px;
+    border: none;
+    display: flex;
+    align-self: center;
+    /* width: 260px; */
+    border-radius: 20px;
+    background-color: ${({ theme }) => theme.color_grey2};
+
+    justify-content: center;
+
+    .nav-link {
+      opacity: 0.4;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 22px;
+
+      padding: 12px 24px;
+      color: #ffffff;
+
+      transition: none;
+
+      &:hover {
+        opacity: 0.75;
+      }
+    }
+
+    .nav-link.active {
+      opacity: 1;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 22px;
+
+      border-radius: 40px;
+      color: #ffffff;
+
+      padding: 12px 24px;
+
+      transition: none;
+      text-decoration: underline;
+      text-decoration-color: white;
+      text-underline-offset: 5px;
+    }
+
+    .title {
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 22px;
+    }
+
+    .nav-title {
+      text-transform: capitalize;
+      font-size: 18px;
+    }
+  }
+`;
