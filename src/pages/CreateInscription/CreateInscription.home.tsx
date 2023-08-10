@@ -8,7 +8,7 @@ import { WalletState } from 'pages/IncWebWallet/core/types';
 import useUnlockWallet from 'pages/IncWebWallet/hooks/useUnlockWalelt';
 import useWalletController from 'pages/IncWebWallet/hooks/useWalletController';
 import accountService from 'pages/IncWebWallet/services/wallet/accountService';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -22,8 +22,25 @@ import { humanFileSize } from 'utils/fileUtils';
 import format from 'utils/format';
 
 import { parseError } from '../../utils/errorHelper';
-import { MAXIMUM_SIZE_FILE, MINIMUM_PRV_BALANCE, SUPPORTED_FILE_EXTENSIONS } from './CreateInscription.constants';
-import { Container, ErrorMessage, InscribeNowButton, UploadFileZone } from './CreateInscription.styles';
+import { MAXIMUM_FILE_SIZE, MINIMUM_PRV_BALANCE, SUPPORTED_FILE_EXTENSIONS } from './CreateInscription.constants';
+import { Container, ErrorMessage, InscribeNowButton, Row, UploadFileZone } from './CreateInscription.styles';
+
+export const formatAmount = (price?: string, canEmpty = false, decimals = 9): string => {
+  let result = '';
+
+  if (!price || price.length < 1) {
+    if (canEmpty) return '--';
+    else {
+      return '0.0';
+    }
+  }
+  const indexNumberBN = new BigNumber(10).pow(decimals).toNumber();
+  const priceBigNumber = new BigNumber(price || '0.0');
+
+  result = priceBigNumber.div(indexNumberBN).decimalPlaces(2).toFixed() || '0.0';
+
+  return result;
+};
 
 const CreateInscription = () => {
   const { showUnlockModal } = useUnlockWallet();
@@ -39,9 +56,13 @@ const CreateInscription = () => {
   const accountSender = useAppSelector(defaultAccountWalletSelector);
 
   // const dispatch = useDispatch();
-  const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, acceptedFiles } = useDropzone({
-    accept: SUPPORTED_FILE_EXTENSIONS,
-  });
+  const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, acceptedFiles, fileRejections } =
+    useDropzone({
+      accept: SUPPORTED_FILE_EXTENSIONS,
+      maxFiles: 1,
+      multiple: false,
+      maxSize: MAXIMUM_FILE_SIZE,
+    });
 
   const _walletAction = () => showUnlockModal();
 
@@ -49,17 +70,53 @@ const CreateInscription = () => {
     return new BigNumber(prvTokenInfo?.amount || 0);
   }, [prvTokenInfo]);
 
+  const errorRejection = useMemo(() => {
+    if (!fileRejections || fileRejections.length < 1) return undefined;
+    let errorMessage = '';
+    const file = fileRejections[0];
+    const errorCode = file.errors[0].code;
+    if (errorCode === 'file-too-large') {
+      errorMessage = `File too large. File's size must be smaller than ${humanFileSize(MAXIMUM_FILE_SIZE)}`;
+    } else {
+      if (errorCode === 'file-invalid-type') {
+        errorMessage = 'File invalid type';
+      } else {
+        errorMessage = 'Something went wrong';
+      }
+    }
+    return errorMessage;
+  }, [fileRejections]);
+
+  useEffect(() => {
+    setErrorMessage(errorRejection);
+  }, [errorRejection]);
+
   const fileUpload = useMemo(() => {
     return acceptedFiles && acceptedFiles.length > 0 ? acceptedFiles[0] : undefined;
   }, [acceptedFiles]);
+
+  const { estimateFee, estimateFeeStr } = useMemo(() => {
+    if (!fileUpload)
+      return {
+        estimateFee: 0,
+        estimateFeeStr: '0',
+      };
+    const currentFileSize = fileUpload.size;
+    const buffer = 5 * 1024; // = 5 KB
+    const totalSize = currentFileSize + buffer;
+    const fee = (totalSize / 1024) * 1e9;
+
+    return {
+      estimateFee: fee || 0,
+      estimateFeeStr: formatAmount(fee.toString(), false, 9),
+    };
+  }, [fileUpload]);
 
   const totalFileSize = useMemo(() => {
     let totalSize = 0;
     acceptedFiles.map((file) => (totalSize += file.size || 0));
     return totalSize;
   }, [acceptedFiles]);
-
-  console.log('FILE SIZE: ', totalFileSize);
 
   const button = useMemo(() => {
     let text = '';
@@ -90,22 +147,25 @@ const CreateInscription = () => {
     };
   }, [incAccount, isIncognitoInstalled, webWalletState]);
 
-  // console.log('ALL Info ', {
-  //   isFocused,
-  //   isDragAccept,
-  //   isDragReject,
-  //   acceptedFiles,
-  //   totalFileSize,
-  //   prvBalance,
-  //   fileUpload,
-  // });
+  const { isEnoughtPRVBalance, prvRequiredStr } = useMemo(() => {
+    let isEnoughtPRVBalance = true;
+    let prvRequiredStr = '';
 
-  const isEnoughtPRVBalance = useMemo(() => {
-    if (prvBalance.isLessThan(new BigNumber(MINIMUM_PRV_BALANCE))) {
-      return false;
+    const maxPRVrequired = BigNumber.maximum(MINIMUM_PRV_BALANCE, estimateFee).toNumber();
+
+    if (prvBalance.isLessThan(new BigNumber(maxPRVrequired))) {
+      isEnoughtPRVBalance = false;
+      prvRequiredStr = format.amountVer2({
+        originalAmount: maxPRVrequired || 0,
+        decimals: prvTokenInfo.pDecimals || 9,
+      });
     }
-    return true;
-  }, [prvBalance, prvTokenInfo]);
+
+    return {
+      isEnoughtPRVBalance,
+      prvRequiredStr,
+    };
+  }, [prvBalance, prvTokenInfo, fileUpload, estimateFee]);
 
   const checkValidate = () => {
     let errorMessage = 'Something went wrong';
@@ -114,26 +174,11 @@ const CreateInscription = () => {
       errorMessage = `File is Required`;
       isValidate = false;
     } else {
-      // Check MINIMUM file's size;
-      // if (totalFileSize < MINIMUM_SIZE_FILE) {
-      //   errorMessage = `File's size must be larger than ${MINIMUM_SIZE_FILE}`;
-      //   isValidate = false;
-      // }
-
       // Check MAXIMUM file's size;
-      if (totalFileSize > MAXIMUM_SIZE_FILE) {
-        errorMessage = `File's size must be smaller than ${humanFileSize(MAXIMUM_SIZE_FILE)}`;
+      if (totalFileSize > MAXIMUM_FILE_SIZE) {
+        errorMessage = `File's size must be smaller than ${humanFileSize(MAXIMUM_FILE_SIZE)}`;
         isValidate = false;
       }
-
-      // Validate Your PRV BalanceisValid
-      // if (prvBalance.isLessThan(new BigNumber(MINIMUM_PRV_BALANCE))) {
-      //   errorMessage = `Your PRV balance must be larger than or equal ${format.amountVer2({
-      //     originalAmount: Number(MINIMUM_PRV_BALANCE),
-      //     decimals: prvTokenInfo.pDecimals,
-      //   })}PRV`;
-      //   isValidate = false;
-      // }
     }
 
     return {
@@ -143,9 +188,9 @@ const CreateInscription = () => {
   };
 
   const inscribeNowOnClick = useThrottle(async () => {
-    if (!isEnoughtPRVBalance) return;
+    if (!isEnoughtPRVBalance || errorMessage) return;
 
-    const { isValidate, errorMessage } = checkValidate();
+    const { isValidate, errorMessage: errorMessageValidate } = checkValidate();
     if (isValidate) {
       //Show Modal Loading
       setModal({
@@ -186,15 +231,7 @@ const CreateInscription = () => {
 
         console.log('TX historyData ', historyData);
 
-        const listHistory1 = await accountService.getInscriptionsHistory({ accountWallet: accountSender });
-
-        console.log('listHistory1 ', listHistory1);
-
         await accountService.setInscriptionsHistory({ accountWallet: accountSender, historyData });
-
-        const listHistory2 = await accountService.getInscriptionsHistory({ accountWallet: accountSender });
-
-        console.log('listHistory2 ', listHistory2);
 
         toast.success('Inscribe Successfully!');
         closeModal();
@@ -206,10 +243,19 @@ const CreateInscription = () => {
         closeModal();
       }
     } else {
-      setErrorMessage(errorMessage);
-      toast.error(errorMessage);
+      setErrorMessage(errorMessageValidate);
+      toast.error(errorMessageValidate);
     }
   });
+
+  const renderRowDescription = (title: any, content: any, color?: string, bold?: string) => {
+    return (
+      <Row>
+        <p className="label">{title || ''}</p>
+        <p className={`content ${color ? color : ''} ${bold ? bold : ''}`}>{content || ''}</p>
+      </Row>
+    );
+  };
 
   return (
     <Container>
@@ -218,52 +264,50 @@ const CreateInscription = () => {
         <UploadFileZone {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
           {!fileUpload ? (
-            // <p className="upload-description">Drag and drop a file here, or click to select files</p>
             <p className="upload-description">Drag and drop a file here</p>
           ) : (
             <>
               <p className="content-file">
                 {fileUpload?.name} - {humanFileSize(fileUpload?.size || 0)}
               </p>
-              {/* <Trash
-                className="trash-icon"
-                size={40}
-                onClick={() => {
-                  console.log('TrashIcon CLICK TODO');
-                }}
-              /> */}
             </>
           )}
         </UploadFileZone>
-        <p className="description">
+        {/* <p className="description">
           <ul>
-            <li>{`File's size must be smaller than 1MB`}</li>
-            <li>{'Your account must be at least 10PRV.'}</li>
+            <li>{`File's size must be smaller than ${humanFileSize(MAXIMUM_FILE_SIZE)}`}</li>
+            <li>{'Your account must be at least 10 PRV.'}</li>
             <li>
               {`Supported file extensions are`} <span>{`jpg, jpeg, png, html, pdf, json.`}</span>
             </li>
           </ul>
-          {/* Please note that one zip file can only include one file extension. */}
-        </p>
+        </p> */}
+
+        {renderRowDescription('Supported file extensions:', `jpg, jpeg, png, html, pdf, json`, 'blue')}
+        {renderRowDescription(`Maximum file's size:`, `${humanFileSize(MAXIMUM_FILE_SIZE)}`)}
+        {/* {renderRowDescription(`Minimum PRV Balance:`, `10 PRV`)} */}
+        {renderRowDescription('Your PRV Balance:', `${prvTokenInfo.formatAmount || 0} PRV`)}
+        {fileUpload &&
+          estimateFee &&
+          renderRowDescription('Estimate Fee: ', `${estimateFeeStr} PRV`, undefined, 'bold')}
+
         {!isEnoughtPRVBalance && webWalletState === WalletState.unlocked && (
           <div>
             <ErrorMessage>
-              {`PRV balance is insufficient. Your PRV balance must be larger than or equal ${format.amountVer2({
-                originalAmount: Number(MINIMUM_PRV_BALANCE),
-                decimals: prvTokenInfo.pDecimals || 9,
-              })} PRV to create the inscription.`}
+              {`PRV balance is insufficient. Your PRV balance must be larger than or equal ${prvRequiredStr} PRV to create the inscription.`}
               <span
                 onClick={() => {
                   history.push('/swap');
                 }}
               >
-                Topup PRV
+                Topup now
               </span>
             </ErrorMessage>
           </div>
         )}
 
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+
         {button.isConnected ? (
           <InscribeNowButton onClick={inscribeNowOnClick}>
             <p className="text">{button.text}</p>

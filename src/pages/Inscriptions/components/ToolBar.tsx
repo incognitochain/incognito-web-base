@@ -55,7 +55,9 @@ export const Container = styled.div`
     flex-direction: row;
     padding: 10px 20px;
     align-items: center;
-    background-color: ${({ theme }) => theme.primary2};
+    /* background-color: ${({ theme }) => theme.primary2}; */
+    background-color: 'transparent';
+    border: 1px solid ${({ theme }) => theme.color_grey4};
     border-radius: 8px;
     gap: 0.2rem;
 

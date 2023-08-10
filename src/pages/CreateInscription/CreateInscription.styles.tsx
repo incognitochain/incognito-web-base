@@ -25,15 +25,15 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     padding: 15px;
-    gap: 1rem;
     width: 500px;
-    min-height: 500px;
+    min-height: 550px;
     background-color: lightgrey;
     box-shadow: 15px 15px 60px rgba(255, 255, 255, 0.6);
     border-radius: 12px;
     margin: 10px auto;
 
     .title {
+      margin: 20px 0;
       font-weight: 500;
       font-size: 1.5rem;
       line-height: 1.2rem;
@@ -100,7 +100,9 @@ export const UploadFileZone = styled.div`
   justify-content: center;
   flex: 1;
   gap: 0.5rem;
-  margin: 0px 30px;
+  margin: 10px 30px;
+  min-height: 200px;
+  margin-bottom: 20px;
   background-color: #0dcaf022;
   border-width: 2px;
   border-radius: 12px;
@@ -131,6 +133,7 @@ export const UploadFileZone = styled.div`
   }
 
   .content-file {
+    padding: 0 20px;
     font-weight: 500;
     font-size: 1.125rem;
     line-height: 1.75rem;
@@ -148,6 +151,7 @@ export const UploadFileZone = styled.div`
 `;
 
 export const InscribeNowButton = styled.div`
+  margin-top: 20px;
   padding: 10px 20px;
   display: inline-block;
   position: relative;
@@ -178,8 +182,32 @@ export const InscribeNowButton = styled.div`
 export const Row = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  margin: 0px 30px;
+
+  .label {
+    flex: 2;
+    font-weight: 400;
+    font-size: 15px;
+    color: black;
+  }
+
+  .content {
+    flex: 1;
+    text-align: right;
+    font-weight: 500;
+    font-size: 16px;
+    color: black;
+  }
+
+  .blue {
+    color: blue;
+  }
+
+  .bold {
+    font-weight: 500;
+  }
 
   @media screen and (max-width: 768px) {
     display: flex;
@@ -188,7 +216,7 @@ export const Row = styled.div`
 `;
 
 export const ErrorMessage = styled.p`
-  margin: 0px 30px;
+  margin: 10px 30px;
   font-weight: 400;
   font-size: 1rem;
   line-height: 1.25rem;
