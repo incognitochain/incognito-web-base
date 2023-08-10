@@ -19,6 +19,8 @@ const API_BASE_URL3 = 'https://device-network.incognito.org/';
 // const ETHERSCAN_URL = isMainnet ? "https://etherscan.io" : "https://kovan.etherscan.io";
 // const BSCSCAN_URL = isMainnet ? "https://bscscan.com" : "https://testnet.bscscan.com";
 // const POLYGONSCAN_URL = isMainnet ? "https://polygonscan.com" : "https://mumbai.polygonscan.com/";
+const INCOGNITO_SCAN_URL = isMainnet ? 'https://explorer.incognito.org' : 'https://testnet.incognito.org';
+
 const ETHERSCAN_URL = 'https://etherscan.io';
 const BSCSCAN_URL = 'https://bscscan.com';
 const POLYGONSCAN_URL = 'https://polygonscan.com';
@@ -116,4 +118,5 @@ export default {
   PASSPHRASE_WALLET_DEFAULT,
 
   COINS_SERVICE_URL,
+  INCOGNITO_SCAN_URL,
 };

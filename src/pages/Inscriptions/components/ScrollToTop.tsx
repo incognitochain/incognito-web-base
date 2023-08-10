@@ -10,7 +10,7 @@ const Container = styled.div`
     position: fixed;
     bottom: 40px;
     right: 25px;
-    z-index: 20;
+    z-index: 999999;
   }
   .icon-style {
     background-color: black;

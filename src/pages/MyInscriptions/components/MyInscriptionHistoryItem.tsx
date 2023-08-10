@@ -1,5 +1,7 @@
 import CopyIcon from 'components/Copy';
+import CONSTANT_CONFIGS from 'pages/IncWebWallet/constants/config';
 import React from 'react';
+import { ExternalLink } from 'react-feather';
 import { shortenString } from 'utils';
 import { humanFileSize } from 'utils/fileUtils';
 import format from 'utils/format';
@@ -27,6 +29,13 @@ const MyInscriptionHistoryItem = (props: Props) => {
         <Row>
           <Content>{shortenString(txId || '', 14)}</Content>
           <CopyIcon text={txId} size={20} />
+          <ExternalLink
+            color="white"
+            className="externalLink"
+            onClick={() => {
+              window.open(`${CONSTANT_CONFIGS.INCOGNITO_SCAN_URL}/tx/${txId}`, '_blank');
+            }}
+          />
         </Row>
       </Row>
       {tokenID && (

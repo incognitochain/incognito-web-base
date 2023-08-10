@@ -22,7 +22,15 @@ export const Container = styled.div`
 export const Row = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 0.5rem;
+
+  .externalLink {
+    :hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
 `;
 
 export const Title = styled.p`

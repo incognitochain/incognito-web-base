@@ -83,7 +83,7 @@ export const Container = styled.div`
   .overlay {
     position: absolute;
 
-    z-index: 9999;
+    z-index: 100;
 
     inset: 0px;
     display: grid;
