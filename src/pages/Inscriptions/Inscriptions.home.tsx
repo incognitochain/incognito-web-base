@@ -42,7 +42,7 @@ const InscriptionDetail = () => {
         headerStyle={{
           backgroundColor: '#303030',
         }}
-        width={'30%'}
+        width={'35%'}
         bodyStyle={{
           backgroundColor: '#303030',
         }}

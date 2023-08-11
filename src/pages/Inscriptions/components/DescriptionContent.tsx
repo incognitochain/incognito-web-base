@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import AppButton from 'components/AppButton';
 import { RoutePaths } from 'pages/Routes';
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -81,20 +82,10 @@ export const Container = styled.div`
 `;
 
 const InscriptionDetail = () => {
-  // const dispatch = useDispatch();
-  // const history = useHistory();
-
   const history = useHistory();
-
-  React.useEffect(() => {}, []);
-
   const inscribeNowOnClick = useCallback(() => {
     history.push(RoutePaths.CREATE_INSCRIPTION);
   }, []);
-
-  // const myInscriptionOnClick = useCallback(() => {
-  //   history.push(RoutePaths.MY_INSCRIPTIONS);
-  // }, []);
 
   return (
     <Container>
@@ -102,12 +93,7 @@ const InscriptionDetail = () => {
       <p className="description">Inscriptions Description.</p>
 
       <div className="row">
-        <div className="inscribe-now" onClick={inscribeNowOnClick}>
-          <p className="text">Create Inscription</p>
-        </div>
-        {/* <div className="inscribe-now" onClick={myInscriptionOnClick}>
-          <p className="text">My Inscriptions</p>
-        </div> */}
+        <AppButton title="Create Inscription" onClickCallback={inscribeNowOnClick}></AppButton>
       </div>
     </Container>
   );

@@ -125,6 +125,13 @@ const ToolBar = (props: Props) => {
   return (
     <Container>
       <div className="leftView">{isMyInscriptionPage ? <SearchBarMyInscription /> : <SearchBar />}</div>
+      {/* <div className="leftView">
+        <SearchBarCustom
+          placeHolderText="Search inscription with index or ID"
+          onChangeCallback={onChangeCallback1}
+          onClearCallback={onClearCallback1}
+        />
+      </div> */}
       <div className="space"></div>
       <div className="rightView">
         <ReloadBalanceButton key={'refresh-inscription-page'} onClickCallback={refreshPage} />,
