@@ -1,12 +1,10 @@
 import BigNumber from 'bignumber.js';
-import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
+import AppButton from 'components/AppButton';
 import { useModal } from 'components/Modal';
 import LoadingTransaction from 'components/Modal/Modal.transaction';
 import { PRV } from 'constants/token';
 import useThrottle from 'hooks/useThrottle';
 import { WalletState } from 'pages/IncWebWallet/core/types';
-import useUnlockWallet from 'pages/IncWebWallet/hooks/useUnlockWalelt';
-import useWalletController from 'pages/IncWebWallet/hooks/useWalletController';
 import IcArrowLeft from 'pages/IncWebWallet/images/ic_arrow_left.svg';
 import accountService from 'pages/IncWebWallet/services/wallet/accountService';
 import { RoutePaths } from 'pages/Routes';
@@ -16,7 +14,6 @@ import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { useAppSelector } from 'state/hooks';
-import { incognitoWalletAccountSelector } from 'state/incognitoWallet';
 import { webWalletStateSelector } from 'state/masterKey';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 // import { Trash } from 'react-feather';
@@ -25,14 +22,7 @@ import format from 'utils/format';
 
 import { parseError } from '../../utils/errorHelper';
 import { MAXIMUM_FILE_SIZE, MINIMUM_PRV_BALANCE, SUPPORTED_FILE_EXTENSIONS } from './CreateInscription.constants';
-import {
-  Container,
-  ErrorMessage,
-  InscribeNowButton,
-  LeftContainer,
-  Row,
-  UploadFileZone,
-} from './CreateInscription.styles';
+import { Container, ErrorMessage, LeftContainer, Row, UploadFileZone } from './CreateInscription.styles';
 
 export const formatAmount = (price?: string, canEmpty = false, decimals = 9): string => {
   let result = '';
@@ -52,14 +42,10 @@ export const formatAmount = (price?: string, canEmpty = false, decimals = 9): st
 };
 
 const CreateInscription = () => {
-  const { showUnlockModal } = useUnlockWallet();
   const history = useHistory();
-  const incAccount = useAppSelector(incognitoWalletAccountSelector);
   const webWalletState = useAppSelector(webWalletStateSelector);
-  const { isIncognitoInstalled } = useIncognitoWallet();
   const { setModal, closeModal } = useModal();
 
-  const walletController = useWalletController();
   const prvTokenInfo = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const accountSender = useAppSelector(defaultAccountWalletSelector);
@@ -72,8 +58,6 @@ const CreateInscription = () => {
       multiple: false,
       maxSize: MAXIMUM_FILE_SIZE,
     });
-
-  const _walletAction = () => showUnlockModal();
 
   const prvBalance = useMemo(() => {
     return new BigNumber(prvTokenInfo?.amount || 0);
@@ -127,35 +111,6 @@ const CreateInscription = () => {
     acceptedFiles.map((file) => (totalSize += file.size || 0));
     return totalSize;
   }, [acceptedFiles]);
-
-  const button = useMemo(() => {
-    let text = '';
-
-    if (walletController.isWalletExtension) {
-      if (!isIncognitoInstalled()) {
-        text = 'Install Wallet';
-      } else if (!incAccount) {
-        text = 'Connect Wallet';
-      } else {
-        text = 'Create Now';
-      }
-    } else if (walletController.isWalletWeb) {
-      if (webWalletState === WalletState.uninitialized) {
-        text = 'Install Wallet';
-      } else if (!incAccount || webWalletState === WalletState.locked) {
-        text = 'Unlock Wallet';
-      } else {
-        text = 'Create Now';
-      }
-    } else {
-      text = 'Install Wallet';
-    }
-
-    return {
-      text,
-      isConnected: !!incAccount,
-    };
-  }, [incAccount, isIncognitoInstalled, webWalletState]);
 
   const { isEnoughtPRVBalance, prvRequiredStr } = useMemo(() => {
     let isEnoughtPRVBalance = true;
@@ -324,17 +279,7 @@ const CreateInscription = () => {
         )}
 
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-
-        {button.isConnected ? (
-          <InscribeNowButton onClick={inscribeNowOnClick}>
-            <p className="text">{button.text}</p>
-          </InscribeNowButton>
-        ) : (
-          <InscribeNowButton onClick={_walletAction}>
-            {' '}
-            <p className="text">{button.text}</p>
-          </InscribeNowButton>
-        )}
+        <AppButton title="Create Now" onClickCallback={inscribeNowOnClick}></AppButton>
       </div>
     </Container>
   );
