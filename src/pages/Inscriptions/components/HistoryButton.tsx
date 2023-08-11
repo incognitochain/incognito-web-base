@@ -1,4 +1,5 @@
 import React from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Book } from 'react-feather';
 import styled from 'styled-components/macro';
 
@@ -6,24 +7,18 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 14px 20px;
+  padding: 10px 20px;
   gap: 0.3rem;
-  background-color: ${({ theme }) => theme.primary2};
+  /* background-color: ${({ theme }) => theme.primary2}; */
   border-radius: 8px;
 
   :hover {
     cursor: pointer;
     opacity: 0.8;
-    scale: 1.02;
+    scale: 1.1;
   }
 
-  .text {
-    align-self: center;
-    font-weight: 500;
-    font-size: 1.1rem;
-    line-height: 1.2rem;
-    white-space: nowrap;
-    color: ${({ theme }) => theme.primary5};
+  .button-tooltip {
   }
 `;
 
@@ -33,11 +28,23 @@ type Props = {
 
 const HistoryButton = (props: Props) => {
   const { onClickCallBack } = props;
+  const renderTooltip = (props: any) => (
+    <Tooltip id="button-tooltip" {...props} className="button-tooltip">
+      <p
+        style={{
+          fontSize: 16,
+        }}
+      >
+        History
+      </p>
+    </Tooltip>
+  );
 
   return (
     <Container onClick={() => onClickCallBack && onClickCallBack()}>
-      <p className="text">History</p>
-      <Book color="white" size={25} />
+      <OverlayTrigger placement="bottom" delay={{ show: 100, hide: 200 }} overlay={renderTooltip}>
+        <Book color="white" size={30} />
+      </OverlayTrigger>
     </Container>
   );
 };

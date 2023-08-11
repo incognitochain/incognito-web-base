@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components/macro';
 import { MediaQueryBuilder } from 'theme/mediaQuery';
 
 export const Container = styled.div`
-  padding: 0 2rem;
   width: 100%;
   min-height: calc(100vh - 135px);
   overflow: scroll;

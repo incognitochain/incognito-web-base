@@ -18,7 +18,6 @@ import { webWalletStateSelector } from 'state/masterKey';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 // import { Trash } from 'react-feather';
 import { humanFileSize } from 'utils/fileUtils';
-import format from 'utils/format';
 
 import { parseError } from '../../utils/errorHelper';
 import { MAXIMUM_FILE_SIZE, MINIMUM_PRV_BALANCE, SUPPORTED_FILE_EXTENSIONS } from './CreateInscription.constants';
@@ -120,10 +119,7 @@ const CreateInscription = () => {
 
     if (prvBalance.isLessThan(new BigNumber(maxPRVrequired))) {
       isEnoughtPRVBalance = false;
-      prvRequiredStr = format.amountVer2({
-        originalAmount: maxPRVrequired || 0,
-        decimals: prvTokenInfo.pDecimals || 9,
-      });
+      prvRequiredStr = formatAmount(maxPRVrequired.toString(), false, 9);
     }
 
     return {
@@ -223,7 +219,7 @@ const CreateInscription = () => {
   };
 
   return (
-    <Container>
+    <Container className="default-max-width default-margin-bottom">
       <LeftContainer
         onClick={() => {
           history.push(RoutePaths.INSCRIPTIONS);
@@ -266,20 +262,20 @@ const CreateInscription = () => {
         {!isEnoughtPRVBalance && webWalletState === WalletState.unlocked && (
           <div>
             <ErrorMessage>
-              {`PRV balance is insufficient. Your PRV balance must be larger than or equal ${prvRequiredStr} PRV to create the inscription.`}
+              {`Your PRV balance must be greater than or equal to ${prvRequiredStr}PRV to inscribe an inscription.`}
               <span
                 onClick={() => {
                   history.push('/swap');
                 }}
               >
-                Topup now
+                {'Top up now'}
               </span>
             </ErrorMessage>
           </div>
         )}
 
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-        <AppButton title="Create Now" onClickCallback={inscribeNowOnClick}></AppButton>
+        <AppButton title="Inscribe" onClickCallback={inscribeNowOnClick}></AppButton>
       </div>
     </Container>
   );

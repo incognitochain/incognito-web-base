@@ -89,11 +89,11 @@ const InscriptionDetail = () => {
 
   return (
     <Container>
-      <p className="title">Inscriptions</p>
-      <p className="description">Inscriptions Description.</p>
+      <p className="title">{'Privacy Inscriptions'}</p>
+      <p className="description">{`Empowering Your Data’s Privacy`}</p>
 
       <div className="row">
-        <AppButton title="Create Inscription" onClickCallback={inscribeNowOnClick}></AppButton>
+        <AppButton title="Inscribe" onClickCallback={inscribeNowOnClick}></AppButton>
       </div>
     </Container>
   );

@@ -25,7 +25,7 @@ const InscriptionDetail = () => {
   };
 
   return (
-    <Container>
+    <Container className="default-max-width default-margin-bottom">
       <DescriptionContent />
       <FilterBox showHistory={showHistoryOnClick} />
       <ToolBar />
@@ -33,7 +33,7 @@ const InscriptionDetail = () => {
       <ScrollToTop />
 
       <Drawer
-        title="History My Inscriptions"
+        title="History"
         placement="right"
         onClose={() => {
           showDrawer(false);
@@ -42,7 +42,7 @@ const InscriptionDetail = () => {
         headerStyle={{
           backgroundColor: '#303030',
         }}
-        width={'35%'}
+        width={'30%'}
         bodyStyle={{
           backgroundColor: '#303030',
         }}

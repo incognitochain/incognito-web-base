@@ -31,11 +31,8 @@ export const LeftContainer = styled.div`
 `;
 
 export const Container = styled.div`
-  padding-bottom: 40px;
   width: 100%;
   max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
   min-height: calc(100vh - 155px);
   display: flex;
   flex-direction: column;
