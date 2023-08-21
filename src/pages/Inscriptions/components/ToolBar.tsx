@@ -27,7 +27,7 @@ export const Container = styled.div`
 
   align-self: center;
 
-  min-height: 60px;
+  min-height: 50px;
 
   gap: 0.8rem;
 
@@ -44,7 +44,6 @@ export const Container = styled.div`
   }
 
   .rightView {
-    flex: 1;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -55,7 +54,7 @@ export const Container = styled.div`
   .sort-order {
     display: flex;
     flex-direction: row;
-    padding: 10px 20px;
+    padding: 8px 15px;
     align-items: center;
     /* background-color: ${({ theme }) => theme.primary2}; */
     background-color: 'transparent';

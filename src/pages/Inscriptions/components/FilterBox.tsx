@@ -69,7 +69,7 @@ const GroupItems = styled.div`
   gap: 1rem;
 
   .item {
-    padding: 15px;
+    padding: 10px 15px;
     min-width: 70px;
     display: flex;
     flex-direction: row;

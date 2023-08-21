@@ -43,7 +43,7 @@ export const Container = styled.div`
   flex-direction: row;
   align-items: center;
   min-height: 50px;
-  padding: 20px;
+  padding: 10px 20px;
   border-radius: 8px;
   border-width: 1px;
   background-color: ${({ theme }) => theme.bg3};
