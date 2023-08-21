@@ -9,65 +9,80 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
 
-  .thumbInscription-container {
+  .leftView {
     display: flex;
-    width: 100%;
-    max-height: 500px;
-    overflow: hidden;
-    justify-content: center;
-    border-radius: 20px;
+    flex: 1;
+    align-items: center;
 
-    .wrapper-inscription {
+    .thumbInscription-container {
       display: flex;
-      padding: 20px;
-      height: 500px;
-      width: 500px;
-      justify-content: center;
-      align-self: center;
+      max-height: 500px;
       overflow: hidden;
+      justify-content: center;
       border-radius: 20px;
 
-      :hover {
-        cursor: pointer;
-        transform: scale(1.01);
-        transition-duration: 0.2s;
+      .wrapper-inscription {
+        display: flex;
+        height: 500px;
+        width: 500px;
+        justify-content: center;
+        align-self: center;
+        overflow: hidden;
+        border-radius: 20px;
+
+        ${MediaQueryBuilder(
+          'upToMedium',
+          css`
+            height: 350px;
+            width: 350px;
+          `
+        )}
+
+        :hover {
+          cursor: pointer;
+          transform: scale(1.01);
+          transition-duration: 0.2s;
+        }
       }
     }
   }
 
-  .bodyInfo {
-    padding: 20px;
-    margin-top: 30px;
-    background-color: #303030;
-    border: 0.5px solid white;
-    border-radius: 16px;
-    width: 70%;
-    min-height: 500px;
-    align-self: center;
+  .rightView {
+    display: flex;
+    flex: 1.1;
+    align-items: center;
+    .bodyInfo {
+      padding: 20px;
+      background-color: #303030;
+      border: 0.5px solid white;
+      border-radius: 16px;
+      min-height: 500px;
+      align-self: center;
 
-    .bodyTitle {
-      flex-direction: row;
-      display: flex;
-      -webkit-box-align: center;
-      align-items: center;
-      -webkit-box-pack: justify;
-      justify-content: space-between;
-      margin-bottom: 1.75rem;
+      .bodyTitle {
+        flex-direction: row;
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        -webkit-box-pack: justify;
+        justify-content: space-between;
+        margin-bottom: 1.75rem;
 
-      .header {
-        font-style: normal;
-        font-weight: 500;
-        font-size: 1.25rem;
-        line-height: 1.75rem;
-        color: white;
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
+        .header {
+          font-style: normal;
+          font-weight: 500;
+          font-size: 1.25rem;
+          line-height: 1.75rem;
+          color: white;
+          text-transform: uppercase;
+          letter-spacing: 0.07em;
+        }
       }
-    }
 
-    .listContent {
-      flex-direction: column;
-      display: flex;
+      .listContent {
+        flex-direction: column;
+        display: flex;
+      }
     }
   }
 
@@ -86,7 +101,8 @@ export const Container = styled.div`
 `;
 
 export const SendButton = styled.div`
-  padding: 15px 25px;
+  margin-top: 20px;
+  padding: 10px 20px;
   display: inline-block;
   position: relative;
   align-items: center;
@@ -106,4 +122,19 @@ export const SendButton = styled.div`
     opacity: 0.8;
     scale: 1.02;
   }
+`;
+
+export const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+
+  ${MediaQueryBuilder(
+    'upToLarge',
+    css`
+      flex-direction: column;
+      gap: 2rem;
+    `
+  )}
 `;

@@ -27,8 +27,8 @@ export const Container = styled.div`
     .content {
       word-break: break-all;
       font-weight: 600;
-      font-size: 1rem;
-      line-height: 1.25rem;
+      font-size: 0.9rem;
+      line-height: 1.15rem;
       color: white;
     }
   }

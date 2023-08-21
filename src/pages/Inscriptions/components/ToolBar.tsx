@@ -89,7 +89,16 @@ export const Container = styled.div`
   ${MediaQueryBuilder(
     'upToMedium',
     css`
+      flex-direction: column;
+      justify-content: left;
+      align-items: baseline;
       width: 100%;
+
+      .leftView {
+        width: inherit;
+      }
+      .rightView {
+      }
     `
   )}
 `;

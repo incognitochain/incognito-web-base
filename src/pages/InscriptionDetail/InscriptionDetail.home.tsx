@@ -13,7 +13,7 @@ import format from 'utils/format';
 
 import { Inscription } from '../../state/inscriptions/inscriptions.types';
 import InscriptionDetailItem from './components/InscriptionDetailItem';
-import { Container, SendButton } from './InscriptionDetail.styles';
+import { Container, Row, SendButton } from './InscriptionDetail.styles';
 import FormSendInscription from './Send/index';
 
 const InscriptionDetail = () => {
@@ -66,7 +66,7 @@ const InscriptionDetail = () => {
     });
   };
 
-  const renserSendButton = () => {
+  const renderSendButton = () => {
     if (walletState === WalletState.uninitialized) return null; //Wallet Null or not created
     if (!myInscriptionTokenIDsList.includes(tokenId)) return null; //This Inscriptions not belong to current User
     if (walletState === WalletState.locked) return <SendButton onClick={_walletAction}>{text}</SendButton>;
@@ -74,30 +74,38 @@ const InscriptionDetail = () => {
   };
 
   return (
-    <Container>
-      <div className="thumbInscription-container">
-        <div className="wrapper-inscription">
-          <InscriptionLoader inscription={inscriptionItem} />
+    <Container className="default-max-width default-margin-bottom">
+      <Row>
+        <div className="leftView">
+          <div className="thumbInscription-container">
+            <div className="wrapper-inscription">
+              <InscriptionLoader inscription={inscriptionItem} />
+            </div>
+          </div>
         </div>
-      </div>
 
-      {renserSendButton()}
-      <div className="bodyInfo">
-        <div className="bodyTitle">
-          <p className="header">{`INSCRIPTION #${inscriptionItem.index}`}</p>
+        <div className="rightView">
+          <div className="bodyInfo">
+            <div className="bodyTitle">
+              <p className="header">{`INSCRIPTION #${inscriptionItem.index}`}</p>
+            </div>
+            <div className="listContent">
+              <InscriptionDetailItem title="Token ID:" content={inscriptionItem.token_id} copiable={true} />
+              <InscriptionDetailItem title="File Size:" content={humanFileSize(inscriptionItem.size || 0)} />
+              <InscriptionDetailItem title="Content Type:" content={inscriptionItem.content_type} />
+              <InscriptionDetailItem title="Mint At Block:" content={inscriptionItem.minted_at_block} />
+              <InscriptionDetailItem
+                title="Mint At:"
+                content={format.formatDateTime({ dateTime: inscriptionItem.minted_at })}
+                isLast={true}
+              />
+              {renderSendButton()}
+            </div>
+          </div>
         </div>
-        <div className="listContent">
-          <InscriptionDetailItem title="Token ID:" content={inscriptionItem.token_id} copiable={true} />
-          <InscriptionDetailItem title="File Size:" content={humanFileSize(inscriptionItem.size || 0)} />
-          <InscriptionDetailItem title="Content Type:" content={inscriptionItem.content_type} />
-          <InscriptionDetailItem title="Mint At Block:" content={inscriptionItem.minted_at_block} />
-          <InscriptionDetailItem
-            title="Mint At:"
-            content={format.formatDateTime({ dateTime: inscriptionItem.minted_at })}
-            isLast={true}
-          />
-        </div>
-      </div>
+      </Row>
+
+      {/* {renderSendButton()} */}
     </Container>
   );
 };
