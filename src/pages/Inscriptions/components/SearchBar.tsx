@@ -109,7 +109,7 @@ const SearchBar = (props: Props) => {
       if (isNaN(Number(keySearch))) {
         queryIndex = false;
         if (keySearch.length !== 64) {
-          errorMessage = 'Key search is inavalid';
+          errorMessage = 'Key search is inavalid.';
           isValid = false;
         }
       } else {
