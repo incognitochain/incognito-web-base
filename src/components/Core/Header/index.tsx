@@ -75,7 +75,7 @@ let menuItem: MenuItemProps[] = [
   //   isLink: true,
   // },
   {
-    name: 'Insriptions',
+    name: 'Inscriptions',
     path: routeInscription,
     metric: METRIC_TYPE.HEADER_INSCRIPTION,
     uniqMetric: METRIC_UNIQ.HEADER_INSCRIPTION_UNIQ,
