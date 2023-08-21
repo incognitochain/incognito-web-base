@@ -5,7 +5,7 @@ import { WalletState } from 'pages/IncWebWallet/core/types';
 import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { getFilterPageSelector, setFilterPage, setKeySearch } from 'state/inscriptions';
+import { getFilterPageSelector, resetSearchState, setFilterPage, setKeySearch } from 'state/inscriptions';
 import { webWalletStateSelector } from 'state/masterKey';
 import styled, { css } from 'styled-components/macro';
 import { MediaQueryBuilder } from 'theme/mediaQuery';
@@ -145,6 +145,7 @@ const FilterBox = (props: Props) => {
       } else {
         dispatch(setKeySearch(''));
         dispatch(setFilterPage(item.title));
+        dispatch(resetSearchState());
         // history.push(item.path);
       }
     },

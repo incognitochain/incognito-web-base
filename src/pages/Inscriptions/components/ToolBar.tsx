@@ -54,7 +54,8 @@ export const Container = styled.div`
   .sort-order {
     display: flex;
     flex-direction: row;
-    padding: 8px 15px;
+    margin-right: 5px;
+    padding: 8px 10px;
     align-items: center;
     /* background-color: ${({ theme }) => theme.primary2}; */
     background-color: 'transparent';

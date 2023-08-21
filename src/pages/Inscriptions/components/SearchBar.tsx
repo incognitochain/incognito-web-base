@@ -1,6 +1,6 @@
 import SearchSVG from 'assets/svg/search-icon.svg';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { XCircle } from 'react-feather';
 import { useDispatch } from 'react-redux';
 import {
@@ -166,14 +166,16 @@ const SearchBar = (props: Props) => {
   const searchInscriptionDeounce = useCallback(debounce(searchInscriptionAPI, 1000), []);
   const keySearchCallbackDeounce = useCallback(debounce(keySearchCallback, 1000), []);
 
-  useEffect(() => {
-    searchInscriptionDeounce(keySearch);
-    keySearchCallbackDeounce(keySearch);
-  }, [keySearch]);
+  // useEffect(() => {
+  //   searchInscriptionDeounce(keySearch);
+  //   keySearchCallbackDeounce(keySearch);
+  // }, [keySearch]);
 
   const onChange = (e: any) => {
     const keySearch = e.target.value;
     setKeySearch(keySearch || '');
+    searchInscriptionDeounce(keySearch);
+    keySearchCallbackDeounce(keySearch);
   };
 
   return (

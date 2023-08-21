@@ -10,10 +10,12 @@ import accountService from 'pages/IncWebWallet/services/wallet/accountService';
 import { RoutePaths } from 'pages/Routes';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { useAppSelector } from 'state/hooks';
+import { setFilterPage } from 'state/inscriptions';
 import { webWalletStateSelector } from 'state/masterKey';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
 // import { Trash } from 'react-feather';
@@ -42,6 +44,7 @@ export const formatAmount = (price?: string, canEmpty = false, decimals = 9): st
 
 const CreateInscription = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const webWalletState = useAppSelector(webWalletStateSelector);
   const { setModal, closeModal } = useModal();
 
@@ -49,7 +52,9 @@ const CreateInscription = () => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const accountSender = useAppSelector(defaultAccountWalletSelector);
 
-  // const dispatch = useDispatch();
+  const goBack = () => {
+    history.push(RoutePaths.INSCRIPTIONS);
+  };
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject, acceptedFiles, fileRejections } =
     useDropzone({
       accept: SUPPORTED_FILE_EXTENSIONS,
@@ -196,6 +201,10 @@ const CreateInscription = () => {
 
         toast.success('Inscribe Successfully!');
         closeModal();
+
+        //Navigate to My Inscirpiton Page
+        goBack();
+        dispatch(setFilterPage('My Inscriptions'));
       } catch (error) {
         console.error('------createAndSendInscribeRequestTx------');
         console.log('[createAndSendInscribeRequestTx] ERROR: ', error);
@@ -222,7 +231,7 @@ const CreateInscription = () => {
     <Container className="default-max-width default-margin-bottom">
       <LeftContainer
         onClick={() => {
-          history.push(RoutePaths.INSCRIPTIONS);
+          goBack();
         }}
       >
         <img alt="ic-arrow-left" src={IcArrowLeft} />
