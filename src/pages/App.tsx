@@ -39,7 +39,6 @@ import InscriptionDetail from './InscriptionDetail';
 import Inscriptions from './Inscriptions';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
-import MyInscriptions from './MyInscriptions';
 import Page404 from './Page404';
 import PeggingApp from './PeggingApp';
 import Policy from './Policy';
@@ -129,7 +128,7 @@ const App = () => {
           path={RoutePaths.CREATE_INSCRIPTION}
           component={withUnlockWallet(CreateInscription, RoutePaths.INSCRIPTIONS)}
         />
-        <Route exact path={RoutePaths.MY_INSCRIPTIONS} component={withUnlockWallet(MyInscriptions)} />
+        {/* <Route exact path={RoutePaths.MY_INSCRIPTIONS} component={withUnlockWallet(MyInscriptions)} /> */}
         <Route exact path={RoutePaths.EARNINGS} component={Earnings} />
         <Route exact path={RoutePaths.PRIVACY_POLICY} component={Policy} />
         <Route exact path={RoutePaths.TERM_OF_SERVICE} component={TermOfService} />

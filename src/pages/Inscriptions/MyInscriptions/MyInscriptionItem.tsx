@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { Inscription } from 'state/inscriptions/inscriptions.types';
 import { ellipsisCenter } from 'utils';
 
-import { Container } from './InscriptionItem.styled';
+import { Container } from './MyInscriptionItem.styled';
 
 type Props = {
   item?: Inscription;

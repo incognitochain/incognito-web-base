@@ -1,5 +1,11 @@
 import { WalletState } from 'pages/IncWebWallet/core/types';
 import useUnlockWallet from 'pages/IncWebWallet/hooks/useUnlockWalelt';
+import InscriptionItem from 'pages/Inscriptions/MyInscriptions/MyInscriptionItem';
+import {
+  ButtonConfirm,
+  Container,
+  InfiniteScrollContainer,
+} from 'pages/Inscriptions/MyInscriptions/MyInscriptionList.styled';
 import React, { useMemo } from 'react';
 import { File } from 'react-feather';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -8,10 +14,7 @@ import { useHistory } from 'react-router-dom';
 import { getKeySearchSelector, getMyInscriptionSortedList, Inscription } from 'state/inscriptions';
 import { webWalletStateSelector } from 'state/masterKey';
 
-import InscriptionItem from './InscriptionItem';
-import { ButtonConfirm, Container, InfiniteScrollContainer } from './InscriptionList.styled';
-
-const InscriptionList = () => {
+const MyInscriptionList = () => {
   const history = useHistory();
   const { showUnlockModal } = useUnlockWallet();
   const myInscriptionListDefault = useSelector(getMyInscriptionSortedList) || [];
@@ -107,4 +110,4 @@ const InscriptionList = () => {
   return <Container>{renderContentView()}</Container>;
 };
 
-export default React.memo(InscriptionList);
+export default React.memo(MyInscriptionList);

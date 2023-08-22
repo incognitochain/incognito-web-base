@@ -1,6 +1,6 @@
 import { Drawer } from 'antd';
-import MyInscriptionList from 'pages/MyInscriptions/components/InscriptionList';
-import MyInscriptionHistory from 'pages/MyInscriptions/components/MyInscriptionHistory';
+import MyInscriptionHistory from 'pages/Inscriptions/MyInscriptions/MyInscriptionHistory';
+import MyInscriptionList from 'pages/Inscriptions/MyInscriptions/MyInscriptionList';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMyInscriptionPage } from 'state/inscriptions';

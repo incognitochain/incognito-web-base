@@ -4,16 +4,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { useAppSelector } from 'state/hooks';
 
-import { Container } from './MyInscriptionHistory.styled';
-import MyInscriptionHistoryItem from './MyInscriptionHistoryItem';
+import { Container } from '../MyInscriptions/MyInscriptionHistory.styled';
+import MyInscriptionHistoryItem from '../MyInscriptions/MyInscriptionHistoryItem';
 
 type Props = {
   showDrawer: any;
 };
 
 const MyInscriptionHistory = (props: Props) => {
-  const { showDrawer } = props;
-
   const accountSender = useAppSelector(defaultAccountWalletSelector);
 
   const [loading, setLoading] = useState(false);

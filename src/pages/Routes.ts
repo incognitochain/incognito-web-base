@@ -9,7 +9,7 @@ const RoutePaths = {
   INSCRIPTIONS: '/inscriptions',
   INSCRIPTION_DETAIL: '/inscription/:tokenId',
   CREATE_INSCRIPTION: '/create-inscription',
-  MY_INSCRIPTIONS: '/my-inscriptions',
+  // MY_INSCRIPTIONS: '/my-inscriptions',
 
   EARNINGS: '/earnings',
   PRIVACY_POLICY: '/privacy-policy',

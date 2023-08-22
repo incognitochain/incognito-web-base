@@ -109,10 +109,6 @@ const WebWallet = () => {
     });
   };
 
-  // const goToMyInscriptions = () => {
-  //   history.push(RoutePaths.MY_INSCRIPTIONS);
-  // };
-
   return (
     <div className="wrap-inc-waller">
       <Container>
