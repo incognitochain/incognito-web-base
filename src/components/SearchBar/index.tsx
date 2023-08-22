@@ -6,7 +6,7 @@ import { Column, Container, ErrorMessage, TextInputStyled } from './styles';
 
 interface SearchBarProps extends InputHTMLAttributes<HTMLInputElement> {
   value?: string;
-  onChangeCallback?: (keySearch?: string) => void;
+  onChangeCallback?: (keySearch: string) => void;
   onClearCallback?: () => void;
   errorMessage?: string;
   searchIcon?: boolean;

@@ -3,7 +3,7 @@ import useThrottle from 'hooks/useThrottle';
 import ReloadBalanceButton from 'pages/IncWebWallet/components/FollowTokenDetail/components/ReloadBalanceButton';
 import React, { useCallback } from 'react';
 import { ArrowDown, ArrowUp } from 'react-feather';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import {
   getInscriptionListAPI,
   getIsMyInscriptionPage,
@@ -16,18 +16,14 @@ import {
 import styled, { css } from 'styled-components/macro';
 import { MediaQueryBuilder } from 'theme/mediaQuery';
 
-import SearchBar from './SearchBar';
+import SearchBarAllInscription from './SearchBarAllInscription';
 import SearchBarMyInscription from './SearchBarMyInscription';
 
 export const Container = styled.div`
   margin: 2rem 0;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-
-  align-self: center;
-
+  align-items: baseline;
   min-height: 50px;
 
   gap: 0.8rem;
@@ -35,9 +31,9 @@ export const Container = styled.div`
   .leftView {
     display: flex;
     flex: 1;
+    align-self: center;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
   }
 
   .space {
@@ -104,12 +100,7 @@ export const Container = styled.div`
   )}
 `;
 
-type Props = {
-  sortByCallback?: any;
-};
-
-const ToolBar = (props: Props) => {
-  const { sortByCallback } = props;
+const ToolBar = () => {
   const dispatch = useDispatch();
   const isMyInscriptionPage = useSelector(getIsMyInscriptionPage);
 
@@ -117,31 +108,27 @@ const ToolBar = (props: Props) => {
   const queryInfo = useSelector(getQueryInfoSelector);
 
   const sortByOnClicked = useCallback(() => {
-    dispatch(setSortBy({ asc: !queryInfo.asc }));
-    dispatch(setInscriptionList([]));
-    dispatch(getInscriptionListAPI());
-    sortByCallback && sortByCallback();
+    batch(() => {
+      dispatch(setSortBy({ asc: !queryInfo.asc }));
+      dispatch(setInscriptionList([]));
+      dispatch(getInscriptionListAPI());
+    });
   }, [sortByStr, isMyInscriptionPage]);
 
   const refreshPage = useThrottle(async () => {
     if (!isMyInscriptionPage) {
-      dispatch(setSearching(false));
-      dispatch(setInscriptionList([]));
-      dispatch(getInscriptionListAPI());
+      batch(() => {
+        dispatch(setSearching(false));
+        dispatch(setInscriptionList([]));
+        dispatch(getInscriptionListAPI());
+      });
     } else {
     }
   }, 1500);
 
   return (
     <Container>
-      <div className="leftView">{isMyInscriptionPage ? <SearchBarMyInscription /> : <SearchBar />}</div>
-      {/* <div className="leftView">
-        <SearchBarCustom
-          placeHolderText="Search inscription with index or ID"
-          onChangeCallback={onChangeCallback1}
-          onClearCallback={onClearCallback1}
-        />
-      </div> */}
+      <div className="leftView">{isMyInscriptionPage ? <SearchBarMyInscription /> : <SearchBarAllInscription />}</div>
       <div className="space"></div>
       <div className="rightView">
         <ReloadBalanceButton key={'refresh-inscription-page'} onClickCallback={refreshPage} />,

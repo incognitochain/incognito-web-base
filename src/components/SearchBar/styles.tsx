@@ -62,7 +62,7 @@ export const TextInputStyled = styled.input`
 
 export const ErrorMessage = styled.p`
   font-weight: 500;
-  font-size: 1.2rem;
-  line-height: 140%;
+  font-size: 1rem;
+  line-height: 1.1rem;
   color: red;
 `;
