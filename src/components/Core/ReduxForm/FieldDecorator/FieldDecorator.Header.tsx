@@ -13,10 +13,10 @@ const FieldDecoratorHeader = ({ leftTitle, rightTitle, children, ...rest }: Prop
   return (
     <HeaderContainer>
       <HeaderWrapper>
-        <Typography.Text type="p1" color="gray_9C9C9C">
+        <Typography.Text type="p1" color="white_3">
           {leftTitle}
         </Typography.Text>
-        <Typography.Text type="p1" color="gray_9C9C9C">
+        <Typography.Text type="p1" color="white_3">
           {rightTitle}
         </Typography.Text>
       </HeaderWrapper>

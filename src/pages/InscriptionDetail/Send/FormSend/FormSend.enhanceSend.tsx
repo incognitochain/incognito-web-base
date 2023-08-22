@@ -25,6 +25,8 @@ const enhanceSend = (WrappedComponent: any) => {
     const { inscriptionId, inscription } = props;
 
     const handleSendInscription = async (formData: any) => {
+      let isSendSuccess;
+
       try {
         // updateMetric().then();
 
@@ -61,6 +63,7 @@ const enhanceSend = (WrappedComponent: any) => {
         console.log('SEND INSCRIPTION: PAYLOAD ====>>>> ', payload);
 
         let tx;
+
         if (typeof setShardNumber === 'function') {
           await setShardNumber(8);
         }
@@ -88,12 +91,17 @@ const enhanceSend = (WrappedComponent: any) => {
 
         await accountService.setInscriptionsHistory({ accountWallet: accountSender, historyData });
 
-        toast.success('Send Success');
+        toast.success('Sent successfully.');
+        isSendSuccess = true;
       } catch (e) {
         console.log('handleSendInscription ERROR: ', e);
         toast.error(parseError(e));
+        isSendSuccess = false;
       } finally {
-        closeModal();
+        closeModal(); // Close Modal Loading
+        if (isSendSuccess) {
+          closeModal(); // Close Modal Send
+        }
       }
     };
 

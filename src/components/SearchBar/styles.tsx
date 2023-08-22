@@ -1,14 +1,22 @@
 import styled from 'styled-components/macro';
 
+export const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 0.5rem;
+`;
+
 export const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
   align-items: center;
   min-height: 50px;
-  padding: 20px;
+  padding: 10px 20px;
   border-radius: 8px;
-  border-width: 1px;
+  border: 1px solid transparent;
   background-color: ${({ theme }) => theme.bg3};
   caret-color: ${({ theme }) => theme.primary5};
 
@@ -50,4 +58,11 @@ export const TextInputStyled = styled.input`
     line-height: 140%;
     color: ${({ theme }) => theme.primary7};
   }
+`;
+
+export const ErrorMessage = styled.p`
+  font-weight: 500;
+  font-size: 1.2rem;
+  line-height: 140%;
+  color: red;
 `;

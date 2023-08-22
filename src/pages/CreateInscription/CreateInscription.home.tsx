@@ -198,8 +198,7 @@ const CreateInscription = () => {
         console.log('TX historyData ', historyData);
 
         await accountService.setInscriptionsHistory({ accountWallet: accountSender, historyData });
-
-        toast.success('Inscribe Successfully!');
+        toast.success('Inscribe successfully. Please wait for up to 3 minutes for your inscription to appear.');
         closeModal();
 
         //Navigate to My Inscirpiton Page

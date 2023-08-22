@@ -68,13 +68,7 @@ const FormSend = (props: Props & any) => {
         <FieldDecorator.Body
           leftView={<FieldDecorator.Input input={props.input} type="text" placeholder={getNetworkFee()} />}
           rightView={
-            <Typography.Text
-              type="p1"
-              color="gray_9C9C9C"
-              fontWeight={600}
-              className={'hover-opacity'}
-              textAlign="right"
-            >
+            <Typography.Text type="p1" color="white" fontWeight={600} className={'hover-opacity'} textAlign="right">
               {'PRV'}
             </Typography.Text>
           }

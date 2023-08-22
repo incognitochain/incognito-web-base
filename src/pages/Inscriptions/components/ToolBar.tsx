@@ -1,3 +1,4 @@
+// import SearchBar from 'components/SearchBar';
 import useThrottle from 'hooks/useThrottle';
 import ReloadBalanceButton from 'pages/IncWebWallet/components/FollowTokenDetail/components/ReloadBalanceButton';
 import React, { useCallback } from 'react';
