@@ -18,10 +18,10 @@ import { useAppSelector } from 'state/hooks';
 import { setFilterPage } from 'state/inscriptions';
 import { webWalletStateSelector } from 'state/masterKey';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
+import { parseError } from 'utils/errorHelper';
 // import { Trash } from 'react-feather';
 import { humanFileSize } from 'utils/fileUtils';
 
-import { parseError } from '../../utils/errorHelper';
 import { MAXIMUM_FILE_SIZE, MINIMUM_PRV_BALANCE, SUPPORTED_FILE_EXTENSIONS } from './CreateInscription.constants';
 import { Container, ErrorMessage, LeftContainer, Row, UploadFileZone } from './CreateInscription.styles';
 
@@ -198,7 +198,9 @@ const CreateInscription = () => {
         console.log('TX historyData ', historyData);
 
         await accountService.setInscriptionsHistory({ accountWallet: accountSender, historyData });
-        toast.success('Inscribe successfully. Please wait for up to 3 minutes for your inscription to appear.');
+        toast.success('Inscribe successfully. Please wait for up to 3 minutes for your inscription to appear.', {
+          autoClose: 3000,
+        });
         closeModal();
 
         //Navigate to My Inscirpiton Page

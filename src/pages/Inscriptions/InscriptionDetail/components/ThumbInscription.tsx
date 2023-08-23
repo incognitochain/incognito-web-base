@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
 
-import { Inscription } from '../../../state/inscriptions/inscriptions.types';
+import { Inscription } from '../../../../state/inscriptions/inscriptions.types';
 import { Container } from './ThumbInscription.styled';
 
 type Props = {

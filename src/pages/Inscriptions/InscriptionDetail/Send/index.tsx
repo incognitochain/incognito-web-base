@@ -1,6 +1,3 @@
-// export { default as FormSend } from './FormSend';
-// export { default as enhance } from './FormSend.enhance';
-// export { default as reducer } from './FormSend.reducer';
 import { Drawer } from 'antd';
 import { useModal } from 'components/Modal';
 import AddressBook from 'pages/IncWebWallet/features/AddressBook';
@@ -35,12 +32,6 @@ const FormSendInscription = (props: Props) => {
 
   return (
     <Container className="animation-opacity">
-      {/* <NavigationHeader
-        leftTitle={`Send Inscription || ''}`}
-        onBack={() => {
-          closeModal();
-        }}
-      /> */}
       <FormSend openAddressBook={() => showDrawer(true)} inscriptionId={inscriptionId} inscription={inscription} />
       <Drawer
         title="Address Book"

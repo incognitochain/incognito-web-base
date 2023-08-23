@@ -11,7 +11,7 @@ import { getInscriptionInfoAPI, getInscriptionTokenIDsListSelector } from 'state
 import { humanFileSize } from 'utils/fileUtils';
 import format from 'utils/format';
 
-import { Inscription } from '../../state/inscriptions/inscriptions.types';
+import { Inscription } from '../../../state/inscriptions/inscriptions.types';
 import InscriptionDetailItem from './components/InscriptionDetailItem';
 import { Container, Row, SendButton } from './InscriptionDetail.styles';
 import FormSendInscription from './Send/index';

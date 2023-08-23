@@ -1,4 +1,4 @@
-import { FORM_CONFIGS as FORM_SEND_INSCRIPTION_CONFIGS } from 'pages/InscriptionDetail/Send/FormSend/FormSend.constant';
+import { FORM_CONFIGS as FORM_SEND_INSCRIPTION_CONFIGS } from 'pages/Inscriptions/InscriptionDetail/Send/FormSend/FormSend.constant';
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { change } from 'redux-form';
