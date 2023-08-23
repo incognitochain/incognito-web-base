@@ -29,7 +29,7 @@ const InscriptionItem = (props: Props) => {
 
   return (
     <Container key={token_id}>
-      <InscriptionLoader inscription={item} onClick={onClick} />
+      <InscriptionLoader inscription={item} onClick={onClick} disbledBlur={true} />
       <div className="card-info">
         <p className="title">{`Inscription #${index}`}</p>
         <p className="token-id">{tokenIdShorten}</p>

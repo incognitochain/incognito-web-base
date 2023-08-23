@@ -11,7 +11,8 @@ export const reducerSelector = createSelector(
 );
 
 export const getInscriptionListSelector = createSelector(reducerSelector, (inscriptionReducer) => {
-  return inscriptionReducer.inscriptionList?.filter((item) => !item.hide) || [];
+  // return inscriptionReducer.inscriptionList?.filter((item) => !item.hide) || [];
+  return inscriptionReducer.inscriptionList || [];
 });
 
 export const getHasLoadMoreSelector = createSelector(

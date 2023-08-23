@@ -1,17 +1,27 @@
+import { Tooltip } from 'antd';
 import placeHolderImg from 'assets/images/image_default.png';
+import { useModal } from 'components/Modal';
 import { INSCRIPTION_BASE_URL } from 'pages/IncWebWallet/services/http2';
 import React, { useState } from 'react';
+// import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Eye, Flag, Info } from 'react-feather';
 import { Inscription } from 'state/inscriptions';
 
+import ReportInscriptionModal from './ReportInscriptionModal';
 import { Container, SpinStyled } from './styled';
 
 type Props = {
   inscription: Inscription;
   onClick?: () => void;
+  disbledBlur?: boolean;
 };
 
 const InscriptionLoader = React.memo((props: Props) => {
-  const { inscription, onClick } = props;
+  const { inscription, onClick, disbledBlur } = props;
+  const { content_type, index, token_id, hide } = inscription;
+  const { setModal } = useModal();
+  const [isBlur, setBlur] = useState(hide);
+  const [isToolTipOpen, setToolTipOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -77,18 +87,68 @@ const InscriptionLoader = React.memo((props: Props) => {
     }
   };
 
-  const { content_type, index, token_id } = inscription;
-
   const renderLoading = () => <SpinStyled size="large" />;
   const renderContent = () => {
+    const className = disbledBlur ? '' : isBlur ? 'blurContent' : '';
+    return <div className={`card-image ${className}`}>{renderInscriptionContent()}</div>;
+  };
+
+  const reportOnClick = () => {
+    setToolTipOpen(false);
+    setModal({
+      closable: true,
+      data: <ReportInscriptionModal inscription={inscription} />,
+      isTransparent: false,
+      rightHeader: undefined,
+      title: 'Report Inscription',
+      isSearchTokenModal: false,
+    });
+  };
+
+  const viewContentOnClick = () => {
+    setBlur(!isBlur);
+  };
+
+  const renderInfoContent = () => (
+    <div className="tool-tip-content">
+      <div className="row-tool-tip" onClick={reportOnClick}>
+        <Flag size={18} color="white"></Flag>
+        <p>Report Image</p>
+      </div>
+      {hide && (
+        <div className="row-tool-tip" onClick={viewContentOnClick}>
+          <Eye size={18} color="white"></Eye>
+          <p>{`${isBlur ? 'View Post' : 'Hide Post'}`}</p>
+        </div>
+      )}
+    </div>
+  );
+
+  const cardOnClick = () => {
+    if (isToolTipOpen || isBlur) return;
+    onClick && onClick();
+  };
+
+  const renderOverlay = () => {
     return (
-      <div className="card-image" onClick={onClick}>
-        {renderInscriptionContent()}
+      <div className="overlay" onClick={cardOnClick}>
+        {!disbledBlur && (
+          <div className="infoAreaView">
+            <div className="infoBlurBackground"></div>
+            <Tooltip
+              placement="top"
+              open={isToolTipOpen}
+              overlay={renderInfoContent}
+              onOpenChange={(flag: boolean) => {
+                setToolTipOpen(flag);
+              }}
+            >
+              <Info className="infoIcon" size={30} color="white" />
+            </Tooltip>
+          </div>
+        )}
       </div>
     );
-  };
-  const renderOverlay = () => {
-    return <div className="overlay" onClick={onClick}></div>;
   };
 
   return (

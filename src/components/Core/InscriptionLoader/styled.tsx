@@ -46,6 +46,7 @@ export const Container = styled.div`
       justify-content: center;
       background: rgb(5, 15, 10);
       overflow: hidden;
+      filter: 50px;
 
       .placeholder-image {
         width: 80px;
@@ -79,16 +80,42 @@ export const Container = styled.div`
         display: none;
       }
     }
+
+    &.blurContent {
+      filter: blur(50px);
+    }
   }
   .overlay {
     position: absolute;
 
     z-index: 100;
-
+    padding: 10px;
     inset: 0px;
-    display: grid;
+
     place-items: center;
-    opacity: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    .infoAreaView {
+      position: absolute;
+      padding: 5px;
+      z-index: 200;
+
+      .infoBlurBackground {
+        background-color: black;
+        filter: blur(20px);
+        width: 20px;
+        height: 20px;
+      }
+
+      .infoIcon {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 10px;
+        filter: blur(0px) !important;
+      }
+    }
   }
 `;
 

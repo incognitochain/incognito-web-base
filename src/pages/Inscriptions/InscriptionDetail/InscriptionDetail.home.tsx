@@ -79,7 +79,7 @@ const InscriptionDetail = () => {
         <div className="leftView">
           <div className="thumbInscription-container">
             <div className="wrapper-inscription">
-              <InscriptionLoader inscription={inscriptionItem} />
+              <InscriptionLoader inscription={inscriptionItem} disbledBlur={true} />
             </div>
           </div>
         </div>
