@@ -19,6 +19,7 @@ export type Inscription = {
   minted_at_block: string;
   content_type: string;
   size: number;
+  hide: boolean;
 };
 
 export type QueryInscription = {

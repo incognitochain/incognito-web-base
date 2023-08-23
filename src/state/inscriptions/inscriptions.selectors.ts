@@ -10,10 +10,9 @@ export const reducerSelector = createSelector(
   (inscriptionsReducer) => inscriptionsReducer
 );
 
-export const getInscriptionListSelector = createSelector(
-  reducerSelector,
-  (inscriptionReducer) => inscriptionReducer.inscriptionList || []
-);
+export const getInscriptionListSelector = createSelector(reducerSelector, (inscriptionReducer) => {
+  return inscriptionReducer.inscriptionList?.filter((item) => !item.hide) || [];
+});
 
 export const getHasLoadMoreSelector = createSelector(
   reducerSelector,
