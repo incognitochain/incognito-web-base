@@ -256,6 +256,18 @@ const queryWithTokenIdAPI = (tokenId: string) => async (dispatch: AppThunkDispat
   }
 };
 
+const reportInscriptionById = (tokenId: string) => async (dispatch: AppThunkDispatch, getState: AppGetState) => {
+  let result;
+  try {
+    result = await http2.get(`report?id=${tokenId}`);
+  } catch (e) {
+    console.log('[reportInscriptionById] ERROR: ', e);
+    result = false;
+  } finally {
+    return result;
+  }
+};
+
 export {
   fetchMyInscriptionListAPI,
   getInscriptionContentAPI,
@@ -263,6 +275,7 @@ export {
   getInscriptionListAPI,
   queryWithIndexAPI,
   queryWithTokenIdAPI,
+  reportInscriptionById,
   resetSearchState,
   setFetchingAction,
   setFilterPage,
