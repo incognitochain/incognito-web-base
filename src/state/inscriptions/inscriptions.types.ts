@@ -15,7 +15,7 @@ export enum InscriptionsActionType {
 export type Inscription = {
   token_id: string;
   index: number;
-  minted_at: number;
+  minted_at: number; //epochTime, timestampe = epochTime * 1000
   minted_at_block: string;
   content_type: string;
   size: number;
