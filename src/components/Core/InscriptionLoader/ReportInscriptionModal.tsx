@@ -122,7 +122,7 @@ const ReportInscriptionModal = (props: Props) => {
       toast.success('Report successfully.', { autoClose: 1000 });
       reportSucess = true;
     } catch (error) {
-      console.log('[ReportInscription] error ', error);
+      console.log('[ReportInscription] aa1 error = ', error);
       toast.error(parseError(error));
       reportSucess = false;
     } finally {

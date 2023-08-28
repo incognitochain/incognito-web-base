@@ -64,8 +64,7 @@ const InscriptionLoader = React.memo((props: Props) => {
             frameBorder="0"
             scrolling="no"
             className="iframe"
-            sandbox={'allow-pointer-lock'}
-            // sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+            sandbox={' allow-scripts allow-pointer-lock allow-same-origin'}
             title={`${token_id}-iframeTag`}
             onLoad={onLoad}
             onError={onError}
@@ -76,10 +75,9 @@ const InscriptionLoader = React.memo((props: Props) => {
           <iframe
             src={srcUrl}
             scrolling="no"
-            sandbox={'allow-pointer-lock'}
             className="iframe"
             title={`${token_id}-iframeTag`}
-            // sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+            sandbox={'allow-scripts allow-pointer-lock allow-same-origin'}
             onLoad={onLoad}
             onError={onError}
           ></iframe>
