@@ -163,6 +163,6 @@ const InscriptionLoader = React.memo((props: Props) => {
   );
 });
 
-InscriptionLoader.displayName = 'InscriptionLoader';
+InscriptionLoader.displayName = 'InscriptionLoader ';
 
 export { InscriptionLoader };
