@@ -96,7 +96,7 @@ const InscriptionDetail = () => {
               <InscriptionDetailItem title="Mint At Block:" content={inscriptionItem.minted_at_block} />
               <InscriptionDetailItem
                 title="Mint At:"
-                content={format.formatDateTime({ dateTime: inscriptionItem.minted_at })}
+                content={format.formatDateTime({ dateTime: inscriptionItem.minted_at * 1000 })}
                 isLast={true}
               />
               {renderSendButton()}

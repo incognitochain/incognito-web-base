@@ -4,7 +4,7 @@ import { useModal } from 'components/Modal';
 import { INSCRIPTION_BASE_URL } from 'pages/IncWebWallet/services/http2';
 import React, { useState } from 'react';
 // import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { Eye, Flag, Info } from 'react-feather';
+import { Eye, EyeOff, Flag, Info } from 'react-feather';
 import { Inscription } from 'state/inscriptions';
 
 import ReportInscriptionModal from './ReportInscriptionModal';
@@ -133,19 +133,22 @@ const InscriptionLoader = React.memo((props: Props) => {
     return (
       <div className="overlay" onClick={cardOnClick}>
         {!disbledBlur && (
-          <div className="infoAreaView">
-            <div className="infoBlurBackground"></div>
-            <Tooltip
-              placement="top"
-              open={isToolTipOpen}
-              overlay={renderInfoContent}
-              onOpenChange={(flag: boolean) => {
-                setToolTipOpen(flag);
-              }}
-            >
-              <Info className="infoIcon" size={30} color="white" />
-            </Tooltip>
-          </div>
+          <>
+            <div className="infoAreaView">
+              <div className="infoBlurBackground"></div>
+              <Tooltip
+                placement="top"
+                open={isToolTipOpen}
+                overlay={renderInfoContent}
+                onOpenChange={(flag: boolean) => {
+                  setToolTipOpen(flag);
+                }}
+              >
+                <Info className="infoIcon" size={30} color="white" />
+              </Tooltip>
+            </div>
+            {isBlur && <EyeOff color="black" style={{ margin: 'auto' }} size={30} />}
+          </>
         )}
       </div>
     );

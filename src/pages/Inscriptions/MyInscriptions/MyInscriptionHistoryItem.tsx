@@ -66,7 +66,7 @@ const MyInscriptionHistoryItem = (props: Props) => {
       </Row>
       <Row>
         <Title>{'Time:'}</Title>
-        <Content>{format.formatDateTime({ dateTime: timestamp })}</Content>
+        <Content>{format.formatDateTime({ dateTime: timestamp * 1000 })}</Content>
       </Row>
     </Container>
   );
