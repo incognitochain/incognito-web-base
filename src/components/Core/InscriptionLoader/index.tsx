@@ -14,10 +14,11 @@ type Props = {
   inscription: Inscription;
   onClick?: () => void;
   disbledBlur?: boolean;
+  isInscriptipDetail?: boolean;
 };
 
 const InscriptionLoader = React.memo((props: Props) => {
-  const { inscription, onClick, disbledBlur } = props;
+  const { inscription, onClick, disbledBlur, isInscriptipDetail = false } = props;
   const { content_type, index, token_id, hide } = inscription;
   const { setModal } = useModal();
   const [isBlur, setBlur] = useState(hide);
@@ -43,7 +44,6 @@ const InscriptionLoader = React.memo((props: Props) => {
     const { content_type } = inscription;
 
     const srcUrl = `${INSCRIPTION_BASE_URL}/inscription-content?id=${token_id}`;
-
     if (error)
       return (
         <div className="placeholder-image-container">
@@ -64,8 +64,7 @@ const InscriptionLoader = React.memo((props: Props) => {
             frameBorder="0"
             scrolling="no"
             className="iframe"
-            sandbox={'allow-pointer-lock'}
-            // sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+            sandbox={'allow-scripts allow-pointer-lock'}
             title={`${token_id}-iframeTag`}
             onLoad={onLoad}
             onError={onError}
@@ -76,10 +75,9 @@ const InscriptionLoader = React.memo((props: Props) => {
           <iframe
             src={srcUrl}
             scrolling="no"
-            sandbox={'allow-pointer-lock'}
+            sandbox={'allow-scripts allow-pointer-lock'}
             className="iframe"
             title={`${token_id}-iframeTag`}
-            // sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
             onLoad={onLoad}
             onError={onError}
           ></iframe>
