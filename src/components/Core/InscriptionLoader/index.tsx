@@ -152,8 +152,9 @@ const InscriptionLoader = React.memo((props: Props) => {
     );
   };
 
+  const className = isInscriptipDetail ? 'hover-deactive' : 'hover-active';
   return (
-    <Container>
+    <Container className={className}>
       {renderContent()}
       {loading && renderLoading()}
       {renderOverlay()}

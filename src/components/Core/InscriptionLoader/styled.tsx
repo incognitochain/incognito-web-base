@@ -14,10 +14,17 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
 
-  :hover {
-    cursor: pointer;
-    transform: scale(1.02);
-    transition-duration: 0.2s;
+  &.hover-active {
+    :hover {
+      cursor: pointer;
+      transform: scale(1.02);
+      transition-duration: 0.2s;
+    }
+  }
+
+  &.hover-deactive {
+    :hover {
+    }
   }
 
   :hover .card-image {

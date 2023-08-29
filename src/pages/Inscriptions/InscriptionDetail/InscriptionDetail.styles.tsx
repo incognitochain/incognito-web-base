@@ -37,12 +37,6 @@ export const Container = styled.div`
             width: 350px;
           `
         )}
-
-        :hover {
-          cursor: pointer;
-          transform: scale(1.01);
-          transition-duration: 0.2s;
-        }
       }
     }
   }
