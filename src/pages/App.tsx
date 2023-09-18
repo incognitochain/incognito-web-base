@@ -143,6 +143,7 @@ const App = () => {
         <Route exact path={RoutePaths.WALLET_IMPORT_RESTORE} component={ImportWallet} />
         <Route exact path={RoutePaths.WALLET_ACCOUNT} component={withUnlockWallet(KeyChain)} />
         <Route exact path={RoutePaths.WALLET_SETTINGS} component={withUnlockWallet(Settings)} />
+        <Route exact path="*" component={Page404} />
         {!isMobile && (
           <>
             <Route exact path={RoutePaths.VOTE} component={Governance} />
@@ -150,7 +151,6 @@ const App = () => {
             <Route exact path={RoutePaths.VOTE_ID} component={ProposalDetail} />
           </>
         )}
-        <Route component={Page404} />
       </Switch>
     );
   };
