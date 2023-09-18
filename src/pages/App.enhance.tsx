@@ -19,7 +19,7 @@ const enhance = (WrappedComponent: React.FunctionComponent) => {
       try {
         axios.get('https://api-explorer.incognito.org/api/v1/explorer/summary').then((data) => {
           const volume = Math.ceil(
-            data.data.data.find((item: any) => item['metricType'] === 'TRADING_VOLUME_TOTAL').value / 1e6
+            data.data.data.find((item: any) => item['metricType'] === 'WEB_PAPP_TOTAL_TRADING_VOLUME').value / 1e6
           );
           StorageManager.setItem(KEYS.TRADE_VOLUME, `${volume}`);
           dispatch(actionSetExplorer(data.data.data));
