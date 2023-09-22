@@ -1,5 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { BigNumber } from 'bignumber.js';
+import { orderBy } from 'lodash';
 import { AppState } from 'state';
 
 import convert from '../../utils/convert';
@@ -19,7 +20,8 @@ export const poolsSelectors = createSelector(
   poolSelectors,
   getPrivacyDataByTokenIDSelector,
   (pool, getPrivacyDataByTokenID) => {
-    return (pool.pools || []).filter((pool) => {
+    let results = [];
+    results = (pool.pools || []).filter((pool) => {
       if (!pool) return false;
       const { token1ID, token2ID, totalValueLockUSD } = pool;
       const token1 = getPrivacyDataByTokenID(token1ID);
@@ -29,6 +31,11 @@ export const poolsSelectors = createSelector(
 
       return !token1.movedUnifiedToken && !token2.movedUnifiedToken;
     });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    results = orderBy(results, ['totalValueLockUSD'], ['desc']);
+
+    return results;
   }
 );
 export const explorerSelectors = createSelector(poolSelectors, (pool) => {

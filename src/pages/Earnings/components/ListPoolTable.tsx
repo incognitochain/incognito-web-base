@@ -13,6 +13,7 @@ import { isFetchingPoolsSelectors, poolsSelectors } from 'state/pools/pool.selec
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 import { Pool } from '../Earnings.types';
+import { formatPrice } from '../features/Validators/Validators.utils';
 
 const Styled = styled.div`
   margin-top: 64px;
@@ -242,7 +243,7 @@ const ListPoolTable = () => {
       dataIndex: 'totalValueLockUSD',
       key: 'totalValueLockUSD',
       responsive: ['md'],
-      render: (text) => <p className="baseText">${text.toFixed(2)}</p>,
+      render: (text) => <p className="baseText">{`$${formatPrice({ price: text || '0' })}`}</p>,
     },
     {
       dataIndex: 'volume',
