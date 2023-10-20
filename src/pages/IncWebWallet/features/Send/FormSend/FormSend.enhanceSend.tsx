@@ -4,10 +4,12 @@ import SelectedPrivacy from 'models/model/SelectedPrivacyModel';
 import useFollowTokenSelected from 'pages/IncWebWallet/hooks/useFollowTokenSelected';
 import accountService from 'pages/IncWebWallet/services/wallet/accountService';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { isValid } from 'redux-form';
 import { defaultAccountWalletSelector } from 'state/account/account.selectors';
 import { useAppDispatch } from 'state/hooks';
 import convert from 'utils/convert';
+import { parseError } from 'utils/errorHelper';
 
 import { getConfirmTxBuilder } from '../TransactionReceipt';
 import TransactionReceipt from '../TransactionReceipt/TransactionReceipt';
@@ -136,8 +138,9 @@ const enhanceSend = (WrappedComponent: any) => {
         }, 500);
       } catch (e) {
         console.log('handleSendAnonymously ERROR: ', e);
-        closeModal();
+        toast.error(parseError(e));
       } finally {
+        closeModal();
       }
     };
 

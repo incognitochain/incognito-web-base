@@ -13,7 +13,7 @@ import { useInternetConnnection } from 'components/Core/InternetConnection';
 import { INCOGNITO_LANDING_PAGE } from 'constants/routing';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import useTheme from 'hooks/useTheme';
-import { routePeggingApps } from 'pages';
+import { routeInscription, routePeggingApps } from 'pages';
 import React from 'react';
 // import { ReactComponent as Logo } from 'assets/svg/logo.svg';
 import { useSelector } from 'react-redux';
@@ -74,6 +74,12 @@ let menuItem: MenuItemProps[] = [
   //   target: '_blank',
   //   isLink: true,
   // },
+  {
+    name: 'Inscriptions',
+    path: routeInscription,
+    metric: METRIC_TYPE.HEADER_INSCRIPTION,
+    uniqMetric: METRIC_UNIQ.HEADER_INSCRIPTION_UNIQ,
+  },
   {
     name: 'Forum',
     path: 'https://we.incognito.org/',

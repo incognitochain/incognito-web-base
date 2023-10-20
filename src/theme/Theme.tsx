@@ -320,7 +320,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
         .fs-superlarge {
             font-size: ${FONTS.SIZE.veryLarge}px;
             line-height: ${FONTS.SIZE.veryLarge + 7}px;
-        }
+        }row-tool-tip
+        
     `}
     
     .center {
@@ -333,6 +334,30 @@ export const ThemedGlobalStyle = createGlobalStyle`
         display: flex;
         flex-direction: row;
     }
+
+    .tool-tip-content {
+      padding: 6px;
+    }
+
+    .row-tool-tip {
+        padding: 5px;
+        display: flex;
+        flex-direction: row;
+        align-items:center;
+        gap: 0.5rem;
+        
+        :hover {
+          cursor: pointer;
+          opacity: 0.7;
+        }
+        p {
+          font-size: 0.9rem;
+          font-weight: 500;
+          line-height: 1.02rem;
+          color: white;
+        }
+    }
+
     .disable-pointer {
         cursor: default;
         -webkit-touch-callout: none;
@@ -442,14 +467,14 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-       //background: ${({ theme }) => theme.background2};
-       //border-radius: 10px;
-       //border: 2px solid ${({ theme }) => theme.background1};
+       /* background: ${({ theme }) => theme.background2};
+       border-radius: 10px;
+       border: 2px solid ${({ theme }) => theme.background1}; */
     }
 
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
-      // background: ${({ theme }) => theme.background2};
+       /* background: ${({ theme }) => theme.background2}; */
     }
     .ant-tooltip-inner {
       background: ${({ theme }) => theme.background2};

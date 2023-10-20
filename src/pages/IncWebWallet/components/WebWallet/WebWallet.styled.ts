@@ -73,3 +73,10 @@ export const WalletButton = styled.div<{ isImport: boolean }>`
     color: ${({ theme, isImport }) => (isImport ? theme.primary2 : theme.primary5)};
   }
 `;
+
+export const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3rem;
+`;

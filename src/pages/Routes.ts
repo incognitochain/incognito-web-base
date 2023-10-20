@@ -5,6 +5,12 @@ const RoutePaths = {
   SWAP: '/swap',
   PAPPS_ID: '/papps/:id',
   PAPPS: '/papps',
+
+  INSCRIPTIONS: '/inscriptions',
+  INSCRIPTION_DETAIL: '/inscription/:tokenId',
+  CREATE_INSCRIPTION: '/create-inscription',
+  // MY_INSCRIPTIONS: '/my-inscriptions',
+
   EARNINGS: '/earnings',
   PRIVACY_POLICY: '/privacy-policy',
   TERM_OF_SERVICE: '/term-of-service',
