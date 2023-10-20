@@ -43,9 +43,10 @@ interface MenuItemProps {
   target?: string;
   metric?: number;
   uniqMetric?: number;
+  isHide?: boolean;
 }
 
-let menuItem: MenuItemProps[] = [
+let MenuItemList: MenuItemProps[] = [
   // {
   //   name: 'Markets',
   //   path: routeMarket,
@@ -55,18 +56,21 @@ let menuItem: MenuItemProps[] = [
     path: '/get-prv',
     metric: METRIC_TYPE.HEADER_PRV,
     uniqMetric: METRIC_UNIQ.HEADER_PRV_UNIQ,
+    isHide: false,
   },
   {
     name: 'Mine',
     path: '/mine/validator',
     metric: METRIC_TYPE.HEADER_MINE,
     uniqMetric: METRIC_UNIQ.HEADER_MINE_UNIQ,
+    isHide: false,
   },
   {
     name: 'Use',
     path: routePeggingApps,
     metric: METRIC_TYPE.HEADER_PAPPS,
     uniqMetric: METRIC_UNIQ.HEADER_PAPPS_UNIQ,
+    isHide: false,
   },
   // {
   //   name: 'Community',
@@ -79,12 +83,14 @@ let menuItem: MenuItemProps[] = [
     path: routeInscription,
     metric: METRIC_TYPE.HEADER_INSCRIPTION,
     uniqMetric: METRIC_UNIQ.HEADER_INSCRIPTION_UNIQ,
+    isHide: true,
   },
   {
     name: 'Forum',
     path: 'https://we.incognito.org/',
     target: '_blank',
     isLink: true,
+    isHide: false,
   },
   // {
   //   name: 'Earning',
@@ -439,6 +445,8 @@ export default function Header() {
   const onClose = () => {
     setVisible(false);
   };
+
+  const menuItem = React.useMemo(() => MenuItemList.filter((item) => !item.isHide), []);
 
   React.useEffect(() => {
     const menuName = (menuItem.find((item: any) => item.path === history.location.pathname) as any)?.name;
