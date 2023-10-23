@@ -53,8 +53,6 @@ import TermOfService from './TermOfService';
 export const HEADER_ID = 'HEADER_VIEW';
 export const FOOTER_ID = 'FOOTER_VIEW';
 
-const IS_SHOW_INSCRIPTION = false;
-
 const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;
@@ -124,17 +122,13 @@ const App = () => {
         <Route exact path={RoutePaths.PAPPS_ID} component={SwapExchange} />
         <Route exact path={RoutePaths.PAPPS} component={PeggingApp} />
 
-        {IS_SHOW_INSCRIPTION && (
-          <>
-            <Route exact path={RoutePaths.INSCRIPTIONS} component={Inscriptions} />
-            <Route exact path={RoutePaths.INSCRIPTION_DETAIL} component={InscriptionDetail} />
-            <Route
-              exact
-              path={RoutePaths.CREATE_INSCRIPTION}
-              component={withUnlockWallet(CreateInscription, RoutePaths.INSCRIPTIONS)}
-            />
-          </>
-        )}
+        <Route exact path={RoutePaths.INSCRIPTIONS} component={Inscriptions} />
+        <Route exact path={RoutePaths.INSCRIPTION_DETAIL} component={InscriptionDetail} />
+        <Route
+          exact
+          path={RoutePaths.CREATE_INSCRIPTION}
+          component={withUnlockWallet(CreateInscription, RoutePaths.INSCRIPTIONS)}
+        />
 
         {/* <Route exact path={RoutePaths.MY_INSCRIPTIONS} component={withUnlockWallet(MyInscriptions)} /> */}
         <Route exact path={RoutePaths.EARNINGS} component={Earnings} />

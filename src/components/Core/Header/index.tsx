@@ -83,7 +83,7 @@ let MenuItemList: MenuItemProps[] = [
     path: routeInscription,
     metric: METRIC_TYPE.HEADER_INSCRIPTION,
     uniqMetric: METRIC_UNIQ.HEADER_INSCRIPTION_UNIQ,
-    isHide: true,
+    isHide: false,
   },
   {
     name: 'Forum',
@@ -455,7 +455,7 @@ export default function Header() {
     } else {
       setPathName('');
     }
-  }, [window.location.pathname]);
+  }, [window.location.pathname, menuItem]);
 
   // React.useEffect(() => {
   //   const { pathname = '' } = location;
