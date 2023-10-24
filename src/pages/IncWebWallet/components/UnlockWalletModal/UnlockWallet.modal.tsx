@@ -69,7 +69,7 @@ const UnlockWalletModal = () => {
         onChange={onChangePassword}
         onKeyDown={(e) => {
           if (e.code.toLowerCase() === 'enter') {
-            !isEmpty(password) && onClickGoIncognito();
+            !isEmpty(password) && onClickGoIncognito && onClickGoIncognito();
           }
         }}
       />
