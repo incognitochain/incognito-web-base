@@ -4,6 +4,7 @@ export const Styled = styled.div`
   padding-bottom: 40px;
   width: 100%;
   min-height: calc(100vh - 135px);
+  margin-top: -40px;
   .section-1 {
     display: flex;
     flex-direction: row;

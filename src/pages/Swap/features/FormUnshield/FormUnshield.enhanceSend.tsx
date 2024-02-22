@@ -14,7 +14,9 @@ import rpcMetric, { METRIC_TYPE } from 'services/rpcMetric';
 import { useAppDispatch, useAppSelector } from 'state/hooks';
 import { getShardIDByAddress } from 'state/incognitoWallet';
 import { getPrivacyDataByTokenIDSelector } from 'state/token';
+import { WalletType } from 'wallet/types';
 
+import useWalletController from '../../../IncWebWallet/hooks/useWalletController';
 import { actionEstimateFee, actionSetErrorMsg } from './FormUnshield.actions';
 import { IMergeProps } from './FormUnshield.enhance';
 import { FormTypes, NetworkTypePayload, SwapExchange } from './FormUnshield.types';
@@ -49,6 +51,7 @@ const enhanceSend = (WrappedComponent: any) => {
     } = props;
 
     const dispatch = useAppDispatch();
+    const walletController = useWalletController();
     const { requestSignTransaction, isIncognitoInstalled, requestIncognitoAccount } = useIncognitoWallet();
     const { setModal, clearAllModal } = useModal();
     const updateMetric = ({ type }: { type: METRIC_TYPE }) => rpcMetric.updateMetric({ type });
@@ -91,11 +94,27 @@ const enhanceSend = (WrappedComponent: any) => {
       const incognito = getIncognitoInject();
 
       // Get OTA Receiver and Burner address
+
+      const walletType: WalletType = walletController.getWalletType();
+
       const _shardID = shardID ? shardID : (exchangeSelectedData || fee || {}).feeAddressShardID;
-      const { result }: { result: any } = await incognito.request({
-        method: 'wallet_requestAccounts',
-        params: { senderShardID: _shardID },
-      });
+
+      let result: any = {};
+
+      if (walletType === 'WalletWeb') {
+        const response: any = await walletController.requestAccount({
+          method: 'wallet_requestAccounts',
+          params: { senderShardID: _shardID },
+        });
+        result = response.result;
+      } else {
+        const response: any = await incognito.request({
+          method: 'wallet_requestAccounts',
+          params: { senderShardID: _shardID },
+        });
+        result = response.result;
+      }
+
       const otaReceiver = result?.otaReceiver;
       const burnerAddress = result?.burnerAddress;
       let feeRefundOTA = '';
@@ -433,7 +452,7 @@ const enhanceSend = (WrappedComponent: any) => {
         BurningAmount: parseInt(burnOriginalAmount),
         TokenID: sellToken.tokenID,
         RemoteAddress: remoteAddress,
-        Type: buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM ? 274 : 275,
+        Type: buyNetworkName === MAIN_NETWORK_NAME.ETHEREUM ? 338 : 275,
       };
       return metadata;
     };
@@ -471,6 +490,9 @@ const enhanceSend = (WrappedComponent: any) => {
           } else if (sellToken.isCentralized) {
             /** Case Unshield Centralized */
             isSignAndSendTransaction = true;
+            payload = {
+              info: typeof id === 'number' ? String(id) : '',
+            };
           } else {
             /** Case Unshield Decentralized */
             const metadata = getUnshieldDecentralizedMetadata({ otaReceiver, burnerAddress });
@@ -533,8 +555,8 @@ const enhanceSend = (WrappedComponent: any) => {
         // console.log('LOGS PAYLOAD 222: ', { sellToken, buyToken, buyNetworkName, formType, exchangeSelectedData });
         return new Promise(async (resolve, reject) => {
           try {
-            const tx = await requestSignTransaction(payload);
-            console.log('LOGS PAYLOAD 000: ', { tx });
+            let tx: any;
+            tx = await requestSignTransaction(payload);
             if (formType === FormTypes.SWAP) {
               if (exchangeSelectedData.appName === SwapExchange.PDEX) {
                 await rpcClient.submitSwapPdex({
@@ -671,9 +693,9 @@ const enhanceSend = (WrappedComponent: any) => {
           dispatch(focus(FORM_CONFIGS.formName, FORM_CONFIGS.sellAmount));
         });
       }
-      if (!isIncognitoInstalled()) {
-        return requestIncognitoAccount();
-      }
+      // if (!isIncognitoInstalled()) {
+      //   return requestIncognitoAccount();
+      // }
 
       setModal({
         isTransparent: false,

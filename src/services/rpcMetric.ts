@@ -1,8 +1,7 @@
 import { AxiosInstance } from 'axios';
 import { isMainnet } from 'config';
+import { checkUpdateMetricUniq } from 'metric';
 import createAxiosInstance from 'services/axios';
-
-import { checkUpdateMetricUniq } from '../storage';
 
 export enum METRIC_TYPE {
   OPEN = 81,
@@ -25,6 +24,7 @@ export enum METRIC_TYPE {
   HEADER_MINE = 301,
   HEADER_PAPPS = 302,
   HEADER_PRV = 303,
+  HEADER_INSCRIPTION = 304,
 
   MINE_OVERVIEW = 400,
   MINE_PNODE = 401,
@@ -47,6 +47,7 @@ export enum METRIC_TYPE {
   PAPP_TRADER_JOE = 417,
   PAPP_TRISOLARIS = 418,
   PAPP_OPENSEA = 419,
+  PAPP_DEVELOPER = 420,
 }
 
 export enum METRIC_UNIQ {
@@ -61,6 +62,8 @@ export enum METRIC_UNIQ {
   HEADER_SWAP_UNIQ = 400,
   HEADER_MINE_UNIQ = 401,
   HEADER_PAPPS_UNIQ = 402,
+  HEADER_INSCRIPTION_UNIQ = 403,
+
   HEADER_PRV_UNIQ = 303,
 
   MINE_OVERVIEW_UNIQ = 500,
@@ -85,6 +88,7 @@ export enum METRIC_UNIQ {
   PAPP_TRADER_JOE_UNIQ = 517,
   PAPP_TRISOLARIS = 518,
   PAPP_OPENSEA_UNIQ = 519,
+  PAPP_DEVELOPER_UNIQ = 520,
 }
 
 class RpcMetric {

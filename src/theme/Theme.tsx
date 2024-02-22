@@ -1,54 +1,19 @@
 import React, { useMemo } from 'react';
-import { Text, TextProps as TextPropsOriginal } from 'rebass';
 import { useIsDarkMode } from 'state/user/hooks';
-import styled, {
+import {
   createGlobalStyle,
-  css,
   DefaultTheme,
   ThemeProvider as StyledComponentsThemeProvider,
 } from 'styled-components/macro';
 
+import { darkTheme, lightTheme } from './colors';
+import { mediaWidthTemplates } from './mediaQuery';
+import { SnippetsInit } from './snippets';
 import { FONTS } from './Theme.fonts';
-import { Colors } from './Theme.styled';
 
 export * from './components';
-
-type TextProps = Omit<TextPropsOriginal, 'css'>;
-
-export const MEDIA_WIDTHS = {
-  upToExtraSmall: 500,
-  upToSmall: 720,
-  upToMedium: 1200,
-  upToLarge: 1440,
-  upToSupperLarge: 1920,
-};
-
-// Migrating to a standard z-index system https://getbootstrap.com/docs/5.0/layout/z-index/
-// Please avoid using deprecated numbers
-export enum Z_INDEX {
-  deprecated_zero = 0,
-  deprecated_content = 1,
-  dropdown = 1000,
-  sticky = 1020,
-  fixed = 1030,
-  modalBackdrop = 1040,
-  offcanvas = 1050,
-  modal = 1060,
-  popover = 1070,
-  tooltip = 1080,
-}
-
-const mediaWidthTemplates: { [width in keyof typeof MEDIA_WIDTHS]: typeof css } = Object.keys(MEDIA_WIDTHS).reduce(
-  (accumulator, size) => {
-    (accumulator as any)[size] = (a: any, b: any, c: any) => css`
-      @media (max-width: ${(MEDIA_WIDTHS as any)[size]}px) {
-        ${css(a, b, c)}
-      }
-    `;
-    return accumulator;
-  },
-  {}
-) as any;
+export { ThemedText } from './themeText';
+export { Z_INDEX } from './zIndex';
 
 export const white = '#FFFFFF';
 export const black = '#000000';
@@ -127,6 +92,7 @@ export function colors(darkMode: boolean): any {
     content4: '#F6465D',
 
     // Primary
+    primary: '#1A73E8',
     primary1: '#1C55B8',
     primary2: '#1A73E8',
     primary3: '#6BA0FB',
@@ -161,120 +127,54 @@ export function colors(darkMode: boolean): any {
   };
 }
 
-function theme(darkMode: boolean): DefaultTheme {
+function colorsFactory(darkMode: boolean) {
   return {
-    ...colors(darkMode),
+    colors: darkMode ? darkTheme : lightTheme,
+  };
+}
 
-    grids: {
-      sm: 8,
-      md: 12,
-      lg: 24,
-    },
+function shadowFactory(darkMode: boolean) {
+  return {
+    shadow1: darkMode ? '#000' : '#2F80ED',
+  };
+}
+
+function mediaWidthFactory(darkMode: boolean) {
+  return {
+    mediaWidth: mediaWidthTemplates,
+  };
+}
+
+function snippetsFactory(darkMode: boolean) {
+  return SnippetsInit;
+}
+
+function themeFactory(darkMode: boolean): DefaultTheme {
+  return {
+    ...colors(darkMode), //Old Colors (Will Remove After, TO DO)
+
+    ...colorsFactory(darkMode),
 
     //shadows
-    shadow1: darkMode ? '#000' : '#2F80ED',
+    ...shadowFactory(darkMode),
 
     // media queries
-    mediaWidth: mediaWidthTemplates,
+    ...mediaWidthFactory(darkMode),
 
     // css snippets
-    flexColumnNoWrap: css`
-      display: flex;
-      flex-flow: column nowrap;
-    `,
-    flexRowNoWrap: css`
-      display: flex;
-      flex-flow: row nowrap;
-    `,
+    ...snippetsFactory(darkMode),
   };
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   const darkMode = useIsDarkMode();
 
-  const themeObject = useMemo(() => theme(darkMode), [darkMode]);
+  const themeObject = useMemo(() => themeFactory(darkMode), [darkMode]);
 
   return <StyledComponentsThemeProvider theme={themeObject}>{children}</StyledComponentsThemeProvider>;
 }
 
-const TextWrapper = styled(Text)<{ color: keyof Colors }>`
-  color: ${({ color, theme }) => (theme as any)[color]};
-`;
-
-/**
- * Preset styles of the Rebass Text component
- */
-export const ThemedText = {
-  Main(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'primary8'} {...props} />;
-  },
-  Link(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'primary1'} {...props} />;
-  },
-  Label(props: TextProps) {
-    return <TextWrapper fontWeight={600} color={'text1'} {...props} />;
-  },
-  Black(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'text1'} {...props} />;
-  },
-  White(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'white'} {...props} />;
-  },
-  Body(props: TextProps) {
-    return <TextWrapper fontWeight={400} fontSize={16} color={'text1'} {...props} />;
-  },
-  LargeHeader(props: TextProps) {
-    return <TextWrapper fontWeight={600} color={'white'} fontSize={24} {...props} />;
-  },
-  Small(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'white'} fontSize={12} lineHeight="17px" {...props} />;
-  },
-  SmallLabel(props: TextProps) {
-    return (
-      <TextWrapper
-        fontWeight={500}
-        color={'white'}
-        fontSize={14}
-        lineHeight="20px"
-        style={{ lineHeight: '20px' }}
-        {...props}
-      />
-    );
-  },
-  RegularLabel(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'white'} fontSize={16} {...props} />;
-  },
-  MediumLabel(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'white'} fontSize={18} style={{ lineHeight: '28px' }} {...props} />;
-  },
-  AvgMediumLabel(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'white'} fontSize={20} style={{ lineHeight: '28px' }} {...props} />;
-  },
-  Blue(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'blue1'} {...props} />;
-  },
-  Yellow(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'yellow3'} {...props} />;
-  },
-  DarkGray(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'text3'} {...props} />;
-  },
-  Gray(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'bg3'} {...props} />;
-  },
-  Italic(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={12} fontStyle={'italic'} color={'text2'} {...props} />;
-  },
-  Error({ error, ...props }: { error: boolean } & TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={14} color={error ? 'content4' : 'text2'} {...props} />;
-  },
-  Warning({ warning, ...props }: { warning: boolean } & TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={14} color={warning ? 'warning' : 'text2'} {...props} />;
-  },
-};
-
 export const ThemedGlobalStyle = createGlobalStyle`
-
 
   html {
     color: ${({ theme }) => theme.text1};
@@ -420,7 +320,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
         .fs-superlarge {
             font-size: ${FONTS.SIZE.veryLarge}px;
             line-height: ${FONTS.SIZE.veryLarge + 7}px;
-        }
+        }row-tool-tip
+        
     `}
     
     .center {
@@ -433,6 +334,30 @@ export const ThemedGlobalStyle = createGlobalStyle`
         display: flex;
         flex-direction: row;
     }
+
+    .tool-tip-content {
+      padding: 6px;
+    }
+
+    .row-tool-tip {
+        padding: 5px;
+        display: flex;
+        flex-direction: row;
+        align-items:center;
+        gap: 0.5rem;
+        
+        :hover {
+          cursor: pointer;
+          opacity: 0.7;
+        }
+        p {
+          font-size: 0.9rem;
+          font-weight: 500;
+          line-height: 1.02rem;
+          color: white;
+        }
+    }
+
     .disable-pointer {
         cursor: default;
         -webkit-touch-callout: none;
@@ -542,14 +467,14 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-       //background: ${({ theme }) => theme.background2};
-       //border-radius: 10px;
-       //border: 2px solid ${({ theme }) => theme.background1};
+       /* background: ${({ theme }) => theme.background2};
+       border-radius: 10px;
+       border: 2px solid ${({ theme }) => theme.background1}; */
     }
 
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
-      // background: ${({ theme }) => theme.background2};
+       /* background: ${({ theme }) => theme.background2}; */
     }
     .ant-tooltip-inner {
       background: ${({ theme }) => theme.background2};
@@ -980,8 +905,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
     h4 {
       color: ${({ theme }) => theme.color_white};
       font-size: 28px;
-        font-weight: 500;
-        line-height: 140%;
+      font-weight: 500;
+      line-height: 140%;
       ${({ theme }: { theme: DefaultTheme }) => theme.mediaWidth.upToSupperLarge`
         font-size: 28px;
         font-weight: 500;
@@ -1123,5 +1048,48 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
   .ant-tabs-nav-wrap {
     border-bottom: 1px solid ${({ theme }) => theme.color_grey4};
+  }
+
+  .ant-drawer-header {
+    display: flex;
+    flex: 0 1;
+    align-items: center;
+    padding: 16px 24px;
+    font-size: 16px;
+    line-height: 22px;
+    border-bottom: 1px solid rgb(65 62 62);
+  }
+
+  .ant-drawer-close {
+    color: white;
+  }
+
+  .ant-drawer-title {
+    flex: 1 1;
+    margin: 0;
+    color:  white;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .ant-popover-message-title {
+    color:  white;
+  }
+
+  .ant-popover-inner {
+    border-radius: 10px;
+  }
+
+  .animation-opacity {
+    animation: keyOpacity 0.8s alternate;
+    @keyframes keyOpacity {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
   }
 `;

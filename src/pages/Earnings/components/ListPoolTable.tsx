@@ -1,8 +1,8 @@
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import arrowBottomActive from 'assets/svg/arrow-bottom-active.svg';
-import arrowDisable from 'assets/svg/arrow-disable.svg';
-import arrowTopActive from 'assets/svg/arrow-top-active.svg';
+// import arrowBottomActive from 'assets/svg/arrow-bottom-active.svg';
+// import arrowDisable from 'assets/svg/arrow-disable.svg';
+// import arrowTopActive from 'assets/svg/arrow-top-active.svg';
 import { CRYPTO_ICON_URL, PRIVATE_TOKEN_CURRENCY_NAME } from 'constants/token';
 import React from 'react';
 import { isMobile } from 'react-device-detect';
@@ -13,6 +13,7 @@ import { isFetchingPoolsSelectors, poolsSelectors } from 'state/pools/pool.selec
 import styled, { DefaultTheme } from 'styled-components/macro';
 
 import { Pool } from '../Earnings.types';
+import { formatPrice } from '../features/Validators/Validators.utils';
 
 const Styled = styled.div`
   margin-top: 64px;
@@ -242,7 +243,7 @@ const ListPoolTable = () => {
       dataIndex: 'totalValueLockUSD',
       key: 'totalValueLockUSD',
       responsive: ['md'],
-      render: (text) => <p className="baseText">${text.toFixed(2)}</p>,
+      render: (text) => <p className="baseText">{`$${formatPrice({ price: text || '0' })}`}</p>,
     },
     {
       dataIndex: 'volume',
@@ -250,29 +251,29 @@ const ListPoolTable = () => {
       responsive: ['md'],
       align: 'left',
       showSorterTooltip: false,
-      render: (text) => <p className="baseText">${text.toFixed(2)}</p>,
+      // render: (text) => <p className="baseText">${text.toFixed(2)}</p>,
       sorter: (a, b) => a.volume - b.volume,
       // eslint-disable-next-line react/prop-types
-      title: ({ sortColumns }) => {
-        // eslint-disable-next-line react/prop-types
-        const sortedColumn = sortColumns?.find(({ column }) => column.key === 'volume');
-        return (
-          <div className="headerTitle" style={{ justifyContent: 'flex-start' }}>
-            Volume 24H
-            {sortedColumn ? (
-              sortedColumn.order === 'ascend' ? (
-                <img src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
-              ) : sortedColumn?.order === 'descend' ? (
-                <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
-              ) : (
-                <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
-              )
-            ) : (
-              <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
-            )}
-          </div>
-        );
-      },
+      // title: ({ sortColumns }) => {
+      //   // eslint-disable-next-line react/prop-types
+      //   const sortedColumn = sortColumns?.find(({ column }) => column.key === 'volume');
+      //   return (
+      //     <div className="headerTitle" style={{ justifyContent: 'flex-start' }}>
+      //       Volume 24H
+      //       {sortedColumn ? (
+      //         sortedColumn.order === 'ascend' ? (
+      //           <img src={arrowBottomActive} style={{ marginLeft: 6, marginRight: 0 }} />
+      //         ) : sortedColumn?.order === 'descend' ? (
+      //           <img src={arrowTopActive} style={{ marginLeft: 6, marginRight: 0 }} />
+      //         ) : (
+      //           <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+      //         )
+      //       ) : (
+      //         <img src={arrowDisable} style={{ marginLeft: 6, marginRight: 0 }} />
+      //       )}
+      //     </div>
+      //   );
+      // },
     },
     {
       key: 'apy',

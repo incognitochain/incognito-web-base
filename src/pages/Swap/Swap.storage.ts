@@ -1,5 +1,5 @@
 import uniqueBy from 'lodash/uniqBy';
-import Storage from 'storage';
+import { StorageManager } from 'storage';
 
 const KEY = 'INC-SWAP-EXCHANGE-TXS-1';
 
@@ -17,8 +17,11 @@ export interface ISwapTxStorage {
 }
 
 const getSwapTxs = (): ISwapTxStorage[] => {
-  const swapTxs = Storage.getItem(KEY);
+  let swapTxs = StorageManager.getItem(KEY);
   if (!swapTxs) return [];
+  if (typeof swapTxs === 'string') {
+    swapTxs = JSON.parse(swapTxs);
+  }
   return swapTxs;
 };
 
@@ -34,7 +37,10 @@ const setSwapTx = ({
   interPAppName,
   interPAppNetwork,
 }: ISwapTxStorage) => {
-  let swapTxs: ISwapTxStorage[] = Storage.getItem(KEY) || [];
+  let swapTxs: ISwapTxStorage[] = StorageManager.getItem(KEY) || [];
+  if (typeof swapTxs === 'string') {
+    swapTxs = JSON.parse(swapTxs);
+  }
   swapTxs.push({
     txHash,
     incAddress,
@@ -48,7 +54,7 @@ const setSwapTx = ({
     interPAppNetwork,
   });
   swapTxs = uniqueBy(swapTxs, 'txHash');
-  Storage.setItem(KEY, swapTxs);
+  StorageManager.setItem(KEY, swapTxs);
 };
 
 export { getSwapTxs, setSwapTx };

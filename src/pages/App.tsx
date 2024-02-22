@@ -1,6 +1,8 @@
+/* eslint-disable no-restricted-imports */
 // eslint-disable-next-line no-restricted-imports
 import 'antd/dist/antd.css';
 import './reset.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ErrorBoundary from 'components/Core/ErrorBoundary';
 import Footer from 'components/Core/Footer';
@@ -9,7 +11,9 @@ import IncognitoWalletProvider from 'components/Core/IncognitoWallet/IncongitoWa
 import { useInternetConnnection } from 'components/Core/InternetConnection';
 import Loader from 'components/Core/Loader';
 import Popups from 'components/Core/Popups';
-import React, { Suspense, useEffect } from 'react';
+import useNFTCoins from 'pages/IncWebWallet/hooks/useNFTCoins';
+import CreateInscription from 'pages/Inscriptions/CreateInscription';
+import { Suspense, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -26,6 +30,13 @@ import Earnings from './Earnings';
 import Validators from './Earnings/features/Validators/Validators';
 import { GetPRV } from './GetPRV';
 import Home from './Home';
+import CreateWallet from './IncWebWallet/features/CreateWallet';
+import ImportWallet from './IncWebWallet/features/ImportWallet';
+import KeyChain from './IncWebWallet/features/Keychain/Keychain';
+import Settings from './IncWebWallet/features/Settings/Settings';
+import withUnlockWallet from './IncWebWallet/hooks/withUnlockWallet';
+import Inscriptions from './Inscriptions';
+import InscriptionDetail from './Inscriptions/InscriptionDetail';
 import InternetDisconnected from './InternetDisconnected/InternetDisconnected';
 import Market from './Market';
 import Page404 from './Page404';
@@ -34,11 +45,11 @@ import Policy from './Policy';
 import POpensea from './POpensea';
 import POpenseaDetail from './POpenseaDetail';
 import POpenseaNFTDetail from './POpenseaNFTDetail';
+import { RoutePaths } from './Routes';
 import Structure from './Structure';
 import DepositPage from './Swap/features/DepositPage';
 import SwapExchange from './Swap/features/SwapExchange';
 import TermOfService from './TermOfService';
-
 export const HEADER_ID = 'HEADER_VIEW';
 export const FOOTER_ID = 'FOOTER_VIEW';
 
@@ -75,6 +86,7 @@ const HeaderWrapper = styled.div`
 const App = () => {
   const history = useHistory();
   const isInternetAlready = useInternetConnnection();
+  useNFTCoins();
 
   const updateMetric = () => rpcMetric.updateMetric({ type: METRIC_TYPE.OPEN });
 
@@ -103,32 +115,44 @@ const App = () => {
   const renderContent = () => {
     return (
       <Switch>
-        <Route exact path="/internet-disconnected" component={InternetDisconnected} />
-        <Route exact path="/" component={Home} />
-        <Route exact path={['/wallet', '/mine', '/wallet.html']} component={Structure} />
-        <Route exact path="/swap" component={Market} />
-        <Route exact path="/papps/:id" component={SwapExchange} />
-        <Route exact path="/papps" component={PeggingApp} />
-        <Route exact path="/earnings" component={Earnings} />
-        <Route exact path="/privacy-policy" component={Policy} />
-        <Route exact path="/term-of-service" component={TermOfService} />
-        <Route exact path="/mine/validator" component={Validators} />
-        <Route exact path="/get-prv" component={GetPRV} />
-        <Route exact path="/buy-node" component={BuyNode} />
-        <Route exact path="/deposit" component={DepositPage} />
-        <Route exact path="/popensea" component={POpensea} />
-        <Route exact path="/papps/popensea/detail/:contract" component={POpenseaDetail} />
-        <Route exact path="/papps/popensea/detail/:contract/:tokenId" component={POpenseaNFTDetail} />
-        <Route exact path="/buy-node" component={BuyNode} />
-        <Route exact path="/deposit" component={DepositPage} />
+        <Route exact path={RoutePaths.HOME} component={Home} />
+        <Route exact path={RoutePaths.INTERNET_DISCONNECTED} component={InternetDisconnected} />
+        <Route exact path={RoutePaths.STRUCTURE} component={Structure} />
+        <Route exact path={RoutePaths.SWAP} component={Market} />
+        <Route exact path={RoutePaths.PAPPS_ID} component={SwapExchange} />
+        <Route exact path={RoutePaths.PAPPS} component={PeggingApp} />
+
+        <Route exact path={RoutePaths.INSCRIPTIONS} component={Inscriptions} />
+        <Route exact path={RoutePaths.INSCRIPTION_DETAIL} component={InscriptionDetail} />
+        <Route
+          exact
+          path={RoutePaths.CREATE_INSCRIPTION}
+          component={withUnlockWallet(CreateInscription, RoutePaths.INSCRIPTIONS)}
+        />
+
+        {/* <Route exact path={RoutePaths.MY_INSCRIPTIONS} component={withUnlockWallet(MyInscriptions)} /> */}
+        <Route exact path={RoutePaths.EARNINGS} component={Earnings} />
+        <Route exact path={RoutePaths.PRIVACY_POLICY} component={Policy} />
+        <Route exact path={RoutePaths.TERM_OF_SERVICE} component={TermOfService} />
+        <Route exact path={RoutePaths.MINE_VALIDATOR} component={Validators} />
+        <Route exact path={RoutePaths.GET_PRV} component={GetPRV} />
+        <Route exact path={RoutePaths.BUY_NODE} component={BuyNode} />
+        <Route exact path={RoutePaths.DEPOSIT} component={DepositPage} />
+        <Route exact path={RoutePaths.POPEN_SEA} component={POpensea} />
+        <Route exact path={RoutePaths.DAPPS_POPENSEA_DEATIL_CONTRACT} component={POpenseaDetail} />
+        <Route exact path={RoutePaths.DAPPS_POPENSEA_DEATIL_CONTRACT_TOKENID} component={POpenseaNFTDetail} />
+        <Route exact path={RoutePaths.WALLET_CREATE} component={CreateWallet} />
+        <Route exact path={RoutePaths.WALLET_IMPORT_RESTORE} component={ImportWallet} />
+        <Route exact path={RoutePaths.WALLET_ACCOUNT} component={withUnlockWallet(KeyChain)} />
+        <Route exact path={RoutePaths.WALLET_SETTINGS} component={withUnlockWallet(Settings)} />
+        <Route exact path="*" component={Page404} />
         {!isMobile && (
           <>
-            <Route exact path="/vote" component={Governance} />
-            <Route exact path="/create-proposal" component={CreateProposal} />
-            <Route exact path="/vote/:id" component={ProposalDetail} />
+            <Route exact path={RoutePaths.VOTE} component={Governance} />
+            <Route exact path={RoutePaths.CREATE_PROPOSAL} component={CreateProposal} />
+            <Route exact path={RoutePaths.VOTE_ID} component={ProposalDetail} />
           </>
         )}
-        <Route component={Page404} />
       </Switch>
     );
   };
@@ -172,23 +196,25 @@ const App = () => {
             {/*  </div>*/}
             {/*)}*/}
           </BodyWrapper>
+          <ToastContainer
+            autoClose={500}
+            hideProgressBar={true}
+            position="top-center"
+            // toastClassName="white-color"
+            // closeButton={<></>}
+            // toastStyle={{ backgroundColor: '#252525', borderColor: '#363636', borderWidth: 1 }}
+            // autoClose={500}
+            // hideProgressBar={true}
+            // newestOnTop={false}
+            // rtl={false}
+            // pauseOnFocusLoss
+            // draggable
+            // pauseOnHover
+          />
         </AppWrapper>
       </IncognitoWalletProvider>
-      <ToastContainer
-        position="bottom-center"
-        toastClassName="white-color"
-        closeButton={<></>}
-        toastStyle={{ backgroundColor: '#252525', borderColor: '#363636', borderWidth: 1 }}
-        autoClose={500}
-        hideProgressBar={true}
-        newestOnTop={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </ErrorBoundary>
   );
 };
 
-export default enhance(App);
+export default enhance(App) as any;

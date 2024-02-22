@@ -1,3 +1,4 @@
+import useWalletController from 'pages/IncWebWallet/hooks/useWalletController';
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'state/hooks';
@@ -8,6 +9,7 @@ import {
   incognitoWalletSetState,
   WalletState,
 } from 'state/incognitoWallet';
+import { WalletType } from 'wallet/types';
 
 interface IncognitoWalletContextType {
   isIncognitoInstalled: () => boolean;
@@ -29,6 +31,7 @@ const IncognitoWalletProvider = (props: any) => {
   const dispatch = useAppDispatch();
   const children = React.useMemo(() => props.children, []);
   useSelector(incognitoWalletSelector);
+  const walletController = useWalletController();
 
   const isIncognitoInstalled = (): boolean => {
     return typeof window.incognito !== 'undefined';
@@ -75,14 +78,23 @@ const IncognitoWalletProvider = (props: any) => {
 
   const requestSignTransaction = async (payload: any) => {
     const incognito = getIncognitoInject();
+    const walletType: WalletType = walletController.getWalletType();
+
     try {
-      if (!incognito) return;
-      const { result }: { result: { state: WalletState } } = await incognito.request({
-        method: 'wallet_signTransaction',
-        params: {
-          ...payload,
-        },
-      });
+      let result;
+      if (walletType === 'WalletExtension' && !incognito) return;
+      if (walletType === 'WalletExtension') {
+        const response = await incognito.request({
+          method: 'wallet_signTransaction',
+          params: {
+            ...payload,
+          },
+        });
+        result = response?.result;
+      } else {
+        result = await walletController.signTransaction(payload);
+      }
+
       return Promise.resolve(result);
     } catch (e) {
       return Promise.reject(e);

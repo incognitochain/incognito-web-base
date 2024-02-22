@@ -1,13 +1,14 @@
 import SwapIcon from 'assets/svg/swap.svg';
+import { Space } from 'components/Core';
 import { ButtonConfirmed } from 'components/Core/Button';
 import { useIncognitoWallet } from 'components/Core/IncognitoWallet/IncongitoWallet.useContext';
 import { InputField } from 'components/Core/ReduxForm';
 import { INPUT_FIELD } from 'components/Core/ReduxForm/InputField';
 import SelectionField from 'components/Core/ReduxForm/SelectionField';
-import { VerticalSpace } from 'components/Core/Space';
 import { TAB_LIST } from 'components/Core/Tabs';
 import { changeTab } from 'components/Core/Tabs/Tabs.reducer';
 import { MAIN_NETWORK_NAME, PRV } from 'constants/token';
+import useUnlockWallet from 'pages/IncWebWallet/hooks/useUnlockWalelt';
 import { FORM_CONFIGS } from 'pages/Swap/Swap.constant';
 import { getQueryPAppName } from 'pages/Swap/Swap.hooks';
 import React, { useEffect, useState } from 'react';
@@ -129,6 +130,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     button,
     inputAmount,
     networkFeeText,
+    enoughNetworkFee,
     burnFeeText,
 
     validateAddress,
@@ -158,7 +160,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
     rate,
   } = props;
 
-  const { isIncognitoInstalled } = useIncognitoWallet();
+  // const { isIncognitoInstalled } = useIncognitoWallet();
+  const { showUnlockModal } = useUnlockWallet();
   const incAccount = useAppSelector(incognitoWalletAccountSelector);
   const history = useHistory();
   const tokens = useAppSelector(unshieldableTokens);
@@ -167,8 +170,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
   const [changing, setChanging] = React.useState(false);
   const prvToken = useAppSelector(getPrivacyDataByTokenIDSelector)(PRV.id);
 
-  const _buttonAction = () => showPopup();
-
+  // const _buttonAction = () => showPopup();
+  const _buttonAction = () => showUnlockModal();
   const dispatch = useDispatch();
 
   const onSelectExchange = (exchangeName: any) => {
@@ -318,7 +321,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
   return (
     <Styled>
       <form onSubmit={handleSubmit(onSend)}>
-        <VerticalSpace />
+        <Space.Vertical size={16} />
         <Field
           component={SelectionField}
           name={FORM_CONFIGS.sellAmount}
@@ -331,7 +334,6 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           onSelectToken={onSelectSellToken}
           networkName={MAIN_NETWORK_NAME.INCOGNITO}
           amount={userBalanceFormatedText}
-          onClickFooterRight={onClickMax}
           footerRightClass="max-text"
           componentProps={{
             type: 'number',
@@ -341,6 +343,8 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           onTopUp={onTopUpCoins}
           tokenAmountNum={sellToken.amount}
           tokenType={'sellToken'}
+          footerRightText="Max"
+          onClickFooterRight={onClickMax}
         />
         <div style={{ height: 2 }} />
         <WrapSwapIcon>
@@ -373,7 +377,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           onSelectToken={onSelectBuyToken}
           onSelectNetwork={onSelectBuyNetwork}
           receiveValue={formType === FormTypes.SWAP ? expectedReceiveAmount || '0' : inputAmount}
-          footerRightText={rightLabelAddress}
+          // footerRightText={rightLabelAddress}
           isUseInput={false}
           footerRightClass="send-to-text"
           tokenNetwork={buyToken.network}
@@ -384,7 +388,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           }}
           tokenType={'buyToken'}
         />
-        {!prvToken.amount && !!inputAmount && isIncognitoInstalled() && incAccount ? (
+        {(!prvToken.amount || !enoughNetworkFee) && !!inputAmount && incAccount ? (
           <ErrorMsgContainer>
             <ThemedText.Error error fontWeight={400}>
               {`Incognito collects a small network fee of ${networkFeeText} to pay the miners who help power the network.`}
@@ -442,7 +446,7 @@ const FormUnshield = React.memo((props: IMergeProps) => {
           errorMsg={errorMsg || undefined}
           interPath={exchangeSelectedData?.interSwapData?.path}
         />
-        <VerticalSpace />
+        <Space.Vertical size={16} />
         {button.isConnected ? (
           <ButtonConfirmed height={'50px'} type="submit">
             {button.text}

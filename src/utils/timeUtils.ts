@@ -6,4 +6,7 @@ const convertISOtoMMYYYY = (timeIOSString: string) => {
   return MONTHS[date.getMonth()] + ' ' + date.getFullYear();
 };
 
-export { convertISOtoMMYYYY };
+//time =>
+const delay = (time = 1000) => new Promise((resolve) => setTimeout(resolve, time));
+
+export { convertISOtoMMYYYY, delay };

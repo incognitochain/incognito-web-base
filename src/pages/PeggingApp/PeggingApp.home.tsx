@@ -3,6 +3,7 @@ import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
 
 import Apps from './features/Apps';
+import Header from './features/Header';
 import { Styled, WrapperContent } from './PeggingApp.styled';
 
 const renderSectionBottom = () => {
@@ -29,7 +30,12 @@ const renderSectionBottom = () => {
 };
 
 const Home = () => {
-  return <Styled className="default-max-width">{renderSectionBottom()}</Styled>;
+  return (
+    <>
+      <Header />
+      <Styled className="default-max-width">{renderSectionBottom()}</Styled>
+    </>
+  );
 };
 
 export default memo(Home);

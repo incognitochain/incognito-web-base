@@ -20,3 +20,5 @@ export const unshieldDataSelector = createSelector(
       state,
     })
 );
+
+export const isMaxSelector = createSelector(formUnshieldSelectors, (form) => form.isMax);

@@ -19,6 +19,9 @@ const Styled = styled.div`
   height: 74px;
   display: flex;
   align-items: center;
+  padding: 0px 12px 0px 12px;
+  border-radius: 8px;
+  cursor: pointer;
   /* border-bottom: 1px solid ${({ theme }) => theme.bg4}; */
   .wrap-content-body {
     justify-content: space-between;
@@ -27,12 +30,11 @@ const Styled = styled.div`
     flex: 1;
   }
 
-  /* :hover {
+  :hover {
     background: ${({ theme }) => theme.bg4};
-    .network {
-      background-color: ${({ theme }) => theme.bg4};
-    }
-  } */
+    cursor: pointer;
+  }
+
   .logo {
     width: 40px;
     height: 40px;
@@ -59,11 +61,15 @@ const Styled = styled.div`
   }
 `;
 
-const Token = React.memo(({ selectedToken }: { selectedToken: SelectedPrivacy }) => {
+const Token = React.memo(({ selectedToken, onItemClick }: { selectedToken: SelectedPrivacy; onItemClick: any }) => {
   if (!selectedToken.symbol) return null;
   const { symbol, shortName, network, formatAmount, formatBalanceByUsd, iconUrl } = selectedToken;
   return (
-    <Styled>
+    <Styled
+      onClick={() => {
+        onItemClick && onItemClick(selectedToken);
+      }}
+    >
       <Image iconUrl={iconUrl} size={true ? 40 : 32} />
       <Row className="wrap-content-body">
         <div>
@@ -80,8 +86,13 @@ const Token = React.memo(({ selectedToken }: { selectedToken: SelectedPrivacy })
           </Row>
         </div>
         <div className="amount-area">
-          <ThemedText.RegularLabel color="primary5">{`$${formatBalanceByUsd}`}</ThemedText.RegularLabel>
-          <ThemedText.SmallLabel color="primary8">{`${formatAmount} ${symbol}`}</ThemedText.SmallLabel>
+          <ThemedText.RegularLabel color="primary5">{`$${formatBalanceByUsd || 0}`}</ThemedText.RegularLabel>
+          <ThemedText.SmallLabel
+            color="primary8"
+            style={{
+              fontSize: 'small',
+            }}
+          >{`${formatAmount || 0} ${symbol}`}</ThemedText.SmallLabel>
         </div>
       </Row>
     </Styled>

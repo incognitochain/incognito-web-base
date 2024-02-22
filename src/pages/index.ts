@@ -12,6 +12,7 @@ export interface IRouteProps extends RouteProps {
 export { route as routeEarnings } from './Earnings/Earnings.route';
 // export { default as MainRoute } from './MainRoute';
 export { route as routeHome } from './Home/Home.route';
+export { route as routeInscription } from './Inscriptions/Inscriptions.route';
 export { route as routeMarket } from './Market/Market.route';
 export { route as routePeggingApps } from './PeggingApp/PeggingApp.route';
 export { route as routeStructure } from './Structure/Structure.route';
